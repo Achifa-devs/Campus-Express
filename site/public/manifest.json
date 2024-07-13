@@ -1,0 +1,25 @@
+{
+  "short_name": "Campus Express",
+  "name": "Campus Express",
+  "icons": [
+    {
+      "src": "1701284174956.jpg",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/*"
+    },
+    {
+      "src": "1701284174956.jpg",
+      "type": "image/*",
+      "sizes": "192x192"
+    },
+    {
+      "src": "1701284174956.jpg",
+      "type": "image/*",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
