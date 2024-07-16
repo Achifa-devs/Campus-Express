@@ -267,7 +267,7 @@ const Card = ({item, index}) => {
 
                         &nbsp;
                         &nbsp;
-                        <span style={{fontSize: 'x-small'}}>{
+                        <span style={{fontSize: 'x-small', background: '#FF4500'}}>{
                             order_list.filter((data) => data.product.product_id === item.product_id && data.order.buyer_id === buyerData.buyer_id).length > 0
                             ?
 
