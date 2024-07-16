@@ -50,11 +50,11 @@ const BuyerLayout = (props) => {
             }
             {props.children}
             {
-                location.pathname.split('/').splice(-1)[0] === 'profile'
+                location.pathname.split('/').splice(-1)[0] === ''
                 ?
-                ''
-                :
                 <Footer />
+                :
+                ''
             }
         </>
 

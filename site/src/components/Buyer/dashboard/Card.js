@@ -257,7 +257,7 @@ const Card = ({item, index}) => {
                         ?
                         window.location.href = `/checkout/${item.product_id}`
                         :
-                        window.location.href = `/product?product_id=${item.product_id}`
+                        window.location.href = `/checkout/${item.product_id}`
 
                     }}>
 
