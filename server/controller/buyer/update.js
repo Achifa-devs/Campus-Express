@@ -102,9 +102,67 @@ function update_cart(req,res) {
     }
 }
 
+async function update_pickup_channel(req,res){
+    let {buyer_id, product_id,pickup_channel} = req.body.data;
+    console.log(pickup_channel)
+    
+    new Promise((resolve, reject) => {
+
+        NeonDB.then((pool) => 
+            pool.query(`
+                SELECT * FROM campus_express_buyer_orders WHERE buyer_id='${buyer_id}' AND product_id='${product_id}'
+            `)
+            .then(result => resolve(result.rows[0]))
+            .catch(err => {
+                console.log(err);
+                reject(err);
+            })
+        )
+        .catch(err => {
+            console.log(err)
+            reject({bool: false, data: err})
+        })
+        
+    })
+    .then((result) => {
+
+        let newPickupChannelArr = result.pick_up_channels;
+        let response = result.pick_up_channels.filter(item => item.channel === pickup_channel.channel)[0];
+        newPickupChannelArr.map(item => {
+            if(item.channel === response.channel){
+                item.locale = pickup_channel.locale;
+                item.date = pickup_channel.date;
+            }
+        })
+
+
+        NeonDB.then((pool) => 
+            pool.query(`UPDATE campus_express_buyer_orders SET pick_up_channels = '${JSON.stringify(newPickupChannelArr)}' WHERE buyer_id = '${buyer_id}' AND product_id = '${product_id}'`)
+            .then(result => {
+                result.rowCount > 0 ? res.send({bool: true, data: result[0]}) : res.send({bool: false, data: ''})
+            })
+            .catch(err => {
+                res.send({bool: false, data: ''})
+                console.log(err)
+            })
+        )
+        .catch(err => {
+            console.log(err)
+            res.send({bool: false, data: ''})
+        })
+
+    })
+    .catch(err => {
+        console.log(err)
+        // res.send({bool: false, data: ''})
+    })
+
+    
+}
 
 module.exports={
     update_view,
     update_pwd,
-    update_cart
+    update_cart,
+    update_pickup_channel
 }

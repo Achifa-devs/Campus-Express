@@ -26,32 +26,10 @@ export default function Contact({role,phone,SendMssg}) {
         }}>
         {/* onClick={e => role !== 0 ? DeleteProduct(e,item.product_id) : AddToCart(e,item.product_id)} */}
             <button onClick={e => {SendMssg()}} style={{height: '50px', width: role ? '100%' : '45%', borderRadius: '5px', display: 'flex', alignItems: 'center', cursor: 'pointer',fontSize: 'x-small', justifyContent: 'space-evenly', background: 'orangered', color: '#fff'}}>
-                {
-                    role === 0
-                    ?
-                    <>
-
-                        {/* <span>
-                            <img src={cartSvg} style={{height: '25px', width: '25px', position: 'relative', borderRadius: '2.5px',marginRight: '5px'}} alt="" />
-                        </span>
-                        <span>{[...Cart].filter(cart => cart.product_id === item.product_id)[0] ? 'Remove From Cart' : 'Add To Cart'}</span> */}
-                    
-                        <span>
-                            <img src={mssg} style={{height: '25px', width: '25px', position: 'relative', borderRadius: '2.5px',marginRight: '5px'}} alt="" />
-                        </span>
-                        <span>Message</span>
-                    
-                    
-                    </>
-                    :
-                    <>
-                        <span>Delete</span>
-
-                        <span>
-                            <img src={deleteSvg} style={{height: '20px', width: '20px', position: 'relative', borderRadius: '2.5px',marginRight: '5px'}} alt="" />
-                        </span>
-                    </>
-                }
+                <span>
+                    <img src={mssg} style={{height: '25px', width: '25px', position: 'relative', borderRadius: '2.5px',marginRight: '5px'}} alt="" />
+                </span>
+                <span>Message</span>
             </button>
 
             <Link to={`tel:+234${phone}`} style={{height: '50px', width: '45%', borderRadius: '5px', display: role ? 'none' : 'flex', alignItems: 'center', cursor: 'pointer', justifyContent: 'space-evenly', fontSize: 'x-small', background: 'orangered', color: '#fff'}}>

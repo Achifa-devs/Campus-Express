@@ -6,6 +6,7 @@ import { v4 as uuid } from "uuid";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { GetBuyer, GetSavedItem } from '../api/buyer/get';
 import { setSaveTo } from '../redux/buyer_store/Save';
+import Footer from '../components/Buyer/Footer';
 
 const BuyerLayout = (props) => {
 
@@ -47,8 +48,14 @@ const BuyerLayout = (props) => {
                 :
                 <Header />
             }
-            {/* <br /> */}
             {props.children}
+            {
+                location.pathname.split('/').splice(-1)[0] === 'profile'
+                ?
+                ''
+                :
+                <Footer />
+            }
         </>
 
     )

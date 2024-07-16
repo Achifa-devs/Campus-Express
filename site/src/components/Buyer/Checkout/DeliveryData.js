@@ -6,13 +6,23 @@ import { useLocation } from 'react-router-dom';
 import Thumbnail from '../Thumbnail';
 import ellipsisSvg from '../../../assets/ellipsis-svgrepo-com.svg'
 import js_ago from 'js-ago';
+import PickupChannel from '../Product/PickupChannel';
 
 export default function DeliveryData({order_list}) {
     let [screenWidth, setScreenWidth] = useState(0);
+    let [locale, setLocale] = useState([]);
+    let [pickUpChannel, setpickUpChannel] = useState('');
 
     useEffect(() => {setScreenWidth(window.innerWidth)},[]);
+   
+    useEffect(() => {
+        console.log(pickUpChannel)
+    }, [pickUpChannel])
     
+    function updateLocation(data) {
+        // setLocale(item => [...item,{channel: pickUpChannel, locale: data.locale, date: data.date, index: locale.length}]);
 
+    } 
    
     let list = useRef(
         [
@@ -30,8 +40,11 @@ export default function DeliveryData({order_list}) {
           {month: 'december'}
         ]
        )
-  return (
+  return ( 
     <>
+        <div className="location-overlay" style={{height: '100vh', width: '100vw'}}>
+            <PickupChannel order_data={order_list?.product} edit={order_list?.order?.pick_up_channels?.filter((data) => data?.channel?.toLowerCase() === pickUpChannel?.toLowerCase())[0]} updateLocation={updateLocation} title={pickUpChannel} />
+        </div>
         <div className="buyer-checkout-delivery-info">
 
             <div className="delivery-info-head">
@@ -86,7 +99,7 @@ export default function DeliveryData({order_list}) {
             <div className="delivery-pick-up-station">
                 <div className='delivery-info-head'>
                     <span>Delivery Address</span>
-                    <span>Change</span>
+                    {/* <span>Change</span> */}
                 </div>
 
                 <hr />
@@ -116,7 +129,11 @@ export default function DeliveryData({order_list}) {
                                 }
                                 </div>
                             </section>
-                            <button onClick={e => window.location.href=(`/checkout/${item.product.product_id}`)} className='shadow-sm' style={{position: 'absolute', top: '5px', right: '5px', height: 'auto', width: 'auto', display: 'flex', alignItems: 'center', justifyContents: 'center', padding: '5px', textAlign: 'center', background: '#fff', color: '#FF4500', fontSize: 'small', float: 'right', color: '#fff', background: '#FF4500'}}>{
+                            <button  onClick={e => {
+                                let overlay = document.querySelector('.location-overlay')
+                                overlay.setAttribute('id', 'location-overlay');
+                                setpickUpChannel(order_list?.order?.pick_up_channels?.filter((data) => data?.channel?.toLowerCase() === item?.channel?.toLowerCase())[0]?.channel)
+                            }} className='shadow-sm' style={{position: 'absolute', top: '5px', right: '5px', height: 'auto', width: 'auto', display: 'flex', alignItems: 'center', justifyContents: 'center', padding: '5px', textAlign: 'center', background: '#fff', color: '#FF4500', fontSize: 'small', float: 'right', color: '#fff', background: '#FF4500'}}>{
                                 'Edit'
                             }</button>
                         </div>

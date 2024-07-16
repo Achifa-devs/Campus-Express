@@ -3,7 +3,7 @@ import axios from 'axios'
 
 let uri_1 = 'https://ce-server.vercel.app'
 let uri_2 = 'http://localhost:2222'
-let IP = uri_2
+let IP = uri_1
  
 const source = axios.CancelToken.source();
 

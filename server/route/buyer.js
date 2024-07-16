@@ -27,7 +27,8 @@ const {
 } = require("../controller/buyer/registraton_login");
 const { 
     update_pwd, 
-    update_view 
+    update_view, 
+    update_pickup_channel
 } = require("../controller/buyer/update");
 const { 
     express, 
@@ -70,6 +71,7 @@ buyer_route.post('/password-reset', parser, reset_pwd);
 
 buyer_route.post('/new-view', parser, update_view);
 buyer_route.post('/new-visitor', parser, add_new_referral);
+buyer_route.post('/pickup-channel-update', parser, update_pickup_channel);
 
 
 // buyer_route.post('/add-cart', parser, add_item_to_cart);

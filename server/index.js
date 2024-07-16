@@ -8,10 +8,10 @@ const {
   cors,
   shortId,
   jwt,
-  io
+  io 
 } = require('./modules');  
 const {
-  NeonDB
+  NeonDB 
 } = require('./db');
 const {
   seller_route 

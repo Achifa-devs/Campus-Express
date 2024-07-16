@@ -33,15 +33,12 @@ import {
 import Contact from './Contact'
 import Share from './Share'
 import { useFlutterwave } from 'flutterwave-react-v3'
+import { GetOrders } from '../../../api/buyer/get'
 
 
 
-const Product = ({item,phone}) => {
+const Product = ({item,phone,order_list}) => {
     let {pickup_channel} = useSelector(s=>s.pickup_channel)
-
-    useEffect(() => {
-        console.log(pickup_channel)
-    },[pickup_channel])
 
     const searchParams = new URLSearchParams(window.location.search);
 
@@ -113,25 +110,30 @@ const Product = ({item,phone}) => {
     let [immediate_purchase, set_immediate_purchase] = useState(1)
 
     async function handleOrder() {
-        let buyer = window.localStorage.getItem('CE_buyer_id');
-        if(buyer === null || buyer === '' || buyer === 'null'){
-            let overlay = document.querySelector('.overlay')
-            overlay.setAttribute('id', 'overlay');
-        }else{
-            // handleFlutterPayment({
-            //     callback: (response) => {
-            //     console.log(response);
-            //     // closePaymentModal() // this will close the modal programmatically
-            //     },
-            //     onClose: () => {}
-            // });
+        let result = order_list.filter((data) => data.product.product_id === item.product_id && data.order.buyer_id === buyerData.buyer_id).length
+        if(result<1){
+            let buyer = window.localStorage.getItem('CE_buyer_id');
+            if(buyer === null || buyer === '' || buyer === 'null'){
+                
+            }else{
+                
+                // let channels = pickup_channel.includes((item) => {
+                //     if(item.channel === 'Custom Location Pickup'){
 
-            let response = await CreateOrder(buyer,item.product_id,item.price,pickup_channel)
-            if(response){
-                window.location.href=(`/checkout/${item.product_id}`)
+                //     }
+                //     (item.channel === 'Door Step Delivery')
+                // })
+                // let response = await CreateOrder(buyer,item.product_id,item.price,pickup_channel)
+                // if(response){
+                //     window.location.href=(`/checkout/${item.product_id}`)
+                // }
             }
+        }else{
+            window.location.href=(`/checkout/${item.product_id}`)
         }
     }
+
+   
 
     return ( 
         <>
@@ -297,9 +299,24 @@ const Product = ({item,phone}) => {
                         screenWidth > 481
                         ?
                         <>
-                            <Contact phone={phone} SendMssg={SendMssg}  />
+                            {/* <Contact phone={phone} SendMssg={SendMssg}  /> */}
+                            <button style={{marginBottom: '15px'}} onClick={handleOrder}>
+                                {
+                                    order_list.filter((data) => data.product.product_id === item.product_id && data.order.buyer_id === buyerData.buyer_id).length > 0
+                                    ?
+
+                                    'View Order'
+                                    :
+                                    'Place Order Now'
+                                }
+                            </button>
+
                             <br />
-                            <button onClick={handleOrder}>Order Now</button>
+
+                            <div style={{background: '#f9f9f9', padding: '10px'}}>
+
+                                To ensure secure transactions, payments are made first. Once your payment is confirmed, the seller will contact you to arrange delivery or pickup. And note that all payments is managed by Escrow services for security reasons.
+                            </div>
                         </>
                         :
                         ''

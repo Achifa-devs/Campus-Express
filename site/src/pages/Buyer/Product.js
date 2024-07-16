@@ -4,7 +4,7 @@ import BuyerLayout from "../../layout/Buyer";
 import { useEffect, useRef, useState } from "react";
 import SimilarItems from "../../components/Buyer/Product/SimilarItems";
 import Description from "../../components/Buyer/Product/Description";
-import { GetItem } from "../../api/buyer/get";
+import { GetItem, GetOrders } from "../../api/buyer/get";
 import { GetSeller } from "../../api/seller/get";
 import { AddView, CreateOrder, LogBuyerIn, RegisterBuyer, UploadChat } from "../../api/buyer/post";
 import { v4 as uuid } from "uuid";
@@ -21,19 +21,24 @@ import {
 } from '../../location';
 import Aside from "../../components/Buyer/Product/Aside";
 const ProductPage = () => {
-    let {pickup_channel} = useSelector(s=>s.pickup_channel)
 
 
     let location = useLocation();
     let navigate = useNavigate();
 
-    let [item, setItem] = useState();
-    let [phone, set_phone] = useState(1);
+    
+
     let {ItemImages} = useSelector(s => s.itemImages);
     let {ActiveImg} = useSelector(s => s.ActiveImg);
+    let {pickup_channel} = useSelector(s=>s.pickup_channel)
     let {buyerData} = useSelector(s => s.buyerData);
+
     let [screenWidth, setScreenWidth] = useState(0);
     let [activeImg, setActiveImg] = useState(imgSvg);
+    let [item, setItem] = useState();
+    let [phone, set_phone] = useState(1);
+    let [order_list, set_order_list] = useState([]);
+
     const searchParams = new URLSearchParams(window.location.search);
 
     useEffect(() => {let width = window.innerWidth;setScreenWidth(width)}, []);
@@ -199,15 +204,29 @@ const ProductPage = () => {
     function SaveHistory() {
         let history = window.localStorage.getItem('campus_express_history');
         if(history !== '' && history !== undefined && history !== null && history !== 'null'){
-            let duplicateItems = JSON.parse(history).filter(data => data?.product_id === item?.product_id)
-            if(duplicateItems.length < 1){
-                window.localStorage.setItem('campus_express_history', JSON.stringify(JSON.parse(history).push({category: item?.category, product_id: item?.product_id})));
-
+            let result = JSON.parse(history)
+            if(result.length>0) {
+                let duplicateItems = result.filter(data => data?.product_id === item?.product_id)
+                if(duplicateItems.length < 1){
+                    window.localStorage.setItem('campus_express_history', JSON.stringify(JSON.parse(history).push({category: item?.category, product_id: item?.product_id})));
+    
+                }
             }
         }else{
             window.localStorage.setItem('campus_express_history', JSON.stringify([{category: item?.category, product_id: item?.product_id}]));
         }
     }
+
+    useEffect(() => {
+        GetOrders(buyerData?.buyer_id)
+        .then((result) => {
+            console.log(result)
+            if(result){
+                set_order_list(result)
+            }
+        })
+        .catch((err) => console.log(err))
+    }, [buyerData]) 
     
     return ( 
         <>
@@ -232,7 +251,7 @@ const ProductPage = () => {
                     <div className="buyer-product-cnt" style={{display: 'flex', flexDirection: 'column', width: screenWidth > 760 ? 'calc(100% - 360px)' : '100%'}}>
 
                         
-                        <Product item={item} phone={phone} />
+                        <Product order_list={order_list} item={item} phone={phone} />
                         {
                             item?.description?.length > 0 
                             ?
@@ -273,7 +292,7 @@ const ProductPage = () => {
 
                     </div>
                     <div className="buyer-product-aside-cnt shadow-sm" style={{width: screenWidth < 480 ? '100%' : '340px', height: 'fit-content', background: '#fff'}}>
-                        <Aside item={item} />
+                        <Aside order_list={order_list} item={item} />
                     </div>
                 </div>
             </BuyerLayout>
