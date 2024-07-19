@@ -330,4 +330,125 @@ function pwdMailTemplate(token,email) {
    )
 }
 
-module.exports={regTxtMail,emailRegMail,phoneRegMail,mailTemplate,regTxtMailTemplate,pwdMailTemplate}
+
+function regTxtMailTemplateForBuyers(user_name) {
+   return(
+       `
+       <!DOCTYPE html>
+     <html lang="en">
+        <head>
+           <meta charset="UTF-8">
+           <meta http-equiv="X-UA-Compatible" content="IE=edge">
+           <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Your Email Template</title>
+       </head>
+       <style>
+             body {
+                 font-family: 'Arial', sans-serif;
+                 margin: 0;
+                 height: auto;
+                 padding: 0;
+                 background-color: #f4f4f4;
+             }
+             .container {
+                 width: 100%;
+                 margin: 0 auto;
+                 padding: 20px;
+                 background-color: #ffffff;
+                 
+         }
+p,header,h4,a{
+   font-size: small;
+   padding: 10px;
+         }
+button{
+   padding: 10px;
+   background-color: #FF4500;
+   width: calc(100% - 20px);
+   color: #fff;
+}
+
+           
+     </style>
+
+       <body>
+         <header><h2>Campus Express Nigeria</h2></header>
+         <div class='container'>
+           <h4>Hello ${user_name}</h4>
+       
+       
+       <p>Welcome to Campus Express! We are thrilled to have you join our community of buyers. Your registration has been successfully completed, and you are now ready to start shopping on our platform.</p>
+       
+       <h4>Here’s what you can do next:</h4>
+       <ol>
+           <li>Set Up Your Profile:
+              <ul>
+                 <li>Log in to your account and complete your profile verification.</li>
+                 <li>Update your inventory to get latest updates.</li>
+              </ul>
+           </li>
+        
+           <li>Purchase Products:
+              <ul>
+                 <li>Order Products.</li>
+                 <li>Make Easy Online Payment Secured With Escrow.</li>
+              </ul>
+           </li>
+
+           <li> Refer And Earn:
+              <ul>
+                    <li>Refer A friend and earn a passive income.</li>
+                    <li>NOTE: conditions applies.</li>
+              </ul>
+           </li>
+
+           <li> Get Support:
+           <ul>
+                 <li>Visit our Help Center for tips and tutorials on how to use campus express.</li>
+                 <li>Contact our support team at 08032639894 if you need any assistance.</li>  
+              </ul>
+           </li>
+        </ol>
+
+       <p>We are committed to helping you shop on Campus Express. If you have any questions or need any assistance, please do not hesitate to reach out to us.</p>
+       
+       <p>Once again, welcome aboard! We look forward to seeing your needs achieved on Campus Express.</p>
+       
+       <p>Best regards,</p>
+         <br/>
+         <p>Akpulu Fabian Chinedu  </p>
+         <p>CEO/Director</p>
+         <p>Campus Express Team  </p>
+         <p>akpulufabian@gmail.com</p>
+         </div>
+       </body>
+         </html>
+
+
+       `
+   )
+}
+
+function regTxtMailForBuyers(user_name) {
+   return(
+       `Hello ${user_name}
+       \n\n
+       We are thrilled to have you join Campus Express! community of buyers. You can now start shopping on our platform by:
+       \n\n
+       1.Setting Up Your Profile.
+       \n\n
+       2.Ordering Items.
+       \n\n
+       3.Refering your friends.
+       \n\n
+       4.Engaging with sellers via reviews to build a strong reputation.
+       \n\n
+       Contact our support team at 08032639894 if you need any help.
+       \n\n
+       We look forward to seeing your store thrive on Campus Express.
+       \n\n
+       Best regards`
+   )
+}
+
+module.exports={regTxtMail,emailRegMail,phoneRegMail,mailTemplate,regTxtMailTemplate,pwdMailTemplate,regTxtMailTemplateForBuyers,regTxtMailForBuyers}

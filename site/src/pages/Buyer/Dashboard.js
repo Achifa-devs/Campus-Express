@@ -206,9 +206,7 @@ const Dashboard = () => {
             cards={cards} 
             
         />)
-        if(location.pathname.split('/')[1] === 'search'){
-            setActiveJSX(<SearchOutput />)
-        }
+        
     }, [location]) 
 
     useEffect(() => {
@@ -373,19 +371,24 @@ const Dashboard = () => {
                     }}>  
 
                         {
-                            <>
-                                {
-                                    
-                                    <Ads />
-
-                                }
-                            
-                            </>
+                            location.pathname.split('/').splice(-1)[0] === 'search'
+                            ?
+                            ''
+                            :
+                            <Ads />
                         }
 
                         
-                        <br />
-                        <br />
+                        {
+                            location.pathname.split('/').splice(-1)[0] === 'search'
+                            ?
+                            ''
+                            :
+                            <>
+                                <br />
+                                <br />
+                            </>
+                        }
                        
                     </div>
 
@@ -416,19 +419,26 @@ const Dashboard = () => {
                             :
                             ''
                         }
-                        {/* <PaidAds cntName={'Recommended'} top={'55px'} /> */}
-                        {/* <FlashAds />  */}
-                        {/* <br /> */}
-                            
-                        {activeJSX}
-                        {activeJSX}
-                        <PaidAds cntName={'Brand New Items'} condition={'new'} top={'25px'} />
-                        {activeJSX}
-                        {activeJSX}
-                        <PaidAds cntName={'Used Items'} condition={'used'} top={'25px'} />
-                        {activeJSX}
-                        {activeJSX}
 
+                        {
+                            location.pathname.split('/').splice(-1)[0] === 'search'
+                            ?
+                                <>
+                                    <SearchOutput />
+                                </>
+                            :
+                            <>
+                                {activeJSX}
+                                {activeJSX}
+                                <PaidAds cntName={'Brand New Items'} condition={'new'} top={'25px'} />
+                                {activeJSX}
+                                {activeJSX}
+                                <PaidAds cntName={'Used Items'} condition={'used'} top={'25px'} />
+                                {activeJSX}
+                                {activeJSX}
+                            </>
+                        }
+                         
                     </div>
 
                     <button className="shadow" style={{position: 'fixed', bottom: '20px', padding: '10px', display: 'flex', alignItems: 'center', flexDirection: 'row', justifyContent: 'center', right: '20px', width: 'auto', height: 'auto', background: '#FF4500', borderRadius: '10px'}} onClick={e => window.location.href=('/seller')}>  

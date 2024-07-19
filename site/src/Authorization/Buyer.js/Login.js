@@ -32,7 +32,7 @@ const BuyerLogin = ({query}) => {
     const validation = useRef(false);
 
 
-    let Login = (e) => {
+    let Login = async(e) => {
         let overlay = document.querySelector('.overlay')
         overlay.setAttribute('id', 'overlay');
         let check = document.querySelector('.err-cnt').querySelector('.err-mssg');
@@ -48,18 +48,16 @@ const BuyerLogin = ({query}) => {
             )
             e.target.disabled = true;
 
-            LogBuyerIn(email,pwd)
-            .then((result) => {
-                window.localStorage.setItem("CE_buyer_id", result.id)
-                window.localStorage.setItem("CE_buyer_name_initial", result.name)
+            let response = await LogBuyerIn(email,pwd)
+            if(response.bool){
+                window.localStorage.setItem("CE_buyer_id", response.id)
+                // window.localStorage.setItem("CE_buyer_name_initial", result.name)
                 location.search !== ''
                 ?
                 navigate(`/${page}?product_id=${data}`)
                 :
                 navigate('/')
-            })
-            .catch((err) => {
-                console.log(err)
+            }else{
                 let overlay = document.querySelector('.overlay')
                 overlay.removeAttribute('id');
 
@@ -83,7 +81,8 @@ const BuyerLogin = ({query}) => {
                 }
                 e.target.disabled = false;
                 setBtn("Login")
-            })
+            }
+            
         }
         
 

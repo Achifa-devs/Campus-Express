@@ -97,7 +97,7 @@ const BuyerSignup = () => {
      
     }
 
-    let Registration = (e) => {
+    let Registration = async(e) => {
         
         // e.currentTarget.disabled = true;
         let overlay = document.querySelector('.overlay')
@@ -112,10 +112,11 @@ const BuyerSignup = () => {
             )
             // e.currentTarget.disabled = true;
             try {
-                let result = RegisterBuyer(fname.trim(),lname.trim(),email,phone,pwd,state,campus,gender)
-                window.localStorage.setItem("CE_buyer_id", result.id)
-                window.localStorage.setItem("CE_buyer_name_initial", result.name)
+                let result = await RegisterBuyer(fname.trim(),lname.trim(),email,phone,pwd,state,campus,gender)
+                // window.localStorage.setItem("CE_buyer_name_initial", result.name)
                 if(result){
+                    console.log(result)
+                    window.localStorage.setItem("CE_buyer_id", result.id)
                     if(location.search){
                         navigate(`/${page}?product_id=${data_}`)
                     }else{
@@ -137,7 +138,6 @@ const BuyerSignup = () => {
             }
            
         }else{
-            alert()
 
             console.log(validation.current)
 

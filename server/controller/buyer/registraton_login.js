@@ -1,11 +1,13 @@
 const { 
     NeonDB 
 } = require("../../db");
+const { regTxtMailTemplateForBuyers, regTxtMailForBuyers } = require("../../mail/reg");
 const { 
     shortId,
     jwt,
     bcrypt
 } = require('../../modules');
+const { send_email, send_sms, send_mail_via_outlook } = require("../../utils");
 const maxAge = 90 * 24 * 60 * 60; 
 
 const createToken = (id) => {
@@ -27,7 +29,7 @@ async function register_buyer(req,res) {
     async function CreateNewBuyer() {
         return(
             NeonDB.then((pool) => 
-                pool.query(`insert into campus_buyers(id,fname,lname,buyer_id,email,phone,password,state,campus,isActive,isVerified,isEmailVerified,isPhoneVerified,date,gender ) values(DEFAULT, '${fname}', '${lname}', '${buyer_id}', '${email}', '${phone}', '${hPwd}', '${state}', '${campus}', '${false}','${false}','${false}','${false}', '${date}')`)
+                pool.query(`insert into campus_buyers(id,fname,lname,buyer_id,email,phone,password,state,campus,isActive,isVerified,isEmailVerified,isPhoneVerified,date,gender ) values(DEFAULT, '${fname}', '${lname}', '${buyer_id}', '${email}', '${phone}', '${hPwd}', '${state}', '${campus}', '${false}','${false}','${false}','${false}', '${date}', '${gender}')`)
                 .then(result => result.rowCount > 0 ?(true) : (false))
                 .catch(err => console.log(err))
             )
@@ -38,7 +40,7 @@ async function register_buyer(req,res) {
     async function CreateNewBuyerWallet() {
         return(
             NeonDB.then((pool) => 
-                pool.query(`insert into campus_express_buyer_wallet(id,wallet_id,buyer_id,wallet_balance,wallet_pin,wallet_number,date) values(DEFAULT,'${wallet_id}','${buyer_id}','${0.00}','${pwd}','${phone}','${date}', '${gender}')`)
+                pool.query(`insert into campus_express_buyer_wallet(id,wallet_id,buyer_id,wallet_balance,wallet_pin,wallet_number,date) values(DEFAULT,'${wallet_id}','${buyer_id}','${0.00}','${pwd}','${phone}','${date}')`)
                 .then(result => result.rowCount > 0 ? true : false)
                 .catch(err => console.log(err))
             )
@@ -57,52 +59,47 @@ async function register_buyer(req,res) {
         )
     }
 
+   
     async function SendEmail() {
-        let token = shortId.generate()
-        function createEmailToken() {
-            return(
-                NeonDB.then((pool) => 
-                    pool.query(`insert into email_token(id,email,user_id,token,date) values(DEFAULT, '${email}', '${buyer_id}', '${token}', '${date}')`)
-                    .then(result => (result.rowCount))
-                    .catch(err => {
-                        console.log(err)
-                    })
-                )
-                .catch(err => {
-                    console.log(err)
-                })
-            )
-        }
+        let name = `${fname} ${lname}`
+        let emailTemp = regTxtMailTemplateForBuyers(name)
+        send_mail_via_outlook(email, 'Welcome To Campus Express', emailTemp)
+    }
     
-        let response1 = await createEmailToken();
-        if(response1 > 0){
-            // console.log(response1)
-            // let response2 = sendEmailToken();
-            res.send(true)
-        }
-
-      
+    async function SendSMS() {
+        let name = `${fname} ${lname}`
+        let emailMssg = regTxtMailForBuyers(name)
+        send_sms(phone,emailMssg)
     }
 
-    async function checkEmail(params) {
+    async function checkPhone() {
         return(
             await NeonDB.then((pool) => 
-                pool.query(`SELECt * FROM campus_buyers WHERE email = '${email}'`)
-                .then(result => result.rows.length > 0 ? {err: 'duplicate email', bool: false} : {bool: true})
+                pool.query(`
+                    SELECT COUNT(*) as count
+                    FROM campus_buyers
+                    WHERE phone = '${phone}'
+                `)
+                .then(result => parseInt(result.rows[0].count, 10) > 0 ? {err: 'duplicate phone', bool: false} : {bool: true, err: ''})
                 .catch(err => (err))
-            )
+            ) 
         )
     }
 
-    async function checkPhone(params) {
+    async function checkEmail() {
         return(
             await NeonDB.then((pool) => 
-                pool.query(`SELECt * FROM campus_buyers WHERE phone = '${phone}'`)
-                .then(result => result.rows.length > 0 ? {err: 'duplicate phone', bool: false} : {bool: true})
+                pool.query(`
+                    SELECT COUNT(*) as count
+                    FROM campus_buyers
+                    WHERE email = '${email}'
+                `)
+                .then(result => parseInt(result.rows[0].count, 10) > 0 ? {err: 'duplicate email', bool: false} : {bool: true, err: ''})
                 .catch(err => (err))
             )
         )
-    }
+    } 
+
 
     try{
         let email = await checkEmail(data => data)
@@ -132,17 +129,19 @@ async function register_buyer(req,res) {
             return(newBuyerWallet ? (true) : (false))
         })
         .then((result) => {
-            console.log('wallet done ...',result)
-            let newBuyerEmailToken = result ? SendEmail() : false;
-            return(newBuyerEmailToken ? (true) : (false))
+            result ? res.status(200).send({bool: true, data: buyer_id}) : ({bool: false, data: ''})
+            SendEmail()
+            SendSMS()
         })
-        
+       
         .catch((err) => {
-            // console.log(err)
-            res.status(500).send(err)
+            console.log(err)
+            res.status(500).send({bool: false, data: err})
         })
     }catch(err){
-        res.status(500).send(err)
+        console.log(err)
+
+        res.status(500).send({bool: false, data: err})
 
     }
 }

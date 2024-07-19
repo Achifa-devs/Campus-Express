@@ -15,7 +15,6 @@ export default function SearchOutput() {
 
     let [searchChar, setSearchChar] = useState('')
     useEffect(() => {
-    
         setSearchRes(SearchList)
     }, [SearchList])
 
@@ -23,8 +22,8 @@ export default function SearchOutput() {
   return (
     <>
         <div style={{
-            marginTop: '50px',
-            paddingTop: '20px',
+            // marginTop: '50px',
+            // paddingTop: '20px',
             background: '#fff'
         }} className="buyer-main-content buyer-main-cnt">
 

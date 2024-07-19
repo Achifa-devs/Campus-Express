@@ -3,7 +3,7 @@ import axios from 'axios'
 
 
 let uri_1 = 'https://ce-server.vercel.app'
-let uri_2 = 'http://localhost:2222'
+let uri_2 = 'http://localhost:2222' 
 let IP = uri_1
 
 
@@ -95,40 +95,20 @@ export async function NewVisitor(src) {
 
 
 async function post_request_generators(uri, body) {
-    // return(
-    //     await axios.post(`${IP}/${uri}`, body, {
-    //         cancelToken: source.token
-    //     })
-    //     .then((result) => result)
-    //     .catch((error) => {
-    //         if (axios.isCancel(error)) {
-    //             console.log('Request canceled:', error.message);
-    //         }  else {
-    //             console.log('Error:', error.message);
-    //         }    
-            
-    //     })     
-        
-    // )
+    let result = await fetch(`${IP}/${uri}`, {
+        method: 'post',
+        headers: {
+          "Content-Type": "Application/json"
+        },
+        body: JSON.stringify(body)
+    })
 
-    return(
-        fetch(`${IP}/${uri}`, {
-            method: 'post',
-            headers: {
-              "Content-Type": "Application/json"
-            },
-            body: JSON.stringify(body)
-        })
-        .then(async(result) => await result.json())
-        .catch((error) => {
-            if (axios.isCancel(error)) {
-                console.log('Request canceled:', error.message);
-            }  else {
-                console.log('Error:', error.message);
-            }    
-        })  
+    try {
+        return await result.json()
+    } catch (error) {
+        return await result.json()
+    }
 
-    )
 }
 
 
