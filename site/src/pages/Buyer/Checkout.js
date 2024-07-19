@@ -34,8 +34,11 @@ const CheckOut = () => {
 
         GetOrder(buyerData?.buyer_id,location.pathname.split('/').splice(-1)[0])
         .then((result) => {
-            set_order_list(result[0]);
-            overlay.removeAttribute('id');
+            // console.log(result)
+            if(result){
+                set_order_list(result[0]);
+                overlay.removeAttribute('id');
+            }
         })
         .catch((err) => {
             console.log(err);

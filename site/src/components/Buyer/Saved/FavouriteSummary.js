@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
-const FavouriteSummary = ({Total, Method, type, price, buyer}) => {
+const FavouriteSummary = ({Total, Method, Items}) => {
 
     // let meta = {
     //     immediate_purchase: window.location.pathname.split('/').length > 4 ? true : false,
@@ -35,22 +35,18 @@ const FavouriteSummary = ({Total, Method, type, price, buyer}) => {
                 </div>
 
                 <div>
-                    <small style={{float: "left"}}>Sub total</small>
+                    <small style={{float: "left"}}>Total Items</small>
                     <small style={{float: "right"}}> 
-                        <small>₦</small>{Total}</small>
+                        {Items?.length}</small>
                 </div> 
 
-                <div style={{fontSize: "small"}}>
-                    <small style={{float: "left"}}>Charges</small>
-                    <small style={{float: "right"}}>
-                        <small>Free</small>
-                    </small>
-                </div>
 
                 <div style={{height: "80px"}}>
                     <button className="shadow-sm" >
                         <span>Favourite SubTotal&nbsp; </span>
-                        <span><small>(₦</small>{Total})</span>
+                        <span><small>(₦</small>{
+                            Items.reduce((accumulator, currentObject) => parseInt(accumulator) + parseInt(currentObject.saved_item[0].price), 0)
+                            })</span>
                     </button>
                 </div>
                 

@@ -4,21 +4,9 @@ import {
     useEffect,
     useState 
 } from 'react'
+import ellipsisSvg from '../../../assets/ellipsis-svgrepo-com.svg'
+
 import js_ago from 'js-ago';
-import { 
-    useDispatch, 
-    useSelector 
-} from 'react-redux';
-import cartSvg from '../../../assets/cart-shopping-fast-svgrepo-com.svg'
-import { 
-    DeleteItemFromCart 
-} from '../../../api/buyer/delete';
-import { 
-    setCartTo 
-} from '../../../redux/buyer_store/Cart';
-import { 
-    AddItemToCart 
-} from '../../../api/buyer/post';
 import { GetSavedItem } from '../../../api/buyer/get';
 import { setSaveTo } from '../../../redux/buyer_store/Save';
 import Thumbnail from '../Thumbnail';
@@ -26,39 +14,46 @@ import { useNavigate } from 'react-router-dom';
 
 const Card = ({activeImg,item,index}) => {
     let navigate = useNavigate()
-    
+    let [screenWidth, setScreenWidth] = useState(0);
+    useEffect(() => {let width = window.innerWidth;setScreenWidth(width)},[]); 
     return ( 
         <>
-             <div key={index} onClick={e => navigate(`/product/${item.saved_item[0].product_id}`)} className="buyer-savedItem-card shadow-sm" style={{width: '100%',borderRadius: '5px'}}>
-                <div>
-                    <Thumbnail product_id={item.saved_item[0].product_id}/>
+             <div className="seller-order-card shadow-sm" style={{position: 'relative', display: 'flex', background: '#fff', margin: '5px 0 5px 0', borderRadius: '10px'}}>
+                <div style={{height: '100%', width: screenWidth > 760 ? '20%' : '20%', borderRadius: '5px', display: 'table', margin: '0 auto'}}>
+                    <Thumbnail product_id={item?.saved_item[0]?.product_id} />
                 </div>
-                <button style={{width: 'auto', height: 'auto',padding: '5px'}}>
-                    <img style={{width: '20px', height: '20px'}} src={deleteSvg} alt="" />
-                </button>
 
-                <div className="buyer-savedItem-body">
+               
+                <div className="seller-order-body" style={{width: 'calc(80%)', position: 'relative'}}>
+                    {/* <img src={deleteSvg}alt="" /> */}
 
+                    <div className="seller-order-title" style={{display: 'flex', width: '80%', fontSize: 'medium', height: '40%', alignItems: 'center', fontWeight: '500'}}>
+                        <p style={{
+                            whiteSpace: 'nowrap', /* Prevent text from wrapping */
+                            overflow: 'hidden',    /* Hide any overflow text */
+                            textOverflow: 'ellipsis'
+                        }}>{item.saved_item[0].title}</p>
+                    </div>
+                    <div className="seller-order-id" style={{display: 'flex', height: '40px', alignItems: 'flex-start'}}>
+                        <h3 style={{fontWeight: '500', fontSize: 'small'}}>&#8358;{
+                                new Intl.NumberFormat('en-us').format(item.saved_item[0].price)}</h3>
+                    </div>
+                   
+{/* <hr /> */}
+                    {/* <div className="seller-order-status" style={{background: '#fff', color: '#FF4500'}}>
+                        {item.savedItem.status.state}
+                    </div> */}
                     
-                    <div className='buyer-item-title' style={{width: 'auto'}}>
-                        <p style={{fontWeight: '500', fontSize: 'medium'}}>{item.saved_item ? item.saved_item[0].title : ''}</p> 
+
+                    <div className="seller-order-date" style={{bottom: '5px', fontWeight: '400', fontSize: 'small'}}>
+                        {item?js_ago(new Date(item?.saved_item[0]?.date)):''}
                     </div>
 
-                    
-
-
-                    <div className="buyer-item-price">
-                        <span style={{fontWeight: '500', fontSize: 'medium'}}>&#8358;{item.saved_item ?  new Intl.NumberFormat('en-us').format(item.saved_item[0].price) : ''} </span>
-                    </div> 
-
-                    {/* <div className='buyer-item-seller'>
-                        <span style={{fontWeight: '500', fontSize: 'medium'}}>Seller: {item.seller.fname} {item.seller.lname}</span>
-                    </div> */}
-
-                    {/* <div className="buyer-items-btn">
-                    
-                    </div> */}
                 </div>
+            
+                <button onClick={e => ''} className='shadow-sm' style={{position: 'absolute', top: '10px', right: '10px', height: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '5px', textAlign: 'center', fontSize: 'small', color: '#fff', background: '#FF4500', width: '30px'}}>
+                    <img src={deleteSvg} style={{height: '100%', width: '100%', position: 'relative'}} alt="" />
+                </button>
             </div>
         </>
      );

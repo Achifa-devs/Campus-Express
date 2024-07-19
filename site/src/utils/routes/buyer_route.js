@@ -18,6 +18,7 @@ import PrivacyPolicy from '../../pages/Buyer/PrivacyPolicy';
 import ErrorPage from '../../components/ErrorPage';
 import Order from '../../pages/Buyer/Order';
 import OrderTracker from '../../pages/Buyer/OrderTracker';
+import NewOrder from '../../pages/NewOrder';
 
 
 
@@ -36,6 +37,7 @@ export let buyer_route = [
     { path: '/history', component: <Historhy />},
     { path: '/cart', component: <Cart />},
     { path: '/orders', component: <Order />},
+    { path: '/new-order/:id', component: <NewOrder />},
     { path: '/wallet', component: <Wallet />},
     { path: '/favourites', component: <SavedItem />},
     { path: '/product', component: <ProductPage />}, 

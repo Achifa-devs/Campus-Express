@@ -127,6 +127,9 @@ const Product = ({item,phone,order_list}) => {
                 // if(response){
                 //     window.location.href=(`/checkout/${item.product_id}`)
                 // }
+
+            window.location.href=(`/new-order/${item.product_id}`)
+
             }
         }else{
             window.location.href=(`/checkout/${item.product_id}`)
@@ -313,10 +316,7 @@ const Product = ({item,phone,order_list}) => {
 
                             <br />
 
-                            <div style={{background: '#f9f9f9', padding: '10px'}}>
-
-                                To ensure secure transactions, payments are made first. Once your payment is confirmed, the seller will contact you to arrange delivery or pickup. And note that all payments is managed by Escrow services for security reasons.
-                            </div>
+                           
                         </>
                         :
                         ''

@@ -60,8 +60,8 @@ const SavedItem = () => {
                             width: '100%',
                             display: 'flex',
                             overflow: 'auto',
-                            alignItems: 'center',
-                            padding: '10px',
+                            alignItems: 'flex-start',
+                            padding: '5px',
                             justifyContent: 'center',
                             flexDirection: 'column'
                         }}> 
@@ -95,7 +95,7 @@ const SavedItem = () => {
                         <Link to={'/'} style={{color: 'orange',fontFamily: 'sans-serif', fontWeight: '500'}}>Click Here To Continue Shopping Your</Link>
                     </section>
                 }
-                    <FavouriteSummary />
+                    <FavouriteSummary Items={Items} />
                 </div>
             </BuyerLayout>
         </>

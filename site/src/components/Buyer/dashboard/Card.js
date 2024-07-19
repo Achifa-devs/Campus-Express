@@ -115,14 +115,16 @@ const Card = ({item, index}) => {
   
 
     useEffect(() => {
-        GetOrders(buyerData?.buyer_id)
-        .then((result) => {
-            console.log(result)
-            if(result){
-                set_order_list(result)
-            }
-        })
-        .catch((err) => console.log(err))
+        if(buyerData){
+            GetOrders(buyerData?.buyer_id)
+            .then((result) => {
+                console.log(result)
+                if(result){
+                    set_order_list(result)
+                }
+            })
+            .catch((err) => console.log(err))
+        }
     }, [buyerData]) 
  
     return ( 
@@ -257,7 +259,7 @@ const Card = ({item, index}) => {
                         ?
                         window.location.href = `/checkout/${item.product_id}`
                         :
-                        window.location.href = `/checkout/${item.product_id}`
+                        window.location.href = `/new-order/${item.product_id}`
 
                     }}>
 

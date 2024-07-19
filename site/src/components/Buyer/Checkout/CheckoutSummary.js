@@ -96,13 +96,25 @@ const CheckoutSummary = ({Total, Method, type, price, buyerData}) => {
 
                     ''
                 :
-                    <button className="shadow-sm" onClick={ e => {
-                        // type !== 'wallet' ? openFlw() : handleDeposit()
-                        window.location.href='order-tracking'
+                    <div style={{
+                        height: 'auto',
+                        width: '100%',
+                        padding: '10px',
+                        position: 'absolute',
+                        bottom: '0', 
+                        background: '#fff',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
                     }}>
-                        <span>Checkout SubTotal&nbsp; </span>
-                        <span><small>(&#8358; </small>{new Intl.NumberFormat('en-us').format(price)})</span>
-                    </button>
+                        <button className="shadow-sm" onClick={ e => {
+                            // type !== 'wallet' ? openFlw() : handleDeposit()
+                            window.location.href='order-tracking'
+                        }}>
+                            <span>Checkout SubTotal&nbsp; </span>
+                            <span><small>(&#8358; </small>{new Intl.NumberFormat('en-us').format(price)})</span>
+                        </button>
+                    </div>
                 
 
                 }

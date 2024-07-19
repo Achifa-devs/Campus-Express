@@ -107,7 +107,7 @@ const Aside = ({
     let list3 = categoriesList
 
     let CEservices = list1.map((item,i) => 
-        <li onClick={e => window.open(`/${item.uri}`)} key={i} style={{display: 'flex', }}>
+        <li onClick={e => window.location.href=(`/${item.uri}`)} key={i} style={{display: 'flex', }}>
             <span>
                 <img src={item.img} style={{height: '20px', width: '20px', marginBottom: '5px'}} alt="" />
             </span>

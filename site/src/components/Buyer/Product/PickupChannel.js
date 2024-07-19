@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { UpdatePickupChannel } from "../../../api/buyer/update"
+import { openNotice } from "../../../Functions/notice"
 
 export default function PickupChannel({updateLocation,title,edit,order_data}) {
     let {buyerData} = useSelector(s=>s.buyerData)
@@ -89,9 +90,11 @@ export default function PickupChannel({updateLocation,title,edit,order_data}) {
   
   
     function addLocation() {
-        let res = ({locale: [state,city,address1,address2,address3].map(item=>item).join(', '), date: {yr: new Date().getFullYear(), mth: selectedMonth, dy: day}})
-        updateLocation(res)
-        rmLocation()
+       
+      let res = ({locale: [state,city,address1,address2,address3].map(item=>item).join(', '), date: {yr: new Date().getFullYear(), mth: selectedMonth, dy: day}})
+      updateLocation(res)
+      rmLocation()
+       
     }
 
     async function editPickupChannel() {
@@ -117,7 +120,7 @@ export default function PickupChannel({updateLocation,title,edit,order_data}) {
   
     return( 
         <>
-            
+           
             <div style={{background: '#fff', width: 'fit-content', padding: '10px', position: 'relative', height: '80%', borderRadius: '10px'}}>
               <h2 style={{padding: '10px', color: '#FF4500', fontWeight: '500'}}><u>Input Your {title} Location </u></h2>
                 <section style={{padding: '10px', overflow: 'auto', height: 'calc(100% - 100px)'}}>

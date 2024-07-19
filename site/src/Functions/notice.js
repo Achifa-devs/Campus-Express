@@ -8,6 +8,11 @@ export function openNotice(mssg) {
         n_cnt.style.zIndex = '1000000'
         n_cnt.style.zIndex = '1000000'
         n_cnt.innerHTML = mssg
+    }else{
+        n_cnt.setAttribute('id', 'notice-cnt')
+        n_cnt.style.zIndex = '1000000'
+        n_cnt.style.zIndex = '1000000'
+        n_cnt.innerHTML = mssg
     }
 
     setTimeout(() => {

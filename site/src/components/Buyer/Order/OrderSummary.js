@@ -62,11 +62,22 @@ const OrderSummary = ({Total, Method, type, price, buyer}) => {
 
                     ''
                 :
-                    <button className="shadow-sm" >
-                        <span>Order SubTotal&nbsp; </span>
-                        <span><small>(&#8358; </small>{new Intl.NumberFormat('en-us').format(Total)})</span>
-                    </button>
-                
+                    <div style={{
+                        height: 'auto',
+                        width: '100%',
+                        padding: '10px',
+                        position: 'absolute',
+                        bottom: '0', 
+                        background: '#fff',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}>
+                        <button style={{position: 'relative'}} className="shadow-sm" >
+                            <span>Order SubTotal&nbsp; </span>
+                            <span><small>(&#8358; </small>{new Intl.NumberFormat('en-us').format(Total)})</span>
+                        </button>
+                    </div>
 
                 }
         </>
