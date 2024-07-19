@@ -393,7 +393,7 @@ const BuyerSignup = () => {
 
 
                     
-                        <div className="seller-input-cnt">
+                        <div className="seller-input-cnt" style={{background: '#FF4500', color: '#fff'}} >
                             
                             <button  onClick={e => {e.preventDefault(); Registration(e)}}>{btn}</button>
                             
