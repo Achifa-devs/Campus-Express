@@ -82,6 +82,20 @@ function retrieve_seller(product_id) {
     // return book;
 }
 
+function retrieve_seller_info(seller_id) {
+    return(
+        NeonDB.then((pool) => 
+            pool.query(`SELECT * FROM campus_sellers WHERE seller_id = '${seller_id}'`)
+            .then(result => (result.rows[0]))
+            .catch(err => console.log(err))
+            // .finally(() => pool.end())
+
+        )
+        .catch(err => console.log(err))
+    )
+    // return book;
+}
+
 async function retrieve_room(buyer_id,seller_id) {
     return(
         await NeonDB.then((pool) => 
@@ -100,11 +114,11 @@ async function retrieve_room(buyer_id,seller_id) {
     )
 }
 
-async function retrieve_buyer(buyer_id,seller_id) {
+async function retrieve_buyer_info(buyer_id) {
     return(
         await NeonDB.then((pool) => 
-            pool.query(`SELECT * FROM campus_buyers`)
-            .then(result => result.rows)
+            pool.query(`SELECT * FROM campus_buyers WHERE buyer_id = '${buyer_id}'`)
+            .then(result => result.rows[0])
             .catch(err => console.log(err))
             // .finally(() => pool.end())
 
@@ -283,14 +297,14 @@ async function send_proposal_message(mssg_type,mssg,order_id,sender_id,room_id) 
     )
 }
 
-async function create_order(product_id,unit,buyer_id) {
+async function update_order(product_id,buyer_id) {
     //stock
     let order_id = shortId.generate()
     let date = new Date()
     return(
       await NeonDB.then((pool) => 
-        pool.query(`insert into campus_express_buyer_orders (id,order_id,product_id,status,date,stock,buyer_id) values(DEFAULT, '${order_id}','${product_id}','pending','${date}','${unit}','${buyer_id}')`)
-            .then(result => result.rowCount > 0 ? ({bool: true, order_id}) : ({bool: false}))
+        pool.query(`UPDATE campus_express_buyer_orders SET havePaid=${true} WHERE buyer_id='${buyer_id}' AND product_id='${product_id}'`)
+            .then(result => result.rowCount > 0 ? ({bool: true}) : ({bool: false}))
             .catch(err => console.log(err))
             // .finally(() => pool.end())
 
@@ -414,7 +428,9 @@ module.exports = {
     retrive_cart,
     refill_coin,
     create_room_id,
-    create_order,
+    send_sms,
+    send_email,
+    update_order,
     send_proposal_message,
     delete_cart,
     update_buyer_assets,
@@ -426,7 +442,8 @@ module.exports = {
     retrieve_room,
     retrive_order,
     retrieve_mssg_meta_data,
-    retrieve_buyer
+    retrieve_buyer_info,
+    retrieve_seller_info
 }
 
 

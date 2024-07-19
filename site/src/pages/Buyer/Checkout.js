@@ -60,7 +60,7 @@ const CheckOut = () => {
                         <DeliveryData order_list={order_list}  />
                         <PaymentMethod />
                     </div>
-                    <CheckoutSummary Method={payment} type={'purchase'} price={order_list?.product?.price} buyerData={buyerData} />
+                    <CheckoutSummary order_list={order_list} Method={payment} type={'purchase'} price={order_list?.product?.price} buyerData={buyerData} />
                 </div>
 
             

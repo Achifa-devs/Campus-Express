@@ -3,7 +3,9 @@ const { v4 } = require("uuid");
 
 const { NeonDB } = require("./db");
 const { shortId, bcrypt, jwt } = require("./modules");
-const { process_transaction, save_tansaction, create_order, create_room_id, retrieve_room, send_proposal_meta_data, retrieve_mssg_meta_data, send_proposal_message, retrieve_seller, retrive_cart, delete_cart_with_id, retrive_order, send_proposal_meta_data_from_cart, retrieve_room_with_room_id, update_buyer_wallet, refill_buyer_wallet, refill_coin } = require("./utils");
+const { process_transaction, save_tansaction, create_order, create_room_id, retrieve_room, send_proposal_meta_data, retrieve_mssg_meta_data, send_proposal_message, retrieve_seller, retrive_cart, delete_cart_with_id, retrive_order, send_proposal_meta_data_from_cart, retrieve_room_with_room_id, update_buyer_wallet, refill_buyer_wallet, refill_coin, update_order, send_sms, retrieve_seller_info, send_email } = require("./utils");
+const { checkoutMssgToSeller } = require("./sms");
+const { checkoutEmailToSeller } = require("./mails/coin");
 const maxAge = 90 * 24 * 60 * 60; 
 const createToken = (id) => {
     return jwt.sign({ id }, 'seller_secret', {
@@ -41,21 +43,15 @@ async function process_payment(req,res) {
     let date = new Date()
     let payment_src = response.payment_type
 
-    let immediate_data = custom_data[1];
-    let immediate_purchase = immediate_data.split('*')[0];
-    let unit = immediate_data.split('*')[1];
-    let product_id = immediate_data.split('*')[2];
+    let buyer_info = JSON.parse(response.phone).buyer_info;
+    let product_info = JSON.parse(response.phone).product_info;
+    let purchase_info = JSON.parse(response.phone).purchase_info;
 
 
+    let {buyer,phone}=buyer_info
+    let {product_id,price,title}=product_info
+    let {unit,amount_paid,payment_type,isBulkPurchase}=purchase_info
 
-    let customer = response.customer;  
-    let customer_data = JSON.parse(customer.phone_number);
-    let user_id = customer_data.user_id;
-
-    let transactional_data = JSON.parse(customer.email);
-    let coin = JSON.parse(transactional_data).coin;
-    let fee = JSON.parse(transactional_data).fee;
-    let payment_type = '';
 
 
     if(payment_type === 'coin_purchase_buyer'){
@@ -64,14 +60,10 @@ async function process_payment(req,res) {
         refill_coin('seller',user,payment_src,payment_type,amount,date,coin,fee)
     }
     else if(payment_type === 'checkout'){
-        if(charged_amount === amount){
-            try{
-                checkout_handler({immediate_purchase,unit,product_id}, user, charged_amount, payment_src, date)
-            }catch(err){
-                console.log(err)
-            }
-        }else{
-            refill_buyer_wallet(user,0,payment_src,4,charged_amount,date)
+        try{
+            checkout_handler({immediate_purchase,unit,product_id}, user, charged_amount, payment_src, date)
+        }catch(err){
+            console.log(err)
         }
     }else{
         return {bool: false, reason: 'payment type is not valid'}
@@ -79,14 +71,14 @@ async function process_payment(req,res) {
 
     async function checkout_handler(immediate_data,user,charged_amount,payment_src,date) {
 
-        if(immediate_data.immediate_purchase === 'true'){
+        if(!isBulkPurchase){
             
-            let seller_id = await retrieve_seller(immediate_data.product_id)
-            console.log('response: ',seller_id)
+            let seller_id = await retrieve_seller(product_id)
+            let seller_info = await retrieve_seller_info(seller_id)
+            let buyer_info = await retrieve_buyer_info(buyer)
 
             new Promise(async(resolve, reject) => { 
-                let response = await save_tansaction(user_id,0,payment_src,4,charged_amount,date,'checkout'); 
-
+                let response = await save_tansaction(buyer,payment_src,payment_type,50,amount_paid,date,'checkout'); 
                 response.bool ? resolve(response) : reject(response)
             })
         
@@ -94,8 +86,7 @@ async function process_payment(req,res) {
                 // CREATE ORDER
                 if(result.bool){
                     console.log(result, 'transaction saved and order is been created...') 
-                    let response = await create_order(immediate_data.product_id, parseInt(immediate_data.unit), user_id)
-
+                    let response = await update_order(product_id,buyer)
                     return response.bool ? response : ({bool: false})
                 }else{
                     console.log(result,'error occcured while saving transaction and order is cancelled...')
@@ -106,11 +97,12 @@ async function process_payment(req,res) {
             .then(async(result) => {
                 // CREATE CHAT ROOM
                 if(result.bool ){
-                    console.log(result, 'order created and chat room is been created...') 
-                    let room_response = create_room_id(seller_id,user_id)
+                    console.log(result, 'sending message to phone...') 
+                    let message = checkoutMssgToSeller(seller_info, buyer_info, product_info, date)
+                    let room_response = send_sms(seller_info.phone, message)
                     return room_response ? ({bool: true, order_id: result.order_id}) : ({bool: false})
                 }else{
-                    console.log(result,'error occcured while creating order and room is cancelled... ') 
+                    console.log(result,'sending message to phone... ') 
                     return response ({bool: false})
             
                 }
@@ -120,34 +112,18 @@ async function process_payment(req,res) {
             .then(async(result) => {
                 // SEND MSSG META DATA
                 if(result.bool ){
-                    console.log(result, 'room created and sending proposal meta data now...') 
-                    let room_id = await retrieve_room(user_id,seller_id)
-                    let mssg = await send_proposal_meta_data(room_id,user_id,result.order_id)
-                    return mssg ? ({bool: true, room_id, order_id: result.order_id}) : ({bool: false,room_id})
+                    console.log(result, 'sending message to  email...') 
+                    let message = checkoutEmailToSeller(seller_info, buyer_info, product_info, date)
+                    let result = send_email(seller_info.email,'Confirmation of Successful Item Purchase', message)
+                    return result ? ({bool: true, room_id, order_id: result.order_id}) : ({bool: false,room_id})
                 }else{
-                    console.log(result,'error occcured while creating room and sending proposal meta data failed...') 
+                    console.log(result,'sending message to  email...') 
                     return response ({bool: false})
                 }
         
             })
         
-            .then(async(result) => {
-                // SEND MSSG
-                // mssg_id,mssg_type,mssg,order_id,sender_id,room_id
-
-                if(result.bool ){
-                    console.log(result, 'room created and sending message now....') 
-                    // let mssg = generate_mssg(`${payload.data.customer.name}`)
-                    let response = await send_proposal_message('doc',product_id,result.order_id,user_id,result.room_id)
-                    return response ? ({bool: true}) : ({bool: false})
-                }else{
-                    console.log(result,'error occcured while creating room and sending message faild...')
-                    return ({bool: false}) 
-            
-                }
-            
-            })
-        
+           
             .then((result) => result.bool ? res.send(true) : res.send(false))
         
             .catch(err => console.log(err))
@@ -156,9 +132,8 @@ async function process_payment(req,res) {
     
             let book = [];
 
-            let response = await save_tansaction(user_id,0,payment_src,4,charged_amount,date,'checkout');
+            let response = await save_tansaction(buyer,payment_src,payment_type,50,amount_paid,date,'checkout'); 
             // response.bool ? resolve(response) : reject(response)
-
             let carts = await retrive_cart(user_id)
 
             let processes = async() => { 

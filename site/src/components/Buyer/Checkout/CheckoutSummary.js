@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { closePaymentModal, useFlutterwave } from "flutterwave-react-v3";
 import { useLocation } from "react-router-dom";
 
-const CheckoutSummary = ({Total, Method, type, price, buyerData}) => {
+const CheckoutSummary = ({Total, Method, order_list, type, price, buyerData}) => {
 
     // let meta = {
     //     immediate_purchase: window.location.pathname.split('/').length > 4 ? true : false,
@@ -24,16 +24,19 @@ const CheckoutSummary = ({Total, Method, type, price, buyerData}) => {
         amount: parseInt(price)+50,
         currency: 'NGN',
         payment_options: 'card,mobilemoney,ussd',
-        
         customer: {
             email: buyerData?.email,
-            // phone_number: `checkout/${immediate_check.split('/').length > 4 ? true : false}*${parseInt(window.location.pathname.split('/')[4].split('-')[1])}*${atob(window.location.pathname.split('/')[2])}/${buyerData.buyerData_id}/${buyerData.phone}/${price}`,
+            phone_number: JSON.stringify({
+                buyer_info: {buyer: buyerData?.buyer_id, phone: buyerData?.phone}, 
+                product_info: {product_id: order_list?.product?.product_id, title: order_list?.product?.title, price: order_list?.product?.price},
+                purchase_info: {unit: null, amount_paid: null, payment_type: 'checkout', isBulkPurchase: false}
+            }),
             name: buyerData?.fname + " " + buyerData?.lname
         },  
 
         customizations: {
             title: 'Campus Express',
-            description: 'Payment for ordered item',
+            description: `Payment for ${order_list?.product?.title}`,
             logo: 'https://st2.depositphotos.com/4403291/7418/v/450/depositphotos_74189661-stock-illustration-online-shop-log.jpg',
         },
     };
