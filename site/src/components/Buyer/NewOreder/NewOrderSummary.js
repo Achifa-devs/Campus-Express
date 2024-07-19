@@ -106,7 +106,7 @@ export default function NewOrderSummary({item,buyer}) {
                         alignItems: 'center',
                         justifyContent: 'center'
                     }}>
-                        <button style={{position: 'relative', background: '#FF4500'}}  className="shadow-sm" onClick={handleNewOrder}>
+                        <button style={{position: 'relative', background: '#FF4500', color: '#fff'}}  className="shadow-sm" onClick={handleNewOrder}>
                             <span>Create New Order&nbsp; </span>
                             {/* <span><small>(&#8358; </small>{new Intl.NumberFormat('en-us').format(price)})</span> */}
                         </button>
