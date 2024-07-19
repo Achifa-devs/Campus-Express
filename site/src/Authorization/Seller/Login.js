@@ -198,7 +198,7 @@ const SellerLogin = () => {
                         </div>
                     </form>
 
-                    <div style={{textAlign: 'center'}} onClick={e => navigate('/seller.password-reset')}>
+                    <div style={{textAlign: 'center'}} onClick={e => navigate('/seller.password-recovery')}>
                         <small style={{cursor: 'pointer', color: 'orangered', fontWeight: '500'}}>Recover Forgotten Password Here</small>
                     </div>
                     <div style={{textAlign: 'center'}} onClick={e => navigate('/seller.signup')}>

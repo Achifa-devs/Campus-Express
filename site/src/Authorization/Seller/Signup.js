@@ -88,7 +88,7 @@ const Signup = () => {
      
     }
 
-    let Registration = (e) => {
+    let Registration = async(e) => {
         // e.target.disabled = true;
         let overlay = document.querySelector('.overlay')
         overlay.setAttribute('id', 'overlay');
@@ -101,22 +101,24 @@ const Signup = () => {
                 <div className="Authloader" style={{background: '#fff',border: '1px solid orangered'}}></div>
             )
             e.target.disabled = true;
-            RegisterSeller(fname.trim(),lname.trim(),email,phone,pwd,state,campus)
-            .then(({bool,data}) => {
-                // window.localStorage.setItem('seller_email_verification_token', token)
+            let response = await RegisterSeller(fname.trim(),lname.trim(),email,phone,pwd,state,campus)
+            console.log(response)
+            if(response.bool){
+                console.log(response)
                 window.localStorage.setItem("CE_seller_id", data)
-                navigate('/seller?status=first_login')
-            })
-            .catch((err) => {
-                if(err.response.data === 'duplicate email'){
+                // navigate('/seller?status=first_login')
+            }else{
+                console.log(response)
+                overlay.removeAttribute('id');
+                if(response.data === 'duplicate email'){
                     addErrMssg([{mssg:'Email already exist, please try something else'}], document.querySelector('.email').parentElement)
-                }else if(err.response.data === 'duplicate phone'){
+                }else if(response.data === 'duplicate phone'){
                     addErrMssg([{mssg:'Phone Number already exist, please try something else'}], document.querySelector('.phone').parentElement)
                 }
                 setBtn("Signup")
-                // console.log(err)
                 e.target.disabled = false;
-            })
+            }
+            
         }else{
             setBtn("Signup")
             e.target.disabled = false;

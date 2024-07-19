@@ -301,7 +301,7 @@ function pwdMailTemplate(token,email) {
             <p>Thank you for choosing Campus Express! To reset your password and continue selling, please click the link below.</p>
             <br/>
             
-            <a href="http://localhost:3000/seller.password-reset?token='${token}'&email='${email}'">
+            <a href="www.campusexpressng.com/seller.password-reset?token='${token}'&email='${email}'">
                <button>
                   Click Here To Reset Password
                </button>
