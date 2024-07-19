@@ -106,7 +106,7 @@ export default function Card({item,index}) {
 
         <div className="ads-card"  style={{
             border: item.state.state === 'active' ? '1px solid green' : '1px solid red',
-            justifyContent: 'left',height: 'auto',position: 'relative'
+            justifyContent: 'left',height: 'fit-content',position: 'relative'
         }} data-id={
             item.product_id
         } >
