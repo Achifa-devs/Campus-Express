@@ -50,7 +50,7 @@ const SavedItem = () => {
     return ( 
         <>
             <BuyerLayout>
-                <div className="buyer-savedItem" style={{display: 'flex', alignItems: 'flex-start', flexDirection: screenWidth > 760 ? 'row' : 'column', justifyContent: 'center', height: '100vh',width: '100%', backgroundColor: '#f9f9f9', margin: '0px', padding: '20px'}}>
+                <div className="buyer-savedItem" style={{display: 'flex', alignItems: 'flex-start', flexDirection: screenWidth > 760 ? 'row' : 'column', justifyContent: 'flex-start', height: '100%',width: '100%', backgroundColor: '#f9f9f9', margin: '0px', padding: '10px'}}>
                 {
                     
                     Items?.length > 0
@@ -62,7 +62,7 @@ const SavedItem = () => {
                             overflow: 'auto',
                             alignItems: 'flex-start',
                             padding: '5px',
-                            justifyContent: 'center',
+                            justifyContent: 'flex-start',
                             flexDirection: 'column'
                         }}> 
                             {

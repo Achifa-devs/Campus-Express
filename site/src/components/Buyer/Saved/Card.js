@@ -18,8 +18,8 @@ const Card = ({activeImg,item,index}) => {
     useEffect(() => {let width = window.innerWidth;setScreenWidth(width)},[]); 
     return ( 
         <>
-             <div className="seller-order-card shadow-sm" style={{position: 'relative', display: 'flex', background: '#fff', margin: '5px 0 5px 0', borderRadius: '10px'}}>
-                <div style={{height: '100%', width: screenWidth > 760 ? '20%' : '20%', borderRadius: '5px', display: 'table', margin: '0 auto'}}>
+             <div className="seller-order-card shadow-sm" style={{position: 'relative', display: 'flex', height: 'fit-content', background: '#fff', margin: '5px 0 5px 0', borderRadius: '10px'}}>
+                <div style={{height: '100%', width: screenWidth > 760 ? '20%' : '40%', borderRadius: '5px', display: 'table', margin: '0 auto'}}>
                     <Thumbnail product_id={item?.saved_item[0]?.product_id} />
                 </div>
 

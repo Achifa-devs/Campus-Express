@@ -8,8 +8,9 @@ const Card = ({index, item}) => {
     useEffect(() => {let width = window.innerWidth;setScreenWidth(width)},[]);
     return ( 
         <>
-            <div className="seller-order-card shadow-sm" style={{position: 'relative', display: 'flex', background: '#fff', margin: '5px 0 5px 0', borderRadius: '10px'}}>
-                <div style={{height: '100%', width: screenWidth > 760 ? '20%' : '20%', borderRadius: '5px', display: 'table', margin: '0 auto'}}>
+            <div className="seller-order-card shadow-sm" style={{position: 'relative', height: 'fit-content', display: 'flex', background: '#fff', margin: '5px 0 5px 0', borderRadius: '10px'}}>
+                <div style={{height: '100%', width: screenWidth > 760 ? '20%' : '40%', borderRadius: '5px', display: 'table', margin: '0 auto'}}>
+                
                     <Thumbnail product_id={item.product.product_id} />
                     <button onClick={e => window.location.href=(`/checkout/${item.product.product_id}`)} className='shadow-sm' style={{height: 'auto',display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '5px 10px 5px 10px', textAlign: 'center', background: '#fff', color: '#FF4500', fontSize: 'small', margin: '5px 0 0 0', color: '#fff', background: '#FF4500', width: '100%'}}>
                         <span>
@@ -29,7 +30,7 @@ const Card = ({index, item}) => {
                     {/* <img src={deleteSvg}alt="" /> */}
 
                     <div className="seller-order-title" style={{display: 'flex', width: '80%', fontSize: 'medium', height: '40%', alignItems: 'center', fontWeight: '500'}}>
-                        <p style={{
+                    <p style={{
                             whiteSpace: 'nowrap', /* Prevent text from wrapping */
                             overflow: 'hidden',    /* Hide any overflow text */
                             textOverflow: 'ellipsis'
@@ -46,7 +47,7 @@ const Card = ({index, item}) => {
                     <div className="seller-order-status" style={{background: '#fff', color: '#FF4500'}}>
                         {item.order.status.state}
                     </div>
-                    <button onClick={e => window.location.href=(`/checkout/${item.product.product_id}`)} className='shadow-sm' style={{position: 'absolute', top: '10px', right: '10px', height: 'auto', width: 'auto', display: 'flex', alignItems: 'center', justifyContents: 'center', padding: '10px', textAlign: 'center', background: '#fff', color: '#FF4500', fontSize: 'small', float: 'right', color: '#fff', background: '#FF4500'}}>{
+                    <button onClick={e => window.location.href=(`/checkout/${item.product.product_id}`)} className='shadow-sm' style={{position: 'absolute', top: '4px', right: '4px', height: 'auto', width: 'auto', display: 'flex', alignItems: 'center', justifyContents: 'center', padding: '10px', textAlign: 'center', background: '#fff', color: '#FF4500', fontSize: 'small', float: 'right', color: '#fff', background: '#FF4500', fontSize: screenWidth > 760 ? 'medium' : 'x-small'}}>{
                         item.order.havePaid
                         ?
                         'View Progress'

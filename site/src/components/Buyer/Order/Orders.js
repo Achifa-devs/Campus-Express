@@ -35,7 +35,7 @@ const Orders = () => {
    
     return ( 
         <>
-            <div className="seller-order-cnt" style={{background: '#f9f9f9', height: 'auto', margin: '0', overflow: 'hidden'}}>
+            <div className="seller-order-cnt" style={{background: '#f9f9f9', height: '100%', margin: '0', overflow: 'hidden'}}>
 
 
                 {
