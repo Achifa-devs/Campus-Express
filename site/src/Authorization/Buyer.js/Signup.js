@@ -19,7 +19,7 @@ const BuyerSignup = () => {
     let [email, setEmail] = useState('')
     let [phone, setPhone] = useState('')
     let [pwd, setPwd] = useState('')
-    let [cPwd, setCPwd] = useState('')
+    let [gender, setGender] = useState(null)
 
     let [state, setState] = useState('')
     let [campus, setCampus] = useState('')
@@ -47,7 +47,8 @@ const BuyerSignup = () => {
         pwd: false,
         phn: false,
         campus: false,
-        state: false
+        state: false,
+        gender: false
     })
 
     function addErrMssg(err,pElem) {
@@ -100,17 +101,18 @@ const BuyerSignup = () => {
         
         // e.currentTarget.disabled = true;
         let overlay = document.querySelector('.overlay')
-        overlay.setAttribute('id', 'overlay');
+        
         Validation();
         Object.values(book.current).filter(item => item !== true).length > 0 ? validation.current = false : validation.current = true;
-        console.log(validation.current)
+        
         if(validation.current){
-            setBtn(
+            overlay.setAttribute('id', 'overlay');
+            setBtn( 
                 <div className="Authloader" style={{background: '#fff',border: '1px solid orangered'}}></div>
             )
             // e.currentTarget.disabled = true;
             try {
-                let result = RegisterBuyer(fname.trim(),lname.trim(),email,phone,pwd,state,campus)
+                let result = RegisterBuyer(fname.trim(),lname.trim(),email,phone,pwd,state,campus,gender)
                 window.localStorage.setItem("CE_buyer_id", result.id)
                 window.localStorage.setItem("CE_buyer_name_initial", result.name)
                 if(result){
@@ -135,6 +137,8 @@ const BuyerSignup = () => {
             }
            
         }else{
+            alert()
+
             console.log(validation.current)
 
             setBtn("Signup")
@@ -213,6 +217,18 @@ const BuyerSignup = () => {
 
                     list.length > 0 ? book.current.phn = false : book.current.phn = true
                 }
+            }else if(item.type === 'radio'){
+                if(gender === null){
+                    let errs = [{bool: false, mssg: 'Please Select Your Gender.'}];
+                    addErrMssg(errs.filter(item => item.mssg !== ''),item.parentElement.parentElement.parentElement)
+                    let list =errs.filter(item => item.mssg !== '')
+                    list.length > 0 ? book.current.gender = false : book.current.gender = true
+                }else{
+                    let errs = [{bool: true, mssg: ''}];
+                    addErrMssg(errs.filter(item => item.mssg !== ''),item.parentElement.parentElement.parentElement)
+                    let list =errs.filter(item => item.mssg !== '')
+                    list.length > 0 ? book.current.gender = false : book.current.gender = true
+                }
             }
         })
 
@@ -281,6 +297,20 @@ const BuyerSignup = () => {
                             </section>
                         </div>
 
+                        <div className="seller-input-cnt" style={{display: 'flex', flexDirection: 'column'}}>
+                            <label htmlFor="">Gender</label>
+                            <br />
+                            <div>
+                                <section style={{display: 'flex', flexDirection: 'row-reverse', alignItems: 'flex-end', cursor: 'pointer', width: '50%'}}>
+                                    <label htmlFor="male">Male</label>&nbsp;&nbsp;
+                                    <input id='male' style={{background: '#efefef', height: '25px', width: '25px'}} onInput={e => setGender(1)} placeholder='Male...' type="radio" name="gender"  />
+                                </section>
+                                <section style={{display: 'flex', flexDirection: 'row-reverse', alignItems: 'flex-end', cursor: 'pointer', width: '50%'}}>
+                                    <label htmlFor="female">Female</label>&nbsp;&nbsp;
+                                    <input id='female' style={{background: '#efefef', height: '25px', width: '25px'}} onInput={e => setGender(0)}  placeholder='Female' type="radio" name="gender"  />
+                                </section>
+                            </div>
+                        </div>
 
                         <div className="seller-input-cnt">
                             <section style={{width: '100%'}}>

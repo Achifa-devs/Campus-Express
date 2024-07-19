@@ -9,8 +9,8 @@ let IP = uri_1
 
 const source = axios.CancelToken.source(); 
 
-export async function RegisterBuyer(fname,lname,email,phone,pwd,state,campus) {
-    let response = await post_request_generators('registration', {fname,lname,email,phone,pwd,state,campus})
+export async function RegisterBuyer(fname,lname,email,phone,pwd,state,campus,gender) {
+    let response = await post_request_generators('registration', {fname,lname,email,phone,pwd,state,campus,gender})
     setTimeout(() => source.cancel('timeout'), 10000) 
     return (response)
 }

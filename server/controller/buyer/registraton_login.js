@@ -17,7 +17,7 @@ const createToken = (id) => {
 
 async function register_buyer(req,res) { 
 
-    let {fname,lname,email,phone,pwd,state,campus} = req.body;
+    let {fname,lname,email,phone,pwd,state,campus,gender} = req.body;
     let date = new Date().toLocaleString();
     let hPwd = await bcrypt.hash(pwd, 10)
     let buyer_id = `CE-${shortId.generate()}`
@@ -27,7 +27,7 @@ async function register_buyer(req,res) {
     async function CreateNewBuyer() {
         return(
             NeonDB.then((pool) => 
-                pool.query(`insert into campus_buyers(id,fname,lname,buyer_id,email,phone,password,state,campus,isActive,isVerified,isEmailVerified,isPhoneVerified,date ) values(DEFAULT, '${fname}', '${lname}', '${buyer_id}', '${email}', '${phone}', '${hPwd}', '${state}', '${campus}', '${false}','${false}','${false}','${false}', '${date}')`)
+                pool.query(`insert into campus_buyers(id,fname,lname,buyer_id,email,phone,password,state,campus,isActive,isVerified,isEmailVerified,isPhoneVerified,date,gender ) values(DEFAULT, '${fname}', '${lname}', '${buyer_id}', '${email}', '${phone}', '${hPwd}', '${state}', '${campus}', '${false}','${false}','${false}','${false}', '${date}')`)
                 .then(result => result.rowCount > 0 ?(true) : (false))
                 .catch(err => console.log(err))
             )
@@ -38,7 +38,7 @@ async function register_buyer(req,res) {
     async function CreateNewBuyerWallet() {
         return(
             NeonDB.then((pool) => 
-                pool.query(`insert into campus_express_buyer_wallet(id,wallet_id,buyer_id,wallet_balance,wallet_pin,wallet_number,date) values(DEFAULT,'${wallet_id}','${buyer_id}','${0.00}','${pwd}','${phone}','${date}')`)
+                pool.query(`insert into campus_express_buyer_wallet(id,wallet_id,buyer_id,wallet_balance,wallet_pin,wallet_number,date) values(DEFAULT,'${wallet_id}','${buyer_id}','${0.00}','${pwd}','${phone}','${date}', '${gender}')`)
                 .then(result => result.rowCount > 0 ? true : false)
                 .catch(err => console.log(err))
             )
