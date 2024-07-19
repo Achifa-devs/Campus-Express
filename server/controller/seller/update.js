@@ -87,14 +87,14 @@ function UpdateProduct(req,res) {
                     if(book.length === constantData.photos.length){
                         res.send(true)
                     }
-                })
+                }) 
                 .catch(err => console.log(err))
             )    
         )
 
     })
     
-    .catch(err => console.log('error messafe from updating product: ',err))
+    .catch(err => console.log('error message from updating product: ',err))
 
 
 }

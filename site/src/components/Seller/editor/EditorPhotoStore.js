@@ -56,7 +56,7 @@ const EditorPhotoStore = ({edit,deletePhoto,productPhotos,photos,category}) => {
 
             <div style={{width: '100%', marginBottom: '0px', borderRadius: '10px'}}>
                 
-                <input type="file" name="image" style={{display: 'none'}} id="imgfile" onChange={handleImage} />
+                <input type="file" multiple name="image" style={{display: 'none'}} id="imgfile" onChange={handleImage} />
 
                 <div className="seller-shop-samples shadow-sm" style={{width: '100%', borderRadius: '10px'}}>
                                 

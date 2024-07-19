@@ -81,7 +81,7 @@ export default function Aside({item,order_list}) {
 
                
 
-               <div style={{border: '1px solid #f9f9f9', padding: '5px', margin: '0 0 0 0', pointerEvents: order_list.filter((data) => data.product.product_id === item.product_id && data.order.buyer_id === buyerData.buyer_id).length > 0 ? 'none':'all', opacity: order_list.filter((data) => data.product.product_id === item.product_id && data.order.buyer_id === buyerData.buyer_id).length > 0?'.5':'1'}}>
+               <div style={{border: '1px solid #f9f9f9', padding: '5px', margin: '0 0 0 0', pointerEvents: order_list.filter((data) => data?.product?.product_id === item?.product_id && data?.order?.buyer_id === buyerData.buyer_id).length > 0 ? 'none':'all', opacity: order_list.filter((data) => data?.product?.product_id === item?.product_id && data?.order?.buyer_id === buyerData?.buyer_id).length > 0?'.5':'1'}}>
                   <div style={{display: 'flex', justifyContent: 'space-between'}}>
                     <span style={{fontWeight: '500', fontSize: 'small'}}>Pickup Station</span>
                     {/* <span style={{fontWeight: '500', fontSize: 'small'}}>Change</span>     */}

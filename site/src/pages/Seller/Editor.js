@@ -372,6 +372,7 @@ const Editor = () => {
 
             
             if(update){
+                let product_id = searchParams.get('product_id');
                 fetch('http://localhost:2222/seller.product-update', {
                     method: 'post',
                     headers: {
@@ -387,6 +388,7 @@ const Editor = () => {
                                 photos: photos.current,
                                 videos: videos.current,
                                 seller_id : seller_id,
+                                product_id: product_id
                                 // pickupChannel: ''
                             }, 
                         
