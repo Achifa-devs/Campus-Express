@@ -73,7 +73,7 @@ const OrderSummary = ({Total, Method, type, price, buyer}) => {
                         alignItems: 'center',
                         justifyContent: 'center'
                     }}>
-                        <button style={{position: 'relative'}} className="shadow-sm" >
+                        <button style={{position: 'relative', background: '#FF4500'}} className="shadow-sm" >
                             <span>Order SubTotal&nbsp; </span>
                             <span><small>(&#8358; </small>{new Intl.NumberFormat('en-us').format(Total)})</span>
                         </button>

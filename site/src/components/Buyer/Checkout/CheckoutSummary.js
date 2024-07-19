@@ -107,7 +107,7 @@ const CheckoutSummary = ({Total, Method, type, price, buyerData}) => {
                         alignItems: 'center',
                         justifyContent: 'center'
                     }}>
-                        <button className="shadow-sm" onClick={ e => {
+                        <button style={{position: 'relative', background: '#FF4500'}}  className="shadow-sm" onClick={ e => {
                             // type !== 'wallet' ? openFlw() : handleDeposit()
                             window.location.href='order-tracking'
                         }}>

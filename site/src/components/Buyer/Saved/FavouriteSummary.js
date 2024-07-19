@@ -58,10 +58,22 @@ const FavouriteSummary = ({Total, Method, Items}) => {
 
                     ''
                 :
-                    <button className="shadow-sm" >
-                        <span>Favourite SubTotal&nbsp; </span>
-                        <span><small>(&#8358; </small>{new Intl.NumberFormat('en-us').format(Total)})</span>
-                    </button>
+                    <div style={{
+                        height: 'auto',
+                        width: '100%',
+                        padding: '10px',
+                        position: 'absolute',
+                        bottom: '0', 
+                        background: '#fff',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}>
+                        <button style={{position: 'relative', background: '#FF4500'}}  className="shadow-sm" >
+                            <span>Favourite SubTotal&nbsp; </span>
+                            <span><small>(&#8358; </small>{new Intl.NumberFormat('en-us').format(Total)})</span>
+                        </button>
+                    </div>
                 
 
                 }
