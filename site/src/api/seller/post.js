@@ -4,7 +4,7 @@ import axios from 'axios'
 
 let uri_1 = 'https://ce-server.vercel.app'
 let uri_2 = 'http://localhost:2222'
-let IP = uri_2
+let IP = uri_1
  
 
 const source = axios.CancelToken.source();
@@ -57,6 +57,11 @@ export async function UpdateItem(constantData, dynamicData) {
 }
 
 
+export async function cloudinarySignature(folder_name) {
+    let response = await post_request_generators('cloudinary-signature', {folder_name})
+    setTimeout(() => source.cancel('timeout'), 10000) 
+    return (response)?.data
+}
 
 
 

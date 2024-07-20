@@ -7,6 +7,26 @@ const { verification_email, newItem } = require("../../templates");
 const { upload_meta_data, upload_photos, send_email, send_sms, send_mail_via_outlook, savePwdToken, savePhoneToken, saveEmailToken } = require("../../utils");
 
 
+async function Signature(req,res) {
+    const cloudinary = require('cloudinary').v2;
+
+    cloudinary.config({
+        cloud_name: 'daqbhghwq',
+        api_key: '244892476618978',
+        api_secret: '9cK2GEvtfholKpvWjzbGUnBJJ5o',
+    });
+
+
+    const folder = req.body.folder_name || 'default_folder'; // default folder if none specified
+    const timestamp = Math.round(new Date().getTime() / 1000);
+    const signature = cloudinary.utils.api_sign_request(
+        { timestamp, folder },
+        '9cK2GEvtfholKpvWjzbGUnBJJ5o'
+    );
+    
+    res.status(200).json({ signature, timestamp, folder });
+
+}
 
 async function UploadNewItem(req,res) {
 
@@ -182,5 +202,6 @@ module.exports={
     SendEmail,
     SendSMS,
     ShopSetup,
-    WalletSetup
+    WalletSetup,
+    Signature
 } 

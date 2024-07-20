@@ -96,13 +96,7 @@
 
             
 
-            {
-                "Lodge/Apartments": 
-                [
-                    "Create Custom Item","Searching For RoomMate","Single Occupant","Multi Occupant","Apartments"
-                ],
-                "img": ""
-            },
+            
 
             {
                 "Furnitures": 
@@ -132,3 +126,4 @@
         ]
     }
 }
+

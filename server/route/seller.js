@@ -24,7 +24,8 @@ const {
     SendSMS,
     SendEmail, 
     ShopSetup,
-    WalletSetup
+    WalletSetup,
+    Signature
 } = require("../controller/seller/post");
 
 const { 
@@ -81,7 +82,7 @@ seller_route.post('/seller.pay-rent', parser, PayRent);
 
 seller_route.post('/seller.send-email', parser, SendEmail);
 seller_route.post('/seller.send-phone', parser, SendSMS);
-
+seller_route.post('/seller.cloudinary-signature', parser, Signature)
 // @@UPLOADS
 
 // @@ DELETE 
