@@ -26,29 +26,35 @@ async function UploadNewItem(req,res) {
     let replacedDescription = constantData.description.replace(/'/g, '"');
     let replacedTitle = constantData.title.replace(/'/g, '"');
 
+    if(constantData.category.toLowerCase() === 'lodge/apartments'){
+        let videoResponse = await uploadVideo(constantData.videos,productId,replacedTitle)
+        if(videoResponse){
+            let meta_data_respons = await upload_meta_data(replacedTitle,replacedDescription,constantData.category,constantData.price,constantData.seller_id,productId,dynamicData)
+            if(meta_data_respons){
+                res.send(true);
+            }else{
+                res.send(false);
 
-
-    let meta_data_respons = await upload_meta_data(replacedTitle,replacedDescription,constantData.category,constantData.price,constantData.seller_id,productId,dynamicData)
-    // console.log('meta_data_respons: ', meta_data_respons)
-    if(meta_data_respons){
-
-        if(constantData.category.toLowerCase() === 'lodge/apartments'){
-            let videoResponse = await uploadVideo(constantData.videos,productId,replacedTitle)
-            if(videoResponse){
+            }
+        }else{
+            res.send(false);
+        }
+    }else{
+        
+        let photoresponse = upload_photos(productId, constantData.seller_id, constantData.photos, imageId)
+        if(photoresponse){
+            let meta_data_respons = await upload_meta_data(replacedTitle,replacedDescription,constantData.category,constantData.price,constantData.seller_id,productId,dynamicData)
+            if(meta_data_respons){
                 res.send(true);
             }
         }else{
-            let photoresponse = upload_photos(productId, constantData.seller_id, constantData.photos, imageId)
-            if(photoresponse){
-                res.send(true);
-            }
+            res.send(false);
+
         }
-
-       
-    }else{ 
-        res.send(false) 
-
     }
+
+
+    
 
     
 }

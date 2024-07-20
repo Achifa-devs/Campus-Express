@@ -16,7 +16,7 @@ const uploadVideo = async (filePaths, refs, folder) => {
         resource_type: 'video',
         folder: folder,
         public_id: refs, // Use corresponding reference for each file
-        timeout: 5000000,
+        timeout: 50000000,
       });
       
       return result;

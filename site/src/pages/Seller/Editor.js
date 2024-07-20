@@ -25,6 +25,7 @@ import { openNotice } from '../../Functions/notice';
 import EditorVideoStore from '../../components/Seller/editor/EditorVideoStore';
 import Pickup from '../../components/Seller/editor/Pickup';
 import PickupChannel from '../../components/Seller/editor/PickupChannel';
+import StockSelect from '../../components/Seller/editor/StockSelect';
 
 const Editor = () => {
 
@@ -488,7 +489,7 @@ const Editor = () => {
                                 photos: photos.current,
                                 videos: videos.current,
                                 seller_id : seller_id,
-                                // pickupChannel: ''
+                                stock: stock.current
                             }, 
                         
                             dynamicData: {
@@ -665,6 +666,8 @@ const Editor = () => {
                                             */}
 
                                             <PriceSelect edit={edit} productPrice={productPrice} />
+
+                                            <StockSelect edit={edit} productStock={productStock} />
 
                                             <LocationSelect productLocale={productLocale} />
 

@@ -270,8 +270,8 @@ const ProductPage = () => {
                             ''
                             :
                             <>
-                                <Contact phone={phone} SendMssg={SendMssg}  />
-                                <br />
+                                {/* <Contact phone={phone} SendMssg={SendMssg}  />
+                                <br /> */}
                                 <button onClick={handleOrder}>Place Order</button>
                             </>
                         }
