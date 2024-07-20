@@ -34,7 +34,7 @@ const SellerLogin = () => {
                 window.localStorage.setItem("CE_seller_id", response.id)
                 console.log(response)
                 // window.localStorage.setItem("CE_seller_name_initial", response.name)
-                // navigate('/seller')
+                navigate('/seller')
 
             }else{
                 let check = document.querySelector('.err-cnt').querySelector('.err-mssg');
