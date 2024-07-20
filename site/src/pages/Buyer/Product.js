@@ -181,23 +181,30 @@ const ProductPage = () => {
     const handleFlutterPayment = useFlutterwave(config);
 
     async function handleOrder() {
-        let buyer = window.localStorage.getItem('CE_buyer_id');
-        if(buyer === null || buyer === '' || buyer === 'null'){
-            let overlay = document.querySelector('.overlay')
-            overlay.setAttribute('id', 'overlay');
-        }else{
-            // handleFlutterPayment({
-            //     callback: (response) => {
-            //     console.log(response);
-            //     // closePaymentModal() // this will close the modal programmatically
-            //     },
-            //     onClose: () => {}
-            // });
+        let result = order_list.filter((data) => data.product.product_id === item.product_id && data.order.buyer_id === buyerData.buyer_id).length
+        if(result<1){
+            let buyer = window.localStorage.getItem('CE_buyer_id');
+            if(buyer === null || buyer === '' || buyer === 'null'){
+                window.location.href=(`/login`)
+                
+            }else{
+                
+                // let channels = pickup_channel.includes((item) => {
+                //     if(item.channel === 'Custom Location Pickup'){
 
-            let response = await CreateOrder(buyer,item.product_id,item.price,pickup_channel)
-            if(response){
-                window.location.href=(`/checkout/${item.product_id}`)
+                //     }
+                //     (item.channel === 'Door Step Delivery')
+                // })
+                // let response = await CreateOrder(buyer,item.product_id,item.price,pickup_channel)
+                // if(response){
+                //     window.location.href=(`/checkout/${item.product_id}`)
+                // }
+
+            window.location.href=(`/new-order/${item.product_id}`)
+
             }
+        }else{
+            window.location.href=(`/checkout/${item.product_id}`)
         }
     }
 
@@ -252,6 +259,26 @@ const ProductPage = () => {
 
                         
                         <Product order_list={order_list} item={item} phone={phone} />
+
+                        {
+                            screenWidth > 481
+                            ?
+                            ''
+                            :
+                            <>
+                                {/* <Contact phone={phone} SendMssg={SendMssg}  />
+                                <br /> */}
+                                <button style={{marginBottom: '15px', background: '#FF4500', color: '#fff'}} onClick={handleOrder}>{
+                                    order_list.filter((data) => data.product.product_id === item.product_id && data.order.buyer_id === buyerData.buyer_id).length > 0
+                                    ?
+
+                                    'View Order'
+                                    :
+                                    'Place Order Now'
+                                }</button>
+                            </>
+                        }
+                        <br />
                         {
                             item?.description?.length > 0 
                             ?
@@ -262,19 +289,7 @@ const ProductPage = () => {
 
                         
 
-                        <br />
-
-                        {
-                            screenWidth > 481
-                            ?
-                            ''
-                            :
-                            <>
-                                {/* <Contact phone={phone} SendMssg={SendMssg}  />
-                                <br /> */}
-                                <button onClick={handleOrder}>Place Order</button>
-                            </>
-                        }
+                        
                         <br />
 
                         <section style={{fontWeight: '400', padding: '15px', background: '#fff4e0', }}>

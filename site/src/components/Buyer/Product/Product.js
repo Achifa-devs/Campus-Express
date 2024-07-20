@@ -114,6 +114,7 @@ const Product = ({item,phone,order_list}) => {
         if(result<1){
             let buyer = window.localStorage.getItem('CE_buyer_id');
             if(buyer === null || buyer === '' || buyer === 'null'){
+                window.location.href=(`/login`)
                 
             }else{
                 
@@ -171,30 +172,7 @@ const Product = ({item,phone,order_list}) => {
                 <div className="loader">
                 </div>
             </div>
-            <div className="buy_now_overlay" onClick={e => {
-                if(e.target === document.querySelector('.buy_now_overlay')){document.querySelector('.buy_now_overlay').removeAttribute('id')}
-            }}>
-                <div className="buy_now_cnt">
-                    {/* <p style={{color: 'orangered', textDecoration: 'underline'}}><b> {stock} Units</b></p>
-
-
-                    <p style={{textAlign: 'left', justifyContent: 'left'}}>There Are Only {stock} Availble {item?.title}</p> */}
-
-                    <div className="btn-cnt"> 
-                        <button onClick={e => {e.preventDefault(); if(immediate_purchase > 1){set_immediate_purchase(immediate_purchase - 1)}}}>-</button>
-                        <div  style={{height: '40px', width: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>{immediate_purchase}</div>
-                        {/* <button onClick={e => {e.preventDefault(); if(immediate_purchase <  stock){set_immediate_purchase(immediate_purchase + 1)}}}>+</button> */}
-                    </div>
-                    <br />
-
-                    <p style={{textAlign: 'left', justifyContent: 'left'}}>You Are Buying {immediate_purchase} Unit Of {item?.title}</p>
-
-                    <br />
-                    <button style={{fontSize: 'small'}} onClick={
-                        e => navigate(`/checkout/${btoa(item.product_id)}/${btoa(item?.price * immediate_purchase)}/immediate_purchase-${immediate_purchase}`)
-                    }>Checkout SubTotal ({item?.price * immediate_purchase})</button>
-                </div>
-            </div>
+            
 
             <div className="buyer-product-data">
                 <div id="left">
