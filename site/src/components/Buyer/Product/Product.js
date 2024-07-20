@@ -129,7 +129,7 @@ const Product = ({item,phone,order_list}) => {
                 
                 <meta name="google" content="sitelinkssearchbox" />
 
-                <link rel="icon" href={ItemImages[ActiveImg]} type="image/x-icon" />
+                <link rel="icon" href={ItemImages[ActiveImg]} />
                 <title>{item?.title}</title>
                 {/* FaceBook Tags */}
                 <meta property="og:site_name" content={`Campus Express Nigeria`} />
