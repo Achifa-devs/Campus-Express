@@ -402,7 +402,7 @@ const Editor = () => {
 
         let checkForError = book.filter(item => item === false)
 
-        if(checkForError.length < 1){
+        if(checkForError.length < 1 && lodgeAddress.length > 0){
             let overlay = document.querySelector('.overlay')
             overlay.setAttribute('id', 'overlay');
             let seller_id = window.localStorage.getItem("CE_seller_id")
@@ -537,6 +537,8 @@ const Editor = () => {
              
             }
 
+        }else{
+            openNotice("Ensure No Field Is Empty")
         }
 
     }

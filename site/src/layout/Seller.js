@@ -21,13 +21,7 @@ const SellerLayout = (props) => {
         }
         async function getData(){
             let result = await GetSeller(window.localStorage.getItem('CE_seller_id'))
-            if(result){
-                dispatch(setSellerTo(result))
-
-            }else{
-                window.location.href=('/seller.login')
-
-            }
+            dispatch(setSellerTo(result))
 
         } 
         

@@ -28,7 +28,7 @@ async function UploadNewItem(req,res) {
 
     if(constantData.category.toLowerCase() === 'lodge/apartments'){
         let videoResponse = await uploadVideo(constantData.videos,productId,replacedTitle)
-        if(videoResponse){
+        if(videoResponse.bool){
             let meta_data_respons = await upload_meta_data(replacedTitle,replacedDescription,constantData.category,constantData.price,constantData.seller_id,productId,dynamicData)
             if(meta_data_respons){
                 res.send(true);
@@ -37,7 +37,7 @@ async function UploadNewItem(req,res) {
 
             }
         }else{
-            res.send(false);
+            res.send(videoResponse);
         }
     }else{
         

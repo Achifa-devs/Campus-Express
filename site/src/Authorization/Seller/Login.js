@@ -30,7 +30,7 @@ const SellerLogin = () => {
 
             let response = await LogSellerIn(email,pwd);
 
-            if(response.bool){
+            if(response?.bool){
                 window.localStorage.setItem("CE_seller_id", response.id)
                 console.log(response)
                 // window.localStorage.setItem("CE_seller_name_initial", response.name)

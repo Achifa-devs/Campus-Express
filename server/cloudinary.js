@@ -25,10 +25,10 @@ const uploadVideo = async (filePaths, refs, folder) => {
     // Wait for all uploads to complete
     const results = await Promise.all(uploadPromises);
     console.log('All uploads completed successfully:', results);
-    return true;
+    return {bool: true};
   } catch (error) {
     console.error('Error uploading videos:', error);
-    return false;
+    return {bool: false, error};
   }
 };
 
