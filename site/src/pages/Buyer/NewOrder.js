@@ -3,13 +3,12 @@ import BuyerLayout from '../../layout/Buyer'
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import CheckoutSummary from '../../components/Buyer/Checkout/CheckoutSummary';
-import OrderedItem from '../components/Buyer/NewOreder/OrderedItem';
-import BuyerAddress from '../components/Buyer/NewOreder/BuyerAddress';
-import DeliveryAddress from '../components/Buyer/NewOreder/DeliveryAddress';
-import PaymentMethod from '../components/Buyer/NewOreder/PaymentMethod';
 import { GetItem } from '../../api/buyer/get';
 import { openNotice } from '../../Functions/notice';
-import NewOrderSummary from '../components/Buyer/NewOreder/NewOrderSummary';
+import OrderedItem from '../../components/Buyer/NewOreder/OrderedItem';
+import BuyerAddress from '../../components/Buyer/NewOreder/BuyerAddress';
+import DeliveryAddress from '../../components/Buyer/NewOreder/DeliveryAddress';
+import NewOrderSummary from '../../components/Buyer/NewOreder/NewOrderSummary';
 
 export default function NewOrder() {
     let location = useLocation()
@@ -58,7 +57,7 @@ export default function NewOrder() {
                 <OrderedItem item={item}/>
                 <BuyerAddress />
                 <DeliveryAddress item={item} />
-                <PaymentMethod />
+                {/* <PaymentMethod /> */}
             </div>
             <NewOrderSummary buyerData={buyerData} item={item} />
         </div>
