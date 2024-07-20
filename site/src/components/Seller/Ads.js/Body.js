@@ -7,7 +7,7 @@ const Body = ({cards}) => {
     return ( 
         <>
             {
-                cards.length > 0
+                cards?.length > 0
                 ?
                 cards.map((item, index) => 
                 
@@ -23,7 +23,7 @@ const Body = ({cards}) => {
                     flexDirection: 'column'
                 }}>
                     <img src={emptySvg} style={{
-                        height: '90px', 
+                        height: '90px',  
                         width: '90px', 
                         position: 'relative',
                         

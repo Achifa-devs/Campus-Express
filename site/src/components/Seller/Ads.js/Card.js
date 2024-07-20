@@ -10,6 +10,7 @@ import ItemImages from '../../../redux/buyer_store/ItemImages';
 import { DeleteItem } from '../../../api/seller/delete';
 import { useDispatch, useSelector } from 'react-redux';
 import { setDeleteListTo } from '../../../redux/seller_store/delete_list';
+import Video from '../../Buyer/Video';
 
 export default function Card({item,index}) {
     let navigate = useNavigate();
@@ -26,7 +27,7 @@ export default function Card({item,index}) {
       let list = document.querySelectorAll('.ads-card');
     //   let selected_card = list?.filter((item) => item.children[0].children[0]);
     //   console.log(selected_card)
-    }, [])
+    }, [item])
   return (
     
     <>
@@ -46,7 +47,13 @@ export default function Card({item,index}) {
                 </div> */}
                 <div className="listing-card-top">
                     <div className="listing-thumbnail-cnt">
-                        <Thumbnail product_id={item.product_id} />
+                        {
+                            item.category === 'Lodge/Apartments'
+                            ?
+                            <Video product_id={item.product_id} folder={item.title} />
+                            :
+                            <Thumbnail product_id={item.product_id} />
+                        }
                     </div>
 
                     <div className="listing-title-cnt">
@@ -126,12 +133,12 @@ export default function Card({item,index}) {
             <div class="top-section" style={{height: '100px', borderRadius: '10px', margin: '0'}}>
                 <div onClick={handleListing} style={{height: '100px', borderRadius: '10px', margin: '0'}}>
                     {
-                        item
+                        item.category === 'Lodge/Apartments'
                         ?
-                        <Thumbnail product_id={item.product_id} />
+                        <Video product_id={item.product_id} folder={item.title} />
                         :
-                        ''
-                   }
+                        <Thumbnail product_id={item.product_id} />
+                    }
                 </div>
             </div>
             <div class="bottom-section" onClick={handleListing} style={{margin: '0'}}>

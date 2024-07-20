@@ -13,6 +13,8 @@ const {
 const {
   NeonDB 
 } = require('./db');
+const cloudinary = require('cloudinary').v2;
+
 const {
   seller_route 
 } = require('./route/seller')
@@ -188,6 +190,33 @@ app.post('/share-image', parser, (req,res) => {
   .catch(err => console.log(err))
  
   
+})
+
+app.get('/video', parser, async(req,res) => {
+  let {product_id,folder} = req.query;
+  
+  cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+  });
+
+  try {
+    const result = await cloudinary.api.resources({
+      type: 'upload',
+      prefix: folder, // Ensure this folder name is correct
+      resource_type: 'video'
+    }, (error, result) => {
+      if (error) {
+        console.error('Error fetching resources:', error);
+      } else {
+        res.status(200).send(result.resources)
+        // console.log('Resources:', result.resources);
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 })
 
 const { Client } = require('pg');

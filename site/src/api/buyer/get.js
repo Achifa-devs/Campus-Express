@@ -57,6 +57,12 @@ export async function GetProductThumbnail(product_id) {
     return (response)?.data
 }
 
+export async function GetProductVideo(product_id,folder) {
+    let response = await get_request_generators(`video`, {product_id,folder})
+    setTimeout(() => source.cancel('timeout'), 10000) 
+    return (response)?.data
+}
+
 export async function GetCart(buyer_id) {
     let response = await get_request_generators(`cart`, {buyer_id})
     setTimeout(() => source.cancel('timeout'), 10000) 

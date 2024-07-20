@@ -23,6 +23,7 @@ import js_ago from 'js-ago'
 import { GetOrders, GetSavedItem } from '../../../api/buyer/get'
 import { openNotice } from '../../../Functions/notice'
 import { useLocation } from 'react-router-dom'
+import Video from '../Video'
 
 const Card = ({item, index}) => {
 
@@ -135,13 +136,13 @@ const Card = ({item, index}) => {
                     
                     
                     
-                   {
-                    item
-                    ?
-                    <Thumbnail product_id={item.product_id} />
-                    :
-                    ''
-                   }
+                    {
+                        item.category === 'Lodge/Apartments'
+                        ?
+                        <Video product_id={item.product_id} folder={item.title} />
+                        :
+                        <Thumbnail product_id={item.product_id} />
+                    }
 
                     <div className="card-body" style={{position: 'relative'}}>
                         
@@ -156,7 +157,6 @@ const Card = ({item, index}) => {
                                 lineHeight: '18px',
                                 color: '#000',
                                 display: 'webkitBox',
-                                
                                 WebkitBoxOrient: 'vertical',
                                 WebkitLineClamp: '2',
                                 overflow: 'hidden',
