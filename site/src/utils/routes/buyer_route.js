@@ -18,7 +18,7 @@ import PrivacyPolicy from '../../pages/Buyer/PrivacyPolicy';
 import ErrorPage from '../../components/ErrorPage';
 import Order from '../../pages/Buyer/Order';
 import OrderTracker from '../../pages/Buyer/OrderTracker';
-import NewOrder from '../../pages/NewOrder';
+import NewOrder from '../../pages/Buyer/NewOrder';
 
 
 
