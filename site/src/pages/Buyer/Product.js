@@ -47,7 +47,7 @@ const ProductPage = () => {
     useEffect(() => {setActiveImg('')}, [searchParams.get('product_id')]);
 
     function fetchData(overlay) {
-        GetItem([location.search.split('=').splice(-1)[0]])
+        GetItem([location.pathname.split('/').splice(-1)[0]])
         .then((result) => {
             setItem(result[0])
             overlay.removeAttribute('id')

@@ -128,7 +128,6 @@ const Product = ({item,phone,order_list}) => {
 
                 <link rel="icon" href={ItemImages[ActiveImg]} />
                 <link rel="shortcut icon" href={ItemImages[ActiveImg]} type="image/x-icon" />
-
                 <title>{item?.title}</title>
 
                 {/* FaceBook Tags */}
