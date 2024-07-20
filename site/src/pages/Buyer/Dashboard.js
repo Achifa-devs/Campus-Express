@@ -430,10 +430,10 @@ const Dashboard = () => {
                             <>
                                 {activeJSX}
                                 {activeJSX}
-                                <PaidAds cntName={'Brand New Items'} condition={'new'} top={'25px'} />
+                                {/* <PaidAds cntName={'Brand New Items'} condition={'new'} top={'25px'} /> */}
                                 {activeJSX}
                                 {activeJSX}
-                                <PaidAds cntName={'Used Items'} condition={'used'} top={'25px'} />
+                                {/* <PaidAds cntName={'Used Items'} condition={'used'} top={'25px'} /> */}
                                 {activeJSX}
                                 {activeJSX}
                             </>
