@@ -25,7 +25,7 @@ import NewOrder from '../../pages/Buyer/NewOrder';
 
 export let buyer_route = [
 
-    { path: '/:id', component: <Dashboard />}, 
+    // { path: '/:id', component: <Dashboard />}, 
     { path: '/', component: <Dashboard />}, 
     { path: '/profile', component: <Me />},
     { path: '/room/:id', component: <MessageRoom />},
@@ -40,7 +40,7 @@ export let buyer_route = [
     { path: '/new-order/:id', component: <NewOrder />},
     { path: '/wallet', component: <Wallet />},
     { path: '/favourites', component: <SavedItem />},
-    { path: '/product', component: <ProductPage />}, 
+    { path: '/:id', component: <ProductPage />}, 
     { path: '/order-tracking', component: <OrderTracker />}, 
     { path: '/checkout/:id', component: <Checkout />},
     { path: '/checkout/:id/:id', component: <Checkout />},
