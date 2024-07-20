@@ -27,9 +27,7 @@ import {
     UploadChat 
 } from '../../../api/buyer/post'
 
-import { 
-    Helmet 
-} from 'react-helmet-async'
+import { Helmet } from 'react-helmet';
 import Contact from './Contact'
 import Share from './Share'
 import { useFlutterwave } from 'flutterwave-react-v3'
@@ -123,16 +121,16 @@ const Product = ({item,phone,order_list}) => {
             <Helmet>
                 <meta name="title" content={`${item?.title}`} />
                 <meta name="description" content={`${item?.description}`} />
-                {/* <meta name="google-site-verification" content="+nxGUDJ4QpAZ5l9Bsjdi102tLVC21AIh5d1Nl23908vVuFHs34=" /> */}
+                
                 <meta name="robots" content="index,follow" />
                 <meta name="googlebot" content="index,follow" />
-                
                 <meta name="google" content="sitelinkssearchbox" />
 
                 <link rel="icon" href={ItemImages[ActiveImg]} />
                 <link rel="shortcut icon" href={ItemImages[ActiveImg]} type="image/x-icon" />
 
                 <title>{item?.title}</title>
+
                 {/* FaceBook Tags */}
                 <meta property="og:site_name" content={`Campus Express Nigeria`} />
                 <meta property="og:title" content={`${item?.title}`} />
