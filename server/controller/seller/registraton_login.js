@@ -179,19 +179,22 @@ async function log_seller_in(req, res) {
     
             }else{
                 res.status(400).send({
-                    Mssg: "Invalid password"
+                    Mssg: "Invalid password",
+                    bool: false
                 })
             }
         }else{
             res.status(400).send({
-                Mssg: "Email is not registered"
+                Mssg: "Email is not registered",
+                bool: false
             })
         }
     })
     .catch(err => {
         console.log('error: ',err)
         res.status(400).send({
-            Mssg: "Email is not registered"
+            Mssg: "Email is not registered",
+            bool: false
         })
 
     })

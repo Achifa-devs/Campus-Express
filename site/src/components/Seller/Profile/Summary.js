@@ -1,7 +1,7 @@
 import React from 'react'
 import ellipsisSvg from '../../../assets/filter-edit-svgrepo-com.svg'
 
-export default function Summary({CashOut,userData,updateActiveJsx}) {
+export default function Summary({CashOut,userData,updateActiveJsx,sellerWallet}) {
   return (
     <>
       <div className="seller-profile-verification">
@@ -22,8 +22,9 @@ export default function Summary({CashOut,userData,updateActiveJsx}) {
 
         <div>
           {/* <div>ID: Verified</div> */}
-          <div>Balance: 100,000{
-          
+          <div>Balance: &#8358; {
+            new Intl.NumberFormat('en-us').format(sellerWallet?.wallet_balance)
+            
           }</div>
           {/* <div>Student: False</div> */}
         </div>

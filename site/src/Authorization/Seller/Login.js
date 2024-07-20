@@ -30,10 +30,11 @@ const SellerLogin = () => {
 
             let response = await LogSellerIn(email,pwd);
 
-            if(response){
+            if(response.bool){
                 window.localStorage.setItem("CE_seller_id", response.id)
-                window.localStorage.setItem("CE_seller_name_initial", response.name)
-                navigate('/seller')
+                console.log(response)
+                // window.localStorage.setItem("CE_seller_name_initial", response.name)
+                // navigate('/seller')
 
             }else{
                 let check = document.querySelector('.err-cnt').querySelector('.err-mssg');

@@ -15,7 +15,8 @@ const {
     GetItemsSold,
     GetReviews,
     GetSellerPhoto, 
-    ValidateToken
+    ValidateToken,
+    GetSellerWallet
 } = require("../controller/seller/get");
 const { 
     UploadNewItem,
@@ -97,6 +98,7 @@ seller_route.get('/seller.edited-item', GetEditedItem);
 seller_route.get('/seller.profile', GetSellerData); 
 seller_route.get('/seller.profile-photo', GetSellerPhoto); 
 seller_route.get('/seller.thumbnail', get_thumbnail);
+seller_route.get('/seller.wallet', GetSellerWallet);
 
 // @@ GET REQUEST
 

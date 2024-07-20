@@ -6,7 +6,7 @@ import SellerLayout from "../../layout/Seller";
 import TopView from "../../components/Seller/Profile/TopView";
 import Body from "../../components/Seller/Profile/Body";
 import { useEffect, useState } from 'react';
-import { GetSellerPhoto, GetShop } from '../../api/seller/get';
+import { GetSellerPhoto, GetSellerWallet, GetShop } from '../../api/seller/get';
 import { useSelector } from 'react-redux';
 import userPhoto from '../../assets/user-svgrepo-com (2).svg'
 
@@ -17,6 +17,7 @@ const Me = () => {
 
     let [photo, setPhoto] = useState(userPhoto)
     let [userData, setUserData] = useState()
+    let [sellerWallet, setSellerWallet] = useState('')
 
     useEffect(() => {
         setUserData(sellerData)
@@ -31,7 +32,15 @@ const Me = () => {
         getPhoto()
       }, [sellerData])
   
-     
+      useEffect(() => {
+        async function getPhoto(){
+          let result = await GetSellerWallet(window.localStorage.getItem('CE_seller_id'))
+          if(result){
+              setSellerWallet(result)
+          }
+        }
+        getPhoto()
+      }, [])
     
       useEffect(() => {
         let overlay = document.querySelector('.overlay')
@@ -60,8 +69,8 @@ const Me = () => {
                 
                     <div className="seller-profile-cnt" style={{height: '100%'}}>
 
-                        <TopView photo={photo} userData={userData} />
-                        <Body userData={userData} shop={shop} />
+                        <TopView  photo={photo} userData={userData} />
+                        <Body sellerWallet={sellerWallet} userData={userData} shop={shop} />
                         
                     </div>
 

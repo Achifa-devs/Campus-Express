@@ -633,7 +633,7 @@ function CashOut({user}) {
     </form>
     )
 }
-export default function Body({userData,shop}) {
+export default function Body({userData,shop,sellerWallet}) {
   const [soldItems, setSoldItems] = useState([]);
   let [reviews, setReviews] = useState([])
   let [TotalSold, setTotalSold] = useState('0')
@@ -702,7 +702,7 @@ export default function Body({userData,shop}) {
 
         <div className="seller-profile-basics">
           
-          <Summary CashOut={CashOut} updateActiveJsx={updateActiveJsx}  userData={userData} />
+          <Summary CashOut={CashOut} sellerWallet={sellerWallet} updateActiveJsx={updateActiveJsx}  userData={userData} />
           <br />
 
           <CoinComp updateActiveJsx={updateActiveJsx} Coin={Coin} userData={userData} shop={shop} />
