@@ -141,7 +141,7 @@ const Card = ({item, index}) => {
                         ?
                         <Video product_id={item.product_id} folder={item.title} />
                         :
-                        <Thumbnail product_id={item.product_id} />
+                        <Thumbnail product_id={item.product_id} title={item.title} />
                     }
 
                     <div className="card-body" style={{position: 'relative'}}>

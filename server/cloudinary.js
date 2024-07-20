@@ -32,6 +32,29 @@ const uploadVideo = async (filePaths, refs, folder) => {
   }
 };
 
+const uploadImages = async (filePaths, refs, folder) => {
+  try {
+    const uploadPromises = filePaths.map(async (filePath) => {
+      const result = await cloudinary.uploader.upload_large(filePath, {
+        resource_type: 'image',
+        folder: folder,
+        public_id: refs, // Use corresponding reference for each file
+        timeout: 50000000,
+      });
+      
+      return result;
+    });
+
+    // Wait for all uploads to complete
+    const results = await Promise.all(uploadPromises);
+    console.log('All uploads completed successfully:', results);
+    return {bool: true};
+  } catch (error) {
+    console.error('Error uploading videos:', error);
+    return {bool: false, error};
+  }
+};
+
 
 // Replace 'path/to/your/video.mp4' with the path to your video file
-module.exports={uploadVideo}
+module.exports={uploadVideo,uploadImages}

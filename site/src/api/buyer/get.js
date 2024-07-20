@@ -51,8 +51,8 @@ export async function GetItemImages(id) {
     return (response)?.data
 }
 
-export async function GetProductThumbnail(product_id) {
-    let response = await get_request_generators(`thumbnail`, {product_id})
+export async function GetProductThumbnail(product_id,folder) {
+    let response = await get_request_generators(`thumbnail`, {product_id,folder})
     setTimeout(() => source.cancel('timeout'), 10000) 
     return (response)?.data
 }

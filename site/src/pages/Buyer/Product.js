@@ -42,8 +42,8 @@ const ProductPage = () => {
     const searchParams = new URLSearchParams(window.location.search);
 
     useEffect(() => {let width = window.innerWidth;setScreenWidth(width)}, []);
-    useEffect(() => {setActiveImg(ItemImages?.length > 0 ? ItemImages[ActiveImg].file : imgSvg)}, [ItemImages]);
-    useEffect(() => {setActiveImg(ItemImages?.length > 0 ? ItemImages[ActiveImg].file : imgSvg)}, [ActiveImg]);
+    useEffect(() => {setActiveImg(ItemImages?.length > 0 ? ItemImages[ActiveImg] : imgSvg)}, [ItemImages]);
+    useEffect(() => {setActiveImg(ItemImages?.length > 0 ? ItemImages[ActiveImg] : imgSvg)}, [ActiveImg]);
     useEffect(() => {setActiveImg('')}, [searchParams.get('product_id')]);
 
     function fetchData(overlay) {
@@ -255,7 +255,7 @@ const ProductPage = () => {
             </div>
             <BuyerLayout>
                 <div className="buyer-product shadow-sm" style={{background: '#fff'}}>
-                    <div className="buyer-product-cnt" style={{display: 'flex', flexDirection: 'column', width: screenWidth > 760 ? 'calc(100% - 360px)' : '100%'}}>
+                    <div className="buyer-product-cnt" style={{display: 'flex', flexDirection: 'column', width: screenWidth > 1001 ? 'calc(100% - 360px)' : '100%'}}>
 
                         
                         <Product order_list={order_list} item={item} phone={phone} />
@@ -278,7 +278,7 @@ const ProductPage = () => {
                                 }</button>
                             </>
                         }
-                        <br />
+
                         {
                             item?.description?.length > 0 
                             ?
@@ -306,7 +306,7 @@ const ProductPage = () => {
                         
 
                     </div>
-                    <div className="buyer-product-aside-cnt shadow-sm" style={{width: screenWidth < 480 ? '100%' : '340px', height: 'fit-content', background: '#fff'}}>
+                    <div className="buyer-product-aside-cnt shadow-sm" style={{width: screenWidth > 1001 ? '340px' : '100%', height: 'fit-content', background: '#fff'}}>
                         <Aside order_list={order_list} item={item} />
                     </div>
                 </div>

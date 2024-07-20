@@ -61,7 +61,7 @@ export default function Aside({item,order_list}) {
         <div className="location-overlay" style={{height: '100vh', width: '100vw'}}>
             <PickupChannel updateLocation={updateLocation} title={pickUpChannel} />
         </div>
-        <div className="buyer-product-aside" style={{padding: '0px', display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'flex-start', height: 'fit-content'}}>
+        <div className="buyer-product-aside" style={{padding: '0px', display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'flex-start', height: 'fit-content', width: '100%'}}>
           <div style={{padding: '0px'}}>
             <h2 style={{padding: '10px', color: '#FF4500', fontWeight: '500'}}>Delivery and Returns</h2>
 

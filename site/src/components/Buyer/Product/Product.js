@@ -54,36 +54,14 @@ const Product = ({item,phone,order_list}) => {
     let [screenWidth, setScreenWidth] = useState(0)
     let [locale, setLocale] = useState([]);
 
-    useEffect(() => {setMetaImg(ItemImages[0]?.file)}, [])
-    useEffect(() => {setActiveImg(ItemImages?.length > 0 ? ItemImages[ActiveImg].file : imgSvg)}, [ItemImages])
-    useEffect(() => {setActiveImg(ItemImages?.length > 0 ? ItemImages[ActiveImg].file : imgSvg)},[])
+    useEffect(() => {setMetaImg(ItemImages[0])}, [])
+    useEffect(() => {setActiveImg(ItemImages?.length > 0 ? ItemImages[ActiveImg] : imgSvg)}, [ItemImages])
+    useEffect(() => {setActiveImg(ItemImages?.length > 0 ? ItemImages[ActiveImg] : imgSvg)},[])
+    useEffect(() => {setActiveImg(ItemImages?.length > 0 ? ItemImages[ActiveImg] : imgSvg)},[ActiveImg])
     useEffect(() => {setActiveImg('')}, [searchParams.get('product_id')])
     useEffect(() => {let width = window.innerWidth;setScreenWidth(width)}, [])
 
-    function SendMssg() {
-        let overlay = document.querySelector('.overlay')
-        overlay.setAttribute('id', 'overlay');
-        if(screenWidth > 760){
-            try {
-                let result = UploadChat(window.localStorage.getItem('CE_buyer_id'), item.seller_id)
-                overlay.removeAttribute('id')
-                navigate(`/buyer.message/${item.seller_id}`, {seller_id: item.seller_id})
-    
-            } catch (error) {
-                console.log(error)
-            }
-        }else{
-            try {
-                let result = UploadChat(window.localStorage.getItem('CE_buyer_id'), item.seller_id)
-                overlay.removeAttribute('id')
-                navigate(`/buyer.room/${item.seller_id}?room=''`, {seller_id: item.seller_id})
-    
-            } catch (error) {
-                console.log(error)
-            }
-        }
-      
-    }
+   
 
     const config = {
         public_key: 'FLWPUBK-502f1f73c8abf430f161a528241c198a-X',
@@ -152,18 +130,20 @@ const Product = ({item,phone,order_list}) => {
                 <meta name="google" content="sitelinkssearchbox" />
 
                 {/* FaceBook Tags */}
-                <meta property="og:site_name" content={`${item?.title}`} />
+                <meta property="og:site_name" content={`Campus Express Nigeria`} />
                 <meta property="og:title" content={`${item?.title}`} />
                 <meta property="og:description" content={`${item?.description}`} />
-                <meta property="og:image" itemprop="image" content={`https://ce-app-server.vercel.app/share-image?product_id=${item?.product_id}`} />
+                <meta property="og:image" itemprop="image" content={`${ItemImages[ActiveImg]}`} />
                 <meta property="og:type" content="website" />
                 <meta property="og:url"  content={`https://www.campusexpressng.com/product?product_id=${item?.product_id}`} />
-                {/* <meta property="og:updated_time" content="1440432930" /> */}
+                <meta property="og:type" content="website"/>
 
+
+               
                 {/* Twitter */}
                 <meta name="twitter:title" content={`${item?.title}`} />
                 <meta name="twitter:description" content={`${item?.description}`} />
-                <meta name="twitter:image" content={`https://ce-app-server.vercel.app/share-image?product_id=${item?.product_id}`} />
+                <meta name="twitter:image" content={`${ItemImages[ActiveImg]}`} />
                 <meta name="twitter:card" content="summary_large_image" />
 
             </Helmet>
@@ -189,7 +169,7 @@ const Product = ({item,phone,order_list}) => {
                     {
                         item 
                         ?
-                        <ItemImgs product_id={searchParams.get('product_id')} />
+                        <ItemImgs product_id={searchParams.get('product_id')} title={item.title} />
                         :
                         ''
                     }
@@ -299,7 +279,7 @@ const Product = ({item,phone,order_list}) => {
                         :
                         ''
                     }
-                    <Share activeImg={activeImg} item={item} metaImg={metaImg} />
+                    <Share activeImg={activeImg} item={item} url={`https://www.campusexpressng.com/product?product_id=${item?.product_id}`} metaImg={metaImg} />
 
 
                     

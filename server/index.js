@@ -193,37 +193,43 @@ app.post('/share-image', parser, (req,res) => {
 })
 
 app.get('/video', parser, async(req,res) => {
-  let {product_id,folder} = req.query;
   
-  cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-  });
-
-  try {
-    const result = await cloudinary.api.resources({
-      type: 'upload',
-      prefix: folder, // Ensure this folder name is correct
-      resource_type: 'video'
-    }, (error, result) => {
-      if (error) {
-        console.error('Error fetching resources:', error);
-      } else {
-        res.status(200).send(result.resources)
-        // console.log('Resources:', result.resources);
-      }
-    });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
 })
+
+// async function moveFilesToCloudinary(params) {
+//   let files = await  NeonDB.then((pool) => 
+//     pool.query(`
+//     SELECT 
+//       i.product_id,
+//       s.title,
+//       array_agg(i.file) AS items
+//     FROM 
+//     product_photo i 
+//     JOIN 
+//       seller_shop s ON i.product_id = s.product_id
+//     GROUP BY 
+//     i.product_id, s.title;
+//     `)
+//     .then(result =>(result.rows))
+//     .catch(err => {
+//       console.log(err)
+//     })
+//   )
+//   .catch(err => console.log(err))
+
+//   files.map(data => {
+//     uploadImages(data.items, data.product_id, (data.title).trim())
+//   })
+
+// }
+// moveFilesToCloudinary()  
 
 const { Client } = require('pg');
 const cron = require('node-cron');
 const { regTxtMail } = require('./mail/reg');
 const { algo } = require('./promotional_algo');
 const { accessSync } = require('fs');
+const { uploadImages } = require('./cloudinary');
 
 
 // Function to check registration dates

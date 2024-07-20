@@ -129,12 +129,32 @@ async function get_item_thumbnail(req,res) {
 
 async function get_thumbnail(req,res) {
 
-    let {product_id} = req.query;
-    NeonDB.then((pool) => 
-        pool.query(`select file from product_photo where product_id = '${product_id}'`)
-        .then(result =>  res.send(result.rows[0]))
-        .catch(err => console.log(err))
-    )
+    let {product_id,folder} = req.query;
+    const cloudinary = require('cloudinary').v2;
+    require('dotenv').config();    
+  
+    cloudinary.config({
+        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+        api_key: process.env.CLOUDINARY_API_KEY,
+        api_secret: process.env.CLOUDINARY_API_SECRET,
+    });
+
+    try {
+        const result = await cloudinary.api.resources({
+        type: 'upload',
+        prefix: folder, // Ensure this folder name is correct
+        resource_type: 'image'
+        }, (error, result) => {
+        if (error) {
+            console.error('Error fetching resources:', error);
+        } else {
+            res.status(200).send(result.resources)
+            // console.log('Resources:', result.resources);
+        }
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 
 }
 

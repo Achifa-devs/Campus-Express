@@ -4,8 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { GetProductThumbnail } from '../../api/buyer/get';
  
 
-const Thumbnail = ({product_id}) => {
+const Thumbnail = ({product_id,title}) => {
     let [img, set_img] = useState(imgSvg);
+    let [uris, set_uris] = useState([]);
     let navigate = useNavigate()
 
     let [screenWidth, setScreenWidth] = useState(window.innerWidth);
@@ -14,14 +15,15 @@ const Thumbnail = ({product_id}) => {
     }, [])
 
     async function fetchData() {
-        let result = await GetProductThumbnail(product_id)
-        result?.file
-        ?
-        set_img(result.file) 
-        :
-        set_img(imgSvg) 
+        let result = await GetProductThumbnail(product_id,title?.trim())
+        if(result){
+            result.map(item => set_uris(uri=>[...uri, item.secure_url]) )
+        }
     }
-  
+    useEffect(() => {
+        set_img(uris[0])
+    },[uris])
+    
     useEffect(() => {
         try {
             fetchData()
@@ -37,6 +39,8 @@ const Thumbnail = ({product_id}) => {
             console.log(error)
         }
     }, [])
+
+    
     return ( 
         <>
             <img loading='lazy' onClick={e => window.location.href=(`/product?product_id=${product_id}`)} src={img} style={{height: screenWidth > 480 ? '140px' : '120px', width: '100%', borderRadius: '10px', display: 'table', margin: '0 auto', position: 'relative'}} alt="" />
