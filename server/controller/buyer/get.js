@@ -134,9 +134,9 @@ async function get_thumbnail(req,res) {
     require('dotenv').config();    
   
     cloudinary.config({
-        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-        api_key: process.env.CLOUDINARY_API_KEY,
-        api_secret: process.env.CLOUDINARY_API_SECRET,
+        cloud_name: 'daqbhghwq',
+        api_key: '244892476618978',
+        api_secret: '9cK2GEvtfholKpvWjzbGUnBJJ5o',
     });
 
     try {
