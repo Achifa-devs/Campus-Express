@@ -20,7 +20,7 @@ const EditorVideoStore = ({edit,deleteVideo,productVideos,videos,category}) => {
             let totalFilesCount = existingFilesCount + index + 1; // Calculate the total number of files
  
             if (totalFilesCount > maxFiles) {
-                openNotice("You can only upload a max of 5 videos");
+                openNotice("You can only upload a max of 5 photos");
                 return;
             }
 
@@ -49,11 +49,16 @@ const EditorVideoStore = ({edit,deleteVideo,productVideos,videos,category}) => {
 
     return ( 
         <>
-            
+            <div className="notice-cnt">
+                <span style={{margin: "0 15px 0 .5px"}}>Only Videos can be uploaded</span>
+                <button className="notice-cnt-btn" style={{width: '40px', height: '30px', background: 'red', borderRadius: '2px', fontWeight: '500', fontSize: 'small'}}>
+                    close
+                </button>
+            </div>
 
             <div style={{width: '100%', marginBottom: '0px', borderRadius: '10px'}}>
                 
-                <input type="file" multiple name="video"  style={{display: 'none'}} id="vidfile" onChange={handleVideo} />
+                <input type="file" name="video"  style={{display: 'none'}} id="vidfile" onChange={handleVideo} />
 
                 <div className="seller-shop-samples shadow-sm">
                                 

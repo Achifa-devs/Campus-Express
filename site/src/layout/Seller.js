@@ -18,16 +18,11 @@ const SellerLayout = (props) => {
 
     useEffect(() => {
         if(window.localStorage.getItem('CE_seller_id') === '' || window.localStorage.getItem('CE_seller_id') === null){
+            window.location.href=('/seller.login')
         }
         async function getData(){
             let result = await GetSeller(window.localStorage.getItem('CE_seller_id'))
-            if(result){
-                dispatch(setSellerTo(result))
-
-            }else{
-                window.location.href=('/seller.login')
-
-            }
+            dispatch(setSellerTo(result))
 
         } 
         

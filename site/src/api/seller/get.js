@@ -27,12 +27,6 @@ export async function GetSeller(seller_id) {
     return (response)?.data
 }
 
-export async function GetSellerWallet(seller_id) {
-    let response = await get_request_generators(`wallet`, {seller_id})
-    setTimeout(() => source.cancel('timeout'), 10000) 
-    return (response)?.data
-}
-
 
 export async function GetSellerPhoto(seller_id) {
     let response = await get_request_generators(`profile-photo`, {seller_id})

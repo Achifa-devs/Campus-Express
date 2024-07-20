@@ -162,18 +162,6 @@ async function GetSellerData(req,res) {
 }
 
 
-async function GetSellerWallet(req,res) {
-    let {seller_id} = req.query;
-    // console.log('seller_id: ', seller_id)
-    NeonDB.then((pool) => 
-        pool.query(`SELECT * FROM campus_express_seller_wallet WHERE seller_id = '${seller_id}'`)
-        .then(result => res.send(result.rows[0]))
-        .catch(err => console.log(err))
-    )
-    .catch(err => console.log(err))
-
-}
-
 async function GetSellerPhoto(req,res) {
     let {seller_id} = req.query;
     NeonDB.then((pool) => 
@@ -283,6 +271,5 @@ module.exports={
     GetChat,
     GetShop,
     GetItemsSold,
-    GetReviews,
-    GetSellerWallet
+    GetReviews
 } 

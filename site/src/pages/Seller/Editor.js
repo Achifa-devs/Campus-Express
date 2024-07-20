@@ -3,8 +3,6 @@ import '../../styles/plan_card.css'
 import '../../styles/loader.css'
 import '../../styles/notice.css'
 import '../../styles/Seller/overlay.css'    
-import deleteSvg from '../../assets/delete-svgrepo-com (2).svg';
-
 import { useLocation, useNavigate } from 'react-router-dom';
 import items from '../../items.json'
 import TypeSelect from '../../components/Seller/editor/TypeSelect';
@@ -24,42 +22,8 @@ import { GetItem, GetItemImages } from '../../api/buyer/get';
 import { openNotice } from '../../Functions/notice';
 import EditorVideoStore from '../../components/Seller/editor/EditorVideoStore';
 import Pickup from '../../components/Seller/editor/Pickup';
-import PickupChannel from '../../components/Seller/editor/PickupChannel';
 
 const Editor = () => {
-
-    let [lodgeAddress, setLodgeAddress] = useState([]);
-
-
-
-    function addLocation(channel) {
-        let buyer = window.localStorage.getItem('CE_buyer_id');
-        if(buyer === null || buyer === '' || buyer === 'null'){
-        // window.location.href=(`/login?page=product&data=${item.product_id}`)
-        }else{ 
-        let overlay = document.querySelector('.location-overlay')
-        overlay.setAttribute('id', 'location-overlay');
-        }
-    }
-  
-    function deleteLocation(data) {
-        let newLocaleList = lodgeAddress.filter(item => item.index !== data)
-        setLodgeAddress(newLocaleList)
-    }
-
-    function updateLocation(data) {
-        if(data.locale.split(',')[0]!=='' && data.locale.split(',')[1]!=='' && data.locale.split(',')[2]!=='' && data.locale.split(',')[3]!==''){
-            setLodgeAddress(item => [...item,{locale: data.locale, index: locale.length, fee: data.fee}])
-        }else{
-            openNotice(
-              'Please Ensure No Field Is Empty'
-            )
-        }
-    }
-
-   
-
-
 
     let location = useLocation();
     let navigate = useNavigate();
@@ -496,8 +460,7 @@ const Editor = () => {
                                 subCategory: window.localStorage.getItem('draft_sub_category'),
                                 gender: window.localStorage.getItem('draft_gender'),
                                 condition: condition_state,
-                                size: window.localStorage.getItem('draft_size'),
-                                lodgeAddress: lodgeAddress
+                                size: window.localStorage.getItem('draft_size')
                             }
                         }
                     )
@@ -704,18 +667,16 @@ const Editor = () => {
                                 {
                                     category.current.toLowerCase() === 'lodge/apartments'
                                     ?
-                                    <div className="" style={{display: 'flex', flexDirection: 'column', width: '100%', padding: '10px 0 10px 0'}}>
+                                    <div className="input-cnt" style={{display: 'flex', flexDirection: 'column', width: '100%', padding: '10px 0 10px 0'}}>
                                         {/* <section style={{display: 'flex', alignItems: 'center', marginBottom: '10px'}}>
                                             <input style={{
                                                 height: '20px',
                                                 width: '20px'
-                                            }} defaultChecked onInput={e => setPhotoActive(!photoActive)} type="checkbox" name="" id="" />
+                                            }} defaultChecked onInput={e => setVideoActive(!videoActive)} type="checkbox" name="" id="" />
                                             &nbsp;
                                             &nbsp;
-                                            <span style={{fontSize: 'small', fontWeight: '500', color: 'orangered'}}>Do you have image samples for this item. (5 Photos Max)</span>
-
+                                            <span style={{fontSize: 'small', fontWeight: '500', color: 'orangered'}}>Do you have video samples for this item. (3 Videos Max )</span>
                                         </section> */}
-                                        {/* <br /> */}
                                         <section style={{width: '100%', opacity: videoActive ? 1 : .5, pointerEvents: videoActive ? 'all' : 'none'}}>
                                             {
                                                 <EditorVideoStore category={category_state} edit={edit} productVideos={productVideos} videos={vid_list} deleteVideo={deleteVideo} />  
@@ -764,68 +725,7 @@ const Editor = () => {
                                     </section>
                                 </div>  */}
 
-                                <div className="location-overlay" style={{height: '100vh', width: '100vw'}}>
-                                        <PickupChannel updateLocation={updateLocation} title={'Lodge'} />
-                                    </div>
-                                    <div className="buyer-checkout-delivery-info">
-                                        <div className="delivery-pick-up-station" >
-                                            <div className='delivery-info-head'>
-                                                <span>Lodge Address</span>
-                                                {/* <span>Change</span> */}
-                                            </div>
-
-                                            <hr />
-                                            <br />
-                                            <div className='' style={{display: 'flex', alignItems: 'center', fontWeight: '500', fontSize: '20', justifyContent: 'space-between', border: '1px solid #FF4500', flexDirection: 'row', padding: '0', width: '100%', background: '#fff', position: 'relative', borderRadius: '5px', marginBottom: '10px', border: 'none'}}>
-                                                        
-                                            <div style={{padding: '0', width: '100%'}}>
-
-                                                <div className='shadow-sm' style={{display: 'flex', alignItems: 'flex-start', fontWeight: '500', fontSize: '20', justifyContent: 'flex-start', flexDirection: 'column', position: 'relative', border: 'none', padding: '10px'}}>
-                                                <section style={{display: 'flex', alignItems: 'center', fontWeight: '500', fontSize: '20', justifyContent: 'flex-start', flexDirection: 'row-reverse', width: '80%'}}>
-                                                    <label style={{height: '20px', padding: '0', width: '100%', display: 'flex', alignItems: 'flex-end', fontSize: 'small'}} htmlFor="">Door Step Delivery</label>
-                                                    &nbsp;&nbsp;<input style={{height: '20px', width: '20px'}} type="checkbox" checked name="" id="" />
-                                                    
-                                                </section>
-                                                <section style={{padding: '10px', fontSize: '12', fontWeight: '400'}}>
-                                                    <small style={{fontSize: 'small'}}>
-                                                        The Item Will Be Delivered At Your Door Step (Charges Applies)
-                                                    </small>
-                                                </section>
-                                                
-                                                <button disabled={lodgeAddress.length > 0 ? true : false} onClick={e => addLocation('Door Step Delivery')} className='shadow-sm' style={{position: 'relative', height: 'auto', width: 'auto', display: 'flex', alignItems: 'center', justifyContents: 'center', padding: '10px', textAlign: 'center', background: '#fff', color: '#FF4500', fontSize: 'small', float: 'right', color: '#fff', background: '#FF4500', opacity: lodgeAddress.length > 0 ? '.5' : '1'}}>Add location</button>
-                                                <section style={{display: 'flex', alignItems: 'flex-start', fontWeight: '500', fontSize: '20', justifyContent: 'flex-start', flexDirection: 'column', padding: '10px', width: '100%', background: '#fff', position: 'relative', borderRadius: '5px'}}>
-                                                    {
-                                                        lodgeAddress.map((item) => 
-                                                            
-                                                            <div className='shadow-sm' style={{display: 'flex', alignItems: 'center', fontWeight: '500', fontSize: '20', justifyContent: 'space-between', border: '1px solid #FF4500', flexDirection: 'row', padding: '5px 5px 5px 10px', width: '100%', background: '#fff', position: 'relative', borderRadius: '5px', marginBottom: '10px'}}>
-                                                               <div style={{display: 'flex', alignItems: 'flex-start', fontWeight: '500', fontSize: '20', justifyContent: 'space-between', flexDirection: 'column', padding: '0', width: '100%', background: '#fff', position: 'relative', borderRadius: '5px', marginBottom: '10px'}}>
-                                                                <small>{
-                                                                item.locale
-                                                                }</small>
-                                                                <br />
-                                                                <small>
-                                                                Inspection Fee: {
-                                                                item.fee
-                                                                }
-                                                               </small>
-                                                               </div>
-                                                                <button  onClick={e=>deleteLocation(item.index)} style={{width: '35px', height: '35px', padding: '5px', textAlign: 'center', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                                                                    <img src={deleteSvg} style={{height: '100%', margin: '0', left: 'unset', float: 'unset', width: '100%', position: 'relative'}} alt="" />
-                                                                </button>
-                                                            </div>
-                                                           
-                                                        )
-                                                    }
-                                                </section>
-                                                </div>
-                                                </div>
-                                            </div>
-
-                                            
-                                        </div>
-                                    </div>
-
-                                </div>
+                            </div>
 
                             
                             
