@@ -12,7 +12,7 @@ cloudinary.config({
 const uploadVideo = async (filePaths, refs, folder) => {
   try {
     const uploadPromises = filePaths.map(async (filePath) => {
-      const result = await cloudinary.uploader.upload_large(filePath, {
+      const result = await cloudinary.uploader.upload(filePath, {
         resource_type: 'video',
         folder: folder,
         public_id: refs, // Use corresponding reference for each file
