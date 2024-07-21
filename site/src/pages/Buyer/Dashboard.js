@@ -326,6 +326,13 @@ const Dashboard = () => {
 
     return ( 
         <>
+
+            <Helmet>
+                <meta name="description" content="Online Shopping On Campus In Nigeria." />
+                <meta name="keywords" content="Campus, Express, Nigeria, Products, Services, Shopping, Jumia. Jiji, Shopify, Online-Shopping" />
+                <meta name="author" content="Campus Express Nigeria" />
+            </Helmet>
+            
             <div className="notice-cnt" style={{margin: 'auto'}}>
                     <span style={{margin: "0 15px 0 .5px"}}></span>
                     <button className="notice-cnt-btn" style={{width: '40px', height: '30px', background: 'red', borderRadius: '2px', fontWeight: '500', fontSize: 'small'}}>
