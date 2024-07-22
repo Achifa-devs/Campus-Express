@@ -9,19 +9,19 @@ export default function OrderRoom() {
 
   return (
     <>
-      <View style={[styles.orderRoom, {height: screenHeight}]}>
+      {/* <View style={[styles.orderRoom, {height: screenHeight - 55}]}> */}
 
-        {/* <ScrollView style={{height: '100%'}}> */}
-        <View style={{height: 'auto'}}>
-            <OrderRoomTop /> 
-        </View>
+        <ScrollView style={{height: '100%'}}>
+          <View style={{height: 'auto'}}>
+              <OrderRoomTop /> 
+          </View>
 
-        <View style={{height: '60%'}}>
-            <OrderRoomBtm />
-        </View>
+          <View style={{height: '60%'}}>
+              <OrderRoomBtm />
+          </View>
 
-        {/* </ScrollView> */}
-      </View>
+        </ScrollView>
+      {/* </View> */}
     </>
   )
 }
