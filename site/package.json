@@ -60,7 +60,6 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "postbuild": "react-snap",
     "eject": "react-scripts eject",
     "dev": "cross-env NODE_ENV=development next dev -p 3002",
     "scan": "tsc --project tsconfig.json --pretty --noEmit",
