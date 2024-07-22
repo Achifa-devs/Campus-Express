@@ -15,7 +15,7 @@ export default function Engagement() {
     ]
   return (
     <>
-        <View >
+        <View>
             
 
             <View style={[
@@ -55,8 +55,7 @@ const styles = StyleSheet.create({
         // marginLeft: 5, 
         // borderRadius: 15,
         // marginRight: 5,
-        borderTopLeftRadius: 25, 
-        borderTopRightRadius: 25,
+        borderRadius: 0,
         display: 'flex', 
         justifyContent: 'space-evenly', 
         flexDirection: 'column',

@@ -3,18 +3,16 @@ import { Dimensions, StyleSheet, Text, View } from 'react-native'
 export default function Orders() {
   let screenWidth = Dimensions.get('window').width;
     let list = [
-      {name: 'Availble For Withdrawal', },
-      {name: 'Earning This July', },
-      {name: 'Avg. Selling Price', },
-      {name: 'Cleared Payments', },
-      {name: 'Active Orders', },
-      {name: 'Inactive Orders', }
+      {name: 'Earning This Month', value: 100000},
+      {name: 'Cleared Ordered', value: 50},
+      {name: 'Active Orders', value: 30},
+      {name: 'Cancelled Orders', value: 12}
     ]
   return (
     <>
         <View>
             
-
+            <Text style={{padding: 10, color: '#000', fontSize: 18}}>Overview</Text>
             <View style={[
                 styles.card,
                 {width: '100%'}
@@ -23,7 +21,7 @@ export default function Orders() {
                     height: 'auto',
                     padding: 0,
                     // marginLeft: 5,  
-                    borderRadius: 15, 
+                    borderRadius: 5, 
                     marginRight: 5,
                     display: 'flex', 
                     justifyContent: 'space-evenly', 
@@ -35,12 +33,14 @@ export default function Orders() {
                 }}>
                     {
                         list.map((item,index) => 
-                            <View style={{display: 'flex', justifyContent: 'space-evenly', flexDirection: 'column', height: 100, width: '48%', marginBottom: 10, alignItems: 'center', backgroundColor: '#f9f9f9', borderRadius: 10}}>
-                                <Text style={{fontSize: 24, padding: 8, color: '#000', textDecorationStyle: 'dashed'}}>25</Text>
-                                <Text style={{fontSize: 12}}>{item.name}</Text>
+                            <View style={{display: 'flex', justifyContent: 'space-evenly', flexDirection: 'column', height: 100, width: '48%', marginBottom: 10, alignItems: 'center', backgroundColor: 'rgb(255, 238, 223)', borderRadius: 10, borderWidth: 0, borderColor: '#FF4500'}}>
+                                <Text style={{fontSize: 24, padding: 8, color: '#000', textDecorationStyle: 'dashed'}}>{
+                                    index === 0 ? <>&#8358;{new Intl.NumberFormat('en-us').format(item.value)}</> : item.value
+                                }</Text>
+                                <Text style={{fontSize: 12, color: '#000'}}>{item.name}</Text>
                             </View>   
                         )
-                    }
+                    } 
                 </View>
                 
             </View>
@@ -52,9 +52,9 @@ export default function Orders() {
 const styles = StyleSheet.create({
     card:{
         height: 'auto',
-        padding: 10,
+        padding: 0,
         // marginLeft: 5, 
-        borderRadius: 15,
+        borderRadius: 5,
         // marginRight: 5,
         display: 'flex', 
         justifyContent: 'space-evenly', 

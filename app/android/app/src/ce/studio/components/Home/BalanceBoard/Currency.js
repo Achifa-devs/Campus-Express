@@ -1,13 +1,12 @@
 import React from 'react'
-import { Text, View } from 'react-native'
+import { Text, TouchableOpacity, View } from 'react-native'
 
 export default function Currency() {
   return (
     <>
-      <View>
-        <View></View>
-        <Text>Currency</Text>
-      </View>
+      <TouchableOpacity>
+        <Text style={{fontSize: 14, color: '#000', fontWeight: '800'}}>Cash Out</Text>
+      </TouchableOpacity>
     </>
   )
 }

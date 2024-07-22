@@ -26,8 +26,8 @@ export default function Home() {
           height: screenHeight - 55
         }]}>
         <Engagement />
-        <View style={{backgroundColor: '#fff', borderTopLeftRadius: 25, borderTopRightRadius: 25, paddingTop: 30}}>
-          <Text style={{padding: 20, fontSize: 18, color: '#000'}}>Earnings</Text>
+        <View style={{backgroundColor: '#fff', backgroundColor: '#fff', borderRadius: 5, padding: 10, height: 'auto'}}>
+          {/* <Text style={{padding: 20, fontSize: 18, color: '#000'}}>Earnings</Text> */}
 
           <Orders />
           <Card /> 
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
       position: 'relative',
       width: '100%',
       padding: 0,
-      backgroundColor: '#FF4500',
+      backgroundColor: '#fff',
       flex: 1,
       // marginBottom: 5
     }

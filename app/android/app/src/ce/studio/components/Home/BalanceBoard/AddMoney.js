@@ -6,10 +6,9 @@ export default function AddMoney() {
   let navigation = useNavigation()
   return (
     <>
-        <TouchableOpacity onPress={e => navigation.navigate('user-deposit')}>
-            <View></View>
-            <Text>Add Money</Text>
-        </TouchableOpacity>
+      <TouchableOpacity>
+          <Text style={{fontSize: 14, color: '#000', fontWeight: '800'}}>Add Money</Text>
+      </TouchableOpacity>
     </>
   )
 }
