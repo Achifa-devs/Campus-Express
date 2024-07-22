@@ -10,34 +10,40 @@ import store from './redux/store';
 import { ErrorBoundary } from 'react-error-boundary';
 import { HelmetProvider } from 'react-helmet-async';
 
-// const root = ReactDOM.createRoot(document.getElementById('root'));
-// root.render(
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
 
-    
+  <Provider store={store}>
+    <HelmetProvider>
+      <Router>
+        <App /> 
+      </Router>
+    </HelmetProvider>
+  </Provider>
  
-// );
-const rootElement = document.getElementById("root");
-if (rootElement.hasChildNodes()) {
-  hydrate(
-    <Provider store={store}>
-      <HelmetProvider>
-        <Router>
-          <App /> 
-        </Router>
-      </HelmetProvider>
-    </Provider>, 
-  rootElement);
-} else {
-  render(
-    <Provider store={store}>
-      <HelmetProvider>
-        <Router>
-          <App /> 
-        </Router>
-      </HelmetProvider>
-    </Provider>, 
-    rootElement);
-}
+);
+// const rootElement = document.getElementById("root");
+// if (rootElement.hasChildNodes()) {
+//   hydrate(
+//     <Provider store={store}>
+//       <HelmetProvider>
+//         <Router>
+//           <App /> 
+//         </Router>
+//       </HelmetProvider>
+//     </Provider>, 
+//   rootElement);
+// } else {
+//   render(
+//     <Provider store={store}>
+//       <HelmetProvider>
+//         <Router>
+//           <App /> 
+//         </Router>
+//       </HelmetProvider>
+//     </Provider>, 
+//     rootElement);
+// }
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

@@ -17,12 +17,15 @@ import FlasAds from '../components/Home/FlashAd'
 import Search from '../components/Home/Search'
 import ShowCase from '../components/Home/ShowCase'
 import Message from './Message';
-import Order from './Order';
+import Order from './Order'; 
 import Profile from './Profile';
+import { useEffect, useState } from 'react';
 const Tab = createBottomTabNavigator();
 
 export default function Home() {
   let screenHeight = Dimensions.get('window').height;
+  
+
   return (
     <>
       <ScrollView style={[styles.homeCnt,{
@@ -31,7 +34,7 @@ export default function Home() {
 
         <Search />
         <FlasAds />
-        <ShowCase />
+        <ShowCase category={'trends'} limit={30} />
 
       </ScrollView> 
     </> 

@@ -20,8 +20,9 @@ const createToken = (id) => {
 async function register_buyer(req,res) { 
 
     let {fname,lname,email,phone,pwd,state,campus,gender} = req.body;
+    console.log(fname,lname,email,phone,pwd,state,campus,gender)
     let date = new Date().toLocaleString();
-    let hPwd = await bcrypt.hash(pwd, 10)
+    let hPwd = await bcrypt.hash(pwd, 10) 
     let buyer_id = `CE-${shortId.generate()}`
     let wallet_id = `CEW-${buyer_id}`
 

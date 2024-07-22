@@ -40,6 +40,8 @@ const BuyerSignup = () => {
     const page = params.get('page');
     const data_ = params.get('data');
 
+    
+
     let book = useRef({
         fname: false,
         lname: false,

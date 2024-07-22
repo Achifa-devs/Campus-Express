@@ -9,12 +9,12 @@ export default function SaveBtn() {
   return (
     <>
       <TouchableOpacity style={styles.saveBtn}>
-            <Text>save</Text>
+            <Text style={{color: '#fff'}}>save</Text>
         </TouchableOpacity>
     </>
-  )
+  ) 
 }
-
+ 
 
 
 const styles = StyleSheet.create({
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
         top: 3,
         padding: 8,
         left: 3,
-        backgroundColor: 'blue',
+        backgroundColor: '#FF4500',
         borderRadius: 15,
         marginBottom: 5
     },

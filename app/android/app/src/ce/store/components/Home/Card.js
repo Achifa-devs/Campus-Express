@@ -4,9 +4,11 @@ import SaveBtn from './buttons/saveBtn'
 import Title from './data/Title';
 import Cost from './data/Cost';
 import ActionBtn from './buttons/actionBtn';
-export default function Card() {
-  let screenWidth = Dimensions.get('window').width;
-
+import Thumbnail from '../../../reusables/Thumbnail';
+import { useNavigation } from '@react-navigation/native';
+export default function Card({item}) {
+    let screenWidth = Dimensions.get('window').width;
+    let navigation = useNavigation()
   return (
     <>
         <View style={[
@@ -15,16 +17,16 @@ export default function Card() {
         ]}>
             <View style={styles.cardTop}>
                 <SaveBtn />
-
-                <View >
-
-                </View>
+ 
+                <TouchableOpacity onPress={e=> navigation.navigate('user-product', {product_id: item.product_id})}>
+                    <Thumbnail br={15} product_id={item.product_id} title={item.title} />
+                </TouchableOpacity> 
             </View>
 
             <View style={styles.cardBtm}>
-                <Title />
-                <Cost />
-                <ActionBtn />
+                <TouchableOpacity onPress={e=> navigation.navigate('user-product', {product_id: item.product_id})}><Title title={item.title} /></TouchableOpacity>
+                <TouchableOpacity onPress={e=> navigation.navigate('user-product', {product_id: item.product_id})}><Cost cost={item.price} /></TouchableOpacity>
+                <ActionBtn cost={item.price} />
             </View>
         </View>
     </>

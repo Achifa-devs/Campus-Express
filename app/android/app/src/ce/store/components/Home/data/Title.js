@@ -1,14 +1,14 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native';
 
-export default function Title() {
+export default function Title({title, size}) {
   return (
     <>
       <View style={styles.card}>
-        <Text 
+        <Text style={{fontSize: size ? size :  15, color: '#000'}} 
             numberOfLines={2}
             ellipsizeMode="tail">
-            Yellow hand Bag and green earing with red shoe
+            {title}
         </Text>
       </View>
     </>

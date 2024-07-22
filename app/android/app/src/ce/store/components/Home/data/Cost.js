@@ -1,16 +1,16 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native';
 
-export default function Cost() {
+export default function Cost({cost,size}) {
   return (
     <>
       <View style={styles.card}>
         <Text style={{fontSize: 16}}>&#8358;&nbsp;</Text>
        
-        <Text style={{fontSize: 13, textDecorationStyle: 'dashed'}} 
+        <Text style={{fontSize: size ? size :  15, textDecorationStyle: 'dashed'}} 
             numberOfLines={2}
             ellipsizeMode="tail">
-            50,000.00
+            {new Intl.NumberFormat('en-us').format(cost)}
         </Text> 
       </View>
     </>
@@ -19,7 +19,7 @@ export default function Cost() {
 
 
 const styles = StyleSheet.create({
-    card:{
+    card:{ 
         height: 'auto',
         width: '100%',
         padding: 0,

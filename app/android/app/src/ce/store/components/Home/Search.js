@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react'
 import { 
     Dimensions,
@@ -9,11 +10,12 @@ import {
 
 export default function Search() {
   let screenWidth = Dimensions.get('window').width;
+  let navigation = useNavigation()
 
   return (
     <>
       <View style={[styles.searchCnt, {width: screenWidth}]}>
-        <TouchableOpacity style={styles.search} placeholder='Search Here'>
+        <TouchableOpacity style={styles.search} onPress={e => navigation.navigate('user-search')}>   
             
         </TouchableOpacity>
       </View>
@@ -31,6 +33,7 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         paddingRight: 15,
         backgroundColor: '#fff',
+        marginTop: 5,
         marginBottom: 5
     },
     search:{
