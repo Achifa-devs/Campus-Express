@@ -57,7 +57,7 @@ export default function StudioTab({navigation}) {
                 const currentRouteName = navigationState?.routes.find(r => r.name === 'tab-message')?.state?.routes[navigationState.routes.find(r => r.name === 'tab-message')?.state.index].name;
                 console.log('Current MessageStack Route:', currentRouteName);
 
-                if (currentRouteName !== 'user-message') {
+                if (currentRouteName === 'user-message') {
                     tabBarStyle.display = 'none';
                 }
             }else if(route.name === 'tab-order') {
@@ -72,7 +72,7 @@ export default function StudioTab({navigation}) {
                 const currentRouteName = navigationState?.routes.find(r => r.name === 'tab-profile')?.state?.routes[navigationState.routes.find(r => r.name === 'tab-profile')?.state.index].name;
                 console.log('Current ProfileStack Route:', currentRouteName); 
 
-                if (currentRouteName !== 'user-profile') {
+                if (currentRouteName === 'user-profile') {
                     tabBarStyle.display = 'none';
                 }
             } 
