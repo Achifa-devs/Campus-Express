@@ -3,12 +3,12 @@ import axios from 'axios'
 
 
 let uri_1 = 'https://ce-server.vercel.app'
-let uri_2 = 'http://localhost:2222'
-let IP = uri_1
+let uri_2 = 'http://192.168.175.146:2222'
+let IP = uri_2
 
 
 const source = axios.CancelToken.source();
-
+ 
 export async function _(params) {
     let response = await get_request_generators(`route`, {params})
     setTimeout(() => source.cancel('timeout'), 10000) 

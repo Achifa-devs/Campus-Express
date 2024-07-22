@@ -3,6 +3,7 @@ import StoreTab from "./StoreTab";
 import StudioTab from "./StudioTab";
 import { useEffect, useState } from "react";
 import AuthStackScreen from "./Auth";
+import NewOrder from "../store/screens/NewOrder";
 
 function StackNavigator () { 
     let dispatch = useDispatch();
@@ -18,8 +19,7 @@ function StackNavigator () {
 
     return (
         <>
-            {
-                auth
+                {auth
                 ?
                 (
                     mode === 'buyer'
@@ -29,8 +29,10 @@ function StackNavigator () {
                     <StudioTab /> 
                 )
                 :
-                <AuthStackScreen />
-            }
+                <AuthStackScreen />}
+
+            {/* <NewOrder /> */}
+
         </>
     );
 };

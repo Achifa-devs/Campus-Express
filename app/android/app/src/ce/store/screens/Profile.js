@@ -30,23 +30,18 @@ const ProfileCnt = ({navigation}) => {
  
   useEffect(() => {
     
-    isEnabled === true
-    ?
-    dispatch(setUserModeTo('user'))
-    :
-    isEnabled === false
-    ?
-    dispatch(setUserModeTo('buyer'))
-
-    :
-    ''
+    if(isEnabled === true){
+      dispatch(setUserModeTo('user'))
+    }else if(isEnabled === false){
+      dispatch(setUserModeTo('buyer'))
+    }
 
   }, [isEnabled])
 
   return ( 
       <>
-        <View style={{height: 'auto', position: 'relative', zIndex: 1500, padding: 10, width: '100%', backgroundColor: '#32CD32', opacity: .7, display: 'flex', alignItems: 'center', justifyContent: 'center',  flexDirection: 'row'}}>
-          <View style={{height: 50, borderRadius: 5, width: '100%', backgroundColor: 'green', opacity: 1, display: 'flex', alignItems: 'center', zIndex: 15000, flexDirection: 'row'}}>
+        <View style={{height: 'auto', position: 'relative', zIndex: 1500, padding: 10, width: '100%', backgroundColor: '#fff', opacity: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',  flexDirection: 'row'}}>
+          <View style={{height: 50, borderRadius: 5, width: '100%', backgroundColor: '#FF4500', opacity: 1, display: 'flex', alignItems: 'center', zIndex: 15000, flexDirection: 'row'}}>
             <Text style={{fontSize: 15, fontWeight: 'bold', fontFamily: 'serif', color: '#fff', position: 'absolute', left: 10}}>
               Seller Mode
             </Text> 
@@ -55,7 +50,7 @@ const ProfileCnt = ({navigation}) => {
 
 
               <Switch
-                trackColor={{false: '#fff', true: 'yellowgreen'}}
+                trackColor={{false: '#fff', true: '#FF4500'}}
                 thumbColor={isEnabled ? '#efefef' : '#fff'}
                 ios_backgroundColor="#3e3e3e"
                 onValueChange={toggleSwitch}
@@ -96,7 +91,16 @@ const ProfileCnt = ({navigation}) => {
                         <Image style={styles.icons} source={require('../assets/right-arrow.png')} />
     </TouchableOpacity>*/}
 
-                    
+
+                    <TouchableOpacity onPress={e => navigation.navigate('user-product-management')} style={{display: 'flex', alignItems: 'center', justifyContent: 'left', padding: 20, marginBottom: 3, flexDirection: 'row', height: 60, width: '100%', backgroundColor: '#fff'}}>
+                        <Text style={{fontFamily: 'serif', fontWeight: 500, fontSize: 15}}>Favourites</Text>
+                        {/* <Image style={styles.icons} source={require('../../assets/right-arrow.png')} /> */}
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={e => navigation.navigate('user-product-management')} style={{display: 'flex', alignItems: 'center', justifyContent: 'left', padding: 20, marginBottom: 3, flexDirection: 'row', height: 60, width: '100%', backgroundColor: '#fff'}}>
+                        <Text style={{fontFamily: 'serif', fontWeight: 500, fontSize: 15}}>History</Text>
+                        {/* <Image style={styles.icons} source={require('../../assets/right-arrow.png')} /> */}
+                    </TouchableOpacity>
                     <TouchableOpacity onPress={e => navigation.navigate('user-product-management')} style={{display: 'flex', alignItems: 'center', justifyContent: 'left', padding: 20, marginBottom: 3, flexDirection: 'row', height: 60, width: '100%', backgroundColor: '#fff'}}>
                         <Text style={{fontFamily: 'serif', fontWeight: 500, fontSize: 15}}>Invite Friends</Text>
                         {/* <Image style={styles.icons} source={require('../../assets/right-arrow.png')} /> */}

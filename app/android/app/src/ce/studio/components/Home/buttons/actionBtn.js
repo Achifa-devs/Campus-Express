@@ -11,7 +11,7 @@ export default function ActionBtn() {
     <>
         <View style={styles.actionBtn}>
 
-            <TouchableOpacity style={{width: '68%',borderRadius: 15, height: '100%', backgroundColor: '#32CD32',  display: 'flex', flexDirection: 'row',justifyContent: 'center', paddingLeft: 6, paddingRight: 6,alignItems: 'center'}}>
+            <TouchableOpacity style={{width: '68%',borderRadius: 15, height: '100%', backgroundColor: '#FF4500',  display: 'flex', flexDirection: 'row',justifyContent: 'center', paddingLeft: 6, paddingRight: 6,alignItems: 'center'}}>
                 <Text style={{fontSize: 10, color: '#fff'}}>Select A plan Now</Text>
             </TouchableOpacity> 
 

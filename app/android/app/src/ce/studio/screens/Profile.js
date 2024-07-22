@@ -31,16 +31,11 @@ const ProfileCnt = ({navigation}) => {
 
   useEffect(() => {
     
-    isEnabled === true
-    ?
-    dispatch(setUserModeTo('user'))
-    :
-    isEnabled === false
-    ?
-    dispatch(setUserModeTo('buyer'))
-
-    :
-    ''
+    if(isEnabled === true){
+      dispatch(setUserModeTo('user'))
+    }else if(isEnabled === false){
+      dispatch(setUserModeTo('buyer'))
+    }
 
   }, [isEnabled])
 

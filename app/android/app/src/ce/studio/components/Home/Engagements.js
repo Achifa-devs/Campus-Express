@@ -10,7 +10,7 @@ export default function Engagement() {
     ]
   return (
     <>
-        <View>
+        <View >
             
 
             <View style={[
@@ -52,16 +52,18 @@ const styles = StyleSheet.create({
     card:{
         height: 'auto',
         padding: 10,
-        marginLeft: 5, 
-        borderRadius: 15,
-        marginRight: 5,
+        // marginLeft: 5, 
+        // borderRadius: 15,
+        // marginRight: 5,
+        borderTopLeftRadius: 25, 
+        borderTopRightRadius: 25,
         display: 'flex', 
         justifyContent: 'space-evenly', 
         flexDirection: 'column',
         flexWrap: 'wrap',
         padding: 8,
         marginBottom: 5,
-        backgroundColor: '#fff'
+        backgroundColor: '#FF4500'
     },
 
     cardTop:{

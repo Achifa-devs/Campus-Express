@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  View,
 } from 'react-native';
 
 import { 
@@ -25,9 +26,12 @@ export default function Home() {
           height: screenHeight - 55
         }]}>
         <Engagement />
-        <Orders />
-        <Card />
+        <View style={{backgroundColor: '#fff', borderTopLeftRadius: 25, borderTopRightRadius: 25, paddingTop: 30}}>
+          <Text style={{padding: 20, fontSize: 18, color: '#000'}}>Earnings</Text>
 
+          <Orders />
+          <Card /> 
+        </View>
       </ScrollView> 
     </> 
   )
@@ -39,8 +43,9 @@ const styles = StyleSheet.create({
       height: 'auto',
       position: 'relative',
       width: '100%',
-      padding: 5,
+      padding: 0,
+      backgroundColor: '#FF4500',
       flex: 1,
-      marginBottom: 5
+      // marginBottom: 5
     }
   });

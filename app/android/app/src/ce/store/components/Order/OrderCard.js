@@ -10,21 +10,22 @@ import Date from './OrderDate';
 import OrderStatus from './OrderStatus';
 import OrderId from './OrderId';
 import { useNavigation } from '@react-navigation/native';
+import Thumbnail from '../../../reusables/Thumbnail';
 
-export default function OrderCard() {
+export default function OrderCard({data}) {
     let navigation = useNavigation()    
     return (
         <>
             <TouchableOpacity onPress={()=>navigation.navigate('order-room')} style={styles.orderCardCnt}>
                 <View style={styles.orderCntLeft}>
-                
+                    <Thumbnail product_id={data?.product_id} title={data?.title} />
                 </View>
 
                 <View style={styles.orderCntRight}>
 
                     <View style={styles.orderCntRightTop}>
                         <View>
-                            <OrderTitle />
+                            <OrderTitle title={data?.title} />
                         </View>
 
                         <View>
@@ -38,7 +39,7 @@ export default function OrderCard() {
                         </View>
 
                         <View>
-                            <Date />
+                            <Date date={data?.date} />
                         </View>
                     </View>
 

@@ -12,7 +12,7 @@ export default function OrderRoomBtm() {
   return (
     <>
         <View style={[styles.orderRoomBtm]}>
-            <Text>r</Text>
+            
         </View>
     </>
   )
@@ -20,10 +20,10 @@ export default function OrderRoomBtm() {
 
 const styles = StyleSheet.create({
     orderRoomBtm:{
-        height: '60%',
+        height: '100%',
         width: '100%',
         position: 'relative',
         padding: 0,
-        backgroundColor: 'green'
+        backgroundColor: '#fff'
     }
 });

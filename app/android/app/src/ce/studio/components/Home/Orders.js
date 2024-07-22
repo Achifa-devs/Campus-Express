@@ -19,7 +19,6 @@ export default function Orders() {
                 styles.card,
                 {width: '100%'}
             ]}> 
-                <Text style={{padding: 10, fontSize: 18, color: '#000'}}>Earnings</Text>
                 <View style={{
                     height: 'auto',
                     padding: 0,
@@ -54,14 +53,14 @@ const styles = StyleSheet.create({
     card:{
         height: 'auto',
         padding: 10,
-        marginLeft: 5, 
+        // marginLeft: 5, 
         borderRadius: 15,
-        marginRight: 5,
+        // marginRight: 5,
         display: 'flex', 
         justifyContent: 'space-evenly', 
         flexDirection: 'column',
         flexWrap: 'wrap',
-        padding: 8,
+        // padding: 8,
         marginBottom: 5,
         backgroundColor: '#fff'
     },

@@ -15,7 +15,7 @@ export default function OrderCard() {
     let navigation = useNavigation()    
     return (
         <>
-            <TouchableOpacity onPress={()=>navigation.navigate('order-room')} style={styles.orderCardCnt}>
+            <TouchableOpacity onPress={()=>navigation.navigate('user-order-room')} style={styles.orderCardCnt}>
                 <View style={styles.orderCntLeft}>
                 
                 </View>
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       padding: 10,
       backgroundColor: '#fff',
-      marginBottom: 5
+    //   marginBottom: 5
     },
     orderCntLeft:{
       height: '100%',

@@ -37,6 +37,7 @@ import Notification from '../store/screens/Notification';
 import Category from '../store/screens/Category';
 import Search from '../store/screens/Search';
 import Product from '../store/screens/Product';
+import NewOrder from '../store/screens/NewOrder';
 const Tab = createBottomTabNavigator();
 
 export default function StoreTab({navigation}) {
@@ -210,6 +211,16 @@ function HomeStackScreen() {
             ), 
             // headerShown: false,  
         }}  name="user-product" component={Product} />
+
+        <HomeStack.Screen  options={{
+            header: ({navigation}) =>
+            (
+                <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px'}}>
+
+                </View>
+            ), 
+            // headerShown: false,  
+        }}  name="user-new-order" component={NewOrder} />
     </HomeStack.Navigator>
   );
 }   
@@ -414,7 +425,7 @@ function ProfileStackScreen() {
                     justifyContent: 'center',
                     alignItems: 'center',
                     color: '#000',
-                    backgroundColor: '#FFF',
+                    backgroundColor: '#FF4500',
                     position: 'relative'
                 }}>
 

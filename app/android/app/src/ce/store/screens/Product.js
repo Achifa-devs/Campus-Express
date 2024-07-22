@@ -1,4 +1,4 @@
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { useState } from 'react'
 import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { GetItem } from '../apis/buyer/get';
@@ -26,6 +26,7 @@ export default function Product() {
     .catch(error=>{
         console.log(error)
     })  
+    let navigation = useNavigation()
 
   return (
     <>    
@@ -61,11 +62,11 @@ export default function Product() {
             </ScrollView>
 
             <View style={styles.btm}>
-                <TouchableOpacity style={[styles.btn, {width: '78%', backgroundColor: '#FF4500'}]}>
+                <TouchableOpacity onPress={e=> navigation.navigate('user-new-order', {data: data})} style={[styles.btn, {width: '78%', backgroundColor: '#FF4500'}]}>
                     <Text style={{fontSize: 15, color: '#fff'}}>Buy Now For {new Intl.NumberFormat('en-us').format(0.95 * parseInt(data?.price))}</Text>
-                </TouchableOpacity>   
+                </TouchableOpacity>    
                 
-                <TouchableOpacity style={[styles.btn, {width: '18%', backgroundColor: 'rgb(255, 244, 224)'}]}>
+                <TouchableOpacity  style={[styles.btn, {width: '18%', backgroundColor: 'rgb(255, 244, 224)'}]}>
                     <Text style={{fontSize: 10, color: '#fff'}}>Cart</Text>
                 </TouchableOpacity>
             </View>

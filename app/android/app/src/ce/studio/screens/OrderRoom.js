@@ -1,5 +1,5 @@
 import React from 'react'
-import { Dimensions, StyleSheet, View } from 'react-native'
+import { Dimensions, ScrollView, StyleSheet, View } from 'react-native'
 import OrderRoomTop from '../components/OrderRoom/OrderRoomTop'
 import OrderRoomBtm from '../components/OrderRoom/OrderRoomBtm';
 
@@ -11,14 +11,16 @@ export default function OrderRoom() {
     <>
       <View style={[styles.orderRoom, {height: screenHeight}]}>
 
-        <View>
-            {/* <OrderRoomTop />  */}
+        {/* <ScrollView style={{height: '100%'}}> */}
+        <View style={{height: 'auto'}}>
+            <OrderRoomTop /> 
         </View>
 
-        <View>
-            {/* <OrderRoomBtm /> */}
+        <View style={{height: '60%'}}>
+            <OrderRoomBtm />
         </View>
 
+        {/* </ScrollView> */}
       </View>
     </>
   )

@@ -64,7 +64,7 @@ export default function StudioTab({navigation}) {
                 const currentRouteName = navigationState?.routes.find(r => r.name === 'tab-order')?.state?.routes[navigationState.routes.find(r => r.name === 'tab-order')?.state.index].name;
                 console.log('Current OrderStack Route:', currentRouteName);
 
-                if (currentRouteName !== 'user-order') {
+                if (currentRouteName === 'user-order-room') {
                     tabBarStyle.display = 'none';
                 }
             } 
@@ -144,12 +144,12 @@ function HomeStackScreen() {
       <HomeStack.Screen  options={{
             header: ({navigation}) =>
             (
-                <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#32CD32', alignItems: 'center', padding: '10px'}}>
+                <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FF4500', alignItems: 'center', padding: '10px'}}>
                     
                     <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                    <View style={{backgroundColor: '#fff', height: '100%', width: 40, borderRadius: 10}}></View>
-                    <Text>&nbsp;</Text>
-                    <Text>Akpulu.F</Text>
+                        <View style={{backgroundColor: '#fff', height: '100%', width: 40, borderRadius: 10}}></View>
+                        <Text>&nbsp;</Text>
+                        <Text>Akpulu.F</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={e => navigation.navigate('user-notification')}>
@@ -173,13 +173,13 @@ function MessageStackScreen() {
         <MessageStack.Screen  options={{
             header: ({navigation}) =>
             (
-                <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#32CD32', alignItems: 'center', paddingLeft: 10, paddingRight: 10}}>
+                <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FF4500', alignItems: 'center', paddingLeft: 10, paddingRight: 10}}>
 
-                    <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '40%', backgroundColor: '#32CD32', alignItems: 'center'}}>
+                    <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '40%', backgroundColor: '#FF4500', alignItems: 'center'}}>
                         <Text style={{paddingLeft: 0, fontSize: 20, color: '#fff'}}>Shopiva Chat</Text>
                     </View>
 
-                    <View style={{ height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', backgroundColor: '#32CD32', alignItems: 'center', padding: '10px'}}>
+                    <View style={{ height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', backgroundColor: '#FF4500', alignItems: 'center', padding: '10px'}}>
                         <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
                             <View style={{backgroundColor: '#fff', height: '100%', width: 40, borderRadius: 10}}></View>
                         </TouchableOpacity>
@@ -204,7 +204,7 @@ function MessageStackScreen() {
             
               {
               
-              <View style={{display: 'flex', flexDirection: 'row', zIndex: 1000, height: '100%', width: '100%', backgroundColor: '#32CD32', alignItems: 'center', paddingTop: 25, justifyContent: 'center', position: 'relative'}}>
+              <View style={{display: 'flex', flexDirection: 'row', zIndex: 1000, height: '100%', width: '100%', backgroundColor: '#FF4500', alignItems: 'center', paddingTop: 25, justifyContent: 'center', position: 'relative'}}>
                 <View style={{
                 position: 'absolute',
                 left: 15,
@@ -215,7 +215,7 @@ function MessageStackScreen() {
                 fontFamily: 'serif',
 
                 }}>
-                  <Text style={{fontSize: 21, height: 50, paddingTop: 10, backgroundColor: '#fff4e0', width: 50, color: '#32CD32', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'row', textAlign: 'center', borderRadius: 50}}>
+                  <Text style={{fontSize: 21, height: 50, paddingTop: 10, backgroundColor: '#fff4e0', width: 50, color: '#FF4500', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'row', textAlign: 'center', borderRadius: 50}}>
                       {/* {seller_name.split(' ')[0].split('')[0]}.{seller_name.split(' ')[1].split('')[0]} */}
                       A.C
                   </Text>
@@ -288,13 +288,13 @@ function OrderStackScreen() {
         <OrderStack.Screen  options={{
             header: ({navigation}) =>
             (
-                <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#32CD32', alignItems: 'center', paddingLeft: 10, paddingRight: 10}}>
+                <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FF4500', alignItems: 'center', paddingLeft: 10, paddingRight: 10}}>
 
-                    <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '40%', backgroundColor: '#32CD32', alignItems: 'center'}}>
+                    <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '40%', backgroundColor: '#FF4500', alignItems: 'center'}}>
                         <Text style={{paddingLeft: 0, fontSize: 20, color: '#fff'}}>Shopiva Orders</Text>
                     </View>
 
-                    <View style={{ height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', backgroundColor: '#32CD32', alignItems: 'center', padding: '10px'}}>
+                    <View style={{ height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', backgroundColor: '#FF4500', alignItems: 'center', padding: '10px'}}>
                         <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
                             <View style={{backgroundColor: '#fff', height: '100%', width: 40, borderRadius: 10}}></View>
                         </TouchableOpacity>
@@ -315,13 +315,13 @@ function OrderStackScreen() {
         <OrderStack.Screen options={{
          header: () =>
           (
-            <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#32CD32', alignItems: 'center', paddingLeft: 10, paddingRight: 10}}>
+            <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FF4500', alignItems: 'center', paddingLeft: 10, paddingRight: 10}}>
 
-                    <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '40%', backgroundColor: '#32CD32', alignItems: 'center'}}>
+                    <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '40%', backgroundColor: '#FF4500', alignItems: 'center'}}>
                         <Text style={{paddingLeft: 0, fontSize: 20, color: '#fff'}}>Order Details</Text>
                     </View>
 
-                    <View style={{ height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', backgroundColor: '#32CD32', alignItems: 'center', padding: '10px'}}>
+                    <View style={{ height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', backgroundColor: '#FF4500', alignItems: 'center', padding: '10px'}}>
                         <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
                             <View style={{backgroundColor: '#fff', height: '100%', width: 40, borderRadius: 10}}></View>
                         </TouchableOpacity>
@@ -337,7 +337,7 @@ function OrderStackScreen() {
 
                 </View>
           ),
-      }} name="order-room" component={OrderRoom} />
+      }} name="user-order-room" component={OrderRoom} />
 
     </OrderStack.Navigator>
   ); 
@@ -351,13 +351,13 @@ function ListingStackScreen() {
         <ListingStack.Screen  options={{
             header: ({navigation}) =>
             (
-                <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#32CD32', alignItems: 'center', paddingLeft: 10, paddingRight: 10}}>
+                <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FF4500', alignItems: 'center', paddingLeft: 10, paddingRight: 10}}>
 
-                    <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '40%', backgroundColor: '#32CD32', alignItems: 'center'}}>
+                    <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '40%', backgroundColor: '#FF4500', alignItems: 'center'}}>
                         <Text style={{paddingLeft: 0, fontSize: 20, color: '#fff'}}>Shopiva Orders</Text>
                     </View>
 
-                    <View style={{ height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', backgroundColor: '#32CD32', alignItems: 'center', padding: '10px'}}>
+                    <View style={{ height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', backgroundColor: '#FF4500', alignItems: 'center', padding: '10px'}}>
                         <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
                             <View style={{backgroundColor: '#fff', height: '100%', width: 40, borderRadius: 10}}></View>
                         </TouchableOpacity>
@@ -400,7 +400,7 @@ function ProfileStackScreen() {
                     justifyContent: 'center',
                     alignItems: 'center',
                     color: '#000',
-                    backgroundColor: '#32CD32',
+                    backgroundColor: '#FF4500',
                     position: 'relative'
                 }}>
 
@@ -426,7 +426,7 @@ function ProfileStackScreen() {
                     justifyContent: 'center',
                     alignItems: 'center',
                     color: '#000',
-                    backgroundColor: '#32CD32',
+                    backgroundColor: '#FF4500',
                     position: 'relative'
                 }}>
 
@@ -453,7 +453,7 @@ function ProfileStackScreen() {
                     justifyContent: 'center',
                     alignItems: 'center',
                     color: '#000',
-                    backgroundColor: '#32CD32',
+                    backgroundColor: '#FF4500',
                     position: 'relative'
                 }}>
 
@@ -480,7 +480,7 @@ function ProfileStackScreen() {
                     justifyContent: 'center',
                     alignItems: 'center',
                     color: '#000',
-                    backgroundColor: '#32CD32',
+                    backgroundColor: '#FF4500',
                     position: 'relative'
                 }}>
 
