@@ -23,7 +23,6 @@
     "js-ago": "^2.0.2",
     "mongodb": "^6.6.2",
     "os-browserify": "^0.3.0",
-    "puppeteer": "^22.13.1",
     "querystring-es3": "^0.2.1",
     "react": "^18.2.0",
     "react-countdown": "^2.3.5",
@@ -44,7 +43,6 @@
     "react-router-dom": "^6.9.0",
     "react-scripts": "5.0.1",
     "react-select": "^5.8.0",
-    "react-snap": "^1.23.0",
     "redux": "^4.2.1",
     "redux-toolkit": "^1.1.2",
     "short-id": "^0.1.0-1",
@@ -87,16 +85,6 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
-    ]
-  },
-  "reactSnap": {
-    "puppeteerExecutablePath": "/usr/bin/chromium-browser",
-    "inlineCss": true,
-    "skipThirdPartyRequests": true,
-    "cacheAjaxRequests": true,
-    "puppeteerArgs": [
-      "--no-sandbox",
-      "--disable-setuid-sandbox"
     ]
   }
   
