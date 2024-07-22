@@ -90,10 +90,14 @@
     ]
   },
   "reactSnap": {
+    "puppeteerExecutablePath": "/usr/bin/chromium-browser",
     "inlineCss": true,
+    "skipThirdPartyRequests": true,
+    "cacheAjaxRequests": true,
     "puppeteerArgs": [
       "--no-sandbox",
       "--disable-setuid-sandbox"
     ]
   }
+  
 }
