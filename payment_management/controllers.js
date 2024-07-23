@@ -35,7 +35,7 @@ async function process_payment(req,res) {
     // UPDATE WALLET
     //*
 
-    let response = payload;
+    let response = payload.data;
 
     let amount = response.amount;
     let charged_amount = response.charged_amount
