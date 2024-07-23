@@ -17,7 +17,7 @@ const CheckoutSummary = ({Total, Method, order_list, type, price, buyerData}) =>
 
     useEffect(() => {set_immediate_check(location.pathname)}, [location])
 
-
+    
     const config = {
         public_key: 'FLWPUBK_TEST-9b89907d8ef65fd12ea69e900e0cd9c3-X',
         tx_ref: Date.now(),
@@ -57,7 +57,14 @@ const CheckoutSummary = ({Total, Method, order_list, type, price, buyerData}) =>
     useEffect(() => {let width = window.innerWidth;setScreenWidth(width)},[]);
     function handleDeposit() {let overlay = document.querySelector('.overlay');overlay.setAttribute('id', 'overlay')};
     
-    
+    useEffect(() => {
+        alert()
+        console.log(JSON.stringify({
+            buyer_info: {buyer: buyerData?.buyer_id, phone: buyerData?.phone}, 
+            product_info: {product_id: order_list?.product?.product_id, title: order_list?.product?.title, price: order_list?.product?.price},
+            purchase_info: {unit: null, amount_paid: null, payment_type: 'checkout', isBulkPurchase: false}
+        }))
+    }, [])
     return ( 
 
         <>

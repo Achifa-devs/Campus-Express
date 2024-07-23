@@ -213,35 +213,72 @@ function send_email(to,subject,message) {
 
 }
 
+function send_mail_via_outlook(email,subject,html) {
+    const nodemailer = require('nodemailer');
+
+    // Create a transporter using Outlook's SMTP settings
+    let transporter = nodemailer.createTransport({
+        host: 'smtp.office365.com',
+        port: 587,
+        secure: false, // true for 465, false for other ports
+        auth: {
+            user: 'campusexpress@outlook.com', // your Outlook email address
+            pass: 'A!nianuli82003', // your Outlook email password
+        },
+        tls: {
+            ciphers: 'SSLv3'
+        }
+    });
+
+    // Setup email data
+    let mailOptions = {
+        from: '"Campus Express" <campusexpress@outlook.com>', // sender address
+        to: email, // list of receivers
+        subject: subject, // Subject line
+        // text: mssg, // plain text body
+        html: html // html body
+    };
+
+    // Send mail with defined transport object
+    transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+        return console.log(error);
+    }
+    console.log('Message sent: %s', info.messageId);
+    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+    });
+
+}
+
 function send_sms(recipient,message) {
     var axios = require('axios');
     var FormData = require('form-data');
     var data = new FormData();
-    data.append('token', process.env.KUDIAPI);
+    data.append('token', 'rXdAgTsFBOS8ECK7MZk1i6WojUmqy9unDv34cQablpz0JLHhIV5NfPG2teYwxR');
     data.append('senderID', 'CampusXpres');
     data.append('recipients', recipient);
     data.append('message', message);
     data.append('gateway', '2');
 
     var config = {
-    method: 'get',
-    maxBodyLength: Infinity,
-    url: 'https://my.kudisms.net/api/sms?token=BZtVPJU1frA6i8sbyScXx3LqHD92OkwRljaNQ0WFg7ue5Md4GTKoEhzpYnmCvI&senderID=neo&recipients=2349036425748,2348153197053&message=helloath&gateway=2',
-    headers: { 
-        ...data.getHeaders()
-    },
-    data : data
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: `https://my.kudisms.net/api/sms?token=rXdAgTsFBOS8ECK7MZk1i6WojUmqy9unDv34cQablpz0JLHhIV5NfPG2teYwxR&senderID=CampusXpres&recipients=${recipient}&message=${message}&gateway=2`,
+        headers: { 
+            ...data.getHeaders()
+        },
+        data : data
     };
 
-    axios(config)
+    return (axios(config)
     .then(function (response) {
-    console.log(JSON.stringify(response.data));
+        return(
+            response.data
+        )
     })
     .catch(function (error) {
-    console.log(error);
-    });
-
-
+        console.log(error);
+    }))
 }
 
 async function retrive_order(buyer_id,product_id) { 
@@ -441,6 +478,7 @@ module.exports = {
     retrieve_seller,
     retrieve_room,
     retrive_order,
+    send_mail_via_outlook,
     retrieve_mssg_meta_data,
     retrieve_buyer_info,
     retrieve_seller_info

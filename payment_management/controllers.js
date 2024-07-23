@@ -3,7 +3,7 @@ const { v4 } = require("uuid");
 
 const { NeonDB } = require("./db");
 const { shortId, bcrypt, jwt } = require("./modules");
-const { process_transaction, save_tansaction, create_order, create_room_id, retrieve_room, send_proposal_meta_data, retrieve_mssg_meta_data, send_proposal_message, retrieve_seller, retrive_cart, delete_cart_with_id, retrive_order, send_proposal_meta_data_from_cart, retrieve_room_with_room_id, update_buyer_wallet, refill_buyer_wallet, refill_coin, update_order, send_sms, retrieve_seller_info, send_email } = require("./utils");
+const { process_transaction, save_tansaction, create_order, create_room_id, retrieve_room, send_proposal_meta_data, retrieve_mssg_meta_data, send_proposal_message, retrieve_seller, retrive_cart, delete_cart_with_id, retrive_order, send_proposal_meta_data_from_cart, retrieve_room_with_room_id, update_buyer_wallet, refill_buyer_wallet, refill_coin, update_order, send_sms, retrieve_seller_info, send_email, retrieve_buyer_info, save_buyer_tansaction, send_mail_via_outlook } = require("./utils");
 const { checkoutMssgToSeller } = require("./sms");
 const { checkoutEmailToSeller } = require("./mails/coin");
 const maxAge = 90 * 24 * 60 * 60; 
@@ -35,17 +35,19 @@ async function process_payment(req,res) {
     // UPDATE WALLET
     //*
 
-    let response = payload.data;
+    let response = payload;
 
     let amount = response.amount;
     let charged_amount = response.charged_amount
 
     let date = new Date()
     let payment_src = response.payment_type
+    let status = response.status
 
-    let buyer_info = (response.customer.phone).buyer_info;
-    let product_info = (response.customer.phone).product_info;
-    let purchase_info = (response.customer.phone).purchase_info;
+    let buyer_info = JSON.parse(response.customer.phone_number).buyer_info;
+    let product_info = JSON.parse(response.customer.phone_number).product_info;
+    let purchase_info = JSON.parse(response.customer.phone_number).purchase_info;
+    console.log(buyer_info)
 
 
     let {buyer,phone}=buyer_info
@@ -61,7 +63,7 @@ async function process_payment(req,res) {
     }
     else if(payment_type === 'checkout'){
         try{
-            checkout_handler({immediate_purchase,unit,product_id}, user, charged_amount, payment_src, date)
+            checkout_handler(payment_src, date)
         }catch(err){
             console.log(err)
         }
@@ -69,7 +71,7 @@ async function process_payment(req,res) {
         return {bool: false, reason: 'payment type is not valid'}
     }
 
-    async function checkout_handler(immediate_data,user,charged_amount,payment_src,date) {
+    async function checkout_handler(payment_src,date) {
 
         if(!isBulkPurchase){
             
@@ -78,7 +80,7 @@ async function process_payment(req,res) {
             let buyer_info = await retrieve_buyer_info(buyer)
 
             new Promise(async(resolve, reject) => { 
-                let response = await save_tansaction(buyer,payment_src,payment_type,50,amount_paid,date,'checkout'); 
+                let response = await save_buyer_tansaction(buyer,payment_src,payment_type,50,parseInt(amount_paid),date,'checkout'); 
                 response.bool ? resolve(response) : reject(response)
             })
         
@@ -99,8 +101,8 @@ async function process_payment(req,res) {
                 if(result.bool ){
                     console.log(result, 'sending message to phone...') 
                     let message = checkoutMssgToSeller(seller_info, buyer_info, product_info, date)
-                    let room_response = send_sms(seller_info.phone, message)
-                    return room_response ? ({bool: true, order_id: result.order_id}) : ({bool: false})
+                    let room_response = await send_sms('8032639894', message)
+                    return room_response.status === 'success' ? ({bool: true, order_id: result.order_id}) : ({bool: false})
                 }else{
                     console.log(result,'sending message to phone... ') 
                     return response ({bool: false})
@@ -114,10 +116,10 @@ async function process_payment(req,res) {
                 if(result.bool ){
                     console.log(result, 'sending message to  email...') 
                     let message = checkoutEmailToSeller(seller_info, buyer_info, product_info, date)
-                    let result = send_email(seller_info.email,'Confirmation of Successful Item Purchase', message)
-                    return result ? ({bool: true, room_id, order_id: result.order_id}) : ({bool: false,room_id})
+                    let response = send_mail_via_outlook(seller_info.email,'Confirmation of Successful Item Purchase', message)
+                    return response ? ({bool: true}) : ({bool: false})
                 }else{
-                    console.log(result,'sending message to  email...') 
+                    console.log(response,'sending message to  email...') 
                     return response ({bool: false})
                 }
         

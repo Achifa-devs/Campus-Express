@@ -10,7 +10,7 @@ function checkoutMssgToSeller(seller,buyer,item,date) {
                 Item Purchased: ${item.title} Coins
                 Amount Paid: ${item.price}
                 Buyer Phone: ${buyer.phone}
-                Date of Purchase: ${date}
+                
 
             Thank you for choosing our service for your transaction. If you have any questions or need further assistance, please do not hesitate to contact us.
             Thank you for using Campus Express Nigeria.
