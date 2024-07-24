@@ -43,11 +43,12 @@ async function process_payment(req,res) {
     let date = new Date()
     let payment_src = response.payment_type
     let status = response.status
+    
+    console.log(JSON.parse(response.customer.phone_number))
 
     let buyer_info = JSON.parse(response.customer.phone_number).buyer_info;
     let product_info = JSON.parse(response.customer.phone_number).product_info;
     let purchase_info = JSON.parse(response.customer.phone_number).purchase_info;
-    console.log(buyer_info)
 
 
     let {buyer,phone}=buyer_info
