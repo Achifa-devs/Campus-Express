@@ -28,39 +28,9 @@ const ProfileCnt = ({navigation}) => {
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
  
-  useEffect(() => {
-    
-    if(isEnabled === true){
-      dispatch(setUserModeTo('user'))
-    }else if(isEnabled === false){
-      dispatch(setUserModeTo('buyer'))
-    }
-
-  }, [isEnabled])
-
+  
   return ( 
       <>
-        <View style={{height: 'auto', position: 'relative', zIndex: 1500, padding: 10, width: '100%', backgroundColor: '#fff', opacity: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',  flexDirection: 'row'}}>
-          <View style={{height: 50, borderRadius: 5, width: '100%', backgroundColor: '#FF4500', opacity: 1, display: 'flex', alignItems: 'center', zIndex: 15000, flexDirection: 'row'}}>
-            <Text style={{fontSize: 15, fontWeight: 'bold', fontFamily: 'serif', color: '#fff', position: 'absolute', left: 10}}>
-              Seller Mode
-            </Text> 
-            
-            <View style={{fontSize: 15, fontWeight: 'bold', fontFamily: 'serif', color: '#fff', position: 'absolute', right: 10}}>
-
-
-              <Switch
-                trackColor={{false: '#fff', true: '#FF4500'}}
-                thumbColor={isEnabled ? '#efefef' : '#fff'}
-                ios_backgroundColor="#3e3e3e"
-                onValueChange={toggleSwitch}
-                value={isEnabled}
-              />
-
-
-            </View>
-          </View>
-        </View>
 
         <ScrollView style={{
             height: screenHeight - 50,

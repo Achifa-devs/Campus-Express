@@ -3,8 +3,10 @@ import {
     StyleSheet, 
     Text, 
     TouchableOpacity, 
+    Vibration, 
     View
 } from 'react-native';
+import FavSvg from '../../../../icons/like-svgrepo-com (1).svg';
 
 export default function ActionBtn({cost}) {
   return (
@@ -15,8 +17,10 @@ export default function ActionBtn({cost}) {
                 <Text style={{fontSize: 10, color: '#fff'}}>Buy Now At {new Intl.NumberFormat('en-us').format(0.95 * cost)}</Text>
             </TouchableOpacity> 
 
-            <TouchableOpacity style={{width: '28%', backgroundColor: 'rgb(255, 244, 224);', height: '100%',borderRadius: 15,display: 'flex', flexDirection: 'row',justifyContent: 'center', paddingLeft: 6, paddingRight: 6,alignItems: 'center'}}>
-                <Text style={{fontSize: 10,}}>cart</Text>
+            <TouchableOpacity style={{width: '28%', backgroundColor: 'rgba(255, 244, 224, .5);', height: '100%',borderRadius: 12,display: 'flex', flexDirection: 'row',justifyContent: 'center', paddingLeft: 6, paddingRight: 6,alignItems: 'center'}} onPress={e => {
+                Vibration.vibrate([0, 50, 100, 50, 100]); // Vibrate for 100 milliseconds
+            }}>
+                <FavSvg height={25} width={25} />
             </TouchableOpacity> 
 
         </View>

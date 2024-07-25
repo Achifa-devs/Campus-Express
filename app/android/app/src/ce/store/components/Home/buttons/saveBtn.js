@@ -4,13 +4,15 @@ import {
     Text, 
     TouchableOpacity 
 } from 'react-native';
+import FavSvg from '../../../../icons/favourite-heart-svgrepo-com.svg';
+
 
 export default function SaveBtn() {
   return (
     <>
       <TouchableOpacity style={styles.saveBtn}>
-            <Text style={{color: '#fff'}}>save</Text>
-        </TouchableOpacity>
+        <FavSvg height={20} width={20} />
+      </TouchableOpacity>
     </>
   ) 
 }
@@ -25,10 +27,16 @@ const styles = StyleSheet.create({
         zIndex: 1000,
         position: 'absolute',
         top: 3,
-        padding: 8,
+        padding: 10,
         left: 3,
-        backgroundColor: '#FF4500',
-        borderRadius: 15,
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        zIndex: 1000,
+        // backgroundColor: 'rgb(255, 244, 224);',
+        backgroundColor: 'rgba(255, 244, 224, 0.8)',
+        borderRadius: 50,
         marginBottom: 5
     },
   });

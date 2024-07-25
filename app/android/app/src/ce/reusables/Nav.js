@@ -1,36 +1,35 @@
 import { useDispatch, useSelector } from "react-redux";
 import StoreTab from "./StoreTab";
-import StudioTab from "./StudioTab";
 import { useEffect, useState } from "react";
 import AuthStackScreen from "./Auth";
 import NewOrder from "../store/screens/NewOrder";
+import { getData } from "./AppStorage";
+import WelcomeScreen from "../store/screens/WelcomeScreen";
 
 function StackNavigator () { 
-    let dispatch = useDispatch();
-    const {
-        mode
-    }=useSelector(s=>s.mode)
-    const {
-        auth
-    }=useSelector(s=>s.auth)
+    
+    const [
+        activeJsx, setActiveJsx
+    ]=useState(<WelcomeScreen />)
 
   
-
+    useEffect(() => {
+        setTimeout(() => 
+            setActiveJsx(<StoreTab />)
+        , 1000)
+    }, [])
 
     return (
         <>
-                {auth
+                {/* {user !== null
                 ?
-                (
-                    mode === 'buyer'
-                    ?
-                    <StoreTab /> 
-                    :
-                    <StudioTab /> 
-                )
+                
                 :
-                <AuthStackScreen />}
-
+                <AuthStackScreen />} */}
+                {/* <StoreTab />  */}
+                {
+                    activeJsx
+                }
             {/* <NewOrder /> */}
 
         </>

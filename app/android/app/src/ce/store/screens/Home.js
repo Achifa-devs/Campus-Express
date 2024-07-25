@@ -29,7 +29,7 @@ export default function Home() {
   return (
     <>
       <ScrollView style={[styles.homeCnt,{
-            height: screenHeight - 55
+            height: screenHeight - 65
         }]}>
 
         <Search />

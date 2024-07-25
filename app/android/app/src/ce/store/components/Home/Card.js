@@ -16,7 +16,7 @@ export default function Card({item}) {
             {width: (screenWidth * 0.50) - 18}
         ]}>
             <View style={styles.cardTop}>
-                <SaveBtn />
+                {/* <SaveBtn /> */}
  
                 <TouchableOpacity onPress={e=> navigation.navigate('user-product', {product_id: item.product_id})}>
                     <Thumbnail br={15} product_id={item.product_id} title={item.title} />

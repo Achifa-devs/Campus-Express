@@ -18,7 +18,6 @@ import {
     useDispatch, 
     useSelector 
 } from 'react-redux';
-import Icon from 'react-native-vector-icons/Ionicons';
 import StackNavigator from './Nav';
 import Message from '../store/screens/Message';
 import Order from '../store/screens/Order';

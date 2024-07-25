@@ -1,8 +1,9 @@
 import React from 'react'
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import Title from '../../../studio/components/Home/data/Title';
+// import Title from '../../../studio/components/Home/data/Title';
 import Date from '../Order/OrderDate';
 import Thumbnail from '../../../reusables/Thumbnail';
+import Title from '../Home/data/Title';
 
 export default function SearchResult({search_word}) {
   return (

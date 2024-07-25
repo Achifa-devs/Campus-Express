@@ -18,7 +18,6 @@ import {
     useDispatch, 
     useSelector 
 } from 'react-redux';
-import Icon from 'react-native-vector-icons/Ionicons';
 import StackNavigator from './Nav';
 import Message from '../store/screens/Message';
 import Order from '../store/screens/Order';
@@ -38,6 +37,15 @@ import Category from '../store/screens/Category';
 import Search from '../store/screens/Search';
 import Product from '../store/screens/Product';
 import NewOrder from '../store/screens/NewOrder';
+
+
+import HomeIcons from '../icons/HomeIcons';
+import MessageIcons from '../icons/MessageIcons';
+import CartIcons from '../icons/CartIcons';
+import OrderIcons from '../icons/OrderIcons';
+import UserIcons from '../icons/UserIcons';
+import WelcomeScreen from '../store/screens/WelcomeScreen';
+
 const Tab = createBottomTabNavigator();
 
 export default function StoreTab({navigation}) {
@@ -50,29 +58,51 @@ export default function StoreTab({navigation}) {
 
   return (
     <>
-        <Tab.Navigator  screenOptions={({ route }) => {
+        <Tab.Navigator 
+         
+            screenOptions={({ route }) => {
+
+            tabBarIcon: ({ focused, color, size }) => {
+                let IconComponent;
+
+                if (route.name === 'Home') {
+                    IconComponent = HomeIcons;
+                } else if (route.name === 'Message') {
+                    IconComponent = MessageIcons;
+                } else if (route.name === 'Cart') {
+                    IconComponent = CartIcons;
+                } else if (route.name === 'Order') {
+                    IconComponent = OrderIcons;
+                } else if (route.name === 'User') {
+                    IconComponent = UserIcons;
+                }
+
+                // Return the custom icon component
+                return <IconComponent color={color} size={size} />;
+            };
            
+            
+
             const tabBarStyle = {
                 display: 'flex',
             };
-
-            if (route.name === 'tab-message') {
-                const currentRouteName = navigationState?.routes.find(r => r.name === 'tab-message')?.state?.routes[navigationState.routes.find(r => r.name === 'tab-message')?.state.index].name;
-                console.log('Current MessageStack Route:', currentRouteName);
+            if (route.name === 'Message') {
+                const currentRouteName = navigationState?.routes.find(r => r.name === 'Message')?.state?.routes[navigationState.routes.find(r => r.name === 'Message')?.state.index].name;
+                // console.log('Current MessageStack Route:', currentRouteName);
 
                 if (currentRouteName === 'user-chat-room') {
                     tabBarStyle.display = 'none';
                 }
-            }else if(route.name === 'tab-order') {
-                const currentRouteName = navigationState?.routes.find(r => r.name === 'tab-order')?.state?.routes[navigationState.routes.find(r => r.name === 'tab-order')?.state.index].name;
-                console.log('Current MessageStack Route:', currentRouteName);
+            }else if(route.name === 'Order') {
+                const currentRouteName = navigationState?.routes.find(r => r.name === 'Order')?.state?.routes[navigationState.routes.find(r => r.name === 'tab-order')?.state.index].name;
+                // console.log('Current MessageStack Route:', currentRouteName);
 
                 if (currentRouteName === 'order-room') {
                     tabBarStyle.display = 'none';
                 }
-            } else if(route.name === 'tab-home') {
-                const currentRouteName = navigationState?.routes.find(r => r.name === 'tab-home')?.state?.routes[navigationState.routes.find(r => r.name === 'tab-home')?.state.index].name;
-                console.log('Current MessageStack Route:', currentRouteName);
+            } else if(route.name === 'Home') {
+                const currentRouteName = navigationState?.routes.find(r => r.name === 'Home')?.state?.routes[navigationState.routes.find(r => r.name === 'Home')?.state.index].name;
+                // console.log('Current MessageStack Route:', currentRouteName);
 
                 if (currentRouteName === 'user-search') {
                     tabBarStyle.display = 'none';
@@ -83,7 +113,8 @@ export default function StoreTab({navigation}) {
                 }else if(currentRouteName === 'user-product') {
                     tabBarStyle.display = 'none'; 
                 }
-            } 
+            }
+
             
             
             return {
@@ -91,8 +122,14 @@ export default function StoreTab({navigation}) {
                 headerShown: false,
             };
 
+        }}
+        
+        tabBarOptions={{
+            activeTintColor: 'tomato',
+            inactiveTintColor: 'gray',
         }}> 
             <Tab.Screen 
+                
                 options={{
                     header: ({navigation}) =>
                     (
@@ -102,14 +139,14 @@ export default function StoreTab({navigation}) {
                         </View>
                     ),
                 }}
-                name="tab-home" 
+                name="Home" 
                 component={HomeStackScreen} /> 
 
             <Tab.Screen 
-                name="tab-message" 
+                name="Message" 
                 component={MessageStackScreen} />
 
-            <Tab.Screen 
+            {/* <Tab.Screen 
                 options={{
                 header: ({navigation}) =>
                     (
@@ -119,24 +156,24 @@ export default function StoreTab({navigation}) {
                         </View>
                     ),
                 }} 
-                name="user-cart" 
-                component={Create} />
+                name="Cart" 
+                component={Create} /> */}
 
             <Tab.Screen 
                 options={{
                     header: ({navigation}) => 
                         (
-                            <View style={{ height: 60, display: 'flex', flexDirection: 'row', width: '100%', backgroundColor: 'green', alignItems: 'center', justifyContent: 'center'}}>
+                            <View style={{ height: 65, display: 'flex', flexDirection: 'row', width: '100%', backgroundColor: '#FF4500', alignItems: 'center', justifyContent: 'center'}}>
                             
                             </View>
                         ),
                 }} 
-                name="tab-order" 
+                name="Order" 
                 component={OrderStackScreen} />
 
             <Tab.Screen 
                 
-                name="tab-profile" 
+                name="Profile" 
                 component={ProfileStackScreen} />
 
         </Tab.Navigator> 
@@ -150,6 +187,7 @@ const HomeStack = createNativeStackNavigator();
 function HomeStackScreen() {
   return (
     <HomeStack.Navigator>
+
         <HomeStack.Screen  options={{
                 header: ({navigation}) =>
                 (
@@ -173,6 +211,8 @@ function HomeStackScreen() {
                 ),
             // headerShown: false, 
             }}  name="user-home" component={Home} />
+
+        
         <HomeStack.Screen  options={{
             header: ({navigation}) =>
             (
@@ -234,24 +274,14 @@ function MessageStackScreen() {
         <MessageStack.Screen  options={{
             header: ({navigation}) =>
             (
-                <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', alignItems: 'center', paddingLeft: 10, paddingRight: 10}}>
+                <View style={{ height: 65, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FF4500', alignItems: 'center', paddingLeft: 10, paddingRight: 10, marginBottom: 1.5}}>
 
-                    <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '40%', backgroundColor: '#FFF', alignItems: 'center'}}>
-                        <Text style={{paddingLeft: 0, fontSize: 20, color: '#fff'}}>Shopiva Chat</Text>
+                    <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '40%', backgroundColor: '#FF4500', alignItems: 'center'}}>
+                        <Text style={{paddingLeft: 0, fontSize: 20, color: '#fff'}}>Messages</Text>
                     </View>
 
                     <View style={{ height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', backgroundColor: '#FFF', alignItems: 'center', padding: '10px'}}>
-                        <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                            <View style={{backgroundColor: '#FF4500', height: '100%', width: 40, borderRadius: 10}}></View>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity onPress={e => navigation.navigate('user-notification')}>
-                            <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                                <View style={{backgroundColor: '#FF4500', height: '100%', width: 40, borderRadius: 10}}>
-
-                                </View>
-                            </View>
-                        </TouchableOpacity>
+                        
                     </View>
 
                 </View>
@@ -349,25 +379,12 @@ function OrderStackScreen() {
         <OrderStack.Screen  options={{
             header: ({navigation}) =>
             (
-                <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', alignItems: 'center', paddingLeft: 10, paddingRight: 10}}>
+                <View style={{ height: 65, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FF4500', alignItems: 'center', paddingLeft: 10, paddingRight: 10}}>
 
-                    <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '40%', backgroundColor: '#FFF', alignItems: 'center'}}>
-                        <Text style={{paddingLeft: 0, fontSize: 20, color: '#fff'}}>Shopiva Orders</Text>
+                    <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '40%', backgroundColor: '#FF4500', alignItems: 'center'}}>
+                        <Text style={{paddingLeft: 0, fontSize: 20, color: '#fff'}}>Orders</Text>
                     </View>
 
-                    <View style={{ height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', backgroundColor: '#FFF', alignItems: 'center', padding: '10px'}}>
-                        <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                            <View style={{backgroundColor: '#FF4500', height: '100%', width: 40, borderRadius: 10}}></View>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity onPress={e => navigation.navigate('user-notification')}>
-                            <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                                <View style={{backgroundColor: '#FF4500', height: '100%', width: 40, borderRadius: 10}}>
-
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
 
                 </View>
             ),
