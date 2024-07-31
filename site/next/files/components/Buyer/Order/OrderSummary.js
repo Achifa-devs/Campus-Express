@@ -1,85 +1,75 @@
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
-const OrderSummary = ({Total, Method, type, price, buyer}) => {
+const OrderSummary = ({}) => {
 
-    // let meta = {
-    //     immediate_purchase: window.location.pathname.split('/').length > 4 ? true : false,
-    //     ce_id: buyer.buyer_id,
-    //     cart: {unit: parseInt(window.location.pathname.split('/')[4].split('-')[1]), product_id: atob(window.location.pathname.split('/')[2])},
-    // }
-    let location = useLocation();
-
-    let [immediate_check, set_immediate_check] = useState('')
-
-    useEffect(() => {set_immediate_check(location.pathname)}, [location])
+    let pathname = usePathname()
 
     let [screenWidth, setScreenWidth] = useState(0);
     useEffect(() => {let width = window.innerWidth;setScreenWidth(width)},[]);
-    function handleDeposit() {let overlay = document.querySelector('.overlay');overlay.setAttribute('id', 'overlay')};
     
-    
+    let list = [
+        {name: 'Orders', svg: ''},
+        {name: 'Inbox', svg: ''},
+        {name: 'Saved Items', svg: ''},
+        {name: 'Followed Sellers', svg: ''},
+        {name: 'Recently Viewed', svg: ''},
+        {name: 'Voucher', svg: ''}
+    ]
+
+    let acct = [
+        {name: 'Account Management', svg: ''},
+        {name: 'Address Book', svg: ''},
+        {name: 'NewsLetter Preference', svg: ''}
+    ]
     return ( 
 
         <>
-            <div className="overlay" style={{padding: '20px'}} onClick={e => e.target === document.querySelector('.overlay') ? e.currentTarget.removeAttribute('id'): ''}>
-                {
-                    Method
-                }
-            </div>
-
-            <div className="buyer-checkout-cnt" style={{display: screenWidth > 759 ? 'flex' :'none', width: '400px', margin: '20px'}}>
-
-                <div style={{borderBottom: "none"}}>
-                    <span>Order Summary</span>
+            <div className="order-confirmation">
+                <div className="order-confirmation-cnt">
+                    <ul>
+                        {
+                            list.map(item => 
+                                <li style={{ 
+                                    height: '50px', 
+                                    width: '100%', 
+                                    fontWeight: '400', 
+                                    display: 'flex', 
+                                    alignItems: 'center'}}>
+                                    <span></span>
+                                    <span>{item.name}</span>
+                                </li>
+                            )
+                        }
+                    </ul>
                 </div>
-
-                <div>
-                    <small style={{float: "left"}}>Sub total</small>
-                    <small style={{float: "right"}}>
-                        <small>₦</small>{Total}</small>
-                </div> 
-
-                <div style={{fontSize: "small"}}>
-                    <small style={{float: "left"}}>Charges</small>
-                    <small style={{float: "right"}}>
-                        <small>Free</small>
-                    </small>
+                <div className="order-confirmation-cnt">
+                    <ul>
+                        {
+                            acct.map(item => 
+                                <li style={{ 
+                                    height: '50px', 
+                                    width: '100%', 
+                                    fontWeight: '400', 
+                                    display: 'flex', 
+                                    alignItems: 'center'}}>
+                                    <span></span>
+                                    <span>{item.name}</span>
+                                </li>
+                            )
+                        }
+                    </ul>
+                    
                 </div>
-
-                <div style={{height: "80px"}}>
-                    <button className="shadow-sm" >
-                        <span>Order SubTotal&nbsp; </span>
-                        <span><small>(₦</small>{Total})</span>
+                <div className="order-confirmation-cnt">
+                    <button>
+                        Logout
                     </button>
                 </div>
                 
             </div>
 
-                {
-                    screenWidth > 759
-                ?
-
-                    ''
-                :
-                    <div style={{
-                        height: 'auto',
-                        width: '100%',
-                        padding: '10px',
-                        position: 'absolute',
-                        bottom: '0', 
-                        background: '#fff',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                    }}>
-                        <button style={{position: 'relative', background: '#FF4500', color: '#fff'}} className="shadow-sm" >
-                            <span>Order SubTotal&nbsp; </span>
-                            <span><small>(&#8358; </small>{new Intl.NumberFormat('en-us').format(Total)})</span>
-                        </button>
-                    </div>
-
-                }
         </>
      );
 }
