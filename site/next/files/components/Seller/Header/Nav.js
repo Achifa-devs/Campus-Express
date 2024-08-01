@@ -8,7 +8,6 @@ import { openNotice } from '../../../reusable.js/notice';
 
 export default function Nav() {
   let [screenWidth, setScreenWidth] = useState(0)
-  let navigate = useNavigate()
 
   useEffect(() => {
     let width = window.innerWidth;

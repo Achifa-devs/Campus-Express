@@ -1,55 +1,53 @@
+"use client"
+
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import Header from '../components/Seller/Header/Header'
 import Aside from '../components/Seller/Aside/Aside'
 import Nav from '../components/Seller/Header/Nav'
-import { GetSeller } from '../api/seller/get'
-import { useDispatch, useSelector } from 'react-redux'
-import { setSellerTo } from '../redux/seller_store/seller'
-import { GetSavedItem } from '../api/buyer/get'
-import { setSaveTo } from '../redux/buyer_store/Save'
+// import { GetSeller } from '../api/seller/get'
+import { useDispatch } from 'react-redux'
+import { usePathname } from 'next/navigation'
+// import { setSellerTo } from '../redux/seller_store/seller'
 
-const SellerLayout = (props) => {
-    let location = useLocation()
+const SellerLayout = ({children}) => {
     let [screenWidth, setScreenWidth] = useState(0) 
     let dispatch = useDispatch() 
 
     
-
+    let pathname = usePathname()
     useEffect(() => {
-        if(window.localStorage.getItem('CE_seller_id') === '' || window.localStorage.getItem('CE_seller_id') === null){
-        }
-        async function getData(){
-            let result = await GetSeller(window.localStorage.getItem('CE_seller_id'))
-            dispatch(setSellerTo(result))
+        setScreenWidth(window.innerWidth)
+    },[])
 
-        } 
+    // useEffect(() => {
+    //     if(window.localStorage.getItem('CE_seller_id') === '' || window.localStorage.getItem('CE_seller_id') === null){
+    //     }
+    //     async function getData(){
+    //         let result = await GetSeller(window.localStorage.getItem('CE_seller_id'))
+    //         dispatch(setSellerTo(result))
+
+    //     } 
         
-        getData()
-        setScreenWidth(window.innerWidth) 
-    }, [location])
+    //     getData()
+    //     setScreenWidth(window.innerWidth) 
+    // }, [pathname])
 
  
     return (
         <>
-            {
-                location.pathname.split('/').splice(-1)[0] === 'seller.profile'
-                ?
-                ''
-                :
-                <Header />
-            }
-            <Aside />
+           
+            
 
             
-            {props.children}
+            {children}
 
             {
                 screenWidth > 760
                 ?
-                ''
+                <Aside />
                 :
-                location.pathname.split('/').splice(-1)[0] === 'seller.editor' 
+                pathname.split('/').splice(-1)[0] === 'seller.editor' 
                 ?
                 ''
                 :

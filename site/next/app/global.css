@@ -1,0 +1,58 @@
+.seller-aside{
+    height: 100vh;
+    position: relative;
+    width: 280px;
+    background: #fff;
+    float: left;
+}
+
+.seller-aside-logo{
+    height: 120px;
+    width: 100%;
+    padding: 6px;
+}
+
+.seller-aside ul{
+    overflow: auto;
+    margin: 0;
+    padding: 10px 15px;
+}
+
+.seller-aside ul li{
+    padding: 10px;
+    cursor: pointer;
+    margin: 10px 0px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    font-weight: 500;
+    border-radius: 8px;
+}
+
+.seller-aside ul li:hover{
+    background-color: #fff4e0;
+}
+
+select,input{
+    width: 250px;
+    height: 45px;
+    padding: 10px;
+    outline: none;
+    background-color: #f9f9f9;
+    border: none;
+}
+textarea{
+    background: #f9f9f9;
+    max-height: 80px;
+    width: 100%;
+    outline: none;
+    border: none;
+    padding: 10px;
+}
+.input-cnt{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    margin: 10px 0px;
+}

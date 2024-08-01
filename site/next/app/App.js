@@ -1,5 +1,6 @@
 "use client"
 import BuyerLayout from '@/files/layout/Buyer'
+import SellerLayout from '@/files/layout/Seller'
 import store from '@/redux/store'
 import { usePathname } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
@@ -34,7 +35,7 @@ export default function App({children}) {
     <>
       <Provider store={store}>
         {
-          <BuyerLayout children={children} />
+          <SellerLayout children={children}/>
         }
       </Provider>
     </>

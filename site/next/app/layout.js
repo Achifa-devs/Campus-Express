@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import store from "@/redux/store";
 import BuyerLayout from "@/files/layout/Buyer";
 import App from "./App";
-
+import './global.css'
 // import '../files/styles/Buyer/xx-large-screen.css'
 // import '../files/styles/Buyer/x-large-screen.css'
 // import '../files/styles/Buyer/medium-screen.css'
@@ -44,7 +44,7 @@ export default function RootLayout({ children }) {
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
         <title>Campus Express</title>
       </head>
-      <body style={{overflowX: 'hidden'}}>
+      <body style={{overflowX: 'hidden', background: '#f9f9f9'}}>
         <App children={children} />
       </body>
     </html>
