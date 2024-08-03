@@ -5,6 +5,7 @@ import store from '@/redux/store'
 import { usePathname } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { Provider } from 'react-redux'
+import {NextUIProvider} from '@nextui-org/react'
 
 export default function App({children}) {
   let pathname = usePathname();
@@ -33,10 +34,13 @@ export default function App({children}) {
   
   return (
     <>
+
       <Provider store={store}>
-        {
-          <SellerLayout children={children}/>
-        }
+        <NextUIProvider>
+          {
+            <SellerLayout children={children}/>
+          }
+        </NextUIProvider>
       </Provider>
     </>
   )

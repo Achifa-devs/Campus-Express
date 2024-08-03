@@ -30,7 +30,7 @@ export default function Aside() {
             {/* <hr /> */}
             <ul>
 
-                <li onClick={e => window.location.href=('/seller/')}>
+                <li onClick={e => window.location.href=('/seller/orders')}>
                     <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect x="5" y="4" width="14" height="17" rx="2" stroke="#000" stroke-width="2"/>
                         <path d="M9 9H15" stroke="#000" stroke-width="2" stroke-linecap="round"/>
@@ -68,7 +68,7 @@ strokeLinejoin
                     <span>New Listing</span>
                 </li>
 
-                <li onClick={e => window.location.href=('/seller/editor')}>
+                {/* <li onClick={e => window.location.href=('/seller/editor')}>
                     <svg fill="#000000" version="1.1" id="Layer_1" 
                             width="30px" height="30px" viewBox="0 0 72 72" enable-background="new 0 0 72 72">
                         <g>
@@ -92,7 +92,7 @@ strokeLinejoin
                     &nbsp;
 
                     <span>Promotion</span>
-                </li>
+                </li> */}
 
 
             </ul>

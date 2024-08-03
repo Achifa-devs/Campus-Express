@@ -4,7 +4,9 @@ import { Provider } from "react-redux";
 import store from "@/redux/store";
 import BuyerLayout from "@/files/layout/Buyer";
 import App from "./App";
-import './global.css'
+import './globals.css'; 
+import { Metadata } from 'next'
+
 // import '../files/styles/Buyer/xx-large-screen.css'
 // import '../files/styles/Buyer/x-large-screen.css'
 // import '../files/styles/Buyer/medium-screen.css'
@@ -14,7 +16,7 @@ import './global.css'
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata = {
+export const metadata =  {
   title: "Campus Express Nigeria",
   description: "Online Shopping On Campus In Nigeria.",
 };
