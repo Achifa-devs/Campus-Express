@@ -2,14 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
-.seller-aside{
-    height: 100vh;
-    position: relative;
-    width: 280px;
-    background: #fff;
-    float: left;
-}
 
+@media screen  and (min-width: 760px)  and (max-width: 1000px) {
+    .seller-aside{
+        height: 100vh;
+        position: relative;
+        width: 200px;
+        background: #fff;
+        float: left;
+    }
+    
+}
+@media screen  and (min-width: 1000px)  and (max-width: 1200px) {
+    .seller-aside{
+        height: 100vh;
+        position: relative;
+        width: 280px;
+        background: #fff;
+        float: left;
+    }
+    
+}
 .seller-aside-logo{
     height: 120px;
     width: 100%;

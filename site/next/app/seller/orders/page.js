@@ -1,5 +1,9 @@
 "use client"
 import '@/app/seller/orders/styles/xx-large.css'
+import '@/app/seller/orders/styles/x-large.css'
+import '@/app/seller/orders/styles/large.css'
+import '@/app/seller/orders/styles/medium.css'
+import '@/app/seller/orders/styles/small.css'
 import React, { useEffect, useState } from "react";
 
 import database1 from "@/database/campus_express_buyer_orders.json";
@@ -51,6 +55,8 @@ export default function App() {
 
 
 function OrderData({item, updateSelectedOrder}){
+
+  
   return(
     <>
       <div style={{display: 'flex', justifyContent: 'flex-start', alignItems: 'center'}}>
@@ -64,7 +70,6 @@ function OrderData({item, updateSelectedOrder}){
       </div>
 
       <hr />
-      <br />
 
       <OrderCard item={item} />
 
@@ -75,7 +80,10 @@ function OrderData({item, updateSelectedOrder}){
 
 function OrdersList({updateSelectedOrder, cards}) {
 
-
+  let [screenWidth, setScreenWidth] = useState(0);
+  useEffect(() => {
+    setScreenWidth(window.innerWidth)
+  }, [])
   return(
     <>
       <div>
@@ -91,7 +99,7 @@ function OrdersList({updateSelectedOrder, cards}) {
             <li className='th-price'>Price</li>
             <li className='th-paid'>Paid</li>
             <li className='th-stat'>Status</li>
-            <li className='th-date'>Date</li>
+            <li className='th-date' style={{display: screenWidth > 480 ? 'block' : 'none'}}>Date</li>
             <li className='th-action'>Action</li>
           </ul>
         </header>
@@ -99,7 +107,7 @@ function OrdersList({updateSelectedOrder, cards}) {
           {
             cards.map(item => 
             
-              <ul onClick={e =>updateSelectedOrder(item)} style={{height: '90px', fontWeight: '300'}}>
+              <ul onClick={e =>updateSelectedOrder(item)} style={{height: '90px', padding: '0', fontWeight: '300'}}>
             
                 <li className='tb-buyer'>
                   <span>
@@ -108,8 +116,8 @@ function OrdersList({updateSelectedOrder, cards}) {
                   <span style={{marginLeft: '8px'}}>Akpulu Chinedu</span>
                 </li>
                 <li className='tb-item'>
-                  <span style={{height: '50px', width: '50px', borderRadius: '10px'}}><Thumbnail product_id={item.item.product_id} title={item.item.title} height={'100%'} /></span>
-                  <span style={{width: '60%', marginLeft: '15px'}}>
+                  <span style={{height: '50px', width: '50px', borderRadius: '10px', display: screenWidth > 480 ? 'block' : 'none'}}><Thumbnail product_id={item.item.product_id} title={item.item.title} height={'100%'} /></span>
+                  <span style={{width: screenWidth > 480 ? '60%' : '100%', marginLeft: screenWidth > 480 ? '15px' : '0'}}>
                   {item.item.title}
                   </span>
                 </li>
@@ -124,7 +132,7 @@ function OrdersList({updateSelectedOrder, cards}) {
                 <li className='tb-stat'>
                   {item.order.status.state}
                 </li>
-                <li className='tb-date'>
+                <li className='tb-date' style={{display: screenWidth > 480 ? 'block' : 'none'}}>
                   {js_ago(item.order.date)}
                 </li>
                 <li className='tb-action'>
@@ -147,7 +155,7 @@ function OrderCard({item}) {
         <h6 className="" style={{padding:'10px', margin: '0', borderBottom: '1px solid #efefef', height: '50px', width: '100%', background: '#fff', fontWeight: '600', display: 'flex', alignItems: 'center'}}>New Order</h6>
         <div className="new-order-card-data-cnt">
           <div className='thumbnail-cnt'>
-            <Thumbnail product_id={item?.product_id} />
+            <Thumbnail product_id={item?.product_id} height={'100%'} />
           </div> 
 
             
@@ -169,7 +177,7 @@ function OrderCard({item}) {
                 </div>
                 
                 <div className="body-cnt-mid">
-                    <div className="seller">
+                    <div className="buyer">
                         <span style={{
                             whiteSpace: 'nowrap', /* Prevent text from wrapping */
                             overflow: 'hidden',    /* Hide any overflow text */
@@ -178,7 +186,7 @@ function OrderCard({item}) {
                     </div>
 
                     <div className="stock">
-                      20 In stock
+                      2 units bought
                     </div>
                 </div>
                 
