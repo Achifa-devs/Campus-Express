@@ -5,7 +5,7 @@ import { GetProductThumbnail } from '@/app/api/buyer/get';
 // import { GetProductThumbnail } from '../../api/buyer/get';
  
 
-const Thumbnail = ({product_id,title}) => {
+const Thumbnail = ({product_id,title,height}) => {
     let [img, set_img] = useState(imgSvg);
     let [uris, set_uris] = useState([]);
 
@@ -43,7 +43,7 @@ const Thumbnail = ({product_id,title}) => {
     
     return ( 
         <>
-            <img loading='lazy' onClick={e => window.location.href=(`/product/${product_id}`)} src={img} style={{height: '150px', width: '100%', borderRadius: '2px', display: 'table', margin: '0 auto', position: 'relative'}} alt="" />
+            <img loading='lazy' onClick={e => window.location.href=(`/product/${product_id}`)} src={img} style={{height: `${height ? height : '150px'}`, width: '100%', borderRadius: '2px', display: 'table', margin: '0 auto', position: 'relative'}} alt="" />
         </>
      );
 }
