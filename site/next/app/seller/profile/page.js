@@ -1,6 +1,13 @@
-import React from 'react'
+"use client"
+import React, { useState } from 'react'
 import '@/app/seller/profile/styles/xx-large.css'
+import '@/app/seller/profile/styles/x-large.css'
+import '@/app/seller/profile/styles/large.css'
+import '@/app/seller/profile/styles/medium.css'
+import '@/app/seller/profile/styles/small.css'
 export default function Profile() {
+ 
+    let [activeCnt, setActiveCnt] = useState(<ShopInfo />)
   return (
     <>
       <div className="seller-profile">
@@ -16,7 +23,7 @@ export default function Profile() {
             </div>
 
             <div className="summary">
-                <div>
+                <div onClick={e=>setActiveCnt(ShopInfo)}>
                     <div>
                         Shop Information
                     </div>
@@ -26,7 +33,7 @@ export default function Profile() {
                     </div>
                 </div>
 
-                <div>
+                <div onClick={e=>setActiveCnt(ShippingInfo)}>
                     <div>
                         Shipping Information
                     </div>
@@ -36,7 +43,7 @@ export default function Profile() {
                     </div>
                 </div>
 
-                <div>
+                <div onClick={e=>setActiveCnt(PaymentInfo)}>
                     <div>
                         Payment Information
                     </div>
@@ -48,7 +55,7 @@ export default function Profile() {
             </div>
 
             {
-                <PaymentInfo />
+                activeCnt
             } 
         </div>
 

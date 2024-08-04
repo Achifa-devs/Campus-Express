@@ -1,5 +1,9 @@
 import React from 'react'
 import '@/app/seller/shop/styles/xx-large.css'
+import '@/app/seller/shop/styles/x-large.css'
+import '@/app/seller/shop/styles/large.css'
+import '@/app/seller/shop/styles/medium.css'
+import '@/app/seller/shop/styles/small.css'
 
 export default function Shop() {
   return (
@@ -33,7 +37,7 @@ export default function Shop() {
                 </div>
 
                 <div className="seller-shop-learner">
-                    <div className='learner-cnt'>
+                    <div className='learner-cnt' style={{padding: '0px 15px'}}>
                         <div>
                             <h6>Learn how to do</h6>
                         </div>

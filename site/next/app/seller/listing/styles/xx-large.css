@@ -95,13 +95,13 @@
         position: relative;
         width: calc(100% - 280px);
         background: #f9f9f9;
-        padding: 20px;
+        padding: 10px;
         overflow: hidden;
         float: right;
     }
 
     .seller-listing-cnt{
-        height: calc(100% - 100px);
+        height: calc(100% - 50px);
         position: relative;
         width: 100%;
         background: #f9f9f9;
@@ -110,10 +110,23 @@
         flex-direction: column;
         align-items: center;
         justify-content: flex-start;
-        padding: 20px;
+        padding: 10px;
         float: right;
     }
-    .seller-listing-cnt header{
+    .seller-listing-card-cnt{
+        height: auto;
+        position: relative;
+        width: 100%;
+        background: #f9f9f9;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 0px;
+        margin-bottom: 5px;
+        float: right;
+    }
+    .seller-listing-card-cnt header{
         width: 100%;
         padding: 10px;
         height: auto;
@@ -123,7 +136,7 @@
         /* margin-top: 70px; */
         background-color: #fff;
     }
-    .seller-listing-cnt section{
+    .seller-listing-card-cnt section{
         display: flex;
         flex-wrap: wrap;
         width: 100%;
@@ -133,7 +146,7 @@
         overflow: auto;
         justify-content: space-between;
     }
-    .seller-listing-cnt section ul{
+    .seller-listing-card-cnt section ul{
         list-style-type: none;
         display: flex;
         width: 100%;
@@ -142,20 +155,20 @@
         padding: 0px;
         justify-content: space-between;
     }
-    .seller-listing-cnt section ul li{
+    .seller-listing-card-cnt section ul li{
         height: auto;
         width: 100%;
         display: flex;
         flex-direction: column;
         background-color: #fff;
     }
-    .seller-listing-cnt section ul li .top{
+    .seller-listing-card-cnt section ul li .top{
         height: 100px;
         width: 100%; 
         display: flex;
         background-color: #fff;
     }
-    .seller-listing-cnt section ul li .btm{
+    .seller-listing-card-cnt section ul li .btm{
         height: auto;
         width: 100%;
         display: flex;
@@ -164,7 +177,7 @@
         justify-content: flex-start;
         background-color: #fff;
     }
-    .seller-listing-cnt section ul li .btm div{
+    .seller-listing-card-cnt section ul li .btm div{
         font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue';
         padding: 2.5px;
         /* border: 1px solid #FF4500; */
@@ -184,13 +197,22 @@
         height: 100%;
         font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue';
         width: calc(100% - 200px);
-        background-color: rgb(62, 117, 165);
+        display: flex;
+        padding: 10px 10px;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: space-between;
+        background-color: rgb(255, 255, 255);
     }
     .product-price{
         height: 100%;
         font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue';
         width: 100px;
-        background-color: rgb(26, 30, 34);
+        display: flex;
+        padding: 10px;
+        align-items: center;
+        justify-content: flex-start;
+        background-color: rgb(255, 255, 255);
     }
     
 }

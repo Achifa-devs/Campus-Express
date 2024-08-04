@@ -76,7 +76,7 @@ export default function Nav() {
       </div>
       
       
-      <div onClick={e =>window.location.href=('/seller/listing')} style={{width: '33.3%', fontSize: 'x-small', color: '#000', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0px', flexDirection: 'column'}}>
+      <div onClick={e =>window.location.href=('/seller/shop')} style={{width: '33.3%', fontSize: 'x-small', color: '#000', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0px', flexDirection: 'column'}}>
         <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#000">
 strokeLinejoin
           <g id="SVGRepo_bgCarrier" stroke-width="0"/>strokeLinejoin

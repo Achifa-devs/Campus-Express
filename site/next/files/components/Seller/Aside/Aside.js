@@ -1,26 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import img from '../../../assets/logo.png'
-import arrow from '../../../assets/down-arrow-backup-2-svgrepo-com.svg'
-// import logo from '../../../assets/c'
-import sell from '../../../assets/sell-svgrepo-com (3).svg'
 import vendorCy from '@/files/assets/vendor-center-typo.svg'
 import vendorSymbol from '@/files/assets/vendor-center-symbol.svg'
-import orders from '../../../assets/order-svgrepo-com (1).svg'
-import user from '../../../assets/account-management-svgrepo-com.svg'
-import inventory from '../../../assets/store-inventory-inventory-stock-supply-svgrepo-com.svg'
-import dashboard from '../../../assets/dashboard-svgrepo-com (1).svg'
+
 export default function Aside() {
-
-    let [balance, setBalance] = useState('0.00');
-    let [settingOption, setSettingOption] = useState(false)
-
+    let [screenWidth, setScreenWidth] = useState(0) 
+    
+    useEffect(() => {
+        setScreenWidth(window.innerWidth)
+    },[])
   return (
 
     <>
-        <div className='seller-aside-overlay'></div>
 
-        <div className='seller-aside' style={{zIndex: '20000'}}>
+        <div className='seller-aside' style={{zIndex: '20000', width: screenWidth >= 1000 ? '280px' : '200px'}}>
             <div className='seller-aside-logo' style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-end'}}>
                     <img src={vendorSymbol.src} style={{height: '100px', width: '100px', color: '#fff', fontSize: 'medium', display: 'flex'}} alt="" />
                     &nbsp;

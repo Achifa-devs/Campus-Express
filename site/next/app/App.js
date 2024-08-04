@@ -36,11 +36,9 @@ export default function App({children}) {
     <>
 
       <Provider store={store}>
-        <NextUIProvider>
-          {
-            <SellerLayout children={children}/>
-          }
-        </NextUIProvider>
+        {
+          <SellerLayout children={children}/>
+        }
       </Provider>
     </>
   )
