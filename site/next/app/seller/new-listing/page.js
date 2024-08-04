@@ -1,6 +1,10 @@
 "use client"
 import React, { useEffect, useRef, useState } from 'react'
 import '@/app/seller/new-listing/styles/xx-large.css'
+import '@/app/seller/new-listing/styles/x-large.css'
+import '@/app/seller/new-listing/styles/large.css'
+import '@/app/seller/new-listing/styles/medium.css'
+import '@/app/seller/new-listing/styles/small.css'
 import items from '@/files/items.json'
 
 export default function NewListing() {
@@ -16,6 +20,7 @@ export default function NewListing() {
     let [categoriesList, setCategoriesList] = useState([])
     let [typeList, setTypeList] = useState([]) 
     let [img_list, setimg_list] = useState([])
+    let [thumbnail, set_thumbnail] = useState('')
     let [vid_list, setvid_list] = useState([])
     let [update, setUpdate] = useState(false);
     let searchParams = new URLSearchParams(window.location.search);
@@ -87,7 +92,7 @@ export default function NewListing() {
         }
     },[categoriesList])
 
-    let handleImage = (e,index) => {
+    let handleImage = (e,imgSrc) => {
         let f = e.target;
         let existingFilesCount = photos.length; // Assume this is the number of already uploaded files
         const maxFiles = 5;
@@ -104,7 +109,11 @@ export default function NewListing() {
 
                 reader.onload = (result) => {
                     let img = reader.result;
-                    productPhotos({file: img, index: index});
+                    if(imgSrc === 'others'){
+                        productPhotos(img);
+                    }else{
+                        set_thumbnail(img)
+                    }
                 }   
                 reader.readAsDataURL(item);
             }
@@ -266,7 +275,7 @@ export default function NewListing() {
         if(window.localStorage.getItem('draft_category') !== null && window.localStorage.getItem('draft_category') !== undefined && window.localStorage.getItem('draft_category') !== ''){ 
 
             // productPhotos(())
-            openNotice("Your Progress Was Saved, Continue From Where You Stopped")
+            // openNotice("Your Progress Was Saved, Continue From Where You Stopped")
             let img = 
             JSON.parse(window.localStorage.getItem('draft_images')) !== null 
             ? 
@@ -497,10 +506,10 @@ export default function NewListing() {
         <div className="seller-editor-cnt">
             
             <section className='item-cnt'>
-                <div style={{height: '100%'}}>
-                    <div className="input-cnt">
+                <div style={{height: 'auto'}}>
+                    <div className="input-cnt" style={{width: '100%'}}>
                         <label htmlFor="" >Title</label>
-                        <textarea defaultValue={title?.current} onInput={e => productTitle(e.target.value)} placeholder='Write A Product Title Here' name="" id=""></textarea>
+                        <textarea style={{height: '100px'}} defaultValue={title?.current} onInput={e => productTitle(e.target.value)} placeholder='Write A Product Title Here' name="" id=""></textarea>
                     </div>
 
                     
@@ -731,33 +740,29 @@ export default function NewListing() {
                     
                 </div>
                 <section>
-                    <div className="input-cnt">
+                    <div className="input-cnt" style={{width: '100%'}}>
                         <label htmlFor="">Description (Optional)</label>
-                        <textarea defaultValue={description?.current} onInput={e => productDescription(e.target.value)} placeholder='Write A  Short Description For The Product Here...' name="" id=""></textarea>
+                        <textarea style={{height: '200px'}} defaultValue={description?.current} onInput={e => productDescription(e.target.value)} placeholder='Write A  Short Description For The Product Here...' name="" id=""></textarea>
                     </div>
                 </section>
             </section>
 
             <section className='file'>
-                <div className=''>
-                    <b>Image Samples</b>
+                <div className='' style={{width: '100%'}}>
+                    <b>Image Samples ({img_list.length + (thumbnail !== '' ? 1 : 0)})</b>
                 </div>
                 <div className='file-cnt'>
                     <div className='img-cnt'>
                         {
-                            img_list.length > 0
+                            thumbnail !== ''
                             ?
-                                <div style={{position: 'relative', padding: '0', height: '100%',  display: 'inline-block', flexShrink: '0', margin: '0 5px 0 5px'}}>
-                                    <div onClick={e => { 
-                                        let list = img_list.filter((item, i) => i !== 0);
-                                        deletePhoto(list);
-
-                                    }} className="delete-sample-img" style={{position: 'absolute', cursor: 'pointer', top: '5px', right: '5px', color: '#fff', background: 'red', zIndex: '1000', width: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '2.5px', height: '20px'}}>x</div>   
-                                    <img style={{height: '100%', width: '100%'}} src={img_list[0].file} alt="" srcset="" />
+                                <div style={{position: 'relative',height: '100%', width: '100%'}}>
+                                    <div onClick={e => { set_thumbnail('')}} className="delete-sample-img" style={{position: 'absolute', cursor: 'pointer', top: '5px', right: '5px', color: '#fff', background: 'red', zIndex: '1000', width: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '2.5px', height: '20px'}}>x</div>   
+                                    <img style={{height: '100%', width: '100%'}} src={thumbnail} alt="" />
                                 </div>
                             :
                             <>
-                                <input onChange={e => handleImage(e)} style={{display: 'none'}} type="file" name="" id="image0" />
+                                <input onChange={e => handleImage(e, 'thumbnail')} style={{display: 'none'}} type="file" name="" id="image0" />
                                 <label htmlFor="image0">
                                     <div>+</div>
                                     <div>Main image</div>
@@ -765,139 +770,36 @@ export default function NewListing() {
                             </>
                         }
                     </div>
-                    <div className='img-cnt'>
-                        {
-                            img_list.length >= 2
-                            ?
-                                <div style={{position: 'relative', padding: '0', height: '100%',  display: 'inline-block', flexShrink: '0', margin: '0 5px 0 5px'}}>
-                                    <div onClick={e => { 
-                                        let list = img_list.filter((item, i) => i !== 1);
-                                        deletePhoto(list);
 
-                                    }} className="delete-sample-img" style={{position: 'absolute', cursor: 'pointer', top: '5px', right: '5px', color: '#fff', background: 'red', zIndex: '1000', width: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '2.5px', height: '20px'}}>x</div>
-                                    <img style={{height: '100%', width: '100%'}} src={img_list[1].file} alt="" srcset="" />
-                                </div>
-                            :
-                            <>
-                                <input onChange={e => handleImage(e)} style={{display: 'none'}} type="file" name="" id="image1" />
-                                <label htmlFor="image1">
-                                    <div>+</div>
-                                    <div>Image</div>
-                                </label>
-                            </>
-                        }
-                    </div>
-                    <div className='img-cnt'>
-                        {
-                            img_list.length >= 3
-                            ?
-                                <div style={{position: 'relative', padding: '0', height: '100%',  display: 'inline-block', flexShrink: '0', margin: '0 5px 0 5px'}}>
-                                    <div onClick={e => { 
-                                        let list = img_list.filter((item, i) => i !== 2);
-                                        deletePhoto(1);
-
-                                    }} className="delete-sample-img" style={{position: 'absolute', cursor: 'pointer', top: '5px', right: '5px', color: '#fff', background: 'red', zIndex: '1000', width: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '2.5px', height: '20px'}}>x</div>
-                                    <img style={{height: '100%', width: '100%'}} src={img_list[2].file} alt="" srcset="" />
-                                </div>
-                            :
-                            <>
-                                <input onChange={e => handleImage(e)} style={{display: 'none'}} type="file" name="" id="image2" />
-                                <label htmlFor="image2">
-                                    <div>+</div>
-                                    <div>Image</div>
-                                </label>
-                            </>
-                        }
-                    </div>
-                    <div className='img-cnt'>
-                        {
-                            img_list.length >= 4
-                            ?
-                                <div style={{position: 'relative', padding: '0', height: '100%',  display: 'inline-block', flexShrink: '0', margin: '0 5px 0 5px'}}>
-                                    <div onClick={e => { 
-                                        let list = img_list.filter((item, i) => i !== 3);
-                                        deletePhoto(list);
-
-                                    }} className="delete-sample-img" style={{position: 'absolute', cursor: 'pointer', top: '5px', right: '5px', color: '#fff', background: 'red', zIndex: '1000', width: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '2.5px', height: '20px'}}>x</div>
-                                    <img style={{height: '100%', width: '100%'}} src={img_list[3].file} alt="" srcset="" />
-                                </div>
-                            :
-                            <>
-                                <input onChange={e => handleImage(e)} style={{display: 'none'}} type="file" name="" id="image3" />
-                                <label htmlFor="image3">
-                                    <div>+</div>
-                                    <div>Image</div>
-                                </label>
-                            </>
-                        }
-                    </div>
-                    <div className='img-cnt'>
-                        {
-                            img_list.length >= 5
-                            ?
-                                <div style={{position: 'relative', padding: '0', height: '100%',  display: 'inline-block', flexShrink: '0', margin: '0 5px 0 5px'}}>
-                                    <div onClick={e => { 
-                                        let list = img_list.filter((item, i) => i !== 4);
-                                        deletePhoto(list);
-
-                                    }} className="delete-sample-img" style={{position: 'absolute', cursor: 'pointer', top: '5px', right: '5px', color: '#fff', background: 'red', zIndex: '1000', width: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '2.5px', height: '20px'}}>x</div>
-                                    <img style={{height: '100%', width: '100%'}} src={img_list[4].file} alt="" srcset="" />
-                                </div>
-                            :
-                            <>
-                                <input onChange={e => handleImage(e)} style={{display: 'none'}} type="file" name="" id="image4" />
-                                <label htmlFor="image4">
-                                    <div>+</div>
-                                    <div>Image</div>
-                                </label>
-                            </>
-                        }
-                    </div>
-                    <div className='img-cnt'>
+                    
                     {
-                            img_list.length >= 6
-                            ?
-                                <div style={{position: 'relative', padding: '0', height: '100%',  display: 'inline-block', flexShrink: '0', margin: '0 5px 0 5px'}}>
+                        
+                        img_list.map((item, index) => 
+                            <div className='img-cnt'>
+                                <div key={index} style={{position: 'relative',height: '100%', width: '100%'}}>
                                     <div onClick={e => { 
-                                        let list = img_list.filter((item, i) => i !== 5);
+                                        let list = img_list.filter((item, i) => i !== index);
                                         deletePhoto(list);
 
                                     }} className="delete-sample-img" style={{position: 'absolute', cursor: 'pointer', top: '5px', right: '5px', color: '#fff', background: 'red', zIndex: '1000', width: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '2.5px', height: '20px'}}>x</div>
-                                    <img style={{height: '100%', width: '100%'}} src={img_list[5].file} alt="" srcset="" />
+                                    <img style={{height: '100%', width: '100%'}} src={item} alt="" srcset="" />
                                 </div>
-                            :
-                            <>
-                                <input onChange={e => handleImage(e)} style={{display: 'none'}} type="file" name="" id="image5" />
-                                <label htmlFor="image5">
-                                    <div>+</div>
-                                    <div>Image</div>
-                                </label>
-                            </>
-                        }
-                    </div>
-                    <div className='img-cnt'>
-                        {
-                            img_list.length >= 7
-                            ?
-                                <div style={{position: 'relative', padding: '0', height: '100%',  display: 'inline-block', flexShrink: '0', margin: '0 5px 0 5px'}}>
-                                    <div onClick={e => { 
-                                        let list = img_list.filter((item, i) => i !== 6);
-                                        deletePhoto(list);
+                            </div>
 
-                                    }} className="delete-sample-img" style={{position: 'absolute', cursor: 'pointer', top: '5px', right: '5px', color: '#fff', background: 'red', zIndex: '1000', width: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '2.5px', height: '20px'}}>x</div>
-                                    <img style={{height: '100%', width: '100%'}} src={img_list[6].file} alt="" srcset="" />
-                                </div>
-                            :
-                            <>
-                                <input onChange={e => handleImage(e)} style={{display: 'none'}} type="file" name="" id="image6" />
-                                <label htmlFor="image6">
-                                    <div>+</div>
-                                    <div>Image</div>
-                                </label>
-                            </>
-                        }
-                    </div>
+                        )
+                    }
 
+                    <div className="img-cnt">
+                        <>
+                            <input multiple onChange={e => handleImage(e, 'others')} style={{display: 'none'}} type="file" name="" id="image1" />
+                            <label htmlFor="image1">
+                                <div>+</div>
+                                <div>Image</div>
+                            </label>
+                        </>
+                    </div>
+                
+                  
                 </div>
             </section>
 
