@@ -275,7 +275,7 @@ const Dashboard = () => {
         .then((result) => {
           setCards(
             result?.map((item, index) => 
-              <Card index={index} item={item} />
+              <Card index={index} key={index} item={item} />
             )
           )
           document.querySelector('.filter-overlay').removeAttribute('id')
