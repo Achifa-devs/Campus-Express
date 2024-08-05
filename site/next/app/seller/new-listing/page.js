@@ -25,7 +25,7 @@ export default function NewListing() {
     let [thumbnail, set_thumbnail] = useState('')
     let [vid_list, setvid_list] = useState([])
     let [update, setUpdate] = useState(false);
-    let searchParams = new URLSearchParams(path.split('?'));
+    let searchParams ;
 
    
     useEffect(() => { 
