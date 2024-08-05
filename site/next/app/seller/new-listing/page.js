@@ -6,11 +6,13 @@ import '@/app/seller/new-listing/styles/large.css'
 import '@/app/seller/new-listing/styles/medium.css'
 import '@/app/seller/new-listing/styles/small.css'
 import items from '@/files/items.json'
+import { usePathname } from 'next/navigation'
 
 export default function NewListing() {
 
     let [screenWidth, setScreenWidth] = useState('');
     let [clientWindow, setClientWindow] = useState({});
+    let pathname = usePathname()
 
     useEffect(() => {
         setClientWindow(window)
@@ -31,20 +33,19 @@ export default function NewListing() {
     let [thumbnail, set_thumbnail] = useState('')
     let [vid_list, setvid_list] = useState([])
     let [update, setUpdate] = useState(false);
-    let searchParams = new URLSearchParams(clientWindow?.location?.search);
 
    
     useEffect(() => { 
         setCategoriesList(items.items.category)
     },[])
-    useEffect(() => {
-        if(clientWindow?.localStorage?.getItem('sub-categories') === null || clientWindow?.localStorage?.getItem('sub-categories') === 'null' || clientWindow?.localStorage?.getItem('sub-categories') === '' || clientWindow?.localStorage?.getItem('sub-categories') === undefined){
-            clientWindow?.localStorage?.setItem('sub-categories', JSON.stringify(items.items.category))
-        }
+    // useEffect(() => {
+    //     if(clientWindow?.localStorage?.getItem('sub-categories') === null || clientWindow?.localStorage?.getItem('sub-categories') === 'null' || clientWindow?.localStorage?.getItem('sub-categories') === '' || clientWindow?.localStorage?.getItem('sub-categories') === undefined){
+    //         clientWindow?.localStorage?.setItem('sub-categories', JSON.stringify(items.items.category))
+    //     }
 
-    },[clientWindow])
+    // },[clientWindow])
     useEffect(() => {
-        let product_id = searchParams.get('product_id'); 
+        let product_id = pathname.split('/').splice(-1)[0]; 
         if(product_id === null){
             setUpdate(false)
         }else{
@@ -53,7 +54,7 @@ export default function NewListing() {
     }, [])
     useEffect(() => {
         async function getData() {
-            let product_id = searchParams.get('product_id'); // price_descending
+            let product_id = pathname.split('/').splice('product_id'); // price_descending
             if(product_id !== null){
                 let result = await GetItem([product_id]);
                 productCategory(result[0]?.category) 
@@ -68,14 +69,14 @@ export default function NewListing() {
                 // overlay.removeAttribute('id')
             }
         }
-        getData()
+        // getData()
         async function getImages() {
-            let product_id = searchParams.get('product_id'); 
+            let product_id = pathname.split('/').splice('product_id'); 
             if(product_id !== ''){
                 result?.map(item => productPhotos(item.file))
             }
         }
-        getImages()
+        // getImages()
     }, [clientWindow])
     let [sizeList, setSizeList] = useState([])
     useEffect(() => {
@@ -135,7 +136,7 @@ export default function NewListing() {
     let [gender_state, set_gender_state] = useState('')
     function productGender(data) {
         gender.current = (data);
-        clientWindow?.localStorage?.setItem('draft_gender', data)
+        // clientWindow?.localStorage?.setItem('draft_gender', data)
         set_gender_state(data)
     }
 
@@ -143,7 +144,7 @@ export default function NewListing() {
     let [size_state, set_size_state] = useState('')
     function productSizeSelect(data) {
         size.current = (data); 
-        clientWindow?.localStorage?.setItem('draft_size', data)
+        // clientWindow?.localStorage?.setItem('draft_size', data)
         set_size_state(data)
     }
     
@@ -152,7 +153,7 @@ export default function NewListing() {
     function productSubCategory(data) {
         subCategory.current = (data); 
         set_subCategory_state(data)
-        clientWindow?.localStorage?.setItem('draft_sub_category', data)
+        // clientWindow?.localStorage?.setItem('draft_sub_category', data)
         if(data === 'Create Custom Item'){
             let value = prompt('Insert Custom Sub Category')
             if(value !== ''){
@@ -161,13 +162,13 @@ export default function NewListing() {
                 categoriesList.map(item => {
                     if(Object.keys(item)[0] === category_state){
                         cType_state === 'Foot Wear' ? item["FootWear"].push(value) : gender === 'Male' ? item["ClothingMale"].push(value) : item["ClothingFemale"].push(value)
-                        clientWindow?.localStorage?.setItem('sub-categories', JSON.stringify(categoriesList))
+                        // clientWindow?.localStorage?.setItem('sub-categories', JSON.stringify(categoriesList))
                         setCategoriesList(categoriesList)
                     }
                 })
-                clientWindow?.localStorage?.setItem('draft_sub_category', value);
+                // clientWindow?.localStorage?.setItem('draft_sub_category', value);
             }else{
-                clientWindow?.localStorage?.removeItem('draft_sub_category')
+                // clientWindow?.localStorage?.removeItem('draft_sub_category')
             }
         }
     }
@@ -176,14 +177,14 @@ export default function NewListing() {
     let [locale_state, set_locale_state] = useState('')
     function productLocale(data) {
         locale.current = (data); 
-        clientWindow?.localStorage?.setItem('draft_locale', data)
+        // clientWindow?.localStorage?.setItem('draft_locale', data)
     }
 
     let condition= useRef('')
     let [condition_state, set_condition_state] = useState('')
     function productCondition(data) {
         condition.current = (data); 
-        clientWindow?.localStorage?.setItem('draft_condition', data)
+        // clientWindow?.localStorage?.setItem('draft_condition', data)
         set_condition_state(data)
     }
 
@@ -191,7 +192,7 @@ export default function NewListing() {
     let [title_state, set_title_state] = useState('')
     function productTitle(data) {
         title.current = (data)
-        clientWindow?.localStorage?.setItem('draft_title', data)
+        // clientWindow?.localStorage?.setItem('draft_title', data)
         set_title_state(data)
     } 
 
@@ -199,7 +200,7 @@ export default function NewListing() {
     let [description_state, set_description_state] = useState('')
     function productDescription(data) {
         description.current = (data)
-        clientWindow?.localStorage?.setItem('draft_description', data)
+        // clientWindow?.localStorage?.setItem('draft_description', data)
         set_description_state(data)
     }
 
@@ -207,7 +208,7 @@ export default function NewListing() {
     let [category_state, set_category_state] = useState('')
     function productCategory(data) {
         category.current = (data); 
-        clientWindow?.localStorage?.setItem('draft_category', data)
+        // clientWindow?.localStorage?.setItem('draft_category', data)
         set_category_state(data)
     }
     
@@ -215,7 +216,7 @@ export default function NewListing() {
     let [cType_state, set_cType_state] = useState('')
     function productType(data) {
         cType.current = (data); 
-        clientWindow?.localStorage?.setItem('draft_c_type', data)
+        // clientWindow?.localStorage?.setItem('draft_c_type', data)
         set_cType_state(data);
 
         if(data === 'Create Custom Item'){
@@ -227,15 +228,15 @@ export default function NewListing() {
                 categoriesList.map(item => {
                     if(Object.keys(item)[0] === category_state){
                         item[category_state].push(value)
-                        clientWindow?.localStorage?.setItem('sub-categories', JSON.stringify(categoriesList))
+                        // clientWindow?.localStorage?.setItem('sub-categories', JSON.stringify(categoriesList))
                         setCategoriesList(categoriesList)
                     }
                 })
 
-                clientWindow?.localStorage?.setItem('draft_c_type', value);
+                // clientWindow?.localStorage?.setItem('draft_c_type', value);
 
             }else{
-                clientWindow?.localStorage?.removeItem('draft_c_type')
+                // clientWindow?.localStorage?.removeItem('draft_c_type')
             }
 
         }
@@ -245,7 +246,7 @@ export default function NewListing() {
     let [price_state, set_price_state] = useState('')
     function productPrice(data) {
         price.current = (data); 
-        clientWindow?.localStorage?.setItem('draft_price', data)
+        // clientWindow?.localStorage?.setItem('draft_price', data)
         set_price_state(data)
     }
 
@@ -280,31 +281,31 @@ export default function NewListing() {
     }
 
     useEffect(() => {
-        if(clientWindow?.localStorage?.getItem('draft_category') !== null && clientWindow?.localStorage?.getItem('draft_category') !== undefined && clientWindow?.localStorage?.getItem('draft_category') !== ''){ 
+        // if(clientWindow?.localStorage?.getItem('draft_category') !== null && clientWindow?.localStorage?.getItem('draft_category') !== undefined && clientWindow?.localStorage?.getItem('draft_category') !== ''){ 
 
             // productPhotos(())
             // openNotice("Your Progress Was Saved, Continue From Where You Stopped")
-            let img = 
-            JSON.parse(clientWindow?.localStorage?.getItem('draft_images')) !== null 
-            ? 
-            JSON.parse(clientWindow?.localStorage?.getItem('draft_images')).map(item => productPhotos(item)) 
-            : ''
+            // let img = 
+            // JSON.parse(clientWindow?.localStorage?.getItem('draft_images')) !== null 
+            // ? 
+            // JSON.parse(clientWindow?.localStorage?.getItem('draft_images')).map(item => productPhotos(item)) 
+            // : ''
 
-            productCategory(clientWindow?.localStorage?.getItem('draft_category')) 
-            productTitle(clientWindow?.localStorage?.getItem('draft_title'))
-            // setPhotos(result.photos.map(item => item.file))
-            productDescription(clientWindow?.localStorage?.getItem('draft_description'))
-            productPrice(clientWindow?.localStorage?.getItem('draft_price'))
-            // setProduct_id(result.meta_data[0].product_id)
-            productStock(clientWindow?.localStorage?.getItem('draft_stock'))
-            productType(clientWindow?.localStorage?.getItem('draft_c_type'))
-            productCondition(clientWindow?.localStorage?.getItem('draft_condition'))
-            productLocale(clientWindow?.localStorage?.getItem('draft_locale'))
-        }else{
+            // productCategory(clientWindow?.localStorage?.getItem('draft_category')) 
+            // productTitle(clientWindow?.localStorage?.getItem('draft_title'))
+            // // setPhotos(result.photos.map(item => item.file))
+            // productDescription(clientWindow?.localStorage?.getItem('draft_description'))
+            // productPrice(clientWindow?.localStorage?.getItem('draft_price'))
+            // // setProduct_id(result.meta_data[0].product_id)
+            // productStock(clientWindow?.localStorage?.getItem('draft_stock'))
+            // productType(clientWindow?.localStorage?.getItem('draft_c_type'))
+            // productCondition(clientWindow?.localStorage?.getItem('draft_condition'))
+            // productLocale(clientWindow?.localStorage?.getItem('draft_locale'))
+        // }else{
             // setCategory('')
-        }
+        // }
     }, [clientWindow])
-    useEffect(() => {setCategoriesList(JSON.parse(clientWindow?.localStorage?.getItem('sub-categories')))},[])
+    // useEffect(() => {setCategoriesList(JSON.parse(clientWindow?.localStorage?.getItem('sub-categories')))},[])
     useEffect(() => {
         let type = categoriesList.filter(item => Object.keys(item)[0] === category.current)[0]; 
         if(type){
@@ -370,7 +371,7 @@ export default function NewListing() {
 
             
             if(update){
-                let product_id = searchParams.get('product_id');
+                let product_id = pathname.split('/').splice('product_id');
                 fetch('https://ce-server.vercel.app/seller.product-update', {
                     method: 'post',
                     headers: {

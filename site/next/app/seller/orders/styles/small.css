@@ -92,7 +92,7 @@
     
     
     .seller-order{
-        height: 100%;
+        height: calc(100% - 0px);
         position: relative;
         width: calc(100% - 0px);
         background: #f9f9f9;

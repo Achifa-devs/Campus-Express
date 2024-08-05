@@ -1,38 +1,37 @@
 import { useEffect, useState } from "react";
-import filterSvg from '../../../assets/filter-edit-svgrepo-com.svg'
-import deleteSvg from '../../../assets/delete-svgrepo-com (1).svg'
-// import dayjs from 'dayjs'
-import { useLocation, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-// import { DeleteItem } from "../../../api/seller/delete";
-// import { setDeleteListTo } from "../../../redux/seller_store/delete_list";
 import { usePathname } from "next/navigation";
-
+import vendorCy from '@/files/assets/vendor-center-typo.svg'
+import vendorSymbol from '@/files/assets/vendor-center-symbol.svg'
  
 const Header = () => {
 
-    
+    let pathname = usePathname()
     return ( 
         <>
             <div className="seller-header shadow-sm" style={{
-                width: pathname.split('/').splice(-1)[0] === 'seller.signup' || pathname.split('/').splice(-1)[0] === 'seller.login' || pathname.split('/').splice(-1)[0] === 'seller.reset-password' ? '100vw' : '',
+                width: pathname.split('/').splice(-1)[0] === 'signup' || pathname.split('/').splice(-1)[0] === 'login' || pathname.split('/').splice(-1)[0] === 'reset-password' ? '100vw' : '',
                 color: '#fff',
+                height: '50px',
                 textAlign: 'center',
                 alignItems: 'center',
                 display: 'flex',
                 padding: '0',
-                position: 'sticky',
+                position: 'relative',
                 backgroundColor: '#fff',
-                top: '0',
                 fontWeight: '500',
-                background: 'orangered',
+                background: '#fff',
                 zIndex: '1000',
                 backgroundImage: 'url(../../../images/download (5).jpeg)',
                 backgroundClip: 'content-box',
                 backgroundSize: 'contain'
             }}>
 
-
+                <div className='seller-aside-logo' style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center'}}>
+                    <img src={vendorSymbol.src} style={{height: '50px', width: '50px', color: '#fff', fontSize: 'medium', display: 'flex'}} alt="" />
+                    &nbsp;
+                    &nbsp;
+                    <img src={vendorCy.src} style={{height: '120px', width: '120px', color: '#fff', fontSize: 'medium', display: 'flex'}} alt="" />
+                </div> 
             </div>
 
             

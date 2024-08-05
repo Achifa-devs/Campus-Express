@@ -1,27 +1,25 @@
-
-import { Inter } from "next/font/google";
-import { Provider } from "react-redux";
-import store from "@/redux/store";
-import BuyerLayout from "@/files/layout/Buyer";
+"use server"
 import App from "./App";
 import './globals.css'; 
-import { Metadata } from 'next'
+import { cookies } from "next/headers";
 
-// import '../files/styles/Buyer/xx-large-screen.css'
-// import '../files/styles/Buyer/x-large-screen.css'
-// import '../files/styles/Buyer/medium-screen.css'
-// import '../files/styles/Buyer/small-screen.css'
-// import '../files/styles/Buyer/large-screen.css'
-// import '../files/styles/notice.css'
-
-const inter = Inter({ subsets: ["latin"] });
-
-export const metadata =  {
+export const metadata =  async () => {return({
   title: "Campus Express Nigeria",
   description: "Online Shopping On Campus In Nigeria.",
-};
+})};
+ 
+export async function setNewCookie(data) {
+  let cookieStore = cookies();
+  if(data?.length > 0){
+    cookieStore.set('sellerJWT', data)
+  }
+}
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+
+  let cookieStore = cookies();
+  let cookieBook = cookieStore.getAll();
+  
   return (
     <html lang="en">
       <head>
@@ -46,9 +44,11 @@ export default function RootLayout({ children }) {
         <title>Campus Express</title>
       </head>
       <body style={{overflowX: 'hidden', background: '#f9f9f9'}}>
-        <App>
-          {children}
-        </App>
+        {
+          <App cookieBook={cookieBook}>
+            {children}
+          </App>
+        }
       </body>
     </html>
   );

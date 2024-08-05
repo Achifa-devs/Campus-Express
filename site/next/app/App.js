@@ -6,42 +6,54 @@ import { usePathname } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { Provider } from 'react-redux'
 import {NextUIProvider} from '@nextui-org/react'
+import Login from './seller/login/page'
+import { setNewCookie } from './layout'
 
-export default function App({children}) {
+export default function App({children, cookieBook}) {
   let pathname = usePathname();
-  let [user, setUser] = useState();
-  let [role, setRole] = useState();
-  // useEffect(() => {
-  //     let user = window.localStorage.getItem('CE_buyer_id');
-  //     if(user === null || user === '' || user === 'null'){
-  //         window.localStorage.setItem('unknownBuyer',`CE-unknown-user-${uuid()}`);
-  //         dispatch(setBuyerTo(null))
-  //     }else{
-  //       async function getData(){
-  //         window.localStorage.removeItem('unknownBuyer')
-  //         let result = await GetBuyer(window.localStorage.getItem('CE_buyer_id'))
-  //         dispatch(setBuyerTo(result))
-  //       }
-  //       async function fetchData() {
-  //         let result = await GetSavedItem(window.localStorage.getItem('CE_buyer_id'))
-  //         dispatch(setSaveTo(result))
-  //       }
-  //       fetchData() 
-  //       getData()
+  let [seller_auth, set_seller_auth] = useState(false)
+  
+  useEffect(() => {
+    if(!pathname.split('/').splice(-1)[0] === 'login' && !pathname.split('/').splice(-1)[0] === 'login'){
+      if(pathname.split('/').splice(-2)[0] === 'seller'){
+        let getSellerJwt = cookieBook.filter(item => item.name === 'sellerJWT')
+        if(getSellerJwt.length > 0){
+          console.log(getSellerJwt)
+          set_seller_auth(true)
+        }else{
+          window.location.href=('/seller/login')
+        }
+      }else{
+  
+      }
+    }else{
 
-  //     }
-  // }, [pathname])
+    }
+  }, [])
+
+
+  function setCookie(data) {
+    setNewCookie(data)
+  }
+
   
   return (
     <>
-
-      <Provider store={store}>
-        {
-          <SellerLayout>
-            {children}
-          </SellerLayout>
-        }
-      </Provider>
+      {
+        <Provider store={store}>
+          {
+            pathname.split('/').splice(-2)[0] === 'seller'
+            ?
+              <SellerLayout setCookie={setCookie}>
+                {children}
+              </SellerLayout>
+            :
+              <BuyerLayout>
+                {children}
+              </BuyerLayout>
+          }
+        </Provider>
+      }
     </>
   )
 }

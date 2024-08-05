@@ -101,7 +101,7 @@
     }
 
     .seller-listing-cnt{
-        height: calc(100% - 50px);
+        height: calc(100% - 100px);
         position: relative;
         width: 100%;
         background: #f9f9f9;

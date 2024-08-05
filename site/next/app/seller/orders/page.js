@@ -20,15 +20,6 @@ export default function App() {
   function GetData(){
     let book = []
 
-    let data = database1.map(order => {
-      database2.map(item => {
-        item.product_id === order.product_id
-        ?
-        book.push({order: order, item: item})
-        :
-        ''
-      })
-    });
     setCards(book)
     console.log(book)
   }
@@ -86,13 +77,13 @@ function OrdersList({updateSelectedOrder, cards}) {
   }, [])
   return(
     <>
-      <div>
+      <div >
         <b>Manage your products</b> here
       </div>
       <hr />
       <div className='seller-order-cnt'>
         <header>
-          <ul>
+          <ul style={{padding: '10px 0px'}}>
           
             <li className='th-buyer'>Buyer</li>
             <li className='th-item'>Item</li>

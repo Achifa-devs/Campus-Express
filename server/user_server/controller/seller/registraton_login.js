@@ -130,6 +130,7 @@ async function log_seller_in(req, res) {
 
     
     let {email,pwd} = req.body;
+    
  
     new Promise((resolve, reject) => {
         NeonDB
@@ -175,7 +176,7 @@ async function log_seller_in(req, res) {
             console.log(auth)
             if (auth) {
                 const token = createToken(user.seller_id);
-                res.status(200).send({bool: true, id: user.seller_id, name: `${user.fname[0]}.${user.lname[0]}`});
+                res.status(200).send({bool: true, id: user.seller_id, cookie: token});
     
             }else{
                 res.status(400).send({
