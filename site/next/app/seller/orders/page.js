@@ -182,7 +182,7 @@ function OrderCard({item}) {
                             whiteSpace: 'nowrap', /* Prevent text from wrapping */
                             overflow: 'hidden',    /* Hide any overflow text */
                             textOverflow: 'ellipsis'
-                        }}>Buyer: Maya's Store</span>
+                        }}>Buyer: Maya s Store</span>
                     </div>
 
                     <div className="stock">

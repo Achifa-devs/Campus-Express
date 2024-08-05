@@ -35,7 +35,7 @@ const Order = () => {
                 <h6 className="" style={{padding:'10px', margin: '0', borderBottom: '1px solid #efefef', height: '50px', width: '100%', background: '#fff', fontWeight: '600', display: 'flex', alignItems: 'center'}}>Order List</h6>
 
                     {
-                    items.map(item => <OrderItem item={item}/> )
+                    items.map((item,index) => <OrderItem key={index} item={item}/> )
                     }
                 </div>
 

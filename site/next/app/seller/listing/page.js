@@ -73,9 +73,9 @@ export default function Listing() {
         <hr />
         <div className="seller-listing-cnt">
             {
-                cards.map(item => 
+                cards.map((item,index) => 
                 
-                    <div className="seller-listing-card-cnt">
+                    <div key={index} className="seller-listing-card-cnt">
                         <header style={{borderBottom: '1px solid #f9f9f9'}}>
                             
                             <div>

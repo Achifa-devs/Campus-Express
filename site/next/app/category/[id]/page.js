@@ -76,8 +76,8 @@ const Dashboard = () => {
         .then((result) => {
             if(result){
                 setCards(
-                    result?.map((item, index) => 
-                        <Card index={index} item={item} />
+                    result.map((item, index) => 
+                        <Card key={index} index={index} item={item} />
                     ) 
                 )
                 setitems(items)

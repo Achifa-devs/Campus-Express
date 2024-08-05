@@ -775,7 +775,7 @@ export default function NewListing() {
                     {
                         
                         img_list.map((item, index) => 
-                            <div className='img-cnt'>
+                            <div className='img-cnt' key={index}>
                                 <div key={index} style={{position: 'relative',height: '100%', width: '100%'}}>
                                     <div onClick={e => { 
                                         let list = img_list.filter((item, i) => i !== index);
