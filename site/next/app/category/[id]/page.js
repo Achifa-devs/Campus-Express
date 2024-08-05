@@ -27,11 +27,10 @@ import {
 import CardCnt from '@/files/components/Buyer/dashboard/CardCnt'
 import Card from '@/files/components/Buyer/dashboard/Card'
 import SearchOutput from '@/files/components/Buyer/Header/SearchOutput'
-import Filterfilter from '@/files/components/Buyer/dashboard/FilterAside'
 import Ads from '@/files/components/Buyer/dashboard/Ads'
 import { usePathname } from 'next/navigation'
-import { GetItems } from './api/buyer/get'
-import { Filter_Cards, NewVisitor } from './api/buyer/post'
+import { GetItems } from '@/app/api/buyer/get'
+import { Filter_Cards, NewVisitor } from '@/app/api/buyer/post'
 import Head from 'next/head'
 
 
