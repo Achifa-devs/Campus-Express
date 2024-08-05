@@ -6,6 +6,7 @@ import '@/app/seller/new-listing/styles/large.css'
 import '@/app/seller/new-listing/styles/medium.css'
 import '@/app/seller/new-listing/styles/small.css'
 import items from '@/files/items.json'
+import { useParams, usePathname } from 'next/navigation'
 
 export default function NewListing() {
 
@@ -14,6 +15,7 @@ export default function NewListing() {
 
     let book = []
     let [edit,setEdit] = useState('');
+    let path = usePathname()
     
 
 
@@ -23,15 +25,15 @@ export default function NewListing() {
     let [thumbnail, set_thumbnail] = useState('')
     let [vid_list, setvid_list] = useState([])
     let [update, setUpdate] = useState(false);
-    let searchParams = new URLSearchParams(window.location.search);
+    let searchParams = new URLSearchParams(path.split('?'));
 
    
     useEffect(() => { 
         setCategoriesList(items.items.category)
     },[])
     useEffect(() => {
-        if(window.localStorage.getItem('sub-categories') === null || window.localStorage.getItem('sub-categories') === 'null' || window.localStorage.getItem('sub-categories') === '' || window.localStorage.getItem('sub-categories') === undefined){
-            window.localStorage.setItem('sub-categories', JSON.stringify(items.items.category))
+        if(localStorage.getItem('sub-categories') === null || localStorage.getItem('sub-categories') === 'null' || localStorage.getItem('sub-categories') === '' || localStorage.getItem('sub-categories') === undefined){
+            localStorage.setItem('sub-categories', JSON.stringify(items.items.category))
         }
 
     },[])
@@ -127,7 +129,7 @@ export default function NewListing() {
     let [gender_state, set_gender_state] = useState('')
     function productGender(data) {
         gender.current = (data);
-        window.localStorage.setItem('draft_gender', data)
+        localStorage.setItem('draft_gender', data)
         set_gender_state(data)
     }
 
@@ -135,7 +137,7 @@ export default function NewListing() {
     let [size_state, set_size_state] = useState('')
     function productSizeSelect(data) {
         size.current = (data); 
-        window.localStorage.setItem('draft_size', data)
+        localStorage.setItem('draft_size', data)
         set_size_state(data)
     }
     
@@ -144,7 +146,7 @@ export default function NewListing() {
     function productSubCategory(data) {
         subCategory.current = (data); 
         set_subCategory_state(data)
-        window.localStorage.setItem('draft_sub_category', data)
+        localStorage.setItem('draft_sub_category', data)
         if(data === 'Create Custom Item'){
             let value = prompt('Insert Custom Sub Category')
             if(value !== ''){
@@ -153,13 +155,13 @@ export default function NewListing() {
                 categoriesList.map(item => {
                     if(Object.keys(item)[0] === category_state){
                         cType_state === 'Foot Wear' ? item["FootWear"].push(value) : gender === 'Male' ? item["ClothingMale"].push(value) : item["ClothingFemale"].push(value)
-                        window.localStorage.setItem('sub-categories', JSON.stringify(categoriesList))
+                        localStorage.setItem('sub-categories', JSON.stringify(categoriesList))
                         setCategoriesList(categoriesList)
                     }
                 })
-                window.localStorage.setItem('draft_sub_category', value);
+                localStorage.setItem('draft_sub_category', value);
             }else{
-                window.localStorage.removeItem('draft_sub_category')
+                localStorage.removeItem('draft_sub_category')
             }
         }
     }
@@ -168,14 +170,14 @@ export default function NewListing() {
     let [locale_state, set_locale_state] = useState('')
     function productLocale(data) {
         locale.current = (data); 
-        window.localStorage.setItem('draft_locale', data)
+        localStorage.setItem('draft_locale', data)
     }
 
     let condition= useRef('')
     let [condition_state, set_condition_state] = useState('')
     function productCondition(data) {
         condition.current = (data); 
-        window.localStorage.setItem('draft_condition', data)
+        localStorage.setItem('draft_condition', data)
         set_condition_state(data)
     }
 
@@ -183,7 +185,7 @@ export default function NewListing() {
     let [title_state, set_title_state] = useState('')
     function productTitle(data) {
         title.current = (data)
-        window.localStorage.setItem('draft_title', data)
+        localStorage.setItem('draft_title', data)
         set_title_state(data)
     } 
 
@@ -191,7 +193,7 @@ export default function NewListing() {
     let [description_state, set_description_state] = useState('')
     function productDescription(data) {
         description.current = (data)
-        window.localStorage.setItem('draft_description', data)
+        localStorage.setItem('draft_description', data)
         set_description_state(data)
     }
 
@@ -199,7 +201,7 @@ export default function NewListing() {
     let [category_state, set_category_state] = useState('')
     function productCategory(data) {
         category.current = (data); 
-        window.localStorage.setItem('draft_category', data)
+        localStorage.setItem('draft_category', data)
         set_category_state(data)
     }
     
@@ -207,7 +209,7 @@ export default function NewListing() {
     let [cType_state, set_cType_state] = useState('')
     function productType(data) {
         cType.current = (data); 
-        window.localStorage.setItem('draft_c_type', data)
+        localStorage.setItem('draft_c_type', data)
         set_cType_state(data);
 
         if(data === 'Create Custom Item'){
@@ -219,15 +221,15 @@ export default function NewListing() {
                 categoriesList.map(item => {
                     if(Object.keys(item)[0] === category_state){
                         item[category_state].push(value)
-                        window.localStorage.setItem('sub-categories', JSON.stringify(categoriesList))
+                        localStorage.setItem('sub-categories', JSON.stringify(categoriesList))
                         setCategoriesList(categoriesList)
                     }
                 })
 
-                window.localStorage.setItem('draft_c_type', value);
+                localStorage.setItem('draft_c_type', value);
 
             }else{
-                window.localStorage.removeItem('draft_c_type')
+                localStorage.removeItem('draft_c_type')
             }
 
         }
@@ -237,7 +239,7 @@ export default function NewListing() {
     let [price_state, set_price_state] = useState('')
     function productPrice(data) {
         price.current = (data); 
-        window.localStorage.setItem('draft_price', data)
+        localStorage.setItem('draft_price', data)
         set_price_state(data)
     }
 
@@ -246,7 +248,7 @@ export default function NewListing() {
     function productStock(data) {
         stock.current = (data); 
         set_stock_state(data)
-        // window.localStorage.setItem('draft_stock', data)
+        // localStorage.setItem('draft_stock', data)
     }
 
     let photos = useRef([])
@@ -272,31 +274,31 @@ export default function NewListing() {
     }
 
     useEffect(() => {
-        if(window.localStorage.getItem('draft_category') !== null && window.localStorage.getItem('draft_category') !== undefined && window.localStorage.getItem('draft_category') !== ''){ 
+        if(localStorage.getItem('draft_category') !== null && localStorage.getItem('draft_category') !== undefined && localStorage.getItem('draft_category') !== ''){ 
 
             // productPhotos(())
             // openNotice("Your Progress Was Saved, Continue From Where You Stopped")
             let img = 
-            JSON.parse(window.localStorage.getItem('draft_images')) !== null 
+            JSON.parse(localStorage.getItem('draft_images')) !== null 
             ? 
-            JSON.parse(window.localStorage.getItem('draft_images')).map(item => productPhotos(item)) 
+            JSON.parse(localStorage.getItem('draft_images')).map(item => productPhotos(item)) 
             : ''
 
-            productCategory(window.localStorage.getItem('draft_category')) 
-            productTitle(window.localStorage.getItem('draft_title'))
+            productCategory(localStorage.getItem('draft_category')) 
+            productTitle(localStorage.getItem('draft_title'))
             // setPhotos(result.photos.map(item => item.file))
-            productDescription(window.localStorage.getItem('draft_description'))
-            productPrice(window.localStorage.getItem('draft_price'))
+            productDescription(localStorage.getItem('draft_description'))
+            productPrice(localStorage.getItem('draft_price'))
             // setProduct_id(result.meta_data[0].product_id)
-            productStock(window.localStorage.getItem('draft_stock'))
-            productType(window.localStorage.getItem('draft_c_type'))
-            productCondition(window.localStorage.getItem('draft_condition'))
-            productLocale(window.localStorage.getItem('draft_locale'))
+            productStock(localStorage.getItem('draft_stock'))
+            productType(localStorage.getItem('draft_c_type'))
+            productCondition(localStorage.getItem('draft_condition'))
+            productLocale(localStorage.getItem('draft_locale'))
         }else{
             // setCategory('')
         }
     }, [])
-    useEffect(() => {setCategoriesList(JSON.parse(window.localStorage.getItem('sub-categories')))},[])
+    useEffect(() => {setCategoriesList(JSON.parse(localStorage.getItem('sub-categories')))},[])
     useEffect(() => {
         let type = categoriesList.filter(item => Object.keys(item)[0] === category.current)[0]; 
         if(type){
@@ -357,7 +359,7 @@ export default function NewListing() {
         if(checkForError.length < 1 && lodgeAddress.length > 0){
             let overlay = document.querySelector('.overlay')
             overlay.setAttribute('id', 'overlay');
-            let seller_id = window.localStorage.getItem("CE_seller_id")
+            let seller_id = localStorage.getItem("CE_seller_id")
             //upload for here
 
             
@@ -385,10 +387,10 @@ export default function NewListing() {
                             dynamicData: {
                                 cType: cType_state,
                                 locale: locale_state,
-                                subCategory: window.localStorage.getItem('draft_sub_category'),
-                                gender: window.localStorage.getItem('draft_gender'),
+                                subCategory: localStorage.getItem('draft_sub_category'),
+                                gender: localStorage.getItem('draft_gender'),
                                 condition: condition_state,
-                                size: window.localStorage.getItem('draft_size')
+                                size: localStorage.getItem('draft_size')
                             }
                         }
                     )
@@ -396,16 +398,16 @@ export default function NewListing() {
                 .then(async(result) => {
                     let response = await result.json();
                     if(response){
-                        window.localStorage.setItem('draft_gender', '')
-                        window.localStorage.setItem('draft_size', '')
-                        window.localStorage.setItem('draft_sub_category', '')
-                        window.localStorage.setItem('draft_locale', '')
-                        window.localStorage.setItem('draft_condition', '')
-                        window.localStorage.setItem('draft_title', '')
-                        window.localStorage.setItem('draft_description', '')
-                        window.localStorage.setItem('draft_category', '')
-                        window.localStorage.setItem('draft_c_type', '')
-                        window.localStorage.setItem('draft_price', '')
+                        localStorage.setItem('draft_gender', '')
+                        localStorage.setItem('draft_size', '')
+                        localStorage.setItem('draft_sub_category', '')
+                        localStorage.setItem('draft_locale', '')
+                        localStorage.setItem('draft_condition', '')
+                        localStorage.setItem('draft_title', '')
+                        localStorage.setItem('draft_description', '')
+                        localStorage.setItem('draft_category', '')
+                        localStorage.setItem('draft_c_type', '')
+                        localStorage.setItem('draft_price', '')
 
                         // openNotice('Update Successful, Redirecting...')
                         window.location.href = '/seller.shop';
@@ -447,10 +449,10 @@ export default function NewListing() {
                             dynamicData: {
                                 cType: cType_state,
                                 locale: locale_state,
-                                subCategory: window.localStorage.getItem('draft_sub_category'),
-                                gender: window.localStorage.getItem('draft_gender'),
+                                subCategory: localStorage.getItem('draft_sub_category'),
+                                gender: localStorage.getItem('draft_gender'),
                                 condition: condition_state,
-                                size: window.localStorage.getItem('draft_size'),
+                                size: localStorage.getItem('draft_size'),
                                 lodgeAddress: lodgeAddress
                             }
                         }
@@ -460,16 +462,16 @@ export default function NewListing() {
                     let response = await result.json();
                     console.log(response)
                     if(response){
-                        window.localStorage.setItem('draft_gender', '')
-                        window.localStorage.setItem('draft_size', '')
-                        window.localStorage.setItem('draft_sub_category', '')
-                        window.localStorage.setItem('draft_locale', '')
-                        window.localStorage.setItem('draft_condition', '')
-                        window.localStorage.setItem('draft_title', '')
-                        window.localStorage.setItem('draft_description', '')
-                        window.localStorage.setItem('draft_category', '')
-                        window.localStorage.setItem('draft_c_type', '')
-                        window.localStorage.setItem('draft_price', '')
+                        localStorage.setItem('draft_gender', '')
+                        localStorage.setItem('draft_size', '')
+                        localStorage.setItem('draft_sub_category', '')
+                        localStorage.setItem('draft_locale', '')
+                        localStorage.setItem('draft_condition', '')
+                        localStorage.setItem('draft_title', '')
+                        localStorage.setItem('draft_description', '')
+                        localStorage.setItem('draft_category', '')
+                        localStorage.setItem('draft_c_type', '')
+                        localStorage.setItem('draft_price', '')
                     
                         // openNotice('Upload Successful, Redirecting...')
                         window.location.href = '/seller.shop';
@@ -557,7 +559,7 @@ export default function NewListing() {
                                 <option value="">Select Gender</option>
                                 {
                                     ["Male", "Female", "Unisex"].map ((item, index) => 
-                                        item === window.localStorage.getItem('draft_gender')
+                                        item === localStorage.getItem('draft_gender')
                                         ?
                                         <option selected key={index} value={item}>{item}</option>
                                         :
@@ -587,7 +589,7 @@ export default function NewListing() {
                                         ?
                                             
                                             footWear?.map((item, index) => 
-                                                item === window.localStorage.getItem('draft_sub_category')
+                                                item === localStorage.getItem('draft_sub_category')
                                                 ?
                                                 <option selected key={index} value={item}>{item}</option>
                                                 :
@@ -602,7 +604,7 @@ export default function NewListing() {
                                             ?
 
                                             maleList.map((item, index) => 
-                                                item === window.localStorage.getItem('draft_sub_category')
+                                                item === localStorage.getItem('draft_sub_category')
                                                 ?
                                                 <option selected key={index} value={item}>{item}</option>
                                                 :
@@ -610,7 +612,7 @@ export default function NewListing() {
                                             )
                                             :
                                             feMaleList.map((item, index) => 
-                                                item === window.localStorage.getItem('draft_sub_category')
+                                                item === localStorage.getItem('draft_sub_category')
                                                 ?
                                                 <option selected key={index} value={item}>{item}</option>
                                                 :
@@ -642,7 +644,7 @@ export default function NewListing() {
                                         <option value={''}>Select Size</option>
                                         {
                                             sizeList.map ((item, index) => 
-                                                item === window.localStorage.getItem('draft_size')
+                                                item === localStorage.getItem('draft_size')
                                                 ?
                                                 <option selected key={index} value={item}>{item}</option>
                                                 :
@@ -660,7 +662,7 @@ export default function NewListing() {
                                         <option value={''}>Select Size</option>
                                         {
                                             ["XX-Large", "X-Large", "Large", "Medium", "Small", "X-Small", "XX-Small"].map ((item, index) => 
-                                                item === window.localStorage.getItem('draft_size')
+                                                item === localStorage.getItem('draft_size')
                                                 ?
                                                 <option selected key={index} value={item}>{item}</option>
                                                 :
@@ -690,7 +692,7 @@ export default function NewListing() {
                                 <option value="">Select {category.current} Condition</option>
                                 {
                                     category_state === "Health/Beauty" ? ["Brand New"].map ((item, index) => 
-                                        item === window.localStorage.getItem('draft_condition') 
+                                        item === localStorage.getItem('draft_condition') 
                                         ?
                                         <option selected key={index} value={item}>{item}</option>
                                         :
@@ -700,7 +702,7 @@ export default function NewListing() {
                                     :
             
                                     subCategory_state === "Underwear" ? ["Brand New"].map ((item, index) => 
-                                        item === window.localStorage.getItem('draft_condition') 
+                                        item === localStorage.getItem('draft_condition') 
                                         ?
                                         <option selected key={index} value={item}>{item}</option>
                                         :
@@ -710,7 +712,7 @@ export default function NewListing() {
                                     : 
                                     
                                     ["Brand New", "Fairly Used", "Refurbished","Used"].map((item, index) => 
-                                        item === window.localStorage.getItem('draft_condition') 
+                                        item === localStorage.getItem('draft_condition') 
                                         ?
                                         <option selected key={index} value={item}>{item}</option>
                                         :
