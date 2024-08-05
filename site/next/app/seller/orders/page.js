@@ -105,9 +105,9 @@ function OrdersList({updateSelectedOrder, cards}) {
         </header>
         <section>
           {
-            cards.map(item => 
+            cards.map((item,index) => 
             
-              <ul onClick={e =>updateSelectedOrder(item)} style={{height: '90px', padding: '0', fontWeight: '300'}}>
+              <ul key={index} onClick={e =>updateSelectedOrder(item)} style={{height: '90px', padding: '0', fontWeight: '300'}}>
             
                 <li className='tb-buyer'>
                   <span>

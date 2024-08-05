@@ -37,7 +37,9 @@ export default function App({children}) {
 
       <Provider store={store}>
         {
-          <SellerLayout children={children}/>
+          <SellerLayout>
+            {children}
+          </SellerLayout>
         }
       </Provider>
     </>

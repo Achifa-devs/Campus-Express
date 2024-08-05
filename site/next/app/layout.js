@@ -47,7 +47,9 @@ export default function RootLayout({ children }) {
         <title>Campus Express</title>
       </head>
       <body style={{overflowX: 'hidden', background: '#f9f9f9'}}>
-        <App children={children} />
+        <App>
+          {children}
+        </App>
       </body>
     </html>
   );

@@ -3,14 +3,14 @@ import Thumbnail from '../Thumbnail'
 import js_ago from 'js-ago'
 import ellipsisSvg from '../../../assets/ellipsis-svgrepo-com.svg'
 
-export default function FavouriteItem({item}) {
+export default function FavouriteItem({item,index}) {
     let [screenWidth, setScreenWidth] = useState(0);
     useEffect(() => {setScreenWidth(window.innerWidth)},[]);
 
   return (
     <>
         
-        <div className="favourite-card-data">
+        <div key={index} className="favourite-card-data">
             <div className="favourite-card-data-cnt">
                 <div className='thumbnail-cnt'>
                     <Thumbnail product_id={item?.product_id} />

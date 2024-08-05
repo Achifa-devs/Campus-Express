@@ -34,7 +34,7 @@ export default function Favourite() {
         <h6 className="" style={{padding:'10px', margin: '0', borderBottom: '1px solid #efefef', height: '50px', width: '100%', background: '#fff', fontWeight: '600', display: 'flex', alignItems: 'center'}}>Favourite List</h6>
 
           {
-            items.map(item => <FavouriteItem item={item}/> )
+            items.map((item,index) => <FavouriteItem index={index} item={item}/> )
           }
         </div>
 

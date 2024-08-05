@@ -75,7 +75,7 @@ function PaymentInfo() {
                     <h3>
                         Preferred payment option
                     </h3>
-                    <h6>Select the payment method, if applicable, of your choice, and ensure to provide all required details. We'll review the validity of your documents upon submission.</h6>
+                    <h6>Select the payment method, if applicable, of your choice, and ensure to provide all required details. We ll review the validity of your documents upon submission.</h6>
                 </section>
 
                 <section style={{display: 'flex', alignItems: 'center', padding: '0 0 0 20px', margin: '20px 0px'}}>
@@ -325,7 +325,7 @@ function ShopInfo() {
                 <h3>
                     Communication Details
                 </h3>
-                <h6>Choose the contact preference for communications from Jumia. We'll send communications and contact you on the details below</h6>
+                <h6>Choose the contact preference for communications from Jumia. We ll send communications and contact you on the details below</h6>
             </section>
 
             <div className="input-cnt">
