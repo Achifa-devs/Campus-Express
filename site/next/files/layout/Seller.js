@@ -47,19 +47,11 @@ const SellerLayout = ({children}) => {
                 ?
                 <Aside />
                 :
-                pathname.split('/').splice(-1)[0] === 'seller.editor' 
-                ?
-                ''
-                :
-                new URLSearchParams(window.location.search).get('product_id')
-                ?
-                ''
-                : 
                 <Nav />
             }
         </>  
 
-    )
+    )  
 }
 
 export default SellerLayout
