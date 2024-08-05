@@ -1,15 +1,15 @@
 "use client" 
 
-import '../files/styles/Buyer/xx-large-screen.css'
-import '../files/styles/Buyer/x-large-screen.css'
-import '../files/styles/Buyer/medium-screen.css'
-import '../files/styles/Buyer/small-screen.css'
-import '../files/styles/Buyer/large-screen.css'
-import '../files/styles/Buyer/buy_now.css'
-import '../files/styles/filter.css'
-import '../files/styles/Buyer/semi-medium-screen.css'
-import '../files/styles/loader.css'
-import '../files/styles/Seller/overlay.css' 
+import '@/files/styles/Buyer/xx-large-screen.css'
+import '@/files/styles/Buyer/x-large-screen.css'
+import '@/files/styles/Buyer/medium-screen.css'
+import '@/files/styles/Buyer/small-screen.css'
+import '@/files/styles/Buyer/large-screen.css'
+import '@/files/styles/Buyer/buy_now.css'
+import '@/files/styles/filter.css'
+import '@/files/styles/Buyer/semi-medium-screen.css'
+import '@/files/styles/loader.css'
+import '@/files/styles/Seller/overlay.css' 
 
 // import sellSvg from '@/public/sell-svgrepo-com.svg' 
 
