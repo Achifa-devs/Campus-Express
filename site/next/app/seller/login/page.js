@@ -233,7 +233,7 @@ export default function Login() {
                     <small style={{cursor: 'pointer', color: 'orangered', fontWeight: '400'}}>Recover Forgotten Password Here</small>
                 </div>
                 <div style={{textAlign: 'center'}} onClick={e => window.location.href=('/seller/signup')}>
-                    <small style={{cursor: 'pointer', color: 'orangered', fontWeight: '400'}}>Don't Have An Account, Signup Here</small>
+                    <small style={{cursor: 'pointer', color: 'orangered', fontWeight: '400'}}>Don t Have An Account, Signup Here</small>
                 </div>
             </section>
         </div>

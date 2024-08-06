@@ -92,7 +92,7 @@ const Signup = () => {
      
     }
 
-    let Registration = async(e) => {
+    let Registration = (e) => {
         // e.target.disabled = true;
         let overlay = document.querySelector('.overlay')
         overlay.setAttribute('id', 'overlay');
@@ -100,33 +100,45 @@ const Signup = () => {
         Validation();
         Object.values(book.current).filter(item => item !== true).length > 0 ? validation.current = false : validation.current = true;
 
-        // if(validation.current){
-        //     setBtn(
-        //         <div className="Authloader" style={{background: '#fff',border: '1px solid orangered'}}></div>
-        //     )
-        //     e.target.disabled = true;
-        //     let response = await RegisterSeller(fname.trim(),lname.trim(),email,phone,pwd,state,campus)
-        //     console.log(response)
-        //     if(response.bool){
-        //         console.log(response)
-        //         window.localStorage.setItem("CE_seller_id", response.data)
-        //         navigate('/seller?status=first_login')
-        //     }else{
-        //         console.log(response)
-        //         overlay.removeAttribute('id');
-        //         if(response.data === 'duplicate email'){
-        //             addErrMssg([{mssg:'Email already exist, please try something else'}], document.querySelector('.email').parentElement)
-        //         }else if(response.data === 'duplicate phone'){
-        //             addErrMssg([{mssg:'Phone Number already exist, please try something else'}], document.querySelector('.phone').parentElement)
-        //         }
-        //         setBtn("Signup")
-        //         e.target.disabled = false;
-        //     }
+        if(validation.current){
+            setBtn(
+                <div className="Authloader" style={{background: '#fff',border: '1px solid orangered'}}></div>
+            )
+            e.target.disabled = true;
+            fetch('http://localhost:2222/seller.registration', {
+                method: 'post',
+                headers: {
+                    "Content-Type": "Application/json"
+                },
+                body: JSON.stringify({fname,lname,email,phone,pwd,state,campus})
+            })
+            .then(async(result) => {
+                let response = await result.json();
+                if(response.bool){
+                    console.log(response)
+
+                    dispatch(setSellerTo(response.cookie))
+                    window.location.href=('/seller/shop')
+                }else{
+                    console.log(response)
+                    overlay.removeAttribute('id');
+                    if(response.data === 'duplicate email'){
+                        addErrMssg([{mssg:'Email already exist, please try something else'}], document.querySelector('.email').parentElement)
+                    }else if(response.data === 'duplicate phone'){
+                        addErrMssg([{mssg:'Phone Number already exist, please try something else'}], document.querySelector('.phone').parentElement)
+                    }
+                    setBtn("Signup")
+                    e.target.disabled = false;
+                }
+            })
+            .catch((err) => {
+                setBtn("Signup")
+                e.target.disabled = false;
+            })
             
-        // }else{
-        //     setBtn("Signup")
-        //     e.target.disabled = false;
-        // }
+        }else{
+            
+        }
     }
 
     function Validation() {
@@ -238,6 +250,10 @@ const Signup = () => {
 
     return ( 
         <>
+            <div className="overlay" >
+                <div className="loader">
+                </div>
+            </div>
            
             <div className="seller-signup">
                 <h6 style={{background: 'orangered', color: '#fff', padding: '10px', marginBottom: '-2px', marginTop: '0', height: 'auto', width: screenWidth > 480 ? 'auto' : '100%', textAlign: 'center'}}>Vendor Center</h6>
@@ -323,7 +339,7 @@ const Signup = () => {
                                         {
                                             data.map((item,index) => {
                                                 return(
-                                                    <option value={item.label}>{item.label}</option>
+                                                    <option key={index} value={item.label}>{item.label}</option>
                                                 )
                                             })
                                         }
@@ -340,7 +356,7 @@ const Signup = () => {
                                         {
                                             campusLocaleList.map((item,index) => {
                                                 return(
-                                                    <option value={item.text}>{item.text}</option>
+                                                    <option key={index} value={item.text}>{item.text}</option>
                                                 )
                                             })
                                         }
@@ -357,7 +373,7 @@ const Signup = () => {
                             
                         </form>
                     
-                        <div className='btn-cnt' onClick={e => window.location.href=('/seller/shop')}>
+                        <div className='btn-cnt'>
                             <button style={{background: '#ff4500', color: '#fff'}} onClick={e => {e.preventDefault(); Registration(e)}}>Register</button>
                             <br />
                             <small style={{cursor: 'pointer', color: '#ff4500'}}>Already Have An Account, Signin Here</small>

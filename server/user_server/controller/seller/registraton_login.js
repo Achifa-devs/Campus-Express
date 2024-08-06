@@ -109,10 +109,12 @@ async function register_seller(req,res) {
         })
         .then((result) => {
             let coverphoto = result ? CreateCoverPhoto() : false;
-            return(coverphoto ? (true) : (false))
+            return(coverphoto ? (true) : (false));
+            
         })
         .then((result) => {
-            result ? res.status(200).send({bool: true, data: seller_id}) : ({bool: false, data: ''})
+            const token = createToken(seller_id);
+            result ? res.status(200).send({bool: true, cookie: token, id: seller_id}) : ({bool: false, data: ''})
             SendEmail()
             SendSMS()
         })
@@ -173,7 +175,6 @@ async function log_seller_in(req, res) {
         if(user){
             console.log(email,pwd)
             const auth = await bcrypt.compare(pwd, user.password);
-            console.log(auth)
             if (auth) {
                 const token = createToken(user.seller_id);
                 res.status(200).send({bool: true, id: user.seller_id, cookie: token});

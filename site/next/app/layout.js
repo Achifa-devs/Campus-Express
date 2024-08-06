@@ -7,11 +7,14 @@ export const metadata =  async () => {return({
   title: "Campus Express Nigeria",
   description: "Online Shopping On Campus In Nigeria.",
 })};
+
+const maxAge = 90 * 24 * 60 * 60; 
  
 export async function setNewCookie(data) {
+  alert(data)
   let cookieStore = cookies();
   if(data?.length > 0){
-    cookieStore.set('sellerJWT', data)
+    cookieStore.set('seller_secret', data, { expires: maxAge })
   }
 }
 
