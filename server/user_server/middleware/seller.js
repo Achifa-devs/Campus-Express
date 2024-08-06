@@ -1,44 +1,15 @@
 const jwt = require('jsonwebtoken');
-const {connectToDatabase, NeonDB} = require('../db');
+const { NeonDB } = require('../db');
 const {Pool, Client} = require("pg");
 
 
-const SellerAuth = (req, res, next) => {
-    const {seller_id} = req.body; 
-    NeonDB.then((pool) => 
-        pool.query(`SELECt * FROM campus_sellers WHERE seller_id = '${seller_id}'`)
-        .then(result => {
-            console.log(result)
-            if(result.rows.length < 1){
-
-                res.status(200).send(false)
-            }else{
-                res.status(200).send(true)
-            }
-        })
-
-        .catch(err => console.log(err))
-    )
-    .catch(err => console.log(err))
+const SellerAuth = async(req, res, next) => {
+    const seller_secret = req.headers.authorization;
     
-}
-
-const CheckSeller = (req, res, next) => {
-    const {seller_id} = req.body; 
-
-    NeonDB.then((pool) => 
-        pool.query(`SELECt * FROM campus_sellers WHERE seller_id = '${seller_id}'`)
-        .then(result => {
-            if(result.rows.length < 1){
-                res.status(200).send({bool: false, data: ''})
-            }else{
-                res.status(200).send({bool: true, data:result.rows[0]})
-            }
-        })
-
-        .catch(err => console.log(err))
-    )
-    .catch(err => console.log(err))
+    let {id} = jwt.verify(seller_secret, 'seller_secret');
+    res.status(200).send({bool: true, id:id})
+   
+    
 }
 
 function CheckPwdResetToken(req, res, next){
@@ -102,4 +73,4 @@ async function ValidateEmail(req,res) {
 }
 
 
-module.exports = { SellerAuth, ValidateEmail, CheckSeller, CheckPwdResetToken };
+module.exports = { SellerAuth, ValidateEmail, CheckPwdResetToken };

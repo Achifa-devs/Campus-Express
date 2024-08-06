@@ -53,7 +53,9 @@ const app = express();
 
 
 app.use(cookieParser());
-app.use(morgan('dev'));   
+app.use(morgan('tiny'));   
+app.options('*', cors()); // Handle preflight requests
+
 app.use(cors({
   origin: '*',
   methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD', 'DELETE', 'UPDATE'],

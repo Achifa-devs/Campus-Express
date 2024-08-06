@@ -11,11 +11,9 @@ export const metadata =  async () => {return({
 const maxAge = 90 * 24 * 60 * 60; 
  
 export async function setNewCookie(data) {
-  alert(data)
   let cookieStore = cookies();
-  if(data?.length > 0){
-    cookieStore.set('seller_secret', data, { expires: maxAge })
-  }
+  let result = cookieStore.set('seller_secret', data);
+  return JSON.stringify(result);
 }
 
 export default async function RootLayout({ children }) {

@@ -20,9 +20,9 @@ const SuperSale = ({item}) => {
         console.log(item)
         if(item.length > 0){
             if(screenWidth < 480){
-                setcardsSet(item.splice(0,2))
-            }else if(screenWidth > 480 && screenWidth < 1000){
                 setcardsSet(item.splice(0,3))
+            }else if(screenWidth > 480 && screenWidth < 1000){
+                setcardsSet(item.splice(0,4))
             }else if(screenWidth >= 1000 ){
                 setcardsSet(item.splice(0,6))
             } 
@@ -69,7 +69,7 @@ const Card = ({item, index}) => {
             <div className="cols"  key={index}>
                 <div className="card" key={index} style={{height: 'auto', marginBottom: '10px', border: 'none', borderRadius: '0', padding: '5px', display: 'block'}}>
                       
-                    <img loading='lazy' onClick={e => window.location.href=(`/product/`)} src={item.svg.src} style={{height: screenWidth > 480 ? '200px' : '200px', width: '100%', borderRadius: '2px', display: 'table', margin: '0 auto', borderRadius: '5px', position: 'relative'}} alt="" />
+                    <img loading='lazy' onClick={e => window.location.href=(`/product/`)} src={item.svg.src} style={{height: screenWidth > 480 ? '200px' : '120px', width: '100%', borderRadius: '2px', display: 'table', margin: '0 auto', borderRadius: '5px', position: 'relative'}} alt="" />
 
                     <div className="card-body" style={{position: 'relative', padding: '5px', height: 'auto'}}>
                         

@@ -20,6 +20,9 @@ import Video from '../Video'
 
 const ShowcaseCard = ({item, index}) => {
 
+    useEffect(() => {
+        setScreenWidth(window.innerWidth)
+    },[])
     let BtnStyles = {
         height: '35px',
         width: '100%',
@@ -125,14 +128,14 @@ const ShowcaseCard = ({item, index}) => {
         <> 
             
             <div className="cols" key={index} id={item.product_id} >
-                <div className="card" key={index} style={{height: 'auto', marginBottom: '10px', border: 'none', borderRadius: '0', padding: '5px', display: 'flex', flexDirection: 'column', flexShrink: '0'}}>
+                <div className="card" key={index} style={{marginBottom: '10px', border: 'none', borderRadius: '0', padding: '5px', display: 'flex', flexDirection: 'column', flexShrink: '0'}}>
                       
                     {
                         item.category === 'Lodge/Apartments'
                         ?
                         <Video product_id={item.product_id} folder={item.title} />
                         :
-                        <Thumbnail product_id={item.product_id} title={item.title} />
+                        <Thumbnail product_id={item.product_id} title={item.title} height={screenWidth > 480 ? '150px' : '100px'} />
                     }
 
                     <div className="card-body" style={{position: 'relative', padding: '5px', height: '50px'}}>

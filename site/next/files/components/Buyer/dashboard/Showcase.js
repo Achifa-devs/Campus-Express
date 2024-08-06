@@ -3,6 +3,7 @@ import {
   useEffect,
   useState
 } from 'react'
+
 import { GetFilteredAds, GetItems } from '@/app/api/buyer/get'
 import ShowcaseCard from './ShowcaseCard'
 import Skeleton from 'react-loading-skeleton'
@@ -162,20 +163,51 @@ export default function Showcase({title}) {
             <div className="header" style={{height: '50px', padding: '10px', display: 'flex', alignItems: 'center', justifyContent: 'left', position: 'relative', width: '100%', background: '#AADEF1'}}>
                 <div style={{float: 'left', color: '#fff', fontFamily: 'sans-serif',}}><b>Phone Super Sale</b></div>
             </div>
-            <div style={{display: 'flex'}}>
-                <SuperSale
-                    item={
-                        [
-                            {title: 'Iphone', svg: iphoneSvg},
-                            {title: 'Android', svg: androidSvg},
-                            {title: 'Cell Phone', svg: cellPhoneSvg},
-                            {title: 'Tablets', svg: tabPhonesSvg},
-                            {title: 'Phones Under 150k', svg: budgetPhoneSvg},
-                            {title: 'Mobile Accessories', svg: phoneAccessSvg}
-                        ]
-                    }       
-                 />
-            </div>
+            {
+                screenWidth > 480
+                ?
+                <div style={{display: 'flex'}}>
+                    <SuperSale
+                        item={
+                            [
+                                {title: 'Iphone', svg: iphoneSvg},
+                                {title: 'Android', svg: androidSvg},
+                                {title: 'Cell Phone', svg: cellPhoneSvg},
+                                {title: 'Tablets', svg: tabPhonesSvg},
+                                {title: 'Phones Under 150k', svg: budgetPhoneSvg},
+                                {title: 'Mobile Accessories', svg: phoneAccessSvg}
+                            ]
+                        }       
+                    />
+                </div>
+                :
+                <>
+                    <div style={{display: 'flex'}}>
+                        <SuperSale
+                            item={
+                                [
+                                    {title: 'Iphone', svg: iphoneSvg},
+                                    {title: 'Android', svg: androidSvg},
+                                    {title: 'Cell Phone', svg: cellPhoneSvg},
+                                    
+                                ]
+                            }       
+                        />
+                    </div>
+                    <div style={{display: 'flex'}}>
+                        <SuperSale
+                            item={
+                                [
+                                   
+                                    {title: 'Tablets', svg: tabPhonesSvg},
+                                    {title: 'Phones Under 150k', svg: budgetPhoneSvg},
+                                    {title: 'Mobile Accessories', svg: phoneAccessSvg}
+                                ]
+                            }       
+                        />
+                    </div>
+                </>
+            }
         </section>
         <section style={{marginBottom: 10}}> 
             <div className="header" style={{height: '50px', padding: '10px', display: 'flex', alignItems: 'center', justifyContent: 'left', position: 'relative', width: '100%', background: '#AADEF1'}}>
@@ -216,18 +248,43 @@ export default function Showcase({title}) {
                 <div style={{float: 'left', color: '#fff', fontFamily: 'sans-serif',}}><b>Appliances</b></div>
             </div>
             <div>
-                <SuperSale
-                    item={
-                        [
-                            {title: 'Fridge', svg: fridgeSvg},
-                            {title: 'Freezer', svg: freezerSvg},
-                            {title: 'Pressing Iron', svg: ironSvg},
-                            {title: 'Fan', svg: fanSvg},
-                            {title: 'Air Conditioner', svg: acSvg},
-                            {title: 'Washing Machine', svg: washerSvg}
-                        ]
-                    }       
-                 />
+                {
+                    screenWidth > 480
+                    ?
+                    <SuperSale
+                        item={
+                            [
+                                {title: 'Fridge', svg: fridgeSvg},
+                                {title: 'Freezer', svg: freezerSvg},
+                                {title: 'Pressing Iron', svg: ironSvg},
+                                {title: 'Fan', svg: fanSvg},
+                                {title: 'Air Conditioner', svg: acSvg},
+                                {title: 'Washing Machine', svg: washerSvg}
+                            ]
+                        }       
+                    />
+                    :
+                    <>
+                        <SuperSale
+                            item={
+                                [
+                                    {title: 'Fan', svg: fanSvg},
+                                    {title: 'Air Conditioner', svg: acSvg},
+                                    {title: 'Washing Machine', svg: washerSvg}
+                                ]
+                            }       
+                        />
+                        <SuperSale
+                            item={
+                                [
+                                    {title: 'Fridge', svg: fridgeSvg},
+                                    {title: 'Freezer', svg: freezerSvg},
+                                    {title: 'Pressing Iron', svg: ironSvg},
+                                ]
+                            }       
+                        />
+                    </>
+                }
             </div>
         </section>
         <section style={{marginBottom: 10}}> 
@@ -244,18 +301,43 @@ export default function Showcase({title}) {
                 <div style={{float: 'left', color: '#fff', fontFamily: 'sans-serif',}}><b>Lodge Revamp</b></div>
             </div>
             <div>
-                <SuperSale
-                    item={
-                        [
-                            {title: 'Beddings', svg: bedSvg},
-                            {title: 'Chanderlier', svg: chanSvg},
-                            {title: 'Home Decor', svg: decorSvg},
-                            {title: 'TV Furniture', svg: tvSvg},
-                            {title: 'Generators', svg: genSvg},
-                            {title: 'Kitchen & Dining', svg: kitchenSvg}
-                        ]
-                    }       
-                 />
+                {    
+                    screenWidth > 480
+                    ?
+                    <SuperSale
+                        item={
+                            [
+                                {title: 'Beddings', svg: bedSvg},
+                                {title: 'Chanderlier', svg: chanSvg},
+                                {title: 'Home Decor', svg: decorSvg},
+                                {title: 'TV Furniture', svg: tvSvg},
+                                {title: 'Generators', svg: genSvg},
+                                {title: 'Kitchen & Dining', svg: kitchenSvg}
+                            ]
+                        }       
+                    />
+                    :
+                    <>
+                        <SuperSale
+                            item={
+                                [
+                                    {title: 'Beddings', svg: bedSvg},
+                                    {title: 'Chanderlier', svg: chanSvg},
+                                    {title: 'Home Decor', svg: decorSvg},
+                                ]
+                            }       
+                        />
+                        <SuperSale
+                        item={
+                            [
+                                {title: 'TV Furniture', svg: tvSvg},
+                                {title: 'Generators', svg: genSvg},
+                                {title: 'Kitchen & Dining', svg: kitchenSvg}
+                            ]
+                        }       
+                    />
+                    </>
+                }
             </div>
         </section>
         <section style={{marginBottom: 10}}> 
@@ -272,18 +354,44 @@ export default function Showcase({title}) {
                 <div style={{float: 'left', color: '#fff', fontFamily: 'sans-serif',}}><b>Health & Beauty Deals</b></div>
             </div>
             <div>
-                <SuperSale
-                    item={
-                        [
-                            {title: 'Bathing Soap', svg: soapSvg},
-                            {title: 'Face Care', svg: faceCareSvg},
-                            {title: 'Shampoo', svg: shampooSvg},
-                            {title: 'Hair Accessories', svg: hairSvg},
-                            {title: 'Make Up', svg: makeupSvg},
-                            {title: 'Fragrance & Deodorants', svg: decorSvg}
-                        ]
-                    }       
-                 />
+                {
+                    screenWidth > 480
+                    ?
+                    <SuperSale
+                        item={
+                            [
+                                {title: 'Bathing Soap', svg: soapSvg},
+                                {title: 'Face Care', svg: faceCareSvg},
+                                {title: 'Shampoo', svg: shampooSvg},
+                                {title: 'Hair Accessories', svg: hairSvg},
+                                {title: 'Make Up', svg: makeupSvg},
+                                {title: 'Fragrance & Deodorants', svg: decorSvg}
+                            ]
+                        }       
+                    />
+                    :
+                    <>
+                        <SuperSale
+                            item={
+                                [
+                                    {title: 'Bathing Soap', svg: soapSvg},
+                                    {title: 'Face Care', svg: faceCareSvg},
+                                    {title: 'Shampoo', svg: shampooSvg},
+                                ]
+                            }       
+                        />
+                        <SuperSale
+                            item={
+                                [
+                                    {title: 'Hair Accessories', svg: hairSvg},
+                                    {title: 'Make Up', svg: makeupSvg},
+                                    {title: 'Fragrance & Deodorants', svg: decorSvg}
+                                ]
+                            }       
+                        />
+                    </>
+
+                 }
             </div>
         </section>
         <section style={{marginBottom: 10}}> 
@@ -300,18 +408,45 @@ export default function Showcase({title}) {
                 <div style={{float: 'left', color: '#fff', fontFamily: 'sans-serif',}}><b>Fashion Deals</b></div>
             </div>
             <div>
-                <SuperSale
-                    item={
-                        [
-                            {title: 'Women Fashion', svg: wmenFSvg},
-                            {title: 'Men Fashion', svg: menFSvg},
-                            {title: 'Wrist Watch', svg: watchSvg},
-                            {title: 'Sneakers', svg: SneakerSvg},
-                            {title: 'Upgrade Your Shoes Games', svg: shoesSvg},
-                            {title: 'Accessories', svg: fAccessSvg}
-                        ]
-                    }       
-                 />
+                    {    
+                        screenWidth > 480
+                        ?
+                        <SuperSale
+                            item={
+                                [
+                                    {title: 'Women Fashion', svg: wmenFSvg},
+                                    {title: 'Men Fashion', svg: menFSvg},
+                                    {title: 'Wrist Watch', svg: watchSvg},
+                                    {title: 'Sneakers', svg: SneakerSvg},
+                                    {title: 'Upgrade Your Shoes Games', svg: shoesSvg},
+                                    {title: 'Accessories', svg: fAccessSvg}
+                                ]
+                            }       
+                        />
+
+                        :
+
+                        <>
+                            <SuperSale
+                                item={
+                                    [
+                                        {title: 'Sneakers', svg: SneakerSvg},
+                                        {title: 'Upgrade Your Shoes Games', svg: shoesSvg},
+                                        {title: 'Accessories', svg: fAccessSvg}
+                                    ]
+                                }       
+                            />
+                            <SuperSale
+                                item={
+                                    [
+                                        {title: 'Women Fashion', svg: wmenFSvg},
+                                        {title: 'Men Fashion', svg: menFSvg},
+                                        {title: 'Wrist Watch', svg: watchSvg},
+                                    ]
+                                }       
+                            />
+                        </>
+                    }
             </div>
         </section>
         <section style={{marginBottom: 10}}> 
@@ -328,18 +463,43 @@ export default function Showcase({title}) {
                 <div style={{float: 'left', color: '#fff', fontFamily: 'sans-serif',}}><b>Groceries</b></div>
             </div>
             <div>
-                <SuperSale
-                    item={
-                        [
-                            {title: 'Food', svg: foodSvg},
-                            {title: 'Wine', svg: wineSvg},
-                            {title: 'Soft Drink', svg: drinksSvg},
-                            {title: 'Lodge Cleaning', svg: cleanerSvg},
-                            {title: 'Water', svg: waterSvg},
-                            {title: 'Fragrance', svg: fragSvg}
-                        ]
-                    }       
-                 />
+                {
+                    screenWidth > 480
+                    ?
+                    <SuperSale
+                        item={
+                            [
+                                {title: 'Food', svg: foodSvg},
+                                {title: 'Wine', svg: wineSvg},
+                                {title: 'Soft Drink', svg: drinksSvg},
+                                {title: 'Lodge Cleaning', svg: cleanerSvg},
+                                {title: 'Water', svg: waterSvg},
+                                {title: 'Fragrance', svg: fragSvg}
+                            ]
+                        }       
+                    />
+                    :
+                    <>
+                        <SuperSale
+                            item={
+                                [
+                                    {title: 'Lodge Cleaning', svg: cleanerSvg},
+                                    {title: 'Water', svg: waterSvg},
+                                    {title: 'Fragrance', svg: fragSvg}
+                                ]
+                            }       
+                        />
+                        <SuperSale
+                            item={
+                                [
+                                    {title: 'Food', svg: foodSvg},
+                                    {title: 'Wine', svg: wineSvg},
+                                    {title: 'Soft Drink', svg: drinksSvg},
+                                ]
+                            }       
+                        />
+                    </>
+                }
             </div>
         </section>
         <section style={{marginBottom: 10}}> 

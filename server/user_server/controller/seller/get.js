@@ -151,10 +151,9 @@ async function GetEditedItem(req,res)  {
 
 async function GetSellerData(req,res) {
     let {seller_id} = req.query;
-    // console.log('seller_id: ', seller_id)
     NeonDB.then((pool) => 
         pool.query(`SELECT * FROM campus_sellers WHERE seller_id = '${seller_id}'`)
-        .then(result => res.send(result.rows[0]))
+        .then(result => res.status(200).send(result.rows[0]))
         .catch(err => console.log(err))
     )
     .catch(err => console.log(err))

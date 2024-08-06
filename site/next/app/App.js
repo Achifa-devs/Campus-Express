@@ -32,9 +32,19 @@ export default function App({children, cookieBook}) {
   }, [])
 
 
-  function setCookie(data) {
-    setNewCookie(data)
+  async function setCookie(data) {
+    if(data !== null && data !== 'null' && data !== ''){
+      let response = await setNewCookie(data)
+      let result = JSON.parse(response);
+      if(result){
+        window.location.href=('/seller/shop')
+
+      }
+    }
   }
+
+  
+
 
   
   return (

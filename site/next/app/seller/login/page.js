@@ -47,7 +47,7 @@ export default function Login() {
                 console.log(response)
                 if(response.bool){
                     dispatch(setSellerTo(response.cookie))
-                    window.location.href=('/seller/shop')
+                    
                 }else{
                     let check = document.querySelector('.err-cnt').querySelector('.err-mssg');
                     if(check){

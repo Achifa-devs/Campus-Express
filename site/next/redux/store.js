@@ -14,6 +14,7 @@ import sellerData from './seller_store/seller';
 import BuyerData from './buyer_store/BuyerData';
 import delete_list from './seller_store/delete_list';
 import pickup_channel from './buyer_store/pickup_channel';
+import seller_data from './seller_store/seller_data';
 
 
 let store = configureStore({
@@ -30,7 +31,7 @@ let store = configureStore({
     savedItem: savedItem,
     buyerData: BuyerData,
     user: userReducer,
-
+    seller_id: seller_data,
     menu: menuSlice,
     sellerData: sellerData,
     delete_list: delete_list

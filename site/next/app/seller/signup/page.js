@@ -8,10 +8,13 @@ import './styles/large.css'
 import './styles/medium.css'
 import './styles/small.css'
 import logoSvg from '@/files/assets/default.svg'
+import { useDispatch } from 'react-redux';
+import { setSellerTo } from '@/redux/seller_store/seller';
 
 
 const Signup = () => {
     let [screenWidth, setScreenWidth] = useState(0) 
+    let dispatch = useDispatch();
     useEffect(() => {
         setScreenWidth(window.innerWidth)
     },[])

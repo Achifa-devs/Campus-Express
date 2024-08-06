@@ -43,7 +43,7 @@ const {
     UpdatePwd
 } = require("../controller/seller/update");
 
-const { SellerAuth, CheckSeller } = require("../middleware/seller");
+const { SellerAuth } = require("../middleware/seller");
 
 const { 
     express, 
@@ -111,8 +111,7 @@ seller_route.get('/seller.token-validation', ValidateToken);
 // @@ CHATS
 
 
-seller_route.post('/seller/authentication', parser, SellerAuth);
-seller_route.post('/seller/check', parser, CheckSeller);
+seller_route.get('/seller.authentication', SellerAuth);
 
 
 
