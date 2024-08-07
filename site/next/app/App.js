@@ -11,26 +11,7 @@ import { setNewCookie } from './layout'
 
 export default function App({children, cookieBook}) {
   let pathname = usePathname();
-  let [seller_auth, set_seller_auth] = useState(false)
   
-  useEffect(() => {
-    if(!pathname.split('/').splice(-1)[0] === 'login' && !pathname.split('/').splice(-1)[0] === 'login'){
-      if(pathname.split('/').splice(-2)[0] === 'seller'){
-        let getSellerJwt = cookieBook.filter(item => item.name === 'seller_secret')
-        if(getSellerJwt.length > 0){
-          console.log(getSellerJwt)
-          set_seller_auth(true)
-        }else{
-          window.location.href=('/seller/login')
-        }
-      }else{
-  
-      }
-    }else{
-
-    }
-  }, [])
-
 
   async function setCookie(data) {
     if(data !== null && data !== 'null' && data !== ''){

@@ -7,6 +7,7 @@ import { v4 as uuid } from "uuid";
 import Footer from '../components/Buyer/Footer';
 import { setBuyerTo } from '@/redux/buyer_store/BuyerData';
 import { usePathname } from 'next/navigation';
+import png from '@/app/pngs/download.png'
 
 const BuyerLayout = ({children}) => {
 
@@ -42,15 +43,28 @@ const BuyerLayout = ({children}) => {
     
     return (
         <>
-            {
+            {/* {
                 pathname.split('/').splice(-1)[0] === 'profile'
                 ?
                 ''
                 :
                 <Header />
+            } */}
+            {/* {children} */}
+            {/* <Footer /> */}
+
+            {
+                <>
+                    <div style={{height: '100vh', width: '100vw', padding: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-evenly', flexWrap: 'wrap'}}>
+                        <img src={png.src} style={{height: '120px', width: '120px'}} alt="" />
+                        <img src={png.src} style={{height: '120px', width: '120px'}} alt="" />
+                        <img src={png.src} style={{height: '120px', width: '120px'}} alt="" />
+                        <img src={png.src} style={{height: '120px', width: '120px'}} alt="" />
+                        <img src={png.src} style={{height: '120px', width: '120px'}} alt="" />
+                        <img src={png.src} style={{height: '120px', width: '120px'}} alt="" />
+                    </div>
+                </>
             }
-            {children}
-            <Footer />
         </>
 
     )

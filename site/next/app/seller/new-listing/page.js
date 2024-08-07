@@ -465,7 +465,7 @@ export default function NewListing() {
                 })  
             }else{
 
-                fetch('http://localhost:2222/seller.product-upload', {
+                fetch('https://ce-server.vercel.app/seller.product-upload', {
                     method: 'post',
                     headers: {
                         "Content-Type": "Application/json"

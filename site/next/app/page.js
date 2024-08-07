@@ -7,7 +7,6 @@ import './styles/medium.css'
 import './styles/small.css' 
 import Ads from '@/files/components/Buyer/dashboard/Ads'
 import Showcase from '@/files/components/Buyer/dashboard/Showcase'
-
 export default function Dashboard() {
   return (
     <>
@@ -15,6 +14,8 @@ export default function Dashboard() {
         <Ads />
         
         <Showcase />
+
+        
 
 
       </div>

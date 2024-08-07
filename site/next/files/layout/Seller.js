@@ -19,46 +19,49 @@ const SellerLayout = ({children,setCookie}) => {
     useEffect(() => {
         setCookie(sellerData) 
     }, [sellerData])    
-
     useEffect(() => {
-        function getCookie(name) {
-        const cookieName = `${name}=`;
-        const cookies = document.cookie.split(';');
-        
-        for (let i = 0; i < cookies.length; i++) {
-            let cookie = cookies[i].trim();
-            if (cookie.indexOf(cookieName) === 0) {
-            return cookie.substring(cookieName.length, cookie.length);
+        if(pathname.split('/').splice(-1)[0] !== 'login' && pathname.split('/').splice(-1)[0] !== 'signup'){
+            function getCookie(name) {
+            const cookieName = `${name}=`;
+            const cookies = document.cookie.split(';');
+            
+            for (let i = 0; i < cookies.length; i++) {
+                let cookie = cookies[i].trim();
+                if (cookie.indexOf(cookieName) === 0) {
+                return cookie.substring(cookieName.length, cookie.length);
+                }
             }
-        }
-        return null; // Cookie not found
-        }
-        
-        // Example usage:
-        const myCookie = getCookie('seller_secret');
-        fetch('http://localhost:2222/seller.authentication',
-        {
-            method: 'GET',
-            // credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': myCookie
-            }
-        
-        })
-        .then(async(result) => {
-
-            let response = await result.json(); 
-            if(response.bool){
-                dispatch(setSellerIdTo(response.id))
-            }else{
-                window.location.href=('/seller/login')
+            return null; // Cookie not found
             }
             
-        })
-        .catch((error) => {
-            console.log(error)
-        }) 
+            // Example usage:
+            const myCookie = getCookie('seller_secret');
+            fetch('http://localhost:2222/seller.authentication',
+            {
+                method: 'GET',
+                // credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': myCookie
+                }
+            
+            })
+            .then(async(result) => {
+
+                let response = await result.json(); 
+                if(response.bool){
+                    dispatch(setSellerIdTo(response.id))
+                }else{
+                    window.location.href=('/seller/login')
+                }
+                
+            })
+            .catch((error) => {
+                console.log(error)
+                window.location.href=('/seller/login')
+
+            })
+        } 
         
     }, [])
 
@@ -80,6 +83,7 @@ const SellerLayout = ({children,setCookie}) => {
             }
             
             {children}
+            
 
             {
                 pathname.split('/').splice(-1)[0] === 'login'

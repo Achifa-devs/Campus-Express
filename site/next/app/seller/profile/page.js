@@ -72,7 +72,7 @@ export default function Profile() {
     useEffect(() => {
         if(seller_id !== 'null' && seller_id !== null && seller_id !== ''){
 
-            fetch(`http://localhost:2222/seller.profile?seller_id=${seller_id}`)
+            fetch(`https://ce-server.vercel.app/seller.profile?seller_id=${seller_id}`)
             .then(async(result) => {
                 let response = await result.json(); 
                 setProfile(response)
@@ -81,7 +81,7 @@ export default function Profile() {
                 console.log(error)
             }) 
 
-            fetch(`http://localhost:2222/seller.shop?seller_id=${seller_id}`)
+            fetch(`https://ce-server.vercel.app/seller.shop?seller_id=${seller_id}`)
             .then(async(result) => {
                 let response = await result.json(); 
                 console.log(response)
@@ -116,7 +116,7 @@ export default function Profile() {
     }
 
     function saveUserData(url,data) {
-        fetch(`http://localhost:2222/${url}`, {
+        fetch(`https://ce-server.vercel.app/${url}`, {
             method: 'post',
             headers: {
                 "Content-Type": "Application/json"
@@ -147,7 +147,7 @@ export default function Profile() {
             saveUserData(url,data)
         }else{
 
-            fetch(`http://localhost:2222/bank-verification`, {
+            fetch(`https://ce-server.vercel.app/bank-verification`, {
                 method: 'post',
                 headers: {
                     "Content-Type": "Application/json"
@@ -253,7 +253,7 @@ function PaymentInfo({updatePaymentInfo}) {
     useEffect(() => {
         if(seller_id !== 'null' && seller_id !== null && seller_id !== ''){
 
-            fetch(`http://localhost:2222/seller.shop?seller_id=${seller_id}`)
+            fetch(`https://ce-server.vercel.app/seller.shop?seller_id=${seller_id}`)
             .then(async(result) => {
                 let response = await result.json(); 
                 set_payment_info(response);
@@ -329,7 +329,7 @@ function ShippingInfo({updateShippingInfo}) {
     useEffect(() => {
         if(seller_id !== 'null' && seller_id !== null && seller_id !== ''){
 
-            fetch(`http://localhost:2222/seller.profile?seller_id=${seller_id}`)
+            fetch(`https://ce-server.vercel.app/seller.profile?seller_id=${seller_id}`)
             .then(async(result) => {
                 let response = await result.json(); 
                 setProfile(response)
@@ -338,7 +338,7 @@ function ShippingInfo({updateShippingInfo}) {
                 console.log(error)
             }) 
 
-            fetch(`http://localhost:2222/seller.shop?seller_id=${seller_id}`)
+            fetch(`https://ce-server.vercel.app/seller.shop?seller_id=${seller_id}`)
             .then(async(result) => {
                 let response = await result.json(); 
                 set_shipping_info(response)
@@ -530,7 +530,7 @@ function ShopInfo({campusLocaleList, updateShopInfo}) {
     useEffect(() => {
         if(seller_id !== 'null' && seller_id !== null && seller_id !== ''){
 
-            fetch(`http://localhost:2222/seller.profile?seller_id=${seller_id}`)
+            fetch(`https://ce-server.vercel.app/seller.profile?seller_id=${seller_id}`)
             .then(async(result) => {
                 let response = await result.json(); 
                 setProfile(response)
@@ -539,7 +539,7 @@ function ShopInfo({campusLocaleList, updateShopInfo}) {
                 console.log(error)
             }) 
 
-            fetch(`http://localhost:2222/seller.shop?seller_id=${seller_id}`)
+            fetch(`https://ce-server.vercel.app/seller.shop?seller_id=${seller_id}`)
             .then(async(result) => {
                 let response = await result.json(); 
                 setState(response?.customer_care?.State)

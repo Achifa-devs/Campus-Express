@@ -33,7 +33,7 @@ export default function Login() {
             )
             e.target.disabled = true;
 
-            fetch('http://localhost:2222/seller.login', {
+            fetch('https://ce-server.vercel.app/seller.login', {
                 method: 'post',
                 headers: {
                     "Content-Type": "Application/json"

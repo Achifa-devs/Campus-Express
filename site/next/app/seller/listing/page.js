@@ -20,7 +20,7 @@ export default function Listing() {
     }, [])
 
     
-    async function fetchData(category) {
+    async function fetchData() {
 
         if(screenWidth > 999){
             setlimit(30);
@@ -29,30 +29,17 @@ export default function Listing() {
         }else if(screenWidth < 659){
             setlimit(30);
         } 
-        // GetItems(category, limit)
-        // .then((result) => {
-        //     console.log(result)
-        //     if(result){
-        //         setCards(
-        //             result?.map((item, index) => 
-        //                 <ShowcaseCard index={index} item={item} />
-        //             ) 
-        //         )
-        //     }
 
-            
-        // })
+        fetch(`https://ce-server.vercel.app/seller.listing?id=${seller_id}`)
+        .then(async(result) => {
+            let response = await result.json(); 
+            setCards(response)
+        })
+        .catch((error) => {
+            console.log(error)
+        }) 
 
-        function GetData(category, limit){
-
-            let data = database.filter(item => item).splice(0,limit);
-            setCards(data)
-        }
-        // .catch(error=>{
-        //     console.log(error)
-        // })
-
-        GetData(category,limit)
+        
     }
         
     useEffect(() => {
@@ -63,31 +50,31 @@ export default function Listing() {
         }
     }, [])
 
-    function handleShare() {
-        if (navigator.share) {
-            navigator.share({
+    // function handleShare() {
+    //     if (navigator.share) {
+    //         navigator.share({
 
-                // Title that occurs over
-                // web share dialog
-                title: 'GeeksForGeeks',
+    //             // Title that occurs over
+    //             // web share dialog
+    //             title: 'GeeksForGeeks',
 
-                // URL to share
-                url: 'https://geeksforgeeks.org'
-            }).then(() => {
-                console.log('Thanks for sharing!');
-            }).catch(err => {
+    //             // URL to share
+    //             url: 'https://geeksforgeeks.org'
+    //         }).then(() => {
+    //             console.log('Thanks for sharing!');
+    //         }).catch(err => {
 
-                // Handle errors, if occurred
-                console.log(
-                "Error while using Web share API:");
-                console.log(err);
-            });
-        } else {
+    //             // Handle errors, if occurred
+    //             console.log(
+    //             "Error while using Web share API:");
+    //             console.log(err);
+    //         });
+    //     } else {
 
-            // Alerts user if API not available 
-            alert("Browser doesn't support this API !");
-        }
-    }
+    //         // Alerts user if API not available 
+    //         alert("Browser doesn't support this API !");
+    //     }
+    // }
 
     
   return (
@@ -179,10 +166,10 @@ export default function Listing() {
                                         <div className="product-reviews">
                                             123 reviews
                                         </div>
-
+{/* 
                                         <button onClick={handleShare} style={{border: 'none', outline: 'none', background: '#FF4500', padding: '0px 8px', height: '70%', cursor: 'pointer', borderRadius: '5px', color: '#fff', position: 'absolute', right: '10px', bottom: '5px'}}>
                                             share
-                                        </button>
+                                        </button> */}
                                     </div>
 
                                 </li>

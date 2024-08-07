@@ -108,7 +108,7 @@ const Signup = () => {
                 <div className="Authloader" style={{background: '#fff',border: '1px solid orangered'}}></div>
             )
             e.target.disabled = true;
-            fetch('http://localhost:2222/seller.registration', {
+            fetch('https://ce-server.vercel.app/seller.registration', {
                 method: 'post',
                 headers: {
                     "Content-Type": "Application/json"

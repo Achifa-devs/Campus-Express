@@ -17,7 +17,7 @@ export default function Shop() {
     useEffect(() => {
         if(seller_id !== 'null' && seller_id !== null && seller_id !== ''){
 
-            fetch(`http://localhost:2222/seller.shop?seller_id=${seller_id}`,{
+            fetch(`https://ce-server.vercel.app/seller.shop?seller_id=${seller_id}`,{
                 headers: {
                     "Content-Type": "Application/json"
                 },
@@ -37,7 +37,7 @@ export default function Shop() {
 
     useEffect(() => {
         if(!shop.shop_id){
-            fetch(`http://localhost:2222/seller.shop-setup`, {
+            fetch(`https://ce-server.vercel.app/seller.shop-setup`, {
                 method: 'post',
                 headers: {
                     "Content-Type": "Application/json"
