@@ -8,9 +8,12 @@ import '@/app/seller/listing/styles/small.css'
 import database from '@/database/seller_shop.json'
 import js_ago from 'js-ago'
 import Thumbnail from '@/files/components/Buyer/Thumbnail'
+import { useSelector } from 'react-redux'
 
 export default function Listing() {
-
+    let {
+        seller_id
+    }=useSelector(s=>s.seller_id);
     let [limit, setlimit] = useState(30)
     let [screenWidth, setScreenWidth] = useState(0)
     let [cards, setCards] = useState([])
@@ -19,36 +22,21 @@ export default function Listing() {
         setScreenWidth(window.innerWidth)
     }, [])
 
-    
-    async function fetchData() {
-
-        if(screenWidth > 999){
-            setlimit(30);
-        }else if(screenWidth > 761 && screenWidth < 1000){
-            setlimit(30);
-        }else if(screenWidth < 659){
-            setlimit(30);
-        } 
-
-        fetch(`https://ce-server.vercel.app/seller.listing?id=${seller_id}`)
-        .then(async(result) => {
-            let response = await result.json(); 
-            setCards(response)
-        })
-        .catch((error) => {
-            console.log(error)
-        }) 
-
-        
-    }
-        
     useEffect(() => {
-        try {
-            fetchData('trends')
-        } catch (error) {
-            console.log(error)
+
+        if(seller_id !== null && seller_id !== 'null'){
+            fetch(`http://localhost:2222/seller.listing?id=${seller_id}`)
+            .then(async(result) => {
+                let response = await result.json(); 
+                console.log(response)
+                setCards(response)
+            })
+            .catch((error) => {
+                
+                console.log(error)
+            }) 
         }
-    }, [])
+    }, [seller_id])
 
     // function handleShare() {
     //     if (navigator.share) {

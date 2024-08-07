@@ -400,7 +400,7 @@ export default function NewListing() {
         let checkForError = book.filter(item => item === false)
 
         if(checkForError.length < 1 ){
-            let seller_id = window.localStorage.getItem("CE_seller_id")
+            
             //upload for here
 
             
@@ -509,7 +509,7 @@ export default function NewListing() {
                         window.localStorage.setItem('draft_price', '')
                     
                         // openNotice('Upload Successful, Redirecting...')
-                        // window.location.href = '/seller.shop';
+                        window.location. href = '/seller/shop';
                     }else{
                         let overlay = document.querySelector('.overlay'); 
                         // openNotice('Upload Failed, Please Try Again')

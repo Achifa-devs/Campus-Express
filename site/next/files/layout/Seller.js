@@ -63,7 +63,7 @@ const SellerLayout = ({children,setCookie}) => {
             })
         } 
         
-    }, [])
+    }, [sellerData])
 
     let pathname = usePathname()
     useEffect(() => {

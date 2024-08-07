@@ -1,11 +1,12 @@
 const { uploadImages } = require("../../reuseables/cloudinary");
+const { NeonDB } = require("../../reuseables/db");
 const { shortId } = require("../../reuseables/modules");
 const { upload_photos, upload_meta_data } = require("../../reuseables/utils");
 
 // @@GET
 async function GetItems(req,res)  {
     let {id} = req.query;
-
+    console.log(id)
     NeonDB.then((pool) => 
         pool.query(`select * from seller_shop where seller_id = '${id}'`)
         .then(result => res.send(result.rows))
