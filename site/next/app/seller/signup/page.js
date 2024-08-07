@@ -121,7 +121,6 @@ const Signup = () => {
                     console.log(response)
 
                     dispatch(setSellerTo(response.cookie))
-                    window.location.href=('/seller/shop')
                 }else{
                     console.log(response)
                     overlay.removeAttribute('id');

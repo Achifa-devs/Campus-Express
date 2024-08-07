@@ -8,7 +8,7 @@ export const metadata =  async () => {return({
   description: "Online Shopping On Campus In Nigeria.",
 })};
 
-const maxAge = 90 * 24 * 60 * 60; 
+// const maxAge = 90 * 24 * 60 * 60; 
  
 export async function setNewCookie(data) {
   let cookieStore = cookies();

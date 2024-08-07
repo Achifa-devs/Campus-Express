@@ -15,6 +15,7 @@ import BuyerData from './buyer_store/BuyerData';
 import delete_list from './seller_store/delete_list';
 import pickup_channel from './buyer_store/pickup_channel';
 import seller_data from './seller_store/seller_data';
+import bankBeneficiary from './bank';
 
 
 let store = configureStore({
@@ -34,7 +35,8 @@ let store = configureStore({
     seller_id: seller_data,
     menu: menuSlice,
     sellerData: sellerData,
-    delete_list: delete_list
+    delete_list: delete_list,
+    bankBeneficiary: bankBeneficiary
 
 
   }

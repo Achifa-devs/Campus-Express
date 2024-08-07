@@ -1,11 +1,59 @@
-import React from 'react'
+"use client"
+import React, { useEffect, useState } from 'react'
 import '@/app/seller/shop/styles/xx-large.css'
 import '@/app/seller/shop/styles/x-large.css'
 import '@/app/seller/shop/styles/large.css'
 import '@/app/seller/shop/styles/medium.css'
 import '@/app/seller/shop/styles/small.css'
+import { useSelector } from 'react-redux'
 
 export default function Shop() {
+    let {
+        seller_id
+    }=useSelector(s=>s.seller_id);
+
+    let [shop, setShop] = useState('')
+
+    useEffect(() => {
+        if(seller_id !== 'null' && seller_id !== null && seller_id !== ''){
+
+            fetch(`http://localhost:2222/seller.shop?seller_id=${seller_id}`,{
+                headers: {
+                    "Content-Type": "Application/json"
+                },
+            })
+            .then(async(result) => {
+                let response = await result.json(); 
+                console.log( response)
+                setShop(response)
+            })
+            .catch((error) => {
+                console.log(error)
+            }) 
+
+            
+        }
+    }, [seller_id])
+
+    useEffect(() => {
+        if(!shop.shop_id){
+            fetch(`http://localhost:2222/seller.shop-setup`, {
+                method: 'post',
+                headers: {
+                    "Content-Type": "Application/json"
+                },
+                body: JSON.stringify({seller_id})
+            })
+            .then(async(result) => {
+                let response = await result.json(); 
+                setShop(response)
+            })
+            .catch((error) => {
+                console.log(error)
+            }) 
+        }
+    }, [shop])
+
   return (
     <>
       <div className="seller-shop">
@@ -30,9 +78,18 @@ export default function Shop() {
                     </div>
 
                     <ul className='metrics-data-cnt'>
-                        <li className='metrics-data'></li>
-                        <li className='metrics-data'></li>
-                        <li className='metrics-data'></li>
+                        <li style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px', flexDirection: 'column'}} className='metrics-data'>
+                            <div>Revenue</div>
+                            <div>&#8358; {new Intl.NumberFormat('en-us').format(0.00)}</div>
+                        </li>
+                        <li style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px', flexDirection: 'column'}} className='metrics-data'>
+                            <div>Items Sold</div>
+                            <div>0</div>
+                        </li>
+                        <li style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px', flexDirection: 'column'}} className='metrics-data'>
+                            <div>Items Rejected</div>
+                            <div>0</div>
+                        </li>
                     </ul>
                 </div>
 

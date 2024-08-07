@@ -83,7 +83,7 @@ function OrdersList({updateSelectedOrder, cards}) {
       <hr />
       <div className='seller-order-cnt'>
         <header>
-          <ul style={{padding: '10px 0px'}}>
+          <ul style={{padding: '10px 0px', background: '#fff'}}>
           
             <li className='th-buyer'>Buyer</li>
             <li className='th-item'>Item</li>
@@ -98,7 +98,7 @@ function OrdersList({updateSelectedOrder, cards}) {
           {
             cards.map((item,index) => 
             
-              <ul key={index} onClick={e =>updateSelectedOrder(item)} style={{height: '90px', padding: '0', fontWeight: '300'}}>
+              <ul key={index} onClick={e =>updateSelectedOrder(item)} style={{height: '90px', padding: '0', fontWeight: '300', background: '#fff'}}>
             
                 <li className='tb-buyer'>
                   <span>

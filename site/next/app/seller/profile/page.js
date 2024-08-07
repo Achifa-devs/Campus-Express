@@ -5,17 +5,19 @@ import '@/app/seller/profile/styles/x-large.css'
 import '@/app/seller/profile/styles/large.css'
 import '@/app/seller/profile/styles/medium.css'
 import '@/app/seller/profile/styles/small.css'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { data, school_choices } from './location';
 import country from '@/states-and-cities.json';
 import bank from '@/bank.json';
+import { setSellerTo } from '@/redux/seller_store/seller'
+import { setBankTo } from '@/redux/bank'
 
 export default function Profile() {
  
     let {
         seller_id
     }=useSelector(s=>s.seller_id);
-
+    let dispatch = useDispatch()
 
     let shopInfo = useRef({
         name: '',
@@ -82,6 +84,7 @@ export default function Profile() {
             fetch(`http://localhost:2222/seller.shop?seller_id=${seller_id}`)
             .then(async(result) => {
                 let response = await result.json(); 
+                console.log(response)
                 setShop(response)
             })
             .catch((error) => {
@@ -95,12 +98,12 @@ export default function Profile() {
         let stateIndex = data.filter(item =>  item.label.toLowerCase() === state?.toLowerCase())
         let index = data.indexOf(stateIndex[0]); 
         let campuses = Object.values(school_choices).reverse();
-        console.log(campuses[index])
         index < 0 ? setCampusLocaleList([]) : setCampusLocaleList(campuses[index])
 
     }, [state])
     
     let [activeCnt, setActiveCnt] = useState(<ShopInfo shop={shop} updateShopInfo={updateShopInfo} campusLocaleList={campusLocaleList} profile={profile}  />)
+    let [activeCntTxt, setActiveCntTxt] = useState('shopInfo')
 
     function updateShopInfo(name, value) {
         shopInfo.current[name] = value;
@@ -112,20 +115,16 @@ export default function Profile() {
         paymentInfo.current[name] = value;
     }
 
-    function save() {
-        console.log(shippingInfo)
-        fetch('', {
+    function saveUserData(url,data) {
+        fetch(`http://localhost:2222/${url}`, {
             method: 'post',
             headers: {
                 "Content-Type": "Application/json"
             },
-            body: JSON.stringify({
-                
-            })
-        })
+            body: JSON.stringify({data,seller_id})
+        })   
         .then(async(result) => {
             let response = await result.json();
-            console.log(response)
             if(response.bool){
                 dispatch(setSellerTo(response.cookie))
                 
@@ -133,13 +132,41 @@ export default function Profile() {
                 
                 setBtn("Login")
             }
-            e.target.disabled = false; 
-            setBtn("Login")
         })
         .catch((err) => {
             console.log(err)
 
         })
+    }
+    
+    function save() {
+        let data = (activeCntTxt === 'shopInfo' ? shopInfo.current : activeCntTxt === 'paymentInfo' ? paymentInfo.current : shippingInfo.current);
+        let url = activeCntTxt === 'shopInfo' ? 'seller.shopInfo' : activeCntTxt === 'paymentInfo' ? 'seller.paymentInfo' : 'seller.shippingInfo'
+        
+        if(activeCntTxt !== 'paymentInfo'){
+            saveUserData(url,data)
+        }else{
+
+            fetch(`http://localhost:2222/bank-verification`, {
+                method: 'post',
+                headers: {
+                    "Content-Type": "Application/json"
+                },
+                body: JSON.stringify({acct: paymentInfo.current.bankAccountNumber, code: paymentInfo.current.bankName})
+            })   
+            .then(async(result) => {
+                let response = await result.json();
+                if(response.bool){
+                    dispatch(setBankTo(response.name))
+                    saveUserData(url,data)
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+                alert(JSON.stringify('Account Number Is Invalid'))
+
+            })
+        }
     }
     
   return ( 
@@ -157,7 +184,7 @@ export default function Profile() {
             </div>
 
             <div className="summary">
-                <div onClick={e=>setActiveCnt(<ShopInfo updateShopInfo={updateShopInfo} shop={shop} campusLocaleList={campusLocaleList} profile={profile} />)}>
+                <div onClick={e=>{setActiveCnt(<ShopInfo updateShopInfo={updateShopInfo} shop={shop} campusLocaleList={campusLocaleList} profile={profile} />); setActiveCntTxt('shopInfo')}}>
                     <div>
                         Shop Information
                     </div>
@@ -167,7 +194,7 @@ export default function Profile() {
                     </div>
                 </div>
 
-                <div onClick={e=>setActiveCnt(<ShippingInfo shop={shop} updateShippingInfo={updateShippingInfo} profile={profile} />)}>
+                <div onClick={e=>{setActiveCnt(<ShippingInfo shop={shop} updateShippingInfo={updateShippingInfo} profile={profile} />); setActiveCntTxt('shippingInfo')}}>
                     <div>
                         Shipping Information
                     </div>
@@ -177,7 +204,7 @@ export default function Profile() {
                     </div>
                 </div>
 
-                <div onClick={e=>setActiveCnt(<PaymentInfo updatePaymentInfo={updatePaymentInfo} />)}>
+                <div onClick={e=>{setActiveCnt(<PaymentInfo updatePaymentInfo={updatePaymentInfo} />); setActiveCntTxt('paymentInfo')}}>
                     <div>
                         Payment Information
                     </div>
@@ -207,6 +234,35 @@ export default function Profile() {
 
 
 function PaymentInfo({updatePaymentInfo}) {
+    let {
+        bankBeneficiary
+    }=useSelector(s=>s.bankBeneficiary)
+    let {
+        seller_id
+    }=useSelector(s=>s.seller_id);
+    let [payment_info, set_payment_info] = useState('')
+
+    useEffect(() => {
+        updatePaymentInfo('bankAccountNumber', payment_info?.payout_info?.bankAccountNumber)
+        updatePaymentInfo('accountBeneficiary', payment_info?.payout_info?.accountBeneficiary)
+        updatePaymentInfo('bankName', payment_info?.payout_info?.bankName)
+    }, [payment_info])
+    useEffect(() => {
+        updatePaymentInfo('accountBeneficiary', bankBeneficiary)
+    }, [bankBeneficiary])
+    useEffect(() => {
+        if(seller_id !== 'null' && seller_id !== null && seller_id !== ''){
+
+            fetch(`http://localhost:2222/seller.shop?seller_id=${seller_id}`)
+            .then(async(result) => {
+                let response = await result.json(); 
+                set_payment_info(response);
+            })
+            .catch((error) => {
+                console.log(error)
+            }) 
+        }
+    }, [seller_id])
     return(
         <>
             <div className="mid">
@@ -230,7 +286,7 @@ function PaymentInfo({updatePaymentInfo}) {
                 
                 <div className="input-cnt">
                     <label htmlFor="">Bank Account Number</label>
-                    <input onInput={e => updatePaymentInfo('bankAccountNumber', e.target.value)} type="text" placeholder="Bank Account Number" id="" />
+                    <input defaultValue={payment_info?.payout_info?.bankAccountNumber} onInput={e => updatePaymentInfo('bankAccountNumber', e.target.value)} type="text" placeholder="Bank Account Number" id="" />
                 </div>
 
 
@@ -241,7 +297,11 @@ function PaymentInfo({updatePaymentInfo}) {
                         <option value="">Select Bank</option>
                         {
                             bank.map((item, index) => 
-                                <option value={item.code}>{item.name}</option>
+                                item.code === payment_info?.payout_info?.bankName
+                                ?
+                                <option key={index} selected value={item.code}>{item.name}</option>
+                                :
+                                <option key={index} value={item.code}>{item.name}</option>
                             )
                         }
                     </select>
@@ -249,16 +309,48 @@ function PaymentInfo({updatePaymentInfo}) {
 
                 <div className="input-cnt">
                     <label htmlFor="">Beneficiary</label>
-                    <input onInput={e => updatePaymentInfo('accountBeneficiary', e.target.value)} type="text" placeholder="Beneficiary" id="" />
+                    <input value={bankBeneficiary} onInput={e => updatePaymentInfo('accountBeneficiary', e.target.value)} type="text" placeholder="Beneficiary" id="" />
                 </div>
             </div>
         </>
     )
 }
 
-function ShippingInfo({profile, updateShippingInfo, shop}) {
+function ShippingInfo({updateShippingInfo}) {
     let [state1, setState1] = useState('')
     let [state2, setState2] = useState('')
+
+    let {
+        seller_id
+    }=useSelector(s=>s.seller_id);
+    let [shipping_info, set_shipping_info] = useState('')
+    let [profile, setProfile] = useState('')
+
+    useEffect(() => {
+        if(seller_id !== 'null' && seller_id !== null && seller_id !== ''){
+
+            fetch(`http://localhost:2222/seller.profile?seller_id=${seller_id}`)
+            .then(async(result) => {
+                let response = await result.json(); 
+                setProfile(response)
+            })
+            .catch((error) => {
+                console.log(error)
+            }) 
+
+            fetch(`http://localhost:2222/seller.shop?seller_id=${seller_id}`)
+            .then(async(result) => {
+                let response = await result.json(); 
+                set_shipping_info(response)
+                setState1(response?.shipping_info?.State)
+                setState2(response?.return_address?.State)
+
+            })
+            .catch((error) => {
+                console.log(error)
+            }) 
+        }
+    }, [seller_id])
 
     return(
         <>
@@ -288,23 +380,23 @@ function ShippingInfo({profile, updateShippingInfo, shop}) {
 
                 <div className="input-cnt">
                     <label htmlFor="">Address 1</label>
-                    <input onInput={e => updateShippingInfo('shippingZone', 'Address1', e.target.value)} type="text" placeholder="Address 1" id="" />
+                    <input defaultValue={shipping_info?.shipping_info?.Address1} onInput={e => updateShippingInfo('shippingZone', 'Address1', e.target.value)} type="text" placeholder="Address 1" id="" />
                 </div>
 
                 <div className="input-cnt">
                     <label htmlFor="">Address 2</label>
-                    <input onInput={e => updateShippingInfo('shippingZone', 'Address2', e.target.value)} type="text" placeholder="Address 2" id="" />
+                    <input defaultValue={shipping_info?.shipping_info?.Address2} onInput={e => updateShippingInfo('shippingZone', 'Address2', e.target.value)} type="text" placeholder="Address 2" id="" />
                 </div>
 
 
                 <div className="input-cnt">
                     <label htmlFor="">Address 3</label>
-                    <input onInput={e => updateShippingInfo('shippingZone', 'Address3', e.target.value)} type="text" placeholder="Address 3" id="" />
+                    <input defaultValue={shipping_info?.shipping_info?.Address3} onInput={e => updateShippingInfo('shippingZone', 'Address3', e.target.value)} type="text" placeholder="Address 3" id="" />
                 </div>
 
                 <div className="input-cnt">
                     <label htmlFor="">Address 4</label>
-                    <input onInput={e => updateShippingInfo('shippingZone', 'Address4', e.target.value)} type="text" placeholder="Address 4" id="" />
+                    <input defaultValue={shipping_info?.shipping_info?.Address4} onInput={e => updateShippingInfo('shippingZone', 'Address4', e.target.value)} type="text" placeholder="Address 4" id="" />
                 </div>
 
                 <section>
@@ -323,6 +415,10 @@ function ShippingInfo({profile, updateShippingInfo, shop}) {
                             <option value="">Select State</option>
                             {
                                 country.map((item,index) => 
+                                    shipping_info?.shipping_info?.State === item.name
+                                    ?
+                                    <option selected key={index} value={item.name}>{item.name}</option>
+                                    :
                                     <option key={index} value={item.name}>{item.name}</option>
                                 )
                             }
@@ -335,6 +431,10 @@ function ShippingInfo({profile, updateShippingInfo, shop}) {
                             <option value="">Select Town</option>
                             {
                                 country.filter(item => item.name === state1)[0]?.cities.map((city,index) => 
+                                    shipping_info?.shipping_info?.City === city
+                                    ?
+                                    <option selected key={index} value={city}>{city}</option>
+                                    :
                                     <option key={index} value={city}>{city}</option>
                                 )
 
@@ -343,7 +443,6 @@ function ShippingInfo({profile, updateShippingInfo, shop}) {
                     </div>
                 </section>
 
-
                 <section>
                     <h3>
                         Return Address
@@ -351,27 +450,24 @@ function ShippingInfo({profile, updateShippingInfo, shop}) {
                     <h6>Please provide details of your customer support. These details will be used to adrress product issues by customers</h6>
                 </section>
 
-            
-
                 <div className="input-cnt">
                     <label htmlFor="">Address 1</label>
-                    <input onInput={e => updateShippingInfo('returnAddress', 'Address1', e.target.value)} type="text" placeholder="Address 1" id="" />
+                    <input defaultValue={shipping_info?.return_address?.Address1} onInput={e => updateShippingInfo('returnAddress', 'Address1', e.target.value)} type="text" placeholder="Address 1" id="" />
                 </div>
 
                 <div className="input-cnt">
                     <label htmlFor="">Address 2</label>
-                    <input onInput={e => updateShippingInfo('returnAddress', 'Address2', e.target.value)} type="text" placeholder="Address 2" id="" />
+                    <input defaultValue={shipping_info?.return_address?.Address2} onInput={e => updateShippingInfo('returnAddress', 'Address2', e.target.value)} type="text" placeholder="Address 2" id="" />
                 </div>
-
 
                 <div className="input-cnt">
                     <label htmlFor="">Address 3</label>
-                    <input onInput={e => updateShippingInfo('returnAddress', 'Address3', e.target.value)} type="text" placeholder="Address 3" id="" />
+                    <input defaultValue={shipping_info?.return_address?.Address3} onInput={e => updateShippingInfo('returnAddress', 'Address3', e.target.value)} type="text" placeholder="Address 3" id="" />
                 </div>
 
                 <div className="input-cnt">
                     <label htmlFor="">Address 4</label>
-                    <input onInput={e => updateShippingInfo('returnAddress', 'Address4', e.target.value)} type="text" placeholder="Address 4" id="" />
+                    <input defaultValue={shipping_info?.return_address?.Address4} onInput={e => updateShippingInfo('returnAddress', 'Address4', e.target.value)} type="text" placeholder="Address 4" id="" />
                 </div>
 
                 <section>
@@ -390,6 +486,10 @@ function ShippingInfo({profile, updateShippingInfo, shop}) {
                             <option value="">Select State</option>
                             {
                                 country.map((item,index) => 
+                                    shipping_info?.return_address?.State === item.name
+                                    ?
+                                    <option selected key={index} value={item.name}>{item.name}</option>
+                                    :
                                     <option key={index} value={item.name}>{item.name}</option>
                                 )
                             }
@@ -402,6 +502,10 @@ function ShippingInfo({profile, updateShippingInfo, shop}) {
                             <option value="">Select Town</option>
                             {
                                 country.filter(item => item.name === state2)[0]?.cities.map((city,index) => 
+                                    shipping_info?.return_address?.City === city
+                                    ?
+                                    <option selected key={index} value={city}>{city}</option>
+                                    :
                                     <option key={index} value={city}>{city}</option>
                                 )
 
@@ -415,10 +519,37 @@ function ShippingInfo({profile, updateShippingInfo, shop}) {
     )
 }
 
-function ShopInfo({profile, campusLocaleList, updateShopInfo, shop}) {
-    
+function ShopInfo({campusLocaleList, updateShopInfo}) {
+    let {
+        seller_id
+    }=useSelector(s=>s.seller_id);
     let [state, setState] = useState('')
+    let [user_shop, set_user_shop] = useState('')
+    let [profile, setProfile] = useState('')
 
+    useEffect(() => {
+        if(seller_id !== 'null' && seller_id !== null && seller_id !== ''){
+
+            fetch(`http://localhost:2222/seller.profile?seller_id=${seller_id}`)
+            .then(async(result) => {
+                let response = await result.json(); 
+                setProfile(response)
+            })
+            .catch((error) => {
+                console.log(error)
+            }) 
+
+            fetch(`http://localhost:2222/seller.shop?seller_id=${seller_id}`)
+            .then(async(result) => {
+                let response = await result.json(); 
+                setState(response?.customer_care?.State)
+                set_user_shop(response)
+            })
+            .catch((error) => {
+                console.log(error)
+            }) 
+        }
+    }, [seller_id])
 
     
     return(
@@ -485,7 +616,7 @@ function ShopInfo({profile, campusLocaleList, updateShopInfo, shop}) {
                             {
                                 campusLocaleList?.map((item,index) => {
                                     return(
-                                        item.text.toLowerCase().trim() === profile?.campus.toLowerCase().trim()
+                                        item?.text?.toLowerCase()?.trim() === profile?.campus?.toLowerCase()?.trim()
                                         ?
                                         <option selected key={index} value={item.text}>{item.text}</option>
                                         :
@@ -509,7 +640,7 @@ function ShopInfo({profile, campusLocaleList, updateShopInfo, shop}) {
 
             <div className="input-cnt">
                 <label htmlFor="">Shop Name</label>
-                <input type="text" value={shop?.title} placeholder="Shop Name" id="" />
+                <input defaultValue={user_shop?.shop_title} type="text" onInput={e => updateShopInfo('name', e.target.value)} placeholder="Shop Name" id="" />
             </div>
 
             <section>
@@ -545,38 +676,37 @@ function ShopInfo({profile, campusLocaleList, updateShopInfo, shop}) {
 
             <div className="input-cnt">
                 <label htmlFor="">Customer Care Name</label>
-                <input onInput={e => updateShopInfo('customerCareName', e.target.value)} type="text" placeholder="Customer Care Name" id="" />
+                <input defaultValue={user_shop?.customer_care?.customerCareName} onInput={e => updateShopInfo('customerCareName', e.target.value)} type="text" placeholder="Customer Care Name" id="" />
             </div>
 
             <div className="input-cnt">
                 <label htmlFor="">Customer Care Phone</label>
-                <input onInput={e => updateShopInfo('customerCarePhone', e.target.value)} type="text" placeholder="Customer Care Phone" id="" />
+                <input defaultValue={user_shop?.customer_care?.customerCarePhone} onInput={e => updateShopInfo('customerCarePhone', e.target.value)} type="text" placeholder="Customer Care Phone" id="" />
             </div>
 
             <div className="input-cnt">
                 <label htmlFor="">Customer Care Email</label>
-                <input onInput={e => updateShopInfo('customerCareEmail', e.target.value)} type="text" placeholder="Customer Care Email" id="" />
+                <input defaultValue={user_shop?.customer_care?.customerCareEmail} onInput={e => updateShopInfo('customerCareEmail', e.target.value)} type="text" placeholder="Customer Care Email" id="" />
             </div>
 
             <div className="input-cnt">
                 <label htmlFor="">Address 1</label>
-                <input onInput={e => updateShopInfo('customerCareAddress1', e.target.value)} type="text" placeholder="Address 1" id="" />
+                <input defaultValue={user_shop?.customer_care?.customerCareAddress1} onInput={e => updateShopInfo('customerCareAddress1', e.target.value)} type="text" placeholder="Address 1" id="" />
             </div>
 
             <div className="input-cnt">
                 <label htmlFor="">Address 2</label>
-                <input onInput={e => updateShopInfo('customerCareAddress2', e.target.value)} type="text" placeholder="Address 2" id="" />
+                <input defaultValue={user_shop?.customer_care?.customerCareAddress2} onInput={e => updateShopInfo('customerCareAddress2', e.target.value)} type="text" placeholder="Address 2" id="" />
             </div>
-
 
             <div className="input-cnt">
                 <label htmlFor="">Address 3</label>
-                <input onInput={e => updateShopInfo('customerCareAddress3', e.target.value)} type="text" placeholder="Address 3" id="" />
+                <input defaultValue={user_shop?.customer_care?.customerCareAddress3} onInput={e => updateShopInfo('customerCareAddress3', e.target.value)} type="text" placeholder="Address 3" id="" />
             </div>
 
             <div className="input-cnt">
                 <label htmlFor="">Address 4</label>
-                <input onInput={e => updateShopInfo('customerCareAddress4', e.target.value)} type="text" placeholder="Address 4" id="" />
+                <input defaultValue={user_shop?.customer_care?.customerCareAddress4} onInput={e => updateShopInfo('customerCareAddress4', e.target.value)} type="text" placeholder="Address 4" id="" />
             </div>
 
             <section>
@@ -595,6 +725,10 @@ function ShopInfo({profile, campusLocaleList, updateShopInfo, shop}) {
                         <option value="">Select State</option>
                         {
                             country.map((item,index) => 
+                            user_shop?.customer_care?.State === item.name
+                                ?
+                                <option selected key={index} value={item.name}>{item.name}</option>
+                                :
                                 <option key={index} value={item.name}>{item.name}</option>
                             )
                         }
@@ -607,6 +741,10 @@ function ShopInfo({profile, campusLocaleList, updateShopInfo, shop}) {
                         <option value="">Select Town</option>
                         {
                             country.filter(item => item.name === state)[0]?.cities.map((city,index) => 
+                                user_shop?.customer_care?.City === city
+                                ?
+                                <option selected key={index} value={city}>{city}</option>
+                                :
                                 <option key={index} value={city}>{city}</option>
                             )
 
