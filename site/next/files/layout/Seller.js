@@ -36,7 +36,7 @@ const SellerLayout = ({children,setCookie}) => {
             
             // Example usage:
             const myCookie = getCookie('seller_secret');
-            fetch('http://localhost:2222/seller.authentication',
+            fetch('https://ce-server.vercel.app/seller.authentication',
             {
                 method: 'GET',
                 // credentials: 'include',
