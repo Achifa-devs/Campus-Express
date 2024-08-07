@@ -25,7 +25,7 @@ export default function Listing() {
     useEffect(() => {
 
         if(seller_id !== null && seller_id !== 'null'){
-            fetch(`http://localhost:2222/seller.listing?id=${seller_id}`)
+            fetch(`https://ce-server.vercel.app/seller.listing?id=${seller_id}`)
             .then(async(result) => {
                 let response = await result.json(); 
                 console.log(response)
