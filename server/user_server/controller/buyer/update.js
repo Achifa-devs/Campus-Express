@@ -1,5 +1,5 @@
-const { NeonDB } = require("../../db");
-const { bcrypt, shortId } = require("../../modules");
+const { NeonDB } = require("../../reuseables/db");
+const { bcrypt, shortId } = require("../../reuseables/modules");
 
 
 

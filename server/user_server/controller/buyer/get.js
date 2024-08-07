@@ -1,4 +1,4 @@
-const { NeonDB } = require("../../db");
+const { NeonDB } = require("../../reuseables/db");
 const { 
     retrieve_room,
     retrieve_seller,
@@ -10,7 +10,7 @@ const {
     retrieve_product_with_id,
     retrieve_buyer, 
     retrieve_products
-} = require("../../utils");
+} = require("../../reuseables/utils");
 async function get_buyer(req,res) {
     let {buyer_id} = req.query;
      NeonDB

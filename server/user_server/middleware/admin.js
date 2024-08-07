@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
-const {connectToDatabase, NeonDB} = require('../db');
 const {Pool, Client} = require("pg");
+const { NeonDB } = require('../reuseables/db');
 
 
 const admin_authentication = (req, res, next) => {

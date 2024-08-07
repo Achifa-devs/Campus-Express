@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "build": "babel src --out-dir lib"
   },
   "author": "fabian",
   "license": "ISC",
@@ -53,5 +54,10 @@
     "uuidv4": "^6.2.13",
     "whatsapp": "^0.0.5-Alpha",
     "youtube-all-in-one-uploader": "^1.0.5"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.24.8",
+    "@babel/core": "^7.25.2",
+    "@babel/preset-env": "^7.25.3"
   }
 }

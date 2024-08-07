@@ -1,5 +1,5 @@
-const { NeonDB } = require("../db");
-const { shortId, bcrypt, jwt } = require("../modules");
+const { shortId, bcrypt, jwt } = require("../reuseables/modules");
+const { NeonDB } = require("../reuseables/db");
 const maxAge = 90 * 24 * 60 * 60; 
 const createToken = (id) => {
     return jwt.sign({ id }, 'seller_secret', {

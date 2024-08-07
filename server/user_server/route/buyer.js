@@ -33,7 +33,7 @@ const {
 const { 
     express, 
     parser
- } = require("../modules");
+ } = require("../reuseables/modules");
 
 let buyer_route = express.Router();  
 

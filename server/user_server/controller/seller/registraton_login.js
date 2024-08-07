@@ -1,13 +1,12 @@
 const { 
     NeonDB 
-} = require("../../db");
-const { regTxtMail, regTxtMailTemplate } = require("../../mail/reg");
+} = require("../../reuseables/db");
 const { 
     shortId,
     jwt,
     bcrypt
-} = require('../../modules');
-const { send_email, send_mail_via_outlook, send_sms } = require("../../utils");
+} = require('../../reuseables/modules');
+const { send_mail_via_outlook, send_sms } = require("../../reuseables/utils");
 const maxAge = 90 * 24 * 60 * 60; 
 
 const createToken = (id) => {
@@ -73,15 +72,15 @@ async function register_seller(req,res) {
     }
  
     async function SendEmail() {
-        let name = `${fname} ${lname}`
-        let emailTemp = regTxtMailTemplate(name)
-        send_mail_via_outlook(email, 'Welcome To Campus Express', emailTemp)
+        // let name = `${fname} ${lname}`
+        // let emailTemp = regTxtMailTemplate(name)
+        // send_mail_via_outlook(email, 'Welcome To Campus Express', emailTemp)
     }
     
     async function SendSMS() {
-        let name = `${fname} ${lname}`
-        let emailMssg = regTxtMail(name)
-        send_sms(phone,emailMssg)
+        // let name = `${fname} ${lname}`
+        // let emailMssg = regTxtMail(name)
+        // send_sms(phone,emailMssg)
     }
 
     try{

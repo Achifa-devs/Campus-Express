@@ -1,13 +1,13 @@
 const { 
     NeonDB 
-} = require("../../db");
+} = require("../../reuseables/db");
 const { 
     shortId, 
     bcrypt, 
     jwt 
-} = require("../../modules");
+} = require("../../reuseables/modules");
 
-const { retrieve_product_with_id, retrieve_seller } = require("../../utils");
+const { retrieve_product_with_id, retrieve_seller } = require("../../reuseables/utils");
 
 
 async function save_item(req,res) {

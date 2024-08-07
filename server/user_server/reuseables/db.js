@@ -40,6 +40,6 @@ let NeonDB = new Promise((resolve, reject) => {
     
 })
 
-module.exports = {
+module.exports = { 
     NeonDB
 }

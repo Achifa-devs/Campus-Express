@@ -1,5 +1,5 @@
-const { NeonDB } = require("../../db");
-const { retrieve_product_with_id, retrieve_seller } = require("../../utils");
+const { NeonDB } = require("../../reuseables/db");
+const { retrieve_product_with_id, retrieve_seller } = require("../../reuseables/utils");
 
 function DeleteItem(req,res) {
     let {
