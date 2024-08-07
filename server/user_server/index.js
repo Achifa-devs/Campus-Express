@@ -4,7 +4,12 @@ const {
   morgan,
   cors,
   io 
-} = require('./reuseables/modules');  
+} = require('./reuseables/modules');
+const FormData = require('form-data');
+const axios = require('axios');
+const path = require('path');
+const formidable = require('formidable');
+const fs = require('fs-extra');
 const {
   seller_route 
 } = require('./route/seller')
@@ -64,25 +69,29 @@ process.on('unhandledRejection', (reason, promise) => {
 });
 
 
-// Copyright 2016 Google LLC
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//    http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-
-/**
- * Usage: node upload.js PATH_TO_VIDEO_FILE
- */
 
 
 
 
+// Function to decode Base64 and save video file
+function saveBase64Video(base64String, outputPath) {
+  const base64Data = base64String.replace(/^data:video\/\w+;base64,/, '');
+  const videoBuffer = Buffer.from(base64Data, 'base64');
+
+  return new Promise((resolve, reject) => {
+    fs.writeFile(outputPath, videoBuffer, (err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(outputPath);
+      }
+    });
+  });
+}
+
+
+app.post('/video-trimmer', parser, (req,res) => {
+  let {video, originalFilename} = req.body;
+
+})
 

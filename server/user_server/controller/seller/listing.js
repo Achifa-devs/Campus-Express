@@ -1,3 +1,7 @@
+const { uploadImages } = require("../../reuseables/cloudinary");
+const { shortId } = require("../../reuseables/modules");
+const { upload_photos, upload_meta_data } = require("../../reuseables/utils");
+
 // @@GET
 async function GetItems(req,res)  {
     let {id} = req.query;
@@ -150,8 +154,9 @@ async function UploadNewItem(req,res) {
         }
     }else{
         
-        let photoresponse = upload_photos(productId, constantData.seller_id, constantData.photos, imageId)
-        if(photoresponse){
+        let photoresponse = uploadImages(constantData.photos, productId, replacedTitle)
+        console.log((await photoresponse).bool)
+        if((await photoresponse).bool){
             let meta_data_respons = await upload_meta_data(replacedTitle,replacedDescription,constantData.category,constantData.price,constantData.seller_id,productId,dynamicData)
             if(meta_data_respons){
                 res.send(true);

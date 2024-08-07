@@ -22,7 +22,10 @@ export default function Aside() {
             {/* <hr /> */}
             <ul>
 
-                <li onClick={e => window.location.href=('/seller/orders')}>
+                <li onClick={e => {
+                    // window.location.href=('/seller/orders')
+                    alert('Check Back Later')
+                }}>
                     <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect x="5" y="4" width="14" height="17" rx="2" stroke="#000" stroke-width="2"/>
                         <path d="M9 9H15" stroke="#000" stroke-width="2" stroke-linecap="round"/>
@@ -51,14 +54,14 @@ strokeLinejoin
                     <span>Listing</span>
                 </li>
 
-                <li onClick={e => window.location.href=('/seller/new-listing')}>
+                {/* <li onClick={e => window.location.href=('/seller/new-listing')}>
                     <svg width="30px" height="30px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path fill="#000" d="M704 288h131.072a32 32 0 0 1 31.808 28.8L886.4 512h-64.384l-16-160H704v96a32 32 0 1 1-64 0v-96H384v96a32 32 0 0 1-64 0v-96H217.92l-51.2 512H512v64H131.328a32 32 0 0 1-31.808-35.2l57.6-576a32 32 0 0 1 31.808-28.8H320v-22.336C320 154.688 405.504 64 512 64s192 90.688 192 201.664v22.4zm-64 0v-22.336C640 189.248 582.272 128 512 128c-70.272 0-128 61.248-128 137.664v22.4h256zm201.408 483.84L768 698.496V928a32 32 0 1 1-64 0V698.496l-73.344 73.344a32 32 0 1 1-45.248-45.248l128-128a32 32 0 0 1 45.248 0l128 128a32 32 0 1 1-45.248 45.248z"/></svg>
 
                     &nbsp;
                     &nbsp;
 
                     <span>New Listing</span>
-                </li>
+                </li> */}
 
                 {/* <li onClick={e => window.location.href=('/seller/editor')}>
                     <svg fill="#000000" version="1.1" id="Layer_1" 

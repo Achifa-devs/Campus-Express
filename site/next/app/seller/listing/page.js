@@ -63,6 +63,32 @@ export default function Listing() {
         }
     }, [])
 
+    function handleShare() {
+        if (navigator.share) {
+            navigator.share({
+
+                // Title that occurs over
+                // web share dialog
+                title: 'GeeksForGeeks',
+
+                // URL to share
+                url: 'https://geeksforgeeks.org'
+            }).then(() => {
+                console.log('Thanks for sharing!');
+            }).catch(err => {
+
+                // Handle errors, if occurred
+                console.log(
+                "Error while using Web share API:");
+                console.log(err);
+            });
+        } else {
+
+            // Alerts user if API not available 
+            alert("Browser doesn't support this API !");
+        }
+    }
+
     
   return (
     <>
@@ -137,7 +163,7 @@ export default function Listing() {
                                         </div>
                                     </div>
 
-                                    <div className="btm" style={{borderTop: '1px solid #f9f9f9'}}>
+                                    <div className="btm" style={{borderTop: '1px solid #f9f9f9', position: 'relative'}}>
                                         <div className="product-stock">
                                             20 in stock
                                         </div>
@@ -153,6 +179,10 @@ export default function Listing() {
                                         <div className="product-reviews">
                                             123 reviews
                                         </div>
+
+                                        <button onClick={handleShare} style={{border: 'none', outline: 'none', background: '#FF4500', padding: '0px 8px', height: '70%', cursor: 'pointer', borderRadius: '5px', color: '#fff', position: 'absolute', right: '10px', bottom: '5px'}}>
+                                            share
+                                        </button>
                                     </div>
 
                                 </li>

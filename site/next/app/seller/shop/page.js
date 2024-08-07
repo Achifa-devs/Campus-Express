@@ -63,7 +63,18 @@ export default function Shop() {
             <hr />
 
             <div className="seller-shop-cnt">
+                <div className="seller-shop-learner">
+                    <div className='learner-cnt' style={{padding: '0px 15px'}}>
+                        <div>
+                            <h6>Publish New Item Now</h6>
+                        </div>
 
+                    </div>
+
+                    <ul className='learner-data-cnt'>
+                        <li style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px', flexDirection: 'row', color: '#FF4500', border: '1px solid #FF4500'}}  className='learner-data' onClick={e => window.location.href=('/seller/new-listing')}>Add New Product To Your Listing </li>
+                    </ul>
+                </div> 
                 <div className="seller-shop-metrics">
                     <div className='metrics-cnt'>
                         <div>

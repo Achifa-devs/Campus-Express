@@ -94,7 +94,12 @@ const SellerLayout = ({children,setCookie}) => {
                     ?
                     <Aside />
                     :
+                    pathname.split('/').splice(-1)[0] === 'new-listing'
+                    ?
+                    ''
+                    :
                     <Nav />
+                    
             }
         </>  
 

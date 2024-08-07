@@ -9,13 +9,28 @@ import items from '@/files/items.json'
 import { usePathname } from 'next/navigation'
 import { validate_inputs } from './validation' 
 import country from '@/states-and-cities.json'; 
+import { useSelector } from 'react-redux'
 
 export default function NewListing() {
 
+    function resetLog() {
+        window.localStorage.setItem('draft_gender', '')
+        window.localStorage.setItem('draft_size', '')
+        window.localStorage.setItem('draft_sub_category', '')
+        window.localStorage.setItem('draft_condition', '')
+        window.localStorage.setItem('draft_c_type', '')
+        window.localStorage.setItem('draft_price', '')
+
+        productPrice('')
+        productType('')
+        productStock('')
+        productGender('')
+        productSubCategory('')
+        productSizeSelect('')
+        productCondition('')    
+    }
     let [screenWidth, setScreenWidth] = useState('');
     let pathname = usePathname()
-
-
     useEffect(() => {
         setScreenWidth(window.innerWidth)
     }, [])
@@ -23,7 +38,9 @@ export default function NewListing() {
     let book = []
     let [edit,setEdit] = useState('');
     
-
+    let {
+        seller_id
+    }=useSelector(s=>s.seller_id);
 
     let [categoriesList, setCategoriesList] = useState([])
     let [typeList, setTypeList] = useState([]) 
@@ -43,12 +60,12 @@ export default function NewListing() {
 
     },[])
     useEffect(() => {
-        let product_id = pathname.split('/').splice(-1)[0]; 
-        if(product_id === null){
-            setUpdate(false)
-        }else{
-            setUpdate(true)
-        }
+        // let product_id = pathname.split('/').splice(-1)[0]; 
+        // if(product_id === null){
+        //     setUpdate(false)
+        // }else{
+        //     setUpdate(true)
+        // }
     }, [])
     useEffect(() => {
         async function getData() {
@@ -206,6 +223,7 @@ export default function NewListing() {
         category.current = (data); 
         window.localStorage.setItem('draft_category', data)
         set_category_state(data)
+        resetLog()
     }
     
     let cType = useRef('')
@@ -335,7 +353,11 @@ export default function NewListing() {
                 function handleErr(element, err, name) {
                     let pElem = name === 'samples' ? element.parentElement.parentElement.parentElement : name === 'thumbnail' ? element.parentElement.parentElement.parentElement : element.parentElement;
 
-                    if(pElem.lastChild.className === 'err-mssg'){
+                    if(pElem.lastChild.className === 'err-mssg' || pElem.firstChild.className === 'err-mssg'){
+                        
+                        name === 'samples' || name ===  'thumbnail' ?  
+                            pElem.firstChild.remove()
+                        :
                         pElem.lastChild.remove()
 
                         let newElem = document.createElement('div')
@@ -343,10 +365,14 @@ export default function NewListing() {
                         newElem.style.width = '100%';
                         newElem.style.textAlign = 'left';
                         newElem.style.justifyContent = 'left';
-                        newElem.position = name === 'samples' ? 'absolute' : name === 'thumbnail' ? 'absolute' : 'relative';
-                        newElem.bottom = '2px';
-                        newElem.left = '2px';
+                        // newElem.position = name === 'samples' ? 'absolute' : name === 'thumbnail' ? 'absolute' : 'relative';
+                        // newElem.top = '2px';
+                        // newElem.left = '2px';
                         newElem.innerHTML = err;
+
+                        name === 'samples' || name ===  'thumbnail' ?  
+                            pElem.prepend(newElem)
+                        :
                         pElem.append(newElem);
                     }else{
                         let newElem = document.createElement('div')
@@ -354,11 +380,16 @@ export default function NewListing() {
                         newElem.style.textAlign = 'left';
                         newElem.style.justifyContent = 'left';
                         newElem.style.width = '100%';
-                        newElem.position = name === 'samples' ? 'absolute' : name === 'thumbnail' ? 'absolute' : 'relative';
-                        newElem.bottom = '2px';
-                        newElem.left = '2px';
+                        // newElem.position = name === 'samples' ? 'absolute' : name === 'thumbnail' ? 'absolute' : 'relative';
+                        // newElem.top = '2px';
+                        // newElem.left = '2px';
                         newElem.innerHTML = err;
+
+                        name === 'samples' || name ===  'thumbnail' ?  
+                            pElem.prepend(newElem)
+                        :
                         pElem.append(newElem);
+
                     }
                 }
 
@@ -368,10 +399,8 @@ export default function NewListing() {
 
         let checkForError = book.filter(item => item === false)
 
-        if(checkForError.length < 1 && lodgeAddress.length > 0){
-            let overlay = document.querySelector('.overlay')
-            overlay.setAttribute('id', 'overlay');
-            let seller_id = window?.localStorage?.getItem("CE_seller_id")
+        if(checkForError.length < 1 ){
+            let seller_id = window.localStorage.getItem("CE_seller_id")
             //upload for here
 
             
@@ -423,7 +452,6 @@ export default function NewListing() {
 
                         // openNotice('Update Successful, Redirecting...')
                         window.location.href = '/seller.shop';
-                        document.querySelector('.overlay').removeAttribute('id')
                     
                         
                     }else{
@@ -434,13 +462,10 @@ export default function NewListing() {
                 })
                 .catch((error) => {
                     console.log('Error:', error.message);
-                    let overlay = document.querySelector('.overlay'); 
-                    overlay.removeAttribute('id')
-                    // openNotice('Upload Failed, Please Try Again')
                 })  
             }else{
 
-                fetch('https://localhost:2222/seller.product-upload', {
+                fetch('http://localhost:2222/seller.product-upload', {
                     method: 'post',
                     headers: {
                         "Content-Type": "Application/json"
@@ -453,7 +478,7 @@ export default function NewListing() {
                                 category: category.current,
                                 price: price.current,
                                 photos: photos.current,
-                                videos: videos.current,
+                                // videos: videos.current,
                                 seller_id : seller_id,
                                 stock: stock.current
                             }, 
@@ -461,43 +486,37 @@ export default function NewListing() {
                             dynamicData: {
                                 cType: cType_state,
                                 locale: locale_state,
-                                subCategory: window?.localStorage?.getItem('draft_sub_category'),
-                                gender: window?.localStorage?.getItem('draft_gender'),
+                                subCategory: window.localStorage.getItem('draft_sub_category'),
+                                gender: window.localStorage.getItem('draft_gender'),
                                 condition: condition_state,
-                                size: window?.localStorage?.getItem('draft_size'),
-                                lodgeAddress: lodgeAddress
+                                size: window.localStorage.getItem('draft_size')
                             }
                         }
                     )
                 })
                 .then(async(result) => {
                     let response = await result.json();
-                    console.log(response)
                     if(response){
-                        window?.localStorage?.setItem('draft_gender', '')
-                        window?.localStorage?.setItem('draft_size', '')
-                        window?.localStorage?.setItem('draft_sub_category', '')
-                        window?.localStorage?.setItem('draft_locale', '')
-                        window?.localStorage?.setItem('draft_condition', '')
-                        window?.localStorage?.setItem('draft_title', '')
-                        window?.localStorage?.setItem('draft_description', '')
-                        window?.localStorage?.setItem('draft_category', '')
-                        window?.localStorage?.setItem('draft_c_type', '')
-                        window?.localStorage?.setItem('draft_price', '')
+                        window.localStorage.setItem('draft_gender', '')
+                        window.localStorage.setItem('draft_size', '')
+                        window.localStorage.setItem('draft_sub_category', '')
+                        window.localStorage.setItem('draft_locale', '')
+                        window.localStorage.setItem('draft_condition', '')
+                        window.localStorage.setItem('draft_title', '')
+                        window.localStorage.setItem('draft_description', '')
+                        window.localStorage.setItem('draft_category', '')
+                        window.localStorage.setItem('draft_c_type', '')
+                        window.localStorage.setItem('draft_price', '')
                     
                         // openNotice('Upload Successful, Redirecting...')
-                        window.location.href = '/seller.shop';
-                        document.querySelector('.overlay').removeAttribute('id')
+                        // window.location.href = '/seller.shop';
                     }else{
                         let overlay = document.querySelector('.overlay'); 
-                        overlay.removeAttribute('id')
                         // openNotice('Upload Failed, Please Try Again')
                     }
                 })
                 .catch((error) => {
                     console.log('Error:', error);
-                    let overlay = document.querySelector('.overlay'); 
-                    overlay.removeAttribute('id')
                     // openNotice('Upload Failed, Please Try Again')
                 })  
              
@@ -812,7 +831,7 @@ export default function NewListing() {
                                         }
                                     </select>
                                 </div>
-                                
+
                                 <div className="input-cnt">
                                     <label htmlFor="">City/Region</label>
 
@@ -845,73 +864,155 @@ export default function NewListing() {
                 </section>
             </section>
 
-            <section className='file'>
-                <div className='' style={{width: '100%'}}>
-                    <b>Image Samples ({img_list.length + (thumbnail !== '' ? 1 : 0)})</b>
-                </div>
-                <br />
-                <div className='file-cnt' style={{position: 'relative', height: '100%', justifyContent: 'space-evenly', display: 'flex', alignItems: 'flex-start', flexWrap: 'wrap'}}>
-                    <div className="img-cnt" style={{width: '48%', margin: '5px 0px'}}>
-                        {
-                            thumbnail !== ''
-                            ?
-                                <div style={{position: 'relative',height: '100%', width: '100%', border: '3px solid #FF4500'}}>
-                                    <div onClick={e => { set_thumbnail('')}} className="delete-sample-img" style={{position: 'absolute', cursor: 'pointer', top: '5px', right: '5px', color: '#fff', background: 'red', zIndex: '1000', width: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '2.5px', height: '20px'}}>x</div>   
-                                    <img style={{height: '100%', width: '100%'}} src={thumbnail} alt="" />
-                                </div>
-                            :
+            {    
+                category_state !== 'Lodge/Apartments'
+                ?
+                <section className='file'>
+                    <div className='' style={{width: '100%'}}>
+                        <b>Image Samples ({img_list.length + (thumbnail !== '' ? 1 : 0)})</b>
+                    </div>
+                    <br />
+                    <div className='file-cnt' style={{position: 'relative', height: '100%', justifyContent: 'space-evenly', display: 'flex', alignItems: 'flex-start', flexWrap: 'wrap'}}>
+                        <div className="img-cnt" style={{width: '48%', margin: '5px 0px'}}>
+                            {
+                                thumbnail !== ''
+                                ?
+                                    <div style={{position: 'relative',height: '100%', width: '100%', border: '3px solid #FF4500'}}>
+                                        <div onClick={e => { set_thumbnail('')}} className="delete-sample-img" style={{position: 'absolute', cursor: 'pointer', top: '5px', right: '5px', color: '#fff', background: 'red', zIndex: '1000', width: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '2.5px', height: '20px'}}>x</div>   
+                                        <img style={{height: '100%', width: '100%'}} src={thumbnail} alt="" />
+                                    </div>
+                                :
+                                <>
+                                    <input onChange={e => handleImage(e, 'thumbnail')} style={{display: 'none'}} type="file" name="thumbnail" id="image0" />
+                                    <label htmlFor="image0">
+                                        <div>+</div>
+                                        <div>Main image</div>
+                                    </label>
+                                </>
+                            }
+                        </div>
+
+                        
+                        
+
+                        <div className="img-cnt" style={{width: '48%', margin: '5px 0px'}}>
                             <>
-                                <input onChange={e => handleImage(e, 'thumbnail')} style={{display: 'none'}} type="file" name="thumbnail" id="image0" />
-                                <label htmlFor="image0">
+                                <input multiple onChange={e => handleImage(e, 'others')} style={{display: 'none'}} type="file" name="samples" id="image1" />
+                                <label htmlFor="image1">
                                     <div>+</div>
-                                    <div>Main image</div>
+                                    <div>Image</div>
                                 </label>
                             </>
+                        </div>
+
+                        {
+                            
+                            img_list.map((item, index) => 
+                                <div className='img-cnt' style={{width: '48%', margin: '5px 0px'}} key={index}>
+                                    <div key={index} style={{position: 'relative',height: '100%', width: '100%'}}>
+                                        <div onClick={e => { 
+                                            let list = img_list.filter((item, i) => i !== index);
+                                            deletePhoto(list);
+
+                                        }} className="delete-sample-img" style={{position: 'absolute', cursor: 'pointer', top: '5px', right: '5px', color: '#fff', background: 'red', zIndex: '1000', width: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '2.5px', height: '20px'}}>x</div>
+                                        <img style={{height: '100%', width: '100%'}} src={item} alt="" srcset="" />
+                                    </div>
+                                </div>
+
+                            )
                         }
                     </div>
-
-                    
-                    
-
-                    <div className="img-cnt" style={{width: '48%', margin: '5px 0px'}}>
-                        <>
-                            <input multiple onChange={e => handleImage(e, 'others')} style={{display: 'none'}} type="file" name="samples" id="image1" />
-                            <label htmlFor="image1">
-                                <div>+</div>
-                                <div>Image</div>
-                            </label>
-                        </>
+                </section>
+                :
+                <section className='file'>
+                    <div className='' style={{width: '100%'}}>
+                        <b>Video Samples ({img_list.length + (thumbnail !== '' ? 1 : 0)})</b>
                     </div>
+                    <br />
+                    <div className='file-cnt' style={{position: 'relative', height: '100%', justifyContent: 'space-evenly', display: 'flex', alignItems: 'flex-start', flexWrap: 'wrap'}}>
+                        <div className="img-cnt" style={{width: '48%', margin: '5px 0px'}}>
+                            {
+                                thumbnail !== ''
+                                ?
+                                    <div style={{position: 'relative',height: '100%', width: '100%', border: '3px solid #FF4500'}}>
+                                        <div onClick={e => { set_thumbnail('')}} className="delete-sample-img" style={{position: 'absolute', cursor: 'pointer', top: '5px', right: '5px', color: '#fff', background: 'red', zIndex: '1000', width: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '2.5px', height: '20px'}}>x</div>   
+                                        <img style={{height: '100%', width: '100%'}} src={thumbnail} alt="" />
+                                    </div>
+                                :
+                                <>
+                                    <input onChange={e => handleVideo(e, 'thumbnail')} style={{display: 'none'}} type="file" name="thumbnail" id="image0" />
+                                    <label htmlFor="image0">
+                                        <div>+</div>
+                                        <div>Main Video</div>
+                                    </label>
+                                </>
+                            }
+                        </div>
 
-                    {
                         
-                        img_list.map((item, index) => 
-                            <div className='img-cnt' style={{width: '48%', margin: '5px 0px'}} key={index}>
-                                <div key={index} style={{position: 'relative',height: '100%', width: '100%'}}>
-                                    <div onClick={e => { 
-                                        let list = img_list.filter((item, i) => i !== index);
-                                        deletePhoto(list);
+                        
 
-                                    }} className="delete-sample-img" style={{position: 'absolute', cursor: 'pointer', top: '5px', right: '5px', color: '#fff', background: 'red', zIndex: '1000', width: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '2.5px', height: '20px'}}>x</div>
-                                    <img style={{height: '100%', width: '100%'}} src={item} alt="" srcset="" />
-                                </div>
-                            </div>
+                        <div className="img-cnt" style={{width: '48%', margin: '5px 0px'}}>
+                            <>
+                                <input multiple onChange={e => handleVideo(e, 'others')} style={{display: 'none'}} type="file" name="samples" id="video0" />
+                                <label htmlFor="video0">
+                                    <div>+</div>
+                                    <div>Video</div>
+                                </label>
+                            </>
+                        </div>
 
-                        )
-                    }
-                </div>
-            </section>
+                        <div className="img-cnt" style={{width: '48%', margin: '5px 0px'}}>
+                            <>
+                                <input multiple onChange={e => handleVideo(e, 'others')} style={{display: 'none'}} type="file" name="samples" id="video1" />
+                                <label htmlFor="video1">
+                                    <div>+</div>
+                                    <div>Video</div>
+                                </label>
+                            </>
+                        </div>
+
+                        <div className="img-cnt" style={{width: '48%', margin: '5px 0px'}}>
+                            <>
+                                <input multiple onChange={e => handleVideo(e, 'others')} style={{display: 'none'}} type="file" name="samples" id="video2" />
+                                <label htmlFor="video2">
+                                    <div>+</div>
+                                    <div>Video</div>
+                                </label>
+                            </>
+                        </div>
+
+                    </div>
+                </section>
+            }
 
             
         </div>
 
+        {
+            screenWidth > 760
+            ?
+            <section className="seller-editor-btn-cnt">
+                <button onClick={handleForm}>
+                    Submit
+                </button>
+            </section>
+            :
+            ''
+        }
         
+      </div>
+      {
+        screenWidth <= 760
+        ?
         <section className="seller-editor-btn-cnt">
             <button onClick={handleForm}>
                 Submit
             </button>
         </section>
-      </div>
+        :
+        ''
+      }
     </>
   )
 }
