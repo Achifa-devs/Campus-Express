@@ -4,6 +4,10 @@ import vendorCy from '@/files/assets/vendor-center-typo.svg'
 import vendorSymbol from '@/files/assets/vendor-center-symbol.svg'
  
 const Header = () => {
+    let [screenWidth, setScreenWidth] = useState(0) 
+    useEffect(() => {
+        setScreenWidth(window.innerWidth)
+    },[])
 
     let pathname = usePathname()
     return ( 
@@ -32,6 +36,23 @@ const Header = () => {
                     &nbsp;
                     <img src={vendorCy.src} style={{height: '120px', width: '120px', color: '#fff', fontSize: 'medium', display: 'flex'}} alt="" />
                 </div> 
+
+
+                {
+                    pathname.split('/').splice(-1)[0] !== 'profile'
+                    ?
+                        screenWidth <= 760 
+                        ?
+                        <div onClick={e => window.location.href=('/seller/profile')} style={{width: '50px', fontSize: 'x-small', color: '#000', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0px', flexDirection: 'column'}}>
+                            <span style={{height: '30px', width: '30px', color: '#fff', fontSize: 'medium', display: 'flex', borderRadius: '50%', background: '#FF4500', padding: '8px', alignItems: 'center', justifyContent: 'center', fontSize: 'x-small', fontWeight: '500'}}>
+                            A.C
+                            </span>
+                        </div>
+                        :
+                        ''
+                    :
+                    ''
+                }
             </div>
 
             

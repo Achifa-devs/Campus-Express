@@ -13,6 +13,7 @@ export default function Shop() {
     }=useSelector(s=>s.seller_id);
 
     let [shop, setShop] = useState('')
+    let [newShopName, setNewShopName] = useState('')
 
     useEffect(() => {
         if(seller_id !== 'null' && seller_id !== null && seller_id !== ''){
@@ -24,7 +25,6 @@ export default function Shop() {
             })
             .then(async(result) => {
                 let response = await result.json(); 
-                console.log( response)
                 setShop(response)
             })
             .catch((error) => {
@@ -47,6 +47,7 @@ export default function Shop() {
             .then(async(result) => {
                 let response = await result.json(); 
                 setShop(response)
+                
             })
             .catch((error) => {
                 console.log(error)
@@ -54,8 +55,53 @@ export default function Shop() {
         }
     }, [shop])
 
+    useEffect(() => {
+      if(shop?.shop_title === ''){
+        document.querySelector('.seller-overlay').setAttribute('id', 'seller-overlay')
+      }
+    }, [shop])
+
+    
+
   return (
     <>
+        <div className="seller-overlay">
+            <section style={{width: 'auto', height: 'fit-content', borderRadius: '5px', padding: '10px', background: '#fff'}}>
+                <div className="seller-input-cnt" style={{height: 'auto'}}>
+                    <label htmlFor="">Shop Name</label>
+                    <input type="text" onInput={e=>setNewShopName(e.target.value)} name="" placeholder='Shop Name' id="" />
+                </div>
+                <div className="seller-input-cnt">
+                    <button onClick={e=> {
+                        fetch(`https://ce-server.vercel.app/seller.shop-name-update`, {
+                            method: 'post',
+                            headers: {
+                                "Content-Type": "Application/json"
+                            },
+                            body: JSON.stringify({seller_id,newShopName})
+                        })
+                        .then(async(result) => {
+                            // let response = await result.json(); 
+                            document.querySelector('.seller-overlay').removeAttribute('id');
+                            window.location.reload()
+                            
+                        })
+                        .catch((error) => {
+                            console.log(error)
+                        }) 
+                    }} style={{
+                        background: '#FF4500',
+                        color: '#FFF', 
+                        border: 'none', 
+                        outline: 'none',
+                        padding: '10px',
+                        borderRadius: '5px'
+                    }}>
+                        <b><small>Set Shop Name</small></b>
+                    </button>
+                </div>
+            </section>
+        </div>
       <div className="seller-shop">
             <div>
                 <b>Hey there,</b> here is a resume of where <b>Xina</b> is at

@@ -65,6 +65,7 @@ const SellerLayout = ({children,setCookie}) => {
         
     }, [sellerData])
 
+
     let pathname = usePathname()
     useEffect(() => {
         setScreenWidth(window.innerWidth)
@@ -99,6 +100,10 @@ const SellerLayout = ({children,setCookie}) => {
                     <Aside />
                     :
                     pathname.split('/').splice(-1)[0] === 'new-listing'
+                    ?
+                    ''
+                    :
+                    pathname.split('/').splice(-1)[0] === 'profile'
                     ?
                     ''
                     :

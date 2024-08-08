@@ -236,4 +236,29 @@
     .seller-profile ul li:hover{
         background-color: #fff4e0;
     }
+
+    .seller-profile-btn-cnt{
+        height: 60px;
+        width: 100%;
+        padding: 15px;
+        background-color: #fff;
+        position: absolute;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        color: #fff;
+        justify-content: flex-end;
+        left: 0;
+    }
+    .seller-profile-btn-cnt button{
+        padding: 10px;
+        outline: none;
+        border: none;
+        display: flex;
+        align-items: center;
+        color: #fff;
+        border-radius: 5px;
+        justify-content: center;
+        background-color: #FF4500;
+    }
 }

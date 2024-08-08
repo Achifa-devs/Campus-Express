@@ -81,7 +81,8 @@ const {
     UpdateShopInfo, 
     ShopSetup, 
     PayRent, 
-    GetShop 
+    GetShop, 
+    UpdateShopName
 } = require("../controller/seller/shop");
 seller_route.get('/seller.shop', GetShop);
 seller_route.post('/seller.pay-rent', parser, PayRent);
@@ -90,6 +91,7 @@ seller_route.post('/seller.shopInfo', parser, UpdateShopInfo);
 seller_route.post('/seller.shippingInfo', parser, UpdateShippingInfo);
 seller_route.post('/seller.paymentInfo', parser, UpdatePaymentInfo);
 seller_route.post('/seller.inventory-update', parser, UpdateInventory);
+seller_route.post('/seller.shop-name-update', parser, UpdateShopName);
 // @@SHOP
 
 module.exports = {seller_route}

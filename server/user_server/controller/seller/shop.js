@@ -120,14 +120,26 @@ async function UpdateShopInfo(req,res) {
     const updatedObj = Object.fromEntries(entries);
 
     NeonDB.then((pool) => 
-    pool.query(`UPDATE campus_shop set shop_title = '${data.name}', customer_care='${JSON.stringify(updatedObj)}' WHERE seller_id = '${seller_id}'`)
-    .then(result => {
-        result.rowCount > 0 ? res.send(true) : res.send(false)
-    })
+        pool.query(`UPDATE campus_shop set shop_title = '${data.name}', customer_care='${JSON.stringify(updatedObj)}' WHERE seller_id = '${seller_id}'`)
+        .then(result => {
+            result.rowCount > 0 ? res.send(true) : res.send(false)
+        })
+        .catch(err => errHandler(err))
+    )
     .catch(err => errHandler(err))
-)
-.catch(err => errHandler(err))
     
+}
+
+async function UpdateShopName(req,res) {
+    let {newShopName,seller_id} = req.body; 
+    NeonDB.then((pool) => 
+        pool.query(`UPDATE campus_shop set shop_title = '${newShopName}' WHERE seller_id = '${seller_id}'`)
+        .then(result => {
+            result.rowCount > 0 ? res.send(true) : res.send(false)
+        })
+        .catch(err => errHandler(err))
+    )
+    .catch(err => errHandler(err))
 }
 
 async function UpdateShippingInfo(req,res) {
@@ -208,5 +220,6 @@ module.exports={
     UpdateInventory,
     UpdatePaymentInfo,
     UpdateShippingInfo,
-    UpdateShopInfo
+    UpdateShopInfo,
+    UpdateShopName
 }
