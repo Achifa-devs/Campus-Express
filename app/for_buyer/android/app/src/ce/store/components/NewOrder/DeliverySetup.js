@@ -33,91 +33,61 @@ export default function DeliverySetup() {
             {/* <Button title="Show Modal" onPress={toggleModal} /> */}
             <BottomModal visible={modalVisible} onClose={toggleModal}>
                 
-                <View style={{height: '90%', width: '100%', borderRadius: 5, padding: 10, }}>
-                    <View style={{height: '60%', width: '100%', borderRadius: 5, padding: 10, backgroundColor: '#fff', borderColor: '#FF4500', borderWidth: .5, marginBottom: 10}}>
-                        <Text style={{color: '#000', height: 40, display: 'flex', alignItems: 'center', flexDirection: 'row',  justifyContent: 'center'}}>Add Delivery Address</Text>
-                        <ScrollView contentContainerStyle={{ display: 'flex', alignItems: 'space-between', flexDirection: 'column',  justifyContent: 'center'}}>
-                            
-                            <View style={{
-                                height: 'auto', 
-                                width: '100%',
-                                position: 'relative',
-                                backgroundColor: '#fff',
-                                color: '#000',
-                                overflow: 'scroll',
-                                marginBottom: 40
-                            }}>
-                                
-                                
-                                <View style={{height: 'auto', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column'}}>
-
-                                    <View style={{ height: 80, display: 'flex', color: '#000', width: '100%', flexDirection: 'column', marginBottom: 10}}>
-                                        <Text style={{width: '100%', color: '#000'}}>State</Text>
-                                        <TextInput style={{height: 50, padding: 10, fontFamily: 'serif', borderRadius: 15, marginBottom: 2, width: '100%',  backgroundColor: '#efefef'}} onChangeText={e => setState(e)} name="state"  placeholder="State"  />
-                                        {/* <Text style={{color: '#000', marginBottom: 15, display: emailErr.length > 0 ? 'flex' : 'none', fontSize: 10, paddingLeft: 5, color: 'red'}}>{emailErr}</Text> */}
-                                    </View>
-
-
-                                    <View style={{ height: 'auto', display: 'flex', color: '#000', width: '100%', flexDirection: 'column', marginBottom: 18}}>
-                                        <Text style={{width: '100%', color: '#000'}}>Campus</Text>
-                                        <TextInput style={{height: 50, padding: 10, fontFamily: 'serif', borderRadius: 15, marginBottom: 2, width: '100%',  backgroundColor: '#efefef'}} onChangeText={e => setCampus(e)} name="campus"  placeholder="Campus"  />
-                                        {/* <Text style={{color: '#000', marginBottom: 2, display: pwdErr.length > 0 ? 'flex' : 'none', fontSize: 10, paddingLeft: 5, color: 'red'}}>{pwdErr}</Text> */}
-                                    </View> 
-
-                                    <View style={{ height: 'auto', display: 'flex', color: '#000', width: '100%', flexDirection: 'column', marginBottom: 18}}>
-                                        <Text style={{width: '100%', color: '#000'}}>Address 1 (Town)</Text>
-                                        <TextInput style={{height: 50, padding: 10, fontFamily: 'serif', borderRadius: 15, marginBottom: 2, width: '100%',  backgroundColor: '#efefef'}} onChangeText={e => setAddress1(e)} name="town"  placeholder="Town"  />
-                                        {/* <Text style={{color: '#000', marginBottom: 2, display: pwdErr.length > 0 ? 'flex' : 'none', fontSize: 10, paddingLeft: 5, color: 'red'}}>{pwdErr}</Text> */}
-                                    </View> 
-
-                                    <View style={{ height: 'auto', display: 'flex', color: '#000', width: '100%', flexDirection: 'column', marginBottom: 18}}>
-                                        <Text style={{width: '100%', color: '#000'}}>Address 2 (Street Name)</Text>
-                                        <TextInput style={{height: 50, padding: 10, fontFamily: 'serif', borderRadius: 15, marginBottom: 2, width: '100%',  backgroundColor: '#efefef'}} onChangeText={e => setAddress2(e)} name="street-name"  placeholder="Street Name"  />
-                                        {/* <Text style={{color: '#000', marginBottom: 2, display: pwdErr.length > 0 ? 'flex' : 'none', fontSize: 10, paddingLeft: 5, color: 'red'}}>{pwdErr}</Text> */}
-                                    </View> 
-
-                                    <View style={{ height: 'auto', display: 'flex', color: '#000', width: '100%', flexDirection: 'column', marginBottom: 18}}>
-                                        <Text style={{width: '100%', color: '#000'}}>Address 3 (Junction)</Text>
-                                        <TextInput style={{height: 50, padding: 10, fontFamily: 'serif', borderRadius: 15, marginBottom: 2, width: '100%',  backgroundColor: '#efefef'}} onChangeText={e => setAddress3(e)} name="juction"  placeholder="Juction"  />
-                                        {/* <Text style={{color: '#000', marginBottom: 2, display: pwdErr.length > 0 ? 'flex' : 'none', fontSize: 10, paddingLeft: 5, color: 'red'}}>{pwdErr}</Text> */}
-                                    </View> 
-
-                                    <View style={{ height: 'auto', display: 'flex', color: '#000', width: '100%', flexDirection: 'column', marginBottom: 18}}>
-                                        <Text style={{width: '100%', color: '#000'}}>Address 4 (Lodge Name)</Text>
-                                        <TextInput style={{height: 50, padding: 10, fontFamily: 'serif', borderRadius: 15, marginBottom: 2, width: '100%',  backgroundColor: '#efefef'}} onChangeText={e => setAddress4(e)} name="lodge-name"  placeholder="Lodge Name"  />
-                                        {/* <Text style={{color: '#000', marginBottom: 2, display: pwdErr.length > 0 ? 'flex' : 'none', fontSize: 10, paddingLeft: 5, color: 'red'}}>{pwdErr}</Text> */}
-                                    </View> 
-
-                                    <View style={{ height: 'auto', display: 'flex', color: '#000', width: '100%', flexDirection: 'column', marginBottom: 18}}>
-                                        <Text style={{width: '100%', color: '#000'}}>Address 5 (Flat Number)</Text>
-                                        <TextInput style={{height: 50, padding: 10, fontFamily: 'serif', borderRadius: 15, marginBottom: 2, width: '100%',  backgroundColor: '#efefef'}} onChangeText={e => setAddress5(e)} name="flat-number"  placeholder="Flat Number"  />
-                                        {/* <Text style={{color: '#000', marginBottom: 2, display: pwdErr.length > 0 ? 'flex' : 'none', fontSize: 10, paddingLeft: 5, color: 'red'}}>{pwdErr}</Text> */}
-                                    </View> 
-                                        
-                                </View>
-                                
-                            </View>
-
-                            
-                        </ScrollView>
-                    </View> 
-                    <View style={{height: '40%', width: '100%', padding: 10, backgroundColor: '#fff', borderColor: '#FF4500', borderRadius: 5, borderWidth: .5}}>
-                        <Text style={{color: '#000', height: 40, display: 'flex', alignItems: 'center', flexDirection: 'row',  justifyContent: 'center'}}>Select At Least 3 Date For Pickup</Text>
-
-                        <ScrollView contentContainerStyle={{ display: 'flex', alignItems: 'space-between', flexDirection: 'column',  justifyContent: 'center'}} style={{height: '100%', width: '100%', padding: 10, backgroundColor: '#f9f9f9'}}>
-    
-                            <View style={{height: '33%', width: '100%', padding: 5, backgroundColor: '#fff'}}>
-                                <TouchableOpacity>
-                                    <Text>Add</Text>
-                                </TouchableOpacity>
-                                <View></View>
-                            </View>
-
-                        </ScrollView> 
+                <View style={{height: 'auto', width: '100%', borderRadius: 5, padding: 10, marginBottom: 10, display: 'flex', alignItems: 'center', flexDirection: 'column',  justifyContent: 'center'}}>
+                    <Text style={{color: '#000', height: 40, display: 'flex', alignItems: 'center', flexDirection: 'row',  justifyContent: 'center'}}>Add Delivery Address</Text>
+                    <ScrollView contentContainerStyle={{ display: 'flex', alignItems: 'space-between', flexDirection: 'column',  justifyContent: 'space-between'}} style={{height: 400, width: '100%'}}>
                         
-                    </View>
+                        <View style={{height: 'auto', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column'}}>
+
+                            <View style={{ height: 80, display: 'flex', color: '#000', width: '100%', flexDirection: 'column', marginBottom: 10}}>
+                                <Text style={{width: '100%', color: '#000'}}>State</Text>
+                                <TextInput style={{height: 50, padding: 10, fontFamily: 'serif', borderRadius: 15, marginBottom: 2, width: '100%',  backgroundColor: '#efefef'}} onChangeText={e => setState(e)} name="state"  placeholder="State"  />
+                                {/* <Text style={{color: '#000', marginBottom: 15, display: emailErr.length > 0 ? 'flex' : 'none', fontSize: 10, paddingLeft: 5, color: 'red'}}>{emailErr}</Text> */}
+                            </View>
+
+
+                            <View style={{ height: 'auto', display: 'flex', color: '#000', width: '100%', flexDirection: 'column', marginBottom: 18}}>
+                                <Text style={{width: '100%', color: '#000'}}>Campus</Text>
+                                <TextInput style={{height: 50, padding: 10, fontFamily: 'serif', borderRadius: 15, marginBottom: 2, width: '100%',  backgroundColor: '#efefef'}} onChangeText={e => setCampus(e)} name="campus"  placeholder="Campus"  />
+                                {/* <Text style={{color: '#000', marginBottom: 2, display: pwdErr.length > 0 ? 'flex' : 'none', fontSize: 10, paddingLeft: 5, color: 'red'}}>{pwdErr}</Text> */}
+                            </View> 
+
+                            <View style={{ height: 'auto', display: 'flex', color: '#000', width: '100%', flexDirection: 'column', marginBottom: 18}}>
+                                <Text style={{width: '100%', color: '#000'}}>Address 1 (Town)</Text>
+                                <TextInput style={{height: 50, padding: 10, fontFamily: 'serif', borderRadius: 15, marginBottom: 2, width: '100%',  backgroundColor: '#efefef'}} onChangeText={e => setAddress1(e)} name="town"  placeholder="Town"  />
+                                {/* <Text style={{color: '#000', marginBottom: 2, display: pwdErr.length > 0 ? 'flex' : 'none', fontSize: 10, paddingLeft: 5, color: 'red'}}>{pwdErr}</Text> */}
+                            </View> 
+
+                            <View style={{ height: 'auto', display: 'flex', color: '#000', width: '100%', flexDirection: 'column', marginBottom: 18}}>
+                                <Text style={{width: '100%', color: '#000'}}>Address 2 (Street Name)</Text>
+                                <TextInput style={{height: 50, padding: 10, fontFamily: 'serif', borderRadius: 15, marginBottom: 2, width: '100%',  backgroundColor: '#efefef'}} onChangeText={e => setAddress2(e)} name="street-name"  placeholder="Street Name"  />
+                                {/* <Text style={{color: '#000', marginBottom: 2, display: pwdErr.length > 0 ? 'flex' : 'none', fontSize: 10, paddingLeft: 5, color: 'red'}}>{pwdErr}</Text> */}
+                            </View> 
+
+                            <View style={{ height: 'auto', display: 'flex', color: '#000', width: '100%', flexDirection: 'column', marginBottom: 18}}>
+                                <Text style={{width: '100%', color: '#000'}}>Address 3 (Junction)</Text>
+                                <TextInput style={{height: 50, padding: 10, fontFamily: 'serif', borderRadius: 15, marginBottom: 2, width: '100%',  backgroundColor: '#efefef'}} onChangeText={e => setAddress3(e)} name="juction"  placeholder="Juction"  />
+                                {/* <Text style={{color: '#000', marginBottom: 2, display: pwdErr.length > 0 ? 'flex' : 'none', fontSize: 10, paddingLeft: 5, color: 'red'}}>{pwdErr}</Text> */}
+                            </View> 
+
+                            <View style={{ height: 'auto', display: 'flex', color: '#000', width: '100%', flexDirection: 'column', marginBottom: 18}}>
+                                <Text style={{width: '100%', color: '#000'}}>Address 4 (Lodge Name)</Text>
+                                <TextInput style={{height: 50, padding: 10, fontFamily: 'serif', borderRadius: 15, marginBottom: 2, width: '100%',  backgroundColor: '#efefef'}} onChangeText={e => setAddress4(e)} name="lodge-name"  placeholder="Lodge Name"  />
+                                {/* <Text style={{color: '#000', marginBottom: 2, display: pwdErr.length > 0 ? 'flex' : 'none', fontSize: 10, paddingLeft: 5, color: 'red'}}>{pwdErr}</Text> */}
+                            </View> 
+
+                            <View style={{ height: 'auto', display: 'flex', color: '#000', width: '100%', flexDirection: 'column', marginBottom: 18}}>
+                                <Text style={{width: '100%', color: '#000'}}>Address 5 (Flat Number)</Text>
+                                <TextInput style={{height: 50, padding: 10, fontFamily: 'serif', borderRadius: 15, marginBottom: 2, width: '100%',  backgroundColor: '#efefef'}} onChangeText={e => setAddress5(e)} name="flat-number"  placeholder="Flat Number"  />
+                                {/* <Text style={{color: '#000', marginBottom: 2, display: pwdErr.length > 0 ? 'flex' : 'none', fontSize: 10, paddingLeft: 5, color: 'red'}}>{pwdErr}</Text> */}
+                            </View> 
+                                
+                        </View>
+                        
+                    </ScrollView> 
                 </View>
-                <View style={{padding: 5, display: 'flex', alignItems: 'center', flexDirection: 'row',  justifyContent: 'space-between'}}>
+
+                <View style={{padding: 10, display: 'flex', alignItems: 'center', flexDirection: 'row',  justifyContent: 'space-between'}}>
                     <TouchableOpacity onPress={toggleModal} style={[styles.btn, {width: '45%'}]}>
                         <Text style={{color: '#fff'}}>Add</Text>
                     </TouchableOpacity>

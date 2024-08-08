@@ -63,6 +63,7 @@ textarea{
     top: 0;
     display: none;
     padding: 10px;
+    align-items: center;
     justify-content: center;
     left: 0;
     z-index: 1000000;

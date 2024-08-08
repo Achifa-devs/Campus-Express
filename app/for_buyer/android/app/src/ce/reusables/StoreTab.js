@@ -112,6 +112,8 @@ export default function StoreTab({navigation}) {
                     tabBarStyle.display = 'none'; 
                 }else if(currentRouteName === 'user-product') {
                     tabBarStyle.display = 'none'; 
+                }else if(currentRouteName === 'user-new-order'){
+                    tabBarStyle.display = 'none'; 
                 }
             }
 
@@ -142,9 +144,9 @@ export default function StoreTab({navigation}) {
                 name="Home" 
                 component={HomeStackScreen} /> 
 
-            <Tab.Screen 
+            {/* <Tab.Screen 
                 name="Message" 
-                component={MessageStackScreen} />
+                component={MessageStackScreen} /> */}
 
             {/* <Tab.Screen 
                 options={{
