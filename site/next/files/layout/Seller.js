@@ -78,7 +78,19 @@ const SellerLayout = ({children,setCookie}) => {
             {
                 screenWidth <= 760
                 ?
-                <Header />
+                    pathname.split('/').splice(-1)[0] === 'login'
+                    ?
+                    ''
+                    :
+                    pathname.split('/').splice(-1)[0] === 'signup'
+                    ?
+                    ''
+                    : 
+                    pathname.split('/').splice(-1)[0] === 'password-recovery'
+                    ?
+                    ''
+                    :
+                    <Header />
                 :
                 ''
             }

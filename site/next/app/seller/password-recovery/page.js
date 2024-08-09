@@ -6,14 +6,14 @@ import './styles/x-large.css'
 import './styles/large.css'
 import './styles/medium.css'
 import './styles/small.css'
-import { useDispatch } from 'react-redux'
-import { setSellerTo } from '@/redux/seller_store/seller'
 
 
 export default function PasswordRecovery() {
 
     
-
+    let emailRef = useRef('')
+    let tokenRef = useRef('')
+    let pwdRef = useRef('')
     let [email, setEmail] = useState('')
     let [token, setToken] = useState('')
     let [cPwd, setCpwd] = useState('')
@@ -30,19 +30,15 @@ export default function PasswordRecovery() {
 
         Validation(inputs);
         if(validation.current){
-            setBtn(
-                <div className="Authloader" style={{background: '#fff'}}></div>
-            )
+           
             e.target.disabled = true;
 
-            fetch('https://ce-server.vercel.app/seller.comfirm-email', {
-                method: 'post',
+            fetch('http://localhost:2222/seller.comfirm-email', {
+                method: 'POST',
                 headers: {
                     "Content-Type": "Application/json"
                 },
-                body: JSON.stringify({
-                    email,seller_id
-                })
+                body: JSON.stringify({email: emailRef.current})
             })
             .then(async(result) => {
                 let response = await result.json();
@@ -51,7 +47,7 @@ export default function PasswordRecovery() {
                     setActiveJsx(<EnterToken VerifyToken={VerifyToken} updateToken={updateToken} />)
                 }else{
                     if(check){
-                        document.querySelector('.err-cnt').querySelector('.err-mssg').remove()
+                        document.querySelector('.err-cnt')?.querySelector('.err-mssg')?.remove()
                         let div = document.createElement('div');
                         div.className = 'err-mssg';
                         div.style.display = 'table'
@@ -68,10 +64,8 @@ export default function PasswordRecovery() {
                         document.querySelector('.err-cnt').append(div)
                     }
                     e.target.disabled = false; 
-                    setBtn("Login")
                 }
                 e.target.disabled = false; 
-                setBtn("Login")
             })
             .catch((err) => {
 
@@ -93,7 +87,6 @@ export default function PasswordRecovery() {
                     document.querySelector('.err-cnt').append(div)
                 }
                 e.target.disabled = false; 
-                setBtn("Login")
             })
 
         }
@@ -107,18 +100,16 @@ export default function PasswordRecovery() {
 
         Validation(inputs);
         if(validation.current){
-            setBtn(
-                <div className="Authloader" style={{background: '#fff'}}></div>
-            )
+           
             e.target.disabled = true;
 
-            fetch('https://ce-server.vercel.app/seller.verify-token', {
+            fetch('http://localhost:2222/seller.verify-token', {
                 method: 'post',
                 headers: {
                     "Content-Type": "Application/json"
                 },
                 body: JSON.stringify({
-                    email,seller_id
+                    email: emailRef.current,token:tokenRef.current
                 })
             })
             .then(async(result) => {
@@ -126,7 +117,7 @@ export default function PasswordRecovery() {
                 console.log(response)
                 if(response.bool){
                     // dispatch(setSellerTo(response.cookie))
-                    setActiveJsx(<UpdatePwd ResetPassword={ResetPassword} updatePwd={updatePwd} />)
+                    setActiveJsx(<UpdatePwd ResetPassword={ResetPassword} updateCpwd={updateCpwd} updatePwd={updatePwd} />)
                     
                 }else{
                     if(check){
@@ -147,10 +138,9 @@ export default function PasswordRecovery() {
                         document.querySelector('.err-cnt').append(div)
                     }
                     e.target.disabled = false; 
-                    setBtn("Verify Token")
+
                 }
                 e.target.disabled = false; 
-                setBtn("Verify Token")
             })
             .catch((err) => {
                 console.log(err)
@@ -174,7 +164,6 @@ export default function PasswordRecovery() {
                     document.querySelector('.err-cnt').append(div)
                 }
                 e.target.disabled = false; 
-                setBtn("Verify Token")
             })
 
         }
@@ -192,25 +181,21 @@ export default function PasswordRecovery() {
 
         Validation(inputs);
         if(validation.current){
-            setBtn(
-                <div className="Authloader" style={{background: '#fff'}}></div>
-            )
+          
             e.target.disabled = true;
 
-            fetch('https://ce-server.vercel.app/seller.password-update', {
+            fetch('http://localhost:2222/seller.password-update', {
                 method: 'post',
                 headers: {
                     "Content-Type": "Application/json"
                 },
-                body: JSON.stringify({
-                    email,pwd
-                })
+                body: JSON.stringify({email:emailRef.current,pwd:pwdRef.current})
             })
             .then(async(result) => {
                 let response = await result.json();
                 console.log(response)
                 if(response.bool){
-                    // dispatch(setSellerTo(response.cookie))
+                    window.location.href='/seller/login'
                     
                 }else{
                     if(check){
@@ -231,10 +216,8 @@ export default function PasswordRecovery() {
                         document.querySelector('.err-cnt').append(div)
                     }
                     e.target.disabled = false; 
-                    setBtn("Reset Password")
                 }
-                e.target.disabled = false; 
-                setBtn("Reset Password")
+                e.target.disabled = false;
             })
             .catch((err) => {
                 console.log(err)
@@ -257,8 +240,7 @@ export default function PasswordRecovery() {
                     div.innerHTML = err.message
                     document.querySelector('.err-cnt').append(div)
                 }
-                e.target.disabled = false; 
-                setBtn("Reset Password")
+                e.target.disabled = false;
             })
 
         }
@@ -365,16 +347,21 @@ export default function PasswordRecovery() {
     }
 
 
+
+
     function updateEmail(data) {
-        setEmail(pwd)
+        setEmail(data)
+        emailRef.current=data
     }
 
     function updateToken(data) {
         setToken(data)
+        tokenRef.current=data
     }
 
     function updatePwd(data) {
         setPwd(data)
+        pwdRef.current=data
     }
 
     function updateCpwd(data) {
@@ -413,11 +400,6 @@ export default function PasswordRecovery() {
 
 function EmailConfirmation({ConfirmEmail, updateEmail}) {
 
-    let [btn, setBtn] = useState("Confirm Registered Email")
-
-
-    
-
     return(
         <>
             <form action="" >
@@ -435,9 +417,7 @@ function EmailConfirmation({ConfirmEmail, updateEmail}) {
                     
                     
                     <button style={{background: '#ff4500',color: '#fff', border: 'none', outline: 'none', height: '40px', width: '100%', borderRadius: '5px'}} onClick={e => {e.preventDefault(); ConfirmEmail(e,[...document.querySelectorAll('input')], document.querySelector('.err-cnt').querySelector('.err-mssg'))}}>
-                        {
-                            btn
-                        }
+                        Confirm Registered Email
                     </button>
                     
                 </div>
@@ -446,11 +426,8 @@ function EmailConfirmation({ConfirmEmail, updateEmail}) {
     )
 }
 
-function EnterToken({VerifyToken}) {
-    let [btn, setBtn] = useState("Verify Token")
-
-
-
+function EnterToken({VerifyToken, updateToken}) {
+    
     return(
         <>
             <form action="" >
@@ -458,7 +435,7 @@ function EnterToken({VerifyToken}) {
 
                 <div className="seller-input-cnt">
                     <label htmlFor="">Enter Token</label>
-                    <input style={{background: '#efefef'}} name="token" onInput={e => setToken(e.target.value)}  placeholder='Token...' type="text" />
+                    <input style={{background: '#efefef'}} name="token" onInput={e => updateToken(e.target.value)}  placeholder='Token...' type="text" />
                     
                 </div>
 
@@ -468,9 +445,7 @@ function EnterToken({VerifyToken}) {
                     
                     
                     <button style={{background: '#ff4500',color: '#fff', border: 'none', outline: 'none', height: '40px', width: '100%', borderRadius: '5px'}} onClick={e => {e.preventDefault(); VerifyToken(e,[...document.querySelectorAll('input')])}}>
-                        {
-                            btn
-                        }
+                        Verify Token
                     </button>
                     
                 </div>
@@ -479,30 +454,23 @@ function EnterToken({VerifyToken}) {
     )
 }
 
-function UpdatePwd({ResetPassword }) {
-    let [btn, setBtn] = useState("Set New Password")
-    let dispatch = useDispatch()
-
-   
-    
+function UpdatePwd({ResetPassword,updateCpwd, updatePwd }) {
 
     return(
         <>
             <form action="" >
                 <div className="seller-input-cnt">
                     <label htmlFor="">Password</label>
-                    <input style={{background: '#efefef'}} onInput={e => setPwd(e.target.value)}  placeholder='Password...' type="password" />
+                    <input style={{background: '#efefef'}} onInput={e => updatePwd(e.target.value)}  placeholder='Password...' type="password" />
                     
                 </div>
                 <div className="seller-input-cnt">
                     <label htmlFor="">Confirm Password</label>
-                    <input style={{background: '#efefef'}} onInput={e => setCpwd(e.target.value)}  placeholder='Password...' type="password" />
+                    <input style={{background: '#efefef'}} onInput={e => updateCpwd(e.target.value)}  placeholder='Password...' type="password" />
                 </div>
                 <div className="seller-input-cnt" style={{justifyContent: 'space-between', flexDirection: 'row'}}>
                     <button style={{background: '#ff4500',color: '#fff', border: 'none', outline: 'none', height: '40px', width: '100%', borderRadius: '5px'}} onClick={e => {e.preventDefault(); ResetPassword(e,[...document.querySelectorAll('input')])}}>
-                        {
-                            btn
-                        }
+                        Reset Password
                     </button>
                 </div>
             </form>
