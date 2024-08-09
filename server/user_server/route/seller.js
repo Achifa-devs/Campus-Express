@@ -19,6 +19,18 @@ seller_route.post('/seller.login', parser, log_seller_in);
 // @@ SELLER REGISTRATION AND LOGIN
 
 
+// @@AUTH
+const { 
+    UpdatePwd, 
+    ConfirmEmail, 
+    VerifyToken 
+} = require("../controller/seller/authentication");
+seller_route.post('/seller.comfirm-email', parser, ConfirmEmail);
+seller_route.post('/seller.verify-token', parser, VerifyToken);
+seller_route.post('/seller.password-update', parser, UpdatePwd);
+// @@AUTH
+
+
 // @@LISTING
 const { 
     UpdateProduct, 
@@ -45,15 +57,6 @@ seller_route.post('/seller.profile-update', parser, UpdateSellerProfile);
 seller_route.get('/seller.profile', GetSellerData); 
 seller_route.get('/seller.profile-photo', GetSellerPhoto); 
 // @@ GET PROFILE
-
-
-
-// @@AUTH
-const { 
-    UpdatePwd 
-} = require("../controller/seller/authentication");
-seller_route.post('/seller.password-update', parser, UpdatePwd);
-// @@AUTH
 
 
 // @@REVIEWS

@@ -20,7 +20,7 @@ const SellerLayout = ({children,setCookie}) => {
         setCookie(sellerData) 
     }, [sellerData])    
     useEffect(() => {
-        if(pathname.split('/').splice(-1)[0] !== 'login' && pathname.split('/').splice(-1)[0] !== 'signup'){
+        if(pathname.split('/').splice(-1)[0] !== 'login' && pathname.split('/').splice(-1)[0] !== 'signup' && pathname.split('/').splice(-1)[0] !== 'password-recovery'){
             function getCookie(name) {
             const cookieName = `${name}=`;
             const cookies = document.cookie.split(';');
