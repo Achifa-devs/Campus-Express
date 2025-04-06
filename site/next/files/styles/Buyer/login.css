@@ -1,0 +1,53 @@
+@media screen and (min-width: 760px) {
+    *{
+        box-sizing: border-box;
+    }
+
+    html,body{
+        height: 100%;
+        width: 100%;
+        background-color: #fff;
+    }
+
+    .buyer-login-cnt{
+        height: 100vh;
+        width: 100vw;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .buyer-login-cnt section{
+        height: 400px;
+        width: 500px;
+        padding: 20px;
+    }
+
+
+    
+    input,select{
+        height: 50px;
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        outline: none;
+    }
+
+    button{
+        height: 50px;
+        width: 100%;
+        border-radius: 5px;
+        outline: none;
+        border: none;
+        float: right;
+        color: #fff;
+        font-weight: 500;
+        background-color: orangered;
+        margin: 0;
+    }
+
+    label{
+        margin-bottom: 5px;
+    }
+}
