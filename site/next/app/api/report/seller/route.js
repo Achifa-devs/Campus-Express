@@ -11,7 +11,6 @@ export async function GET(request) {
   }
 
   try {
-    const pool = await NeonDB;
 
     const sellerShopRes = await pool.query(
       'SELECT * FROM seller_shop WHERE seller_id = $1',

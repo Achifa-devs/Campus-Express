@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import ActionBtn from './buttons/actionBtn';
 import BalanceLabel from './BalanceBoard/BalanceLabel';
@@ -11,17 +11,18 @@ import { getData } from '../../../reusables/AsyncStore.js';
 export default function Engagement({navigation}) {
   let screenWidth = Dimensions.get('window').width;
   
+  let [id, set_id] = useState('')
   useEffect(() => {
-    let id = async () => await getData('user_id');
-    console.log(id)
+    getData('user_id').then(result => set_id(result));
     fetch(`https://www.campussphere.net/api/report/seller?seller_id=${id}`)
-    .then((result) => {
-      console.log(result)
+    .then(async(result) => {
+      let res = await result.json();
+      console.log('result: ', res)
     })
     .catch((err) => {
       console.log(err)
     })
-  }, [])
+  }, [id])
   return (
     <>
       <View style={{padding: 10}}>
