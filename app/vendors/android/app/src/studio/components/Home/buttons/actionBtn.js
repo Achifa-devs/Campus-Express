@@ -11,11 +11,11 @@ export default function ActionBtn() {
     <>
         <View style={styles.actionBtn}>
 
-            <TouchableOpacity style={{width: '68%',borderRadius: 15, height: '100%', backgroundColor: '#FF4500',  display: 'flex', flexDirection: 'row',justifyContent: 'center', paddingLeft: 6, paddingRight: 6,alignItems: 'center'}}>
+            <TouchableOpacity style={{width: '68%',borderRadius: 5, height: '100%', backgroundColor: '#FF4500',  display: 'flex', flexDirection: 'row',justifyContent: 'center', paddingLeft: 6, paddingRight: 6,alignItems: 'center'}}>
                 <Text style={{fontSize: 10, color: '#fff'}}>Select A plan Now</Text>
             </TouchableOpacity> 
 
-            <TouchableOpacity style={{width: '28%', backgroundColor: '#efefef', height: '100%',borderRadius: 15,display: 'flex', flexDirection: 'row',justifyContent: 'center', paddingLeft: 6, paddingRight: 6,alignItems: 'center'}}>
+            <TouchableOpacity style={{width: '28%', backgroundColor: '#efefef', height: '100%',borderRadius: 5,display: 'flex', flexDirection: 'row',justifyContent: 'center', paddingLeft: 6, paddingRight: 6,alignItems: 'center'}}>
                 <Text style={{fontSize: 10,}}>cart</Text>
             </TouchableOpacity> 
 
@@ -42,6 +42,6 @@ const styles = StyleSheet.create({
         
         left: 0,
         backgroundColor: '#fff',
-        borderRadius: 15,
+        borderRadius: 5,
     },
   });

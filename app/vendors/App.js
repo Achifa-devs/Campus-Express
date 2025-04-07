@@ -15,12 +15,13 @@ import React, { useEffect, useState } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Signup from './android/app/src/Auth/Signup';
 import Login from './android/app/src/Auth/Login';
-import { Alert, Text, View } from 'react-native';
+import { Alert, StatusBar, Text, View } from 'react-native';
 import CookieManager from '@react-native-cookies/cookies';
 import StudioTab from './android/app/src/reusables/StudioTab';
 import { set_cookie } from './redux/cookie';
 import { get_cookie, getData } from './android/app/src/reusables/AsyncStore.js';
 import { set_user } from './redux/user.js';
+import Aside from './android/app/src/reusables/Aside.js';
 
 
 function App(){  
@@ -49,9 +50,9 @@ function NavCnt() {
 
 
   useEffect(() => {
-    CookieManager.get('https://campusexpressng.com')
+    CookieManager.get('https://campussphere.net')
     .then((result) => {
-    // console.log(result)
+    console.log(result)
       if(result.jwt_token.value !== null && result.jwt_token.value !== '') {
         dispatch(set_cookie(true))
       }else{
@@ -77,13 +78,14 @@ function NavCnt() {
             <>
               <Stack.Navigator>
                 <Stack.Screen name={'login'} options={{
-      
+                  
                   header: ({navigation}) =>
                   (
+                    
                     <View style={{ height: 0, display: 'flex', flexDirection: 'row', width: '100%', backgroundColor: '#1E90FF', alignItems: 'center', justifyContent: 'center'}}>
-                      
+                      <StatusBar backgroundColor="#FF4500" barStyle="light-content" />
                       <Text style={{fontSize: 30, color: '#fff'}}>
-                        Paypenz
+                        Campus Sphere - For Vendors
                       </Text>
                     </View>
                   ),
@@ -95,9 +97,9 @@ function NavCnt() {
                   header: ({navigation}) =>
                   (
                     <View style={{ height: 0, display: 'flex', flexDirection: 'row', width: '100%', backgroundColor: '#1E90FF', alignItems: 'center', justifyContent: 'center'}}>
-                      
+                      <StatusBar backgroundColor="#FF4500" barStyle="light-content" />
                       <Text style={{fontSize: 30, color: '#fff'}}>
-                        Paypenz
+                        Campus Sphere - For Vendors
                       </Text>
                     </View>
                   ),
@@ -107,7 +109,10 @@ function NavCnt() {
               </Stack.Navigator>
             </>
           :
-          <StudioTab />
+            <>
+              <Aside />
+              <StudioTab />
+            </>
         }
     </GestureHandlerRootView>
   )

@@ -19,8 +19,12 @@ export default function Orders() {
                 styles.card,
                   { width: '100%',marginTop: 20 },
                 
-            ]}> 
-                <View style={{
+              ]}> 
+                <View style={{width: '100%'}}> 
+                    <Text style={{fontSize: 17, fontWeight: '500', margin: 5, color: '#000', textAlign: 'left'}}>Earnings</Text>
+                </View>
+                
+                <View style={{ 
                     height: 'auto',
                     // marginLeft: 5,  
                     borderRadius: 5, 
@@ -29,26 +33,29 @@ export default function Orders() {
                     justifyContent: 'space-evenly', 
                     flexDirection: 'row',
                     flexWrap: 'wrap',
-                    padding: 0,
+                      padding: 0,
+                    elevation: 2, // Higher values increase shadow intensity
+        
+                    // borderWidth: 2,borderColor: '#000',
                     marginBottom: 5,
                     backgroundColor: '#fff'
                 }}>
                     {
                         list.map((item,index) => 
                             <View style={{
-                                display: 'flex', justifyContent: 'space-evenly', flexDirection: 'column', height: 140, width: '45%', marginBottom: 15, alignItems: 'center', backgroundColor: '#fff', borderRadius: 5, borderWidth: 1, borderColor: '#fff',shadowColor: '#000', // Shadow color
+                                display: 'flex', justifyContent: 'space-evenly', flexDirection: 'column', height: 80, width: '45%', marginBottom: 5, alignItems: 'flex-start', backgroundColor: '#fff', borderRadius: 2.5, borderWidth: 1, borderColor: '#fff',shadowColor: '#000', // Shadow color
                                 shadowOffset: { width: 0, height: 4 }, // Shadow position
                                 shadowOpacity: 0.3, // Shadow transparency
                                 shadowRadius: 4.65, // Shadow blur radius
-
+                                padding: 10,
                                 // Shadow for Android
-                                elevation: 2, // Higher values increase shadow intensity
-                            }}>
-                                <Text style={{fontSize: 24, padding: 8, color: '#000', textDecorationStyle: 'dashed'}}>{
+                                // elevation: 2, // Higher values increase shadow intensity
+                            }}> 
+                                <Text style={{fontSize: 18, padding: 0, color: index === 0 ? '#3fcd32' : '#000', textDecorationStyle: 'dashed', textAlign: 'left', fontWeight: '500'}}>{
                                     index === 0 ? <>&#8358;{new Intl.NumberFormat('en-us').format(item.value)}</> : item.value
                                 }</Text>
-                                <Text style={{fontSize: 12, color: '#000'}}>{item.name}</Text>
-                            </View>   
+                                <Text style={{fontSize: 12, color: '#000', textAlign: 'left'}}>{item.name}</Text>
+                            </View>    
                         )
                     } 
                 </View>

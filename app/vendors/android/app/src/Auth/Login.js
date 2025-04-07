@@ -1,6 +1,6 @@
 
 
-import { Dimensions, ScrollView, Vibration, StyleSheet, Text, TextInput, TouchableOpacity, View, Button, Alert } from "react-native";
+import { Dimensions, ScrollView, Vibration, StyleSheet, Text, TextInput, TouchableOpacity, View, Button, Alert, ActivityIndicator } from "react-native";
 import { useEffect, useRef, useState } from "react";
 import { Dropdown } from 'react-native-element-dropdown';
 import { useNavigation } from "@react-navigation/native";
@@ -13,6 +13,7 @@ import BackSvg from '../assets/back-svgrepo-com (4).svg'
 import CookieManager from '@react-native-cookies/cookies';
 import { getData, storeData } from "../reusables/AsyncStore.js";
 import { set_cookie } from "../../../../redux/cookie.js";
+import { err } from "react-native-svg";
 
 const Login = ({}) => {
 
@@ -20,6 +21,7 @@ const Login = ({}) => {
     const screenHeight = Dimensions.get('window').height;
     const screenWidth = Dimensions.get('window').width;
     let [userId, setUserId] = useState('');
+    let [server_err, set_server_err] = useState(false)
 
     let [input, setInput] = useState('email')
     let dispatch = useDispatch() 
@@ -28,21 +30,20 @@ const Login = ({}) => {
     const handleVibrate = (timer) => {Vibration.vibrate(timer)};
     
     let [email, setEmail] = useState('')
-    let [phone, setPhone] = useState('')
     let [pwd, setPwd] = useState('')
 
     let [emailErr, setEmailErr] = useState('')
-    let [phoneErr, setPhoneErr] = useState('')
     let [pwdErr, setPwdErr] = useState('')
 
     useEffect(() => {
         async function get_stored_data() {
             let email = await getData('email')
-            setEmail(email)
+            if(email){setEmail(email)}
             let phone = await getData('phone')
-            setPhone(phone)
+            if(phone){setPhone(phone)}
+            console.log(email)
         }
-        get_stored_data()
+        // get_stored_data()
     }, [])
     
      
@@ -57,8 +58,7 @@ const Login = ({}) => {
 
             if(name.toLowerCase() === 'email'){
                 setEmailErr(err)
-            }else if(name.toLowerCase() === 'phone number'){
-                setPhoneErr(err)
+                console.log(err)
             }else if(name.toLowerCase() === 'password'){
                 setPwdErr(err)
             }
@@ -66,25 +66,27 @@ const Login = ({}) => {
 
         let data = response.filter((item) => item._j.mssg === '').length > 1 ? true : false;
 
-        if(data){
-            let input_data = input === 'email' ? email : phone
-            fetch('http://192.168.249.146:2003/system.login', {
+        if (data) {
+            set_server_err(true)
+            fetch('https://campussphere.net/api/login/seller', {
                 method: 'post',
                 headers: {
                     "Content-Type": "Application/json"
                 },
-                body: JSON.stringify({input: input,input_data,pwd,provider: 'local'})
+                body: JSON.stringify({email, pwd})
             })
             .then(async(result) => {
+                
                 let response = await result.json()
                 // console.log(result)
                 // console.log(response)
-                if(response.bool){
-                    setUserId(response.id)
-                    CookieManager.set('https://paypenz.com', {
+                if (response.bool) {
+                    console.log(response)
+                    setUserId(response.user.seller_id)
+                    CookieManager.set('https://campussphere.net', {
                         name: 'jwt_token',
                         value: response.cookie,
-                        domain: 'paypenz.com',
+                        domain: 'campussphere.net',
                         path: '/',
                         version: '1',
                         secure: true,
@@ -93,26 +95,33 @@ const Login = ({}) => {
                     .then((done) => {
                         console.log('Cookie set!', done);
                         storeData('email', response.user.email)
-                        storeData('phone', response.user.phone)
                         storeData('user', JSON.stringify(response.user)) 
-                        storeData('user_id', response.id)
+                        storeData('user_id', response.user.seller_id)
                         dispatch(set_cookie(true))
                         // openModal()
                     })
-                    .catch(err => console.log(err))
+                    .catch(err => {
+                        console.log(err);
+                        Alert.alert('Network error, please try again.')
+
+                    })
                     
-                }else{
-                    if(response.data === 'duplicate email'){
-                        setEmailErr('Email Already Exist')
-                    }else if(response.data === 'duplicate phone'){
-                        setPhoneErr('Phone Number Already Exist')
-                    }
+                } else {
+                    set_server_err(!true)
+                    console.log(response)
+                    if(response.Mssg === 'Email is not registered'){
+                        setEmailErr('Email is not registered')
+                    }else if(response.Mssg === 'Invalid password'){
+                        setPwdErr('Password is not valid')
+                    }  
                     // console.log(response.data)
 
                 }
 
             })
             .catch((err) => {
+                set_server_err(!true)
+                Alert.alert('Network error, please try again.')
                 // set_server_err(err)
                 console.log(err)
                 
@@ -125,7 +134,6 @@ const Login = ({}) => {
     async function validateInput() {
 
         let data = [  
-            {value: phone, name: 'Phone number'},
             {value: email, name: 'Email'},
             {value: pwd, name: 'Password'}
         ];
@@ -134,8 +142,7 @@ const Login = ({}) => {
             let test = {email: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/}
 
             if(item.name.toLowerCase() === 'email'){
-
-                if(item.value.length < 1){
+                if(item.value === ''){
                     return ({bool: false, mssg: `${item.name} cannot be empty`, name: item.name})
                 }else if(!item.value.match(test.email)){
                     return ({bool: false, mssg: `${item.name} is invalid`, name: item.name})
@@ -143,16 +150,6 @@ const Login = ({}) => {
                     return ({bool: true, mssg: ``, name: item.name})
                 } 
                 
-            }else if(item.name.toLowerCase() === 'phone number'){
-
-                if(item.value === ''){
-                    return ({bool: false, mssg: `${item.name} cannot be empty`, name: item.name})
-                }else if(item.value.length > 0 && item.value.length < 10){
-                    return {bool: false, mssg: `${item.name} is invalid`, name: item.name}
-                }else{
-                    return ({bool: true, mssg: ``, name: item.name})
-                }
-
             }else if(item.name.toLowerCase() === 'password'){
 
                 if(item.value === ''){
@@ -174,7 +171,25 @@ const Login = ({}) => {
     return ( 
         <> 
 
-           
+            {
+                server_err
+                ?
+                <View style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+                    justifyContent: 'center', 
+                    alignItems: 'center',
+                    zIndex: 10
+                }}>
+                    <ActivityIndicator style={{opacity: 1}} size={'large'} color={'#FF4500'}></ActivityIndicator>
+                </View>
+                :
+                ''
+            }
             <View style={{
                 height: '100%',
                 width: '100%',
@@ -204,13 +219,13 @@ const Login = ({}) => {
                                 
                                 <View style={{ height: 80, display: 'flex', color: '#000', width: '100%', flexDirection: 'column', marginBottom: 10}}>
                                     <Text style={{width: '100%', color: '#000', marginLeft: 8}}>Email</Text>
-                                    <TextInput style={{height: 50, fontFamily: 'Roboto', padding: 10, borderRadius: 10, marginBottom: 2, width: '100%',  backgroundColor: '#efefef'}} defaultValue={email} onChangeText={e => setEmail(e)} name="email"  placeholder="Email"  />
+                                    <TextInput style={{height: 50, fontFamily: 'Roboto', padding: 10, borderRadius: 5, marginBottom: 2, width: '100%',  backgroundColor: '#efefef'}} defaultValue={email} onChangeText={e => setEmail(e)} name="email"  placeholder="Email"  />
                                     <Text style={{color: '#000', marginBottom: 15, display: emailErr.length > 0 ? 'flex' : 'none', fontSize: 10, paddingLeft: 5, color: 'red'}}>{emailErr}</Text>
                                 </View>
 
                                 <View style={{ height: 80, display: 'flex', color: '#000', width: '100%', flexDirection: 'column', marginBottom: 10}}>
                                     <Text style={{width: '100%', color: '#000', marginLeft: 8}}>Password</Text>
-                                    <TextInput maxLength={6} keyboardType="numeric" style={{height: 50, fontFamily: 'Roboto', padding: 10, borderRadius: 10, marginBottom: 2, width: '100%',  backgroundColor: '#efefef'}} onChangeText={e => setPwd(e)} name="pwd"  placeholder="Password"  />
+                                    <TextInput  style={{height: 50, fontFamily: 'Roboto', padding: 10, borderRadius: 5, marginBottom: 2, width: '100%',  backgroundColor: '#efefef'}} onChangeText={e => setPwd(e)} name="pwd"  placeholder="Password"  />
                                     <Text style={{color: '#000', marginBottom: 15, display: pwdErr.length > 0 ? 'flex' : 'none', fontSize: 10, paddingLeft: 5, color: 'red'}}>{pwdErr}</Text>
                                 </View>
 
@@ -228,7 +243,7 @@ const Login = ({}) => {
                         padding: 20, 
                         overflow: 'scroll'
                     }}>
-                        <TouchableOpacity activeOpacity={.6} onPress={e => loginHandler()} style={{display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20, marginBottom: 3, flexDirection: 'row', borderRadius: 15, height: 60, width: '100%', backgroundColor: '#FF4500'}} >
+                        <TouchableOpacity activeOpacity={.6} onPress={e => loginHandler()} style={{display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20, marginBottom: 3, flexDirection: 'row', borderRadius: 5, height: 60, width: '100%', backgroundColor: '#FF4500'}} >
                             <Text style={{fontWeight: 'bold', borderRadius: 15, color: '#fff', textAlign: 'center', fontSize: 15}}>Login</Text>
                         </TouchableOpacity>
 

@@ -10,15 +10,15 @@ export default function Card() {
             styles.card,
             {width: '100%'}
         ]}>
-            <View style={{height: '100%', borderRadius: 15,borderWidth: 1,borderColor: '#FF4500'}}>
+            <View style={{height: '100%', borderRadius: 5}}>
 
                 <View style={{display: 'flex', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center',borderRadius: 15}}>
                     <View style={{width: '30%'}}>
-
+                        
                     </View>
                     <View style={{width: '70%'}}>
-                        <Text style={{fontSize: 16, padding: 8, color: '#000', textDecorationStyle: 'dashed'}}>
-                            Bulid Your Business For <Text style={{fontSize: 13}}>&#8358;</Text>700 Only
+                        <Text style={{fontSize: 16, padding: 8, color: '#000', fontWeight: '500', textDecorationStyle: 'dashed'}}>
+                            Bulid Your Business For <Text style={{fontSize: 15, color: '#3fcd32'}}>&#8358;700</Text> Only
                         </Text> 
                     </View>
                 </View>
@@ -35,7 +35,8 @@ const styles = StyleSheet.create({
         height: 160,
         padding: 0,
         borderRadius: 5,
-        padding: 8,
+        padding: 0,
+        elevation: 2,
         marginBottom: 5,
         backgroundColor: '#fff'
     },
@@ -44,7 +45,7 @@ const styles = StyleSheet.create({
         height: 100,
         width: '100%',
         backgroundColor: '#efefef',
-        borderRadius: 15,
+        borderRadius: 5,
         padding: 0,
         position: 'relative',
 
@@ -57,7 +58,7 @@ const styles = StyleSheet.create({
         padding: 0,
         marginBottom: 5,
         backgroundColor: '#fff',
-        borderRadius: 15,
+        borderRadius: 5,
 
     },
 

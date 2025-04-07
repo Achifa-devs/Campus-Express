@@ -22,8 +22,10 @@ import {
     useDispatch, 
     useSelector 
 } from 'react-redux';
-// import Icon from 'react-native-vector-icons/Ionicons';
+// import Icon from 'react-native-vector-icons/Ionicons ';
 // import StackNavigator from './Nav';
+import Ionicons  from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, FontAwesome, etc.
+
 // import Message from '../studio/screens/Message';
 import Order from '../studio/screens/Order';
 import Profile from '../studio/screens/Profile';
@@ -59,6 +61,9 @@ import Payments from '../studio/screens/Settings/Shop/Payments.js';
 import Sub from '../studio/screens/Settings/Shop/Sub.js';
 import Security from '../studio/screens/Settings/Shop/Security.js';
 import Branding from '../studio/screens/Settings/Shop/Branding.js';
+import AsideModal from './Aside.js';
+import Message from '../studio/screens/Message.js';
+import { set_drawer } from '../../../../redux/drawer.js';
 // import ExchangeAlert from '../studio/screens/Settings/ExchangeAlert';
 // import ChangeEmail from '../studio/screens/Settings/AccountSecurity/ChangeEmail';
 
@@ -75,97 +80,82 @@ export default function StudioTab({ navigation }) {
 
   return (
     <>
-        <Tab.Navigator  screenOptions={({ route }) => {
-           
-            const tabBarStyle = {
-                display: 'flex',
-            };
+       <Tab.Navigator
+            screenOptions={({ route }) => ({
+                tabBarIcon: ({ focused, color, size }) => {
+                let iconName;
 
-            if (route.name === 'tab-message') {
-                const currentRouteName = navigationState?.routes.find(r => r.name === 'tab-message')?.state?.routes[navigationState.routes.find(r => r.name === 'tab-message')?.state.index].name;
-                // console.log('Current MessageStack Route:', currentRouteName);
+                if (route.name === 'Home') {
+                    iconName = focused ? 'home' : 'home-outline';
+                } else if (route.name === 'Message') {
+                    iconName = focused ? 'chatbox' : 'chatbox-outline';
+                } else if (route.name === 'Listing') {
+                    iconName = focused ? 'list' : 'list-outline';
+                } else if (route.name === 'Order') {
+                    iconName = focused ? 'receipt' : 'receipt-outline';
+                } 
+                
+                console.log('Icon name: ', iconName);
 
-                if (currentRouteName === 'user-message') {
-                    tabBarStyle.display = 'none';
-                }
-            }else if(route.name === 'tab-home') {
-                const currentRouteName = navigationState?.routes.find(r => r.name === 'tab-home')?.state?.routes[navigationState.routes.find(r => r.name === 'tab-home')?.state.index].name;
-                // console.log('Current HoProfileStack Route:', currentRouteName);
-
-                if (currentRouteName === 'user-new-listing') {
-                    tabBarStyle.display = 'none';
-                }
-            }else if(route.name === 'tab-order') {
-                const currentRouteName = navigationState?.routes.find(r => r.name === 'tab-order')?.state?.routes[navigationState.routes.find(r => r.name === 'tab-order')?.state.index].name;
-                // console.log('Current OrderStack Route:', currentRouteName);
-
-                if (currentRouteName === 'user-order-room') {
-                    tabBarStyle.display = 'none';
-                }
-            }  
-            else if(route.name === 'tab-profile') {
-                const currentRouteName = navigationState?.routes.find(r => r.name === 'tab-profile')?.state?.routes[navigationState.routes.find(r => r.name === 'tab-profile')?.state.index].name;
-                // console.log('Current ProfileStack Route:', currentRouteName); 
-
-                if (currentRouteName === 'user-profile') {
-                    tabBarStyle.display = 'none';
-                }
-            } 
-            
-            return {
-                tabBarStyle,
+                return <Ionicons  name={iconName} size={size} color={color} />;
+                },
+                tabBarActiveTintColor: '#FF4500',
+                tabBarInactiveTintColor: 'gray',
                 headerShown: false,
-            };
-
-        }}> 
-            <Tab.Screen 
-                options={{
-                    header: ({navigation}) =>
-                    (
-                        <View style={{ height: 0, display: 'none', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#007FFF', alignItems: 'center', padding: '10px'}}>
-
-                            
-                        </View>
-                    ),
-                }}
-                name="tab-home" 
-                component={HoProfileStackScreen} /> 
-
-            {/* <Tab.Screen 
-                name="tab-message" 
-                component={MessageStackScreen} /> */}
-
-            <Tab.Screen 
-                options={{
-                header: ({navigation}) =>
-                    (
-                        <View style={{ height: 200, display: 'flex', flexDirection: 'row', width: '100%', backgroundColor: '#007FFF', alignItems: 'center', justifyContent: 'center'}}>
-                        
-                            
-                        </View>
-                    ),
-                }}  
-                name="tab-listing" 
-                component={ListingStackScreen} />
-
-            <Tab.Screen 
-                options={{
-                    header: ({navigation}) => 
+                tabBarStyle: {
+                    display: 'flex', // your existing logic can override this
+                },
+            })}
+            >
+              {/* Your screens here */}
+                 <Tab.Screen 
+                    options={{
+                        header: ({navigation}) =>
                         (
-                            <View style={{ height: 60, display: 'flex', flexDirection: 'row', width: '100%', backgroundColor: 'green', alignItems: 'center', justifyContent: 'center'}}>
-                            
+                            <View style={{ height: 0, display: 'none', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#007FFF', alignItems: 'center', padding: '10px'}}>
+
+                                
                             </View>
                         ),
-                }} 
-                name="tab-order" 
-                component={OrderStackScreen} />
+                    }}
+                    name="Home" 
+                    component={HoProfileStackScreen} /> 
 
-            <Tab.Screen 
-                
-                name="tab-profile" 
-                component={ProfileStackScreen} />
+                <Tab.Screen 
+                    name="Message" 
+                    component={MessageStackScreen} />
 
-        </Tab.Navigator> 
+                <Tab.Screen 
+                    options={{
+                    header: ({navigation}) =>
+                        (
+                            <View style={{ height: 200, display: 'flex', flexDirection: 'row', width: '100%', backgroundColor: '#007FFF', alignItems: 'center', justifyContent: 'center'}}>
+                            
+                                
+                            </View>
+                        ),
+                    }}  
+                    name="Listing" 
+                    component={ListingStackScreen} />
+
+                <Tab.Screen 
+                    options={{
+                        header: ({navigation}) => 
+                            (
+                                <View style={{ height: 60, display: 'flex', flexDirection: 'row', width: '100%', backgroundColor: 'green', alignItems: 'center', justifyContent: 'center'}}>
+                                
+                                </View>
+                            ),
+                    }} 
+                    name="Order" 
+                    component={OrderStackScreen} />
+
+                {/* <Tab.Screen 
+                    
+                    name="Profile" 
+                    component={ProfileStackScreen} /> */}
+        </Tab.Navigator>
+
     </>
   )
 }
@@ -174,6 +164,9 @@ export default function StudioTab({ navigation }) {
 
 const HoProfileStack = createNativeStackNavigator();
 function HoProfileStackScreen() {
+    let dispatch = useDispatch()
+    let {drawer} = useSelector(s=> s.drawer)
+    const [isModalOpen, setModalOpen] = React.useState(false);
   return (
     <HoProfileStack.Navigator>
         <HoProfileStack.Screen  options={{
@@ -182,7 +175,7 @@ function HoProfileStackScreen() {
               <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FF4500', alignItems: 'center', padding: '10px' }}>
                     <StatusBar backgroundColor="#FF4500" barStyle="light-content" />
                     
-                    <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
+                    <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}} onPress={() => dispatch(set_drawer(!drawer))}>
                         <View style={{backgroundColor: '#fff', height: '100%', width: 40, borderRadius: 10}}></View>
                         <Text>&nbsp;</Text>
                         <Text style={{color: '#fff'}}>Hue</Text>
@@ -195,6 +188,9 @@ function HoProfileStackScreen() {
                         </View>
                     </View>
                     </TouchableOpacity>
+
+
+                    
                 </View>
             ),
         }}  name="user-home" component={Home} />
@@ -386,120 +382,120 @@ function HoProfileStackScreen() {
   );
 }
 
-// const MessageStack = createNativeStackNavigator();
-// function MessageStackScreen() {
-//   return (
-//     <MessageStack.Navigator>
-//         <MessageStack.Screen  options={{
-//             header: ({navigation}) =>
-//             (
-//                 <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FF4500', alignItems: 'center', paddingLeft: 10, paddingRight: 10}}>
-//                     <StatusBar backgroundColor="#FF4500" barStyle="light-content" />
+const MessageStack = createNativeStackNavigator();
+function MessageStackScreen() {
+  return (
+    <MessageStack.Navigator>
+        <MessageStack.Screen  options={{
+            header: ({navigation}) =>
+            (
+                <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FF4500', alignItems: 'center', paddingLeft: 10, paddingRight: 10}}>
+                    <StatusBar backgroundColor="#FF4500" barStyle="light-content" />
 
-//                     <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '40%', backgroundColor: '#FF4500', alignItems: 'center'}}>
-//                         <Text style={{paddingLeft: 0, fontSize: 20, color: '#fff'}}>Shopiva Chat</Text>
-//                     </View>
+                    <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '40%', backgroundColor: '#FF4500', alignItems: 'center'}}>
+                        <Text style={{paddingLeft: 0, fontSize: 20, color: '#fff'}}>Shopiva Chat</Text>
+                    </View>
 
-//                     <View style={{ height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', backgroundColor: '#FF4500', alignItems: 'center', padding: '10px'}}>
-//                         <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-//                             <View style={{backgroundColor: '#fff', height: '100%', width: 40, borderRadius: 10}}></View>
-//                         </TouchableOpacity>
+                    <View style={{ height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', backgroundColor: '#FF4500', alignItems: 'center', padding: '10px'}}>
+                        <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
+                            <View style={{backgroundColor: '#fff', height: '100%', width: 40, borderRadius: 10}}></View>
+                        </TouchableOpacity>
 
-//                         <TouchableOpacity onPress={e => navigation.navigate('user-notification')}>
-//                             <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-//                                 <View style={{backgroundColor: '#fff', height: '100%', width: 40, borderRadius: 10}}>
+                        <TouchableOpacity onPress={e => navigation.navigate('user-notification')}>
+                            <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
+                                <View style={{backgroundColor: '#fff', height: '100%', width: 40, borderRadius: 10}}>
 
-//                                 </View>
-//                             </View>
-//                         </TouchableOpacity>
-//                     </View>
+                                </View>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
 
-//                 </View>
-//             ),
-//         }}   name="user-message" component={Message} />
+                </View>
+            ),
+        }}   name="user-message" component={Message} />
 
-//         <MessageStack.Screen options={{
-//          header: () =>
-//           (
-//             <View style={{ height: 70, display: 'flex', flexDirection: 'row', width: '100%', backgroundColor: 'green', alignItems: 'center', justifyContent: 'center'}}>
+        <MessageStack.Screen options={{
+         header: () => 
+          (
+            <View style={{ height: 70, display: 'flex', flexDirection: 'row', width: '100%', backgroundColor: 'green', alignItems: 'center', justifyContent: 'center'}}>
             
-//               {
+              {
               
-//               <View style={{display: 'flex', flexDirection: 'row', zIndex: 1000, height: '100%', width: '100%', backgroundColor: '#FF4500', alignItems: 'center', paddingTop: 25, justifyContent: 'center', position: 'relative'}}>
-//                 <View style={{
-//                 position: 'absolute',
-//                 left: 15,
-//                 fontSize: 20,
-//                 bottom: 8,
-//                 color: '#fff',
-//                 fontWeight: 'bold',
-//                 fontFamily: 'serif',
+              <View style={{display: 'flex', flexDirection: 'row', zIndex: 1000, height: '100%', width: '100%', backgroundColor: '#FF4500', alignItems: 'center', paddingTop: 25, justifyContent: 'center', position: 'relative'}}>
+                <View style={{
+                position: 'absolute',
+                left: 15,
+                fontSize: 20,
+                bottom: 8,
+                color: '#fff',
+                fontWeight: 'bold',
+                fontFamily: 'serif',
 
-//                 }}>
-//                   <Text style={{fontSize: 21, height: 50, paddingTop: 10, backgroundColor: '#fff4e0', width: 50, color: '#FF4500', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'row', textAlign: 'center', borderRadius: 50}}>
-//                       {/* {seller_name.split(' ')[0].split('')[0]}.{seller_name.split(' ')[1].split('')[0]} */}
-//                       A.C
-//                   </Text>
-//                 </View>
+                }}>
+                  <Text style={{fontSize: 21, height: 50, paddingTop: 10, backgroundColor: '#fff4e0', width: 50, color: '#FF4500', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'row', textAlign: 'center', borderRadius: 50}}>
+                      {/* {seller_name.split(' ')[0].split('')[0]}.{seller_name.split(' ')[1].split('')[0]} */}
+                      A.C
+                  </Text>
+                </View>
 
-//                 <View style={{
-//                 position: 'absolute',
-//                 left: 85,
-//                 fontSize: 20,
-//                 bottom: 12,
-//                 color: '#fff',
-//                 fontWeight: 'bold',
-//                 fontFamily: 'serif',
+                <View style={{
+                position: 'absolute',
+                left: 85,
+                fontSize: 20,
+                bottom: 12,
+                color: '#fff',
+                fontWeight: 'bold',
+                fontFamily: 'serif',
 
-//                 }}>
-//                 <Text style={{
-//                 fontFamily: 'serif',
-//                 fontSize: 19,
-//                 color: '#fff',
-//                 fontWeight: 'bold',
+                }}>
+                <Text style={{
+                fontFamily: 'serif',
+                fontSize: 19,
+                color: '#fff',
+                fontWeight: 'bold',
 
-//                 }}>
-//                     {/* {seller_name} */}
-//                     Akpulu Chinedu
-//                 </Text>
+                }}>
+                    {/* {seller_name} */}
+                    Akpulu Chinedu
+                </Text>
 
-//                 <Text style={{
-//                 fontFamily: 'serif',
-//                 fontSize: 11,
-//                 color: '#fff',
-//                 fontWeight: 'bold',
+                <Text style={{
+                fontFamily: 'serif',
+                fontSize: 11,
+                color: '#fff',
+                fontWeight: 'bold',
 
-//                 }}>
-//                 active 
-//                 {/* {js_ago(new Date(seller_date))} */}
-//                 </Text>
-//                 </View> 
+                }}>
+                active 
+                {/* {js_ago(new Date(seller_date))} */}
+                </Text>
+                </View> 
 
-//                 <View style={{
-//                 position: 'absolute',
-//                 right: 25,
-//                 fontSize: 20,
-//                 bottom: 12,
-//                 color: '#fff',
-//                 fontWeight: 'bold',
-//                 fontFamily: 'serif',
+                <View style={{
+                position: 'absolute',
+                right: 25,
+                fontSize: 20,
+                bottom: 12,
+                color: '#fff',
+                fontWeight: 'bold',
+                fontFamily: 'serif',
 
-//                 }}>
+                }}>
 
                 
                 
-//                 </View> 
+                </View> 
 
-//               </View>
+              </View>
 
               
-//               }
-//             </View>
-//           ),
-//       }} name="user-chat-room" component={ChatScreen} />
-//     </MessageStack.Navigator>
-//   ); 
-// }
+              }
+            </View>
+          ),
+      }} name="user-chat-room" component={ChatScreen} />
+    </MessageStack.Navigator>
+  ); 
+}
 
 const OrderStack = createNativeStackNavigator();
 function OrderStackScreen() {
