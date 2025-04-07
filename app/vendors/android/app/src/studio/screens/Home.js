@@ -49,7 +49,7 @@ export default function Home() {
         <ScrollView style={[styles.homeCnt,{
             height: screenHeight - 55
           }]}>
-          <Engagement />
+          <Engagement navigation={navigation} />
           <View style={{backgroundColor: '#fff', backgroundColor: '#fff', borderRadius: 5, padding: 10, height: 'auto'}}>
             {/* <Text style={{padding: 20, fontSize: 18, color: '#000'}}>Earnings</Text> */}
 

@@ -172,13 +172,13 @@ function HoProfileStackScreen() {
         <HoProfileStack.Screen  options={{
             header: ({navigation}) =>
             (
-              <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FF4500', alignItems: 'center', padding: '10px' }}>
+              <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', elevation: 2, alignItems: 'center', padding: '10px' }}>
                     <StatusBar backgroundColor="#FF4500" barStyle="light-content" />
-                    
+                     
                     <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}} onPress={() => dispatch(set_drawer(!drawer))}>
-                        <View style={{backgroundColor: '#fff', height: '100%', width: 40, borderRadius: 10}}></View>
+                        <View style={{backgroundColor: '#FF4500', height: '100%', width: 40, borderRadius: 10}}></View>
                         <Text>&nbsp;</Text>
-                        <Text style={{color: '#fff'}}>Hue</Text>
+                        <Text style={{color: '#000'}}>Hue</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={e => navigation.navigate('user-new-listing')}>
