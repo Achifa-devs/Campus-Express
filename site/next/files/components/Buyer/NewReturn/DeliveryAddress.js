@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import deleteSvg from '../../../assets/delete-svgrepo-com (1).svg';
 import { openNotice, open_notice } from '../../../reusable.js/notice';
 import { setPickupChannelTo } from '@/redux/buyer_store/pickup_channel';
-import { buyerBtnAuthChecker } from '@/files/reusable.js/btnAuthChecker';
 import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup';
 import { UpdatePickupChannel } from '@/app/api/buyer/update';
 import ReactDOMServer from 'react-dom/server';
@@ -15,7 +14,7 @@ export default function DeliveryAddress({item,refund_id,refund,updateDeliveryOpt
     let [locale, setLocale] = useState([]);
     let [deliveryOpt, setdeliveryOpt] = useState(-1);
     let [pickUpChannel, setpickUpChannel] = useState('');
-    
+    let {buyer_id} = useSelector(s=> s.buyer_id)
     let pathname = usePathname()
 
     let dispatch = useDispatch() 
@@ -24,9 +23,9 @@ export default function DeliveryAddress({item,refund_id,refund,updateDeliveryOpt
 
         buyer_overlay_setup(true, 'Loading...')
 
-        let buyer = await buyerBtnAuthChecker();
+        // let buyer = await ();
         console.log(buyer)
-        if(!buyer){
+        if(!buyer_id){
             buyer_overlay_setup(false, '')
 
             // window.location.href=(`/login?page=product&data=${item.product_id}`)

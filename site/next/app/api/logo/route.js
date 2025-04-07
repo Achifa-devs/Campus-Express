@@ -1,4 +1,3 @@
-This is the next code :
 import { NextResponse } from 'next/server';
 
 export async function GET() {

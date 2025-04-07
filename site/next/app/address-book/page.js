@@ -8,7 +8,6 @@ import { setAccessoryTo } from "@/redux/buyer_store/Aceessories";
 import PickupChannel from '@/files/components/Buyer/Product/PickupChannel';
 import { setPickupChannelTo } from '@/redux/buyer_store/pickup_channel';
 import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup';
-import { buyerBtnAuthChecker } from '@/files/reusable.js/btnAuthChecker';
 
 export default function AddressBook() {
     let [screenWidth, setScreenWidth] = useState(0);

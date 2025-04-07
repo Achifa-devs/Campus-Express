@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import deleteSvg from '../../../assets/delete-svgrepo-com (1).svg';
 import { openNotice, open_notice } from '../../../reusable.js/notice';
 import { setPickupChannelTo } from '@/redux/buyer_store/pickup_channel';
-import { buyerBtnAuthChecker } from '@/files/reusable.js/btnAuthChecker';
 import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup';
 import { UpdatePickupChannel } from '@/app/api/buyer/update';
 import ReactDOMServer from 'react-dom/server';

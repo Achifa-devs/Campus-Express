@@ -50,7 +50,7 @@ export default function Aside() {
                         <View style={{padding: 20, display: 'flex', flexDirection: 'row', justifyContent: 'space-between',}}>
                             <View >
                                 <View>
-                                    <View style={{ height: 65, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', width: 65, borderRadius: 50, backgroundColor: '#000', alignItems: 'center', padding: 20, marginBottom: 10}}>
+                                    <View style={{ height: 55, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', width: 55, borderRadius: 50, backgroundColor: '#000', alignItems: 'center', padding: 20, marginBottom: 10}}>
                         
                                     </View>
                                 </View>
