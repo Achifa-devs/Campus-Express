@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { 
+    Alert,
     StyleSheet, 
     Text, 
     TouchableOpacity, 
@@ -7,40 +8,90 @@ import {
 } from 'react-native'
 import OrderCard from '../Order/OrderCard';
 import MssgSvg from '../../../assets/messages-1-svgrepo-com.svg'
+import Ionicons  from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, FontAwesome, etc.
 import PhnSvg from '../../../assets/phone-svgrepo-com.svg'
-export default function OrderRoomTop() {
+// import Ionicons  from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, FontAwesome, etc.
+
+export default function OrderRoomTop({ order, product }) {
+    let [buyer, set_buyer] = useState('')
+    function get_buyer() {
+        fetch(`https://campussphere.net:3000/api/profile/buyer`, {
+            method: 'post',
+            headers: {
+            "Content-Type": "Application/json"
+            },
+            body: JSON.stringify({buyer_id: order?.buyer_id})
+        })
+        .then(async(result) => {
+            
+            let response = await result.json()
+           if (response.bool) {
+             set_buyer(response?.user)
+           } else {
+            Alert.alert('Network error, please try again.')
+               
+           }
+        })
+        .catch((err) => {
+            Alert.alert('Network error, please try again.')
+            console.log(err)
+        })
+    }
+    useEffect(() => {
+        get_buyer()
+    }, [])
+    
   return (
     <>
         <View style={styles.orderRoomTop}>
             <View style={{
                 width: '100%',
-                height: 120,
+                height: 100,
                 backgroundColor: '#fff',
                 display: 'flex',
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-                alignItems: 'center'
+                alignItems: 'center',
+                // elevation: 2
+                
+                
             }}>
                 <View style={{
                     width: '60%',
                     height: '100%',
                     backgroundColor: '#fff',
                     display: 'flex',
-                    justifyContent: 'space-evenly',
+                    justifyContent: 'flex-start',
                     alignItems: 'center',
-                    flexDirection: 'row'
+                
+                    flexDirection: 'row',
+                    marginLeft: .5
+                    
                 }}>
                     <View style={{
-                        backgroundColor: '#6a6a6a',
+                        backgroundColor: '#fff',
                         borderRadius: 50,
-                        height: 80,
-                        width: 80
+                        height: 60,
+                        display: 'flex',
+                        justifyContent: 'space-evenly',
+                        alignItems: 'center',
+                        flexDirection: 'row',
+                        width: 60,
+                        marginLeft: 2.5
                     }}>
-
+                        <Ionicons name={'person-circle-outline'} size={60} color={'#FF4500'} />
                     </View>
+                    
                     <View>
-                        <Text>Akpulu Fabina.C</Text>
-                        <Text>Unizik, Awka</Text>
+                          <Text style={{ fontSize: 15, fontWeight: '500', color: '#000', marginLeft: 2.5, marginTop: 18 }}>{buyer ? buyer?.fname : ''}.{buyer ? buyer?.lname[0].toUpperCase() : ''}</Text>
+                        
+                        <View style={{fontSize: 12, fontWeight: '500' , color: '#000', marginLeft: .5, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center'}}>
+                            <Ionicons name={'school'} size={20} color={'#FF4500'} />
+                            <Text style={{fontSize: 12, fontWeight: '500' , color: '#000', marginLeft: 2.5}}>{buyer ? buyer?.campus : ''}</Text>
+                        </View>
+                         <View style={{fontSize: 12, fontWeight: '500' , color: '#000', marginLeft: .5, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center'}}>
+                            <Text style={{fontSize: 12, fontWeight: '500' , color: '#000', marginLeft: 2.5}}>{buyer ? buyer?.state : ''} state</Text>
+                        </View>
                     </View>
                 </View>
 
@@ -61,18 +112,19 @@ export default function OrderRoomTop() {
                         justifyContent: 'space-evenly',
                         alignItems: 'center',
                         flexDirection: 'row'
-                    }}>
+                    }} activeOpacity={.9}>
                         <View style={{
                             width: 40,
                             height: 40,
-                            backgroundColor: '#FF4500',
+                            backgroundColor: '#fff',
                             display: 'flex',
                             borderRadius: 10,
                             justifyContent: 'space-evenly',
-                            alignItems: 'center',
+                              alignItems: 'center',
+                            elevation: 2,
                             flexDirection: 'row'
                         }}> 
-                            <MssgSvg width={20} height={20} />
+                            <Ionicons name={'chatbox'} size={20} color={'#FF4500'} />
                         </View>
                     </TouchableOpacity>
 
@@ -84,24 +136,26 @@ export default function OrderRoomTop() {
                         justifyContent: 'space-evenly',
                         alignItems: 'center',
                         flexDirection: 'row'
-                    }}>
+                    }} activeOpacity={.9}>
                         <View style={{
                             width: 40,
                             height: 40,
-                            backgroundColor: '#FF4500',
+                            backgroundColor: '#fff',
                             display: 'flex',
                             borderRadius: 10,
+                            elevation: 2,
+                            
                             justifyContent: 'space-evenly',
                             alignItems: 'center',
                             flexDirection: 'row'
                         }}> 
-                            <PhnSvg width={20} height={20} />
+                            <Ionicons name={'call'} size={20} color={'#FF4500'} />
                         </View>
                     </TouchableOpacity>
                 </View>
                 
             </View>
-            <OrderCard />
+            <OrderCard order={order} product={product} />
 
         </View> 
     </>
@@ -113,7 +167,7 @@ const styles = StyleSheet.create({
         height: 'auto',
         width: '100%',
         position: 'relative',
-        padding: 10,
+        padding: 0,
         backgroundColor: '#FF4500'
     }
 });

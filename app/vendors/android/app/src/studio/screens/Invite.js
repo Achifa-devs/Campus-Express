@@ -13,22 +13,22 @@ export default function Invite() {
     
     // Load contacts
     useEffect(() => {
-        Contacts.getAll()
-        .then(contacts => {
+      Contacts.getAll()
+      .then(contacts => {
         setContacts(contacts);
-        // console.log(contacts)
-        })
-        .catch(e => {
+      console.log(contacts)
+      })
+      .catch(e => {
         console.log(e);
-        });
+      });
     }, [])
 
     
     const onShare = async () => {
         try {
           const result = await Share.share({
-            message: 'Download the PayPenz app today and start earning cashback on every transaction! https://www.example.com',
-            url: 'https://www.example.com', // Optional URL
+            message: 'Download the Campus Sphere app today and start shopping from the compfort of your lodge! https://campussphere.net',
+            url: 'https://campussphere.net', // Optional URL
           });
     
           if (result.action === Share.sharedAction) {
@@ -46,17 +46,10 @@ export default function Invite() {
     };
 
     useEffect(() => {
-        console.log('search_char: ', search_char)
-
         if(search_char !== ''){
-            let result = contacts.filter(item => item.displayName ? item?.displayName.toLowerCase().indexOf(search_char?.toLowerCase()) > -1 : '')
-
-            // let result = contacts.map(item => console.log(item?.displayName.toLowerCase()))
-            setContacts(result)
-
+          let result = contacts.filter(item => item.displayName ? item?.displayName.toLowerCase().indexOf(search_char?.toLowerCase()) > -1 : '')
+          setContacts(result)
         }
-
-        
     }, [search_char])
     
 
@@ -69,38 +62,33 @@ export default function Invite() {
                 <TextInput style={styles.input} onChangeText={txt=> set_search_char(txt)} placeholder='Search contact here' />
             </View>
             <ScrollView >
+              {
+                contacts.map((item, index) => 
+                  <TouchableOpacity key={index} onPress={() => onShare()} style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 10,  flexDirection: 'row', height: 'auto', width: '100%', backgroundColor: '#fff'}}>
+                    <View style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row'}}>
+                      <View style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 10}}>
+                        <ContactSvg width={20} height={20} />
+                      </View>
+                      <View >
+                        <Text style={{fontFamily: 'Roboto', fontWeight: 500, fontSize: 15, color: '#000'}}>{item.displayName}</Text>
 
-                <FlatList
-                    data={contacts}
-                    keyExtractor={(item) => item.recordID}
-                    renderItem={({ item }) => (
-                    <TouchableOpacity onPress={() => onShare()} style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 10,  flexDirection: 'row', height: 'auto', width: '100%', backgroundColor: '#fff'}}>
-                        <View style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row'}}>
-                            <View style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 10}}>
-                                <ContactSvg width={20} height={20} />
-                            </View>
-                            <View >
-                                <Text style={{fontFamily: 'Roboto', fontWeight: 500, fontSize: 15, color: '#000'}}>{item.displayName}</Text>
-
-                                {item.phoneNumbers.map(phone => (
-                                    <View key={phone.id}> 
-                                        {/* <View >
-                                            <PhoneSvg style={{marginBottom: -12, marginRight: 8}} width={20} height={20} />
-                                        </View> */}
-                                        <Text>{phone.number}</Text>
-                                    </View>
-                                ))}
-                            </View>
-                        </View>
-                         
-                        <View style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#fff', borderRadius: 50, padding: 5}}>
-                            <AngleSvg width={35} height={35} />
-                        </View>
-                    </TouchableOpacity>
-                    )}
-                />
-
-                
+                        {item.phoneNumbers.map(phone => (
+                          <View key={phone.id}> 
+                            {/* <View >
+                                <PhoneSvg style={{marginBottom: -12, marginRight: 8}} width={20} height={20} />
+                            </View> */}
+                            <Text>{phone.number}</Text>
+                          </View>
+                        ))}
+                      </View>
+                    </View>
+                            
+                    <View style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#fff', borderRadius: 50, padding: 5}}>
+                        <AngleSvg width={35} height={35} />
+                    </View>
+                  </TouchableOpacity>
+                )
+              }
             </ScrollView>
 
         </View>

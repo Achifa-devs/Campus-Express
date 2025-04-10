@@ -14,6 +14,7 @@ export async function POST(req) {
     const date = new Date().toLocaleString();
     const hashedPwd = await bcrypt.hash(pwd, 10);
     const seller_id = `CE-${shortId.generate()}`;
+    const wallet_id = `CEW-${shortId.generate()}`;
 
     // Check if email already exists
     const emailCheck = await pool.query(
@@ -34,7 +35,7 @@ export async function POST(req) {
     }
 
     // Insert seller
-    const insertSeller = await pool.query(
+    await pool.query(
       `INSERT INTO campus_sellers (
         id, fname, lname, seller_id, email, phone, password, state,
         campus, isActive, isVerified, isEmailVerified, isPhoneVerified,
@@ -46,6 +47,19 @@ export async function POST(req) {
       [
         fname, lname, seller_id, email, phone, hashedPwd, state, campus,
         false, false, false, false, date, date, gender,
+      ]
+    );
+
+    
+    // Insert wallet
+    await pool.query(
+      `INSERT INTO campus_express_seller_wallet (
+        id, wallet_id, seller_id, wallet_balance, wallet_pin, wallet_number, date
+      ) VALUES (
+        DEFAULT, $1, $2, $3, $4, $5, $6
+      )`,
+      [
+        wallet_id, seller_id, 0, '0000', phone, date
       ]
     );
 
@@ -67,7 +81,11 @@ export async function POST(req) {
       maxAge: 60 * 60 * 24 * 7, // 7 days
     });
 
-    return NextResponse.json({ bool: true, id: seller_id }, { status: 200 });
+    return NextResponse.json({
+      bool: true,
+      cookie: token,
+      user: { fname, lname, seller_id, email, phone, state, campus, gender }
+    }, { status: 200 });
 
   } catch (err) {
     console.error('Registration error:', err);

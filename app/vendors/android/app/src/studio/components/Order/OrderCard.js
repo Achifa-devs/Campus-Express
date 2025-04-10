@@ -1,44 +1,52 @@
 import React from 'react'
 import { 
-    StyleSheet,
-    Text, 
-    TouchableOpacity, 
-    View 
+  Image,
+  StyleSheet,
+  Text, 
+  TouchableOpacity, 
+  View 
 } from 'react-native'
 import OrderTitle from './OrderTitle';
-import Date from './OrderDate';
 import OrderStatus from './OrderStatus';
 import OrderId from './OrderId';
 import { useNavigation } from '@react-navigation/native';
+import js_ago from 'js-ago';
+import numeral from 'numeral';
 
-export default function OrderCard() {
+
+export default function OrderCard({order, product}) {
     let navigation = useNavigation()    
     return (
         <>
             <TouchableOpacity onPress={()=>navigation.navigate('user-order-room')} style={styles.orderCardCnt}>
                 <View style={styles.orderCntLeft}>
-                
+                   <Image height={'100%'} width={'100%'} borderRadius={5} source={{uri: product?.thumbnail_id}} />
                 </View>
 
                 <View style={styles.orderCntRight}>
 
                     <View style={styles.orderCntRightTop}>
                         <View>
-                            <OrderTitle />
+                          <Text numberOfLines={2}
+                            ellipsizeMode="tail" style={{fontSize: 16, fontWeight: '500', color: '#000'}}>{product?.title}</Text>
                         </View>
 
-                        <View>
-                            <OrderId />
+                        <View style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row'}}>
+                          <Text style={{fontSize: 15, padding: 0, fontWeight: '500', color: '#000'}}>₦{new Intl.NumberFormat('en-us').format(order?.price)}</Text>
+                          {/* <Text style={{ fontSize: 11, padding: 0, fontWeight: '600', color: order?.havepaid ? '#FF4500' : '#FF4500', marginTop: 0 }}>  - {order?.havepaid ? 'Payment made' : 'Pending payment'}</Text> */}
                         </View>
+                        
                     </View>
                     
                     <View style={styles.orderCntRightBtm}>
-                        <View>
-                            <OrderStatus />
+                        <View style={{paddingLeft: 6, paddingRight: 6, paddingTop: 4, paddingBottom: 4, borderRadius: 5, backgroundColor: '#FF4500'}}>
+                          <Text
+                            style={{fontSize: 10, fontWeight: '500', color: '#fff'}}>{order?.stock} unit ordered</Text>
                         </View>
 
                         <View>
-                            <Date />
+                            <Text numberOfLines={2}
+                            ellipsizeMode="tail" style={{fontSize: 12, fontWeight: '500', color: '#000'}}>{order?.date ? js_ago(new Date(order?.date)) : ''}</Text>
                         </View>
                     </View>
 
@@ -59,7 +67,6 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       padding: 10,
       backgroundColor: '#fff',
-    //   marginBottom: 5
     },
     orderCntLeft:{
       height: '100%',
@@ -71,7 +78,7 @@ const styles = StyleSheet.create({
     orderCntRight:{
       height: '100%',
       width: '70%',
-      padding: 8,
+      paddingLeft: 10, paddingRight: 10, paddingTop: 2, paddingBottom: 2,
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'flex-start',

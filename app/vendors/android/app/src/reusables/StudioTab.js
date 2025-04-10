@@ -64,8 +64,11 @@ import Branding from '../studio/screens/Settings/Shop/Branding.js';
 import AsideModal from './Aside.js';
 import Message from '../studio/screens/Message.js';
 import { set_drawer } from '../../../../redux/drawer.js';
+import Notice from '../studio/screens/Notice.js';
+import Shopile from '../studio/screens/Shop.js';
 // import ExchangeAlert from '../studio/screens/Settings/ExchangeAlert';
 // import ChangeEmail from '../studio/screens/Settings/AccountSecurity/ChangeEmail';
+import { PermissionsAndroid, Platform } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
@@ -75,8 +78,24 @@ export default function StudioTab({ navigation }) {
     const navigationState = useNavigationState(state => state);
 
     React.useEffect(() => {
-        // console.log('Current Navigation State:', navigationState);
-    }, [navigationState]);
+
+        async function requestContactPermission() {
+        if (Platform.OS === 'android') {
+            const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.READ_CONTACTS,
+            {
+                title: "Contacts Permission",
+                message: "This app needs access to your contacts.",
+                buttonPositive: "OK"
+            }
+            );
+
+            return granted === PermissionsAndroid.RESULTS.GRANTED;
+        }
+        return true;
+        }
+        requestContactPermission()
+    }, []);
 
   return (
     <>
@@ -93,9 +112,11 @@ export default function StudioTab({ navigation }) {
                     iconName = focused ? 'list' : 'list-outline';
                 } else if (route.name === 'Order') {
                     iconName = focused ? 'receipt' : 'receipt-outline';
-                } 
+                } else if (route.name === 'Profile') {
+                    iconName = focused ? 'person-circle' : 'person-circle-outline';
+                }
                 
-                console.log('Icon name: ', iconName);
+                // console.log('Icon name: ', iconName);
 
                 return <Ionicons  name={iconName} size={size} color={color} />;
                 },
@@ -150,10 +171,10 @@ export default function StudioTab({ navigation }) {
                     name="Order" 
                     component={OrderStackScreen} />
 
-                {/* <Tab.Screen 
+                <Tab.Screen 
                     
                     name="Profile" 
-                    component={ProfileStackScreen} /> */}
+                    component={ProfileStackScreen} />
         </Tab.Navigator>
 
     </>
@@ -176,15 +197,18 @@ function HoProfileStackScreen() {
                     <StatusBar backgroundColor="#FF4500" barStyle="light-content" />
                      
                     <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}} onPress={() => dispatch(set_drawer(!drawer))}>
-                        <View style={{backgroundColor: '#FF4500', height: '100%', width: 40, borderRadius: 10}}></View>
+                        <View style={{backgroundColor: '#fff', elevation: 0, height: '100%', width: 40, borderRadius: 5, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                            <Ionicons  name={'storefront'} size={25} color={'#FF4500'} />
+                            
+                        </View>
                         <Text>&nbsp;</Text>
-                        <Text style={{color: '#000'}}>Hue</Text>
+                        {/* <Text style={{color: '#000'}}>Hue</Text> */}
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={e => navigation.navigate('user-new-listing')}>
+                    <TouchableOpacity onPress={e => navigation.navigate('user-notification')}>
                     <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                        <View style={{backgroundColor: '#fff', height: '100%', width: 40, borderRadius: 10}}>
-
+                        <View style={{backgroundColor: '#fff', elevation: 0, height: '100%', width: 40, borderRadius: 5, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                            <Ionicons  name={'notifications'} size={25} color={'#FF4500'} />
                         </View>
                     </View>
                     </TouchableOpacity>
@@ -200,6 +224,7 @@ function HoProfileStackScreen() {
             (
                 <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px'}}>
                     <StatusBar backgroundColor="#FF4500" barStyle="light-content" />
+                    
                     <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
                         <View style={{backgroundColor: '#FF4500', height: '100%', width: 40, borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}><Text style={{color: '#fff',display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>A.F</Text></View>
                     </TouchableOpacity>
@@ -215,6 +240,25 @@ function HoProfileStackScreen() {
             ),
         }}  name="user-new-listing" component={Create} />
 
+          <HoProfileStack.Screen  options={{
+            header: ({navigation}) =>
+            (
+                <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px'}}>
+                    <StatusBar backgroundColor="#FF4500" barStyle="light-content" />
+                    <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', backgroundColor: '#FFF', alignItems: 'center', paddingLeft: 15, paddingRight: 5}}>
+                        <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5}}>
+                            <BackSvg width={22} height={22} />
+                        </TouchableOpacity>
+                        
+                    </View>
+                    <View style={{backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10}}>
+                        <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Notification</Text>
+                    </View>
+
+
+                </View>
+            ),
+        }}  name="user-notification" component={Notice} />
 
         <HoProfileStack.Screen  options={{
             header: ({navigation}) =>
@@ -346,7 +390,7 @@ function HoProfileStackScreen() {
 
 
           
-          <HoProfileStack.Screen  options={{
+        <HoProfileStack.Screen  options={{
             header: ({navigation}) =>
             (
 
@@ -378,6 +422,23 @@ function HoProfileStackScreen() {
                 ),
             // headerShown: false, 
         }}  name="user-settings-2" component={Shop} />
+        
+        <HoProfileStack.Screen options={{
+                header: ({navigation}) =>
+                (
+
+                    <>
+                        <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', alignItems: 'center', paddingLeft: 15, paddingRight: 25}}>
+                            <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5}}>
+                                <BackSvg width={22} height={22} />
+                            </TouchableOpacity>
+                            
+                        </View>
+                       
+                    </>
+                ),
+            // headerShown: false, 
+        }}  name="user-shopile" component={Shopile} /> 
     </HoProfileStack.Navigator>  
   );
 }
@@ -505,26 +566,13 @@ function OrderStackScreen() {
         <OrderStack.Screen  options={{
             header: ({navigation}) =>
             (
-                <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FF4500', alignItems: 'center', paddingLeft: 10, paddingRight: 10}}>
+                <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', elevation: 2, paddingLeft: 10, paddingRight: 10}}>
                     <StatusBar backgroundColor="#FF4500" barStyle="light-content" />
 
-                    <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '40%', backgroundColor: '#FF4500', alignItems: 'center'}}>
-                        <Text style={{paddingLeft: 0, fontSize: 20, color: '#fff'}}>Shopiva Orders</Text>
+                    <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '40%', backgroundColor: '#fff', alignItems: 'center'}}>
+                        <Text style={{paddingLeft: 0, fontSize: 20, color: '#000'}}>Orders</Text>
                     </View>
-
-                    <View style={{ height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', backgroundColor: '#FF4500', alignItems: 'center', padding: '10px'}}>
-                        <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                            <View style={{backgroundColor: '#fff', height: '100%', width: 40, borderRadius: 10}}></View>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity onPress={e => navigation.navigate('user-notification')}>
-                            <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                                <View style={{backgroundColor: '#fff', height: '100%', width: 40, borderRadius: 10}}>
-
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
+  
 
                 </View>
             ),
@@ -533,25 +581,11 @@ function OrderStackScreen() {
         <OrderStack.Screen options={{
          header: () =>
           (
-            <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FF4500', alignItems: 'center', paddingLeft: 10, paddingRight: 10}}>
+            <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', elevation: 2, alignItems: 'center', paddingLeft: 10, paddingRight: 10}}>
                 <StatusBar backgroundColor="#FF4500" barStyle="light-content" />
 
-                    <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '40%', backgroundColor: '#FF4500', alignItems: 'center'}}>
-                        <Text style={{paddingLeft: 0, fontSize: 20, color: '#fff'}}>Order Details</Text>
-                    </View>
-
-                    <View style={{ height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', backgroundColor: '#FF4500', alignItems: 'center', padding: '10px'}}>
-                        <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                            <View style={{backgroundColor: '#fff', height: '100%', width: 40, borderRadius: 10}}></View>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity onPress={e => navigation.navigate('user-notification')}>
-                            <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                                <View style={{backgroundColor: '#fff', height: '100%', width: 40, borderRadius: 10}}>
-
-                                </View>
-                            </View>
-                        </TouchableOpacity>
+                    <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '40%', backgroundColor: '#FFF', alignItems: 'center'}}>
+                        <Text style={{paddingLeft: 0, fontSize: 20, color: '#000'}}>Order Details</Text>
                     </View>
 
                 </View>
@@ -570,14 +604,14 @@ function ListingStackScreen() {
         <ListingStack.Screen  options={{
             header: ({navigation}) =>
             (
-                <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FF4500', alignItems: 'center', paddingLeft: 10, paddingRight: 10}}>
+                <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', alignItems: 'center', paddingLeft: 10, paddingRight: 10, elevation: 2}}>
                     <StatusBar backgroundColor="#FF4500" barStyle="light-content" />
 
-                    <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '40%', backgroundColor: '#FF4500', alignItems: 'center'}}>
-                        <Text style={{paddingLeft: 0, fontSize: 20, color: '#fff'}}>Shopiva Orders</Text>
+                    <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '40%', backgroundColor: '#FFF', alignItems: 'center'}}>
+                        <Text style={{paddingLeft: 0, fontSize: 20, color: '#000'}}>Inventory</Text>
                     </View>
 
-                    <View style={{ height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', backgroundColor: '#FF4500', alignItems: 'center', padding: '10px'}}>
+                    {/* <View style={{ height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', backgroundColor: '#FF4500', alignItems: 'center', padding: '10px'}}>
                         <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
                             <View style={{backgroundColor: '#fff', height: '100%', width: 40, borderRadius: 10}}></View>
                         </TouchableOpacity>
@@ -589,7 +623,7 @@ function ListingStackScreen() {
                                 </View>
                             </View>
                         </TouchableOpacity>
-                    </View>
+                    </View> */}
 
                 </View>
             ),

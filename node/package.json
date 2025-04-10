@@ -1,0 +1,11 @@
+{
+  "name": "campus_sphere",
+  "version": "1.0.0",
+  "description": "eCommerce server for campus_sphere",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Akpulu Fabian Chinedu",
+  "license": "ISC"
+}

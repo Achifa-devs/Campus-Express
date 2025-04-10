@@ -53,7 +53,7 @@ export default function Notification() {
     useEffect(() => {
         console.log(user?.notification)
         if (user) {
-            for (x in user?.notification) {
+            for (x in user?.notification) { 
                 if (x === 'campaigns') {
                     setIsEnabled7(user?.notification[x][0]["email"])
                     setIsEnabled8(user?.notification[x][0]["sms"])

@@ -2,10 +2,12 @@ import React from 'react'
 import { Dimensions, ScrollView, StyleSheet, View } from 'react-native'
 import OrderRoomTop from '../components/OrderRoom/OrderRoomTop'
 import OrderRoomBtm from '../components/OrderRoom/OrderRoomBtm';
+import Ionicons  from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, FontAwesome, etc.
 
-export default function OrderRoom() {
-
+export default function OrderRoom({route}) {
+  const { order, product, buyer } = route.params;
   let screenHeight = Dimensions.get('window').height;
+
 
   return (
     <>
@@ -13,11 +15,11 @@ export default function OrderRoom() {
 
         <ScrollView style={{height: '100%'}}>
           <View style={{height: 'auto'}}>
-              <OrderRoomTop /> 
+              <OrderRoomTop order={order} buyer={buyer} product={product} /> 
           </View>
 
-          <View style={{height: '60%'}}>
-              <OrderRoomBtm />
+          <View style={{height: 'auto'}}>
+              <OrderRoomBtm order={order} buyer={buyer} product={product}/>
           </View>
 
         </ScrollView>
@@ -35,6 +37,6 @@ const styles = StyleSheet.create({
     //   justifyContent: 'center',
     //   alignItems: 'center',
     //   padding: 10,
-      backgroundColor: '#efefef',
+      backgroundColor: '#fff',
     }
   });

@@ -4,13 +4,13 @@ import SelectDropdown from 'react-native-select-dropdown'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
   
 
-export default function Dropdown({ placeholder, data, update_data, input_name }) {
-  
-
+export default function Dropdown({ placeholder, data, update_data, input_name, default_value }) {
   return (
     <>
       <SelectDropdown
         data={data}
+        
+        defaultValue={default_value} // ✅ this sets the default selected item
         searchInputStyle={{
           borderRadius: 5, 
           width: '100%'
@@ -21,20 +21,20 @@ export default function Dropdown({ placeholder, data, update_data, input_name })
         renderButton={(selectedItem, isOpened) => {
           return (
             <View style={styles.dropdownButtonStyle}>
-              {/* {selectedItem && (
+              {selectedItem && (
                 <Icon name={selectedItem.icon} style={styles.dropdownButtonIconStyle} />
-              )} */}
+              )}
               <Text style={styles.dropdownButtonTxtStyle}>
                 {(selectedItem && selectedItem.title) || placeholder}
               </Text>
-              {/* <Icon name={isOpened ? 'chevron-up' : 'chevron-down'} style={styles.dropdownButtonArrowStyle} /> */}
+              <Icon name={isOpened ? 'chevron-up' : 'chevron-down'} style={styles.dropdownButtonArrowStyle} />
             </View>
           );
         }}
         renderItem={(item, index, isSelected) => {
           return (
             <View style={{...styles.dropdownItemStyle, ...(isSelected && {backgroundColor: '#D2D9DF'})}}>
-              {/* <Icon name={item.icon} style={styles.dropdownItemIconStyle} /> */}
+              <Icon name={item.icon} style={styles.dropdownItemIconStyle} />
               <Text style={styles.dropdownItemTxtStyle}>{item.title}</Text>
             </View>
           );
@@ -45,6 +45,7 @@ export default function Dropdown({ placeholder, data, update_data, input_name })
     </>
   )
 }
+
   
   const styles = StyleSheet.create({
     dropdownButtonStyle: {

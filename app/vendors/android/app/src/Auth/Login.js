@@ -68,7 +68,8 @@ const Login = ({}) => {
 
         if (data) {
             set_server_err(true)
-            fetch('https://campussphere.net/api/login/seller', {
+
+            fetch('https://campussphere.net:3000/api/login/seller', {
                 method: 'post',
                 headers: {
                     "Content-Type": "Application/json"

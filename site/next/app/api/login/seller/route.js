@@ -23,7 +23,7 @@ export async function POST(req) {
     const sellerId = result.rows[0].id;
 
     const userResult = await pool.query(
-      `SELECT seller_id, email, password, fname, lname FROM campus_sellers WHERE id = $1`,
+      `SELECT seller_id, email, password, fname, lname, gender, state, campus, phone FROM campus_sellers WHERE id = $1`,
       [sellerId]
     );
 

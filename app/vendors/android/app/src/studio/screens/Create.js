@@ -12,14 +12,12 @@ import items from '../../../../../items.json';
 import Photo from '../components/Create.js/Photo';
 import SubCategory from '../components/Create.js/SubCategory';
 import Gender from '../components/Create.js/Gender';
-import { useRoute } from '@react-navigation/native';
 import Size from '../components/Create.js/Size';
-export default function Create() {
-
+export default function Create({ route }) {
+  const { update } = route.params;
   let screenWidth = Dimensions.get('window').width;
   let screenHeight = Dimensions.get('window').height;
 
-  let [update, setUpdate] = useState(false);
 
   let [uploading, set_uploading] = useState(false);
 
@@ -297,6 +295,10 @@ export default function Create() {
   useEffect(() => {
     console.log(data.current)
   }, [data])
+
+  useEffect(() => {
+
+  }, [])
 
   return (
     <>

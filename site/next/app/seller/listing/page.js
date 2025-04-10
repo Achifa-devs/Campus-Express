@@ -99,7 +99,7 @@ export default function Listing() {
                                 
                                 <div>
                                     {
-                                        js_ago(new Date(item?.date))
+                                        item?.date ? js_ago(new Date(item?.date)) : ''
                                     }
                                 </div>
                                 <div style={{color: item.state.state === 'active' ? 'green' : 'red', fontWeight: '500'}}>
@@ -185,7 +185,7 @@ export default function Listing() {
                                             </div>
                                             |
                                             <div className="product-views">
-                                                {item.views} views
+                                                {item.views} views 
                                             </div>
                                             |
                                             <div className="product-reviews">

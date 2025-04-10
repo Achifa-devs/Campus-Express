@@ -26,7 +26,7 @@ export async function GET(request) {
         );
 
         if (orderRes.rows.length > 0) {
-          return { order: orderRes.rows[0], product: item };
+          return orderRes.rows[0];
         }
 
         return null;
@@ -54,7 +54,7 @@ export async function GET(request) {
     );
     
     const earnings = await pool.query(
-      'SELECT * FROM seller_earnings WHERE seller_id = $1',
+      'SELECT * FROM campus_express_seller_wallet WHERE seller_id = $1',
       [seller_id]
     );
 

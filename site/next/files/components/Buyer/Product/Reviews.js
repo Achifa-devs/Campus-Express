@@ -4,7 +4,7 @@ import StarRating from '@/files/reusable.js/star';
 export default function Reviews() {
   return (
     <>
-        <div className="buyer-product-reviews" style={{borderRadius: '5px', padding: '0', display: 'none'}}>
+        <div className="buyer-product-reviews" style={{borderRadius: '5px', padding: '0'}}>
             <h6 className="" style={{padding:'10px', margin: '0', borderBottom: '1px solid #efefef', height: '50px', width: '100%', background: '#fff', fontWeight: '600', display: 'flex', alignItems: 'center'}}>Reviews</h6>
             <section >
                 <div className='ratings'>

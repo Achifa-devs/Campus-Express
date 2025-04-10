@@ -94,7 +94,7 @@ export default function Profile({navigation}) {
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={e => navigation.navigate('buyer-community/legal')} style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 20, marginBottom: 0, flexDirection: 'row', height: 75, width: '100%', backgroundColor: '#fff'}}>
+                    {/* <TouchableOpacity onPress={e => navigation.navigate('buyer-community/legal')} style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 20, marginBottom: 0, flexDirection: 'row', height: 75, width: '100%', backgroundColor: '#fff'}}>
                         <View style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row'}}>
                             <View style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5}}>
                                 <RatingSvg width={20} height={20} />
@@ -104,7 +104,7 @@ export default function Profile({navigation}) {
                         <View style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#fff', borderRadius: 50, padding: 5}}>
                             <AngleSvg width={35} height={35} />
                         </View>
-                    </TouchableOpacity> 
+                    </TouchableOpacity>  */}
 
                    
                     

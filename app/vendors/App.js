@@ -52,7 +52,7 @@ function NavCnt() {
   useEffect(() => {
     CookieManager.get('https://campussphere.net')
     .then((result) => {
-    console.log(result)
+      console.log(result)
       if(result.jwt_token.value !== null && result.jwt_token.value !== '') {
         dispatch(set_cookie(true))
       }else{

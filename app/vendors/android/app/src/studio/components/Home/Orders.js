@@ -1,15 +1,67 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Dimensions, StyleSheet, Text, View } from 'react-native'
+import { getData } from '../../../reusables/AsyncStore.js';
 export default function Orders() {
   let screenWidth = Dimensions.get('window').width;
-    let list = [
-      {name: 'Earning This Month', value: 100000},
-      {name: 'Cleared Ordered', value: 50},
-      {name: 'Active Orders', value: 30},
-      {name: 'Cancelled Orders', value: 12},
-      {name: 'Total Reports', value: 12},
-      {name: 'Total Reviews', value: 12}
-    ]
+    let [list, set_list] = useState([
+      {name: 'Earning This Month', value: '...'},
+      {name: 'Cleared Ordered', value: '...'},
+      {name: 'Active Orders', value: '...'},
+      {name: 'Cancelled Orders', value: '...'},
+      {name: 'Total Reports', value: '...'},
+      {name: 'Total Reviews', value: '...'}
+    ])
+
+    
+    
+      let [id, set_id] = useState('')
+      useEffect(() => {
+        getData('user_id').then(result => set_id(result));
+        fetch(`https://campussphere.net:3000/api/report/seller?seller_id=${id}`)
+            .then(async (result) => {
+                let res = await result.json();
+                const updateEarningThisMonth = (newValue, name) => {
+                    set_list(prevList => 
+                        prevList.map(item =>
+                        item.name === name
+                            ? { ...item, value: newValue } // Update the value for 'Earning This Month'
+                            : item
+                        )
+                    );
+                };
+
+                if (res) {
+                    let { orders, reviews, reports, earnings } = res;
+                    console.log(orders)
+                    let order_data = [0, 0, 0]
+                    
+                    orders.map(item => {
+                        if (item?.status?.state === 'completed') {
+                            order_data[0] +=1
+                        } else if(item?.status?.state === 'pending' && item?.havepaid){
+                            order_data[1] +=1
+                        }else if(item?.status?.state === 'cancelled'){
+                            order_data[2] +=1
+                        }
+                    })
+                    
+                    
+                    
+                    
+                    updateEarningThisMonth(reviews?.rows?.length, 'Total Reviews');
+                    updateEarningThisMonth(reports?.rows?.length, 'Total Reports');
+                    updateEarningThisMonth(earnings?.rows[0]?.wallet_balance, 'Earning This Month');
+
+                    updateEarningThisMonth(order_data[0], 'Cleared Ordered');
+                    updateEarningThisMonth(order_data[1], 'Active Orders');
+                    updateEarningThisMonth(order_data[2], 'Cancelled Orders');
+                }
+
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+      }, [id])
   return (
     <>
         <View>

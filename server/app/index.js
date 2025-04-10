@@ -4,6 +4,7 @@ const {
   morgan,
   cors,
   io, 
+  shortId,
   bcrypt
 } = require('./reuseables/modules');
 const fs = require('fs-extra');
@@ -87,11 +88,6 @@ app.get('/image-folder', (req,res) => {
 })
 
 
-// app.get('/logo', async(req, res) => {
-//   let p = await bcrypt.hash('0000', 10);
-//   console.log(p)
-//   // send_mail_via_brevo('akpulufabian@gmail.com', 'testing', '<h1>Hello World</h1>');
-// })
 
 process.on('unhandledRejection', (reason, promise) => {
   // console.log('Unhandled Rejection at:', reason.stack || reason)

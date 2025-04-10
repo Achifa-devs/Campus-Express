@@ -8,25 +8,23 @@ import dayjs from 'dayjs';
 import DatePicker from 'react-native-date-picker'
 import { SelectList } from 'react-native-dropdown-select-list';
 import axios from 'axios';
+import Dropdown from '../../reusables/Dropdown';
+import { data, school_choices } from '../../reusables/location';
+// import { data, school_choices } from "../reusables/location";
 export default function PersonalData() {
     let {
         user
-    } = useSelector(s=>s.user);
+    } = useSelector(s => s.user);
+    console.log(user)
  
     
     let [states, set_states] =  useState('')
-    let [state, set_state] =  useState('')
-    
     let [cities, set_cities] =  useState('')
-    let [city, set_city] = useState('')
-
     let [home_address, set_home_address] = useState('')
-    let [postal_code, set_postal_code] = useState('')
-    
-    let [gender, set_gender] = useState('')
-    let [birth, set_birth] = useState('')
-
-
+    let [gender, setGender] = useState('')
+    let [state, setState] = useState('')
+    let [campus, setCampus] = useState('')
+    const [campusLocaleList, setCampusLocaleList] = useState([]);
 
     function update_user(){
         axios.post('http://192.168.249.146:2003/system.profile-update', {
@@ -39,68 +37,37 @@ export default function PersonalData() {
             console.log(err)
         }) 
     }
-    let [date, setDate] = useState(new Date())
-    let [open, setOpen] = useState(false)
 
-
-    let [day, setday] = useState('');
-    let [month, setmonth] = useState('');
-    let [year, setyear] = useState('');
-
-    
     useEffect(() => {
-        date_converter()
-    }, [date])
-
-    let months = [
-    'January', 'February', 'March', 'April', 'May', 'June', 
-    'July', 'August', 'September', 'October', 'November', 'December'
-    ];
-
-    function date_converter() {
-        // const dateString = date;
-        const d = new Date(date); // Convert the string to a Date object
-
-        const day = d.getUTCDate(); // Get the day of the month (1-31)
-        const month = d.getUTCMonth() + 1; // Get the month (0-11), so add 1 to make it 1-12
-        const year = d.getUTCFullYear(); // Get the full year (e.g., 2025)
-
-        setmonth(months[month - 1]);
-        setday(day);
-        setyear(year)
-        set_birth(`${day} ${months[month - 1]}, ${year}`)
-
-    }
-    
-
-    
- 
-    // const [selected, setSelected] = React.useState("");
-  
-    let data = [
-        {key:'1', value:'Male'},
-        {key:'2', value:'Female'}
-    ]
-  
-   
-  
-    useEffect(() => {
-        if (user) {
-            set_gender(user?.gender)
-            setday(user?.birth?.split(' ')[0])
-            setmonth(user?.birth?.split(' ')[1].split(',')[0])
-            setyear(user?.birth?.split(' ')[2])
-            set_state(user?.address?.state)
-            set_city(user?.address?.city)
-            set_home_address(user?.address?.home_address)
-            set_postal_code(user?.address?.postal_code)
-
+        if (user !== null && user !== undefined && user !== 'null' && user !== 'undefined') { 
+            // setState(user?.state)
+            update_data(user?.state, 'state')
+            update_data(user?.campus, 'campus')
+            update_data(user?.gender, 'gender')
         }
     }, [user])
+
     
+    function update_data(data, name) {
+        console.log('update_data',data)
+        if (name === 'gender') {
+            setGender(data)
+        } else if (name === 'state') {
+            setState(data)
+        } else {
+            setCampus(data)
+        }
+    }
+    useEffect(() => {
+        setCampusLocaleList([])
+        let stateIndex = data.filter(item =>  item.title.toLowerCase() === state.toLowerCase())
+        let index = data.indexOf(stateIndex[0]); 
+        let campuses = Object.values(school_choices).reverse();
+        index < 0 ? setCampusLocaleList([]) : setCampusLocaleList(campuses[index])
+    }, [state])
 
     useEffect(() => {
-        locations.map((item,index) => set_states(data => [...data, {key: index+1, value: item.name}]));
+        locations.map((item,index) => set_states(data => [...data, {key: index+1, title: item.name}]));
     }, [])
     
     useEffect(() => {
@@ -108,7 +75,7 @@ export default function PersonalData() {
             console.log(locations.filter(item => item.name === state)[0]?.cities)
             let cities = locations.filter(item => item.name === state)[0]?.cities;
             set_cities([])
-            cities?.map((item,index) => set_cities(data => [...data, {key: index+1, value: item}]));
+            cities?.map((item,index) => set_cities(data => [...data, {key: index+1, title: item}]));
         }
 
     },[state])
@@ -145,15 +112,10 @@ export default function PersonalData() {
                 
                  <View style={styles.inputCnt}>
                     <Text style={styles.label}>Gender</Text>
-                    <SelectList 
-                        setSelected={(val) => { set_gender(val)}} 
-                        data={data} 
-                        defaultOption={{key:'1', value:user?.gender}}
-                        save="value"
-                    />
+                     <Dropdown update_data={update_data} default_value={{title: user?.gender}} data={[{ title: 'Male' }, { title: 'Female' }]} input_name={'gender'} placeholder={'Select your gender'} />
                 </View>
 
-                <View style={{marginTop: 10}}>
+                {/* <View style={{marginTop: 10}}>
                     <Text style={[styles.label, {marginLeft: 15, marginBottom: -12, margintTop: 10}]}>Date Of Birth</Text>
                       
                     <View style={[styles.dateInputCnt, {padding: 10}]}>
@@ -189,11 +151,11 @@ export default function PersonalData() {
                           }}
                           mode='date'
                     />
-                </View>
+                </View> */}
 
                 <View style={styles.inputCnt}>
                     <Text style={styles.label}>Phone number</Text>
-                    <TextInput style={styles.input} value={`${user?.phone_number}`} />
+                    <TextInput style={styles.input} value={`${user?.phone}`} />
                 </View>
                 
                 <View style={styles.inputCnt}>
@@ -206,15 +168,20 @@ export default function PersonalData() {
 
                 <Text style={[styles.label, {borderBottomColor: '#000', borderBottomWidth: .5, paddingBottom: 10, marginBottom: 10, marginTop: 25}]}>Address</Text>
 
-                <View style={styles.inputCnt}>
-                    <Text style={styles.label}>Home address</Text>
+                {/* <View style={styles.inputCnt}>
+                    <Text style={styles.label}>Street or junction (e.g. Yahoo junction)</Text>
                     <TextInput style={styles.input} defaultValue={home_address} onChangeText={txt=> set_home_address(txt)}/>
                 </View>
                 
                 <View style={styles.inputCnt}>
+                    <Text style={styles.label}>Lodge Name</Text>
+                    <TextInput style={styles.input} defaultValue={home_address} onChangeText={txt=> set_home_address(txt)}/>
+                </View> */}
+                
+                {/* <View style={styles.inputCnt}>
                     <Text style={styles.label}>Postal code</Text>
                     <TextInput style={styles.input} defaultValue={postal_code} keyboardType='numeric' onChangeText={txt=> set_postal_code(txt)}/>
-                </View>
+                </View> */}
 
                 {/* <View style={styles.inputCnt}>
                     <Text style={styles.label}>Country</Text>
@@ -227,26 +194,30 @@ export default function PersonalData() {
                 
                 <View style={styles.inputCnt}>
                     <Text style={styles.label}>State</Text>
-                    <SelectList 
+                    {/* <SelectList 
                         setSelected={(val) => set_state(val)} 
                         data={states} 
                         defaultOption={{key:'1', value:user?.address?.state}}
                         
                         save="value"
                         placeholder='Select state'
-                    />
+                    /> */}
+                    <Dropdown update_data={update_data} default_value={{title: user?.state}} data={data}  input_name={'state'} placeholder={'Select your state'} />
+                    
                 </View>
                 
                 <View style={styles.inputCnt}>
-                    <Text style={styles.label}>City</Text>
-                    <SelectList 
+                    <Text style={styles.label}>Campus</Text>
+                    {/* <SelectList 
                         setSelected={(val) => set_city(val)} 
                         data={cities} 
                         defaultOption={{key:'1', value:user?.address?.city}}
                         save="value"
                         placeholder='Select city'
                         
-                    />
+                    /> */}
+                    <Dropdown update_data={update_data} default_value={{title: user?.campus}}  data={campusLocaleList} input_name={'campus'} placeholder={'Select your campus'} />
+                    
                 </View>
                 
                 
