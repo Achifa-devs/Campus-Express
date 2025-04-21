@@ -29,7 +29,7 @@ export default function Listing() {
       console.log(response)
       set_list(response)
 
-      // if (response.bool) {
+      // if (response.success) {
       //     console.log(response)
       //     set_list(response.data)
       // } else {

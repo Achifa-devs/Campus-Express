@@ -40,7 +40,7 @@ export default function Bank() {
         })   
         .then(async(result) => {
             let response = await result.json();
-            if (response.bool) {
+            if (response.success) {
                 setindicator(false)
                 setBeneficiary(response.name)
             }else {
@@ -55,7 +55,7 @@ export default function Bank() {
     }
 
     function create() {
-        fetch(`http://192.168.234.146:3000/api/shop/payment/create`, {
+        fetch(`http://192.168.224.146:9090/api/shop/payment/create`, {
             method: 'post',
             headers: {
                 "Content-Type": "Application/json"
@@ -64,7 +64,7 @@ export default function Bank() {
         })   
         .then(async(result) => {
             let response = await result.json();
-            if (response.bool) {
+            if (response.success) {
                 setindicator(false)
                 
                 navigation.navigate('')

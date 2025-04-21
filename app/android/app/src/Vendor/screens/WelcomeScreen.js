@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Image, StyleSheet, Text, View, Dimensions, StatusBar, TouchableOpacity } from 'react-native'
 import * as Progress from 'react-native-progress';
-// import LossSvg from '../../assets/loss-graph-finance-svgrepo-com.svg'
+// import LossSvg from '../../media/assets/loss-graph-finance-svgrepo-com.svg'
 import { set_cookie } from '../../../../../redux/vendor/cookie';
-// import { validate_jwt } from '../../reusables/Cookie';
+// import { validate_jwt } from '../../utils/Cookie';
 import { useDispatch } from 'react-redux';
 import CookieManager from '@react-native-cookies/cookies';
 import { set_user } from '../../../../../redux/vendor/user';
@@ -17,7 +17,7 @@ export default function WelcomeScreen({navigation}) {
     //     async function home_data() {
     //         let seller_id = await validate_jwt();
     //         console.log('seller_id: ', seller_id)
-    //         if (!seller_id.bool) {
+    //         if (!seller_id.success) {
     //             set_bnt(true) 
                 
     //         } else {
@@ -68,7 +68,7 @@ export default function WelcomeScreen({navigation}) {
 
     return ( 
       <>
-        <StatusBar backgroundColor="#FF4500" barStyle="light-content" />
+        <StatusBar backgroundColor="#FF4500" barStyle="light-content" /> 
 
         <View style={[styles.cnt, {height: screenHeight}]}>
             <View style={styles.loader_cnt}>
@@ -106,7 +106,7 @@ export default function WelcomeScreen({navigation}) {
                     ?
                         <View style={{height: 360, width: '100%', padding: 10}}>
                             <Image 
-                                source={require('../../assets/10473220-removebg-preview.png')} 
+                                source={require('../../media/assets/10473220-removebg-preview.png')} 
                                 style={styles.image} 
                             />
                                         
@@ -116,7 +116,7 @@ export default function WelcomeScreen({navigation}) {
                     ?
                         <View style={{height: 360, width: '100%', padding: 10}}>
                             <Image 
-                                source={require('../../assets/10613770-removebg-preview.png')} 
+                                source={require('../../media/assets/10613770-removebg-preview.png')} 
                                 style={styles.image} 
                             />
                                         
@@ -126,7 +126,7 @@ export default function WelcomeScreen({navigation}) {
                     ?
                         <View style={{height: 300, width: '100%', padding: 10}}>
                             <Image 
-                                source={require('../../assets/5143422-removebg-preview-removebg-preview.png')} 
+                                source={require('../../media/assets/5143422-removebg-preview-removebg-preview.png')} 
                                 style={[styles.image, {width: '100%'}]} 
                             />
                                         
@@ -136,7 +136,7 @@ export default function WelcomeScreen({navigation}) {
                     ?
                         <View style={{height: 360, width: '100%', padding: 10}}>
                             <Image 
-                                source={require('../../assets/9994025-removebg-preview.png')} 
+                                source={require('../../media/assets/9994025-removebg-preview.png')} 
                                 style={[styles.image, {width: '100%'}]} 
                             />
                                         
@@ -146,7 +146,7 @@ export default function WelcomeScreen({navigation}) {
                     ? 
                         <View style={{height: 360, width: '100%', padding: 10}}>
                             <Image 
-                                source={require('../../assets/10632520-removebg-preview.png')} 
+                                source={require('../../media/assets/10632520-removebg-preview.png')} 
                                 style={[styles.image, {width: '100%'}]} 
                             />   
                         </View>

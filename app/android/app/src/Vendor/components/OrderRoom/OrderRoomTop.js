@@ -7,9 +7,9 @@ import {
     View 
 } from 'react-native'
 import OrderCard from '../Order/OrderCard';
-import MssgSvg from '../../../assets/messages-1-svgrepo-com.svg'
+import MssgSvg from '../../../media/assets/messages-1-svgrepo-com.svg'
 import Ionicons  from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, FontAwesome, etc.
-import PhnSvg from '../../../assets/phone-svgrepo-com.svg'
+import PhnSvg from '../../../media/assets/phone-svgrepo-com.svg'
 // import Ionicons  from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, FontAwesome, etc.
 
 export default function OrderRoomTop({ order, product }) {
@@ -25,7 +25,7 @@ export default function OrderRoomTop({ order, product }) {
         .then(async(result) => {
             
             let response = await result.json()
-           if (response.bool) {
+           if (response.success) {
              set_buyer(response?.user)
            } else {
             Alert.alert('Network error, please try again.')

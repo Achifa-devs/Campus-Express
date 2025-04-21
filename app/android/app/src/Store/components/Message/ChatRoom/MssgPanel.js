@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-// import MoreImgSvg from '../../assets/more-four-svgrepo-com.svg'
-// import SendImgSvg from '../../assets/send-square-svgrepo-com.svg'
+// import MoreImgSvg from '../../media/assets/more-four-svgrepo-com.svg'
+// import SendImgSvg from '../../media/assets/send-square-svgrepo-com.svg'
 import { ScrollView, TextInput, TouchableOpacity } from 'react-native';
 
 export default function MssgPanel({sendMssg,imageLoader,setTextInput,message}) {

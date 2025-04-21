@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Dimensions, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import BottomModal from '../../../reusables/BtmModal';
-import RadioButton from '../../../reusables/RadioBtn';
+import BottomModal from '../../utils/BtmModal';
+import RadioButton from '../../utils/RadioBtn';
 
 export default function Type({type_list,category,updateType}) {
     let screenWidth = Dimensions.get('window').width;

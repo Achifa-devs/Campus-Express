@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { ActivityIndicator, Alert, Dimensions, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, Vibration, View } from 'react-native';
 import { useSelector } from 'react-redux';
-// import { send_token } from '../../../reusables/sms_token';
+// import { send_token } from '../../utils/sms_token';
 import axios from 'axios';
-import { send_token } from '../../../../reusables/sms_token';
+import { send_token } from '../../../utils/sms_token';
 
 export default function ChangeEmail({ route, navigation }) {
      const { token } = route.params || {};
@@ -31,7 +31,7 @@ export default function ChangeEmail({ route, navigation }) {
     async function update_phone_pin() {
       
         return await axios.post('http://192.168.249.146:2003/system.email-update', {email: new_email, id: user?.id})
-        .then(({ data }) => ({bool: data.bool}))
+        .then(({ data }) => ({bool: data.success}))
         .catch(err => (err.response?.data))
     }
     return (
@@ -142,7 +142,7 @@ export default function ChangeEmail({ route, navigation }) {
 
                                     let response = await update_phone_pin();
                                     console.log(response)
-                                    if (response.bool) {
+                                    if (response.success) {
                                         //Alert message
                                     
                                         Alert.alert('New email was saved successfully.');

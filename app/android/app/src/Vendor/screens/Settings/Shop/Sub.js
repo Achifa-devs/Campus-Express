@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { ScrollView, StyleSheet, TextInput, View, Text, TouchableOpacity } from 'react-native'
-import HistorySvg from '../../../../assets/history-svgrepo-com (2).svg'
-import BillingSvg from '../../../../assets/bill-receipt-svgrepo-com.svg'
-import PlanSvg from '../../../../assets/packages-shipping-and-delivery-svgrepo-com.svg'
-import AngleSvg from '../../../../assets/angle-right-svgrepo-com.svg'
+import HistorySvg from '../../../../media/assets/history-svgrepo-com (2).svg'
+import BillingSvg from '../../../../media/assets/bill-receipt-svgrepo-com.svg'
+import PlanSvg from '../../../../media/assets/packages-shipping-and-delivery-svgrepo-com.svg'
+import AngleSvg from '../../../../media/assets/angle-right-svgrepo-com.svg'
 export default function Sub() {
   return (
         <>

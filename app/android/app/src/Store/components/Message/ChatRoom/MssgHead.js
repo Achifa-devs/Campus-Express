@@ -13,7 +13,7 @@ import {
 import { 
     setSellerDateTo 
 } from '../../../../../../Redux/reducers/studio/room_date';
-import PhotoImgSvg from '../../assets/image-svgrepo-com (4).svg'
+import PhotoImgSvg from '../../media/assets/image-svgrepo-com (4).svg'
 
 export default function MssgHead({index,navigation,item}) {
 

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Dimensions, StyleSheet, Text, View } from 'react-native'
-import { getData } from '../../../reusables/AsyncStore.js';
+import { getData } from '../../../utils/AsyncStore.js';
+// import { getData } from '../../utils/AsyncStore.js';
 export default function Orders() {
   let screenWidth = Dimensions.get('window').width;
     let [list, set_list] = useState([

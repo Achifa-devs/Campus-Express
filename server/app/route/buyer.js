@@ -67,12 +67,12 @@ buyer_route.post('/filter', parser, filter_items);
 
 buyer_route.get('/buyer', get_buyer);
 buyer_route.get('/', get_shop_items);
-buyer_route.get('/filtered-ads', get_shop_items_via_condition);
+// buyer_route.get('/filtered-ads', get_shop_items_via_condition);
 buyer_route.get('/search-word', get_search_word);
 
 buyer_route.get('/lodges', get_lodges);
 buyer_route.get('/product', get_item);
-buyer_route.get('/product-images', get_item_thumbnail);
+// buyer_route.get('/product-images', get_item_thumbnail);
 buyer_route.get('/thumbnail', get_thumbnail);
 
 buyer_route.get('/saved-items-data', get_saved_item_data);
@@ -123,6 +123,7 @@ buyer_route.post('/create-refund', parser, create_refund);
 buyer_route.post('/cancel-refund', parser, cancel_refund);
 buyer_route.post('/remove-refund', parser, remove_refund);
 buyer_route.post('/confirm-refund', parser, confirm_refund);
+
 buyer_route.get('/refunds', get_refunds);
 buyer_route.get('/refund', get_refund);
 

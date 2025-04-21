@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { ScrollView, StyleSheet, TextInput, View, Text, TouchableOpacity } from 'react-native'
-import LegalSvg from '../../../../assets/legal-hammer-symbol-svgrepo-com.svg'
-import RefundSvg from '../../../../assets/refund-svgrepo-com.svg'
-import ShippingSvg from '../../../../assets/shipping-fast-solid-svgrepo-com.svg'
-import AngleSvg from '../../../../assets/angle-right-svgrepo-com.svg'
+import LegalSvg from '../../../../media/assets/legal-hammer-symbol-svgrepo-com.svg'
+import RefundSvg from '../../../../media/assets/refund-svgrepo-com.svg'
+import ShippingSvg from '../../../../media/assets/shipping-fast-solid-svgrepo-com.svg'
+import AngleSvg from '../../../../media/assets/angle-right-svgrepo-com.svg'
 export default function Policies() {
   return (
         <>

@@ -3,7 +3,7 @@ import OrderCard from '../components/Order/OrderCard'
 import FavSvg from '../../icons/order-svgrepo-com (3).svg';
 import { Dimensions, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import { useSelector } from 'react-redux';
-import { getData } from '../../utils/AsyncStore.js';
+import { getData } from ''../../utils/AsyncStore.js';
 
 export default function Order() {
   let screenHeight = Dimensions.get('window').height;

@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { ActivityIndicator, Alert, Dimensions, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-// import { send_token } from '../../../reusables/sms_token';
+// import { send_token } from '../../utils/sms_token';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { send_token } from '../../../../reusables/sms_token';
+import { send_token } from '../../../utils/sms_token';
 
 export default function Pin({ route, navigation }) {
     const { token } = route.params || {};
@@ -23,7 +23,7 @@ export default function Pin({ route, navigation }) {
     async function update_transfer_pin() {
       
         return await axios.post('http://192.168.249.146:2003/seller.update-pin', {pwd: pwd,seller_id: user?.seller_id})
-        .then(({ data }) => ({bool: data.bool}))
+        .then(({ data }) => ({bool: data.success}))
         .catch(err => (err.response?.data))
     }
   return (
@@ -140,7 +140,7 @@ export default function Pin({ route, navigation }) {
 
                                 let response = await update_transfer_pin();
                                 console.log(response)
-                                if (response.bool) {
+                                if (response.success) {
                                     //Alert message
                                     Alert.alert('Pin was saved successfully.');
                                     set_pwd_set(false)

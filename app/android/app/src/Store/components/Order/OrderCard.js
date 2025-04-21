@@ -10,7 +10,7 @@ import Date from './OrderDate';
 import OrderStatus from './OrderStatus';
 import OrderId from './OrderId';
 import { useNavigation } from '@react-navigation/native';
-import Thumbnail from '../../../utils/store/Thumbnail';
+import Thumbnail from '../'../../utils/store/Thumbnail';
 
 export default function OrderCard({data}) {
     let navigation = useNavigation()    

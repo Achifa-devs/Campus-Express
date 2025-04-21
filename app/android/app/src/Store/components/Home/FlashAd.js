@@ -1,11 +1,11 @@
 import React from 'react'
-import appliances from '../../../assets/appliances.png'
-import phone from  '../../../assets/Artboard_1_copy_2.png'
-import laptop from '../../../assets/Artboard_1_copy_3.png'
-import grocery from '../../../assets/Artboard_1_copy_4.png'
-import electronics from '../../../assets/Artboard_1_copy_7.png'
-import fashion from '../../../assets/Artboard_1_copy_13.png'
-import gif from '../../../assets/BUY-NOW-PAY-LATER_GIF-2.gif'
+import appliances from '../../../media/assets/appliances.png'
+import phone from  '../../../media/assets/Artboard_1_copy_2.png'
+import laptop from '../../../media/assets/Artboard_1_copy_3.png'
+import grocery from '../../../media/assets/Artboard_1_copy_4.png'
+import electronics from '../../../media/assets/Artboard_1_copy_7.png'
+import fashion from '../../../media/assets/Artboard_1_copy_13.png'
+import gif from '../../../media/assets/BUY-NOW-PAY-LATER_GIF-2.gif'
 
 import { 
   Dimensions,
@@ -21,13 +21,13 @@ export default function FlasAds() {
   let screenWidth = Dimensions.get('window').width;
   let navigation = useNavigation()
   let list = [
-    {name: 'appliances', svg: appliances, uri: '../../../assets/appliances.png'},
-    {name: 'phone', svg: phone, uri: '../../../assets/Artboard_1_copy_2.png'},
-    {name: 'laptop', svg: laptop, uri: '../../../assets/Artboard_1_copy_3.png'},
-    {name: 'grocery', svg: grocery, uri: '../../../assets/Artboard_1_copy_4.png'},
-    {name: 'electronics', svg: electronics, uri: '../../../assets/Artboard_1_copy_7.png'},
-    {name: 'fashion', svg: fashion, uri: '../../../assets/Artboard_1_copy_13.png'},
-    {name: 'gif', svg: gif, uri: '../../../assets/BUY-NOW-PAY-LATER_GIF-2.gif'},
+    {name: 'appliances', svg: appliances, uri: '../../../media/assets/appliances.png'},
+    {name: 'phone', svg: phone, uri: '../../../media/assets/Artboard_1_copy_2.png'},
+    {name: 'laptop', svg: laptop, uri: '../../../media/assets/Artboard_1_copy_3.png'},
+    {name: 'grocery', svg: grocery, uri: '../../../media/assets/Artboard_1_copy_4.png'},
+    {name: 'electronics', svg: electronics, uri: '../../../media/assets/Artboard_1_copy_7.png'},
+    {name: 'fashion', svg: fashion, uri: '../../../media/assets/Artboard_1_copy_13.png'},
+    {name: 'gif', svg: gif, uri: '../../../media/assets/BUY-NOW-PAY-LATER_GIF-2.gif'},
 ]
   return (  
     <>

@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 
 // import Title from '../../../studio/components/Home/data/Title';
 import Date from '../Order/OrderDate';
 import Title from '../Home/data/Title';
-import Thumbnail from '../../../utils/store/Thumbnail';
+import Thumbnail from '../'../../utils/store/Thumbnail';
 
 export default function SearchResult({search_word}) {
   return (

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Button, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import BottomModal from '../../../utils/store/BtmModal';
-import RadioButton from '../../../utils/store/RadioBtn';
+import BottomModal from '../'../../utils/store/BtmModal';
+import RadioButton from '../'../../utils/store/RadioBtn';
 
 export default function DeliverySetup() {
 

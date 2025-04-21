@@ -7,7 +7,7 @@ import Top from '../components/Product/Top';
 import Mid from '../components/Product/Mid';
 import Btm from '../components/Product/Btm';
 import ShowCase from '../components/Home/ShowCase';
-import Thumbnail from '../../utils/store/Thumbnail';
+import Thumbnail from ''../../utils/store/Thumbnail';
 
 export default function Product() {
     let screenWidth = Dimensions.get('window').width;

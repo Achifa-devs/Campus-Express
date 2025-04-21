@@ -3,7 +3,7 @@ import { Dimensions, ScrollView, StyleSheet, Text, Touchable, TouchableOpacity, 
 import ChatHead from '../components/Message/MessageRoom/ChatHead';
 import FavSvg from '../../icons/message-svgrepo-com.svg';
 import { useSelector } from 'react-redux';
-import { getData } from '../../utils/AsyncStore.js';
+import { getData } from ''../../utils/AsyncStore.js';
 
 export default function Message() {
   let screenHeight = Dimensions.get('window').height;

@@ -1,5 +1,5 @@
 import React from 'react'
-import GoogleSvg from '../../../../assets/google-color-svgrepo-com (2).svg'
+import GoogleSvg from '../../../../media/assets/google-color-svgrepo-com (2).svg'
 import { ScrollView, StyleSheet, Switch, TextInput, View, Text, TouchableOpacity } from 'react-native'
 
 export default function ShopContact() {

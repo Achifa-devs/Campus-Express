@@ -1,14 +1,14 @@
 import React from 'react'
 import { ScrollView, StyleSheet, TextInput, View, Text, TouchableOpacity } from 'react-native'
-import BellSvg from '../../assets/bell-svgrepo-com (3).svg'
-import CloseSvg from '../../assets/close-circle-svgrepo-com.svg'
-import RateSvg from '../../assets/exchange-diagonal-svgrepo-com.svg'
-import LinkSvg from '../../assets/link-square-svgrepo-com (1).svg'
-import ShieldSvg from '../../assets/shield-minimalistic-svgrepo-com.svg'
-import BookSvg from '../../assets/book-svgrepo-com (1).svg'
-import ApperanceSvg from '../../assets/contrast-907-svgrepo-com.svg'
-import AngleSvg from '../../assets/angle-right-svgrepo-com.svg'
-import RatingSvg from '../../assets/star-rating-svgrepo-com (1).svg'
+import BellSvg from '../../media/assets/bell-svgrepo-com (3).svg'
+import CloseSvg from '../../media/assets/close-circle-svgrepo-com.svg'
+import RateSvg from '../../media/assets/exchange-diagonal-svgrepo-com.svg'
+import LinkSvg from '../../media/assets/link-square-svgrepo-com (1).svg'
+import ShieldSvg from '../../media/assets/shield-minimalistic-svgrepo-com.svg'
+import BookSvg from '../../media/assets/book-svgrepo-com (1).svg'
+import ApperanceSvg from '../../media/assets/contrast-907-svgrepo-com.svg'
+import AngleSvg from '../../media/assets/angle-right-svgrepo-com.svg'
+import RatingSvg from '../../media/assets/star-rating-svgrepo-com (1).svg'
 
 export default function Setting({navigation}) {
     return (

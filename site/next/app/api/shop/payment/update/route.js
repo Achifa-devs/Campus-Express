@@ -1,6 +1,6 @@
 'use server'
-import pool from '../../db';
 import { NextResponse } from 'next/server';
+import pool from '../../../db';
 
 export async function POST(req) {
     try {

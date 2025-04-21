@@ -1,7 +1,7 @@
 import React from 'react'
 import { View } from 'react-native'
-// import InVisibleEyeSVG from '../../../assets/eye-slash-svgrepo-com.svg'
-// import VisibleEyeSVG from '../../../assets/eye-svgrepo-com.svg'
+// import InVisibleEyeSVG from '../../../media/assets/eye-slash-svgrepo-com.svg'
+// import VisibleEyeSVG from '../../../media/assets/eye-svgrepo-com.svg'
 export default function BalanceVisibility() {
   return (
     <>

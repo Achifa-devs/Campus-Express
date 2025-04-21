@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { ScrollView, StyleSheet, TextInput, View, Text, TouchableOpacity } from 'react-native'
-import LocationSvg from '../../../../assets/location-define-svgrepo-com.svg'
-import DeliverySvg from '../../../../assets/delivery-svgrepo-com (2).svg'
-import ShippingSvg from '../../../../assets/shipping-fast-solid-svgrepo-com.svg'
-import AngleSvg from '../../../../assets/angle-right-svgrepo-com.svg'
+import LocationSvg from '../../../../media/assets/location-define-svgrepo-com.svg'
+import DeliverySvg from '../../../../media/assets/delivery-svgrepo-com (2).svg'
+import ShippingSvg from '../../../../media/assets/shipping-fast-solid-svgrepo-com.svg'
+import AngleSvg from '../../../../media/assets/angle-right-svgrepo-com.svg'
 export default function ShopLocale() {
   return (
         <>

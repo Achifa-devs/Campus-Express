@@ -1,9 +1,9 @@
 import React from 'react'
 import { ScrollView, StyleSheet, Switch, TextInput, View, Text, TouchableOpacity } from 'react-native'
-import ClosedSvg from '../../../assets/closed-sign-svgrepo-com.svg'
-import ViewSvg from '../../../assets/view-list-details-svgrepo-com.svg'
-import WithdrawSvg from '../../../assets/withdraw-1-svgrepo-com.svg'
-// import SellSvg from '../../../assets/sell-svgrepo-com (4).svg'
+import ClosedSvg from '../../../media/assets/closed-sign-svgrepo-com.svg'
+import ViewSvg from '../../../media/assets/view-list-details-svgrepo-com.svg'
+import WithdrawSvg from '../../../media/assets/withdraw-1-svgrepo-com.svg'
+// import SellSvg from '../../../media/assets/sell-svgrepo-com (4).svg'
 
 export default function CloseAcct() {
   return ( 

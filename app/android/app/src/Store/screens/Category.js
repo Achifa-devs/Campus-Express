@@ -13,7 +13,7 @@ import {
 import { GetItems } from '../apis/buyer/get';
 import Title from '../components/Home/data/Title';
 import Cost from '../components/Home/data/Cost';
-import Thumbnail from '../../utils/store/Thumbnail';
+import Thumbnail from ''../../utils/store/Thumbnail';
 
 export default function Category() {
     let screenWidth = Dimensions.get('window').width;

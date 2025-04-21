@@ -12,20 +12,20 @@ const Account = ({navigation}) => {
             <View >
                 <TouchableOpacity onPress={e => navigation.navigate('seller-preference')} style={{display: 'flex', alignItems: 'center', justifyContent: 'left', padding: 20, marginBottom: 1.3, flexDirection: 'row', height: 60, width: '100%', backgroundColor: '#fff'}}>
                     <Text style={{fontFamily: 'serif', fontWeight: 500, fontSize: 15}}>Change Password</Text>
-                    <Image style={styles.icons} source={require('../../assets/right-arrow.png')} />
+                    <Image style={styles.icons} source={require('../../media/assets/back-svgrepo-com (4).svg')} />
                 </TouchableOpacity>
 
 
                 <TouchableOpacity onPress={e => navigation.navigate('seller-preference')} style={{display: 'flex', alignItems: 'center', justifyContent: 'left', padding: 20, marginBottom: 1.3, flexDirection: 'row', height: 60, width: '100%', backgroundColor: '#fff'}}>
                     <Text style={{fontFamily: 'serif', fontWeight: 500, fontSize: 15}}>Change Payment Method</Text>
-                    <Image style={styles.icons} source={require('../../assets/right-arrow.png')} />
+                    <Image style={styles.icons} source={require('../../media/assets/back-svgrepo-com (4).svg')} />
                 </TouchableOpacity>
 
 
 
                 <TouchableOpacity onPress={e => navigation.navigate('seller-preference')} style={{display: 'flex', alignItems: 'center', justifyContent: 'left', padding: 20, marginBottom: 1.3, marginBottom: 1, flexDirection: 'row', height: 60, width: '100%', backgroundColor: '#fff'}}>
                     <Text style={{fontFamily: 'serif', fontWeight: 500, fontSize: 15}}>Personal Data</Text>
-                    <Image style={styles.icons} source={require('../../assets/right-arrow.png')} />
+                    <Image style={styles.icons} source={require('../../media/assets/back-svgrepo-com (4).svg')} />
                 </TouchableOpacity>
 
 

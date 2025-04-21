@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { ScrollView, StyleSheet, TextInput, View, Text, TouchableOpacity } from 'react-native'
-import PrivacySvg from '../../../../assets/privacy-1-svgrepo-com.svg'
-import DeleteSvg from '../../../../assets/delete-svgrepo-com (3).svg'
-import AngleSvg from '../../../../assets/angle-right-svgrepo-com.svg'
-import RatingSvg from '../../../../assets/star-rating-svgrepo-com (1).svg'
-import CloseSVG from '../../../../assets/close-square-svgrepo-com.svg'
+import PrivacySvg from '../../../../media/assets/privacy-1-svgrepo-com.svg'
+import DeleteSvg from '../../../../media/assets/delete-svgrepo-com (3).svg'
+import AngleSvg from '../../../../media/assets/angle-right-svgrepo-com.svg'
+import RatingSvg from '../../../../media/assets/star-rating-svgrepo-com (1).svg'
+import CloseSVG from '../../../../media/assets/close-square-svgrepo-com.svg'
 export default function Security() {
   return (
         <>

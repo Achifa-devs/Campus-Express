@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { ScrollView, StyleSheet, TextInput, View, Text, TouchableOpacity } from 'react-native'
-import DomainSvg from '../../../../assets/domain-registration-website-svgrepo-com.svg'
-import ThemeSvg from '../../../../assets/theme-park-svgrepo-com (1).svg'
-import AngleSvg from '../../../../assets/angle-right-svgrepo-com.svg'
+import DomainSvg from '../../../../media/assets/domain-registration-website-svgrepo-com.svg'
+import ThemeSvg from '../../../../media/assets/theme-park-svgrepo-com (1).svg'
+import AngleSvg from '../../../../media/assets/angle-right-svgrepo-com.svg'
 export default function Branding() {
   return (
         <>

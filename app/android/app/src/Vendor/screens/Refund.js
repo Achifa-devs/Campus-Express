@@ -2,14 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import { Dimensions, Image, KeyboardAvoidingView, Modal, ScrollView, StyleSheet, Switch, Text, TouchableOpacity, TouchableOpacityBase, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 // import { setProfessionTo } from "../Redux/reducers/studio/Profession";
-import AngleSvg from '../../assets/angle-right-svgrepo-com.svg'
+import AngleSvg from '../../media/assets/angle-right-svgrepo-com.svg'
 import Ionicons  from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, FontAwesome, etc.
-import Dropdown from "../../reusables/Dropdown";
-import { school_choices,data } from "../../reusables/location";
+import Dropdown from "../utils/Dropdown";
+import { school_choices,data } from "../utils/location";
 import { TextInput } from "react-native-gesture-handler";
 // import { data, school_choices } from "../reusables/location";
 import { RichEditor, RichToolbar, actions } from 'react-native-pell-rich-editor';
-import BottomModal from "../../reusables/BtmModal";
+import BottomModal from "../utils/BtmModal";
 const Refund = ({ navigation }) => {
     const screenHeight = Dimensions.get('window').height;
     const screenWidth = Dimensions.get('window').width;

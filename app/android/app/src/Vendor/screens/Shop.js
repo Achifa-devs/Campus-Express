@@ -2,11 +2,10 @@ import React, {useEffect, useState} from 'react'
 import { Alert, Image, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { ScrollView, Text, TextInput } from 'react-native-gesture-handler'
 import Ionicons  from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, FontAwesome, etc.
-import ReviewSvg from '../../assets/review-svgrepo-com.svg'
+import ReviewSvg from '../../media/assets/review-svgrepo-com.svg'
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
-import BottomModal from '../../reusables/BtmModal';
-import Dropdown from '../../reusables/Dropdown';
+import BottomModal from '../utils/BtmModal';
 import { items } from '../../../../../items.json'
 import StarRating from 'react-native-star-rating-widget';
 export default function Shopile() {
@@ -38,7 +37,7 @@ export default function Shopile() {
             let response = await result.json()
             console.log(result)
             console.log(response)
-            if (response.bool) {
+            if (response.success) {
                 console.log(response)
                 set_shop(response.shop)
             } else {

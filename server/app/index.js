@@ -20,7 +20,7 @@ const { send_email, send_mail_via_outlook, send_mail_via_brevo } = require('./re
 const multer = require('multer');
 const { NeonDB } = require('./reuseables/db');
 greetingTime(new Date());
-require('dotenv').config();    
+require'dotenv').config();    
 const app = express();  
 
 app.use(cookieParser()); 

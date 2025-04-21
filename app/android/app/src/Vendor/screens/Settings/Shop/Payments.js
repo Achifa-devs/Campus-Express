@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { ActivityIndicator, Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import CloseSvg from '../../../../assets/close-circle-svgrepo-com.svg'
-import DialPadSvg from '../../../../assets/dialpad-svgrepo-com.svg'
+import CloseSvg from '../../../../media/assets/close-circle-svgrepo-com.svg'
+import DialPadSvg from '../../../../media/assets/dialpad-svgrepo-com.svg'
 import Ionicons  from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, FontAwesome, etc.
 import { useNavigation } from '@react-navigation/native';
-import BottomModal from '../../../../reusables/BtmModal';
+import BottomModal from '../../../utils/BtmModal';
 import { useSelector } from 'react-redux';
 import bank from '../../../../../../../bank.json'
 
@@ -23,7 +23,7 @@ export default function Payments() {
         setModalVisible(!modalVisible);
     };
    function get() {
-        fetch(`http://192.168.234.146:3000/api/shop/payment/`, {
+        fetch(`http://192.168.224.146:9090/api/shop/payment/`, {
             method: 'post',
             headers: {
                 "Content-Type": "Application/json"
@@ -32,7 +32,7 @@ export default function Payments() {
         })   
         .then(async(result) => {
             let response = await result.json();
-            if (response.bool) {
+            if (response.success) {
                 set_payment_data(response.data)
                 setindicator(false)
             } else {

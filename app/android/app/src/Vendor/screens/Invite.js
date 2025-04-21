@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { ScrollView, StyleSheet, TextInput, View, Linking, Share, Text, TouchableOpacity, PermissionsAndroid, FlatList, Button, Alert } from 'react-native'
 import Contacts from 'react-native-contacts';
-import ContactSvg from '../../assets/contact-book-2-svgrepo-com.svg'
-import AngleSvg from '../../assets/angle-right-svgrepo-com.svg'
-import PhoneSvg from '../../assets/phone-svgrepo-com (3).svg'
+import ContactSvg from '../../media/assets/contact-book-2-svgrepo-com.svg'
+import AngleSvg from '../../media/assets/angle-right-svgrepo-com.svg'
+import PhoneSvg from '../../media/assets/phone-svgrepo-com (3).svg'
 
 export default function Invite() {
 

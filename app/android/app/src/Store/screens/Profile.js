@@ -51,15 +51,15 @@ const ProfileCnt = ({navigation}) => {
                 <View> 
                     <TouchableOpacity onPress={e => navigation.navigate('user-product-management')} style={{display: 'flex', alignItems: 'center', justifyContent: 'left', padding: 20, marginBottom: 3, flexDirection: 'row', height: 60, width: '100%', backgroundColor: '#fff'}}>
                         <Text style={{fontFamily: 'serif', fontWeight: 500, fontSize: 15}}>Become A Seller</Text>
-                        {/* <Image style={styles.icons} source={require('../../assets/right-arrow.png')} /> */}
+                        {/* <Image style={styles.icons} source={require('../../media/assets/right-arrow.png')} /> */}
                     </TouchableOpacity>
                     <TouchableOpacity onPress={e => navigation.navigate('user-product-management')} style={{display: 'flex', alignItems: 'center', justifyContent: 'left', padding: 20, marginBottom: 3, flexDirection: 'row', height: 60, width: '100%', backgroundColor: '#fff'}}>
                         <Text style={{fontFamily: 'serif', fontWeight: 500, fontSize: 15}}>History</Text>
-                        {/* <Image style={styles.icons} source={require('../../assets/right-arrow.png')} /> */}
+                        {/* <Image style={styles.icons} source={require('../../media/assets/right-arrow.png')} /> */}
                     </TouchableOpacity>
                     <TouchableOpacity onPress={e => navigation.navigate('user-product-management')} style={{display: 'flex', alignItems: 'center', justifyContent: 'left', padding: 20, marginBottom: 3, flexDirection: 'row', height: 60, width: '100%', backgroundColor: '#fff'}}>
                         <Text style={{fontFamily: 'serif', fontWeight: 500, fontSize: 15}}>Invite Friends</Text>
-                        {/* <Image style={styles.icons} source={require('../../assets/right-arrow.png')} /> */}
+                        {/* <Image style={styles.icons} source={require('../../media/assets/right-arrow.png')} /> */}
                     </TouchableOpacity>
 
                 </View>
@@ -76,12 +76,12 @@ const ProfileCnt = ({navigation}) => {
                 <View> 
                     <TouchableOpacity onPress={e => navigation.navigate('user-preference')} style={{display: 'flex', alignItems: 'center', justifyContent: 'left', padding: 20, marginBottom: 3, flexDirection: 'row', height: 60, width: '100%', backgroundColor: '#fff'}}>
                         <Text style={{fontFamily: 'serif', fontWeight: 500, fontSize: 15}}>Preference</Text>
-                        {/* <Image style={styles.icons} source={require('../../assets/right-arrow.png')} /> */}
+                        {/* <Image style={styles.icons} source={require('../../media/assets/right-arrow.png')} /> */}
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={e => navigation.navigate('user-account')}  style={{display: 'flex', alignItems: 'center', justifyContent: 'left', padding: 20, flexDirection: 'row', height: 60, width: '100%', backgroundColor: '#fff'}}>
                         <Text style={{fontFamily: 'serif', fontWeight: 500, fontSize: 15}}>Acccount</Text>
-                        {/* <Image style={styles.icons} source={require('../../assets/right-arrow.png')} /> */}
+                        {/* <Image style={styles.icons} source={require('../../media/assets/right-arrow.png')} /> */}
                     </TouchableOpacity>
                     
                 </View>
@@ -98,23 +98,23 @@ const ProfileCnt = ({navigation}) => {
                 <View> 
                     <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'left', padding: 20, marginBottom: 3, flexDirection: 'row', height: 60, width: '100%', backgroundColor: '#fff'}}>
                         <Text style={{fontFamily: 'serif', fontWeight: 400, fontSize: 15}}>Terms Of Service</Text>
-                        {/* <Image style={styles.icons} source={require('../../assets/right-arrow.png')} /> */}
+                        {/* <Image style={styles.icons} source={require('../../media/assets/right-arrow.png')} /> */}
                     </TouchableOpacity>
                     <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'left', padding: 20, marginBottom: 3, flexDirection: 'row', height: 60, width: '100%', backgroundColor: '#fff'}}>
                         <Text style={{fontFamily: 'serif', fontWeight: 400, fontSize: 15}}>Privacy Policy</Text>
-                        {/* <Image style={styles.icons} source={require('../../assets/right-arrow.png')} /> */}
+                        {/* <Image style={styles.icons} source={require('../../media/assets/right-arrow.png')} /> */}
                     </TouchableOpacity>
                     <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'left', padding: 20, marginBottom: 3, flexDirection: 'row', height: 60, width: '100%', backgroundColor: '#fff'}}>
                         <Text style={{fontFamily: 'serif', fontWeight: 400, fontSize: 15}}>Blogs</Text>
-                        {/* <Image style={styles.icons} source={require('../../assets/right-arrow.png')} /> */}
+                        {/* <Image style={styles.icons} source={require('../../media/assets/right-arrow.png')} /> */}
                     </TouchableOpacity>
                     <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'left', padding: 20, marginBottom: 3, flexDirection: 'row', height: 60, width: '100%', backgroundColor: '#fff'}}>
                         <Text style={{fontFamily: 'serif', fontWeight: 400, fontSize: 15}}>Community Standard</Text>
-                        {/* <Image style={styles.icons} source={require('../../assets/right-arrow.png')} /> */}
+                        {/* <Image style={styles.icons} source={require('../../media/assets/right-arrow.png')} /> */}
                     </TouchableOpacity>
                     <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'left', padding: 20, marginBottom: 3, flexDirection: 'row', height: 60, width: '100%', backgroundColor: '#fff'}}>
                         <Text style={{fontFamily: 'serif', fontWeight: 400, fontSize: 15}}>Forum</Text>
-                        {/* <Image style={styles.icons} source={require('../../assets/right-arrow.png')} /> */}
+                        {/* <Image style={styles.icons} source={require('../../media/assets/right-arrow.png')} /> */}
                     </TouchableOpacity>
                     
                 </View>

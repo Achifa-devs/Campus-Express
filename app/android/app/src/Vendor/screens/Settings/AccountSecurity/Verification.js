@@ -1,11 +1,11 @@
 import React from 'react'
 import { ScrollView, StyleSheet, TextInput, View, Text, TouchableOpacity } from 'react-native'
 // import { StyleSheet, TouchableOpacity } from 'react-native';
-import AngleSvg from '../../../../assets/angle-right-svgrepo-com.svg'
+import AngleSvg from '../../../../media/assets/angle-right-svgrepo-com.svg'
 
-import DailPadSvg from '../../../../assets/dialpad-svgrepo-com.svg'
-import PhoneSvg from '../../../../assets/phone-svgrepo-com (4).svg'
-import MssgSvg from '../../../../assets/message-square-dots-svgrepo-com.svg'
+import DailPadSvg from '../../../../media/assets/dialpad-svgrepo-com.svg'
+import PhoneSvg from '../../../../media/assets/phone-svgrepo-com (4).svg'
+import MssgSvg from '../../../../media/assets/message-square-dots-svgrepo-com.svg'
 
 export default function Verification() {
   return (

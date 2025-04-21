@@ -8,8 +8,8 @@ import dayjs from 'dayjs';
 import DatePicker from 'react-native-date-picker'
 import { SelectList } from 'react-native-dropdown-select-list';
 import axios from 'axios';
-import Dropdown from '../../reusables/Dropdown';
-import { data, school_choices } from '../../reusables/location';
+import Dropdown from '../utils/Dropdown';
+import { data, school_choices } from '../utils/location';
 // import { data, school_choices } from "../reusables/location";
 export default function PersonalData() {
     let {

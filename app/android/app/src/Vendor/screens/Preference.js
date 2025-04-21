@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Alert, Dimensions, Image, Modal, ScrollView, StyleSheet, Switch, Text, TouchableOpacity, TouchableOpacityBase, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 // import { setProfessionTo } from "../Redux/reducers/studio/Profession";
-import AngleSvg from '../../assets/angle-right-svgrepo-com.svg'
+import AngleSvg from '../../media/assets/angle-right-svgrepo-com.svg'
 import Ionicons  from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, FontAwesome, etc.
 
 

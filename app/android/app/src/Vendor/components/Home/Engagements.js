@@ -7,7 +7,7 @@ import BalanceValue from './BalanceBoard/BalanceValue';
 import Currency from './BalanceBoard/Currency';
 import AddMoney from './BalanceBoard/AddMoney';
 import Svg, { Path } from 'react-native-svg';
-import { getData } from '../../../reusables/AsyncStore.js';
+import { getData } from '../../utils/AsyncStore.js';
 export default function Engagement({navigation}) {
   let screenWidth = Dimensions.get('window').width;
   

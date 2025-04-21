@@ -17,9 +17,7 @@ import CookieManager from '@react-native-cookies/cookies';
 import { set_user } from './redux/vendor/user';
 import Ionicons  from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, FontAwesome, etc.
 import { getData, storeData } from './android/app/src/utils/AsyncStore.js';
-import StackNavigator from './android/app/src/utils/store/Nav';
-import Login from './android/app/src/Auth/Vendor/Login.js';
-import Signup from './android/app/src/Auth/Vendor/Signup.js';
+import Vendor from './android/app/src/utils/Vendor.js';
 
 
 function App(){  
@@ -55,143 +53,23 @@ function NavCnt() {
 
   return(
     <GestureHandlerRootView style={{ flex: 1 }}>
+      <StatusBar backgroundColor="#FF4500" barStyle="light-content" /> 
+      
       {
-        mode === 'vendor'
+        mode !== 'vendor'
         ?
         <Vendor />
         :
         mode === 'shop'
-        ?
+        ? 
         <Shop />
         :
-        <DualScreen />
+        ''
       }
     </GestureHandlerRootView>
   )
 }
   
-
-function Vendor() {
-  let dispatch = useDispatch()
-  let Stack = createNativeStackNavigator()
-
-  let {
-    cookie
-  } = useSelector(s => s.cookie);
-
-  useEffect(() => {
-    CookieManager.get('https://campussphere.net')
-    .then((result) => {
-      if(result.jwt_token.value !== null && result.jwt_token.value !== '') {
-        dispatch(set_cookie(true))
-      }else{
-        dispatch(set_cookie(false))
-      }
-    })
-    .catch(err => console.log(err))
-  }, [])
-  
-  useEffect(() => {
-    async function get_user() {
-      let data = await getData('user');
-      if (data) { 
-        dispatch(set_user(JSON.parse(data)))
-      }
-    }
-    if (cookie) {
-      get_user() 
-    }
-  }, [cookie]) 
-  
-  return (
-    <Provider store={store}>
-      {
-        cookie !== true
-        ?
-          <>
-            <Stack.Navigator>
-              <Stack.Screen name={'login'} options={{
-                
-                header: ({navigation}) =>
-                (
-                  
-                  <View style={{ height: 0, display: 'flex', flexDirection: 'row', width: '100%', backgroundColor: '#1E90FF', alignItems: 'center', justifyContent: 'center'}}>
-                    <StatusBar backgroundColor="#FF4500" barStyle="light-content" />
-                    <Text style={{fontSize: 30, color: '#fff'}}>
-                      Campus Sphere - For Vendors
-                    </Text>
-                  </View>
-                ),
-                            
-                            
-              }} component={Login} />  
-              <Stack.Screen name={'registration'} options={{
-    
-                header: ({navigation}) =>
-                (
-                  <View style={{ height: 0, display: 'flex', flexDirection: 'row', width: '100%', backgroundColor: '#1E90FF', alignItems: 'center', justifyContent: 'center'}}>
-                    <StatusBar backgroundColor="#FF4500" barStyle="light-content" />
-                    <Text style={{fontSize: 30, color: '#fff'}}>
-                      Campus Sphere - For Vendors
-                    </Text>
-                  </View>
-                ),
-                            
-                            
-              }} component={Signup} />  
-            </Stack.Navigator>
-          </>
-        :
-          <>
-            {/* <WelcomeScreen /> */}
-            <Aside />
-            <StudioTab />
-          </>
-        }
-    </Provider>
-  )
-}
-
-function Shop() {
-  let dispatch = useDispatch()
-  let Stack = createNativeStackNavigator()
-
-  let {
-    cookie
-  } = useSelector(s => s.cookie);
-
-  useEffect(() => {
-    CookieManager.get('https://campussphere.net')
-    .then((result) => {
-      if(result.jwt_token.value !== null && result.jwt_token.value !== '') {
-        dispatch(set_cookie(true))
-      }else{
-        dispatch(set_cookie(false))
-      }
-    })
-    .catch(err => console.log(err))
-  }, [])
-  
-  useEffect(() => {
-    async function get_user() {
-      let data = await getData('user');
-      if (data) { 
-        dispatch(set_user(JSON.parse(data)))
-      }
-    }
-    if (cookie) {
-      get_user() 
-    }
-  }, [cookie]) 
-  
-  return (
-    <>
-        
-      <StackNavigator />
-    </>
-  )
-}
-
 
 
 function DualScreen() {
@@ -202,7 +80,7 @@ function DualScreen() {
   }
   return(
     <>
-      <StatusBar hidden={true} backgroundColor="#FF4500" barStyle="light-content" />
+      {/* <StatusBar backgroundColor="#FF4500" barStyle="light-content" />  */}
       <View>
         <View style={{
           height: (height*0.8),

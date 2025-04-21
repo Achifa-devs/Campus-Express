@@ -5,7 +5,7 @@ import Title from './data/Title';
 import Cost from './data/Cost';
 import ActionBtn from './buttons/actionBtn';
 import { useNavigation } from '@react-navigation/native';
-import Thumbnail from '../../../utils/store/Thumbnail';
+import Thumbnail from '../'../../utils/store/Thumbnail';
 export default function Card({item}) {
     let screenWidth = Dimensions.get('window').width;
     let navigation = useNavigation()
