@@ -52,7 +52,7 @@ const BuyerLayout = ({children,setCookie}) => {
     useEffect(() => {
 
         if(buyer_id !== null){
-            fetch(`https://ce-server.vercel.app/buyer?buyer_id=${buyer_id}`,
+            fetch(`/api/store/customer?buyer_id=${buyer_id}`,
             {
                 headers: {
                     'Content-Type': 'application/json'
@@ -61,13 +61,17 @@ const BuyerLayout = ({children,setCookie}) => {
             })
             .then(async(result) => {
                 let response = await result.json(); 
-                dispatch(setBuyerInfoTo(response));
-                // window.localStorage.removeItem('id_for_unknown_buyer')
-                window.localStorage.setItem('CE_buyer_id', response?.buyer_id)
-                update_db_id_for_unknown_buyer_to_registered_id()
+                // alert(JSON.stringify(response))
+                if (response?.bool) {
+                    dispatch(setBuyerInfoTo(response?.data));
+                    // window.localStorage.removeItem('id_for_unknown_buyer')
+                    window.localStorage.setItem('CE_buyer_id', response?.data?.buyer_id)
+                    update_db_id_for_unknown_buyer_to_registered_id()
+                }
             })
             .catch((error) => {
                 console.log(error)
+
 
             })
         } else {
@@ -79,24 +83,27 @@ const BuyerLayout = ({children,setCookie}) => {
     }, [buyer_id])
 
     function update_db_id_for_unknown_buyer_to_registered_id() {
-        fetch(`https://ce-server.vercel.app/update-unknown-buyer-in-views?unknown_buyer_id=${window.localStorage.getItem('id_for_unknown_buyer')}&registered_id=${buyer_id}`,
-            {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            
+        fetch(`http://192.168.24.146:9090/product-view-unknown-buyer-update`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                unknown_buyer_id: window.localStorage.getItem('id_for_unknown_buyer'),
+                registered_id: buyer_id
             })
-            .then(async (result) => {
-                window.localStorage.removeItem('id_for_unknown_buyer')
-                let response = await result.json(); 
-                // dispatch(setBuyerInfoTo(response));
-                // window.localStorage.removeItem('id_for_unknown_buyer')
-            
-            })
-            .catch((error) => {
-                console.log(error)
+        })
+        .then(async (result) => {
+            window.localStorage.removeItem('id_for_unknown_buyer')
+            let response = await result.json(); 
+            // dispatch(setBuyerInfoTo(response));
+            // window.localStorage.removeItem('id_for_unknown_buyer')
+        
+        })
+        .catch((error) => {
+            console.log(error)
 
-            })
+        })
     }
 
     useEffect(() => {
@@ -105,11 +112,12 @@ const BuyerLayout = ({children,setCookie}) => {
 
         if (!excludedPaths.includes(currentPath)) {
             // alert()
-            fetch('/api/auth/buyer-auth', {
+            fetch('/api/store/auth', {
             method: 'GET'
             })
             .then(async (res) => {
                 const data = await res.json();
+
                 if (data.bool) {
                     dispatch(setBuyerIdTo(data.id));
                 } else {
@@ -118,6 +126,7 @@ const BuyerLayout = ({children,setCookie}) => {
                 }
             })
             .catch((err) => {
+                
                 console.error('Auth Error:', err);
                 // window.location.href = '/buyer/login';
             });
@@ -325,6 +334,13 @@ const BuyerLayout = ({children,setCookie}) => {
                     ''
                     : 
                     pathname.split('/').splice(-1)[0] === 'password-recovery'
+                    ?
+                    ''
+                    :
+                    pathname.split('/').splice(-1)[0] === 'reset-pwd'
+                    ?
+                    ''
+                    :pathname.split('/').splice(-1)[0] === 'confirm-token'
                     ?
                     ''
                     :

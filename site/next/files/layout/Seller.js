@@ -18,8 +18,8 @@ const SellerLayout = ({children,setCookie}) => {
 
         if (!excludedPaths.includes(currentPath)) {
             // alert()
-            fetch('/api/auth/seller-auth', {
-            method: 'GET'
+            fetch('/api/vendor/auth', {
+                method: 'GET'
             })
             .then(async (res) => {
                 const data = await res.json();
@@ -27,12 +27,12 @@ const SellerLayout = ({children,setCookie}) => {
                     dispatch(setSellerIdTo(data.id));
                 } else {
                 // Optionally redirect to login
-                    window.location.href = '/seller/login';
+                    window.location.href = '/vendor/login';
                 }
             })
             .catch((err) => {
                 console.error('Auth Error:', err);
-                window.location.href = '/seller/login';
+                window.location.href = '/vendor/login';
             });
         }
 
@@ -101,8 +101,8 @@ const SellerLayout = ({children,setCookie}) => {
                     
             }
 
-            {
-                <button onClick={e => window.location.href=('/seller/new-listing/')} style={{
+            {/* {
+                <button onClick={e => window.location.href=('/vendor/new-listing/')} style={{
                     position: 'fixed',
                     right: '15px',
                     bottom: '45px',
@@ -111,7 +111,7 @@ const SellerLayout = ({children,setCookie}) => {
                 }}>
                     Upload Product
                 </button>
-            }
+            } */}
         </>  
 
     )  

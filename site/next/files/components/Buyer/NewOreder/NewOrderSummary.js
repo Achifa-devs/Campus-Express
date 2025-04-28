@@ -22,19 +22,21 @@ export default function NewOrderSummary({item,stock,deliveryOpt,order_id}) {
         if (deliveryOpt !== -1) {
             if (deliveryOpt === 0 && check_2.length > 0 || deliveryOpt === 1 && check_1.length > 0) {
                 buyer_overlay_setup(true, 'Creating new order...')
-                fetch('https://ce-server.vercel.app/create-order', {
+                fetch('/api/store/new-order', {
                     method: 'post',
                     headers: {
                         "Content-Type": "Application/json"
                     },
                     body: JSON.stringify({
-                        buyer: buyer_id, product_id: item.product_id, price: parseInt(item.price)*parseInt(stock), stock: stock, locale: pickup_channel
+                        buyer_id: buyer_id, product_id: item.product_id, price: parseInt(item.price)*parseInt(stock), stock: stock, locale: pickup_channel
                     })
                 })
                 .then(async(result)=> {
                     let response = await result.json()
-                    if (response) {
-                        window.location.replace(`/checkout/${item?.product_id}`)
+                    if (response.bool) {
+                        buyer_overlay_setup(false, '')
+
+                        // window.location.replace(`/store/checkout/${item?.product_id}`)
                         // window.location.href=(`/checkout/${item?.product_id}`, {replace: true})
                     }else{
                         open_notice(true, 'Error Occured, Please Try Again')
@@ -45,7 +47,7 @@ export default function NewOrderSummary({item,stock,deliveryOpt,order_id}) {
                 .catch((err) => {
                     open_notice(true, 'Error Occured, Please Try Again')
                     buyer_overlay_setup(false, '')
-
+                    console.log(err)
                 })
                 
             }else{ 
@@ -70,7 +72,7 @@ export default function NewOrderSummary({item,stock,deliveryOpt,order_id}) {
 
         if(deliveryOpt !== -1){
             if(deliveryOpt === 0 && check_2.length>0 || deliveryOpt === 1 && check_1.length>0){
-                fetch('https://ce-server.vercel.app/update-order', {
+                fetch('/api/store/update-order', {
                     method: 'post',
                     headers: {
                         "Content-Type": "Application/json"
@@ -81,8 +83,8 @@ export default function NewOrderSummary({item,stock,deliveryOpt,order_id}) {
                 })
                 .then(async(result)=> {
                     let response = await result.json()
-                    if(response){
-                        window.location.href=(`/checkout/${item?.product_id}`)
+                    if(response.bool){
+                        // window.location.href=(`/checkout/${item?.product_id}`)
                     }else{
                         open_notice(true, 'Error Occured, Please Try Again...')
                     }

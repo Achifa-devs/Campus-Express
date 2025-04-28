@@ -11,13 +11,11 @@ import {
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Video from 'react-native-video';
 import React, { useEffect, useState } from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Alert, Dimensions, StatusBar, Text, TouchableOpacity, View } from 'react-native';
-import CookieManager from '@react-native-cookies/cookies';
-import { set_user } from './redux/vendor/user';
 import Ionicons  from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, FontAwesome, etc.
-import { getData, storeData } from './android/app/src/utils/AsyncStore.js';
-import Vendor from './android/app/src/utils/Vendor.js';
+import Vendor from './android/app/src/files/utils/Vendor.js';
+import { storeData, getData } from './android/app/src/files/utils/AsyncStore.js.js';
+import { Shop } from './android/app/src/files/utils/Store.js';
 
 
 function App(){  
@@ -38,7 +36,7 @@ export default App;
 
 function NavCnt() {
  
-  let [mode, set_mode] = useState('')
+  let [mode, set_mode] = useState('shop')
 
   useEffect(() => {
     let get_mode = async () => {
@@ -53,10 +51,9 @@ function NavCnt() {
 
   return(
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <StatusBar backgroundColor="#FF4500" barStyle="light-content" /> 
       
       {
-        mode !== 'vendor'
+        mode === 'vendor'
         ?
         <Vendor />
         :
@@ -64,7 +61,7 @@ function NavCnt() {
         ? 
         <Shop />
         :
-        ''
+        <DualScreen />
       }
     </GestureHandlerRootView>
   )
@@ -80,7 +77,7 @@ function DualScreen() {
   }
   return(
     <>
-      {/* <StatusBar backgroundColor="#FF4500" barStyle="light-content" />  */}
+      <StatusBar backgroundColor="#FF4500" hidden barStyle="light-content" /> 
       <View>
         <View style={{
           height: (height*0.8),

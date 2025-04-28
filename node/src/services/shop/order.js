@@ -14,10 +14,10 @@ import {
 } from "../../repositories/shop/refund.js";
 
 export const getOrder = async (payload) => {
-  const { order_id } = payload;
+  const { product_id, buyer_id } = payload;
 
   // Business logic
-  const response = await findOrderById({ order_id });
+  const response = await findOrderById({ product_id, buyer_id });
 
   if (!response.length === 0) {
     throw new Error("Error getting order");

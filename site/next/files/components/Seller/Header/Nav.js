@@ -38,7 +38,7 @@ export default function Nav() {
       }}>
 
       <div  onClick={e => {
-        window.location.href=('/seller/orders')
+        window.location.href=('/vendor/orders')
         // alert('Check back later')  
 
       }} style={{
@@ -62,7 +62,7 @@ export default function Nav() {
         &nbsp;
         <span>Orders</span>
       </div>
-      <div onClick={e => window.location.href=('/seller/listing')} style={{width: '33.3%', fontSize: 'x-small', color: '#000', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0px', flexDirection: 'column', borderBottom: active === 'listing' ? '#FF4500' : '#fff'}}>
+      <div onClick={e => window.location.href=('/vendor/listing')} style={{width: '33.3%', fontSize: 'x-small', color: '#000', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0px', flexDirection: 'column', borderBottom: active === 'listing' ? '#FF4500' : '#fff'}}>
         <svg width="20px" height="20px" viewBox="0 -0.5 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#FF4500">
   strokeLinejoin
           <g id="SVGRepo_bgCarrier" stroke-width="0"/>strokeLinejoinstrokeLinejoinstrokeLinejoinstrokeLinejoin
@@ -78,7 +78,7 @@ export default function Nav() {
       </div>
       <div style={{width: '33.3%', borderBottom: active === 'balance' ? '#FF4500' : '#fff', fontSize: 'x-small', color: '#000', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0px', flexDirection: 'column'}} onClick={e => 
       {
-        window.location.href=('/seller/balance')
+        window.location.href=('/vendor/balance')
         // alert('Check back later')
 
       }
@@ -95,7 +95,7 @@ export default function Nav() {
           <span>Balance</span>
       </div>
       
-      <div onClick={e =>window.location.href=('/seller/shop')} style={{width: '33.3%', borderBottom: active === 'shop' ? '#FF4500' : '#fff', fontSize: 'x-small', color: '#000', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0px', flexDirection: 'column'}}>
+      <div onClick={e =>window.location.href=('/vendor/shop')} style={{width: '33.3%', borderBottom: active === 'shop' ? '#FF4500' : '#fff', fontSize: 'x-small', color: '#000', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0px', flexDirection: 'column'}}>
         <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#000">
 strokeLinejoin
           <g id="SVGRepo_bgCarrier" stroke-width="0"/>strokeLinejoin

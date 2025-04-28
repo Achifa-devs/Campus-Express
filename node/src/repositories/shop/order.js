@@ -5,10 +5,10 @@ import shortId from "short-id"
 import { errorHandler } from "../../utils/erroHandler.js";
 
 // Find order by ID
-export async function findOrderById({ order_id }) {
+export async function findOrderById({ product_id, buyer_id }) {
     const result = await pool.query(
-    `SELECT * FROM campus_express_buyer_orders WHERE order_id = $1`,
-    [order_id]
+    `SELECT * FROM campus_express_buyer_orders WHERE product_id = $1 AND buyer_id = $2`,
+    [product_id, buyer_id]
     );
   return result.rows;
 };

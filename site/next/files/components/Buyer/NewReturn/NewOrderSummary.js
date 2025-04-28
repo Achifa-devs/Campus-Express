@@ -22,7 +22,7 @@ export default function NewOrderSummary({item,stock,deliveryOpt,refund_id}) {
         if(deliveryOpt !== -1){
             if (deliveryOpt === 0 && check_2.length > 0 || deliveryOpt === 1 && check_1.length > 0) {
                 buyer_overlay_setup(true, 'Creating new refund...')
-                fetch('https://ce-server.vercel.app/create-refund', {
+                fetch('http://192.168.24.146:9090/create-refund', {
                     method: 'post',
                     headers: {
                         "Content-Type": "Application/json"
@@ -66,7 +66,7 @@ export default function NewOrderSummary({item,stock,deliveryOpt,refund_id}) {
 
         if(deliveryOpt !== -1){
             if(deliveryOpt === 0 && check_2.length>0 || deliveryOpt === 1 && check_1.length>0){
-                fetch('https://ce-server.vercel.app/update-refund', {
+                fetch('http://192.168.24.146:9090/update-refund', {
                     method: 'post',
                     headers: {
                         "Content-Type": "Application/json"

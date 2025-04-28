@@ -21,9 +21,15 @@ export const getProducts = async (payload) => {
     let { seller_id } = payload;
     
     // Business logic
-    const response = await findProducts({ seller_id });
-
-    return response;
+    try {
+        const response = await findProducts({ seller_id });
+        console.log(response)
+    
+        return response;
+    } catch (error) {
+        console.log(error)
+        
+    }
 };
 
 

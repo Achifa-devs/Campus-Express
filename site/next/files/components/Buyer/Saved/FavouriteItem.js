@@ -21,7 +21,7 @@ export default function FavouriteItem({ item, index }) {
         if (buyer_id !== '' && buyer_id !== null) {
             buyer_overlay_setup(true, 'Loading')
             
-            axios.get('https://ce-server.vercel.app/orders', {params: {buyer_id: buyer_id.trim()}})
+            axios.get('http://192.168.24.146:9090/orders', {params: {buyer_id: buyer_id.trim()}})
             .then(({data})=>{
                 console.log(data)
                 set_orders(data)
@@ -102,7 +102,7 @@ export default function FavouriteItem({ item, index }) {
                     <div className="body-cnt-btm">
                         <button onClick={e => {
                             buyer_overlay_setup(true, 'Unsaving item')
-                            axios.delete('https://ce-server.vercel.app/unsave-item', {params: {buyer_id: item?.item?.buyer_id, product_id: item?.saved_item[0]?.product_id}})
+                            axios.delete('http://192.168.24.146:9090/unsave-item', {params: {buyer_id: item?.item?.buyer_id, product_id: item?.saved_item[0]?.product_id}})
                             .then(({data})=>{
                                 e.target.parentElement.parentElement.parentElement.parentElement.remove()
                                 // setItems(data)

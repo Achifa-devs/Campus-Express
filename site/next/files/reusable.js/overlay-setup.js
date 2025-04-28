@@ -42,7 +42,20 @@ function buyer_overlay_setup(status, content) {
     }
 }
 
+
+function loader(bool) {
+    let overlay = document.querySelector('.overlay');
+    if(bool){
+        overlay.setAttribute('id', 'overlay')
+    } else {
+        overlay.removeAttribute('id')
+        
+    }
+}
+
 module.exports={
     seller_overlay_setup,
-    buyer_overlay_setup
+    buyer_overlay_setup,
+    loader
+
 }

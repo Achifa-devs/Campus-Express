@@ -47,8 +47,8 @@ import contactvg from '../../../assets/costumer-support-call-svgrepo-com.svg'
 import chatSvg from '../../../assets/messages-1-svgrepo-com (1).svg'
 import sellSvg from '../../../assets/sell-svgrepo-com (1).svg'
 import logoutSvg from '../../../assets/logout-2-svgrepo-com.svg'
-import { GetSearchWord } from "@/app/api/buyer/get";
 import Filter from "./Filter";
+import bookSvg from '../../../assets/book-svgrepo-com.svg'
 
 const Header = () => {
 
@@ -131,26 +131,31 @@ const Header = () => {
       if(searchChar !== '' && searchChar !== ' '){ 
         try {
 
-          fetch(`https://ce-server.vercel.app/search-word?word=${word}`,
-          {
+          fetch(`/api/store/search?word=${searchChar}`, {
             headers: {
-              'Content-Type': 'application/json'
+              'Gender': window.localStorage.getItem('cs-gender') 
             }
-          
           })
-          .then(async(result) => {
-            let response = await result.json(); 
-            dispatch(setSearchListTo(response))
+          .then(async(res) => {
+            let response = await res.json();
+              console.log(response)
+            if (response.bool) {
+              dispatch(setSearchListTo(response.data))
+            }else{
+              // buyer_overlay_setup(false, '')
+            }
           })
-          .catch((error) => {
-            console.log(error)
-          })
-           
+          .catch(err =>{
+            console.log(err)
+            // buyer_overlay_setup(false, '')
+          });
         } catch (error) {
-           console.log(error)
+          console.log(error)
         }
    
-       }
+          
+   
+      }
     }
     getData()
   }, [searchChar])
@@ -201,7 +206,7 @@ const Header = () => {
 
     } else if (task === 'categories') { 
       let categories = [
-        {txt: "Books", svg: '', uri: ''},
+        {txt: "Books", svg: bookSvg, uri: ''},
         {txt: "Food", svg: foodSvg, uri: ''},
         {txt: "Electronics", svg: electronicsSvg, uri: ''},
         {txt: "Fashion", svg: fashionSvg, uri: ''},
@@ -376,7 +381,7 @@ const Header = () => {
       <div className="buyer-header shadow-sm"  style={{position: 'sticky', top: '0', zIndex: '10000', background: '#fff'}}>
 
 
-        <img onClick={e => window.location.href = '/'} src={'https://res.cloudinary.com/daqbhghwq/image/upload/f_jpg/2024-06-27_dqlq3a.jpg'} style={{ height: screenWidth > 760 ? '50px' : '50px', width: screenWidth > 760 ? '50px' : '50px', borderRadius: '5px' }} alt="" />
+        <img onClick={e => window.location.href = '/store'} src={'https://res.cloudinary.com/daqbhghwq/image/upload/f_jpg/2024-06-27_dqlq3a.jpg'} style={{ height: screenWidth > 760 ? '50px' : '50px', width: screenWidth > 760 ? '50px' : '50px', borderRadius: '5px' }} alt="" />
         
 
         {
@@ -407,18 +412,31 @@ const Header = () => {
           
           <div className="input-cnt search-cnt">
             <input onFocus={e => openSearchResult(e)} onInput={e => {
-              async function getData() {
-                if(e.target.value !== '' && e.target.value !== ' '){ 
-                  try {
-                    let result = await GetSearchWord(e.target.value)
-                    dispatch(setSearchListTo(result))
-                  } catch (error) {
-                    console.log(error)
-                  }
-            
+              if(e.target.value !== '' && e.target.value !== ' '){ 
+                try {
+                  fetch(`/api/store/search?word=${e.target.value}`, {
+                    headers: {
+                      'Gender': window.localStorage.getItem('cs-gender') 
+                    }
+                  })
+                  .then(async(res) => {
+                    let response = await res.json();
+                    console.log(response.data)
+        
+                    if (response.bool) {
+                      dispatch(setSearchListTo(response.data))
+
+                    }else{
+                    }
+                  })
+                  .catch(err =>{
+                    console.log(err)
+                  });
+                } catch (error) {
+                  console.log(error)
                 }
+          
               }
-              getData()
             }} type="search" name="" placeholder="What Are You Looking For..." id="" />
             <button style={{borderRadius: '5px'}}>Search</button>
           </div> 
@@ -462,7 +480,7 @@ const Header = () => {
                           Hi {buyer_info?.fname}
                           </h6>
                           :
-                          <h6 onClick={e=>window.location.href='/login'}>
+                          <h6 onClick={e=>window.location.href='/store/login'}>
                           Login
                           </h6>
                         }

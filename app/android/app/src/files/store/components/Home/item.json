@@ -1,0 +1,141 @@
+{"items" : 
+    {
+        "category": 
+        [
+            
+
+            {
+                "Electronics":
+                [
+                    "Audio/Musical Equipment","Photo/Video Camera","Printer/Scanners","Video Game Console","Video Games","T.V/DVD","MIFI/Routers"
+                ],
+                "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1745876568/electronics_1_wzemwa.png"
+            },
+
+            {
+                "Fashion": 
+                [
+                    "Bags","Clothing","Jewelry","Foot Wear","Watch"
+                ],
+                "FootWear":  ["<==Create Custom Sub Category ==>","Sandals","Shoes","Cotina","Palms","Boots","Slippers"],
+                "ClothingMale": ["<==Create Custom Sub Category ==>","Underwear","Tops","Trousees","Nicker/Shorts","Sports-wear","Swim-suit"],
+                "ClothingFemale": ["<==Create Custom Sub Category ==>","Underwear","Tops","Trousees","Nicker/Shorts","Sports-wear","Gown","Skirt","Swim-suit"],
+                "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1745876569/fashion_gd69s2.png"
+            },
+            {
+                "Games": 
+                [
+                    "Play station","Nitendo","X-box"
+                ],
+                "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1745878942/Fuji_Gaming_store_Dashboard_card_1x_EN._SY304_CB564799420__haac9y.jpg"
+            },
+            {
+                "Appliances": 
+                [
+                    "Gas","Stove","Generator","Electric Cooker","Blender","Washing Machine","Refridgerator","Kettle","Fan","Bulb","Stabilizer","Toaster","Vacuum Cleaner","Dish Washer","Micro Wave","Oven","Mixer"
+                ],
+                "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1745876569/appliances_1_u7bokt.png"
+            },
+            {
+                "Health/Beauty": 
+                [
+                    "Bath/Body","Hair Care","Skin Care","Wig/Weavon","Fragrance","Make-Up","Tool Accessories","Sexual Wellness"
+                ],
+                "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1745876568/beauty_p5llrg.png"
+            },
+             {
+                "Pets": 
+                [
+                    "Cat","Dog","Bird","Rabbit","Turtle","Snakes","Mice","Parrot","Chicken"
+                ],
+                "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1745876878/OIP_jtaygg.jpg"
+            },
+
+            {
+                "Mobile Phones": 
+                [
+                    "Android","Samsung","IOS","Windows","BalckBerry","Symbian"
+                ],
+                "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1745876566/phones_zs8mrl.png"
+            },
+
+
+            
+
+            {
+                "Laptops/Desktops": 
+                [
+                    "Windows","Mac","Chrome","Ubuntu","Linux"
+                ],
+                "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1745876593/Artboard_1_copy_3-removebg-preview_x7cvmo.png"
+            },
+
+            {
+                "Food": 
+                [
+                    "Meat","Fruits","Vegetables","Oil","Grains","Legumes","Junk Food/Snaks","Sea Food","Processed Food","Beverages"
+                ],
+                "img": "../../../media/assets/Artboard_1_copy_4.png"
+            },
+            {
+                "Tablets": 
+                [
+                    "Android","Samsung","IOS","Windows","BalckBerry"
+                ],
+                "img": ""
+            },
+            
+
+            {
+                "Laptops/Desktops Accessories": 
+                [
+                    "Monitor","Speakers","C.P.U","Flash Drive","Hard Disk/SSD","Mouse","Keyboard","Charger/Cords"
+                ],
+                "img": ""
+            },
+
+            {
+                "Phone/Tablet Accessories": 
+                [
+                    "Ear Piece","Charger","Memory Card","Battery","Sim Card","Phone Case","OTG","Air Pod","Power Bank"
+                ],
+                "img": ""
+            },
+
+           
+
+            {
+                "Vehicle": 
+                [
+                    "SUV","Sedan","Mini Van","Truck","Bus","Tricycle","Bicycle","MotorCycle","Van"
+                ],
+                "img": ""
+            },
+
+            
+
+            
+
+            {
+                "Furnitures": 
+                [
+                    "Chair","Table","CupBoard","Shelve","Wardrobe","Stool","Bench","Bed"
+                ],
+                "img": ""
+            },
+
+            
+
+            {
+                "Utensils": 
+                [
+                    "Plate","Pot","Spoon/Fork","Knife","Tray","Basket","Cup"
+                ],
+                "img": ""
+            }
+
+
+        ]
+    }
+}
+

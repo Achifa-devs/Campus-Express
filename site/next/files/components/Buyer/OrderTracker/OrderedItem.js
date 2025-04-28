@@ -56,7 +56,7 @@ export default function OrderedItem({item,order}) {
                             <button class="button is-primary" onClick={e => {
                                 buyer_overlay_setup(true, 'Confirming Order')
 
-                                axios.post('https://ce-server.vercel.app/confirm-order', {buyer_id: buyer_id, order_id: order?.order_id, product_id: order?.product_id})
+                                axios.post('http://192.168.24.146:9090/confirm-order', {buyer_id: buyer_id, order_id: order?.order_id, product_id: order?.product_id})
                                 .then(({data})=>{
                                     console.log(data)
                                     if(data){

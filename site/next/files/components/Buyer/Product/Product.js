@@ -17,9 +17,9 @@ import ItemImgs from './ItemImgs'
 import Share from './Share'
 import StarRating from '@/files/reusable.js/star';
 import SaveButton from '../dashboard/SaveButton'
-import { UnSaveItem } from '@/app/api/buyer/delete'
+// import { UnSaveItem } from '@/app/api/buyer/delete'
 import { setSaveTo } from '@/redux/buyer_store/Save'
-import { SaveItem } from '@/app/api/buyer/post'
+// import { SaveItem } from '@/app/api/buyer/post'
 import { open_notice } from '@/files/reusable.js/notice'
 import Contact from './Contact'
 import { Link } from 'react-router-dom'
@@ -98,17 +98,17 @@ const Product = ({ item, seller, order_list }) => {
         let result = order_list.filter((data) => data?.product?.product_id === item?.product_id && data?.order?.buyer_id === buyer_id)?.length
         if(result<1){
             if(buyer_id === null || buyer_id === '' || buyer_id === 'null'){
-                window.location.href=(`/login`)
+                window.location.href=(`/store/login`)
                 
             }else{
                 
                 
 
-                window.location.href=(`/new-order/${item.product_id}`)
+                window.location.href=(`/store/new-order/${item.product_id}`)
 
             }
         }else{
-            window.location.href=(`/checkout/${item.product_id}`)
+            window.location.href=(`/store/checkout/${item.product_id}`)
         }
 
     }

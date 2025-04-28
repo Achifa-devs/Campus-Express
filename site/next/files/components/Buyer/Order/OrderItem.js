@@ -79,7 +79,7 @@ export default function OrderItem({item,order}) {
                             <button class="button is-primary" onClick={e => {
                                 buyer_overlay_setup(true, 'Cancelling Order')
 
-                                axios.post('https://ce-server.vercel.app/cancel-order', {buyer_id: buyer_id, order_id: order?.order_id, amount:order?.price, reason: 'cancelled', product_id: order?.product_id})
+                                axios.post('http://192.168.24.146:9090/cancel-order', {buyer_id: buyer_id, order_id: order?.order_id, amount:order?.price, reason: 'cancelled', product_id: order?.product_id})
                                 .then(({data})=>{
                                     console.log(data)
                                     if(data){
@@ -104,7 +104,7 @@ export default function OrderItem({item,order}) {
         </div>
         
           
-        <div className="order-card-data" id={`${item?.product_id}`} style={{border: selected_order ? '2px solid #FF4500' : 'none'}}>
+        <div className="order-card-data" id={`/store/${item?.product_id}`} style={{border: selected_order ? '2px solid #FF4500' : 'none'}}>
             <div className="order-card-data-cnt">
                 <div className='thumbnail-cnt'>
                     <Thumbnail thumbnail_id={item?.thumbnail_id} height={'100%'} />
@@ -162,7 +162,7 @@ export default function OrderItem({item,order}) {
                             order?.status.state === 'completed'
                             ?
                             <>
-                                <button style={{opacity: '1', background: 'yellowgreen'}} onClick={e=>{window.location.href = `/new-return/${item?.product_id}`}}>
+                                <button style={{opacity: '1', background: 'yellowgreen'}} onClick={e=>{window.location.href = `/store/new-return/${item?.product_id}`}}>
                                     Return & refund
                                 </button>
                                 <button style={{height: 'auto', background: order?.status.state === 'completed' ? 'green' : '#FF4500'}} disabled>
@@ -184,7 +184,7 @@ export default function OrderItem({item,order}) {
                                     
                                         buyer_overlay_setup(true, `Deleting order`)
                                         
-                                        axios.post('https://ce-server.vercel.app/remove-order', {order_id: order?.order_id})
+                                        axios.post('http://192.168.24.146:9090/remove-order', {order_id: order?.order_id})
                                         .then(({data})=>{
                                             console.log(data)
                                             if(data){
@@ -209,7 +209,7 @@ export default function OrderItem({item,order}) {
                                         <small>Delete order</small>
                                     }
                                 </button>
-                                <button onClick={e=> order?.havepaid ? window.location.href=`/order-tracking/${item?.product_id}` : window.location.href=`/checkout/${item?.product_id}`}>
+                                <button onClick={e=> order?.havepaid ? window.location.href=`/store/order-tracking/${item?.product_id}` : window.location.href=`/store/checkout/${item?.product_id}`}>
                                     {
                                         order?.havepaid
                                         ?

@@ -7,7 +7,7 @@ import Thumbnail from '../Thumbnail'
 import { 
   useNavigate 
 } from 'react-router-dom'
-import { GetFilteredAds } from '@/app/api/buyer/get'
+// import { GetFilteredAds } from '@/app/api/buyer/get'
 // import { 
 //   GetFilteredAds
 // } from '../../../api/buyer/get'
@@ -20,15 +20,15 @@ export default function PaidAds({condition,cntName,top}) {
     setScreenWidth(width)
 }, [])
   useEffect(() => {
-    try {
-      async function getData() {
-        let result = await GetFilteredAds(condition)
-        setItems(result)
-      }
-      getData()
-    } catch (error) {
-      console.log(error)
-    }
+    // try {
+    //   async function getData() {
+    //     let result = await GetFilteredAds(condition)
+    //     setItems(result)
+    //   }
+    //   getData()
+    // } catch (error) {
+    //   console.log(error)
+    // }
 
 }, []) 
     // let navigate = useNavigate()

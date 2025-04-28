@@ -15,8 +15,9 @@ export async function findProductById({ product_id, seller_id }) {
 
 // Find products
 export async function findProducts({ seller_id }) {
+
   const result = await pool.query(
-    `SELECT * FROM seller_shop WHERE seller_id = '${seller_id}' `
+    `SELECT * FROM seller_shop WHERE seller_id = $1 `
     [seller_id]
   );
   return result.rows;
@@ -120,7 +121,7 @@ export async function createProduct({ constantData, dynamicData, shipping_data }
 // DELETE product view by ID
 export async function deleteProduct({ product_id }) {
   const result = await pool.query(
-    `DELETE FROM seller_shop WHERE product_id = '${product_id}'`,
+    `DELETE FROM seller_shop WHERE product_id = $1`,
     [product_id]
   );
   let response = await errorHandler(result?.rowCount);

@@ -2,8 +2,8 @@ import {
     useEffect, 
     useState 
 } from "react";
-import '../../../styles/loader.css'
-import '../../../styles/Seller/overlay.css' 
+// import '../../../styles/loader.css'
+// import '../../../styles/Seller/overlay.css' 
 
 import Filter from "../Header/Filter"; 
 import FilterAside from "./FilterAside";
@@ -73,10 +73,7 @@ const CardCnt = ({
     
     return ( 
         <>
-            <div className="overlay" >
-                <div className="loader">
-                </div>
-            </div>
+            
 
           
             <div className="buyer-card-cnt" style={{

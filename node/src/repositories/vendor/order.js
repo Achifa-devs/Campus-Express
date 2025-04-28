@@ -26,9 +26,13 @@ export async function findOrders({ seller_id }) {
 // cancel order
 export async function cancelOrder({ order_id }) {
   const result = await pool.query(
-    `UPDATE campus_express_buyer_orders set status='{"state": "cancelled"}' WHERE order_id=$1 RETURN havepaid`,
+    `UPDATE campus_express_buyer_orders 
+    SET status='{"state": "cancelled"}' 
+    WHERE order_id = $1 
+    RETURNING havepaid, buyer_id`,
     [order_id]
   );
-  let response = await errorHandler(result?.rowCount);
-  return response;
+
+  await errorHandler(result?.rowCount);
+  return result.rows[0];
 };

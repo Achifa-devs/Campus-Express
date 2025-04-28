@@ -411,7 +411,7 @@ const Editor = () => {
             
             if(update){
                 let product_id = searchParams.get('product_id');
-                fetch('https://ce-server.vercel.app/seller.product-update', {
+                fetch('http://192.168.24.146:9090/seller.product-update', {
                     method: 'post',
                     headers: {
                         "Content-Type": "Application/json"
@@ -474,7 +474,7 @@ const Editor = () => {
                 })  
             }else{
 
-                fetch('https://ce-server.vercel.app/seller.product-upload', {
+                fetch('http://192.168.24.146:9090/seller.product-upload', {
                     method: 'post',
                     headers: {
                         "Content-Type": "Application/json"

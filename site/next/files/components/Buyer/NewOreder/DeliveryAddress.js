@@ -1,13 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import deleteSvg from '../../../assets/delete-svgrepo-com (1).svg';
-import { openNotice, open_notice } from '../../../reusable.js/notice';
+import { open_notice } from '../../../reusable.js/notice';
 import { setPickupChannelTo } from '@/redux/buyer_store/pickup_channel';
 import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup';
-import { UpdatePickupChannel } from '@/app/api/buyer/update';
-import ReactDOMServer from 'react-dom/server';
+// import { UpdatePickupChannel } from '@/app/api/buyer/update';
 import { data, school_choices } from './location';
-import axios from 'axios';
 import { usePathname } from 'next/navigation';
 
 export default function DeliveryAddress({ item, order_id, order, updateDeliveryOpt }) {
@@ -173,7 +171,7 @@ export default function DeliveryAddress({ item, order_id, order, updateDeliveryO
                     }
                   </section>
 
-                  <button disabled={item.channel === 'Custom Pickup Location' && locale.length > 0 ? true : false} onClick={e => addLocation('Custom Pickup Location')} className='shadow-sm' style={{position: 'relative', height: 'auto', width: 'auto', display: 'flex', alignItems: 'center', justifyContents: 'center', borderRadius: '5px', padding: '10px', textAlign: 'center', background: '#fff', color: '#FF4500', fontSize: 'small', float: 'right', color: '#fff', background: '#FF4500'}}>{
+                  <button disabled={item?.channel === 'Custom Pickup Location' && locale.length > 0 ? true : false} onClick={e => addLocation('Custom Pickup Location')} className='shadow-sm' style={{position: 'relative', height: 'auto', width: 'auto', display: 'flex', alignItems: 'center', justifyContents: 'center', borderRadius: '5px', padding: '10px', textAlign: 'center', background: '#fff', color: '#FF4500', fontSize: 'small', float: 'right', color: '#fff', background: '#FF4500'}}>{
                     pickUpChannel === 'Custom Pickup Location' && locale.length > 0 
                     ?
                     'Edit Location'
@@ -383,19 +381,19 @@ function PickupChannel({updateLocation,title,edit,order_data,item}) {
   
 
     async function editPickupChannel() {
-        let response = await UpdatePickupChannel({
-            buyer_id: buyerData?.buyer_id, 
-            product_id: order_data?.product_id, 
-            pickup_channel:  {
-                channel: edit?.channel, 
-                locale: [state,city,town,address1,address2,address3].map(item=>item).join(', '), 
-                date: {yr: new Date().getFullYear(), mth: selectedMonth, dy: day},
-                index: edit?.index
-            }
-        })
-        if(response.bool){
-          updateLocation(response.locale)
-        }
+      // let response = await UpdatePickupChannel({
+      //     buyer_id: buyerData?.buyer_id, 
+      //     product_id: order_data?.product_id, 
+      //     pickup_channel:  {
+      //         channel: edit?.channel, 
+      //         locale: [state,city,town,address1,address2,address3].map(item=>item).join(', '), 
+      //         date: {yr: new Date().getFullYear(), mth: selectedMonth, dy: day},
+      //         index: edit?.index
+      //     }
+      // })
+      // if(response.bool){
+      //   updateLocation(response.locale)
+      // }
     }
   
     function rmLocation() {

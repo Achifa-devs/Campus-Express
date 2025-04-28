@@ -37,6 +37,10 @@ import tweeterSvg from '@/public/twitter-svgrepo-com (2).svg'
 import fbSvg from '@/public/facebook-1-svgrepo-com (1).svg'
 import { setCategoryTo } from '@/redux/buyer_store/Category'
 
+import orderSvg from '../../../assets/order-completed-svgrepo-com.svg'
+import inboxSvg from '../../../assets/inbox-alt-svgrepo-com (1).svg'
+import bookSvg from '../../../assets/book-svgrepo-com.svg'
+
 const Aside = ({
     ChangeAsideCategory
 }) => {
@@ -53,7 +57,7 @@ const Aside = ({
     let [categoriesList, setCategoriesList] = useState([])
 
     let categories = [
-        ["Book", ''],
+        ["Book", bookSvg.src],
         ["Food", foodSvg.src],
         ["Electronics", electronicsSvg.src],
         ["Fashion", fashionSvg.src],
@@ -79,9 +83,9 @@ const Aside = ({
     
 
     let list1 = [
-        {text: 'Orders', svg: '', uri: 'orders'},
-        {text: 'Inbox', svg: '', uri: 'inbox'},
-        {text: 'Favourites', svg: '', uri: 'favourites'},
+        {text: 'Orders', svg: orderSvg.src, uri: 'orders'},
+        {text: 'Inbox', svg: inboxSvg.src, uri: 'inbox'},
+        {text: 'Favourites', svg: savedSvg.src, uri: 'favourites'},
         // {text: 'Followed Sellers', svg: '', uri: 'following'},
         // {text: 'Recently Viewed', svg: '', uri: 'history'},
         // {text: 'Refunds', svg: '', uri: 'refunds'}
@@ -99,9 +103,9 @@ const Aside = ({
     let list3 = categoriesList
 
     let CEservices = list1.map((item,i) => 
-        <li onClick={e => window.location.href=(`/${item.uri}`)} key={i} style={{display: 'flex', }}>
+        <li onClick={e => window.location.href=(`/store/${item.uri}`)} key={i} style={{display: 'flex', }}>
             <span>
-                <img src={item.img} style={{height: '20px', width: '20px', marginBottom: '5px'}} alt="" />
+                <img src={item.svg} style={{height: '20px', width: '20px', marginBottom: '5px'}} alt="" />
             </span>
             &nbsp;
             &nbsp;
@@ -110,7 +114,7 @@ const Aside = ({
     )
 
     let Help = list2.map((item, i) => 
-        <li onClick={e => i === list2.length - 1 ?  () => {window.localStorage.removeItem('buyer_info'); alert('You are logged out.')} : window.location.href=(`${item.uri}`)} key={i} style={{display: 'flex', }}>
+        <li onClick={e => i === list2.length - 1 ?  () => {window.localStorage.removeItem('buyer_info'); alert('You are logged out.')} : window.location.href=(`/store/${item.uri}`)} key={i} style={{display: 'flex', }}>
             <span>
                 <img src={item.img} style={{height: '20px', width: '20px', marginBottom: '5px'}} alt="" />
             </span>
@@ -121,7 +125,7 @@ const Aside = ({
     )
 
     let Categories = categories.map((item,i) => 
-        <li style={{display: 'flex', }} id={storedCategory.toLowerCase() === item[0].toLowerCase() ? 'aside-list-active' : ''} data-category={item[0]} onClick={e => {window.location.href=(`/category/${item[0]}`); dispatch(setCategoryTo(item[0]))}} key={i}>
+        <li style={{display: 'flex', }} id={storedCategory.toLowerCase() === item[0].toLowerCase() ? 'aside-list-active' : ''} data-category={item[0]} onClick={e => {window.location.href=(`/store/category/${item[0]}`); dispatch(setCategoryTo(item[0]))}} key={i}>
             <span>
             
                 <img src={(item[1])} style={{height: '20px', width: '20px', marginBottom: '5px'}} alt="" />
@@ -158,12 +162,12 @@ const Aside = ({
                                 buyer_info?.fname + " " + buyer_info?.lname 
                                 : 
                                 <>
-                                <span onClick={e => window.location.href=('/login')} style={{cursor: 'pointer'}}>
+                                <span onClick={e => window.location.href=('/store/login')} style={{cursor: 'pointer'}}>
                                     <img src={loginw.src} style={{height: '20px', transform: 'rotate(180deg)', color: '#fff', width: '20px', marginBottom: '5px', }} alt="" />
                                 </span>
                                 &nbsp;
                                 {/* &nbsp; */}
-                                <span onClick={e => window.location.href=('/login')} style={{fontSize: 'small', cursor: 'pointer'}}>Login</span>
+                                <span onClick={e => window.location.href=('/store/login')} style={{fontSize: 'small', cursor: 'pointer'}}>Login</span>
                                 </>
                             }
                         </span>

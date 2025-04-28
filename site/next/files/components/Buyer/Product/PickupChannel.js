@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
-import { UpdatePickupChannel } from "@/app/api/buyer/update"
+// import { UpdatePickupChannel } from "@/app/api/buyer/update"
 
 export default function PickupChannel({updateLocation,title,edit,order_data}) {
     let {buyerData} = useSelector(s=>s.buyerData)
@@ -97,19 +97,19 @@ export default function PickupChannel({updateLocation,title,edit,order_data}) {
     }
 
     async function editPickupChannel() {
-        let response = await UpdatePickupChannel({
-            buyer_id: buyerData?.buyer_id, 
-            product_id: order_data?.product_id, 
-            pickup_channel:  {
-                channel: edit?.channel, 
-                locale: [state,city,town,address1,address2,address3].map(item=>item).join(', '), 
-                date: {yr: new Date().getFullYear(), mth: selectedMonth, dy: day},
-                index: edit?.index
-            }
-        })
-        if(response.bool){
-            updateLocation(response.locale)
-        }
+        // let response = await UpdatePickupChannel({
+        //     buyer_id: buyerData?.buyer_id, 
+        //     product_id: order_data?.product_id, 
+        //     pickup_channel:  {
+        //         channel: edit?.channel, 
+        //         locale: [state,city,town,address1,address2,address3].map(item=>item).join(', '), 
+        //         date: {yr: new Date().getFullYear(), mth: selectedMonth, dy: day},
+        //         index: edit?.index
+        //     }
+        // })
+        // if(response.bool){
+        //     updateLocation(response.locale)
+        // }
     }
   
     function rmLocation() {

@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react'
 import Thumbnail from '../Thumbnail'
 import Video from '../Video'
 import img from '@/public/eye-svgrepo-com (1).svg'
-import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup'
-export default function Carousel({category,product_id}) {
+import {
+    buyer_overlay_setup
+} from '@/files/reusable.js/overlay-setup'
+export default function Carousel({category,product_id,updateReq}) {
     let [screenWidth, setScreenWidth] = useState(0)
     let [cardsSet, setcardsSet] = useState([])
     let [cards, setCards] = useState([])
@@ -20,7 +22,7 @@ export default function Carousel({category,product_id}) {
 
    
     useEffect(() => {
-        fetch(`/api/products/category?category=${category}&limit=${10}`, {
+        fetch(`/api/store/products/category?category=${category}&limit=${10}`, {
             headers: {
                 'Gender': window.localStorage.getItem('cs-gender') 
             }
@@ -30,21 +32,20 @@ export default function Carousel({category,product_id}) {
 
             if (response.bool) {
                 
-
                 setCards(
                     response?.data?.map((item, index) => 
                         item?.product_id !== product_id ? <Card index={index} item={item} />: ''
                     ) 
                 )
-
-            }else{
-                
-
+                updateReq ? updateReq(true): '' 
+           } else {
+                updateReq ? updateReq(false): ''
             }
         })
         .catch(err =>{
-            console.log(err)
             
+            console.log(err)
+            updateReq ? updateReq(false): ''
 
         });
 
@@ -60,68 +61,12 @@ export default function Carousel({category,product_id}) {
                 ?
                 cardsSet.map((item,index) => item)
                 :
-                <cardSkeleton />
+                ''
             }
           </div>
         </div>
     </>
   )
-}
-
-
-
-function cardSkeleton(screenWidth) {
-
-    return(
-        <>
-            {
-                screenWidth <= 480
-                ?
-                [0,1].map((item,index)=><div key={index} className="card"style={{height: '200px', marginBottom: '10px', borderRadius: '5px', display: 'flex', flexShrink: '0', border: 'none'}}>
-                    <div style={{padding: '10px'}}>
-                        <SkeletonLoader width="100%" height="100px" />
-                    </div>
-                    <div style={{padding: '10px'}}>
-                        <SkeletonLoader width="100%" height="10px" />
-                    </div>
-                    <div style={{padding: '10px'}}>
-                        <SkeletonLoader width="100%" height="10px" />
-                    </div>
-                </div>)
-                :
-                screenWidth > 480 && screenWidth < 1000
-                ?
-                [0,1,2].map((item,index)=><div key={index} className="card"style={{height: '200px', marginBottom: '10px', borderRadius: '5px', display: 'flex', flexShrink: '0', border: 'none'}}>
-                    <div style={{padding: '10px'}}>
-                        <SkeletonLoader width="100%" height="100px" />
-                    </div>
-                    <div style={{padding: '10px'}}>
-                        <SkeletonLoader width="100%" height="10px" />
-                    </div>
-                    <div style={{padding: '10px'}}>
-                        <SkeletonLoader width="100%" height="10px" />
-                    </div>
-                </div>)
-                :
-                screenWidth >= 1000
-                ?
-                [0,1,2,3,4,5].map((item,index)=><div key={index} className="card"style={{height: '200px', marginBottom: '10px', borderRadius: '5px', display: 'flex', flexShrink: '0', border: 'none'}}>
-                    <div style={{padding: '10px'}}>
-                        <SkeletonLoader width="100%" height="100px" />
-                    </div>
-                    <div style={{padding: '10px'}}>
-                        <SkeletonLoader width="100%" height="10px" />
-                    </div>
-                    <div style={{padding: '10px'}}>
-                        <SkeletonLoader width="100%" height="10px" />
-                    </div>
-                </div>)
-                :
-                ''
-
-            }
-        </>
-    )
 }
 
 
@@ -141,7 +86,7 @@ const Card = ({item, index}) => {
             <div className="cols" key={index} id={item.product_id} >
                 <div className="card" key={index} style={{height: 'auto', marginBottom: '10px', border: 'none', borderRadius: '0', padding: '5px', display: 'flex', width: '180px', flexDirection: 'column', flexShrink: '0'}}>
                       
-                    <div onClick={e => window.location.href=(`/product/${item.product_id}`)}>
+                    <div onClick={e => window.location.href=(`/store/product/${item.product_id}`)}>
                         {
                             (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(item?.thumbnail_id?.split('.').pop().toLowerCase())) ? 
                             <Thumbnail thumbnail_id={item?.thumbnail_id} />
@@ -165,7 +110,7 @@ const Card = ({item, index}) => {
                                 color: '#000',
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
-                            }} onClick={e => window.location.href=(`/product/${item.product_id}`)} >{item.title}</small>
+                            }} onClick={e => window.location.href=(`/store/product/${item.product_id}`)} >{item.title}</small>
                             : 
                             <small style={{
                                 display: 'block',
@@ -177,7 +122,7 @@ const Card = ({item, index}) => {
                                 color: '#000',
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
-                            }} onClick={e => window.location.href=(`/product/${item.product_id}`)} >{item.title}</small>
+                            }} onClick={e => window.location.href=(`/store/product/${item.product_id}`)} >{item.title}</small>
                         }
 
                       
@@ -186,11 +131,11 @@ const Card = ({item, index}) => {
                             {
                                 screenWidth > 479
                                 ?
-                                <h6 onClick={e => window.location.href=(`/product/${item.product_id}`)} style={{marginBottom: '10px', marginTop: '10px', fontWeight: '500', fontSize: 'small', color: '#000', fontFamily: 'sans-serif'}}>&#8358;{
+                                <h6 onClick={e => window.location.href=(`/store/product/${item.product_id}`)} style={{marginBottom: '10px', marginTop: '10px', fontWeight: '500', fontSize: 'small', color: '#000', fontFamily: 'sans-serif'}}>&#8358;{
                                     new Intl.NumberFormat('en-us').format(item.price)
                                 }</h6>
                                 : 
-                                <h6 onClick={e => window.location.href=(`/product/${item.product_id}`)} style={{marginBottom: '10px', fontWeight: '500', color: '#000'}}>&#8358;{new Intl.NumberFormat('en-us').format(item.price)}</h6>
+                                <h6 onClick={e => window.location.href=(`/store/product/${item.product_id}`)} style={{marginBottom: '10px', fontWeight: '500', color: '#000'}}>&#8358;{new Intl.NumberFormat('en-us').format(item.price)}</h6>
                             }
 
                             <div style={{

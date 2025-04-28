@@ -9,6 +9,7 @@ import ShowCaseCardCnt from './ShowCaseCardCnt'
 import Carousel from './Carousel'
 import SuperSale from './SuperSale'
 import PaidAds from './PaidAds'
+import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup'
 
 let iphoneSvg = 'https://res.cloudinary.com/daqbhghwq/image/upload/v1725467382/iPhones_xotw64.png'
 let androidSvg = 'https://res.cloudinary.com/daqbhghwq/image/upload/v1725467387/smart-phones_q9ptm3.png'
@@ -56,6 +57,33 @@ export default function Showcase({type}) {
     let [limit, setlimit] = useState(30)
     let [screenWidth, setScreenWidth] = useState(0)
     let [cards, setCards] = useState([])
+    let [hasLoaded, setHasLoaded] = useState(false);
+
+    function updateReq(data) {
+        if(data){
+            setHasLoaded(true)
+        } else {
+            setHasLoaded(false)
+            
+        }
+    }
+
+ 
+
+    useEffect(() => {
+        let overlay = document.querySelector('.overlay');
+
+        if (hasLoaded) {
+            overlay.removeAttribute('id')
+            console.log(overlay)
+            
+        } else {
+            // let overlay = document.querySelector('.overlay');
+            overlay.setAttribute('id', 'overlay');
+            console.log(overlay)
+            
+        }
+    }, [hasLoaded])
 
     useEffect(() => {
         setScreenWidth(window.innerWidth)
@@ -144,29 +172,17 @@ export default function Showcase({type}) {
       <div className="buyer-showcase" style={{background: '#fff'}}>
 
       
-        {/* <section style={{marginBottom: 10, borderRadius: '0', height: 'fit-content'}}> 
-            <div className="header" style={{height: '50px', padding: '10px', display: 'flex', alignItems: 'center', justifyContent: 'left', position: 'relative', width: '100%', background: '#FFF', borderTopLeftRadius: '5px', borderTopRightRadius: '5px', justifyContent: 'space-between', display: 'flex', width: '100%', flexDirection: 'row'}}>
-                <div style={{float: 'left', color: '#000', fontFamily: 'sans-serif',}}><b>Showcase</b></div>
-            </div>
-            <div>
-                {activeJSX}
-                {activeJSX}
-                {activeJSX}
-                {activeJSX}
-            </div>
-           
-        </section> */}
         <section style={{marginBottom: 10}}> 
             <div className="header" style={{height: '50px', padding: '10px', display: 'flex', alignItems: 'center', justifyContent: 'left', position: 'relative', width: '100%', background: '#FFF', borderTopLeftRadius: '5px', borderTopRightRadius: '5px', justifyContent: 'space-between', display: 'flex', width: '100%', flexDirection: 'row'}}>
                 <div>
                     <b>Fashion Deals</b>
                 </div>
                 <button onClick={e=> {
-                    window.location.href=`/category/Fashion`
+                    window.location.href=`/store/category/Fashion`
                 }}  style={{padding: '3px 8px', borderRadius: '5px'}}>View more</button>
             </div>
             <div style={{display: 'flex'}}>
-                <Carousel category={btoa('Fashion')} cards={cards} />
+                <Carousel updateReq={updateReq} category={btoa('Fashion')} cards={cards} />
             </div>
         </section>
 
@@ -180,7 +196,7 @@ export default function Showcase({type}) {
                     <b>Health & Beauty Deals</b>
                 </div>
                 <button onClick={e=> {
-                    window.location.href=`/category/Health & Beauty`
+                    window.location.href=`/store/category/Health & Beauty`
                 }}   style={{padding: '3px 8px', borderRadius: '5px'}}>View more</button>
             </div>
             <div style={{display: 'flex'}}>
@@ -188,57 +204,6 @@ export default function Showcase({type}) {
             </div>
         </section>
 
-        
-        {/* <section style={{marginBottom: 10, borderBottomLeftRadius: '5px', borderBottomRightRadius: '5px'}}> 
-            <div className="header" style={{height: '50px', padding: '10px', display: 'flex', alignItems: 'center', justifyContent: 'left', position: 'relative', width: '100%', background: '#FFF', borderTopLeftRadius: '5px', borderTopRightRadius: '5px', justifyContent: 'space-between', display: 'flex', width: '100%', flexDirection: 'row'}}>
-                <div style={{float: 'left', color: '#000', fontFamily: 'sans-serif',}}><b>Phone Super Sale</b></div>
-            </div>
-            {
-                screenWidth > 480
-                ?
-                <div style={{display: 'flex'}}>
-                    <SuperSale
-                        item={
-                            [
-                                {category: 'Mobile Phones', type: 'Iphone', svg: iphoneSvg},
-                                {category: 'Mobile Phones', type: 'Android', svg: androidSvg},
-                                {category: 'Mobile Phones', type: 'Cell Phone', svg: cellPhoneSvg},
-                                {category: 'Tablets', type: 'Tablets', svg: tabPhonesSvg},
-                                {category: 'Mobile Phones', type: 'Phone under 150k', svg: budgetPhoneSvg, filter: {type: 'price', value: '-150000'}},
-                                {category: 'Phone & Tablet Accessories', type: 'Phone Accessories', svg: phoneAccessSvg}
-                            ]
-                        }       
-                    />
-                </div>
-                :
-                <>
-                    <div style={{display: 'flex'}}>
-                        <SuperSale
-                            item={
-                                [
-                                    {category: 'Mobile Phones', type: 'Iphone', svg: iphoneSvg},
-                                    {category: 'Mobile Phones', type: 'Android', svg: androidSvg},
-                                    {category: 'Mobile Phones', type: 'Cell Phone', svg: cellPhoneSvg},
-                                    
-                                ]
-                            }       
-                        />
-                    </div>
-                    <div style={{display: 'flex'}}>
-                        <SuperSale
-                            item={
-                                [
-                                   
-                                    {category: 'Tablets', type: 'Tablets', svg: tabPhonesSvg},
-                                    {category: 'Mobile Phones', type: 'Phone under 150k', svg: budgetPhoneSvg, filter: {type: 'price', value: '-150000'}},
-                                    {category: 'Phone & Tablet Accessories', type: 'Phone Accessories', svg: phoneAccessSvg}
-                                ]
-                            }         
-                        />
-                    </div>
-                </>
-            }
-        </section> */}
         <section style={{marginBottom: 10, borderBottomLeftRadius: '5px', borderBottomRightRadius: '5px'}}> 
             <div className="header" style={{height: '50px', padding: '10px', display: 'flex', alignItems: 'center', justifyContent: 'left', position: 'relative', width: '100%', background: '#FFF', borderTopLeftRadius: '5px', borderTopRightRadius: '5px', justifyContent: 'space-between', display: 'flex', width: '100%', flexDirection: 'row'}}>
                 <div style={{float: 'left', color: '#000', fontFamily: 'sans-serif', justifyContent: 'space-between', display: 'flex', width: '100%', flexDirection: 'row'}}>
@@ -261,7 +226,7 @@ export default function Showcase({type}) {
                     <b>Phone & Tablet Accessories Deals</b>
                 </div>
                 <button onClick={e=> {
-                    window.location.href=`/category/Phone & Tablet Accessories`
+                    window.location.href=`/store/category/Phone & Tablet Accessories`
                 }}  style={{padding: '3px 8px', borderRadius: '5px'}}>View more</button>
             </div>
             <div style={{display: 'flex'}}>
@@ -276,7 +241,7 @@ export default function Showcase({type}) {
                     <b>Laptop Deals</b>
                 </div>
                 <button onClick={e=> {
-                    window.location.href=`/category/Laptops & Desktops`
+                    window.location.href=`/store/category/Laptops & Desktops`
                 }}  style={{padding: '3px 8px', borderRadius: '5px'}}>View more</button>
             </div>
             <div>
@@ -287,7 +252,7 @@ export default function Showcase({type}) {
             <div className="header" style={{height: '50px', padding: '10px', display: 'flex', alignItems: 'center', justifyContent: 'left', position: 'relative', width: '100%', background: '#FFF', borderTopLeftRadius: '5px', borderTopRightRadius: '5px', justifyContent: 'space-between', display: 'flex', width: '100%', flexDirection: 'row'}}>
                 <div style={{float: 'left', color: '#000', fontFamily: 'sans-serif',}}><b>Laptops & Desktops Accessories</b></div>
                 <button onClick={e=> {
-                    window.location.href=`/category/Laptops & Desktops`
+                    window.location.href=`/store/category/Laptops & Desktops`
                 }}  style={{padding: '3px 8px', borderRadius: '5px'}}>View more</button>
             </div>
             <div style={{display: 'flex'}}>
@@ -302,7 +267,7 @@ export default function Showcase({type}) {
                     <b>Lodge Deals</b>
                 </div>
                 <button onClick={e=> {
-                    window.location.href=`/category/Lodge & Apartments`
+                    window.location.href=`/store/category/Lodge & Apartments`
                 }}   style={{padding: '3px 8px', borderRadius: '5px'}}>View more</button>
             </div>
             <div>
@@ -314,7 +279,7 @@ export default function Showcase({type}) {
             <div className="header" style={{height: '50px', padding: '10px', display: 'flex', alignItems: 'center', justifyContent: 'left', position: 'relative', width: '100%', background: '#FFF', borderTopLeftRadius: '5px', borderTopRightRadius: '5px', justifyContent: 'space-between', display: 'flex', width: '100%', flexDirection: 'row'}}>
                 <div style={{float: 'left', color: '#000', fontFamily: 'sans-serif',}}><b>Electronics Deals</b></div>
                 <button onClick={e=> {
-                    window.location.href=`/category/Electronics`
+                    window.location.href=`/store/category/Electronics`
                 }}  style={{padding: '3px 8px', borderRadius: '5px'}}>View more</button>
             </div>
             <div style={{display: 'flex'}}>
@@ -325,7 +290,7 @@ export default function Showcase({type}) {
             <div className="header" style={{height: '50px', padding: '10px', display: 'flex', alignItems: 'center', justifyContent: 'left', position: 'relative', width: '100%', background: '#FFF', borderTopLeftRadius: '5px', borderTopRightRadius: '5px', justifyContent: 'space-between', display: 'flex', width: '100%', flexDirection: 'row'}}>
                 <div style={{float: 'left', color: '#000', fontFamily: 'sans-serif',}}><b>Furnitures</b></div>
                 <button onClick={e=> {
-                    window.location.href=`/category/Furnitures`
+                    window.location.href=`/store/category/Furnitures`
                 }}  style={{padding: '3px 8px', borderRadius: '5px'}}>View more</button>
             </div>
             <div style={{display: 'flex'}}>
@@ -340,7 +305,7 @@ export default function Showcase({type}) {
                         <b>Book Libs</b>
                     </div>
                     <button onClick={e=> {
-                        window.location.href=`/category/Books`
+                        window.location.href=`/store/category/Books`
                     }} style={{padding: '3px 8px', borderRadius: '5px'}}>View more</button>
                 </div>
             </div>
@@ -355,7 +320,7 @@ export default function Showcase({type}) {
             <div className="header" style={{height: '50px', padding: '10px', display: 'flex', alignItems: 'center', justifyContent: 'left', position: 'relative', width: '100%', background: '#FFF', borderTopLeftRadius: '5px', borderTopRightRadius: '5px', justifyContent: 'space-between', display: 'flex', width: '100%', flexDirection: 'row'}}>
                 <div style={{float: 'left', color: '#000', fontFamily: 'sans-serif',}}><b>Vehicle</b></div>
                 <button onClick={e=> {
-                    window.location.href=`/category/Vehicle`
+                    window.location.href=`/store/category/Vehicle`
                 }}  style={{padding: '3px 8px', borderRadius: '5px'}}>View more</button>
             </div>
             <div style={{display: 'flex'}}>
@@ -367,7 +332,7 @@ export default function Showcase({type}) {
             <div className="header" style={{height: '50px', padding: '10px', display: 'flex', alignItems: 'center', justifyContent: 'left', position: 'relative', width: '100%', background: '#FFF', borderTopLeftRadius: '5px', borderTopRightRadius: '5px', justifyContent: 'space-between', display: 'flex', width: '100%', flexDirection: 'row'}}>
                 <div style={{float: 'left', color: '#000', fontFamily: 'sans-serif',}}><b>Pets</b></div>
                 <button onClick={e=> {
-                    window.location.href=`/category/Pets`
+                    window.location.href=`/store/category/Pets`
                 }}  style={{padding: '3px 8px', borderRadius: '5px'}}>View more</button>
             </div>
             <div style={{display: 'flex'}}>
@@ -379,7 +344,7 @@ export default function Showcase({type}) {
             <div className="header" style={{height: '50px', padding: '10px', display: 'flex', alignItems: 'center', justifyContent: 'left', position: 'relative', width: '100%', background: '#FFF', borderTopLeftRadius: '5px', borderTopRightRadius: '5px', justifyContent: 'space-between', display: 'flex', width: '100%', flexDirection: 'row'}}>
                 <div style={{float: 'left', color: '#000', fontFamily: 'sans-serif',}}><b>Cleaning Agents</b></div>
                 <button onClick={e=> {
-                    window.location.href=`/category/Cleaning Agents`
+                    window.location.href=`/store/category/Cleaning Agents`
                 }}  style={{padding: '3px 8px', borderRadius: '5px'}}>View more</button>
             </div>
             <div style={{display: 'flex'}}>
@@ -388,54 +353,6 @@ export default function Showcase({type}) {
         </section>
         
 
-        {/* <section style={{marginBottom: 10}}> 
-            <div className="header" style={{height: '50px', padding: '10px', display: 'flex', alignItems: 'center', justifyContent: 'left', position: 'relative', width: '100%', background: '#FFF', borderTopLeftRadius: '5px', borderTopRightRadius: '5px', justifyContent: 'space-between', display: 'flex', width: '100%', flexDirection: 'row'}}>
-                <div style={{float: 'left', color: '#000', fontFamily: 'sans-serif',}}><b>Appliances</b></div>
-                <button onClick={e=> {
-                    window.location.href=`/category/Appliances`
-                }}  style={{padding: '3px 8px', borderRadius: '5px'}}>View more</button>
-                
-            </div>
-            <div>
-                {
-                    screenWidth > 480
-                    ?
-                    <SuperSale
-                        item={
-                            [
-                                {category: 'Appliances', type: 'Refridgerator', svg: fridgeSvg},
-                                {category: 'Appliances', type: 'Freezer', svg: freezerSvg},
-                                {category: 'Appliances', type: 'Pressing Iron', svg: ironSvg},
-                                {category: 'Appliances', type: 'Fan', svg: fanSvg},
-                                {category: 'Appliances', type: 'Air Conditioner', svg: acSvg},
-                                {category: 'Appliances', type: 'Washing Machine', svg: washerSvg}
-                            ]
-                        }       
-                    />
-                    :
-                    <>
-                        <SuperSale
-                            item={
-                                [
-                                    {category: 'Appliances', type: 'Fan', svg: fanSvg},
-                                    {category: 'Appliances', type: 'Air Conditioner', svg: acSvg},
-                                    {category: 'Appliances', type: 'Washing Machine', svg: washerSvg}
-                                ]
-                            }       
-                        />
-                        <SuperSale
-                            item={
-                                [
-                                    {category: 'Appliances', type: 'Refridgerator', svg: fridgeSvg},
-                                    {category: 'Appliances', type: 'Freezer', svg: freezerSvg},
-                                    {category: 'Appliances', type: 'Pressing Iron', svg: ironSvg},
-                                ]
-                            }       
-                        />
-                    </>
-                }
-            </div>
-        </section> */}
         <section style={{marginBottom: 10}}> 
             <div className="header" style={{height: '50px', padding: '10px', display: 'flex', alignItems: 'center', justifyContent: 'left', position: 'relative', width: '100%', background: '#FFF', borderTopLeftRadius: '5px', borderTopRightRadius: '5px', justifyContent: 'space-between', display: 'flex', width: '100%', flexDirection: 'row'}}>
 
@@ -443,7 +360,7 @@ export default function Showcase({type}) {
                     <b>Appliances Deals</b>
                 </div>
                 <button onClick={e=> {
-                    window.location.href=`/category/Appliances`
+                    window.location.href=`/store/category/Appliances`
                 }}  style={{padding: '3px 8px', borderRadius: '5px'}}>View more</button>
             </div>
             <div style={{display: 'flex'}}>
@@ -451,50 +368,6 @@ export default function Showcase({type}) {
             </div>
         </section>
 
-        {/* <section style={{marginBottom: 10}}> 
-            <div className="header" style={{height: '50px', padding: '10px', display: 'flex', alignItems: 'center', justifyContent: 'left', position: 'relative', width: '100%', background: '#FFF', borderTopLeftRadius: '5px', borderTopRightRadius: '5px', justifyContent: 'space-between', display: 'flex', width: '100%', flexDirection: 'row'}}>
-                <div style={{float: 'left', color: '#000', fontFamily: 'sans-serif',}}><b>Lodge Revamp</b></div>
-            </div>
-            <div>
-                {    
-                    screenWidth > 480
-                    ?
-                    <SuperSale
-                        item={
-                            [
-                                {category: 'Furnitures', type: 'Beddings', svg: bedSvg},
-                                {category: 'Furnitures', type: 'Chanderlier', svg: chanSvg},
-                                {category: 'Furnitures', type: 'Chair', svg: decorSvg},
-                                {category: 'Electronics', type: 'T.V', svg: tvSvg},
-                                {category: 'Appliances', type: 'Generator', svg: genSvg},
-                                {category: 'Furnitures', type: 'Kitchen & Dining', svg: kitchenSvg}
-                            ]
-                        }        
-                    />
-                    :
-                    <>
-                        <SuperSale
-                            item={
-                                [
-                                    {category: 'Furnitures', type: 'Beddings', svg: bedSvg},
-                                    {category: 'Furnitures', type: 'Chanderlier', svg: chanSvg},
-                                    {category: 'Furnitures', type: 'Chair', svg: decorSvg},
-                                ]
-                            }       
-                        />
-                        <SuperSale
-                        item={
-                            [
-                                {category: 'Furnitures', type: 'T.V', svg: tvSvg},
-                                {category: 'Appliances', type: 'Generator', svg: genSvg},
-                                {category: 'Furnitures', type: 'Kitchen & Dining', svg: kitchenSvg}
-                            ]
-                        }       
-                    />
-                    </>
-                }
-            </div>
-        </section> */}
         <section style={{marginBottom: 10}}> 
             <div className="header" style={{height: '50px', padding: '10px', display: 'flex', alignItems: 'center', justifyContent: 'left', position: 'relative', width: '100%', background: '#FFF', borderTopLeftRadius: '5px', borderTopRightRadius: '5px', justifyContent: 'space-between', display: 'flex', width: '100%', flexDirection: 'row'}}>
                 
@@ -502,7 +375,7 @@ export default function Showcase({type}) {
                     <b>Lodge Revamp Deals</b>
                 </div>
                 <button onClick={e=> {
-                    window.location.href=`/category/Furnitures`
+                    window.location.href=`/store/category/Furnitures`
                 }}   style={{padding: '3px 8px', borderRadius: '5px'}}>View more</button>
             </div>
             <div>
@@ -510,53 +383,6 @@ export default function Showcase({type}) {
             </div>
         </section>
          
-
-        {/* <section style={{marginBottom: 10}}> 
-            <div className="header" style={{height: '50px', padding: '10px', display: 'flex', alignItems: 'center', justifyContent: 'left', position: 'relative', width: '100%', background: '#FFF', borderTopLeftRadius: '5px', borderTopRightRadius: '5px', justifyContent: 'space-between', display: 'flex', width: '100%', flexDirection: 'row'}}>
-                <div style={{float: 'left', color: '#000', fontFamily: 'sans-serif',}}><b>Health & Beauty Deals</b></div>
-            </div>
-            <div>
-                {
-                    screenWidth > 480
-                    ?
-                    <SuperSale
-                        item={
-                            [
-                                {category: 'Health & Beauty', type: 'Bath & Body', svg: soapSvg},
-                                {category: 'Health & Beauty', type: 'Skin Care', svg: faceCareSvg},
-                                {category: 'Health & Beauty', type: 'Hair Care', svg: shampooSvg},
-                                {category: 'Health & Beauty', type: 'Tool Accessories', svg: hairSvg},
-                                {category: 'Health & Beauty', type: 'Make-Up', svg: makeupSvg},
-                                {category: 'Health & Beauty', type: 'Fragrance', svg: fragSvg}
-                            ]
-                        }       
-                    />
-                    :
-                    <>
-                        <SuperSale
-                            item={
-                                [
-                                    {category: 'Health & Beauty', type: 'Bath & Body', svg: soapSvg},
-                                    {category: 'Health & Beauty', type: 'Skin Care', svg: faceCareSvg},
-                                    {category: 'Health & Beauty', type: 'Hair Care', svg: shampooSvg},
-                                ]
-                            }       
-                        />
-                        <SuperSale
-                            item={
-                                [
-                                    {category: 'Health & Beauty', type: 'Tool Accessories', svg: hairSvg},
-                                    {category: 'Health & Beauty', type: 'Make-Up', svg: makeupSvg},
-                                    {category: 'Health & Beauty', type: 'Fragrance', svg: fragSvg}
-                                ]
-                            }       
-                        />
-                    </>
-
-                 }
-            </div>
-        </section> */}
-       
               
         <section style={{marginBottom: 10}}> 
             <div className="header" style={{height: '50px', padding: '10px', display: 'flex', alignItems: 'center', justifyContent: 'left', position: 'relative', width: '100%', background: '#FFF', borderTopLeftRadius: '5px', borderTopRightRadius: '5px', justifyContent: 'space-between', display: 'flex', width: '100%', flexDirection: 'row'}}>
@@ -565,7 +391,7 @@ export default function Showcase({type}) {
                     <b>Kitchen Utensils</b>
                 </div>
                 <button onClick={e=> {
-                    window.location.href=`/category/Utensils`
+                    window.location.href=`/store/category/Utensils`
                 }}  style={{padding: '3px 8px', borderRadius: '5px'}}>View more</button>
             </div>
             <div style={{display: 'flex'}}>
@@ -573,97 +399,6 @@ export default function Showcase({type}) {
             </div>
         </section>
         
-        {/* <section style={{marginBottom: 10}}> 
-            <div className="header" style={{height: '50px', padding: '10px', display: 'flex', alignItems: 'center', justifyContent: 'left', position: 'relative', width: '100%', background: '#FFF', borderTopLeftRadius: '5px', borderTopRightRadius: '5px', justifyContent: 'space-between', display: 'flex', width: '100%', flexDirection: 'row'}}>
-                <div style={{float: 'left', color: '#000', fontFamily: 'sans-serif',}}><b>Fashion Deals</b></div>
-            </div>
-            <div>
-                    {    
-                        screenWidth > 480
-                        ?
-                        <SuperSale
-                            item={
-                                [
-                                    {category: 'Fashion', type: 'Jewelry', filter: {type: 'gender', value: 'female'}, svg: wmenFSvg},
-                                    {category: 'Fashion', type: 'Clothing', filter: {type: 'gender', value: 'male'}, svg: menFSvg},
-                                    {category: 'Fashion', type: 'Watch', svg: watchSvg},
-                                    {category: 'Fashion', type: 'Sneakers', svg: SneakerSvg},
-                                    {category: 'Fashion', type: 'Foot Wear', svg: shoesSvg},
-                                    {category: 'Fashion', type: 'Accessories', svg: fAccessSvg}
-                                ]
-                            }       
-                        />
-
-                        :
-
-                        <>
-                            <SuperSale
-                                item={
-                                    [
-                                        {category: 'Fashion', type: 'Sneakers', svg: SneakerSvg},
-                                        {category: 'Fashion', type: 'Foot Wears', svg: shoesSvg},
-                                        {category: 'Fashion', type: 'Accessories', svg: fAccessSvg}
-                                    ]
-                                }       
-                            />
-                            <SuperSale
-                                item={
-                                    [
-                                        {category: 'Fashion', type: 'Jewelry', filter: {type: 'gender', value: 'female'}, svg: wmenFSvg},
-                                        {category: 'Fashion', type: 'Clothing', filter: {type: 'gender', value: 'male'}, svg: menFSvg},
-                                        {category: 'Fashion', type: 'Watch', svg: watchSvg},
-                                    ]
-                                }       
-                            />
-                        </>
-                    }
-            </div>
-        </section> */}
-        
-        {/* <section style={{marginBottom: 10}}> 
-            <div className="header" style={{height: '50px', padding: '10px', display: 'flex', alignItems: 'center', justifyContent: 'left', position: 'relative', width: '100%', background: '#FFF', borderTopLeftRadius: '5px', borderTopRightRadius: '5px', justifyContent: 'space-between', display: 'flex', width: '100%', flexDirection: 'row'}}>
-                <div style={{float: 'left', color: '#000', fontFamily: 'sans-serif',}}><b>Groceries</b></div>
-            </div>
-            <div>
-                {
-                    screenWidth > 480
-                    ?
-                    <SuperSale
-                        item={
-                            [
-                                {category: 'Food', type: 'Processed Food', svg: foodSvg},
-                                {category: 'Food', type: 'Wine', svg: wineSvg},
-                                {category: 'Food', type: 'Junk Food & Snaks', svg: drinksSvg},
-                                {category: 'Food', type: 'Cleaning Agents', svg: cleanerSvg},
-                                {category: 'Food', type: 'Water', svg: waterSvg},
-                                {category: 'Health & Beauty', type: 'Fragrance', svg: fragSvg}
-                            ]
-                        }       
-                    />
-                    :
-                    <>
-                        <SuperSale
-                            item={
-                                [
-                                    {category: 'Food', type: 'Cleaning Agents', svg: cleanerSvg},
-                                    {category: 'Food', type: 'Water', svg: waterSvg},
-                                    {category: 'Health & Beauty', type: 'Fragrance', svg: fragSvg}
-                                ]
-                            }       
-                        />
-                        <SuperSale
-                            item={
-                                [
-                                    {category: 'Food', type: 'Processed Food', svg: foodSvg},
-                                    {category: 'Food', type: 'Wine', svg: wineSvg},
-                                    {category: 'Food', type: 'Junk Food & Snaks', svg: drinksSvg},
-                                ]
-                            }       
-                        />
-                    </>
-                }
-            </div>
-        </section> */}
         <section style={{marginBottom: 10}}> 
             <div className="header" style={{height: '50px', padding: '10px', display: 'flex', alignItems: 'center', justifyContent: 'left', position: 'relative', width: '100%', background: '#FFF', borderTopLeftRadius: '5px', borderTopRightRadius: '5px', justifyContent: 'space-between', display: 'flex', width: '100%', flexDirection: 'row'}}>
                
@@ -671,7 +406,7 @@ export default function Showcase({type}) {
                     <b>Groceries Deals</b>
                 </div>
                 <button onClick={e=> {
-                    window.location.href=`/category/Food`
+                    window.location.href=`/store/category/Food`
                 }}  style={{padding: '3px 8px', borderRadius: '5px'}}>View more</button>
             </div>
             <div style={{display: 'flex'}}>

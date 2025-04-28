@@ -42,6 +42,13 @@ export const getProducts = async (payload) => {
     const response = await findProductsByCategoryAndGender({ trimmed, cap_gender, limit });
 
     return response;
+
+  } else if (trimmed.toLowerCase() === 'trends') {
+
+    const response = await findProducts({ limit });
+    console.log("response: ", response)
+    return response;
+
   }
 
   const response = await findProductsByCategory({ category, limit });

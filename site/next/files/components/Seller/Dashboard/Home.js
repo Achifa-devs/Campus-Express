@@ -47,7 +47,7 @@ const Home = () => {
     }, [])
 
     function setUpShop() {
-        fetch('https://ce-server.vercel.app/seller.shop-setup', {
+        fetch('http://192.168.24.146:9090/seller.shop-setup', {
             method: 'post',
             headers: {
                 "Content-Type": "Application/json"
@@ -70,7 +70,7 @@ const Home = () => {
     }
 
     function setUpWallet() {
-        fetch('https://ce-server.vercel.app/seller.wallet-setup', {
+        fetch('http://192.168.24.146:9090/seller.wallet-setup', {
             method: 'post',
             headers: {
                 "Content-Type": "Application/json"

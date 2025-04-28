@@ -1,12 +1,15 @@
 
 import {
     getCustomer, 
+    postAlterCustomerPwd, 
+    postConfirmEmail, 
     postLoginCustomer, 
     postNewCustomer, 
     postResetCustomerEmail, 
     postResetCustomerPhone, 
     postResetCustomerPwd, 
-    postUpdateCustomerProfile
+    postUpdateCustomerProfile,
+    postVerifyToken
 } from "../../services/shop/customer.js";
 
 export async function GET_CUSTOMER(req, res) {
@@ -67,6 +70,37 @@ export async function UPDATE_CUSTOMER_PROFILE(req, res) {
 export async function RESET_PWD(req, res) {
     try {
         const reset_pwd = await postResetCustomerPwd(req.body);
+        res.status(201).json({ success: true, data: reset_pwd });
+    } catch (error) {
+        res.status(400).json({ success: false, message: error.message });
+    }
+}
+
+
+export async function ALTER_PWD(req, res) {
+    try {
+        const alter_pwd = await postAlterCustomerPwd(req.body);
+        res.status(201).json({ success: true, data: alter_pwd });
+    } catch (error) {
+        res.status(400).json({ success: false, message: error.message });
+    }
+}
+
+
+
+export async function CONFIRM_EMAIL(req, res) {
+    try {
+        const reset_pwd = await postConfirmEmail(req.body);
+        res.status(201).json({ success: true, data: reset_pwd });
+    } catch (error) {
+        res.status(400).json({ success: false, message: error.message });
+    }
+}
+
+
+export async function VERIFY_TOKEN(req, res) {
+    try {
+        const reset_pwd = await postVerifyToken(req.body);
         res.status(201).json({ success: true, data: reset_pwd });
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });

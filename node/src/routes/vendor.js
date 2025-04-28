@@ -51,7 +51,7 @@ VENDOR_ROUTE.get('/vendor/products', GET_PRODUCTS)
 VENDOR_ROUTE.get('/vendor/product-thumbnail', GET_PRODUCT_THUMBNAIL);
 VENDOR_ROUTE.post('/vendor/create-product', parser, CREATE_PRODUCT)
 VENDOR_ROUTE.post('/vendor/update-product', parser, UPDATE_PRODUCT)
-VENDOR_ROUTE.post('/vendor/delete-product', parser, DELETE_PRODUCT)
+VENDOR_ROUTE.get('/vendor/delete-product', DELETE_PRODUCT)
 
 VENDOR_ROUTE.get('/vendor/shop', GET_SHOP_DETAILS)
 VENDOR_ROUTE.get('/vendor/shop-reviews', GET_SHOP_REVIEWS)

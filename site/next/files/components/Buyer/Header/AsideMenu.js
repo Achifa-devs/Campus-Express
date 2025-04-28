@@ -43,7 +43,7 @@ const AsideMenu = ({}) => {
                                     <li key={index} onClick={e=> {
                                             screenWidth > 760 
                                             ?
-                                            window.location.href=`/${item.uri.toLowerCase()}`
+                                            window.location.href=`/store/${item.uri.toLowerCase()}`
                                             :
                                             (
                                                 (dispatch(setAccessoryTo(1)))
@@ -71,7 +71,7 @@ const AsideMenu = ({}) => {
                                     <li key={index} onClick={e=> {
                                             screenWidth > 760
                                             ?
-                                            (item.uri === 'account-managements' ? window.open('/account-managements', '_blank') : window.location.href=`/${item.uri.toLowerCase()}`) 
+                                            (item.uri === 'account-managements' ? window.open('/store/account-managements', '_blank') : window.location.href=`/store/${item.uri.toLowerCase()}`) 
                                             :
                                             (dispatch(setAccessoryTo(1)))
                                             // (dispatch(setAccessoryMenuTo(item.uri.toLowerCase())))

@@ -19,9 +19,9 @@ import js_ago from 'js-ago'
 import Video from '../Video'
 import { setSaveTo } from '@/redux/buyer_store/Save'
 import { open_notice } from '@/files/reusable.js/notice'
-import { SaveItem } from '@/app/api/buyer/post'
-import { UnSaveItem } from '@/app/api/buyer/delete'
-import { GetOrders } from '@/app/api/buyer/get'
+// import { SaveItem } from '@/app/api/buyer/post'
+// import { UnSaveItem } from '@/app/api/buyer/delete'
+// import { GetOrders } from '@/app/api/buyer/get'
 
 const Card = ({item, index}) => {
 
@@ -114,19 +114,19 @@ const Card = ({item, index}) => {
     
     
 
-    useEffect(() => {
-        // console.log(JSON.stringify(buyer_info))
-        if(buyer_info){
-            GetOrders(buyer_info?.buyer_id)
-            .then((result) => {
-                console.log(result)
-                if(result){
-                    set_order_list(result)
-                }
-            })
-            .catch((err) => console.log(err))
-        }
-    }, [buyer_info]) 
+    // useEffect(() => {
+    //     // console.log(JSON.stringify(buyer_info))
+    //     if(buyer_info){
+    //         GetOrders(buyer_info?.buyer_id)
+    //         .then((result) => {
+    //             console.log(result)
+    //             if(result){
+    //                 set_order_list(result)
+    //             }
+    //         })
+    //         .catch((err) => console.log(err))
+    //     }
+    // }, [buyer_info]) 
  
     return ( 
         <> 
@@ -163,7 +163,7 @@ const Card = ({item, index}) => {
                                 WebkitLineClamp: '2',
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis'
-                            }} onClick={e => window.location.href=(`/product/${item.product_id}`)} >{item.title}</small>
+                            }} onClick={e => window.location.href=(`/store/product/${item.product_id}`)} >{item.title}</small>
                             : 
                             <small style={{
                                 fontSize: 'small',
@@ -177,7 +177,7 @@ const Card = ({item, index}) => {
                                 WebkitLineClamp: '2',
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis'
-                            }} onClick={e => window.location.href=(`/product/${item.product_id}`)} >{item.title}</small>
+                            }} onClick={e => window.location.href=(`/store/product/${item.product_id}`)} >{item.title}</small>
                         }
 
                       
@@ -185,14 +185,14 @@ const Card = ({item, index}) => {
                         {
                             screenWidth > 479
                             ?
-                            <h6 onClick={e => window.location.href=(`/product/${item.product_id}`)} style={{marginBottom: '10px', marginTop: '10px', fontWeight: '400', fontSize: 'small', color: '#000', fontFamily: 'sans-serif'}}>&#8358;{
+                            <h6 onClick={e => window.location.href=(`/store/product/${item.product_id}`)} style={{marginBottom: '10px', marginTop: '10px', fontWeight: '400', fontSize: 'small', color: '#000', fontFamily: 'sans-serif'}}>&#8358;{
                                 new Intl.NumberFormat('en-us').format(item.price)
                             }</h6>
                             : 
-                            <h6 onClick={e => window.location.href=(`/product/${item.product_id}`)} style={{marginBottom: '10px', fontWeight: '700', color: '#000'}}>&#8358;{new Intl.NumberFormat('en-us').format(item.price)}</h6>
+                            <h6 onClick={e => window.location.href=(`/store/product/${item.product_id}`)} style={{marginBottom: '10px', fontWeight: '700', color: '#000'}}>&#8358;{new Intl.NumberFormat('en-us').format(item.price)}</h6>
                         }
 
-                        <div onClick={e => window.location.href=(`/product/${item.product_id}`)} style={{display: 'flex',background: '#fff', color: 'orangered',  alignItems: 'center', justifyContent: 'left', padding: '0'}}>
+                        <div onClick={e => window.location.href=(`/store/product/${item.product_id}`)} style={{display: 'flex',background: '#fff', color: 'orangered',  alignItems: 'center', justifyContent: 'left', padding: '0'}}>
                             <span  style={{background: '#fff', color: '#000', borderRadius: '5px', top: '20px', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', left: '20px', padding: '5px 0 5px 0'}}>
                                 <span  style={{background: '#fff',color: 'orangered', padding: '0'}}>
 

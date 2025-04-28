@@ -76,7 +76,7 @@ const Header = () => {
                     ?
                         screenWidth <= 760 
                         ?
-                        <div onClick={e => window.location.href=('/seller/profile')} style={{width: '50px', fontSize: 'x-small', color: '#000', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0px', flexDirection: 'column'}}>
+                        <div onClick={e => window.location.href=('/vendor/profile')} style={{width: '50px', fontSize: 'x-small', color: '#000', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0px', flexDirection: 'column'}}>
                             <span style={{height: '30px', width: '30px', color: '#fff', fontSize: 'medium', display: 'flex', borderRadius: '50%', background: '#FF4500', padding: '8px', alignItems: 'center', justifyContent: 'center', fontSize: 'x-small', fontWeight: '500'}}>
                             {
                                 profile?.fname?.split('')[0]

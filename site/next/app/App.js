@@ -5,9 +5,6 @@ import store from '@/redux/store'
 import { usePathname } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { Provider } from 'react-redux'
-import {NextUIProvider} from '@nextui-org/react'
-import Login from './seller/login/page'
-import { setNewCookie } from './layout'
 import { IsClientCtxProvider } from '@/files/reusable.js/isClieent'
 
 export default function App({children}) {
@@ -37,7 +34,7 @@ export default function App({children}) {
         <Provider store={store}>
           
           {
-            pathname.split('/').splice(-2)[0] === 'seller'
+            pathname.split('/').splice(-2)[0] === 'vendor'
             ?
             <IsClientCtxProvider>
               <SellerLayout>

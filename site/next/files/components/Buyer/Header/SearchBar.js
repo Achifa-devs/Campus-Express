@@ -3,12 +3,10 @@ import filterSvg from '../../../assets/filter-edit-svgrepo-com.svg'
 import { useEffect, useState } from 'react';
 // import { setBuyerJsxTo } from '../redux/buyer/BuyerOverlayJsx';
 import { useDispatch } from 'react-redux';
-// import { GetSearchWord } from '../api/buyer';
 import '../../../styles/search.css'
 import { useNavigate } from 'react-router-dom';
 import { setSearchListTo } from '@/redux/buyer_store/SearchList';
 import { usePathname } from 'next/navigation';
-import { GetSearchWord } from '@/app/api/buyer/get';
 
 const SearchBar = ({updateSearchText}) => {
   let [searchResultElem, setSearchResultElem] = useState('')
@@ -53,11 +51,27 @@ const SearchBar = ({updateSearchText}) => {
     async function getData() {
       if(searchChar !== '' && searchChar !== ' '){ 
         try {
-           let result = await GetSearchWord(searchChar)
-           dispatch(setSearchListTo(result))
-           
+          fetch(`/api/store/search?word=${e.target.value}`, {
+            headers: {
+              'Gender': window.localStorage.getItem('cs-gender') 
+            }
+          })
+          .then(async(res) => {
+            let response = await res.json();
+              console.log(response)
+            if (response.bool) {
+              buyer_overlay_setup(false, '')
+              dispatch(setSearchListTo(response.data))
+            }else{
+              buyer_overlay_setup(false, '')
+            }
+          })
+          .catch(err =>{
+            console.log(err)
+            buyer_overlay_setup(false, '')
+          });
         } catch (error) {
-           console.log(error)
+          console.log(error)
         }
    
        }

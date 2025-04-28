@@ -92,7 +92,11 @@ export default async function RootLayout({ children }) {
        
 
       </head>
-      <body style={{overflowX: 'hidden', background: '#f9f9f9'}}>
+      <body style={{ overflowX: 'hidden', background: '#f9f9f9' }}>
+        <div className="overlay">
+          <div className="loader">
+          </div>
+        </div>
         {
           <App>
             {children}

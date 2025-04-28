@@ -56,7 +56,7 @@ export async function UPDATE_PRODUCT(req, res) {
 
 export async function DELETE_PRODUCT(req, res) {
     try {
-        const delete_product = await postDeleteProduct(req.body);
+        const delete_product = await postDeleteProduct(req.query);
         res.status(201).json({ success: true, data: delete_product });
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });

@@ -38,6 +38,28 @@ export async function countEmail ({ email }) {
   return parseInt(result.rows[0].count)
 }
 
+// Check customer token
+export async function findTokenByEmail ({ email }) {
+  
+  const result = await pool.query(`
+    SELECT * FROM token
+    WHERE recipient = $1
+  `, [email]
+  )
+  return (result.rows[0])
+}
+
+export async function deleteTokenByEmail ({ email }) {
+  
+  const result = await pool.query(`
+    DELETE FROM token
+    WHERE recipient = $1 
+  `, [email]
+  )
+  let response = await errorHandler(result?.rowCount);
+  return response;
+}
+
 // Check customer phone
 export async function countPhone ({ phone }) {
   const result = await pool.query(`
@@ -96,11 +118,11 @@ export async function updateCustomerProfileById({ buyer_id, fname, lname, gender
   return result.rows[0];
 };
 
-export async function updateCustomerPasswordById({ buyer_id, pwd }) {
+export async function updateCustomerPasswordById({ buyer_id, password }) {
   
   const result = await pool.query(
     `UPDATE campus_buyers set password=$1 WHERE buyer_id = $2`,
-    [pwd, buyer_id]
+    [password, buyer_id]
   );
   return result.rows[0];
 };
