@@ -4,6 +4,7 @@ import { userAuth } from './reducer/auth';
 import cookie from './vendor/cookie';
 import drawer from './vendor/drawer';
 import user from './vendor/user';
+import location from './location';
 
 let store = configureStore({
   reducer: {
@@ -11,7 +12,8 @@ let store = configureStore({
     auth: userAuth,
     cookie: cookie,
     user: user,
-    drawer: drawer
+    drawer: drawer,
+    location: location
   }
 
 })

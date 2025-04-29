@@ -1,8 +1,6 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react'
 import { Dimensions, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { GetItem } from '../apis/buyer/get';
-import Images from '../components/Product/Images';
 import Top from '../components/Product/Top';
 import Mid from '../components/Product/Mid';
 import Btm from '../components/Product/Btm';

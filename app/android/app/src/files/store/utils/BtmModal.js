@@ -59,8 +59,8 @@ const styles = StyleSheet.create({
   modal: {
     height: 'auto',
     backgroundColor: 'white',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
     padding: 10,
   },
 });

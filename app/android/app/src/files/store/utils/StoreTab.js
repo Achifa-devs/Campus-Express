@@ -12,6 +12,7 @@ import {
     View 
 } from 'react-native';
 import BellSvg from '../../media/assets/notification-svgrepo-com (1).svg'
+import BackSvg from '../../media/assets/back-svgrepo-com (1).svg'
 import {  
     createBottomTabNavigator 
 } from "@react-navigation/bottom-tabs";
@@ -48,6 +49,8 @@ import UserIcons from '../../media/icons/UserIcons';
 
 import SearchBar from '../components/Home/Search'
 import Shops from '../screens/Shops';
+import Type from '../screens/Type';
+import TypeProducts from '../screens/Products';
 
 const Tab = createBottomTabNavigator();
 
@@ -200,7 +203,6 @@ function HomeStackScreen() {
                 (
                     <>
                         <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', alignItems: 'center', padding: '10px'}}>
-                            <StatusBar backgroundColor="#FF4500" barStyle="light-content" /> 
                             
                             <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
                             <View style={{backgroundColor: '#FF4500', height: '100%', width: 40, borderRadius: 10}}></View>
@@ -275,6 +277,60 @@ function HomeStackScreen() {
             ), 
             // headerShown: false,  
         }}  name="user-product" component={Product} />
+        
+         <HomeStack.Screen  options={{
+            header: ({navigation}) =>
+            (
+                <View style={{ height: 60, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FF4500', alignItems: 'center', padding: '10px'}}>  
+                    <StatusBar hidden />
+                    <View style={{
+                        height: '100%',
+                        //   width: '100%',
+                        paddingTop: 0,
+                        paddingBottom: 0,
+                        paddingLeft: 15,
+                        paddingRight: 15,
+                        backgroundColor: '#FF4500',
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        // marginBottom: 5
+                    }}>
+                        <TouchableOpacity style={{
+                            height: 55,
+                            borderRadius: 15,
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'flex-start',
+                            alignItems: 'center',
+                            width: '10%',
+                        }} onPress={e => navigation.navigate('user-home')}> 
+                            <BackSvg height={25} width={25} />
+                        </TouchableOpacity>
+                        <TextInput onChangeText={txt => {updateSearchChar(txt)}} style={{
+                            height: 45,
+                            borderRadius: 5,
+                            padding: 10,
+                            width: '90%',
+                            backgroundColor: '#efefef',
+                            float: 'right'
+                        }} placeholder='Search anything here' />
+                    </View>
+                </View>
+            ), 
+            // headerShown: false,  
+        }}  name="user-type-product" component={TypeProducts} />
+        
+        <HomeStack.Screen  options={{
+            header: ({navigation}) =>
+            (
+                <View style={{ height: 55, display: 'none', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px'}}>
+
+                </View>
+            ), 
+            // headerShown: false,  
+        }}  name="user-type" component={Type} />
 
         <HomeStack.Screen  options={{
             header: ({navigation}) =>

@@ -9,6 +9,7 @@ export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
     const word = searchParams.get('word');
+
     const result = await pool.query(`SELECT * FROM seller_shop`);
   
     const list = result.rows;

@@ -13,14 +13,14 @@ export default function Card({ item }) {
     return (
         <>
             <TouchableOpacity 
-                onPress={() => navigation.navigate('user-type', { category: categoryName })}
+                onPress={() => navigation.navigate('user-type', { types: Object.values(item)[0], category: categoryName  })}
                 style={[
                     styles.card,
                     { width: (screenWidth * 0.3) + 2 }
                 ]}
             >
                 <View style={styles.cardTop}>
-                    <TouchableOpacity onPress={() => navigation.navigate('user-product', { product_id: item.product_id })}>
+                    <TouchableOpacity onPress={() => navigation.navigate('user-type', { types: Object.values(item)[0], category: categoryName })}>
                         {imgUrl ? (
                             <Image
                                 source={{ uri: imgUrl }}

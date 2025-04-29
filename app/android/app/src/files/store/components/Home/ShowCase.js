@@ -10,7 +10,6 @@ import { useEffect, useState } from 'react';
  
 import Card from './Card';
 import items from './item.json';
-import { useFocusEffect } from '@react-navigation/native';
  
 export default function ShowCase({category, limit, bg}) {
     let screenWidth = Dimensions.get('window').width;
@@ -23,9 +22,6 @@ export default function ShowCase({category, limit, bg}) {
       set_list(cat)
     }, [])
  
-    let [data, setData] = useState([])
-  
-   
   return (  
       <>
         {/* <View style={{padding: 10, backgroundColor: 'rgb(255, 244, 224)'}}>

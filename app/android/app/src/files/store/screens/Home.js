@@ -16,18 +16,23 @@ import {
 import FlasAds from '../components/Home/FlashAd'
 import Search from '../components/Home/Search'
 import ShowCase from '../components/Home/ShowCase'
-import Message from './Message';
-import Order from './Order'; 
-import Profile from './Profile';
-import { useEffect, useState } from 'react';
 import Hot from '../components/Home/Hot';
 import Ads from '../components/Home/Ads';
+import { useEffect } from 'react';
+import { getCurrentLocationAndAddress } from '../../utils/Gps';
+import { useDispatch } from 'react-redux';
 const Tab = createBottomTabNavigator();
 
 export default function Home() {
   let screenHeight = Dimensions.get('window').height;
-  
+  let dispatch = useDispatch()
 
+  useEffect(() => {
+    async function getCurrentLocale() {
+      await getCurrentLocationAndAddress(dispatch);
+    }
+    getCurrentLocale()
+  }, [])
   return (
     <>
       <ScrollView style={[styles.homeCnt,{

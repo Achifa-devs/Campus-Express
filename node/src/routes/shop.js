@@ -28,7 +28,9 @@ import {
 import {
     GET_PRODUCT, 
     GET_PRODUCTS, 
+    GET_PRODUCTS_TYPE, 
     GET_PRODUCT_THUMBNAIL, 
+    GET_SEARCH, 
     POST_PRODUCT_VIEW, 
     UPDATE_PRODUCT_VIEW_FOR_UNKNOWN_CUSTOMER
 } from "../controllers/shop/product.js"
@@ -101,6 +103,8 @@ CUSTOMER_ROUTE.post('/confirm-refund', parser, CONFIRM_REFUND);
 // HANDLES REQ ON HOW CUSTOMER VIEW PRODUCTS ---
 CUSTOMER_ROUTE.get('/product', GET_PRODUCT);
 CUSTOMER_ROUTE.get('/products', GET_PRODUCTS);
+CUSTOMER_ROUTE.get('/products-type', GET_PRODUCTS_TYPE);
+CUSTOMER_ROUTE.get('/search', GET_SEARCH);
 CUSTOMER_ROUTE.get('/product-thumbnail', parser, GET_PRODUCT_THUMBNAIL);
 CUSTOMER_ROUTE.post('/product-view', parser, POST_PRODUCT_VIEW);
 CUSTOMER_ROUTE.post('/product-view-unknown-buyer-update', parser, UPDATE_PRODUCT_VIEW_FOR_UNKNOWN_CUSTOMER);

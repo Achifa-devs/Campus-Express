@@ -5,6 +5,7 @@ import {
   findProductsByCategory, 
   findProductsByCategoryAndGender, 
   findProductsThumbnailById, 
+  findProductsType, 
   findProductViewById, 
   updateProductView, 
   updateProductViewForUnkownBuyer
@@ -19,6 +20,16 @@ export const getProduct = async (payload) => {
   return response;
 };
 
+export const getSearch = async (payload) => {
+  let { word } = payload;
+ 
+    
+  const response = await findProducts({ limit: null });
+  const filteredList = response.filter(item => item.title.toLowerCase().indexOf(word.toLowerCase()) > -1);
+  console.log("response: ", filteredList)
+  return filteredList;
+
+};
 
 export const getProducts = async (payload) => {
   let { category, limit, gender } = payload;
@@ -64,6 +75,22 @@ export const getProductThumbnail = async (payload) => {
   const response = await findProductsThumbnailById({ product_id });
 
   return response;
+};
+
+
+export const getProductType = async (payload) => {
+  const { category, type } = payload;
+
+  // Business logic
+  try {
+    const response = await findProductsType({ type, limit: 40 });
+    return response;
+
+  } catch (error) {
+    console.log('error: ', error)
+    
+  }
+
 };
 
 

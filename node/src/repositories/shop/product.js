@@ -15,11 +15,26 @@ export async function findProductById({ product_id }) {
 
 // Find products
 export async function findProducts({ limit }) {
-  const result = await pool.query(
-    `SELECT * FROM seller_shop WHERE state->>'state' = 'active' LIMIT $1`,
-    [limit]
-  );
-  return result.rows;
+  if (limit !== null) {
+    const result = await pool.query(
+      `SELECT * FROM seller_shop WHERE state->>'state' = 'active' LIMIT $1`,
+      [limit]
+    );
+    return result.rows;
+  } else {
+    const result = await pool.query(
+      `SELECT * FROM seller_shop WHERE state->>'state' = 'active'`
+    );
+    return result.rows;
+  }
+};
+
+export async function findProductsType({ type, limit }) {
+   const result = await pool.query(
+      `SELECT * FROM seller_shop WHERE state->>'state' = 'active' AND others->>'cType' = $1 LIMIT $2`,
+      [type,limit]
+    );
+    return result.rows;
 };
 
 // Find products by category
