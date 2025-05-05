@@ -31,7 +31,7 @@ export default function ChangeEmail({ route, navigation }) {
 
     async function update_phone_pin() {
       
-        return await axios.post('http://192.168.144.146:9090/system.email-update', {email: new_email, id: user?.id})
+        return await axios.post('http://192.168.105.146:9090/system.email-update', {email: new_email, id: user?.id})
         .then(({ data }) => ({bool: data.success}))
         .catch(err => (err.response?.data))
     }

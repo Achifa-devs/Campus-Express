@@ -24,7 +24,7 @@ export default function DropdownExample({ dropdownData, name, placeholder, updat
         data={dropdownData}
         search
         maxHeight={300}
-        labelField="label"
+        labelField="title"
         valueField="value"
         placeholder={placeholder}
         searchPlaceholder="Search..."
@@ -40,7 +40,7 @@ export default function DropdownExample({ dropdownData, name, placeholder, updat
 
 const styles = StyleSheet.create({
   container: { 
-    padding: 16,
+    padding: 0,
     width: '100%'
   },
   dropdown: {

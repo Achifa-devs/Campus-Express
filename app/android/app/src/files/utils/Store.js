@@ -1,10 +1,9 @@
 import CookieManager from "@react-native-cookies/cookies";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useDispatch, useSelector } from "react-redux";
-import { set_user } from "../../../../../redux/vendor/user.js";
-import { getData } from "./AsyncStore.js.js";
 import { useEffect } from "react";
 import StackNavigator from "../store/utils/Nav.js";
+import Aside from "../vendor/utils/Aside.js";
 
 export function Shop() {
   let dispatch = useDispatch()
@@ -26,21 +25,11 @@ export function Shop() {
     .catch(err => console.log(err))
   }, [])
   
-  useEffect(() => {
-    async function get_user() {
-      let data = await getData('user');
-      if (data) { 
-        dispatch(set_user(JSON.parse(data)))
-      }
-    }
-    if (cookie) {
-      get_user() 
-    }
-  }, [cookie]) 
+ 
   
   return (
-    <>
-        
+    <> 
+      {/* <Aside /> */}
       <StackNavigator />
     </>     
   )

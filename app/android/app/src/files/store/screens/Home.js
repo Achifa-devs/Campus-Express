@@ -1,65 +1,25 @@
-import { 
-    Dimensions,
-    Image,
-    ScrollView,
-    StyleSheet,
-    Switch,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View 
-} from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
-import { 
-    createBottomTabNavigator 
-} from "@react-navigation/bottom-tabs"
-import FlasAds from '../components/Home/FlashAd'
-import Search from '../components/Home/Search'
-import ShowCase from '../components/Home/ShowCase'
-import Hot from '../components/Home/Hot';
+import { FlatList, View } from 'react-native';
 import Ads from '../components/Home/Ads';
-import { useEffect } from 'react';
-import { getCurrentLocationAndAddress } from '../../utils/Gps';
-import { useDispatch } from 'react-redux';
-const Tab = createBottomTabNavigator();
+import FlasAds from '../components/Home/FlashAd';
+import ShowCase from '../components/Home/ShowCase';
+import Hot from '../components/Home/Hot';
+
+const sections = [
+  { key: 'ads', component: <Ads /> },
+  { key: 'flashads', component: <FlasAds /> },
+  { key: 'showcase', component: <ShowCase category="trends" bg="rgb(255, 244, 224)" limit={30} /> },
+  { key: 'hot', component: <Hot /> },
+];
 
 export default function Home() {
-  let screenHeight = Dimensions.get('window').height;
-  let dispatch = useDispatch()
-
-  useEffect(() => {
-    async function getCurrentLocale() {
-      await getCurrentLocationAndAddress(dispatch);
-    }
-    getCurrentLocale()
-  }, [])
   return (
-    <>
-      <ScrollView style={[styles.homeCnt,{
-            // height: '100%'
-      }]}>
-       
-
-        <View style={{padding: 2.5}}>
-          <Ads /> 
-        </View>
-        <View style={{padding: 2.5}}>
-          <FlasAds /> 
-        </View>
-        <ShowCase category={'trends'} bg={'rgb(255, 244, 224)'} limit={30} />
-        <Hot />
-      </ScrollView> 
-    </> 
-  )
+    <FlatList
+      data={sections}
+      renderItem={({ item }) => (
+        <View style={{ padding: 2.5 }}>{item.component}</View>
+      )}
+      keyExtractor={(item) => item.key}
+      contentContainerStyle={{ backgroundColor: '#f9f9f9' }}
+    />
+  );
 }
-
-
-const styles = StyleSheet.create({
-    homeCnt:{
-        height: 'auto',
-        width: '100%',
-        padding: 0,
-    // marginBottom: 5,
-        backgroundColor: '#f9f9f9'
-    }
-  });

@@ -8,8 +8,8 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
-    View,
-    StatusBar
+    View
+   
 } from 'react-native';
 import BellSvg from '../../media/assets/notification-svgrepo-com (1).svg'
 import SettingSvg from '../../media/assets/settings-svgrepo-com (8).svg'
@@ -32,7 +32,7 @@ import { getData } from './AppStorage.js';
 import Bank from '../screens/Drawer/Bank.js';
 import Invite from '../screens/Profile/Profiles/Invite.js';
 import PersonalData from '../screens/Profile/Profiles/PersonalData.js';
-import Notice from '../screens/Home/Notice.js';
+import Notice from '../screens/Sell/Notice.js';
 import ShopDetails from '../screens/Drawer/Shop/Details.js';
 import ShopContact from '../screens/Drawer/Shop/Contact.js';
 import ShopLocale from '../screens/Drawer/Shop/ShopLocale.js';
@@ -62,8 +62,8 @@ import Logout from '../screens/Profile/Settings/AccountSecurity/Logout.js';
 import ConnectedServices from '../screens/Profile/Settings/AccountSecurity/ConnectedServices.js';
 import Notification from '../../store/screens/Notification.js';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Home from '../screens/Home/Home.js';
-import Create from '../screens/Home/Create.js';
+import Home from '../screens/Sell/Home.js';
+import Create from '../screens/Sell/Create.js';
 
 const Tab = createBottomTabNavigator();
 
@@ -199,7 +199,7 @@ function HoProfileStackScreen() {
             header: ({navigation}) =>
             (
               <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', elevation: 2, alignItems: 'center', padding: '10px' }}>
-                    <StatusBar backgroundColor="#FF4500" barStyle="light-content" /> 
+                
                      
                     <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}} onPress={() => dispatch(set_drawer(!drawer))}>
                         <View style={{backgroundColor: '#fff', elevation: 0, height: '100%', width: 40, borderRadius: 5, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
@@ -228,7 +228,7 @@ function HoProfileStackScreen() {
             header: ({navigation}) =>
             (
                 <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px'}}>
-                    <StatusBar backgroundColor="#FF4500" barStyle="light-content" /> 
+                   
                     
                     <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
                         <View style={{backgroundColor: '#FF4500', height: '100%', width: 40, borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}><Text style={{color: '#fff',display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>A.F</Text></View>
@@ -249,7 +249,7 @@ function HoProfileStackScreen() {
             header: ({navigation}) =>
             (
                 <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px'}}>
-                    <StatusBar backgroundColor="#FF4500" barStyle="light-content" /> 
+                    
                     <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', backgroundColor: '#FFF', alignItems: 'center', paddingLeft: 15, paddingRight: 5}}>
                         <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5}}>
                             <BackSvg width={22} height={22} />
@@ -591,7 +591,7 @@ function MessageStackScreen() {
             header: ({navigation}) =>
             (
                 <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FF4500', alignItems: 'center', paddingLeft: 10, paddingRight: 10}}>
-                    <StatusBar backgroundColor="#FF4500" barStyle="light-content" /> 
+                   
 
                     <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '40%', backgroundColor: '#FF4500', alignItems: 'center'}}>
                         <Text style={{paddingLeft: 0, fontSize: 20, color: '#fff'}}>Shopiva Chat</Text>
@@ -707,7 +707,7 @@ function OrderStackScreen() {
             header: ({navigation}) =>
             (
                 <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', elevation: 2, paddingLeft: 10, paddingRight: 10}}>
-                    <StatusBar backgroundColor="#FF4500" barStyle="light-content" /> 
+                   
 
                     <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '40%', backgroundColor: '#fff', alignItems: 'center'}}>
                         <Text style={{paddingLeft: 0, fontSize: 20, color: '#000'}}>Orders</Text>
@@ -722,7 +722,7 @@ function OrderStackScreen() {
          header: () =>
           (
             <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', elevation: 2, alignItems: 'center', paddingLeft: 10, paddingRight: 10}}>
-                <StatusBar backgroundColor="#FF4500" barStyle="light-content" /> 
+               
 
                     <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '40%', backgroundColor: '#FFF', alignItems: 'center'}}>
                         <Text style={{paddingLeft: 0, fontSize: 20, color: '#000'}}>Order Details</Text>
@@ -745,7 +745,7 @@ function ListingStackScreen() {
             header: ({navigation}) =>
             (
                 <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', alignItems: 'center', paddingLeft: 10, paddingRight: 10, elevation: 2}}>
-                    <StatusBar backgroundColor="#FF4500" barStyle="light-content" /> 
+                    
 
                     <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '40%', backgroundColor: '#FFF', alignItems: 'center'}}>
                         <Text style={{paddingLeft: 0, fontSize: 20, color: '#000'}}>Inventory</Text>

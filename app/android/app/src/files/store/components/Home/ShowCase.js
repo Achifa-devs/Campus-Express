@@ -1,63 +1,87 @@
-import React, { useCallback, useLayoutEffect }  from 'react'
+import React, { useEffect, useState } from 'react';
 import { 
-    Dimensions,
-    ScrollView, 
+    ScrollView,
     StyleSheet,
     Text,
-    View 
-} from 'react-native'
-import { useEffect, useState } from 'react';
- 
+    View,
+    Dimensions 
+} from 'react-native';
+
 import Card from './Card';
 import items from './item.json';
- 
-export default function ShowCase({category, limit, bg}) {
-    let screenWidth = Dimensions.get('window').width;
 
-    let [list, set_list] = useState([])
+export default function ShowCase() {
+    const [list, setList] = useState([]);
 
     useEffect(() => {
-      let cat = (items.items.category).splice(0,8)
-      cat.push({More: []})
-      set_list(cat)
-    }, [])
- 
-  return (  
-      <>
-        {/* <View style={{padding: 10, backgroundColor: 'rgb(255, 244, 224)'}}>
-            <Text style={{fontWeight: 700., fontSize: 25, color: '#FF4500'}}>Product Categories</Text>
-        </View> */}
-        <View style={[styles.showcase, {backgroundColor: '#FFF'}]}>
-            {
-                items.items.category.length > 0
-                ?
-                list.map((item, index) => <Card item={item} />)
-                :
-                <Text>No Item To Display</Text>
-            }
-            
-        </View> 
-    </>
-  )
+        const categories = [...items.items.category].splice(0, 7);
+        categories.push({ More: [] }); // Add "More" button as last item
+        setList(categories);
+    }, []);
+
+    return (
+        <>
+            {/* Optional Header */}
+            <View style={styles.header}>
+                <Text style={styles.title}>Product Categories</Text>
+            </View>
+
+            <View style={styles.showcase}>
+                {list.length > 0 ? (
+                    list.map((item, index) => (
+                        <Card item={item} key={index.toString()} />
+                    ))
+                ) : (
+                    <View style={styles.noItems}>
+                        <Text style={styles.noItemsText}>No Item to Display</Text>
+                    </View>
+                )}
+            </View>
+        </>
+    );
 }
 
-
 const styles = StyleSheet.create({
-    showcase:{
-        // height: 'auto',
-        width: '100%',
-        padding: 7,
-        backgroundColor: '#FFF',
-        marginBottom: .5,
+    header: {
+        paddingHorizontal: 16,
+        paddingVertical: 14,
+        backgroundColor: '#fff',
+        borderBottomColor: '#FF4500',
+        borderBottomWidth: 1.25,
+        marginBottom: 0,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.05,
+        shadowRadius: 2,
+        elevation: 2, // for Android shadow
         flexDirection: 'row',
+        alignItems: 'center',
         justifyContent: 'space-between',
-        flexWrap: 'wrap',
-        alignItems: 'flex-start',
     },
-    search:{
-        height: 55,
-        borderRadius: 25,
-        padding: 10,
-        backgroundColor: '#efefef'
-    }
-  });
+
+    title: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#FF4500',
+        letterSpacing: 0.5,
+    },
+
+    showcase: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+        paddingHorizontal: 10,
+        paddingBottom: 20,
+        backgroundColor: '#FFF',
+    },
+    noItems: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 20,
+    },
+    noItemsText: {
+        fontSize: 14,
+        color: '#888',
+    },
+});

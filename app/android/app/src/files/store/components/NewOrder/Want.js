@@ -1,7 +1,7 @@
 import React from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, Vibration, View } from 'react-native'
 
-export default function Want() {
+export default function Want({data, updateUnits, units}) {
   return (
     <>
       <View style={styles.wantCnt}>
@@ -10,7 +10,7 @@ export default function Want() {
 
             <View style={{width: '100%', marginBottom: 20, display: 'flex', alignItems: 'center', flexDirection: 'row',  justifyContent: 'space-between'}}>
                 <Text style={{color: '#000'}}>Units Availble</Text>
-                <Text style={{color: '#000', fontSize: 20,}}>10</Text>
+                <Text style={{color: '#000', fontSize: 20,}}>{data?.stock}</Text>
             </View>
 
             <View style={{width: '100%', marginBottom: 20, display: 'flex', alignItems: 'flex-start', flexDirection: 'column',  justifyContent: 'space-between'}}>
@@ -19,17 +19,21 @@ export default function Want() {
                 <View style={{width: '100%', marginBottom: 0, display: 'flex', alignItems: 'center', flexDirection: 'row',  justifyContent: 'space-between'}}>
                     <View style={{width: '100%', marginBottom: 0, display: 'flex', alignItems: 'center', flexDirection: 'row',  justifyContent: 'space-evenly', backgroundColor: '#fff'}}>
                         <View style={[{width: '33%'}]}>
-                            <TouchableOpacity style={[styles.btn, {width: 45}]}> 
+                            <TouchableOpacity style={[styles.btn, {width: 45}]} onPress={e=> {
+                                units > 1 ? updateUnits(units - 1) : ''
+                            }}> 
                                 <Text style={{color: '#fff'}}>-</Text>
                             </TouchableOpacity>
                         </View>
 
                         <View style={[{width: '33%', height: 40, backgroundColor: '#fff', display: 'flex', alignItems: 'flex-end', flexDirection: 'row',  justifyContent: 'center'}]}>
-                            <Text style={{color: '#000', fontSize: 20, width: '100%', }}>0</Text>
+                            <Text style={{color: '#000', fontSize: 20, width: '100%', }}>{units}</Text>
                         </View>
 
                         <View style={[{width: '33%'}]}>
-                            <TouchableOpacity style={[styles.btn, {width: 45}]}> 
+                            <TouchableOpacity style={[styles.btn, {width: 45}]} onPress={e=> {
+                                units < data?.stock ? updateUnits(units + 1) : ''
+                            }}> 
                                 <Text style={{color: '#fff'}}>+</Text>
                             </TouchableOpacity>
                         </View>
@@ -66,8 +70,9 @@ const styles = StyleSheet.create({
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'flex-start',
+    borderRadius: .5,
       alignItems: 'flex-start',
-      padding: 10,
+      padding: 15,
       backgroundColor: '#fff',
       marginBottom: 5
     },

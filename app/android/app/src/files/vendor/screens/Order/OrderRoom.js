@@ -1,7 +1,7 @@
 import React from 'react'
 import { Dimensions, ScrollView, StyleSheet, View } from 'react-native'
-import OrderRoomTop from '../../components/OrderRoom/OrderRoomTop'
-import OrderRoomBtm from '../../components/OrderRoom/OrderRoomBtm';
+import OrderRoomTop from '../../components/SalesRoom/OrderRoomTop'
+import OrderRoomBtm from '../../components/SalesRoom/OrderRoomBtm';
 import Ionicons  from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, FontAwesome, etc.
 
 export default function OrderRoom({route}) {

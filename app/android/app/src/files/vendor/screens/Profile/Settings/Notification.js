@@ -34,7 +34,7 @@ export default function Notification() {
         } = useSelector(s=>s.user);
 
     function update_notification(target, src, value) {
-        axios.post('http://192.168.144.146:9090/system.notice-update', {
+        axios.post('http://192.168.105.146:9090/system.notice-update', {
             id: user?.id,
             data: {
                 target: target,

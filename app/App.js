@@ -1,161 +1,182 @@
-
-import { 
-  NavigationContainer 
-} from '@react-navigation/native';
-import store from './redux/store';
-import { 
-  Provider,
-  useDispatch,
-  useSelector,
-} from 'react-redux';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import Video from 'react-native-video';
 import React, { useEffect, useState } from 'react';
-import { Alert, Dimensions, StatusBar, Text, TouchableOpacity, View } from 'react-native';
-import Ionicons  from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, FontAwesome, etc.
-import Vendor from './android/app/src/files/utils/Vendor.js';
-import { storeData, getData } from './android/app/src/files/utils/AsyncStore.js.js';
+import { View, Text, Image, StyleSheet } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { Provider, useDispatch, useSelector } from 'react-redux';
+import FlashMessage from 'react-native-flash-message';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import store from './redux/store';
 import { Shop } from './android/app/src/files/utils/Store.js';
+import { setToggleMessage } from './redux/toggleMssg.js';
 
+import notifee, {
+  AndroidImportance,
+  AndroidStyle,
+  AndroidVisibility,
+  AuthorizationStatus
+} from '@notifee/react-native';
 
-function App(){  
-  
+import { getApp } from '@react-native-firebase/app';
+import {
+  getMessaging,
+  requestPermission,
+  getToken,
+  onMessage
+} from '@react-native-firebase/messaging';
+
+const flashMessageRef = React.createRef();
+
+function App() {
+  useEffect(() => {
+    (async () => {
+      const settings = await notifee.requestPermission();
+      if (settings.authorizationStatus >= AuthorizationStatus.AUTHORIZED) {
+        console.log('Notification permissions granted.');
+      } else {
+        console.log('Notification permissions not granted.');
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    const app = getApp();
+    const messaging = getMessaging(app);
+
+    // Setup FCM token
+    requestPermission(messaging).then(() => {
+      getToken(messaging).then(token => {
+        console.log('FCM Token:', token);
+      });
+    });
+
+    // Create notification channels
+    (async () => {
+      await notifee.createChannel({
+        id: 'remoteMessage',
+        name: 'Remote Messages',
+        importance: AndroidImportance.HIGH,
+        sound: 'default', // Enables sound
+        visibility: AndroidVisibility.PUBLIC, // For lockscreen
+        vibration: true,
+      });
+    })();
+
+    // Foreground message handler
+    const unsubscribe = onMessage(messaging, async remoteMessage => {
+      console.log('Foreground FCM:', remoteMessage);
+      await notifee.displayNotification({
+        title: remoteMessage.data?.title,
+        body: remoteMessage.data?.body,
+        android: {
+          channelId: 'remoteMessage',
+          smallIcon: 'ic_notification', // White-only icon for status bar
+          largeIcon: 'ic_notification_large', // Your colored logo
+          style: {
+            type: AndroidStyle.BIGPICTURE,
+            picture: remoteMessage.data?.media,
+          },
+          pressAction: {
+            id: 'default',
+          },
+          importance: AndroidImportance.HIGH,
+          visibility: AndroidVisibility.PUBLIC,
+        },
+      });
+    });
+
+    return unsubscribe;
+  }, []);
+
   return (
-    
     <Provider store={store}>
       <NavigationContainer>
         <NavCnt />
       </NavigationContainer>
-    </Provider> 
-
+    </Provider>
   );
 }
+
 export default App;
 
-
-
 function NavCnt() {
- 
-  let [mode, set_mode] = useState('shop')
+  const [mode, setMode] = useState('shop');
+  const { toggleMessage } = useSelector(state => state.toggleMessage);
+  const dispatch = useDispatch();
+
+  function handleShowMessage() {
+    if (flashMessageRef.current) {
+      flashMessageRef.current.showMessage({
+        message: '',
+        position: 'bottom',
+        style: styles.flashMessage,
+        renderCustomContent: () => (
+          <View style={styles.customContent}>
+            <Image
+              source={{
+                uri: 'https://res.cloudinary.com/daqbhghwq/image/upload/t_logo%20resize/v1743769930/2024-06-27_dqlq3a.png',
+              }}
+              style={styles.logo}
+            />
+            <Text style={styles.messageText}>{toggleMessage}</Text>
+          </View>
+        ),
+      });
+    }
+  }
 
   useEffect(() => {
-    let get_mode = async () => {
-      let data = await getData('mode');
-      if (data) { 
-        set_mode(data)
-      }
+    if (toggleMessage !== null) {
+      handleShowMessage();
     }
-    get_mode()
-  }, []) 
+    dispatch(setToggleMessage(null));
+  }, [toggleMessage]);
 
-
-  return(
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      
-      {
-        mode === 'vendor'
-        ?
-        <Vendor />
-        :
-        mode === 'shop'
-        ? 
-        <Shop />
-        :
-        <DualScreen />
-      }
-    </GestureHandlerRootView>
-  )
+  return (
+    <SafeAreaProvider style={{ flex: 1 }}>
+      {mode === 'shop' && <Shop />}
+      <FlashMessage ref={flashMessageRef} position="bottom" />
+    </SafeAreaProvider>
+  );
 }
-  
 
-
-function DualScreen() {
-  const { width, height } = Dimensions.get('window');
-
-  function toggleMode(mode) {
-    storeData('mode', mode)
-  }
-  return(
-    <>
-      <StatusBar backgroundColor="#FF4500" hidden barStyle="light-content" /> 
-      <View>
-        <View style={{
-          height: (height*0.8),
-          width: '100%',
-          backgroundColor: '#000'
-        }}>
-          <Video
-            source={{uri: 'https://res.cloudinary.com/daqbhghwq/video/upload/v1742848434/c3e28ead-c062-44d2-b791-d38d7d210eee/2aukVOrfv%7Cc3e28ead-c062-44d2-b791-d38d7d210eee.mp4'}}  // Local or remote video URL
-            ref={(ref) => { this.player = ref }} // Reference to the video player
-            onBuffer={this.onBuffer} // Buffering callback
-            onError={this.videoError} // Error callback
-            style={{
-              width: '100%',
-              height: '100%',
-              position: 'absolute',
-              top: 0,
-              left: 0,
-            }}
-            controls={false} // Shows play, pause, etc.
-          />
-        </View>
-        <View style={{
-          height: '20%',
-          width: '100%',
-          backgroundColor: '#fff'
-        }}>
-          <TouchableOpacity onPress={e=>{
-            toggleMode('shop')
-          }} style={{
-            height: 160,
-            width: '45%',
-            position: 'absolute',
-            top: -60,
-            zIndex: 100,
-            elevation: 2,
-            padding: 8,
-            left: 10,
-            borderRadius: 6,
-            backgroundColor: '#fff',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center' 
-          }}>
-            <View style={{height: '40%'}}>
-              <Ionicons name={'bag-outline'} size={40} color={'#000'} />
-            </View>
-            
-            <Text style={{fontWeight: 500, color: '#000', fontSize: 18, width: '100%', textAlign: 'center', height: '20%'}}>Start shopping</Text>
-            <Text style={{fontWeight: 400, color: '#000', fontSize: 14, width: '100%', textAlign: 'center', height: '40%'}}>Discover deals. Shop now with ease.</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={e=>{
-            toggleMode('vendor')
-          }} style={{
-            height: 160,
-            width: '45%',
-            position: 'absolute',
-            top: -60,
-            zIndex: 100,
-            elevation: 2,
-            padding: 8,
-            right: 10,
-            borderRadius: 6,
-            backgroundColor: '#fff',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center' 
-          }}>
-            <View style={{height: '40%'}}>
-              <Ionicons name={'storefront-outline'} size={40} color={'#000'} />
-            </View>
-            
-            <Text style={{fontWeight: 500, color: '#000', fontSize: 18, width: '100%', textAlign: 'center', height: '20%'}}>Start selling</Text>
-            <Text style={{fontWeight: 400, color: '#000', fontSize: 14, width: '100%', textAlign: 'center', height: '40%'}}>List products. Reach buyers. Sell fast.</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </>
-  )
-}
+const styles = StyleSheet.create({
+  flashMessage: {
+    borderRadius: 5,
+    height: 50,
+    width: '70%',
+    backgroundColor: 'transparent',
+    alignSelf: 'center',
+    marginBottom: '25%',
+    padding: 0,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  customContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FF4500',
+    borderRadius: 5,
+    height: 50,
+    width: '100%',
+    paddingHorizontal: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
+  },
+  logo: {
+    width: 35,
+    height: 35,
+    resizeMode: 'contain',
+    borderRadius: 8,
+    marginRight: 10,
+  },
+  messageText: {
+    fontSize: 14,
+    color: '#FFF',
+    fontWeight: '500',
+    flexShrink: 1,
+  },
+});

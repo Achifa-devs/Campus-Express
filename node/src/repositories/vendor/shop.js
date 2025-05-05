@@ -61,7 +61,7 @@ export async function findShopReviewsById({ seller_id }) {
 // Find shop details by ID
 export async function findShopDetailsById({ seller_id }) {
   const result = await pool.query(
-    `SELECT * FROM campus_shops WHERE seller_id = $1`,
+    `SELECT * FROM shops WHERE seller_id = $1`,
     [seller_id]
   );
   return result.rows;
@@ -72,7 +72,7 @@ export async function findShopDetailsById({ seller_id }) {
 export async function createShop({ shop_id, seller_id, newShopName }) {
   
   const result = await pool.query(
-    `INSERT INTO campus_shops (
+    `INSERT INTO shops (
         id,shop_id,seller_id,title,category,status,description,logo_url,open_hrs,social_links,is_verified,created_at,updated_at
     ) VALUES (
         DEFAULT, $1, $2, $3, '', 'active', '', '', '', '', ${false}, $4, $5
@@ -89,7 +89,7 @@ export async function createShop({ shop_id, seller_id, newShopName }) {
 // Update shop 
 export async function UpdateShop({ seller_id, newShopname, description }) {
   const result = await pool.query(
-    `UPDATE campus_shops set title = $2, description = $3 WHERE seller_id = $1'`,
+    `UPDATE shops set title = $2, description = $3 WHERE seller_id = $1'`,
     [seller_id, newShopname, description]
   );
   let response = await errorHandler(result?.rowCount); 
@@ -98,7 +98,7 @@ export async function UpdateShop({ seller_id, newShopname, description }) {
 
 export async function UpdateShopCategory({ seller_id }) {
   const result = await pool.query(
-    `UPDATE campus_shops set inventory='${JSON.stringify(inventory)}' WHERE seller_id = $1'`,
+    `UPDATE shops set inventory='${JSON.stringify(inventory)}' WHERE seller_id = $1'`,
     [seller_id]
   );
   let response = await errorHandler(result?.rowCount); 

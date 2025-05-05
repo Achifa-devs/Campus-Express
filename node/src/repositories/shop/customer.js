@@ -10,7 +10,7 @@ import { errorHandler } from "../../utils/erroHandler.js";
 // Create new customer
 export async function createCustomer({ fname, lname, buyer_id, email, phone, hashedPwd, state, campus, gender }) {
   const result = await pool.query(
-    `INSERT INTO campus_buyers (
+    `INSERT INTO users (
     id, fname, lname, buyer_id, email, phone, password, state,
     campus, isActive, isVerified, isEmailVerified, isPhoneVerified,
     date, gender
@@ -32,7 +32,7 @@ export async function countEmail ({ email }) {
   
   const result = await pool.query(`
     SELECT COUNT(*) as count
-    FROM campus_buyers
+    FROM users
     WHERE email = '${email}'
   `)
   return parseInt(result.rows[0].count)
@@ -64,7 +64,7 @@ export async function deleteTokenByEmail ({ email }) {
 export async function countPhone ({ phone }) {
   const result = await pool.query(`
     SELECT COUNT(*) as count
-    FROM campus_buyers
+    FROM users
     WHERE phone = '${phone}'
   `)
 
@@ -74,7 +74,7 @@ export async function countPhone ({ phone }) {
 // Find user by ID
 export async function findUserById({buyer_id}) {
   const result = await pool.query(
-    `SELECT * FROM campus_buyers WHERE buyer_id = $1`,
+    `SELECT * FROM users WHERE buyer_id = $1`,
     [buyer_id]
   );
   return result.rows[0];
@@ -83,7 +83,7 @@ export async function findUserById({buyer_id}) {
 export async function findUserByEmail({ email }) {
   
   const result = await pool.query(
-    `SELECT * FROM campus_buyers WHERE email = $1`,
+    `SELECT * FROM users WHERE email = $1`,
     [email]
   );
   return result.rows[0];
@@ -93,7 +93,7 @@ export async function findUserByEmail({ email }) {
 export async function updateCustomerPhoneById({ buyer_id, phone }) {
   
   const result = await pool.query(
-    `UPDATE campus_buyers set phone = $1 WHERE buyer_id = $2`,
+    `UPDATE users set phone = $1 WHERE buyer_id = $2`,
     [phone, buyer_id]
   );
   return result.rows[0];
@@ -102,7 +102,7 @@ export async function updateCustomerPhoneById({ buyer_id, phone }) {
 export async function updateCustomerEmailById({ buyer_id, email }) {
   
   const result = await pool.query(
-    `UPDATE campus_buyers set email = $1 WHERE buyer_id = $2`,
+    `UPDATE users set email = $1 WHERE buyer_id = $2`,
     [email, buyer_id]
   );
   return result.rows[0];
@@ -112,7 +112,7 @@ export async function updateCustomerEmailById({ buyer_id, email }) {
 export async function updateCustomerProfileById({ buyer_id, fname, lname, gender }) {
   
   const result = await pool.query(
-    `UPDATE campus_buyers set fname=$1, lname=$2, gender=$3 WHERE buyer_id = $4`,
+    `UPDATE users set fname=$1, lname=$2, gender=$3 WHERE buyer_id = $4`,
     [fname, lname, gender, buyer_id]
   );
   return result.rows[0];
@@ -121,7 +121,7 @@ export async function updateCustomerProfileById({ buyer_id, fname, lname, gender
 export async function updateCustomerPasswordById({ buyer_id, password }) {
   
   const result = await pool.query(
-    `UPDATE campus_buyers set password=$1 WHERE buyer_id = $2`,
+    `UPDATE users set password=$1 WHERE buyer_id = $2`,
     [password, buyer_id]
   );
   return result.rows[0];

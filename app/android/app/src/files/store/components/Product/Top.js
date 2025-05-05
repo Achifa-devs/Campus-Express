@@ -1,27 +1,40 @@
+import js_ago from 'js-ago';
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native';
-
-export default function Top({size, title, cost}) {
-    return (
+import LocationSvg from '../../../media/assets/location-svgrepo-com (1).svg'
+export default function Top({data}) {
+    return ( 
         <>
             
             <View style={styles.card}>
-                <Text style={{fontSize: 16, color: '#000'}}>&#8358;&nbsp;</Text>
+                <LocationSvg height={18} width={18} />
             
-                <Text style={{fontSize: size ? size :  25, textDecorationStyle: 'dashed', color: '#000'}} 
+                <Text style={{fontSize: 15, textDecorationStyle: 'dashed', color: '#000'}} 
                     numberOfLines={2}
                     ellipsizeMode="tail">
-                    {new Intl.NumberFormat('en-us').format(cost)}
+                      {data.campus}, {data.uni_state},  {js_ago(new Date(data.date))}
                 </Text> 
             </View>
 
+            
             <View style={styles.card}>
-                <Text style={{fontSize: size ? size :  18, color: '#000'}} 
+                <Text style={{fontSize: 18, color: '#000', fontWeight: 'bold'}} 
                     numberOfLines={2}
                     ellipsizeMode="tail">
-                    {title}
+                    {data?.title}
                 </Text>
             </View>
+
+            <View style={styles.card}>
+                <Text style={{fontSize: 16, color: 'green', fontWeight: 'bold'}}>&#8358;&nbsp;</Text>
+            
+                <Text style={{fontSize: 16, color: 'green', fontWeight: 'bold'}} 
+                    numberOfLines={2}
+                    ellipsizeMode="tail">
+                    {new Intl.NumberFormat('en-us').format(data?.price)}
+                </Text> 
+            </View>
+
 
         </>
       )
@@ -39,7 +52,9 @@ export default function Top({size, title, cost}) {
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'flex-start',
-            backgroundColor: '#fff'
+            backgroundColor: '#fff',
+            // borderRadius: 7
+
         },
     
         cardTop:{

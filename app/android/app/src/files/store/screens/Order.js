@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import OrderCard from '../components/Order/OrderCard'
 import FavSvg from '../../media/icons/order-svgrepo-com (3).svg';
 import { Dimensions, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import { useSelector } from 'react-redux';

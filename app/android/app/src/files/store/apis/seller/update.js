@@ -2,8 +2,8 @@ import axios from 'axios'
 // import {IP} from '@env'
 
 
-let uri_1 = 'http://192.168.144.146:9090'
-let uri_2 = 'http://192.168.144.146:9090'
+let uri_1 = 'http://192.168.105.146:9090'
+let uri_2 = 'http://192.168.105.146:9090'
 let IP = uri_1
 
 

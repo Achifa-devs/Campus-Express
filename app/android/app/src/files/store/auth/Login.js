@@ -1,29 +1,41 @@
-import { Dimensions, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { useEffect, useState } from "react";
-import { Dropdown } from 'react-native-element-dropdown';
-import { useDispatch } from "react-redux";
-import { setUserAuthTo } from "../../../../../redux/reducer/auth";
-const Login = ({navigation}) => {
-    const screenHeight = Dimensions.get('window').height;
-    let dispatch = useDispatch();
+import React, { useEffect, useState } from 'react'
+import { ActivityIndicator, Dimensions, Image, StatusBar, Text, TextInput, TouchableOpacity, Vibration, View } from 'react-native'
+import { storeData } from '../../utils/AsyncStore.js'
+import { generateId, getDeviceId } from '../utils/IdGen.js'
+import { useNavigation } from '@react-navigation/native'
 
-    let [overlay, setOverlay] = useState(false)
-    let [type, setType] = useState('')
-
+const Login = () => {
+    const screenHeight = Dimensions.get("screen").height 
+    const screenWidth = Dimensions.get("screen").width 
     let [email, setEmail] = useState('')
     let [pwd, setPwd] = useState('')
+    let [server_err, set_server_err] = useState(false)
 
     let [emailErr, setEmailErr] = useState('')
     let [pwdErr, setPwdErr] = useState('')
-    
-    const [isFocus, setIsFocus] = useState(false); 
+
+
+    const [isPwdVisible, setIsPwdVisible] = useState(true);
+    useEffect(() => {
+        if (!isPwdVisible) {
+            setTimeout(() => {
+                setIsPwdVisible(!isPwdVisible)
+            }, 800)
+        }
+    }, [isPwdVisible])
 
     let signupHandler = async() => {
+       
+
         let response = await validateInput()
 
         response.map(item => {
+
             let name = item._j.name;
             let err = item._j.mssg;
+
+            console.log('errs: ', name, err)
+
 
             if(name.toLowerCase() === 'email'){
                 setEmailErr(err)
@@ -32,51 +44,78 @@ const Login = ({navigation}) => {
             }
         })
 
-        let data = response.filter((item) => item._j.mssg === '').length === 2 ? true : false;
+        let data = response.filter((item) => item._j.mssg === '').length === 4 ? true : false;
 
+        
         if(data){
-            fetch('http://192.168.175.146:2222/login', {
-                    method: 'post',
-                    headers: {
-                        "Content-Type": "Application/json"
-                    },
-                    body: JSON.stringify({email,pwd})
-            })
-            .then(async(result) => {
-                let response = await result.json()
-                // console.log(result)
-                console.log(response)
-                if(response.success){
-                    dispatch(setUserAuthTo(true))
-                }else{
-                    // if(response.data === 'duplicate email'){
-                    //     setEmailErr('Email Already Exist')
-                    // }else if(response.data === 'duplicate phone'){
-                    //     setPhoneErr('Phone Number Already Exist')
-                    // }
-                    // console.log(response.data)
+            set_server_err(true)
 
-                }
+            
+            // fetch('https://campussphere.net/api/registration/seller', {
+            //     method: 'post',
+            //     headers: {
+            //         "Content-Type": "Application/json"
+            //     },
+            //     body: JSON.stringify({fname,lname,email,phone,pwd,state,campus,gender})
+            // })
+            // .then(async(result) => {
+            //     let response = await result.json();
+            //     console.log(response)
+            //     if(response.success){
+            //         CookieManager.set('https://campussphere.net', {
+            //             name: 'jwt_token',
+            //             value: response.cookie,
+            //             domain: 'campussphere.net',
+            //             path: '/',
+            //             version: '1',
+            //             secure: true,
+            //             expires: `'${90 * 24 * 60 * 60}'`
+            //         })
+            //         .then((done) => {
+            //             console.log('Cookie set!', done);
+            //             dispatch(set_cookie(true))
+            //         })
+            //         .catch(err => console.log(err))
+            //     } else {
+            //         set_server_err(!true)
 
-            })
-            .catch((err) => {
-                // set_server_err(err)
-                console.log(err)
-            })
+            //         Vibration.vibrate(300)
+            //         if(response.message === 'Email already exists'){
+            //             setEmailErr('Email Already Exist')
+            //         }else if(response.message === 'Phone already exists'){
+            //             setPhoneErr('Phone Number Already Exist')
+            //         }
+            //     }
+            // })
+            // .catch((err) => {
+            //     set_server_err(!true)
+
+            //     console.log(err)
+            //     setBtn("Signup")
+            //     seller_overlay_setup(false, '')
+            //     e.target.disabled = false;
+            // })
+        } else {
+            set_server_err(!true)
+
+            Vibration.vibrate(300)
+            
         }
+        
     }
-
+    
+        
     async function validateInput() {
 
         let data = [  
             {value: email, name: 'Email'},
-            {value: pwd, name: 'Password'}
+            {value: pwd, name: 'Password'},
         ];
 
         let result =  data.map(async(item) => {
             let test = {email: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/}
 
-            if(item.name.toLowerCase() === 'email'){
+           if(item.name.toLowerCase() === 'email'){
 
                 if(item.value.length < 1){
                     return ({bool: false, mssg: `${item.name} cannot be empty`, name: item.name})
@@ -99,164 +138,208 @@ const Login = ({navigation}) => {
             }
         })
 
-        // console.log('result1: ', result1)
-
         return [...result];
     } 
+    const navigation = useNavigation();
 
     return ( 
         <> 
+            {
+                server_err
+                ?
+                <View style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    backgroundColor: 'background-color: rgba(0, 0, 0, 0.5);',
+                    justifyContent: 'center', 
+                    alignItems: 'center',
+                    zIndex: 10
+                }}>
+                    <ActivityIndicator style={{opacity: 1}} size={'large'} color={'#000'}></ActivityIndicator>
+                </View>
+                :
+                ''
+            }
+            
+            <StatusBar backgroundColor={'#FFF'} barStyle={"dark-content"} />
+        
             <View style={{
-                height: 200,
-                width: '100%',
-                position: 'relative',
-                backgroundColor: '#FF4500',
-                color: '#000',
-                overflow: 'scroll'
+                backgroundColor: '#FFF',
+                height: screenHeight*.75,
+                width: screenWidth,
+                padding: 10,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
             }}>
-
-            </View>
-            <View style={{
-                height: 'auto',
-                width: '100%',
-                position: 'relative',
-                backgroundColor: '#FF4500',
-                color: '#000',
-                overflow: 'scroll'
-            }}>
-                <ScrollView contentContainerStyle={{ display: 'flex', alignItems: 'center', flexDirection: 'column',  justifyContent: 'space-between'}} style={{height: screenHeight, width: '100%', borderTopLeftRadius: 25, borderTopRightRadius: 25, padding: 20, backgroundColor: '#fff'}}>
-
-                    <TouchableOpacity onPress={e => signupHandler()} style={{display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20, justifyContent: 'space-between', marginBottom: 8, flexDirection: 'row', borderRadius: 15, height: 60, width: '100%', backgroundColor: '#fff', 
-                    borderWidth: .5,
-                    borderColor: '#004cff'
-                    // ...Platform.select({
-                    //     ios: {
-                    //         shadowColor: '#000',
-                    //         shadowOffset: { width: 0, height: 2 },
-                    //         shadowOpacity: 0.25,
-                    //         shadowRadius: 3.84,
-                    //     },
-                    //     android: {
-                    //         elevation: 5,
-                    //     },
-                    //     }),
-                    }} >
-                        <View></View>
-                        <Text style={{fontFamily: 'serif', fontWeight: 'bold', borderRadius: 15, color: '#004cff', textAlign: 'center', fontSize: 15}}>Facebook</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity onPress={e => signupHandler()} style={{display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20, justifyContent: 'space-between', marginBottom: 25, flexDirection: 'row', borderRadius: 15, height: 60, width: '100%', backgroundColor: '#fff', 
-                    borderWidth: .5,
-                    borderColor: '#FF4500'
-                    // ...Platform.select({
-                    //     ios: {
-                    //         shadowColor: '#000',
-                    //         shadowOffset: { width: 0, height: 2 },
-                    //         shadowOpacity: 0.25,
-                    //         shadowRadius: 3.84,
-                    //     },
-                    //     android: {
-                    //         elevation: 5,
-                    //     },
-                    //     }),
-                    }} >
-                        <View></View>
-                        <Text style={{fontFamily: 'serif', fontWeight: 'bold', borderRadius: 15, color: '#FF4500', textAlign: 'center', fontSize: 15}}>Google</Text>
-                    </TouchableOpacity>
-
-
+               
+                <View style={{
+                    backgroundColor: '#FFF',
+                    height: 'auto',
+                    width: screenWidth,
+                    padding: 10,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between'
+                }}>
                     <View style={{
+                        height: 100,
+                        width: 100,
+                        display: 'flex',
+                        alignItems: 'center',
+                        backgroundColor: '#FFF',
+                        justifyContent: 'center',
+                        padding: 15,
+                            borderBottomWidth: 4,
+                        borderColor: '#FFF', borderRadius: 100, marginBottom: 6
+                    }}>
+                        <Image height={100} width={100} source={{ uri: 'https://res.cloudinary.com/daqbhghwq/image/upload/v1746402998/Untitled_design-removebg-preview_peqlme.png' }} />
+                    </View>
+                    <Text style={{color: '#FF4500', fontWeight: '500',fontSize: 20, marginBottom: 6}}>Login Form</Text>
+                    
+                    
+                    <View style={{
+                        backgroundColor: '#FFF',
                         height: 'auto',
                         width: '100%',
-                        position: 'relative',
-                        backgroundColor: '#fff',
-                        color: '#000',
-                        overflow: 'scroll',
-                        marginBottom: 20
+                        marginTop: 18,
+                    
+                        borderRadius: 2.5,
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        justifyContent: 'center',
+                        flexDirection: 'column'
                     }}>
-                        
-
-                        <View style={{height: 'auto', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column'}}>
-                          
-                            <View style={{ height: 80, display: 'flex', color: '#000', width: '100%', flexDirection: 'column', marginBottom: 10}}>
-                                <Text style={{width: '100%', color: '#000'}}>Email</Text>
-                                <TextInput style={{height: 50, padding: 10, fontFamily: 'serif', borderRadius: 15, marginBottom: 2, width: '100%',  backgroundColor: '#efefef'}} onChangeText={e => setEmail(e)} name="email"  placeholder="Email"  />
-                                <Text style={{color: '#000', marginBottom: 15, display: emailErr.length > 0 ? 'flex' : 'none', fontSize: 10, paddingLeft: 5, color: 'red'}}>{emailErr}</Text>
+                        <Text style={{
+                            width: '100%',
+                            textAlign: 'left',
+                            marginLeft: 3
+                        }}>Email</Text>
+                        <TextInput keyboardType='alphabet' style={{
+                            backgroundColor: '#FFF',
+                            height: 50,
+                            width: '100%',
+                            borderRadius: 2.5,
+                    
+                            borderWidth: 1,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }} onChangeText={txt => setEmail(txt)} />
+                        <Text style={{color: '#000', marginBottom: 5, display: emailErr.length > 0 ? 'flex' : 'none', fontSize: 10, paddingLeft: 5, color: 'red'}}>{emailErr}</Text>
+                    </View>
+                    
+                    <View style={{
+                        backgroundColor: '#FFF',
+                        height: 'auto',
+                        width: '100%',
+                        display: 'flex',
+                        marginTop: 18,
+                    
+                        alignItems: 'flex-start',
+                        justifyContent: 'space-between',
+                        flexDirection: 'column'
+                    }}>
+                        <View style={{
+                            backgroundColor: '#FFF',
+                            height: 'auto',
+                            width: '100%',
+                            display: 'flex',
+                            marginTop: 18,
+                    
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            flexDirection: 'row'
+                        }}>
+                            <View style={{
+                                backgroundColor: '#FFF',
+                                height: 'auto',
+                                width: '82%',
+                                borderRadius: 2.5,
+                                display: 'flex',
+                                alignItems: 'flex-start',
+                                justifyContent: 'center',
+                                flexDirection: 'column'
+                            }}>
+                                <Text style={{
+                                    width: '100%',
+                                    textAlign: 'left',
+                                    marginLeft: 3
+                                }}>Password</Text>
+                    
+                                <TextInput keyboardType='alphabet' style={{
+                                    backgroundColor: '#FFF',
+                                    height: 50,
+                                    width: '100%',
+                                    borderWidth: 1,
+                                    borderRadius: 2.5,
+                    
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }} secureTextEntry={isPwdVisible} onChangeText={txt => setPwd(txt)}  />
+                    
                             </View>
-                            
-                            <View style={{ height: 'auto', display: 'flex', color: '#000', width: '100%', flexDirection: 'column', marginBottom: 18}}>
-                                <Text style={{width: '100%', color: '#000'}}>Password</Text>
-                                <TextInput style={{height: 50, padding: 10, fontFamily: 'serif', borderRadius: 15, marginBottom: 2, width: '100%',  backgroundColor: '#efefef'}} onChangeText={e => setPwd(e)} name="Password"  placeholder="Password"  />
-                                <Text style={{color: '#000', marginBottom: 2, display: pwdErr.length > 0 ? 'flex' : 'none', fontSize: 10, paddingLeft: 5, color: 'red'}}>{pwdErr}</Text>
-                            </View> 
-                            
-                            
+                            <TouchableOpacity style={{
+                                backgroundColor: '#FF4500',
+                                height: 'auto',
+                                height: 50,
+                                width: '15%',
+                                marginTop: 18,
+                                // borderWidth: 1,
+                                borderRadius: 2.5,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                flexDirection: 'column'
+                            }} onPress={e=> setIsPwdVisible(!isPwdVisible)}>
+                                {/* <SeeSvg height={30} width={30} /> */}
+                            </TouchableOpacity>
                         </View>
+                        <Text style={{color: '#000', marginBottom: 5, display: pwdErr.length > 0 ? 'flex' : 'none', fontSize: 10, paddingLeft: 5, color: 'red'}}>{pwdErr}</Text>
+                    
                     </View>
+                </View>
+                <TouchableOpacity onPress={e => navigation.navigate('user-signup')}  style={{height: 50, width: 'auto', marginTop: 10, marginBottom: 5, display: 'flex', alignItems: 'center', backgroundColor: '#FFF', justifyContent: 'center', flexDirection: 'row'}}>
+                    <Text style={{height: 'auto', width: 'auto', fontSize: 13, backgroundColor: '#fff', fontFamily: 'roboto', color: '#FF4500'}}>Already Have An Account?</Text>
+                    <Text style={{height: 'auto', width: 'auto', fontSize: 13, backgroundColor: '#fff', fontFamily: 'roboto', fontWeight: 'bold', color: '#FF4500'}}> Signup Here</Text>
+                </TouchableOpacity>
+            </View>
 
-                    <View style={{
-                        height: 'auto',
-                        width: '100%',
-                        position: 'relative',
-                        backgroundColor: '#fff',
-                        color: '#000',
-                        overflow: 'scroll'
-                    }}>
-                        <TouchableOpacity activeOpacity={.6} onPress={e => signupHandler()} style={{display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20, marginBottom: 3, flexDirection: 'row', borderRadius: 15, height: 60, width: '100%', backgroundColor: '#FF4500'}} >
-                            <Text style={{fontFamily: 'serif', fontWeight: 'bold', borderRadius: 15, color: '#fff', textAlign: 'center', fontSize: 15}}>LogIn</Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity onPress={e => navigation.navigate('user-signup')}  style={{height: 20, width: 'auto', marginTop: 20, marginBottom: 5, display: 'flex', alignItems: 'center', backgroundColor: '#fff', justifyContent: 'center', flexDirection: 'column'}}>
-                                
-                            <Text style={{height: 'auto', width: 'auto', fontSize: 10, backgroundColor: '#fff', fontFamily: 'serif', color: '#FF4500'}}>Don't Have An Account Signup Here</Text>
-
-                        
-                                
-                        </TouchableOpacity>
-
-                        <View style={{height: 20, width: 'auto', marginTop: 5, marginBottom: 15, display: 'flex', alignItems: 'center', backgroundColor: '#fff', justifyContent: 'center', flexDirection: 'column'}}>
-                                
-                        
-
-                            <Text style={{height: 'auto', width: 'auto', fontSize: 8, backgroundColor: '#fff', fontFamily: 'serif', color: '#FF4500'}}>Powered By AChiFa</Text>
-                                
-                        </View>
-                    </View>
-                </ScrollView>
+            <View style={{
+                backgroundColor: '#FFF',
+                height: screenHeight*.15,
+                width: screenWidth,
+                position: 'absolute', 
+                bottom: 0,
+                padding: 10,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',flex: 1
+            }}>
+                <TouchableOpacity style={{
+                    backgroundColor: '#FF4500',
+                    height: 'auto',
+                    height: 50,
+                    width: '100%',
+                    marginTop: 28,
+                    // borderWidth: 1,
+                    borderRadius: 4,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexDirection: 'column'
+                }} onPress={e=> signupHandler()}>
+                    <Text style={{color: '#fff'}}>Login</Text>
+                </TouchableOpacity>
+                
             </View>
         </>
-     );
+    )
 }
- 
-export default Login;
 
-const styles = StyleSheet.create({
- 
-    icon: {
-      marginRight: 5,
-      
-    },
-    label: {
-      position: 'absolute',
-      backgroundColor: 'white',
-      left: 22,
-      top: 8,
-      zIndex: 999,
-      paddingHorizontal: 8,
-      fontSize: 14,
-    },
-    placeholderStyle: {
-      fontSize: 16,
-    },
-    selectedTextStyle: {
-      fontSize: 16,
-    },
-    iconStyle: {
-      width: 20,
-      height: 20,
-    },
-    inputSearchStyle: {
-      height: 40,
-      fontSize: 16,
-    },
-  });
+
+export default Login;

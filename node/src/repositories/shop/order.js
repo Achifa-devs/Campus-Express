@@ -7,7 +7,7 @@ import { errorHandler } from "../../utils/erroHandler.js";
 // Find order by ID
 export async function findOrderById({ product_id, buyer_id }) {
     const result = await pool.query(
-    `SELECT * FROM campus_express_buyer_orders WHERE product_id = $1 AND buyer_id = $2`,
+    `SELECT * FROM orders WHERE product_id = $1 AND buyer_id = $2`,
     [product_id, buyer_id]
     );
   return result.rows;
@@ -16,7 +16,7 @@ export async function findOrderById({ product_id, buyer_id }) {
 // Find orders
 export async function findOrders({ buyer_id }) {
   const result = await pool.query(
-    `SELECT * FROM campus_express_buyer_orders WHERE buyer_id = $1`,
+    `SELECT * FROM orders WHERE buyer_id = $1`,
     [buyer_id]
   );
   return result.rows;
@@ -25,7 +25,7 @@ export async function findOrders({ buyer_id }) {
 // Create order
 export async function createOrder({ buyer,product_id,stock,price,locale }) {
   const result = await pool.query(
-    `INSERT INTO campus_express_buyer_orders(
+    `INSERT INTO orders(
         id, order_id, product_id, status, date, stock, buyer_id, price, pick_up_channels, havePaid
     ) VALUES (
         DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9
@@ -40,7 +40,7 @@ export async function createOrder({ buyer,product_id,stock,price,locale }) {
 // Confirm order
 export async function confirmOrder({ order_id,buyer_id,product_id }) {
   const result = await pool.query(
-    `UPDATE campus_express_buyer_orders set status='{"state": "completed"}' WHERE order_id=$1`,
+    `UPDATE orders set status='{"state": "completed"}' WHERE order_id=$1`,
     [order_id]
   );
   return result.rows;
@@ -49,7 +49,7 @@ export async function confirmOrder({ order_id,buyer_id,product_id }) {
 // deleteOrder
 export async function deleteOrder({ buyer_id, product_id }) {
   const result = await pool.query(
-    `DELETE FROM campus_express_buyer_orders WHERE buyer_id=$1 AND product_id=$2`,
+    `DELETE FROM orders WHERE buyer_id=$1 AND product_id=$2`,
     [buyer_id, product_id]
   );
   let response = await errorHandler(result?.rowCount);
@@ -59,7 +59,7 @@ export async function deleteOrder({ buyer_id, product_id }) {
 
 export async function deleteOrderById({ order_id }) {
   const result = await pool.query(
-    `DELETE FROM campus_express_buyer_orders WHERE order_id=$1`,
+    `DELETE FROM orders WHERE order_id=$1`,
     [order_id]
   );
   let response = await errorHandler(result?.rowCount);
@@ -69,7 +69,7 @@ export async function deleteOrderById({ order_id }) {
 // Create order with order_id
 export async function createOrderWithId({ buyer_id, product_id, stock, price, locale, order_id }) {
   const result = await pool.query(
-    `INSERT INTO campus_express_buyer_orders(
+    `INSERT INTO orders(
         id, order_id, product_id, status, date, stock, buyer_id, price, pick_up_channels, havePaid
     ) VALUES (
         DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9
@@ -84,7 +84,7 @@ export async function createOrderWithId({ buyer_id, product_id, stock, price, lo
 // cancel order
 export async function cancelOrder({ order_id }) {
   const result = await pool.query(
-    `UPDATE campus_express_buyer_orders set status='{"state": "cancelled"}' WHERE order_id=$1 RETURN havepaid`,
+    `UPDATE orders set status='{"state": "cancelled"}' WHERE order_id=$1 RETURN havepaid`,
     [order_id]
   );
   return result.rows;

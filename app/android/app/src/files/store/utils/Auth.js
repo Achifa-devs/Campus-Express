@@ -10,6 +10,7 @@ import {
     TouchableOpacity,
     View 
 } from 'react-native';
+import Ionicons  from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, FontAwesome, etc.
 
 import { 
     createBottomTabNavigator 
@@ -18,70 +19,121 @@ import {
     useDispatch, 
     useSelector 
 } from 'react-redux';
-import StackNavigator from './Nav';
-import Message from '../store/screens/Message';
-import Order from '../store/screens/Order';
-import Profile from '../store/screens/Profile';
-import Create from '../store/screens/Create';
-import { NavigationContainer, useNavigationState } from '@react-navigation/native';
-import Home from '../store/screens/Home';
+
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import ChatScreen from '../store/screens/Chat';
-import { useRoute } from '@react-navigation/native';
-import OrderRoom from '../store/screens/OrderRoom';
-import Signup from '../Auth/Signup';
-import Login from '../Auth/Login';
+import Signup from '../auth/Signup';
+import Login from '../auth/Login';
+import GetStarted from '../auth/GetStarted';
+import { useNavigation } from '@react-navigation/native';
+import { getDeviceId } from './IdGen';
 const Tab = createBottomTabNavigator();
 
 
 const AuthStack = createNativeStackNavigator();
-export default function AuthStackScreen() {
+export default function AuthStackScreen({updateActiveJsx}) {
+    const navigation = useNavigation();
+    
     return (
         <AuthStack.Navigator>
+            <AuthStack.Screen options={{
+                header: ({navigation}) =>
+                (
+                    <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', alignItems: 'center', padding: '10px'}}>
+                        
+                        <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'center'}}>
+                            <Text>&nbsp;</Text>
+                            <Text>&nbsp;</Text>
+                            <Text>&nbsp;</Text>
+                            <Text style={{color: '#FF4500', fontSize: 20, fontWeight: 'bold'}}>Campus Sphere</Text>
+                        </View>
+
+                        {/* <TouchableOpacity onPress={e=> {
+                            navigation.navigate('user-login')
+                        }} style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'center'}}>
+                            <Text>&nbsp;</Text>
+                            <Text>&nbsp;</Text>
+                            <Text style={{ color: '#FF4500', fontSize: 16, fontWeight: 'bold' }}>Login</Text>
+                            <Text>&nbsp;</Text>
+                            <Text>&nbsp;</Text>
+
+                            <Ionicons name={'log-out'} size={24} color={'#FF4500'} />
+                            <Text>&nbsp;</Text>
+                            <Text>&nbsp;</Text>
+                            
+                        </TouchableOpacity> */}
+                    </View>
+                ),
+            }} 
+                
+                name="user-starter" component={GetStarted} />
+            
             <AuthStack.Screen  options={{
                 header: ({navigation}) =>
                 (
-                    <View style={{ height: 55, display: 'none', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#32CD32', alignItems: 'center', padding: '10px'}}>
+                    <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', alignItems: 'center', padding: '10px'}}>
                         
-                        <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                        <View style={{backgroundColor: '#fff', height: '100%', width: 40, borderRadius: 10}}></View>
-                        <Text>&nbsp;</Text>
-                        <Text>Akpulu.F</Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity onPress={e => navigation.navigate('user-notification')}>
-                        <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                            <View style={{backgroundColor: '#fff', height: '100%', width: 40, borderRadius: 10}}>
-
-                            </View>
+                        <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'center'}}>
+                            <Text>&nbsp;</Text>
+                            <Text>&nbsp;</Text>
+                            <Text>&nbsp;</Text>
+                            {/* <Image height={45} width={45} source={{ uri: 'https://res.cloudinary.com/daqbhghwq/image/upload/v1746402998/Untitled_design-removebg-preview_peqlme.png' }} /> */}
+                            <Text style={{color: '#FF4500', fontSize: 16, fontWeight: 'bold'}}>Campus Sphere</Text>
                         </View>
+
+                        <TouchableOpacity onPress={async(e) => {
+                            let user = await getDeviceId();
+                            updateActiveJsx({
+                                user
+                            })
+                        }} style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'center'}}>
+                            <Text>&nbsp;</Text>
+                            <Text>&nbsp;</Text>
+                            <Text style={{ color: '#FF4500', fontSize: 16, fontWeight: 'bold' }}>Skip</Text>
+                            <Text>&nbsp;</Text>
+                            <Text>&nbsp;</Text>
+
+                            {/* <Ionicons name={'log-out'} size={24} color={'#FF4500'} /> */}
+                            <Text>&nbsp;</Text>
+                            <Text>&nbsp;</Text>
+                            
                         </TouchableOpacity>
                     </View>
                 ),
-            }}  name="user-signup" component={Signup} />
+            }}   name="user-signup" component={Signup} />
 
             <AuthStack.Screen  options={{
                 header: ({navigation}) =>
                 (
-                    <View style={{ height: 55, display: 'none', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#32CD32', alignItems: 'center', padding: '10px'}}>
+                    <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', alignItems: 'center', padding: '10px'}}>
                         
-                        <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                        <View style={{backgroundColor: '#fff', height: '100%', width: 40, borderRadius: 10}}></View>
-                        <Text>&nbsp;</Text>
-                        <Text>Akpulu.F</Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity onPress={e => navigation.navigate('user-notification')}>
-                        <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                            <View style={{backgroundColor: '#fff', height: '100%', width: 40, borderRadius: 10}}>
-
-                            </View>
+                        <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'center'}}>
+                            <Text>&nbsp;</Text>
+                            <Text>&nbsp;</Text>
+                            <Text>&nbsp;</Text>
+                            {/* <Image height={45} width={45} source={{ uri: 'https://res.cloudinary.com/daqbhghwq/image/upload/v1746402998/Untitled_design-removebg-preview_peqlme.png' }} /> */}
+                            <Text style={{color: '#FF4500', fontSize: 16, fontWeight: 'bold'}}>Campus Sphere</Text>
                         </View>
+
+                        <TouchableOpacity onPress={async(e)=> {
+                            let user = await getDeviceId();
+                            updateActiveJsx({
+                                user
+                            })
+                        }} style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'center'}}>
+                            <Text>&nbsp;</Text>
+                            <Text>&nbsp;</Text>
+                            <Text style={{ color: '#FF4500', fontSize: 16, fontWeight: 'bold' }}>Skip</Text>
+                            <Text>&nbsp;</Text>
+                            <Text>&nbsp;</Text>
+
+                            {/* <Ionicons name={'log-out'} size={24} color={'#FF4500'} /> */}
+                            <Text>&nbsp;</Text>
+                            <Text>&nbsp;</Text>
+                            
                         </TouchableOpacity>
                     </View>
                 ),
             }}  name="user-login" component={Login} />
-        {/* <AuthStack.Screen name="user-chat-room" component={ChatScreen} /> */}
         </AuthStack.Navigator>
     );
 }

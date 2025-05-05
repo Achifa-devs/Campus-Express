@@ -7,7 +7,7 @@ import { errorHandler } from "../../utils/erroHandler.js";
 // Find product by ID
 export async function findProductById({ product_id, seller_id }) {
     const result = await pool.query(
-    `SELECT * FROM seller_shop WHERE product_id = $1 AND seller_id = '${seller_id}'`,
+    `SELECT * FROM products WHERE product_id = $1 AND seller_id = '${seller_id}'`,
     [product_id, seller_id]
     );
   return result.rows;
@@ -17,7 +17,7 @@ export async function findProductById({ product_id, seller_id }) {
 export async function findProducts({ seller_id }) {
 
   const result = await pool.query(
-    `SELECT * FROM seller_shop WHERE seller_id = $1 `
+    `SELECT * FROM products WHERE seller_id = $1 `
     [seller_id]
   );
   return result.rows;
@@ -28,7 +28,7 @@ export async function findProducts({ seller_id }) {
 // Find product thumnail by ID
 export async function findProductsThumbnailById({ product_id }) {
   const result = await pool.query(
-    `SELECT thumbnail_id FROM seller_shop WHERE product_id = $1`,
+    `SELECT thumbnail_id FROM products WHERE product_id = $1`,
     [product_id]
   );
   return result.rows;
@@ -59,7 +59,7 @@ export async function createProduct({ constantData, dynamicData, shipping_data }
     let date = new Date();
     
     const result = await pool.query(
-        `INSERT INTO seller_shop(
+        `INSERT INTO products(
             id,
             product_id,
             seller_id,
@@ -121,7 +121,7 @@ export async function createProduct({ constantData, dynamicData, shipping_data }
 // DELETE product view by ID
 export async function deleteProduct({ product_id }) {
   const result = await pool.query(
-    `DELETE FROM seller_shop WHERE product_id = $1`,
+    `DELETE FROM products WHERE product_id = $1`,
     [product_id]
   );
   let response = await errorHandler(result?.rowCount);
@@ -151,7 +151,7 @@ export async function updateProduct({ constantData, dynamicData, shipping_data }
     let date = new Date();
     
     const result = await pool.query(
-        `UPDATE seller_shop set 
+        `UPDATE products set 
             status=$1,
             title=$2,
             description=$3,

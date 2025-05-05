@@ -7,7 +7,7 @@ import { errorHandler } from "../../utils/erroHandler.js";
 // Find shop owner by ID
 export async function findShopOwnerById({ seller_id }) {
   const result = await pool.query(
-    `SELECT * FROM campus_sellers WHERE seller_id = $1`,
+    `SELECT * FROM users WHERE seller_id = $1`,
     [seller_id]
   );
   return result.rows;
@@ -26,7 +26,7 @@ export async function findShopReviewsById({ seller_id }) {
 // Find shop details by ID
 export async function findShopDetailsById({ seller_id }) {
   const result = await pool.query(
-    `SELECT * FROM campus_shops WHERE seller_id = $1`,
+    `SELECT * FROM shops WHERE seller_id = $1`,
     [seller_id]
   );
   return result.rows;
@@ -35,7 +35,7 @@ export async function findShopDetailsById({ seller_id }) {
 // Find shop content by ID
 export async function findShopContentById({ seller_id }) {
   const result = await pool.query(
-    `SELECT * FROM seller_shop WHERE seller_id = $1`,
+    `SELECT * FROM products WHERE seller_id = $1`,
     [seller_id]
   );
   return result.rows;
@@ -90,7 +90,7 @@ export async function createShopReview({ shop_id, seller_id, order_id, buyer_id,
 // // UPdate shop view by ID
 // export async function UpdateShopView({ product_id }) {
 //   const result = await pool.query(
-//     `UPDATE seller_shop set views = views+1 WHERE product_id = $1'`,
+//     `UPDATE products set views = views+1 WHERE product_id = $1'`,
 //     [product_id]
 //   );
 //   let response = await errorHandler(result?.rowCount); 

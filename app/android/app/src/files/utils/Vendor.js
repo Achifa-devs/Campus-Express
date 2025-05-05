@@ -4,8 +4,8 @@ import { Provider, useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import Login from "../vendor/auth/Login.js";
 import Signup from "../vendor/auth/Signup.js";
-import { Alert, StatusBar, Text, View } from "react-native";
-import Aside from "../vendor/utils/Aside.js";
+import { Alert, Text, View } from "react-native";
+// import Aside from "../store/utils/Aside.js";
 import StudioTab from "../vendor/utils/StudioTab.js";
 import store from "../../../../../redux/store.js";
 import { set_cookie } from "../../../../../redux/vendor/cookie.js";
@@ -21,7 +21,7 @@ export default function Vendor() {
   } = useSelector(s => s.cookie);
 
   useEffect(() => {
-    console.log('statusBarHeight: ', StatusBar);
+   
     CookieManager.get('https://campussphere.net')
     .then((result) => {
       if(result.jwt_token.value !== null && result.jwt_token.value !== '') {
@@ -31,7 +31,7 @@ export default function Vendor() {
       }
     })
     .catch(err => console.log(err))
-    // Alert.alert(StatusBar.currentHeight)
+    
   }, [])
    
   
@@ -44,7 +44,7 @@ export default function Vendor() {
         cookie !== true
         ?
           <>
-            <StatusBar  backgroundColor="#FF4500"  barStyle="dark-content" /> 
+           
             
             <Stack.Navigator>
               <Stack.Screen name={'login'} options={{
@@ -79,7 +79,7 @@ export default function Vendor() {
         :
           <>
             {/* <WelcomeScreen /> */}
-            <Aside />
+            {/* <Aside /> */}
             <StudioTab />
           </>
         }

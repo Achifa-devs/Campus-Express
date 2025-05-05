@@ -1,9 +1,9 @@
 
 import * as React from 'react';
 import { 
+    Alert,
     Dimensions,
     Image,
-    StatusBar,
     StyleSheet,
     Switch,
     Text,
@@ -11,8 +11,7 @@ import {
     TouchableOpacity,
     View 
 } from 'react-native';
-import BellSvg from '../../media/assets/notification-svgrepo-com (1).svg'
-import BackSvg from '../../media/assets/back-svgrepo-com (1).svg'
+
 import {  
     createBottomTabNavigator 
 } from "@react-navigation/bottom-tabs";
@@ -20,37 +19,18 @@ import {
     useDispatch, 
     useSelector 
 } from 'react-redux';
-import StackNavigator from './Nav';
-import Message from '../screens/Message';
-import Order from '../screens/Order';
-import Profile from '../screens/Profile';
-import Create from '../screens/Create';
+// import Create from '../screens/Create';
 import { NavigationContainer, useNavigationState } from '@react-navigation/native';
-import Home from '../screens/Home';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import ChatScreen from '../screens/Chat';
-import { useRoute } from '@react-navigation/native';
-import OrderRoom from '../screens/OrderRoom';
-import Preference from '../screens/Preference';
-import Invite from '../screens/Invite';
-import Account from '../screens/Account';
-import Notification from '../screens/Notification';
-import Category from '../screens/Category';
-import Search from '../screens/Search';
-import Product from '../screens/Product';
-import NewOrder from '../screens/NewOrder';
+import Ionicons  from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, FontAwesome, etc.
 
 
-import HomeIcons from '../../media/icons/HomeIcons';
-import MessageIcons from '../../media/icons/MessageIcons';
-import CartIcons from '../../media/icons/CartIcons';
-import OrderIcons from '../../media/icons/OrderIcons';
-import UserIcons from '../../media/icons/UserIcons';
-
-import SearchBar from '../components/Home/Search'
-import Shops from '../screens/Shops';
-import Type from '../screens/Type';
-import TypeProducts from '../screens/Products';
+import { HomeStackScreen } from '../../utils/Stacks/Home';
+import { MessageStackScreen } from '../../utils/Stacks/Message';
+import { OrderStackScreen } from '../../utils/Stacks/Order';
+import { ProfileStackScreen } from '../../utils/Stacks/Profile';
+import { SellStackScreen } from '../../utils/Stacks/Sell';
+import { InventoryStackScreen } from '../../utils/Stacks/Inventory';
+import { SalesStackScreen } from '../../utils/Stacks/Sales';
 
 const Tab = createBottomTabNavigator();
 
@@ -59,85 +39,58 @@ export default function StoreTab({navigation}) {
     const navigationState = useNavigationState(state => state);
 
     React.useEffect(() => {
-        console.log('Current Navigation State:', navigationState);
+        // console.log('Current Navigation State:', navigationState);
     }, [navigationState]);
+
+    let [tabBarStyle, setTabBarStyle] = React.useState('flex')
+
+    function updateTabBarStyle(data) {
+        setTabBarStyle(data)
+    }
 
   return (
     <>
         <Tab.Navigator 
          
-            screenOptions={({ route }) => {
+            screenOptions={({ route }) => ({
+                
+                tabBarIcon: ({ focused, color, size }) => {
+                    let iconName;
 
-            tabBarIcon: ({ focused, color, size }) => {
-                let IconComponent;
+                    if (route.name === 'Home') {
+                        iconName = focused ? 'home' : 'home-outline';
+                        HomeRoute(navigationState, updateTabBarStyle)
+                    } else if (route.name === 'Messages') {
+                        iconName = focused ? 'chatbox' : 'chatbox-outline';
+                    } else if (route.name === 'Inventory') {
+                        iconName = focused ? 'cube' : 'cube-outline';
+                    } else if (route.name === 'Orders') {
+                        iconName = focused ? 'receipt' : 'receipt-outline';
+                    } else if (route.name === 'Sales') {
+                        iconName = focused ? 'pricetags-outline' : 'pricetags-outline';
+                    } else if (route.name === 'Sell') {
+                        iconName = focused ? 'storefront' : 'storefront-outline';
+                    } else if (route.name === 'Profile') {
+                        iconName = focused ? 'person-circle' : 'person-circle-outline';
+                        ProfileRoute(navigationState, updateTabBarStyle)
+                    }
+                    return <Ionicons  name={iconName} size={size} color={color} />;
+                    // console.log('Icon name: ', iconName);
 
-                if (route.name === 'Home') {
-                    IconComponent = HomeIcons;
-                } else if (route.name === 'Message') {
-                    IconComponent = MessageIcons;
-                } else if (route.name === 'Cart') {
-                    IconComponent = CartIcons;
-                } else if (route.name === 'Order') {
-                    IconComponent = OrderIcons;
-                } else if (route.name === 'User') {
-                    IconComponent = UserIcons;
-                }
-
-                // Return the custom icon component
-                return <IconComponent color={color} size={size} />;
-            };
-           
-            
-
-            const tabBarStyle = {
-                display: 'flex',
-            };
-            if (route.name === 'Message') {
-                const currentRouteName = navigationState?.routes.find(r => r.name === 'Message')?.state?.routes[navigationState.routes.find(r => r.name === 'Message')?.state.index].name;
-                // console.log('Current MessageStack Route:', currentRouteName);
-
-                if (currentRouteName === 'user-chat-room') {
-                    tabBarStyle.display = 'none';
-                }
-            }else if(route.name === 'Order') {
-                const currentRouteName = navigationState?.routes.find(r => r.name === 'Order')?.state?.routes[navigationState.routes.find(r => r.name === 'tab-order')?.state.index].name;
-                // console.log('Current MessageStack Route:', currentRouteName);
-
-                if (currentRouteName === 'order-room') {
-                    tabBarStyle.display = 'none';
-                }
-            } else if(route.name === 'Home') {
-                const currentRouteName = navigationState?.routes.find(r => r.name === 'Home')?.state?.routes[navigationState.routes.find(r => r.name === 'Home')?.state.index].name;
-                // console.log('Current MessageStack Route:', currentRouteName);
-
-                if (currentRouteName === 'user-search') {
-                    tabBarStyle.display = 'none';
-                }else if(currentRouteName === 'user-shops') {
-                    tabBarStyle.display = 'none'; 
-                }else if(currentRouteName === 'user-notification') {
-                    tabBarStyle.display = 'none'; 
-                }else if(currentRouteName === 'user-category') {
-                    tabBarStyle.display = 'none'; 
-                }else if(currentRouteName === 'user-product') {
-                    tabBarStyle.display = 'none'; 
-                }else if(currentRouteName === 'user-new-order'){
-                    tabBarStyle.display = 'none'; 
-                }
-            }
-
-            
-            
-            return {
-                tabBarStyle,
+                
+                },
+                
+                tabBarActiveTintColor: '#FF4500',
+                tabBarInactiveTintColor: 'gray',
                 headerShown: false,
-            };
+                tabBarStyle: {
+                    display: tabBarStyle
+                },
+                
 
-        }}
+        })}>
         
-        tabBarOptions={{
-            activeTintColor: 'tomato',
-            inactiveTintColor: 'gray',
-        }}> 
+         
             <Tab.Screen 
                 
                 options={{
@@ -153,7 +106,11 @@ export default function StoreTab({navigation}) {
                 component={HomeStackScreen} /> 
 
             <Tab.Screen 
-                name="Favourite" 
+                name="Inventory" 
+                component={InventoryStackScreen} />
+
+            <Tab.Screen 
+                name="Messages" 
                 component={MessageStackScreen} />
 
             <Tab.Screen 
@@ -166,9 +123,10 @@ export default function StoreTab({navigation}) {
                         </View>
                     ),
                 }} 
-                name="Inbox" 
-                component={Create} />
-
+                name="Sell"  
+                component={SellStackScreen} />
+                
+            
             <Tab.Screen 
                 options={{
                     header: ({navigation}) => 
@@ -178,11 +136,23 @@ export default function StoreTab({navigation}) {
                             </View>
                         ),
                 }} 
-                name="Order" 
-                component={OrderStackScreen} />
+                name="Orders" 
+                  component={OrderStackScreen} />
+              
+            <Tab.Screen 
+                options={{
+                    header: ({navigation}) => 
+                        (
+                            <View style={{ height: 65, display: 'flex', flexDirection: 'row', width: '100%', backgroundColor: '#FF4500', alignItems: 'center', justifyContent: 'center'}}>
+                            
+                            </View>
+                        ),
+                }} 
+                name="Sales" 
+                component={SalesStackScreen} />
 
             <Tab.Screen 
-                
+                 
                 name="Profile" 
                 component={ProfileStackScreen} />
 
@@ -193,493 +163,8 @@ export default function StoreTab({navigation}) {
 
 
 
-const HomeStack = createNativeStackNavigator();
-function HomeStackScreen() {
-  return (
-    <HomeStack.Navigator>
 
-        <HomeStack.Screen  options={{
-                header: ({navigation}) =>
-                (
-                    <>
-                        <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', alignItems: 'center', padding: '10px'}}>
-                            
-                            <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                            <View style={{backgroundColor: '#FF4500', height: '100%', width: 40, borderRadius: 10}}></View>
-                            <Text>&nbsp;</Text>
-                            <Text>Akpulu.F</Text>
-                            </TouchableOpacity>
 
-                            <TouchableOpacity onPress={e => navigation.navigate('user-notification')}>
-                            <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                                <View style={{backgroundColor: '#fff', height: '100%', width: 40, borderRadius: 10, padding: 4}}> 
-                                    <Text style={{backgroundColor: 'hsl(14.086956521739133, 100%, 54.90196078431373%);', height: 'auto', display: 'flex', flexDirection: 'row',width: 'fit-content', alignItems: 'center' ,justifyContent: 'center', position: 'absolute', color: '#fff', left: -8, top: -2.5, borderRadius: 15, borderRadius: 10, fontSize: 10, padding: 3.5}}>20</Text>
-                                    <BellSvg width={'100%'} height={'100%'} />
-                                </View>
-                            </View>   
-                            </TouchableOpacity>
-                        </View>
-                        
-                        <SearchBar />
-                    </>
-                ),
-            // headerShown: false, 
-            }}  name="user-home" component={Home} />
-
-        
-        <HomeStack.Screen  options={{
-            header: ({navigation}) =>
-            (
-                <View style={{ height: 55, display: 'none', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px', margin: '0'}}>
-                <StatusBar backgroundColor="#FF4500" barStyle="light-content" /> 
-
-                </View>
-            ),
-            // headerShown: false, 
-            }}  name="user-search" component={Search} />
-        <HomeStack.Screen  options={{
-            header: ({navigation}) =>
-            (
-                <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px'}}>
-                <StatusBar backgroundColor="#FF4500" barStyle="light-content" /> 
-
-                </View>
-            ), 
-            // headerShown: false, 
-        }}  name="user-notification" component={Notification} /> 
-
-        <HomeStack.Screen  options={{
-            header: ({navigation}) =>
-            (
-                <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px'}}>
-
-                </View>
-            ), 
-            // headerShown: false,  
-        }} name="user-shops" component={Shops} />
-          
-        <HomeStack.Screen  options={{
-            header: ({navigation}) =>
-            (
-                <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px'}}>
-
-                </View>
-            ), 
-            // headerShown: false,  
-        }}  name="user-category" component={Category} />
-
-        <HomeStack.Screen  options={{
-            header: ({navigation}) =>
-            (
-                <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px'}}>
-
-                </View>
-            ), 
-            // headerShown: false,  
-        }}  name="user-product" component={Product} />
-        
-         <HomeStack.Screen  options={{
-            header: ({navigation}) =>
-            (
-                <View style={{ height: 60, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FF4500', alignItems: 'center', padding: '10px'}}>  
-                    <StatusBar hidden />
-                    <View style={{
-                        height: '100%',
-                        //   width: '100%',
-                        paddingTop: 0,
-                        paddingBottom: 0,
-                        paddingLeft: 15,
-                        paddingRight: 15,
-                        backgroundColor: '#FF4500',
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        // marginBottom: 5
-                    }}>
-                        <TouchableOpacity style={{
-                            height: 55,
-                            borderRadius: 15,
-                            display: 'flex',
-                            flexDirection: 'row',
-                            justifyContent: 'flex-start',
-                            alignItems: 'center',
-                            width: '10%',
-                        }} onPress={e => navigation.navigate('user-home')}> 
-                            <BackSvg height={25} width={25} />
-                        </TouchableOpacity>
-                        <TextInput onChangeText={txt => {updateSearchChar(txt)}} style={{
-                            height: 45,
-                            borderRadius: 5,
-                            padding: 10,
-                            width: '90%',
-                            backgroundColor: '#efefef',
-                            float: 'right'
-                        }} placeholder='Search anything here' />
-                    </View>
-                </View>
-            ), 
-            // headerShown: false,  
-        }}  name="user-type-product" component={TypeProducts} />
-        
-        <HomeStack.Screen  options={{
-            header: ({navigation}) =>
-            (
-                <View style={{ height: 55, display: 'none', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px'}}>
-
-                </View>
-            ), 
-            // headerShown: false,  
-        }}  name="user-type" component={Type} />
-
-        <HomeStack.Screen  options={{
-            header: ({navigation}) =>
-            (
-                <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px'}}>
-
-                </View>
-            ), 
-            // headerShown: false,  
-        }}  name="user-new-order" component={NewOrder} />
-    </HomeStack.Navigator>
-  );
-}   
-
-
-
-const MessageStack = createNativeStackNavigator();
-function MessageStackScreen() {
-  return (
-    <MessageStack.Navigator>
-        <MessageStack.Screen  options={{
-            header: ({navigation}) =>
-            (
-                <View style={{ height: 65, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FF4500', alignItems: 'center', paddingLeft: 10, paddingRight: 10, marginBottom: 1.5}}>
-
-                    <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '40%', backgroundColor: '#FF4500', alignItems: 'center'}}>
-                        <Text style={{paddingLeft: 0, fontSize: 20, color: '#fff'}}>Messages</Text>
-                    </View>
-
-                    <View style={{ height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', backgroundColor: '#FFF', alignItems: 'center', padding: '10px'}}>
-                        
-                    </View>
-
-                </View>
-            ),
-        }}   name="user-message" component={Message} />
-
-        <MessageStack.Screen options={{
-         header: () =>
-          (
-            <View style={{ height: 70, display: 'flex', flexDirection: 'row', width: '100%', backgroundColor: 'green', alignItems: 'center', justifyContent: 'center'}}>
-            <StatusBar backgroundColor="#FF4500" barStyle="light-content" /> 
-
-              {
-              
-              <View style={{display: 'flex', flexDirection: 'row', zIndex: 1000, height: '100%', width: '100%', backgroundColor: '#FFF', alignItems: 'center', paddingTop: 25, justifyContent: 'center', position: 'relative'}}>
-                <View style={{
-                position: 'absolute',
-                left: 15,
-                fontSize: 20,
-                bottom: 8,
-                color: '#fff',
-                fontWeight: 'bold',
-                fontFamily: 'serif',
-
-                }}>
-                  <Text style={{fontSize: 21, height: 50, paddingTop: 10, backgroundColor: '#fff4e0', width: 50, color: '#FFF', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'row', textAlign: 'center', borderRadius: 50}}>
-                      {/* {seller_name.split(' ')[0].split('')[0]}.{seller_name.split(' ')[1].split('')[0]} */}
-                      A.C
-                  </Text>
-                </View>
-
-                <View style={{
-                position: 'absolute',
-                left: 85,
-                fontSize: 20,
-                bottom: 12,
-                color: '#fff',
-                fontWeight: 'bold',
-                fontFamily: 'serif',
-
-                }}>
-                <Text style={{
-                fontFamily: 'serif',
-                fontSize: 19,
-                color: '#fff',
-                fontWeight: 'bold',
-
-                }}>
-                    {/* {seller_name} */}
-                    Akpulu Chinedu
-                </Text>
-
-                <Text style={{
-                fontFamily: 'serif',
-                fontSize: 11,
-                color: '#fff',
-                fontWeight: 'bold',
-
-                }}>
-                active 
-                {/* {js_ago(new Date(seller_date))} */}
-                </Text>
-                </View> 
-
-                <View style={{
-                position: 'absolute',
-                right: 25,
-                fontSize: 20,
-                bottom: 12,
-                color: '#fff',
-                fontWeight: 'bold',
-                fontFamily: 'serif',
-
-                }}>
-
-                
-                
-                </View> 
-
-              </View>
-
-              
-              }
-            </View>
-          ),
-      }} name="user-chat-room" component={ChatScreen} />
-    </MessageStack.Navigator>
-  ); 
-}
-
-const OrderStack = createNativeStackNavigator();
-function OrderStackScreen() {
-  return (
-    <OrderStack.Navigator>
-
-        <OrderStack.Screen  options={{
-            header: ({navigation}) =>
-            (
-                <View style={{ height: 65, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FF4500', alignItems: 'center', paddingLeft: 10, paddingRight: 10}}>
-
-                    <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '40%', backgroundColor: '#FF4500', alignItems: 'center'}}>
-                        <Text style={{paddingLeft: 0, fontSize: 20, color: '#fff'}}>Orders</Text>
-                    </View>
-
-
-                </View>
-            ),
-        }}   name="user-order" component={Order} />
-
-        <OrderStack.Screen options={{
-         header: () =>
-          (
-            <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', alignItems: 'center', paddingLeft: 10, paddingRight: 10}}>
-
-                    <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '40%', backgroundColor: '#FFF', alignItems: 'center'}}>
-                        <Text style={{paddingLeft: 0, fontSize: 20, color: '#fff'}}>Order Details</Text>
-                    </View>
-
-                    <View style={{ height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', backgroundColor: '#FFF', alignItems: 'center', padding: '10px'}}>
-                        <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                            <View style={{backgroundColor: '#FF4500', height: '100%', width: 40, borderRadius: 10}}></View>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity onPress={e => navigation.navigate('user-notification')}>
-                            <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                                <View style={{backgroundColor: '#FF4500', height: '100%', width: 40, borderRadius: 10}}>
-
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
-
-                </View>
-          ),
-      }} name="order-room" component={OrderRoom} />
-
-    </OrderStack.Navigator>
-  ); 
-}
-
-const ProfileStack = createNativeStackNavigator();
-function ProfileStackScreen() {
-  return (
-    <ProfileStack.Navigator>
-
-        <ProfileStack.Screen  options={{
-            header: ({navigation}) =>
-            (
-                <View style={{ 
-                    fontWeight: 'bold',
-                    fontFamily: 'serif',
-                    display: 'flex',
-                    width: '100%',
-                    height: 130,
-                    padding: 10,
-                    margin: 0,
-                    // borderBottomLeftRadius: 15,
-                    // borderBottomRightRadius: 15,
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    flexDirection: 'row',
-                    color: '#000',
-                    backgroundColor: '#FF4500',
-                    position: 'relative'
-                }}>
-                    <View style={{ 
-                            fontWeight: 'bold',
-                            fontFamily: 'serif',
-                            display: 'flex',
-                            width: '50%',
-                            height: '100%',
-                            padding: 0,
-                            margin: 0,
-                            flexDirection: 'row',
-                            justifyContent: 'flex-start',
-                            alignItems: 'center',
-                            color: '#000',
-                            position: 'relative'
-                        }}>
-                            
-                    </View>
-                    <View>
-                        
-                    </View>
-
-
-                </View>
-            ),
-        }}   name="user-profile" component={Profile} />
-
-        <ProfileStack.Screen  options={{
-            header: ({navigation}) =>
-            (
-                <View style={{ 
-                    fontWeight: 'bold',
-                    fontFamily: 'serif',
-                    display: 'flex',
-                    width: '100%',
-                    height: 60,
-                    padding: 0,
-                    margin: 0,
-                    // borderBottomLeftRadius: 15,
-                    // borderBottomRightRadius: 15,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    color: '#000',
-                    backgroundColor: '#FFF',
-                    position: 'relative'
-                }}>
-
-                    
-
-                </View>
-            ),
-            
-        }}   name="user-preference" component={Preference} />
-
-        <ProfileStack.Screen  options={{
-            header: ({navigation}) =>
-            (
-                <View style={{ 
-                    fontWeight: 'bold',
-                    fontFamily: 'serif',
-                    display: 'flex',
-                    width: '100%',
-                    height: 60,
-                    padding: 0,
-                    margin: 0,
-                    // borderBottomLeftRadius: 15,
-                    // borderBottomRightRadius: 15,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    color: '#000',
-                    backgroundColor: '#FFF',
-                    position: 'relative'
-                }}>
-
-                    
-
-                </View>
-            ),
-            
-        }}   name="user-invite" component={Invite} />
-
-        <ProfileStack.Screen  options={{
-            header: ({navigation}) =>
-            (
-                <View style={{ 
-                    fontWeight: 'bold',
-                    fontFamily: 'serif',
-                    display: 'flex',
-                    width: '100%',
-                    height: 60,
-                    padding: 0,
-                    margin: 0,
-                    // borderBottomLeftRadius: 15,
-                    // borderBottomRightRadius: 15,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    color: '#000',
-                    backgroundColor: '#FFF',
-                    position: 'relative'
-                }}>
-
-                    
-
-                </View>
-            ),
-            
-        }}   name="user-account" component={Account} />
-
-        {/* <ProfileStack.Screen  options={{
-            header: ({navigation}) =>
-            (
-                <View style={{ height: 55, display: 'none', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', alignItems: 'center', padding: '10px'}}>
-                    
-                    <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                    <View style={{backgroundColor: '#FF4500', height: '100%', width: 40, borderRadius: 10}}></View>
-                    <Text>&nbsp;</Text>
-                    <Text>Akpulu.F</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity onPress={e => navigation.navigate('user-notification')}>
-                    <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                        <View style={{backgroundColor: '#FF4500', height: '100%', width: 40, borderRadius: 10}}>
-
-                        </View>
-                    </View>
-                    </TouchableOpacity>
-                </View>
-            ),
-        }}  name="user-signup" component={Signup} />
-
-        <ProfileStack.Screen  options={{
-            header: ({navigation}) =>
-            (
-                <View style={{ height: 55, display: 'none', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', alignItems: 'center', padding: '10px'}}>
-                    
-                    <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                    <View style={{backgroundColor: '#FF4500', height: '100%', width: 40, borderRadius: 10}}></View>
-                    <Text>&nbsp;</Text>
-                    <Text>Akpulu.F</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity onPress={e => navigation.navigate('user-notification')}>
-                    <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                        <View style={{backgroundColor: '#FF4500', height: '100%', width: 40, borderRadius: 10}}>
-
-                        </View>
-                    </View>
-                    </TouchableOpacity>
-                </View>
-            ),
-        }}  name="user-login" component={Login} /> */}
-
-    </ProfileStack.Navigator>
-  ); 
-}
 
  
 
@@ -700,4 +185,92 @@ const styles = StyleSheet.create({
         padding: 10,
         backgroundColor: '#efefef'
     }
-  });
+});
+  
+
+
+
+
+function HomeRoute(navigationState, updateTabBarStyle) {
+    const currentRouteName = navigationState?.routes.find(r => r.name === 'Home')?.state?.routes[navigationState.routes.find(r => r.name === 'Home')?.state.index].name;
+    // console.log('Current MessageStack Route:', currentRouteName);
+
+    if (currentRouteName === 'user-home') {
+        updateTabBarStyle('flex');
+    }else if (currentRouteName === 'user-search') {
+        updateTabBarStyle('none');
+    }else if(currentRouteName === 'user-shops') {
+        updateTabBarStyle('none'); 
+    }else if(currentRouteName === 'user-notification') {
+        updateTabBarStyle('none'); 
+    }else if(currentRouteName === 'user-category') {
+        updateTabBarStyle('none'); 
+    }else if(currentRouteName === 'user-product') {
+        updateTabBarStyle('none'); 
+    }else if(currentRouteName === 'user-new-order'){
+        updateTabBarStyle('none'); 
+    }
+    else if(currentRouteName === 'user-shops'){
+        updateTabBarStyle('none'); 
+    }else if(currentRouteName === 'user-type-product'){
+        updateTabBarStyle('none'); 
+    }
+}
+
+
+function MessageRoute(navigationState) {
+    if (route.name === 'Message') {
+        const currentRouteName = navigationState?.routes.find(r => r.name === 'Message')?.state?.routes[navigationState.routes.find(r => r.name === 'Message')?.state.index].name;
+        // console.log('Current MessageStack Route:', currentRouteName);
+
+        if (currentRouteName === 'user-chat-room') {
+            tabBarStyle.display = 'none';
+        }
+    }
+}
+
+function ProfileRoute(navigationState, updateTabBarStyle) {
+    const currentRouteName = navigationState?.routes.find(r => r.name === 'Profile')?.state?.routes[navigationState.routes.find(r => r.name === 'Profile')?.state.index].name;
+    // console.log('Current MessageStack Route:', currentRouteName);
+
+    if (currentRouteName === 'user-profile') {
+        updateTabBarStyle('flex');
+    }else if (currentRouteName === 'user-history') {
+        updateTabBarStyle('none');
+    }else if(currentRouteName === 'user-favourite') {
+        updateTabBarStyle('none'); 
+    }else if(currentRouteName === 'user-data') {
+        updateTabBarStyle('none'); 
+    }else if(currentRouteName === 'user-preference') {
+        updateTabBarStyle('none'); 
+    }else if(currentRouteName === 'user-invite') {
+        updateTabBarStyle('none'); 
+    }else if(currentRouteName === 'user-account'){
+        updateTabBarStyle('none'); 
+    }else if(currentRouteName === 'user-logout'){
+        updateTabBarStyle('none'); 
+    }else if(currentRouteName === 'user-security'){
+        updateTabBarStyle('none'); 
+    }else if(currentRouteName === 'user-email-update'){
+        updateTabBarStyle('none'); 
+    }else if(currentRouteName === 'user-phone-update'){
+        updateTabBarStyle('none'); 
+    }else if(currentRouteName === 'user-pwd-update'){
+        updateTabBarStyle('none'); 
+    }else if(currentRouteName === 'user-notification'){
+        updateTabBarStyle('none'); 
+    }else if(currentRouteName === 'user-shop'){
+        updateTabBarStyle('none'); 
+    }else if(currentRouteName === 'user-reviews'){
+        updateTabBarStyle('none'); 
+    }else if(currentRouteName === 'user-report'){
+        updateTabBarStyle('none'); 
+    }else if(currentRouteName === 'user-terms'){
+        updateTabBarStyle('none'); 
+    }else if(currentRouteName === 'user-policy'){
+        updateTabBarStyle('none'); 
+    }else if(currentRouteName === 'user-blog'){
+        updateTabBarStyle('none'); 
+    }
+}
+

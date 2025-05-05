@@ -1,4 +1,4 @@
-package com.app
+package com.ucommerce.campussphere
 
 import android.app.Application
 import com.facebook.react.PackageList
@@ -10,6 +10,7 @@ import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.load
 import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.soloader.SoLoader
+import io.invertase.notifee.NotifeePackage;
 
 class MainApplication : Application(), ReactApplication {
 

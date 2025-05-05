@@ -2,87 +2,74 @@ import React from 'react';
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-export default function Card({ item }) {
-    let screenWidth = Dimensions.get('window').width;
-    let navigation = useNavigation();
+const size = 60; // Circle size
 
-    // Get the first non-img key (the category name)
+export default function Card({ item }) {
+    const navigation = useNavigation();
+
     const categoryName = Object.keys(item).find(key => key !== 'img');
-    const imgUrl = item.img; // Directly get the 'img' field
+    const imgUrl = item.img;
+
+    const isMoreCard = categoryName === 'More';
+
+    const handlePress = () => {
+        if (isMoreCard) {
+            navigation.navigate('all-categories'); // Update route if needed
+        } else {
+            navigation.navigate('user-type', {
+                types: Object.values(item)[0],
+                category: categoryName,
+            });
+        }
+    };
 
     return (
-        <>
-            <TouchableOpacity 
-                onPress={() => navigation.navigate('user-type', { types: Object.values(item)[0], category: categoryName  })}
-                style={[
-                    styles.card,
-                    { width: (screenWidth * 0.3) + 2 }
-                ]}
-            >
-                <View style={styles.cardTop}>
-                    <TouchableOpacity onPress={() => navigation.navigate('user-type', { types: Object.values(item)[0], category: categoryName })}>
-                        {imgUrl ? (
-                            <Image
-                                source={{ uri: imgUrl }}
-                                style={{ width: '100%', height: '100%', borderRadius: 5 }}
-                                resizeMode="cover"
-                            />
-                        ) : (
-                            <View style={{ width: '100%', height: '100%', backgroundColor: '#ccc', borderRadius: 5, justifyContent: 'center', alignItems: 'center' }}>
-                                <Text style={{ fontSize: 8, color: '#555' }}>No Image</Text>
-                            </View>
-                        )}
-                    </TouchableOpacity>
-                </View> 
-
-                <View style={styles.cardBtm}>
-                    <Text style={styles.cardText}>
-                        {categoryName}
-                    </Text>
-                </View>
-            </TouchableOpacity>
-        </>
+        <TouchableOpacity style={styles.cardContainer} onPress={handlePress}>
+            <View style={[styles.circle, isMoreCard && styles.moreCircle]}>
+                {imgUrl && !isMoreCard ? (
+                    <Image source={{ uri: imgUrl }} style={styles.image} resizeMode="cover" />
+                ) : (
+                    <Text style={styles.moreText}>+</Text>
+                )}
+            </View>
+            <Text style={styles.label} numberOfLines={1}>{categoryName}</Text>
+        </TouchableOpacity>
     );
 }
 
 const styles = StyleSheet.create({
-    card: {
-        height: 110,
-        padding: 0,
-        borderRadius: 5,
-        padding: 8,
-        marginBottom: 5,
-        backgroundColor: '#fff'
+    cardContainer: {
+        width: size + 10,
+        margin: 8,
+        alignItems: 'center',
     },
-
-    cardTop: {
-        height: 60,
-        width: '100%',
-        backgroundColor: '#efefef',
-        borderRadius: 5,
-        padding: 0,
-        position: 'relative',
-        marginBottom: 5
-    },
-
-    cardBtm: {
-        height: 32,
-        width: '100%',
-        padding: 0,
-        marginBottom: 1.5,
-        backgroundColor: '#fff',
-        borderRadius: 1.5,
+    circle: {
+        width: size,
+        height: size,
+        borderRadius: size / 2,
+        backgroundColor: '#eee',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        overflow: 'hidden',
     },
-
-    cardText: {
-        paddingLeft: 3.5,
-        paddingRight: 3.5,
-        fontWeight: '700',
-        paddingBottom: 3.5,
-        paddingTop: 3.5,
+    image: {
+        width: size,
+        height: size,
+        borderRadius: size / 2,
+    },
+    label: {
+        marginTop: 6,
         fontSize: 10,
-        textAlign: 'center'
-    }
+        fontWeight: '600',
+        textAlign: 'center',
+        color: '#333',
+    },
+    moreCircle: {
+        backgroundColor: '#FF4500',
+    },
+    moreText: {
+        fontSize: 24,
+        color: '#fff',
+        fontWeight: 'bold',
+    },
 });

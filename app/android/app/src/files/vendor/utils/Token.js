@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { ScrollView, StyleSheet, TextInput, StatusBar, View, Text, TouchableOpacity, Vibration } from 'react-native'
+import { ScrollView, StyleSheet, TextInput,  View, Text, TouchableOpacity, Vibration } from 'react-native'
 import { useSelector } from 'react-redux';
 import BackSvg from '../assets/back-svgrepo-com (4).svg'
 import { set_token } from "../../../../redux/token";
@@ -27,7 +27,7 @@ export default function Token({navigation, route}) {
     } = useSelector(s=>s.user);
     return (
         <>
-            <StatusBar backgroundColor="#FF4500" barStyle="light-content" /> 
+          
            
             <View style={styles.cnt} >
                 <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start'}}>

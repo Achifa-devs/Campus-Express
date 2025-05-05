@@ -41,7 +41,7 @@ export default function TypeProducts() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const result = await fetch(`http://192.168.144.146:9090/products-type?category=${category}&type=${type}`, {
+        const result = await fetch(`http://192.168.105.146:9090/products-type?category=${category}&type=${type}`, {
           headers: {
             'Content-Type': 'application/json',
           },

@@ -1,6 +1,6 @@
 
 
-import { Dimensions, StatusBar, ScrollView, Vibration, StyleSheet, Text, TextInput, TouchableOpacity, View, Button, Alert, ActivityIndicator } from "react-native";
+import { Dimensions, ScrollView, Vibration, StyleSheet, Text, TextInput, TouchableOpacity, View, Button, Alert, ActivityIndicator } from "react-native";
 import { useEffect, useRef, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
@@ -64,7 +64,7 @@ const Login = ({}) => {
         if (data) {
             set_server_err(true)
 
-            fetch('http://192.168.144.146:9090/vendor/login', {
+            fetch('http://192.168.105.146:9090/vendor/login', {
                 method: 'post',
                 headers: {
                     "Content-Type": "Application/json"

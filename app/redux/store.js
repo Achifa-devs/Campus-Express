@@ -5,6 +5,7 @@ import cookie from './vendor/cookie';
 import drawer from './vendor/drawer';
 import user from './vendor/user';
 import location from './location';
+import toggleMessage from './toggleMssg';
 
 let store = configureStore({
   reducer: {
@@ -13,7 +14,8 @@ let store = configureStore({
     cookie: cookie,
     user: user,
     drawer: drawer,
-    location: location
+    location: location,
+    toggleMessage: toggleMessage
   }
 
 })

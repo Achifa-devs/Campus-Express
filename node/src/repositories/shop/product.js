@@ -7,7 +7,7 @@ import { errorHandler } from "../../utils/erroHandler.js";
 // Find product by ID
 export async function findProductById({ product_id }) {
     const result = await pool.query(
-    `SELECT * FROM seller_shop WHERE product_id = $1`,
+    `SELECT * FROM products WHERE product_id = $1`,
     [product_id]
     );
   return result.rows;
@@ -17,13 +17,13 @@ export async function findProductById({ product_id }) {
 export async function findProducts({ limit }) {
   if (limit !== null) {
     const result = await pool.query(
-      `SELECT * FROM seller_shop WHERE state->>'state' = 'active' LIMIT $1`,
+      `SELECT * FROM products WHERE state->>'state' = 'active' LIMIT $1`,
       [limit]
     );
     return result.rows;
   } else {
     const result = await pool.query(
-      `SELECT * FROM seller_shop WHERE state->>'state' = 'active'`
+      `SELECT * FROM products WHERE state->>'state' = 'active'`
     );
     return result.rows;
   }
@@ -31,7 +31,7 @@ export async function findProducts({ limit }) {
 
 export async function findProductsType({ type, limit }) {
    const result = await pool.query(
-      `SELECT * FROM seller_shop WHERE state->>'state' = 'active' AND others->>'cType' = $1 LIMIT $2`,
+      `SELECT * FROM products WHERE state->>'state' = 'active' AND others->>'cType' = $1 LIMIT $2`,
       [type,limit]
     );
     return result.rows;
@@ -40,7 +40,7 @@ export async function findProductsType({ type, limit }) {
 // Find products by category
 export async function findProductsByCategory({ category,limit }) {
   const result = await pool.query(
-    `SELECT * FROM seller_shop WHERE category = $1 AND state->>'state' = 'active'LIMIT $2`,
+    `SELECT * FROM products WHERE category = $1 AND state->>'state' = 'active'LIMIT $2`,
     [category,limit]
   );
   return result.rows;
@@ -49,7 +49,7 @@ export async function findProductsByCategory({ category,limit }) {
 // Find products by category
 export async function findProductsByCategoryAndGender({ category, cap_gender,limit }) {
   const result = await pool.query(
-    `SELECT * FROM seller_shop WHERE category = $1 AND state->>'state' = 'active' AND others->>'gender' = $2 LIMIT $3`,
+    `SELECT * FROM products WHERE category = $1 AND state->>'state' = 'active' AND others->>'gender' = $2 LIMIT $3`,
     [category,cap_gender,limit]
   );
   return result.rows;
@@ -60,7 +60,7 @@ export async function findProductsByCategoryAndGender({ category, cap_gender,lim
 // Find product thumnail by ID
 export async function findProductsThumbnailById({ product_id }) {
   const result = await pool.query(
-    `SELECT thumbnail_id FROM seller_shop WHERE product_id = $1`,
+    `SELECT thumbnail_id FROM products WHERE product_id = $1`,
     [product_id]
   );
   return result.rows;
@@ -96,7 +96,7 @@ export async function findProductViewById({ product_id, buyer_id }) {
 // UPdate product view by ID
 export async function updateProductView({ product_id }) {
   const result = await pool.query(
-    `UPDATE seller_shop set views = views+1 WHERE product_id = $1'`,
+    `UPDATE products set views = views+1 WHERE product_id = $1'`,
     [product_id]
   );
   let response = await errorHandler(result?.rowCount);

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { ScrollView, StyleSheet, Text, TextInput, Dimensions, TouchableOpacity, View, Image, ActivityIndicator, Alert } from 'react-native'
 // import Title from '../../../studio/components/Home/data/Title';
-import Date from '../Order/OrderDate';
 import js_ago from 'js-ago';
 import { useNavigation } from '@react-navigation/native';
 

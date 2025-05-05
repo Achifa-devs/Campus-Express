@@ -6,7 +6,7 @@ import { errorHandler } from "../../utils/erroHandler.js";
 // Find order by ID
 export async function findFavouriteById({ saveditems_id }) {
     const result = await pool.query(
-    `SELECT * FROM campus_express_buyer_saveditems WHERE saveditems_id = $1`,
+    `SELECT * FROM favourite WHERE saveditems_id = $1`,
     [saveditems_id]
     );
   return result.rows;
@@ -15,7 +15,7 @@ export async function findFavouriteById({ saveditems_id }) {
 // Find orders
 export async function findFavourites({ buyer_id }) {
   const result = await pool.query(
-    `SELECT * FROM campus_express_buyer_saveditems WHERE buyer_id = $1`,
+    `SELECT * FROM favourite WHERE buyer_id = $1`,
     [buyer_id]
   );
   return result.rows;
@@ -24,7 +24,7 @@ export async function findFavourites({ buyer_id }) {
 // Create order
 export async function createFavourite({ buyer_id, product_id }) {
   const result = await pool.query(
-    `INSERT INTO campus_express_buyer_saveditems(
+    `INSERT INTO favourite(
         id,savedItems_id ,product_id ,date ,buyer_id
     ) VALUES (
         DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9
@@ -40,7 +40,7 @@ export async function createFavourite({ buyer_id, product_id }) {
 // deleteOrder
 export async function deleteFavourite({ buyer_id, product_id }) {
   const result = await pool.query(
-    `DELETE FROM campus_express_buyer_saveditems WHERE buyer_id=$1 AND product_id=$2`,
+    `DELETE FROM favourite WHERE buyer_id=$1 AND product_id=$2`,
     [buyer_id, product_id]
   );
   let response = await errorHandler(result?.rowCount);

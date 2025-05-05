@@ -1,11 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import appliances from '../../../media/assets/appliances.png'
-import phone from  '../../../media/assets/Artboard_1_copy_2.png'
-import laptop from '../../../media/assets/Artboard_1_copy_3.png'
-import grocery from '../../../media/assets/Artboard_1_copy_4.png'
-import electronics from '../../../media/assets/Artboard_1_copy_7.png'
-// import fashion from '../../../media/assets/Artboard_1_copy_13.png'
-// import gif from '../../../media/assets/BUY-NOW-PAY-LATER_GIF-2.gif'
 
 import { 
   Dimensions,
@@ -21,9 +14,12 @@ export default function FlasAds() {
   let screenWidth = Dimensions.get('window').width;
   let navigation = useNavigation()
   const images = [
-  'https://res.cloudinary.com/daqbhghwq/image/upload/v1745880357/ECSF_712X384_jy7nz3.png',
-  'https://res.cloudinary.com/daqbhghwq/image/upload/v1745880357/Desktop_Homepage_Slider__712x384_ctaxcb.jpg',
-  'https://res.cloudinary.com/daqbhghwq/image/upload/v1745880356/DesktopHomepageSlider_712x384_eergve.jpg'
+  'https://res.cloudinary.com/daqbhghwq/image/upload/v1746302994/IMG-20250503-WA0031_gsxkbk.jpg',
+  'https://res.cloudinary.com/daqbhghwq/image/upload/v1746302994/IMG-20250503-WA0032_vnrmqb.jpg',
+  'https://res.cloudinary.com/daqbhghwq/image/upload/v1746302994/IMG-20250503-WA0036_laocvz.jpg',
+  // 'https://res.cloudinary.com/daqbhghwq/image/upload/v1746302994/IMG-20250503-WA0033_uz35ah.jpg',
+  // 'https://res.cloudinary.com/daqbhghwq/image/upload/v1746302994/IMG-20250503-WA0034_mx18gn.jpg',
+  // 'https://res.cloudinary.com/daqbhghwq/image/upload/v1746302994/IMG-20250503-WA0035_hqci2h.jpg'
   ];
    const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -51,16 +47,16 @@ export default function FlasAds() {
 
 const styles = StyleSheet.create({
   flashAdsCnt:{
-    height: 180,
+    height: 150,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    // marginBottom: 0,
+    marginBottom: 0,
     flexWrap: 'wrap',
     borderRadius: 10,
-    paddingTop: 10,
-    paddingBottom: 10,
+    paddingTop: 0,
+    paddingBottom: 0,
     paddingLeft: .5,
     paddingRight: .5,
     backgroundColor: '#fff'
@@ -82,6 +78,6 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: '100%',
-    borderRadius: 5
+    borderRadius: .5
   }
 });
