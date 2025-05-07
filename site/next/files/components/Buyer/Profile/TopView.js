@@ -24,7 +24,7 @@ export default function TopView({userData}) {
 
     useEffect(() => {
       async function getPhoto(){
-        let result = await GetSellerPhoto(window.localStorage.getItem('CE_seller_id'))
+        let result = await GetSellerPhoto(window.localStorage.getItem('CE_user_id'))
         console.log(result)
         setPhoto(result?.file)
       }

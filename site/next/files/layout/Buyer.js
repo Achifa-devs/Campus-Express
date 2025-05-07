@@ -23,8 +23,8 @@ const BuyerLayout = ({children,setCookie}) => {
     }=useSelector(s=> s.buyerData) 
       
     let {
-        buyer_id
-    } = useSelector(s => s.buyer_id)
+        user_id
+    } = useSelector(s => s.user_id)
 
     let [load_start, set_load_start] = useState(0);
 
@@ -51,8 +51,8 @@ const BuyerLayout = ({children,setCookie}) => {
     
     useEffect(() => {
 
-        if(buyer_id !== null){
-            fetch(`/api/store/customer?buyer_id=${buyer_id}`,
+        if(user_id !== null){
+            fetch(`/api/store/customer?user_id=${user_id}`,
             {
                 headers: {
                     'Content-Type': 'application/json'
@@ -65,7 +65,7 @@ const BuyerLayout = ({children,setCookie}) => {
                 if (response?.bool) {
                     dispatch(setBuyerInfoTo(response?.data));
                     // window.localStorage.removeItem('id_for_unknown_buyer')
-                    window.localStorage.setItem('CE_buyer_id', response?.data?.buyer_id)
+                    window.localStorage.setItem('CE_user_id', response?.data?.user_id)
                     update_db_id_for_unknown_buyer_to_registered_id()
                 }
             })
@@ -80,7 +80,7 @@ const BuyerLayout = ({children,setCookie}) => {
 
         }
         
-    }, [buyer_id])
+    }, [user_id])
 
     function update_db_id_for_unknown_buyer_to_registered_id() {
         fetch(`http://192.168.24.146:9090/product-view-unknown-buyer-update`,{
@@ -89,8 +89,8 @@ const BuyerLayout = ({children,setCookie}) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                unknown_buyer_id: window.localStorage.getItem('id_for_unknown_buyer'),
-                registered_id: buyer_id
+                unknown_user_id: window.localStorage.getItem('id_for_unknown_buyer'),
+                registered_id: user_id
             })
         })
         .then(async (result) => {

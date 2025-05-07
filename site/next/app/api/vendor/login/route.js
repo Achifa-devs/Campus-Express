@@ -23,7 +23,7 @@ export async function POST(req) {
     const sellerId = result.rows[0].id;
 
     const userResult = await pool.query(
-      `SELECT seller_id, email, password, fname, lname, gender, state, campus, phone FROM campus_sellers WHERE id = $1`,
+      `SELECT user_id, email, password, fname, lname, gender, state, campus, phone FROM campus_sellers WHERE id = $1`,
       [sellerId]
     );
 
@@ -39,7 +39,7 @@ export async function POST(req) {
 
     // Create token
     const token = jwt.sign(
-      { id: user.seller_id },
+      { id: user.user_id },
       'kdiU$28Fs!9shF&2xZpD3Q#1gLx@R7TkWzPq',
       { expiresIn: '7d' }
     );

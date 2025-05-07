@@ -1,449 +1,519 @@
-import React, { useEffect, useState } from 'react'
-import { ActivityIndicator, Dimensions, Image, StatusBar, Text, TextInput, TouchableOpacity, Vibration, View } from 'react-native'
-import { storeData } from '../../utils/AsyncStore.js'
-import { generateId, getDeviceId } from '../utils/IdGen.js'
-import { useNavigation } from '@react-navigation/native'
+import React, { useEffect, useState, useCallback, useRef } from 'react';
+import {
+  ActivityIndicator,
+  Alert,
+  Dimensions,
+  FlatList,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Vibration,
+  View
+} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import DropdownExample from '../../utils/DropDown.js';
+import { data, school_choices } from './location.js';
+import { getDeviceId } from '../utils/IdGen.js';
+import { storeData } from '../../utils/AsyncStore.js.js';
+import { useDispatch } from 'react-redux';
+import { setUserAuthTo } from '../../../../../../redux/reducer/auth.js';
 
-// import SeeSvg from '../../../assets/see-svgrepo-com.svg'
-const Signup = () => {
-    const screenHeight = Dimensions.get("screen").height 
-    const screenWidth = Dimensions.get("screen").width 
-    let [fname, setFname] = useState('')
-    let [lname, setLname] = useState('')
-    let [email, setEmail] = useState('')
-    let [pwd, setPwd] = useState('')
-    let [server_err, set_server_err] = useState(false)
+const Signup = ({updateActiveJsx}) => {
+    const screenHeight = Dimensions.get("window").height;
+    const screenWidth = Dimensions.get("window").width;
+    const [id, setId] = useState('')
+  const [formData, setFormData] = useState({
+    fname: '',
+    lname: '',
+    email: '',
+    phone: '',
+    state: '',
+    campus: '',
+    pwd: '',
+    deviceId: getDeviceId().then(result => result)
+  });
+  const [errors, setErrors] = useState({
+    fname: '',
+    lname: '',
+    email: '',
+    phone: '',
+    state: '',
+    campus: '',
+    pwd: ''
+  });
+  const [serverLoading, setServerLoading] = useState(false);
+  const [isPwdVisible, setIsPwdVisible] = useState(false);
+  const [campusLocaleList, setCampusLocaleList] = useState([]);
+  const navigation = useNavigation();
+  const [serverErr, setServerErr] = useState('');
+ 
 
-    let [fnameErr, setFnameErr] = useState('')
-    let [lnameErr, setLnameErr] = useState('')
-    let [emailErr, setEmailErr] = useState('')
-    let [pwdErr, setPwdErr] = useState('')
-
-
-    const [isPwdVisible, setIsPwdVisible] = useState(true);
-    useEffect(() => {
-        if (!isPwdVisible) {
-            setTimeout(() => {
-                setIsPwdVisible(!isPwdVisible)
-            }, 800)
-        }
-    }, [isPwdVisible])
-
-    let signupHandler = async() => {
-       
-
-        let response = await validateInput()
-
-        response.map(item => {
-
-            let name = item._j.name;
-            let err = item._j.mssg;
-
-            console.log('errs: ', name, err)
-
-
-            if(name.toLowerCase() === 'firstname'){
-                setFnameErr(err)
-            }else if(name.toLowerCase() === 'lastname'){
-                setLnameErr(err)
-            }else if(name.toLowerCase() === 'email'){
-                setEmailErr(err)
-            }else if(name.toLowerCase() === 'password'){
-                setPwdErr(err)
-            }
-        })
-
-        let data = response.filter((item) => item._j.mssg === '').length === 4 ? true : false;
-
-        
-        if(data){
-            set_server_err(true)
-
-            
-            // fetch('https://campussphere.net/api/registration/seller', {
-            //     method: 'post',
-            //     headers: {
-            //         "Content-Type": "Application/json"
-            //     },
-            //     body: JSON.stringify({fname,lname,email,phone,pwd,state,campus,gender})
-            // })
-            // .then(async(result) => {
-            //     let response = await result.json();
-            //     console.log(response)
-            //     if(response.success){
-            //         CookieManager.set('https://campussphere.net', {
-            //             name: 'jwt_token',
-            //             value: response.cookie,
-            //             domain: 'campussphere.net',
-            //             path: '/',
-            //             version: '1',
-            //             secure: true,
-            //             expires: `'${90 * 24 * 60 * 60}'`
-            //         })
-            //         .then((done) => {
-            //             console.log('Cookie set!', done);
-            //             dispatch(set_cookie(true))
-            //         })
-            //         .catch(err => console.log(err))
-            //     } else {
-            //         set_server_err(!true)
-
-            //         Vibration.vibrate(300)
-            //         if(response.message === 'Email already exists'){
-            //             setEmailErr('Email Already Exist')
-            //         }else if(response.message === 'Phone already exists'){
-            //             setPhoneErr('Phone Number Already Exist')
-            //         }
-            //     }
-            // })
-            // .catch((err) => {
-            //     set_server_err(!true)
-
-            //     console.log(err)
-            //     setBtn("Signup")
-            //     seller_overlay_setup(false, '')
-            //     e.target.disabled = false;
-            // })
-        } else {
-            set_server_err(!true)
-
-            Vibration.vibrate(300)
-            
-        }
-        
+  // Form fields configuration
+  const formFields = [
+    {
+      id: 'fname',
+      label: 'First name',
+      type: 'text',
+      placeholder: 'Enter first name',
+      keyboardType: 'default',
+      error: errors.fname,
+      halfWidth: true
+    },
+    {
+      id: 'lname',
+      label: 'Last name',
+      type: 'text',
+      placeholder: 'Enter last name',
+      keyboardType: 'default',
+      error: errors.lname,
+      halfWidth: true 
+    }, 
+    {
+      id: 'email',
+      label: 'Email',
+      type: 'text',
+      placeholder: 'Enter email',
+      keyboardType: 'email-address',
+      error: errors.email,
+      halfWidth: false
+    },
+    {
+      id: 'phone',
+      label: 'WhatsApp number',
+      type: 'tel',
+      placeholder: 'Enter your whatsapp number',
+      keyboardType: 'numeric',
+      error: errors.phone,
+      halfWidth: false
+    },
+    {
+      id: 'pwd',
+      label: 'Password',
+      type: 'password',
+      placeholder: 'Enter password',
+      keyboardType: 'default',
+      error: errors.pwd,
+      halfWidth: false,
+      rightIcon: (
+        <TouchableOpacity 
+          onPress={() => setIsPwdVisible(!isPwdVisible)}
+          style={styles.eyeIcon}
+        >
+          <Text>{isPwdVisible ? '👁️' : '👁️‍🗨️'}</Text>
+        </TouchableOpacity>
+      )
+    },
+    {
+      id: 'state',
+      label: 'State',
+      type: 'dropdown',
+      data: data,
+      fieldName: 'label',
+      name: 'state',
+      placeholder: 'Select state',
+      error: errors.state,
+      halfWidth: false
+    },
+    {
+      id: 'campus',
+      label: 'Campus',
+      type: 'dropdown',
+      data: campusLocaleList,
+      fieldName: 'text',
+      name: 'campus',
+      placeholder: 'Select campus',
+      error: errors.campus,
+      halfWidth: false
     }
+  ];
+
+  useEffect(() => {
+    if (formData.state) {
+      const stateIndex = data.findIndex(item => 
+        item.label.toLowerCase() === formData.state.toLowerCase()
+      );
+      const campuses = Object.values(school_choices).reverse();
+      setCampusLocaleList(stateIndex >= 0 ? campuses[stateIndex] : []);
+    }
+  }, [formData.state]);
+
+  const updateData = useCallback((name, value) => {
+    setFormData(prev => ({ ...prev, [name]: value }));
+    // Clear error when field is updated
+    setErrors(prev => ({ ...prev, [name]: '' }));
+  }, []);
+
+  const validateField = useCallback((field, value) => {
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     
-        
-    async function validateInput() {
+    switch(field) {
+      case 'fname':
+      case 'lname':
+        if (!value) return `${field === 'fname' ? 'First' : 'Last'} name cannot be empty`;
+        if (value.length < 3) return 'Must be at least 3 characters';
+        return '';
+      case 'email':
+        if (!value) return 'Email cannot be empty';
+        if (!emailRegex.test(value)) return 'Invalid email format';
+        return '';
+      case 'phone':
+        if (!value) return 'Phone cannot be empty';
+        if (value.length<11) return 'Invalid number (must be 11 digits)';
+        return '';
+      case 'state':
+      case 'campus':
+        if (!value) return 'Please make a selection';
+        return '';
+      case 'pwd':
+        if (!value) return 'Password cannot be empty';
+        if (value.length < 8) return 'Must be at least 8 characters';
+        return '';
+      default:
+        return '';
+    }
+  }, []);
 
-        let data = [  
-            {value: fname, name: 'Firstname'},
-            {value: lname, name: 'Lastname'},
-            {value: email, name: 'Email'},
-            {value: pwd, name: 'Password'},
-        ];
+  const validateForm = useCallback(() => {
+    const newErrors = {};
+    let isValid = true;
 
-        let result =  data.map(async(item) => {
-            let test = {email: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/}
+    Object.keys(formData).forEach(key => {
+      const error = validateField(key, formData[key]);
+      newErrors[key] = error;
+      if (error) isValid = false;
+    });
 
-            if(item.name.toLowerCase() === 'firstname'){
-                
-                if(item.value === ''){
-                    return ({bool: false, mssg: `${item.name} cannot be empty`, name: item.name})
-                }else if(item.value.length < 3){
-                    return ({bool: false, mssg: `Characters must be at least 3`, name: item.name})
-                }else{
-                    return ({bool: true, mssg: ``, name: item.name})
-                }
+    setErrors(newErrors);
+    return isValid;
+  }, [formData, validateField]);
+    
+    const dispatch = useDispatch()
 
-            }else if(item.name.toLowerCase() === 'lastname'){
+  const handleSignup = useCallback(async () => {
+    setServerErr('')
+    if (!validateForm()) {
+      Vibration.vibrate(300);
+      return;
+    }
 
-                if(item.value === ''){
-                    return ({bool: false, mssg: `${item.name} cannot be empty`, name: item.name})
-                }else if(item.value.length < 3){
-                    return ({bool: false, mssg: `Characters must be at least 3`, name: item.name})
-                }else{
-                    return ({bool: true, mssg: ``, name: item.name})
-                }
-                
-            }else if(item.name.toLowerCase() === 'email'){
+    setServerLoading(true);
+    try {
+      // Simulate API call
+    //   await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Replace with actual API call
+      
+      const response = await fetch('http://192.168.209.146:9090/vendor/registration', {
+        method: 'POST',
+        headers: { "Content-Type": "Application/json" },
+        body: JSON.stringify(formData)
+      });
+      const data = await response.json();
+      console.log(data)
+       
+    if (data.success) {
+        await storeData('user', JSON.stringify(data.data.user));
+        dispatch(setUserAuthTo(true))
+        console.log(data)
+    } else {
+        // Handle specific errors
+        setServerErr(data.message)
+        Vibration.vibrate(300);
+ 
+    }
+      
+      
+      // For demo purposes, navigate after "successful" signup
+    //   navigation.navigate('user-login');
+    } catch (error) {
+      console.error('Signup error:', error);
+      Alert.alert('Error', 'Failed to sign up. Please try again.');
+    } finally {
+      setServerLoading(false);
+    }
+  }, [formData, navigation, validateForm]);
 
-                if(item.value.length < 1){
-                    return ({bool: false, mssg: `${item.name} cannot be empty`, name: item.name})
-                }else if(!item.value.match(test.email)){
-                    return ({bool: false, mssg: `${item.name} is invalid`, name: item.name})
-                }else{ 
-                    return ({bool: true, mssg: ``, name: item.name})
-                } 
-                
-            }else if(item.name.toLowerCase() === 'password'){
 
-                if(item.value === ''){
-                    return ({bool: false, mssg: `${item.name} cannot be empty`, name: item.name})
-                }else if(item.value.length > 0 && item.value.length < 8){
-                    return {bool: false, mssg: `${item.name} must be at least 8 characters`, name: item.name}
-                }else{
-                    return ({bool: true, mssg: ``, name: item.name})
-                }
 
-            }
-        })
+  const inputRefs = useRef({});
+  const scrollViewRef = useRef();
 
-        // console.log('result1: ', result1)
+  const focusNextField = (nextField) => {
+      inputRefs.current[nextField]?.focus();
+  };
 
-        return [...result];
-    } 
-    const navigation = useNavigation();
+  const handleInputFocus = (event, fieldId) => {
+      // Measure the input position and scroll to it
+      const scrollResponder = scrollViewRef.current?.getScrollResponder();
+      if (scrollResponder) {
+          scrollResponder.scrollResponderScrollNativeHandleToKeyboard(
+              event.target,
+              0, // extra offset
+              true
+          );
+      }
+  };
 
-    return ( 
-        <> 
-            {
-                server_err
-                ?
-                <View style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    backgroundColor: 'background-color: rgba(0, 0, 0, 0.5);',
-                    justifyContent: 'center', 
-                    alignItems: 'center',
-                    zIndex: 10
-                }}>
-                    <ActivityIndicator style={{opacity: 1}} size={'large'} color={'#000'}></ActivityIndicator>
+    const renderItem = useCallback(({ item }) => {
+        if (item.type === 'dropdown') {
+            return (
+                <View style={[styles.inputContainer, item.halfWidth && styles.halfWidthContainer]}>
+                    <Text style={styles.label}>{item.label}</Text>
+                    <DropdownExample
+                        dropdownPosition="top"
+                        fieldName={item.fieldName}
+                        updateData={updateData}
+                        dropdownData={item.data}
+                        name={item.id}
+                        placeholder={item.placeholder}
+                    />
+                    {item.error ? <Text style={styles.errorText}>{item.error}</Text> : null}
                 </View>
-                :
-                ''
-            }
-            
-            <StatusBar backgroundColor={'#FFF'} barStyle={"dark-content"} />
-        
-            <View style={{
-                backgroundColor: '#FFF',
-                height: screenHeight*.75,
-                width: screenWidth,
-                padding: 10,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-            }}>
-               
-                <View style={{
-                    backgroundColor: '#FFF',
-                    height: 'auto',
-                    width: screenWidth,
-                    padding: 10,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between'
-                }}>
-                    <View style={{
-                        height: 100,
-                        width: 100,
-                        display: 'flex',
-                        alignItems: 'center',
-                        backgroundColor: '#FFF',
-                        justifyContent: 'center',
-                        padding: 15,
-                            borderWidth: 4,
-                        borderColor: '#fff', borderRadius: 100, marginBottom: 6
-                    }}>
-                        <Image height={100} width={100} source={{ uri: 'https://res.cloudinary.com/daqbhghwq/image/upload/v1746402998/Untitled_design-removebg-preview_peqlme.png' }} />
-                    </View>
-                    <Text style={{color: '#FF4500', fontWeight: '500',fontSize: 20, marginBottom: 6}}>Registration Form</Text>
-                    
-                    
-                    <View style={{
-                        backgroundColor: '#FFF',
-                        height: 'auto',
-                        width: '100%',
-                        marginTop: 18,
-                    
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        flexDirection: 'row'
-                    }}>
-                        <View style={{
-                            backgroundColor: '#FFF',
-                            height: 'auto',
-                            width: '48%',
-                            borderRadius: 2.5,
-                            display: 'flex',
-                            alignItems: 'flex-start',
-                            justifyContent: 'center',
-                            flexDirection: 'column'
-                        }}>
-                            <Text style={{
-                                width: '100%',
-                                textAlign: 'left',
-                                marginLeft: 3
-                            }}>First name</Text>
-                    
-                            <TextInput keyboardType='alphabet' style={{
-                                backgroundColor: '#FFF',
-                                height: 50,
-                                width: '100%',
-                                borderWidth: 1,
-                                borderRadius: 2.5,
-                    
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center'
-                            }} onChangeText={txt => setFname(txt)} />
-                            <Text style={{color: '#000', marginBottom: 5, display: fnameErr.length > 0 ? 'flex' : 'none', fontSize: 10, paddingLeft: 5, color: 'red'}}>{fnameErr}</Text>
-                        </View>
-                        <View style={{
-                            backgroundColor: '#FFF',
-                            height: 'auto',
-                            width: '48%',
-                            borderRadius: 2.5,
-                            display: 'flex',
-                            alignItems: 'flex-start',
-                            justifyContent: 'center',
-                            flexDirection: 'column'
-                        }}>
-                            <Text style={{
-                                width: '100%',
-                                textAlign: 'left',
-                                marginLeft: 3
-                            }}>Last name</Text>
-                            <TextInput keyboardType='alphabet' style={{
-                                backgroundColor: '#FFF',
-                                height: 50,
-                                width: '100%',
-                                borderRadius: 2.5,
-                    
-                                borderWidth: 1,
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center'
-                            }} onChangeText={txt => setLname(txt)}  />
-                            <Text style={{color: '#000', marginBottom: 5, display: lnameErr.length > 0 ? 'flex' : 'none', fontSize: 10, paddingLeft: 5, color: 'red'}}>{lnameErr}</Text>
-                        </View>
-                    
-                    </View>
-                    
-                    <View style={{
-                        backgroundColor: '#FFF',
-                        height: 'auto',
-                        width: '100%',
-                        marginTop: 18,
-                    
-                        borderRadius: 2.5,
-                        display: 'flex',
-                        alignItems: 'flex-start',
-                        justifyContent: 'center',
-                        flexDirection: 'column'
-                    }}>
-                        <Text style={{
-                            width: '100%',
-                            textAlign: 'left',
-                            marginLeft: 3
-                        }}>Email</Text>
-                        <TextInput keyboardType='alphabet' style={{
-                            backgroundColor: '#FFF',
-                            height: 50,
-                            width: '100%',
-                            borderRadius: 2.5,
-                    
-                            borderWidth: 1,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center'
-                        }} onChangeText={txt => setEmail(txt)} />
-                        <Text style={{color: '#000', marginBottom: 5, display: emailErr.length > 0 ? 'flex' : 'none', fontSize: 10, paddingLeft: 5, color: 'red'}}>{emailErr}</Text>
-                    </View>
-                    
-                    <View style={{
-                        backgroundColor: '#FFF',
-                        height: 'auto',
-                        width: '100%',
-                        display: 'flex',
-                        marginTop: 18,
-                    
-                        alignItems: 'flex-start',
-                        justifyContent: 'space-between',
-                        flexDirection: 'column'
-                    }}>
-                        <View style={{
-                            backgroundColor: '#FFF',
-                            height: 'auto',
-                            width: '100%',
-                            display: 'flex',
-                            marginTop: 18,
-                    
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            flexDirection: 'row'
-                        }}>
-                            <View style={{
-                                backgroundColor: '#FFF',
-                                height: 'auto',
-                                width: '82%',
-                                borderRadius: 2.5,
-                                display: 'flex',
-                                alignItems: 'flex-start',
-                                justifyContent: 'center',
-                                flexDirection: 'column'
-                            }}>
-                                <Text style={{
-                                    width: '100%',
-                                    textAlign: 'left',
-                                    marginLeft: 3
-                                }}>Password</Text>
-                    
-                                <TextInput keyboardType='alphabet' style={{
-                                    backgroundColor: '#FFF',
-                                    height: 50,
-                                    width: '100%',
-                                    borderWidth: 1,
-                                    borderRadius: 2.5,
-                    
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center'
-                                }} secureTextEntry={isPwdVisible} onChangeText={txt => setPwd(txt)}  />
-                    
-                            </View>
-                            <TouchableOpacity style={{
-                                backgroundColor: '#FF4500',
-                                height: 'auto',
-                                height: 50,
-                                width: '15%',
-                                marginTop: 18,
-                                // borderWidth: 1,
-                                borderRadius: 2.5,
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                flexDirection: 'column'
-                            }} onPress={e=> setIsPwdVisible(!isPwdVisible)}>
-                                {/* <SeeSvg height={30} width={30} /> */}
-                            </TouchableOpacity>
-                        </View>
-                        <Text style={{color: '#000', marginBottom: 5, display: pwdErr.length > 0 ? 'flex' : 'none', fontSize: 10, paddingLeft: 5, color: 'red'}}>{pwdErr}</Text>
-                    
-                    </View>
+            );
+        }
+
+        return (
+            <View style={[styles.inputContainer, item.halfWidth && styles.halfWidthContainer]}>
+                <Text style={styles.label}>{item.label}</Text>
+                <View style={styles.inputWrapper}>
+                    <TextInput
+                        ref={ref => inputRefs.current[item.id] = ref}
+                        style={styles.input}
+                        placeholder={item.placeholder}
+                        value={formData[item.id]}
+                        onChangeText={(text) => updateData(item.id, text)}
+                        secureTextEntry={item.type === 'password' && !isPwdVisible}
+                        keyboardType={item.keyboardType || 'default'}
+                        onFocus={(event) => handleInputFocus(event, item.id)}
+                        blurOnSubmit={item.id !== 'pwd'}
+                        onSubmitEditing={() => {
+                            if (item.id !== 'pwd') {
+                                const nextField = getNextField(item.id);
+                                if (nextField) {
+                                    focusNextField(nextField);
+                                }
+                            } else {
+                                Keyboard.dismiss();
+                            }
+                        }}
+                        returnKeyType={item.id === 'pwd' ? 'done' : 'next'}
+                    />
+                    {item.rightIcon || null}
                 </View>
-                <TouchableOpacity onPress={e => navigation.navigate('user-login')}  style={{height: 50, width: 'auto', marginTop: 10, marginBottom: 5, display: 'flex', alignItems: 'center', backgroundColor: '#FFF', justifyContent: 'center', flexDirection: 'row'}}>
-                    <Text style={{height: 'auto', width: 'auto', fontSize: 13, backgroundColor: '#fff', fontFamily: 'roboto', color: '#FF4500'}}>Already Have An Account?</Text>
-                    <Text style={{height: 'auto', width: 'auto', fontSize: 13, backgroundColor: '#fff', fontFamily: 'roboto', fontWeight: 'bold', color: '#FF4500'}}> SignIn Here</Text>
-                </TouchableOpacity>
+                {item.error ? <Text style={styles.errorText}>{item.error}</Text> : null}
             </View>
+        );
+    }, [formData, isPwdVisible, updateData]);
 
-            <View style={{
-                backgroundColor: '#FFF',
-                height: screenHeight*.15,
-                width: screenWidth,
-                position: 'absolute', 
-                bottom: 0,
-                padding: 10,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',flex: 1
-            }}>
-                <TouchableOpacity style={{
-                    backgroundColor: '#FF4500',
-                    height: 'auto',
-                    height: 50,
-                    width: '100%',
-                    marginTop: 28,
-                    // borderWidth: 1,
-                    borderRadius: 4,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexDirection: 'column'
-                }} onPress={e=> signupHandler()}>
-                    <Text style={{color: '#fff'}}>Signup</Text>
+    const getNextField = (currentField) => {
+        const currentIndex = formFields.findIndex(field => field.id === currentField);
+        if (currentIndex < formFields.length - 1) {
+            return formFields[currentIndex + 1].id;
+        }
+        return null;
+    };
+
+    return (
+        <>
+            <StatusBar backgroundColor="#FFF" barStyle="dark-content" />
+          
+            {serverLoading && (
+                <View style={styles.loadingOverlay}>
+                    <ActivityIndicator size="large" color="#FF4500" />
+                </View>
+            )}
+
+            <KeyboardAvoidingView
+                behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+                keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}
+                style={{ flex: 1 }}
+            >
+                <ScrollView
+                    ref={scrollViewRef}
+                    style={styles.container}
+                    contentContainerStyle={styles.formContainer}
+                    showsVerticalScrollIndicator={false}
+                    keyboardShouldPersistTaps="handled"
+                    automaticallyAdjustContentInsets={false}
+                    contentInset={{ bottom: 100 }} // Extra space at bottom
+                >
+                    <View style={styles.header}>
+                        <View style={styles.logoContainer}>
+                            <Image 
+                                style={styles.logo} 
+                                source={{ uri: 'https://res.cloudinary.com/daqbhghwq/image/upload/v1746402998/Untitled_design-removebg-preview_peqlme.png' }} 
+                            />
+                        </View>
+                        <Text style={styles.title}>Registration Form</Text>
+                        <Text style={[styles.title, {fontSize: 12, color: 'red', textDecoration: 'underline'}]}>{serverErr}</Text>
+                    </View>
+                    
+                    {formFields.map((item) => renderItem({ item }))}
+                </ScrollView>
+            </KeyboardAvoidingView>
+
+            <View style={styles.footer}>
+                <TouchableOpacity 
+                    onPress={() => navigation.navigate('user-login')} 
+                    style={styles.loginLink}
+                    disabled={serverLoading ? true : false}
+                >
+                    <Text style={styles.loginText}>Already Have An Account? </Text>
+                    <Text style={[styles.loginText, styles.loginTextBold]}>SignIn Here</Text>
                 </TouchableOpacity>
-                
+
+                <TouchableOpacity 
+                    style={styles.signupButton} 
+                    onPress={handleSignup}
+                    disabled={serverLoading}
+                >
+                    <Text style={styles.signupButtonText}>
+                        {serverLoading ? 'Processing...' : 'Signup'}
+                    </Text>
+                </TouchableOpacity>
             </View>
         </>
-    )
-}
+    );
+};
 
+
+
+
+
+
+
+
+
+
+
+// ... (keep your existing styles)
+const screenWidth = Dimensions.get("window").width;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#FFF',
+  },
+  loadingOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 10,
+  },
+  header: {
+    alignItems: 'center',
+    backgroundColor: '#FFF',
+    borderColor: '#fff',
+    width: '100%',
+    paddingTop: 20,
+    paddingBottom: 30,
+  },
+  logoContainer: {
+    height: 100,
+    width: 100,
+    borderRadius: 50,
+    borderWidth: 4,
+    borderColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+    backgroundColor: '#FFF',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  logo: {
+    height: 80,
+    width: 80,
+    resizeMode: 'contain',
+  },
+  title: {
+    color: '#FF4500',
+    fontWeight: '500',
+    fontSize: 20,
+    marginBottom: 10,
+  },
+  formContainer: {
+    padding: 16,
+    paddingBottom: 200,
+    display: 'flex', justifyContent: 'space-between',backgroundColor: '#fff', flexDirection: 'row', flexWrap: 'wrap'
+  },
+  inputContainer: {
+    marginBottom: 15,
+    width: screenWidth*.9
+  },
+  halfWidthContainer: {
+    width: screenWidth*.4,
+  },
+  label: {
+    marginBottom: 5,
+    color: '#333',
+    fontSize: 14,
+  },
+  inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#DDD',
+    borderRadius: 5,
+    backgroundColor: '#FFF',
+    overflow: 'hidden',
+  },
+  input: {
+    flex: 1,
+    height: 50,
+    paddingHorizontal: 15,
+    fontSize: 16,
+  },
+  eyeIcon: {
+    padding: 15,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+    marginTop: 3,
+    paddingLeft: 5,
+  },
+  footer: {
+    padding: 20,
+    borderTopWidth: 1,
+    borderTopColor: '#EEE',
+    backgroundColor: '#FFF',
+    position: 'absolute', bottom: 0, zIndex: 1000, width: '100%'
+  },
+  loginLink: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 15,
+  },
+  loginText: {
+    color: '#FF4500',
+    fontSize: 14,
+  },
+  loginTextBold: {
+    fontWeight: 'bold',
+  },
+  signupButton: {
+    backgroundColor: '#FF4500',
+    height: 50,
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  signupButtonText: {
+    color: '#FFF',
+    fontSize: 16,
+    fontWeight: '500',
+  },
+});
 
 export default Signup;

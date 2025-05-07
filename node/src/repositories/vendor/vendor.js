@@ -7,19 +7,19 @@ import { errorHandler } from "../../utils/erroHandler.js";
 
 
 // Create new Vendor
-export async function createVendor({ fname, lname, seller_id, email, phone, hashedPwd, state, campus, gender }) {
+export async function createVendor({ fname, lname, user_id, email, phone, hashedPwd, state, campus, gender, deviceId }) {
   const result = await pool.query(
     `INSERT INTO users (
-    id, fname, lname, seller_id, email, phone, password, state,
+    id, fname, lname, user_id, email, phone, password, state,
     campus, isActive, isVerified, isEmailVerified, isPhoneVerified,
-    date, lastseen, gender
+    date, lastseen, gender, deviceid
     ) VALUES (
     DEFAULT, $1, $2, $3, $4, $5, $6, $7,
-    $8, $9, $10, $11, $12, $13, $14, $15
+    $8, $9, $10, $11, $12, $13, $14, $15, $16
     )`,
     [
-      fname, lname, seller_id, email, phone, hashedPwd, state, campus,
-      false, false, false, false, `${new Date()}`, `${new Date()}`, gender
+      fname, lname, user_id, email, phone, hashedPwd, state, campus,
+      false, false, false, false, `${new Date()}`, `${new Date()}`, null, deviceId
     ]
   );
   let response = await errorHandler(result?.rowCount);
@@ -49,10 +49,10 @@ export async function countPhone ({ phone }) {
 }
 
 // Find user by ID
-export async function findUserById({seller_id}) {
+export async function findUserById({user_id}) {
   const result = await pool.query(
-    `SELECT * FROM users WHERE seller_id = $1`,
-    [seller_id]
+    `SELECT * FROM users WHERE user_id = $1`,
+    [user_id]
   );
   return result.rows[0];
 };
@@ -66,38 +66,38 @@ export async function findUserByEmail({ email }) {
   return result.rows[0];
 };
 
-export async function updateVendorPhoneById({ seller_id, phone }) {
+export async function updateVendorPhoneById({ user_id, phone }) {
   
   const result = await pool.query(
-    `UPDATE users set phone = $1 WHERE seller_id = $2`,
-    [phone, seller_id]
+    `UPDATE users set phone = $1 WHERE user_id = $2`,
+    [phone, user_id]
   );
   return result.rows[0];
 };
 
-export async function updateVendorEmailById({ seller_id, email }) {
+export async function updateVendorEmailById({ user_id, email }) {
   
   const result = await pool.query(
-    `UPDATE users set email = $1 WHERE seller_id = $2`,
-    [email, seller_id]
+    `UPDATE users set email = $1 WHERE user_id = $2`,
+    [email, user_id]
   );
   return result.rows[0];
 };
 
-export async function updateVendorProfileById({ seller_id, fname, lname, gender }) {
+export async function updateVendorProfileById({ user_id, fname, lname, gender }) {
   
   const result = await pool.query(
-    `UPDATE users set fname=$1, lname=$2, gender=$3 WHERE seller_id = $4`,
-    [fname, lname, gender, seller_id]
+    `UPDATE users set fname=$1, lname=$2, gender=$3 WHERE user_id = $4`,
+    [fname, lname, gender, user_id]
   );
   return result.rows[0];
 };
 
-export async function updateVendorPasswordById({ seller_id, pwd }) {
+export async function updateVendorPasswordById({ user_id, pwd }) {
   
   const result = await pool.query(
-    `UPDATE users set password=$1 WHERE seller_id = $2`,
-    [pwd, seller_id]
+    `UPDATE users set password=$1 WHERE user_id = $2`,
+    [pwd, user_id]
   );
   return result.rows[0];
 };

@@ -39,7 +39,7 @@ const Card = ({item,index,unit,getTotalPrice, product_id}) => {
         
         function Handler(params) {
             try {
-                let result = UpdateCartUnit(type,window.localStorage.getItem('CE_buyer_id'),item.item.product_id)
+                let result = UpdateCartUnit(type,window.localStorage.getItem('CE_user_id'),item.item.product_id)
                 if(type === 'add'){
                     let oldUnit = unit.filter(data => data.product_id === item.item.product_id)[0].unit;
                     
@@ -81,7 +81,7 @@ const Card = ({item,index,unit,getTotalPrice, product_id}) => {
         e.target.disabled = true;
 
         try {
-            let result = DeleteItemFromCart(product_id, window.localStorage.getItem('CE_buyer_id'))
+            let result = DeleteItemFromCart(product_id, window.localStorage.getItem('CE_user_id'))
             dispatch(setCartTo(result))
             e.target.disabled = false;
             e.target.parentElement.remove()

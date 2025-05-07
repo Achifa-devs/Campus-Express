@@ -25,12 +25,12 @@ export default function Shopile() {
     },[user])
 
     function get_shop_data() {
-        fetch('http://192.168.105.146:3000/api/vendor/shop', {
+        fetch('http://192.168.209.146:3000/api/vendor/shop', {
             method: 'post',
             headers: {
                 "Content-Type": "Application/json"
             },
-            body: JSON.stringify({seller_id: user?.seller_id})
+            body: JSON.stringify({user_id: user?.user_id})
         })
         .then(async(result) => {
             

@@ -2,18 +2,26 @@
     {
         "category": 
         [
+            
             {
-                "Food": 
-                [
-                    "Create Custom Item","Meat","Fruits","Vegetables","Oil","Grains","Legumes","Junk Food/Snaks","Sea Food","Processed Food","Beverages"
+                "Lodge & Apartments": [
+                    "For Single Occupancy", "For Shared Accommodation (Roommates)"
                 ],
-                "img": "/app/src/assets/food-market-purchasing-svgrepo-com.svg"
+                "Single": [
+                    "Private Room for Rent","Exclusive Student Accommodation"
+                ],
+                "Roomate": [
+                    "Roommate Needed for Student Lodge [Searching for Roomate]","Shared Room Available [New Occupants]"
+                ],
+                "img": ""
             },
+
+            
 
             {
                 "Electronics":
                 [
-                    "Create Custom Item","Audio/Musical Equipment","Photo/Video Camera","Printer/Scanners","Video Game Console","Video Games","T.V/DVD","MIFI/Routers"
+                    "Audio/Musical Equipment","Photo/Video Camera","Printer","Scanners","T.V","DVD","MIFI/Routers"
                 ],
                 "img": ""
             },
@@ -21,26 +29,54 @@
             {
                 "Fashion": 
                 [
-                    "Create Custom Item","Bags","Clothing","Jewelry","Foot Wear","Watch"
+                    "Bags","Clothing","Jewelry","Foot Wear","Watch", "Sneakers","Accessories"
                 ],
-                "FootWear":  ["<==Create Custom Sub Category ==>","Sandals","Shoes","Cotina","Palms","Boots","Slippers"],
-                "ClothingMale": ["<==Create Custom Sub Category ==>","Underwear","Tops","Trousees","Nicker/Shorts","Sports-wear","Swim-suit"],
-                "ClothingFemale": ["<==Create Custom Sub Category ==>","Underwear","Tops","Trousees","Nicker/Shorts","Sports-wear","Gown","Skirt","Swim-suit"],
+                "FootWear":  ["Sandals","Shoes","Cotina","Palms","Boots","Slippers"],
+                "ClothingMale": ["Underwear","Tops","Trousees","Nicker/Shorts","Sports-wear","Swim-suit"],
+                "ClothingFemale": ["Underwear","Tops","Trousees","Nicker/Shorts","Sports-wear","Gown","Skirt","Swim-suit"],
+                "Accessories": ["Belt","Solks","Bangos","Chain","Necklace","Cap","Ski-Mask"],
                 "img": ""
             },
 
             {
-                "Health/Beauty": 
+                "Health & Beauty": 
                 [
-                    "Create Custom Item","Bath/Body","Hair Care","Skin Care","Wig/Weavon","Fragrance","Make-Up","Tool Accessories","Sexual Wellness"
+                    "Bath & Body","Hair Care","Skin Care","Wig & Weavon","Fragrance","Make-Up","Tool Accessories","Sexual Wellness"
                 ],
                 "img": ""
+            },
+            {
+                "Services": [
+                    "Barber", 
+                    "Hairdresser", 
+                    "Cleaner", 
+                    "Laundry", 
+                    "Photographer", 
+                    "Make-Up Artist", 
+                    "Tailor/Fashion Designer", 
+                    "Home Tutor", 
+                    "Chef/Cook", 
+                    "Manicure/Pedicure", 
+                    "Massage Therapist", 
+                    "Painter", 
+                    "Phone/Laptop Repair", 
+                    "Plumber", 
+                    "Electrician"
+                ],
+                "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1746200400/services_icon_1_w5lpuy.png"
+            },
+            {
+            "Games": 
+            [
+                "PlayStation","Xbox","Nintendo","PSP (PlayStation Portable)","PS Vita"
+            ],
+            "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1745878942/Fuji_Gaming_store_Dashboard_card_1x_EN._SY304_CB564799420__haac9y.jpg"
             },
 
             {
                 "Mobile Phones": 
                 [
-                    "Create Custom Item","Android","Samsung","IOS","Windows","BalckBerry","Symbian"
+                    "Android","Samsung","IOS","Windows","BalckBerry","Cell Phone"
                 ],
                 "img": ""
             },
@@ -49,31 +85,31 @@
             {
                 "Tablets": 
                 [
-                    "Create Custom Item","Android","Samsung","IOS","Windows","BalckBerry"
+                    "Android","Samsung","IOS","Windows","BalckBerry"
                 ],
                 "img": ""
             },
 
             {
-                "Laptops/Desktops": 
+                "Laptops & Desktops": 
                 [
-                    "Create Custom Item","Windows","Mac","Chrome","Ubuntu","Linux"
+                    "Windows","Mac","Chrome","Ubuntu","Linux"
                 ],
                 "img": ""
             },
 
             {
-                "Laptops/Desktops Accessories": 
+                "Laptops & Desktops Accessories": 
                 [
-                    "Create Custom Item","Monitor","Speakers","C.P.U","Flash Drive","Hard Disk/SSD","Mouse","Keyboard","Charger/Cords"
+                    "Monitor","Speakers","C.P.U","Flash Drive","Hard Disk/SSD","Mouse","Keyboard","Charger/Cords"
                 ],
                 "img": ""
             },
 
             {
-                "Phone/Tablet Accessories": 
+                "Phone & Tablet Accessories": 
                 [
-                    "Create Custom Item","Ear Piece","Charger","Memory Card","Battery","Sim Card","Phone Case","OTG","Air Pod","Power Bank"
+                    "Ear Piece","Charger","Memory Card","Battery","Sim Card","Phone Case","OTG","Air Pod","Power Bank"
                 ],
                 "img": ""
             },
@@ -81,27 +117,87 @@
             {
                 "Pets": 
                 [
-                    "Create Custom Item","Cat","Dog","Bird","Rabbit","Turtle","Snakes","Mice","Parrot","Chicken"
+                    "Cat","Dog","Bird","Rabbit","Snakes","Mice","Parrot"
                 ],
                 "img": ""
             },
 
+            {
+                "Stationery & Study Supplies": [
+                    "Textbooks", "Notebooks", "Pens & Pencils", "Highlighters", "Calculators", "Drawing Materials", "Staplers", "Whiteboard & Markers", "Folders"
+                ],
+                "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1746200000/stationery_d3m8xk.png"
+            },
+
+            {
+                "School Essentials": [
+                    "Backpacks", "Lab Coats", "ID Card Holders", "Scientific Calculators", "Rulers", "Mathematical Sets"
+                ],
+                "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1746200055/school_essentials_bfd2xn.png"
+            },
+
+            {
+                "Sports & Fitness": [
+                    "Jersey", "Sneakers", "Dumbbells", "Skipping Ropes", "Yoga Mats", "Fitness Trackers", "Bicycles", "Balls"
+                ],
+                "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1746200100/sports_fitness_ujodze.png"
+            },
+
+            {
+                "Cleaning Supplies": [
+                    "Detergents", "Brooms", "Mops", "Buckets", "Disinfectants", "Toilet Brush", "Air Fresheners"
+                ],
+                "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1746200142/cleaning_supplies_lapnpb.png"
+            },
+            {
+                "Food": 
+                [
+                    "Meat","Fruits","Vegetables","Oil","Grains","Legumes","Junk Food & Snaks","Sea Food","Processed Food", "Wine","Beverages","Food"
+                ],
+                "img": "/app/src/assets/food-market-purchasing-svgrepo-com.svg"
+            },
+            {
+                "Decor & Room Items": [
+                    "Curtains", "Bed Sheets", "Pillows", "Rugs", "Wall Art", "Mirrors", "Clocks", "Lamp Shades"
+                ],
+                "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1746200183/room_decor_uxfbqg.png"
+            },
+
+            {
+                "Subscription & Gift Cards": [
+                    "Netflix", "Spotify", "Apple Music", "Google Play", "Amazon", "PlayStation Store", "iTunes"
+                ],
+                "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1746200225/gift_cards_vmxlvl.png"
+            },
+
+            {
+                "Beddings & Linens": [
+                    "Blankets", "Mattress", "Duvets", "Pillow Cases", "Bed Covers", "Mosquito Net"
+                ],
+                "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1746200263/beddings_ghs7yc.png"
+            },
+           
             {
                 "Vehicle": 
                 [
-                    "Create Custom Item","SUV","Sedan","Mini Van","Truck","Bus","Tricycle","Bicycle","MotorCycle","Van"
+                    "SUV","Sedan","Mini Van","Truck","Bus","Tricycle","Bicycle","MotorCycle","Van"
                 ],
                 "img": ""
             },
 
             
-
+            {
+                "Cleaning Agents": 
+                [
+                    "Detergents","Insecticide","Disinfectants","Acid Cleaners"
+                ],
+                "img": ""
+            },
             
-
             {
                 "Furnitures": 
                 [
-                    "Create Custom Item","Chair","Table","CupBoard","Shelve","Wardrobe","Stool","Bench","Bed"
+                    "Chair","Table","CupBoard","Shelve","Wardrobe","Stool","Bench","Bed"
                 ],
                 "img": ""
             },
@@ -109,7 +205,7 @@
             {
                 "Appliances": 
                 [
-                    "Create Custom Item","Gas","Stove","Generator","Electric Cooker","Blender","Washing Machine","Refridgerator","Kettle","Fan","Bulb","Stabilizer","Toaster","Vacuum Cleaner","Dish Washer","Micro Wave","Oven","Mixer"
+                    "Gas","Stove","Generator","Electric Cooker","Blender","Washing Machine","Refridgerator","Kettle","Fan","Bulb","Stabilizer","Toaster","Vacuum Cleaner","Dish Washer","Micro Wave","Oven","Mixer"
                 ],
                 "img": ""
             },
@@ -117,11 +213,10 @@
             {
                 "Utensils": 
                 [
-                    "Create Custom Item","Plate","Pot","Spoon/Fork","Knife","Tray","Basket","Cup"
+                    "Plate","Pot","Spoon/Fork","Knife","Tray","Basket","Cup"
                 ],
                 "img": ""
             }
-
 
         ]
     }

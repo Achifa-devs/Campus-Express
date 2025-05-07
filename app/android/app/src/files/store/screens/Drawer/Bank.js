@@ -31,7 +31,7 @@ export default function Bank() {
     }
 
     function verify() {
-        fetch(`http://192.168.105.146:9090/bank-verification`, {
+        fetch(`http://192.168.209.146:9090/bank-verification`, {
             method: 'post',
             headers: {
                 "Content-Type": "Application/json"
@@ -55,12 +55,12 @@ export default function Bank() {
     }
 
     function create() {
-        fetch(`http://192.168.105.146:9090:9090/api/shop/payment/create`, {
+        fetch(`http://192.168.209.146:9090:9090/api/shop/payment/create`, {
             method: 'post',
             headers: {
                 "Content-Type": "Application/json"
             },
-            body: JSON.stringify({acct_num: acctNo, beneficiary: beneficiary, bank: bankName, seller_id: user?.seller_id })
+            body: JSON.stringify({acct_num: acctNo, beneficiary: beneficiary, bank: bankName, user_id: user?.user_id })
         })   
         .then(async(result) => {
             let response = await result.json();

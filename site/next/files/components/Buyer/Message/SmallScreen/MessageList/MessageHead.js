@@ -13,7 +13,7 @@ export default function MessageHead({data, index, setRoomId}) {
     let navigate = useNavigate()
   return (
     <>
-        <section key={index} onClick={e => navigate(`/buyer.room/${data.seller_data.seller_id}?room=${data.room}`)}>
+        <section key={index} onClick={e => navigate(`/buyer.room/${data.seller_data.user_id}?room=${data.room}`)}>
             <div style={{
                 height: '50px',
                 width: '50px',

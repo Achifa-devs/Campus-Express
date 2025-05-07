@@ -10,9 +10,9 @@ export async function GET(request) {
   const { searchParams } = new URL(request.url);
   
 
-  if (searchParams.get('seller_id')) {
-    const seller_id = searchParams.get('seller_id') || 'Default Product';
-    const res = await pool.query(`SELECT * FROM seller_shop WHERE seller_id='${seller_id}'`);
+  if (searchParams.get('user_id')) {
+    const user_id = searchParams.get('user_id') || 'Default Product';
+    const res = await pool.query(`SELECT * FROM products WHERE user_id='${user_id}'`);
     return NextResponse.json({bool: true, data: res.rows});
   }
 

@@ -26,13 +26,13 @@ export default function MessageLg() {
 
         try {
             async function getData() {
-                let result = await GetChatRooms(window.localStorage.getItem('CE_seller_id'))
+                let result = await GetChatRooms(window.localStorage.getItem('CE_user_id'))
                 setItem(result)
                 // console.log(result)
 
                 let path = location.pathname.split('/').splice(-1)[0].split('-')[0] === 'CE'
                 if(path){
-                    let response = result.filter(item => item?.buyer_data?.buyer_id === location.pathname.split('/').splice(-1)[0]);  
+                    let response = result.filter(item => item?.buyer_data?.user_id === location.pathname.split('/').splice(-1)[0]);  
                     setRoomData(response[0]?.mssg?.mssg_id);
                     setActiveRoom(response[0]);
                 }

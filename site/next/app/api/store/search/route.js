@@ -10,7 +10,7 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const word = searchParams.get('word');
 
-    const result = await pool.query(`SELECT * FROM seller_shop`);
+    const result = await pool.query(`SELECT * FROM products`);
   
     const list = result.rows;
     const filteredList = list.filter(item => item.title.toLowerCase().indexOf(word.toLowerCase()) > -1);

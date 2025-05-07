@@ -1,4 +1,4 @@
-function seller_shop_overlay_setup(status, content) {
+function products_overlay_setup(status, content) {
     
     let overlay = document.createElement('div')
 
@@ -43,6 +43,6 @@ const MyEditor = () => {
 
 
 module.exports={
-    seller_shop_overlay_setup,
+    products_overlay_setup,
     MyEditor
 }

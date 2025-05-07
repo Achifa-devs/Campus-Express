@@ -75,7 +75,7 @@ const ShowcaseCard = ({item, index}) => {
 
                 if(duplicateSearch.length > 0){
     
-                    // let result = await UnSaveItem(product_id, window.localStorage.getItem('CE_buyer_id'));
+                    // let result = await UnSaveItem(product_id, window.localStorage.getItem('CE_user_id'));
                     // setBtnMode(!btnMode) 
                     // overlay.removeAttribute('id')
                     // dispatch(setSaveTo(result))
@@ -83,7 +83,7 @@ const ShowcaseCard = ({item, index}) => {
     
                 }else{
                     
-                    // let result = await SaveItem(product_id, window.localStorage.getItem('CE_buyer_id'))
+                    // let result = await SaveItem(product_id, window.localStorage.getItem('CE_user_id'))
                     // setBtnMode(!btnMode) 
                     // overlay.removeAttribute('id')
                     // dispatch(setSaveTo(result))
@@ -92,7 +92,7 @@ const ShowcaseCard = ({item, index}) => {
                 }
             }else{
     
-                // let result = await SaveItem(product_id, window.localStorage.getItem('CE_buyer_id'))
+                // let result = await SaveItem(product_id, window.localStorage.getItem('CE_user_id'))
                 // setBtnMode(!btnMode) 
                 // overlay.removeAttribute('id')
                 // dispatch(setSaveTo(result))
@@ -113,7 +113,7 @@ const ShowcaseCard = ({item, index}) => {
 
     useEffect(() => {
         if(buyerData){
-            // GetOrders(buyerData?.buyer_id)
+            // GetOrders(buyerData?.user_id)
             // .then((result) => {
             //     console.log(result)
             //     if(result){

@@ -48,8 +48,8 @@ const Product = ({ item, seller, order_list }) => {
 
 
     let {
-        buyer_id
-    } = useSelector(s => s.buyer_id);
+        user_id
+    } = useSelector(s => s.user_id);
     let { 
         savedItem
     } = useSelector(s => s.savedItem)
@@ -95,9 +95,9 @@ const Product = ({ item, seller, order_list }) => {
     async function handleOrder(id) {
         // window.location.href=(`/new-order/${id.trim()}`)
 
-        let result = order_list.filter((data) => data?.product?.product_id === item?.product_id && data?.order?.buyer_id === buyer_id)?.length
+        let result = order_list.filter((data) => data?.product?.product_id === item?.product_id && data?.order?.user_id === user_id)?.length
         if(result<1){
-            if(buyer_id === null || buyer_id === '' || buyer_id === 'null'){
+            if(user_id === null || user_id === '' || user_id === 'null'){
                 window.location.href=(`/store/login`)
                 
             }else{
@@ -220,7 +220,7 @@ const Product = ({ item, seller, order_list }) => {
                             {/* <Contact phone={phone}   /> */}
                             <button style={{borderRadius: '2.5px',border: 'none', outline: 'none', width: '100%'}} className='shadow' onClick={e=>handleOrder(item.product_id)}>
                                 {
-                                    order_list?.filter((data) => data?.product?.product_id === item?.product_id && data?.order?.buyer_id === buyer_id).length > 0
+                                    order_list?.filter((data) => data?.product?.product_id === item?.product_id && data?.order?.user_id === user_id).length > 0
                                     ?
 
                                     'View Order'

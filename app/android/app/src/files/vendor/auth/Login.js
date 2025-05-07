@@ -64,7 +64,7 @@ const Login = ({}) => {
         if (data) {
             set_server_err(true)
 
-            fetch('http://192.168.105.146:9090/vendor/login', {
+            fetch('http://192.168.209.146:9090/vendor/login', {
                 method: 'post',
                 headers: {
                     "Content-Type": "Application/json"
@@ -77,7 +77,7 @@ const Login = ({}) => {
                 // console.log(result)
                 const { data, success } = response;
                 if (success) {
-                    setUserId(data.seller_id)
+                    setUserId(data.user_id)
                     CookieManager.set('https://campussphere.net', {
                         name: 'jwt_token',
                         value: data.cookie,

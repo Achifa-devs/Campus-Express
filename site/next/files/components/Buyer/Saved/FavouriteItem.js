@@ -10,18 +10,18 @@ import { useSelector } from 'react-redux';
 
 export default function FavouriteItem({ item, index }) {
     let {
-        buyer_id 
-    } = useSelector(s => s.buyer_id);
+        user_id 
+    } = useSelector(s => s.user_id);
     let [orders, set_orders] = useState([0]);
     let [ordered, set_ordered] = useState([0]);
    
     let [screenWidth, setScreenWidth] = useState(0);
     useEffect(() => {setScreenWidth(window.innerWidth)},[]);
     useEffect(() => {
-        if (buyer_id !== '' && buyer_id !== null) {
+        if (user_id !== '' && user_id !== null) {
             buyer_overlay_setup(true, 'Loading')
             
-            axios.get('http://192.168.24.146:9090/orders', {params: {buyer_id: buyer_id.trim()}})
+            axios.get('http://192.168.24.146:9090/orders', {params: {user_id: user_id.trim()}})
             .then(({data})=>{
                 console.log(data)
                 set_orders(data)
@@ -36,7 +36,7 @@ export default function FavouriteItem({ item, index }) {
 
         }
 
-    }, [buyer_id])
+    }, [user_id])
     
     useEffect(() => {
         if (orders) {
@@ -91,7 +91,7 @@ export default function FavouriteItem({ item, index }) {
                                 whiteSpace: 'nowrap', /* Prevent text from wrapping */
                                 overflow: 'hidden',    /* Hide any overflow text */
                                 textOverflow: 'ellipsis'
-                            }}>Seller-id: {item?.saved_item[0]?.seller_id}</span>
+                            }}>Seller-id: {item?.saved_item[0]?.user_id}</span>
                         </div>
 
                         <div className="stock">
@@ -102,7 +102,7 @@ export default function FavouriteItem({ item, index }) {
                     <div className="body-cnt-btm">
                         <button onClick={e => {
                             buyer_overlay_setup(true, 'Unsaving item')
-                            axios.delete('http://192.168.24.146:9090/unsave-item', {params: {buyer_id: item?.item?.buyer_id, product_id: item?.saved_item[0]?.product_id}})
+                            axios.delete('http://192.168.24.146:9090/unsave-item', {params: {user_id: item?.item?.user_id, product_id: item?.saved_item[0]?.product_id}})
                             .then(({data})=>{
                                 e.target.parentElement.parentElement.parentElement.parentElement.remove()
                                 // setItems(data)

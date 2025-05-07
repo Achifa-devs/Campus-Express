@@ -5,20 +5,20 @@ import shortId from "short-id"
 import { errorHandler } from "../../utils/erroHandler.js";
 
 // Find product by ID
-export async function findProductById({ product_id, seller_id }) {
+export async function findProductById({ product_id, user_id }) {
     const result = await pool.query(
-    `SELECT * FROM products WHERE product_id = $1 AND seller_id = '${seller_id}'`,
-    [product_id, seller_id]
+    `SELECT * FROM products WHERE product_id = $1 AND user_id = '${user_id}'`,
+    [product_id, user_id]
     );
   return result.rows;
 };
 
 // Find products
-export async function findProducts({ seller_id }) {
+export async function findProducts({ user_id }) {
 
   const result = await pool.query(
-    `SELECT * FROM products WHERE seller_id = $1 `
-    [seller_id]
+    `SELECT * FROM products WHERE user_id = $1 `
+    [user_id]
   );
   return result.rows;
 };
@@ -50,7 +50,7 @@ export async function createProduct({ constantData, dynamicData, shipping_data }
     let replacedTitle = constantData.title.replace(/'/g, '"');
 
     let {
-        category, price, stock, productId, seller_id, thumbnail_id, campus, state, thumbnail_public_id
+        category, price, stock, productId, user_id, thumbnail_id, campus, state, thumbnail_public_id
     }=constantData
 
     
@@ -62,7 +62,7 @@ export async function createProduct({ constantData, dynamicData, shipping_data }
         `INSERT INTO products(
             id,
             product_id,
-            seller_id,
+            user_id,
             status,
             title,
             description,
@@ -89,7 +89,7 @@ export async function createProduct({ constantData, dynamicData, shipping_data }
         )`,
         [
             productId,
-            seller_id,
+            user_id,
             'unsold',
             replacedTitle,
             replacedDescription,
@@ -142,7 +142,7 @@ export async function updateProduct({ constantData, dynamicData, shipping_data }
     let replacedTitle = constantData.title.replace(/'/g, '"');
 
     let {
-        category, price, stock, productId, seller_id, thumbnail_id, campus, state, thumbnail_public_id
+        category, price, stock, productId, user_id, thumbnail_id, campus, state, thumbnail_public_id
     }=constantData
 
     
@@ -171,7 +171,7 @@ export async function updateProduct({ constantData, dynamicData, shipping_data }
             campus=$17,
             uni_state=$18,
             thumbnail_public_id=$19
-            WHERE product_id = $20 AND seller_id = $21
+            WHERE product_id = $20 AND user_id = $21
         `,
         [
             'unsold',
@@ -195,7 +195,7 @@ export async function updateProduct({ constantData, dynamicData, shipping_data }
             state,
             thumbnail_public_id,
             productId,
-            seller_id
+            user_id
         ]
     );
     

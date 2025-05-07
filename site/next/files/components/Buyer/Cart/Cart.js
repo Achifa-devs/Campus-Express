@@ -46,7 +46,7 @@ const Cart = () => {
     useEffect(() => {
         
         try {
-            let result = GetCartItems(window.localStorage.getItem('CE_buyer_id'))
+            let result = GetCartItems(window.localStorage.getItem('CE_user_id'))
 
             if(result){
                 setItems(result);

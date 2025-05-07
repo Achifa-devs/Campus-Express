@@ -6,17 +6,17 @@ import pool from "../../db";
 const PAYSTACK_SECRET = 'Bearer sk_live_0b40ab530a17bf672214c095e1b6f57d2c3dba2a';
 
 // Save buyer transaction
-async function save_buyer_transaction(buyer_id, payment_src, payment_type, app_fee, amount, date, reason) {
+async function save_buyer_transaction(user_id, payment_src, payment_type, app_fee, amount, date, reason) {
     try {
         // const pool = await NeonDB; // Ensure NeonDB resolves before use
         const query = `
             INSERT INTO buyer_transactions (
-                buyer_id, payment_src, payment_type, app_fee, amount, date, reason
+                user_id, payment_src, payment_type, app_fee, amount, date, reason
             ) VALUES ($1, $2, $3, $4, $5, $6, $7)
             RETURNING id;
         `;
 
-        const values = [buyer_id, payment_src, payment_type, app_fee, amount, date, reason];
+        const values = [user_id, payment_src, payment_type, app_fee, amount, date, reason];
 
         const result = await pool.query(query, values);
         return { bool: result.rowCount > 0 };
@@ -27,18 +27,18 @@ async function save_buyer_transaction(buyer_id, payment_src, payment_type, app_f
 }
 
 // Update order status after payment
-async function update_order(product_id, buyer_id) {
+async function update_order(product_id, user_id) {
     try {
         // const pool = await NeonDB; // Ensure NeonDB resolves before use
 
         const query = `
-            UPDATE campus_express_buyer_orders 
+            UPDATE orders 
             SET havePaid = $1
-            WHERE buyer_id = $2 AND product_id = $3
+            WHERE user_id = $2 AND product_id = $3
             RETURNING order_id, stock, pick_up_channels;
         `;
 
-        const values = [true, buyer_id, product_id];
+        const values = [true, user_id, product_id];
 
         const result = await pool.query(query, values);
 
@@ -81,7 +81,7 @@ export async function POST(req) {
            
             // Save buyer transaction
             const transactionResult = await save_buyer_transaction(
-                buyer_info.buyer_id, 
+                buyer_info.user_id, 
                 'Paystack', 
                 'checkout', 
                 0, // Assuming app fee is 0 for now
@@ -92,7 +92,7 @@ export async function POST(req) {
 
             // If transaction saved successfully, update order
             if (transactionResult.bool) {
-                await update_order(product_info.product_id, buyer_info.buyer_id);
+                await update_order(product_info.product_id, buyer_info.user_id);
             }
 
             return NextResponse.json({ message: "Payment processed and order updated" }, { status: 200 });

@@ -34,8 +34,8 @@ import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup';
 export default function NewOrder() {
     let pathname = usePathname()
     let {
-        buyer_id
-    }=useSelector(s=>s.buyer_id);
+        user_id
+    }=useSelector(s=>s.user_id);
     let [deliveryOpt, setdeliveryOpt] = useState(-1);
     let [stock, setstock] = useState(1);
     let [screenWidth, setScreenWidth] = useState(0);
@@ -89,10 +89,10 @@ export default function NewOrder() {
 
     useEffect(() => {
 
-        if (buyer_id !== '' && buyer_id !== null && buyer_id !== 'null') {
+        if (user_id !== '' && user_id !== null && user_id !== 'null') {
 
             
-            axios.get('http://192.168.24.146:9090/order', {params: {buyer_id: buyer_id, product_id: pathname.split('/').splice(-1)[0]}})
+            axios.get('http://192.168.24.146:9090/order', {params: {user_id: user_id, product_id: pathname.split('/').splice(-1)[0]}})
             .then(({data})=>{
                 set_order(data)
                 set_order_id(data[0]?.order?.order_id)
@@ -106,14 +106,14 @@ export default function NewOrder() {
 
             })
         }
-    }, [buyer_id])
+    }, [user_id])
 
     useEffect(() => {
 
-        if (buyer_id !== '' && buyer_id !== null && buyer_id !== 'null') {
+        if (user_id !== '' && user_id !== null && user_id !== 'null') {
 
             
-            axios.get('http://192.168.24.146:9090/refund', {params: {buyer_id: buyer_id, product_id: pathname.split('/').splice(-1)[0]}})
+            axios.get('http://192.168.24.146:9090/refund', {params: {user_id: user_id, product_id: pathname.split('/').splice(-1)[0]}})
             .then(({data})=>{
                 if (data.length > 0) {
                     set_refund(data)
@@ -128,7 +128,7 @@ export default function NewOrder() {
                 buyer_overlay_setup(false, '')
             })
         }
-    }, [buyer_id])
+    }, [user_id])
 
   return (
     <>

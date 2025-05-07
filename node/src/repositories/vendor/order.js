@@ -14,10 +14,10 @@ export async function findOrderById({ order_id }) {
 };
 
 // Find orders
-export async function findOrders({ seller_id }) {
+export async function findOrders({ user_id }) {
   const result = await pool.query(
-    `SELECT * FROM orders WHERE seller_id = $1`,
-    [seller_id]
+    `SELECT * FROM orders WHERE user_id = $1`,
+    [user_id]
   );
   return result.rows;
 };

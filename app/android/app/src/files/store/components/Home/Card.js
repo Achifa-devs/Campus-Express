@@ -14,7 +14,7 @@ export default function Card({ item }) {
 
     const handlePress = () => {
         if (isMoreCard) {
-            navigation.navigate('all-categories'); // Update route if needed
+            navigation.navigate('all-category'); // Update route if needed
         } else {
             navigation.navigate('user-type', {
                 types: Object.values(item)[0],
@@ -32,7 +32,7 @@ export default function Card({ item }) {
                     <Text style={styles.moreText}>+</Text>
                 )}
             </View>
-            <Text style={styles.label} numberOfLines={1}>{categoryName}</Text>
+            <Text style={styles.label} numberOfLines={2}>{categoryName}</Text>
         </TouchableOpacity>
     );
 }
@@ -40,6 +40,7 @@ export default function Card({ item }) {
 const styles = StyleSheet.create({
     cardContainer: {
         width: size + 10,
+        // height: 100,
         margin: 8,
         alignItems: 'center',
     },

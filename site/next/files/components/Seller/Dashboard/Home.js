@@ -31,7 +31,7 @@ const Home = () => {
         let overlay = document.querySelector('.overlay')
         if(params !== 'first_login'){
             overlay.setAttribute('id', 'overlay');
-            GetOverview(window.localStorage.getItem("CE_seller_id"))
+            GetOverview(window.localStorage.getItem("CE_user_id"))
             .then((result) => {
                 set_total_for_sale(result.total_sale)
                 set_total_reported(result.total_reported)
@@ -54,7 +54,7 @@ const Home = () => {
             },
             body: JSON.stringify(
                 {
-                   seller_id: window.localStorage.getItem('CE_seller_id')
+                   user_id: window.localStorage.getItem('CE_user_id')
                 }
             )
         })
@@ -77,7 +77,7 @@ const Home = () => {
             },
             body: JSON.stringify(
                 {
-                   seller_id: window.localStorage.getItem('CE_seller_id'),
+                   user_id: window.localStorage.getItem('CE_user_id'),
                    phone: sellerData.phone
                 } 
             )

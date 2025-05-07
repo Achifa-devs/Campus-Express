@@ -20,7 +20,7 @@ const Mssg = ({mssg_id}) => {
         // })
     },[]) 
 
-    // onClick={e => navigate(`/product/${product_id}?seller_id=${seller_id}`)}
+    // onClick={e => navigate(`/product/${product_id}?user_id=${user_id}`)}
 
     return ( 
         <>

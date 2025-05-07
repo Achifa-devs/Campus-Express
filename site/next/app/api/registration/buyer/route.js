@@ -13,7 +13,7 @@ export async function POST(req) {
 
     const date = new Date().toLocaleString();
     const hashedPwd = await bcrypt.hash(pwd, 10);
-    const buyer_id = `CE-${shortId.generate()}`;
+    const user_id = `CE-${shortId.generate()}`;
 
     // Check if email already exists
     const emailCheck = await pool.query(
@@ -36,7 +36,7 @@ export async function POST(req) {
     // Insert buyer
     const insertbuyer = await pool.query(
       `INSERT INTO campus_buyers (
-        id, fname, lname, buyer_id, email, phone, password, state,
+        id, fname, lname, user_id, email, phone, password, state,
         campus, isActive, isVerified, isEmailVerified, isPhoneVerified,
         date, gender
       ) VALUES (
@@ -44,7 +44,7 @@ export async function POST(req) {
         $8, $9, $10, $11, $12, $13, $14
       )`,
       [
-        fname, lname, buyer_id, email, phone, hashedPwd, state, campus,
+        fname, lname, user_id, email, phone, hashedPwd, state, campus,
         false, false, false, false, date, gender
       ]
     );
@@ -53,11 +53,11 @@ export async function POST(req) {
     await pool.query(
       `INSERT INTO coverphoto (id, file, user_id, date)
        VALUES (DEFAULT, $1, $2, $3)`,
-      ['null', buyer_id, new Date()]
+      ['null', user_id, new Date()]
     );
 
     // Create JWT and Set Secure Cookie
-    const token = createToken({ id: buyer_id }, 'kdiU$28Fs!9shF&2xZpD3Q#1gLx@R7TkWzPq');
+    const token = createToken({ id: user_id }, 'kdiU$28Fs!9shF&2xZpD3Q#1gLx@R7TkWzPq');
 
     cookies().set('buyer_secret', token, {
       httpOnly: true,
@@ -67,7 +67,7 @@ export async function POST(req) {
       maxAge: 60 * 60 * 24 * 7, // 7 days
     });
 
-    return NextResponse.json({ bool: true, id: buyer_id }, { status: 200 });
+    return NextResponse.json({ bool: true, id: user_id }, { status: 200 });
 
   } catch (err) {
     console.error('Registration error:', err);

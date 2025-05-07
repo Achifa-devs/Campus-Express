@@ -80,7 +80,7 @@ function Profile() {
 
     useEffect(() => {
         async function getPhoto(){
-          let result = await GetSellerPhoto(window.localStorage.getItem('CE_seller_id'))
+          let result = await GetSellerPhoto(window.localStorage.getItem('CE_user_id'))
           if(result.file === 'null'){
                 setPhoto(userPhoto)
                 setSelectedPhoto('')
@@ -109,7 +109,7 @@ function Profile() {
     let UpdateProfile = () => {
         let overlay = document.querySelector('.overlay')
         overlay.setAttribute('id', 'overlay');
-        UpdateSellerProfile(fname,lname,state,campus,window.localStorage.getItem('CE_seller_id'),selectedPhoto)
+        UpdateSellerProfile(fname,lname,state,campus,window.localStorage.getItem('CE_user_id'),selectedPhoto)
         .then((result) => result ? overlay.removeAttribute('id') : '')
         .catch((err) => console.log(err))
     }

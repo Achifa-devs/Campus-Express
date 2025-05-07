@@ -14,7 +14,7 @@ export default function DeliveryAddress({item,refund_id,refund,updateDeliveryOpt
     let [locale, setLocale] = useState([]);
     let [deliveryOpt, setdeliveryOpt] = useState(-1);
     let [pickUpChannel, setpickUpChannel] = useState('');
-    let {buyer_id} = useSelector(s=> s.buyer_id)
+    let {user_id} = useSelector(s=> s.user_id)
     let pathname = usePathname()
 
     let dispatch = useDispatch() 
@@ -25,7 +25,7 @@ export default function DeliveryAddress({item,refund_id,refund,updateDeliveryOpt
 
         // let buyer = await ();
         console.log(buyer)
-        if(!buyer_id){
+        if(!user_id){
             buyer_overlay_setup(false, '')
 
             // window.location.href=(`/login?page=product&data=${item.product_id}`)
@@ -355,7 +355,7 @@ function PickupChannel({updateLocation,title,edit,refund_data}) {
 
     async function editPickupChannel() {
         let response = await UpdatePickupChannel({
-            buyer_id: buyerData?.buyer_id, 
+            user_id: buyerData?.user_id, 
             product_id: refund_data?.product_id, 
             pickup_channel:  {
                 channel: edit?.channel, 

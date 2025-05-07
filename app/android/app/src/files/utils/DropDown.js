@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { useSelector } from 'react-redux';
 
-export default function DropdownExample({ dropdownData, name, placeholder, updateData }) {
+export default function DropdownExample({ dropdownData, defaultValue, fieldName, name, placeholder, updateData, dropdownPosition }) {
   const [value, setValue] = useState('');
 
-  const { location } = useSelector(s => s.location);
 
   useEffect(() => {
-    if (location?.address?.state) {
-      setValue(location.address.state);
-    }
-  }, [location]);
+    setValue({title: defaultValue});
+  }, [defaultValue]);
 
   return (
     <View style={styles.container}>
@@ -23,15 +20,17 @@ export default function DropdownExample({ dropdownData, name, placeholder, updat
         inputSearchStyle={styles.searchInput}
         data={dropdownData}
         search
+        dropdownPosition={dropdownPosition || 'bottom'}
         maxHeight={300}
-        labelField="title"
-        valueField="value"
+        labelField={fieldName || "title"}
+        valueField={fieldName || "title"}
         placeholder={placeholder}
         searchPlaceholder="Search..."
         value={value}
         onChange={item => {
-          setValue(item.value);
-          updateData(name,item.value);
+          setValue(item);
+          let key = fieldName || "title";
+          updateData(name,item[key]);
         }}
       />
     </View>
@@ -41,7 +40,8 @@ export default function DropdownExample({ dropdownData, name, placeholder, updat
 const styles = StyleSheet.create({
   container: { 
     padding: 0,
-    width: '100%'
+    width: '100%',
+    marginVertical: 20
   },
   dropdown: {
     height: 50,

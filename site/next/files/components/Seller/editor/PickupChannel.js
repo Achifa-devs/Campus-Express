@@ -34,7 +34,7 @@ export default function PickupChannel({updateLocation,title,edit,order_data}) {
 
     async function editPickupChannel() {
         let response = await UpdatePickupChannel({
-            seller_id: sellerData?.seller_id, 
+            user_id: sellerData?.user_id, 
             product_id: order_data?.product_id, 
             pickup_channel:  {
                 locale: [state,city,town,address1,address2,address3,address4].map(item=>item).join(', '), 

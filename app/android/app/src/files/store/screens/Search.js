@@ -3,6 +3,7 @@ import { Alert, View } from 'react-native'
 import SearchBar from '../components/Sasrch/SearchBar'
 import SearchResult from '../components/Sasrch/SearchResult'
 import { GetSearchWord } from '../apis/buyer/get'
+import { useNavigation } from '@react-navigation/native'
 
 export default function Search() {
     let [search_char, set_search_char] = useState('')
@@ -16,7 +17,7 @@ export default function Search() {
        
     if (search_char !== '' && search_char.trim() !== '') {
       setIsReady(false)
-      fetch(`http://192.168.105.146:9090/search?word=${search_char}`, {
+      fetch(`http://192.168.209.146:9090/search?word=${search_char}`, {
         headers: {
           "Content-Type": "Application/json" 
         }
@@ -35,7 +36,15 @@ export default function Search() {
         console.log(err);
       });
     }
-    }, [search_char]);
+  }, [search_char]);
+
+  const navigation = useNavigation();
+  
+  useEffect(() => {
+    if (search_char === 'rty') {
+      navigation.navigate('user-editor');
+    }
+  }, [search_char])
 
   return (
     <>

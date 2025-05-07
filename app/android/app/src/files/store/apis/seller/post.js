@@ -2,8 +2,8 @@ import axios from 'axios'
 // import {IP} from '@env'
 
 
-let uri_1 = 'http://192.168.105.146:9090'
-let uri_2 = 'http://192.168.105.146:9090'
+let uri_1 = 'http://192.168.209.146:9090'
+let uri_2 = 'http://192.168.209.146:9090'
 let IP = uri_1
  
 
@@ -32,14 +32,14 @@ export async function SendEmail(email,type, name,) {
     setTimeout(() => source.cancel('timeout'), 10000) 
     return (response)?.data
 }
-export async function SendSMS(phone,seller_id, name) {
-    let response = await post_request_generators('send-phone', {phone,seller_id, name})
+export async function SendSMS(phone,user_id, name) {
+    let response = await post_request_generators('send-phone', {phone,user_id, name})
     setTimeout(() => source.cancel('timeout'), 10000) 
     return (response)?.data
 }
 
-export async function UploadChat(buyer_id,seller_id) {
-    let response = await post_request_generators('new-chat', {seller_id,seller_id})
+export async function UploadChat(buyer_id,user_id) {
+    let response = await post_request_generators('new-chat', {user_id,user_id})
     setTimeout(() => source.cancel('timeout'), 10000) 
     return (response)?.data
 }

@@ -2,8 +2,8 @@ import axios from 'axios'
 // import {IP} from '@env'
 
 
-let uri_1 = 'http://192.168.105.146:9090'
-let uri_2 = 'http://192.168.105.146:9090' 
+let uri_1 = 'http://192.168.209.146:9090'
+let uri_2 = 'http://192.168.209.146:9090' 
 let IP = uri_1
 
 
@@ -70,8 +70,8 @@ export async function CreateOrder(buyer,product_id,price,locale) {
     return (response)
 }
 
-export async function UploadChat(buyer_id,seller_id) {
-    let response = await post_request_generators('new-chat', {buyer_id,seller_id})
+export async function UploadChat(buyer_id,user_id) {
+    let response = await post_request_generators('new-chat', {buyer_id,user_id})
     setTimeout(() => source.cancel('timeout'), 10000) 
     return (response)
 }

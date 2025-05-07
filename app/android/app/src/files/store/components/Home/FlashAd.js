@@ -47,12 +47,13 @@ export default function FlasAds() {
 
 const styles = StyleSheet.create({
   flashAdsCnt:{
-    height: 150,
+    height: 180,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    marginBottom: 0,
+    marginTop: -1,
+    marginBottom: -10,
     flexWrap: 'wrap',
     borderRadius: 10,
     paddingTop: 0,

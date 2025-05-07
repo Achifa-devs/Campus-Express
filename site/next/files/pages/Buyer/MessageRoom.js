@@ -21,7 +21,7 @@ export default function MessageRoom({}) {
             let chat_box = result;
             let heads = []
             console.log(chat_box)
-            chat_box.map(item => heads.push({id: item.buyer_id, name: item.buyer_name}))
+            chat_box.map(item => heads.push({id: item.user_id, name: item.buyer_name}))
             setChatHead(heads)
             setChatList(chat_box)
           }
@@ -33,7 +33,7 @@ export default function MessageRoom({}) {
     }, [])
 
     useEffect(() => {
-        let r = chatList.filter(item => item.buyer_id === selected_head)[0]
+        let r = chatList.filter(item => item.user_id === selected_head)[0]
         console.log(chatList)
         if(r !== undefined) {
             set_chat(r?.mssg)

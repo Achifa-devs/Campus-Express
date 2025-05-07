@@ -96,8 +96,8 @@ const Dashboard = () => {
         })
     }
 
-    async function fetchSavedData(buyer_id) {
-        GetSavedItem(buyer_id)
+    async function fetchSavedData(user_id) {
+        GetSavedItem(user_id)
         .then((result) => {
             dispatch(setSaveTo(result))
         })
@@ -161,7 +161,7 @@ const Dashboard = () => {
     useEffect(() => {
         
         try {
-            fetchSavedData(window.localStorage.getItem('CE_buyer_id'))
+            fetchSavedData(window.localStorage.getItem('CE_user_id'))
         } catch (error) {
             console.log(error)
         }
@@ -220,7 +220,7 @@ const Dashboard = () => {
         if(localStorage.getItem('new-visitor')){
 
             let user = JSON.parse(localStorage.getItem('new-visitor'))
-            let id = window.localStorage.getItem('CE_buyer_id')
+            let id = window.localStorage.getItem('CE_user_id')
 
             let userId = user.id;
             let visit = user.visit;
@@ -229,7 +229,7 @@ const Dashboard = () => {
             let newVisit = visit + 1;
             let newDate = [...dates, new Date()];
     
-            // let str = {id: userId, date: newDate, visit: newVisit, isRegistered: id !== null ? true : false, buyer_id: id !== '' ? id : ''}
+            // let str = {id: userId, date: newDate, visit: newVisit, isRegistered: id !== null ? true : false, user_id: id !== '' ? id : ''}
 
             let str = {id: userId, date: newDate, visit: newVisit, src: src}
             localStorage.setItem('new-visitor', JSON.stringify(str))

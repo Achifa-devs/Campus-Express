@@ -8,20 +8,20 @@ let IP = uri_1
 
 const source = axios.CancelToken.source();
 
-export async function ResetPwd(email,seller_id) {
-    let response = await api_request_generators('seller.password-reset', {email,seller_id})
+export async function ResetPwd(email,user_id) {
+    let response = await api_request_generators('seller.password-reset', {email,user_id})
     setTimeout(() => source.cancel('timeout'), 10000) 
     return (response)?.data
 }
 
-export async function CheckPwdResetToken(seller_id,token) {
-    let response = await api_request_generators('seller.password-token-check', {seller_id,token})
+export async function CheckPwdResetToken(user_id,token) {
+    let response = await api_request_generators('seller.password-token-check', {user_id,token})
     setTimeout(() => source.cancel('timeout'), 10000) 
     return (response)?.data
 }
 
-export async function UpdatePwd(buyer_id, pwd) {
-    let response = await api_request_generators('password-update', {buyer_id, pwd})
+export async function UpdatePwd(user_id, pwd) {
+    let response = await api_request_generators('password-update', {user_id, pwd})
     setTimeout(() => source.cancel('timeout'), 10000) 
     return(response)
 }

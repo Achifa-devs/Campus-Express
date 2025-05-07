@@ -30,8 +30,8 @@ export async function GET_SHOP_DETAILS(req, res) {
 
 export async function CREATE_SHOP(req, res) {
     try {
-        const shop_review = await postNewShop(req.body);
-        res.status(201).json({ success: true, data: shop_review });
+        const shop= await postNewShop(req.body);
+        res.status(201).json({ success: true, data: shop});
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });
     }

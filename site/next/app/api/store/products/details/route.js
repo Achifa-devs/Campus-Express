@@ -13,7 +13,7 @@ export async function GET(request) {
 
   if (searchParams.get('slug')) {
     const slug = searchParams.get('slug') || 'Default Product';
-    const res = await pool.query(`SELECT * FROM seller_shop WHERE product_id='${slug}'`);
+    const res = await pool.query(`SELECT * FROM products WHERE product_id='${slug}'`);
 
     return NextResponse.json({data: res.rows[0], bool: true}, { status: 200 });
 

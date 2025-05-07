@@ -63,7 +63,7 @@
 //             if(duplicateSearch.length > 0){
 //                 let newList = cartList.filter(item => item !== duplicateSearch[0])
 //                 //dispatch(setCartTo(newList))
-//                 DeleteItemFromCart(product_id, window.localStorage.getItem('CE_buyer_id'))
+//                 DeleteItemFromCart(product_id, window.localStorage.getItem('CE_user_id'))
 //                 .then((result) => {
 //                     dispatch(setCartTo(result))
 //                     e.target.disabled = false;
@@ -73,7 +73,7 @@
 //                 })
 //             }else{
 //                 dispatch(setCartTo([...Cart, product_id]))
-//                 AddItemToCart(product_id, window.localStorage.getItem('CE_buyer_id'))
+//                 AddItemToCart(product_id, window.localStorage.getItem('CE_user_id'))
 //                 .then((result) => {
 //                     dispatch(setCartTo(result))
 //                     e.target.disabled = false;
@@ -83,7 +83,7 @@
 //                 })
 //             }
 //         }else{
-//             AddItemToCart(product_id, window.localStorage.getItem('CE_buyer_id'))
+//             AddItemToCart(product_id, window.localStorage.getItem('CE_user_id'))
 //             .then((result) => {
 //                 dispatch(setCartTo(result))
 //                 e.target.disabled = false;
@@ -103,7 +103,7 @@
 //             if(duplicateSearch.length > 0){
 //                 // let newList = saveList.filter(item => item !== duplicateSearch[0])
 //                 // dispatch(setSaveTo(newList))
-//                 UnSaveItem(product_id, window.localStorage.getItem('CE_buyer_id'))
+//                 UnSaveItem(product_id, window.localStorage.getItem('CE_user_id'))
 //                 .then((result) => {
 //                     console.log(result)
 //                     dispatch(setSaveTo(result))
@@ -114,7 +114,7 @@
 //                 })
 //             }else{
                 
-//                 SaveItem(product_id, window.localStorage.getItem('CE_buyer_id'))
+//                 SaveItem(product_id, window.localStorage.getItem('CE_user_id'))
 //                 .then((result) => {
 //                     console.log(result)
 
@@ -126,7 +126,7 @@
 //                 })
 //             }
 //         }else{
-//             SaveItem(product_id, window.localStorage.getItem('CE_buyer_id'))
+//             SaveItem(product_id, window.localStorage.getItem('CE_user_id'))
 //             .then((result) => {
 //                 dispatch(setSaveTo(result))
 //                 e.target.disabled = false;

@@ -49,7 +49,7 @@ export default function OrderedItem({item,updateStock}) {
                                 whiteSpace: 'nowrap', /* Prevent text from wrapping */
                                 overflow: 'hidden',    /* Hide any overflow text */
                                 textOverflow: 'ellipsis'
-                            }}>Shop ID: {item?.product?.seller_id}</span>
+                            }}>Shop ID: {item?.product?.user_id}</span>
                         </div>
                         <br />
                         <div className="stock">

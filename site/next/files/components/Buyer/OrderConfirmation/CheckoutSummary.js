@@ -25,7 +25,7 @@ const CheckoutSummary = ({Total, Method, order_list, type}) => {
     useEffect(() => {let width = window.innerWidth;setScreenWidth(width)},[]);
     const config = {
         metadata: {
-            buyer_info: {buyer_id: buyer_info?.buyer_id}, 
+            buyer_info: {user_id: buyer_info?.user_id}, 
             product_info: {product_id: order_list?.product?.product_id, title: order_list?.product?.title, price: order_list?.product?.price},
             purchase_info: {unit: order_list?.order?.stock, amount_paid: order_list?.product?.price*order_list?.order?.stock, payment_type: 'checkout', isBulkPurchase: false},
         },

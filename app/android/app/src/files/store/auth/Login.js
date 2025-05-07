@@ -1,345 +1,310 @@
-import React, { useEffect, useState } from 'react'
-import { ActivityIndicator, Dimensions, Image, StatusBar, Text, TextInput, TouchableOpacity, Vibration, View } from 'react-native'
-import { storeData } from '../../utils/AsyncStore.js'
-import { generateId, getDeviceId } from '../utils/IdGen.js'
-import { useNavigation } from '@react-navigation/native'
+import React, { useState, useCallback } from 'react';
+import {
+  ActivityIndicator,
+  Dimensions,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+  Vibration
+} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { setUserAuthTo } from '../../../../../../redux/reducer/auth';
+import { useDispatch } from 'react-redux';
+import { storeData } from '../../utils/AsyncStore.js';
 
-const Login = () => {
-    const screenHeight = Dimensions.get("screen").height 
-    const screenWidth = Dimensions.get("screen").width 
-    let [email, setEmail] = useState('')
-    let [pwd, setPwd] = useState('')
-    let [server_err, set_server_err] = useState(false)
+const Login = ({updateActiveJsx}) => {
+  const [formData, setFormData] = useState({
+    email: '',
+    pwd: ''
+  });
+  const [errors, setErrors] = useState({
+    email: '',
+    pwd: ''
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [isPwdVisible, setIsPwdVisible] = useState(false);
+  const navigation = useNavigation();
+  const [serverErr, setServerErr] = useState('')
 
-    let [emailErr, setEmailErr] = useState('')
-    let [pwdErr, setPwdErr] = useState('')
-
-
-    const [isPwdVisible, setIsPwdVisible] = useState(true);
-    useEffect(() => {
-        if (!isPwdVisible) {
-            setTimeout(() => {
-                setIsPwdVisible(!isPwdVisible)
-            }, 800)
-        }
-    }, [isPwdVisible])
-
-    let signupHandler = async() => {
-       
-
-        let response = await validateInput()
-
-        response.map(item => {
-
-            let name = item._j.name;
-            let err = item._j.mssg;
-
-            console.log('errs: ', name, err)
-
-
-            if(name.toLowerCase() === 'email'){
-                setEmailErr(err)
-            }else if(name.toLowerCase() === 'password'){
-                setPwdErr(err)
-            }
-        })
-
-        let data = response.filter((item) => item._j.mssg === '').length === 4 ? true : false;
-
-        
-        if(data){
-            set_server_err(true)
-
-            
-            // fetch('https://campussphere.net/api/registration/seller', {
-            //     method: 'post',
-            //     headers: {
-            //         "Content-Type": "Application/json"
-            //     },
-            //     body: JSON.stringify({fname,lname,email,phone,pwd,state,campus,gender})
-            // })
-            // .then(async(result) => {
-            //     let response = await result.json();
-            //     console.log(response)
-            //     if(response.success){
-            //         CookieManager.set('https://campussphere.net', {
-            //             name: 'jwt_token',
-            //             value: response.cookie,
-            //             domain: 'campussphere.net',
-            //             path: '/',
-            //             version: '1',
-            //             secure: true,
-            //             expires: `'${90 * 24 * 60 * 60}'`
-            //         })
-            //         .then((done) => {
-            //             console.log('Cookie set!', done);
-            //             dispatch(set_cookie(true))
-            //         })
-            //         .catch(err => console.log(err))
-            //     } else {
-            //         set_server_err(!true)
-
-            //         Vibration.vibrate(300)
-            //         if(response.message === 'Email already exists'){
-            //             setEmailErr('Email Already Exist')
-            //         }else if(response.message === 'Phone already exists'){
-            //             setPhoneErr('Phone Number Already Exist')
-            //         }
-            //     }
-            // })
-            // .catch((err) => {
-            //     set_server_err(!true)
-
-            //     console.log(err)
-            //     setBtn("Signup")
-            //     seller_overlay_setup(false, '')
-            //     e.target.disabled = false;
-            // })
-        } else {
-            set_server_err(!true)
-
-            Vibration.vibrate(300)
-            
-        }
-        
-    }
+  const validateField = useCallback((field, value) => {
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     
+    switch(field) {
+      case 'email':
+        if (!value) return 'Email cannot be empty';
+        if (!emailRegex.test(value)) return 'Invalid email format';
+        return '';
+      case 'pwd':
+        if (!value) return 'Password cannot be empty';
+        if (value.length < 8) return 'Must be at least 8 characters';
+        return '';
+      default:
+        return '';
+    }
+  }, []);
+
+  const validateForm = useCallback(() => {
+    const newErrors = {
+      email: validateField('email', formData.email),
+      pwd: validateField('pwd', formData.pwd)
+    };
+    
+    setErrors(newErrors);
+    return !newErrors.email && !newErrors.pwd;
+  }, [formData, validateField]);
+    const dispatch = useDispatch()
+
+  const handleLogin = useCallback(async () => {
+    if (!validateForm()) {
+      Vibration.vibrate(300);
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Replace with actual API call
+      const response = await fetch('http://192.168.209.146:9090/vendor/login', {
+        method: 'POST',
+        headers: { "Content-Type": "Application/json" },
+        body: JSON.stringify(formData)
+      });
+        const data = await response.json();
         
-    async function validateInput() {
+        console.log(data)
+      
+      if (data.success) {
+        await storeData('user', JSON.stringify(data.data.user));
+        dispatch(setUserAuthTo(true))
+      } else {
+        // Handle specific errors
+        setServerErr(data.message)
+        Vibration.vibrate(300);
+      }
+      
+      // For demo purposes, navigate after "successful" login
+      // navigation.navigate('user-home');
+    } catch (error) {
+      console.error('Login error:', error);
+      setErrors(prev => ({ ...prev, pwd: 'Login failed. Please try again.' }));
+    } finally {
+      setIsLoading(false);
+    }
+  }, [formData, navigation, validateForm]);
 
-        let data = [  
-            {value: email, name: 'Email'},
-            {value: pwd, name: 'Password'},
-        ];
+  const handleInputChange = useCallback((field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+    // Clear error when field is updated
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: '' }));
+    }
+  }, [errors]);
 
-        let result =  data.map(async(item) => {
-            let test = {email: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/}
+  return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+    >
+      <StatusBar backgroundColor="#FFF" barStyle="dark-content" />
+      
+      {isLoading && (
+        <View style={styles.loadingOverlay}>
+          <ActivityIndicator size="large" color="#FF4500" />
+        </View>
+      )}
 
-           if(item.name.toLowerCase() === 'email'){
+      <View style={styles.content}>
+        <View style={styles.header}>
+          <View style={styles.logoContainer}>
+            <Image 
+              style={styles.logo} 
+              source={{ uri: 'https://res.cloudinary.com/daqbhghwq/image/upload/v1746402998/Untitled_design-removebg-preview_peqlme.png' }} 
+            />
+          </View>
+                <Text style={styles.title}>Login Form</Text>
+                <Text style={[styles.title, {fontSize: 12, color: 'red', textDecoration: 'underline'}]}>{serverErr}</Text>
+                  
+        </View>
 
-                if(item.value.length < 1){
-                    return ({bool: false, mssg: `${item.name} cannot be empty`, name: item.name})
-                }else if(!item.value.match(test.email)){
-                    return ({bool: false, mssg: `${item.name} is invalid`, name: item.name})
-                }else{ 
-                    return ({bool: true, mssg: ``, name: item.name})
-                } 
-                
-            }else if(item.name.toLowerCase() === 'password'){
+        <View style={styles.form}>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Email</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter your email"
+              value={formData.email}
+              onChangeText={(text) => handleInputChange('email', text)}
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
+            {errors.email ? <Text style={styles.errorText}>{errors.email}</Text> : null}
+          </View>
 
-                if(item.value === ''){
-                    return ({bool: false, mssg: `${item.name} cannot be empty`, name: item.name})
-                }else if(item.value.length > 0 && item.value.length < 8){
-                    return {bool: false, mssg: `${item.name} must be at least 8 characters`, name: item.name}
-                }else{
-                    return ({bool: true, mssg: ``, name: item.name})
-                }
-
-            }
-        })
-
-        return [...result];
-    } 
-    const navigation = useNavigation();
-
-    return ( 
-        <> 
-            {
-                server_err
-                ?
-                <View style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    backgroundColor: 'background-color: rgba(0, 0, 0, 0.5);',
-                    justifyContent: 'center', 
-                    alignItems: 'center',
-                    zIndex: 10
-                }}>
-                    <ActivityIndicator style={{opacity: 1}} size={'large'} color={'#000'}></ActivityIndicator>
-                </View>
-                :
-                ''
-            }
-            
-            <StatusBar backgroundColor={'#FFF'} barStyle={"dark-content"} />
-        
-            <View style={{
-                backgroundColor: '#FFF',
-                height: screenHeight*.75,
-                width: screenWidth,
-                padding: 10,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-            }}>
-               
-                <View style={{
-                    backgroundColor: '#FFF',
-                    height: 'auto',
-                    width: screenWidth,
-                    padding: 10,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between'
-                }}>
-                    <View style={{
-                        height: 100,
-                        width: 100,
-                        display: 'flex',
-                        alignItems: 'center',
-                        backgroundColor: '#FFF',
-                        justifyContent: 'center',
-                        padding: 15,
-                            borderBottomWidth: 4,
-                        borderColor: '#FFF', borderRadius: 100, marginBottom: 6
-                    }}>
-                        <Image height={100} width={100} source={{ uri: 'https://res.cloudinary.com/daqbhghwq/image/upload/v1746402998/Untitled_design-removebg-preview_peqlme.png' }} />
-                    </View>
-                    <Text style={{color: '#FF4500', fontWeight: '500',fontSize: 20, marginBottom: 6}}>Login Form</Text>
-                    
-                    
-                    <View style={{
-                        backgroundColor: '#FFF',
-                        height: 'auto',
-                        width: '100%',
-                        marginTop: 18,
-                    
-                        borderRadius: 2.5,
-                        display: 'flex',
-                        alignItems: 'flex-start',
-                        justifyContent: 'center',
-                        flexDirection: 'column'
-                    }}>
-                        <Text style={{
-                            width: '100%',
-                            textAlign: 'left',
-                            marginLeft: 3
-                        }}>Email</Text>
-                        <TextInput keyboardType='alphabet' style={{
-                            backgroundColor: '#FFF',
-                            height: 50,
-                            width: '100%',
-                            borderRadius: 2.5,
-                    
-                            borderWidth: 1,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center'
-                        }} onChangeText={txt => setEmail(txt)} />
-                        <Text style={{color: '#000', marginBottom: 5, display: emailErr.length > 0 ? 'flex' : 'none', fontSize: 10, paddingLeft: 5, color: 'red'}}>{emailErr}</Text>
-                    </View>
-                    
-                    <View style={{
-                        backgroundColor: '#FFF',
-                        height: 'auto',
-                        width: '100%',
-                        display: 'flex',
-                        marginTop: 18,
-                    
-                        alignItems: 'flex-start',
-                        justifyContent: 'space-between',
-                        flexDirection: 'column'
-                    }}>
-                        <View style={{
-                            backgroundColor: '#FFF',
-                            height: 'auto',
-                            width: '100%',
-                            display: 'flex',
-                            marginTop: 18,
-                    
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            flexDirection: 'row'
-                        }}>
-                            <View style={{
-                                backgroundColor: '#FFF',
-                                height: 'auto',
-                                width: '82%',
-                                borderRadius: 2.5,
-                                display: 'flex',
-                                alignItems: 'flex-start',
-                                justifyContent: 'center',
-                                flexDirection: 'column'
-                            }}>
-                                <Text style={{
-                                    width: '100%',
-                                    textAlign: 'left',
-                                    marginLeft: 3
-                                }}>Password</Text>
-                    
-                                <TextInput keyboardType='alphabet' style={{
-                                    backgroundColor: '#FFF',
-                                    height: 50,
-                                    width: '100%',
-                                    borderWidth: 1,
-                                    borderRadius: 2.5,
-                    
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center'
-                                }} secureTextEntry={isPwdVisible} onChangeText={txt => setPwd(txt)}  />
-                    
-                            </View>
-                            <TouchableOpacity style={{
-                                backgroundColor: '#FF4500',
-                                height: 'auto',
-                                height: 50,
-                                width: '15%',
-                                marginTop: 18,
-                                // borderWidth: 1,
-                                borderRadius: 2.5,
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                flexDirection: 'column'
-                            }} onPress={e=> setIsPwdVisible(!isPwdVisible)}>
-                                {/* <SeeSvg height={30} width={30} /> */}
-                            </TouchableOpacity>
-                        </View>
-                        <Text style={{color: '#000', marginBottom: 5, display: pwdErr.length > 0 ? 'flex' : 'none', fontSize: 10, paddingLeft: 5, color: 'red'}}>{pwdErr}</Text>
-                    
-                    </View>
-                </View>
-                <TouchableOpacity onPress={e => navigation.navigate('user-signup')}  style={{height: 50, width: 'auto', marginTop: 10, marginBottom: 5, display: 'flex', alignItems: 'center', backgroundColor: '#FFF', justifyContent: 'center', flexDirection: 'row'}}>
-                    <Text style={{height: 'auto', width: 'auto', fontSize: 13, backgroundColor: '#fff', fontFamily: 'roboto', color: '#FF4500'}}>Already Have An Account?</Text>
-                    <Text style={{height: 'auto', width: 'auto', fontSize: 13, backgroundColor: '#fff', fontFamily: 'roboto', fontWeight: 'bold', color: '#FF4500'}}> Signup Here</Text>
-                </TouchableOpacity>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Password</Text>
+            <View style={styles.passwordContainer}>
+              <TextInput
+                style={[styles.input, styles.passwordInput]}
+                placeholder="Enter your password"
+                value={formData.pwd}
+                onChangeText={(text) => handleInputChange('pwd', text)}
+                secureTextEntry={!isPwdVisible}
+              />
+              <TouchableOpacity 
+                style={styles.eyeIcon}
+                onPress={() => setIsPwdVisible(!isPwdVisible)}
+              >
+                <Text style={styles.eyeIconText}>
+                  {isPwdVisible ? '👁️' : '👁️‍🗨️'}
+                </Text>
+              </TouchableOpacity>
             </View>
+            {errors.pwd ? <Text style={styles.errorText}>{errors.pwd}</Text> : null}
+          </View>
 
-            <View style={{
-                backgroundColor: '#FFF',
-                height: screenHeight*.15,
-                width: screenWidth,
-                position: 'absolute', 
-                bottom: 0,
-                padding: 10,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',flex: 1
-            }}>
-                <TouchableOpacity style={{
-                    backgroundColor: '#FF4500',
-                    height: 'auto',
-                    height: 50,
-                    width: '100%',
-                    marginTop: 28,
-                    // borderWidth: 1,
-                    borderRadius: 4,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexDirection: 'column'
-                }} onPress={e=> signupHandler()}>
-                    <Text style={{color: '#fff'}}>Login</Text>
-                </TouchableOpacity>
-                
-            </View>
-        </>
-    )
-}
+          <TouchableOpacity 
+            style={styles.loginButton} 
+            onPress={handleLogin}
+            disabled={isLoading}
+          >
+            <Text style={styles.loginButtonText}>
+              {isLoading ? 'Logging in...' : 'Login'}
+            </Text>
+          </TouchableOpacity>
+        </View>
 
+        <TouchableOpacity 
+          style={styles.signupLink}
+          onPress={() => navigation.navigate('user-signup')}
+        >
+          <Text style={styles.signupText}>Don't have an account? </Text>
+          <Text style={[styles.signupText, styles.signupTextBold]}>Sign up here</Text>
+        </TouchableOpacity>
+      </View>
+    </KeyboardAvoidingView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#FFF',
+  },
+  loadingOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 10,
+  },
+  content: {
+    flex: 1,
+    padding: 20,
+    justifyContent: 'center',
+  },
+  header: {
+    alignItems: 'center',
+    marginBottom: 30,
+  },
+  logoContainer: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    borderWidth: 4,
+    borderColor: '#FFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FFF',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  logo: {
+    width: 80,
+    height: 80,
+    resizeMode: 'contain',
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: '600',
+    color: '#FF4500',
+    marginTop: 15,
+  },
+  form: {
+    marginBottom: 20,
+  },
+  inputContainer: {
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: 14,
+    color: '#333',
+    marginBottom: 8,
+  },
+  input: {
+    height: 50,
+    borderWidth: 1,
+    borderColor: '#DDD',
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    fontSize: 16,
+    backgroundColor: '#FFF',
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  passwordInput: {
+    flex: 1,
+  },
+  eyeIcon: {
+    position: 'absolute',
+    right: 15,
+    padding: 10,
+  },
+  eyeIconText: {
+    fontSize: 20,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+    marginTop: 5,
+  },
+  loginButton: {
+    height: 50,
+    backgroundColor: '#FF4500',
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  loginButtonText: {
+    color: '#FFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  signupLink: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 20,
+  },
+  signupText: {
+    color: '#FF4500',
+    fontSize: 14,
+  },
+  signupTextBold: {
+    fontWeight: 'bold',
+  },
+});
 
 export default Login;

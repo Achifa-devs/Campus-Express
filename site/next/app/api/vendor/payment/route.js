@@ -5,8 +5,8 @@ import { NextResponse } from 'next/server';
 export async function GET(req) {
     try {
         const { searchParams } = new URL(req.url);
-        const seller_id = searchParams.get("seller_id");
-        const res = await pool.query(`SELECT * FROM payment WHERE seller_id='${seller_id}'`);
+        const user_id = searchParams.get("user_id");
+        const res = await pool.query(`SELECT * FROM payment WHERE user_id='${user_id}'`);
         return NextResponse.json({ bool: res?.rows?.length > 0 ? true : false, data: res?.rows[0]}, { status: 200 });
 
   } catch (err) {

@@ -6,8 +6,8 @@ import '@/app/vendor/orders/styles/medium.css'
 import '@/app/vendor/orders/styles/small.css'
 import React, { useEffect, useRef, useState } from "react";
 
-import database1 from "@/database/campus_express_buyer_orders.json";
-import database2 from '@/database/seller_shop.json'
+import database1 from "@/database/orders.json";
+import database2 from '@/database/products.json'
 import js_ago from 'js-ago';
 import backSvg from '@/files/assets/back-svgrepo-com (3).svg';
 import Thumbnail from '@/files/components/Buyer/Thumbnail';
@@ -25,14 +25,14 @@ export default function App() {
 
   
   let {
-    seller_id
-  }=useSelector(s=>s.seller_id);
+    user_id
+  }=useSelector(s=>s.user_id);
 
   
   useEffect(() => {
 
-    if(seller_id !== '' && seller_id !== null){
-      axios.get('/api/vendor/orders', {params: {seller_id: seller_id.trim()}})
+    if(user_id !== '' && user_id !== null){
+      axios.get('/api/vendor/orders', {params: {user_id: user_id.trim()}})
       .then(({data})=>{
         console.log(data)
         setCards(data?.data)
@@ -42,7 +42,7 @@ export default function App() {
       })
     }
 
-  },[seller_id])
+  },[user_id])
 
   function updateSelectedOrder(data) {
     setItem(data)
@@ -210,7 +210,7 @@ function OrderCard({item}) {
                           whiteSpace: 'nowrap', /* Prevent text from wrapping */
                           overflow: 'hidden',    /* Hide any overflow text */
                           textOverflow: 'ellipsis'
-                      }}>Buyer: {item?.order?.buyer_id}</span>
+                      }}>Buyer: {item?.order?.user_id}</span>
                   </div>
 
                   <div className="stock">
@@ -223,9 +223,9 @@ function OrderCard({item}) {
               <button onClick={e => {
                 if(item?.order?.havepaid)
                 {
-                  const encodedMessage = encodeURIComponent(`Item Ordered:${item.title} Seller-id:\n\n\n${item.seller_id} \n\n\nPrice: ₦${new Intl.NumberFormat('en-us').format(item.price)} \n\n\n 'https://www.campusexpressng.com/product/${item.product_id}'`);
+                  const encodedMessage = encodeURIComponent(`Item Ordered:${item.title} Seller-id:\n\n\n${item.user_id} \n\n\nPrice: ₦${new Intl.NumberFormat('en-us').format(item.price)} \n\n\n 'https://www.campusexpressng.com/product/${item.product_id}'`);
 
-                  const whatsappUrl = `https://wa.me/${item?.order?.buyer_id}?text=${encodedMessage}`;
+                  const whatsappUrl = `https://wa.me/${item?.order?.user_id}?text=${encodedMessage}`;
 
                   // Open WhatsApp with the share URL
                   window.open(whatsappUrl, '_blank');

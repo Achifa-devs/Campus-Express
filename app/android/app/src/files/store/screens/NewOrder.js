@@ -1,130 +1,172 @@
-import React, { useState } from 'react'
-// import OrderCard from '../components/Order/OrderCard'
-import DeliverySetup from '../components/NewOrder/DeliverySetup'
-import Want from '../components/NewOrder/Want'
-import Specs from '../components/NewOrder/Specs'
-import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { useRoute } from '@react-navigation/native'
-import OrderCard from '../components/NewOrder/OrderCard'
+import React, { useState } from 'react';
+import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useRoute, useNavigation } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import OrderCard from '../components/NewOrder/OrderCard';
+import Want from '../components/NewOrder/Want';
 
 export default function NewOrder() {
-    let screenHeight = Dimensions.get('window').height;
-  let { data } = useRoute()?.params
-  let [ units, setUnits ]= useState(1);
-  function updateUnits(data) {
-    setUnits(data)
-  }
-  return (
-    <>
-      <View>
-        <ScrollView style={{
-          width: '100%',
-          height: screenHeight - 120,
-          backgroundColor: '#efefef',
-          padding: 5,
+    const navigation = useNavigation();
+    const { data } = useRoute()?.params;
+    const [units, setUnits] = useState(1);
+    const screenHeight = Dimensions.get('window').height;
+    const totalPrice = 0.95 * parseInt(data?.price) * units;
 
-          position: 'relative'
-        }}
-        contentContainerStyle={{display: 'flex', alignItems: 'center', flexDirection: 'row', justifyContent: 'flex-start', flexWrap: 'wrap'}}>
-          <OrderCard data={data} />
-          <Want data={data} updateUnits={updateUnits} units={units} />
-            {/* <DeliverySetup /> */}
-            {/* <Specs /> */}
-            <View style={{
-              display: 'flex',
-              flexDirection: 'column',
-              padding: 8,
-              backgroundColor: '#FFF',
-              alignItems: 'center', marginTop: 10,
-    borderRadius: .5,
-              //   borderRadius: 7,
-              justifyContent: 'space-between',
-            }}>
-              <View style={{
-                height: 'auto',
-                width: '100%',
-                padding: 0,
-                // padding: 8,
-                // marginBottom: 2.5,
-                display: 'flex',
-                flexDirection: 'column',
-                borderRadius: .5,
-                alignItems: 'flex-start',
-                justifyContent: 'flex-start',
-                backgroundColor: '#fff'
-              }}>
-                <Text style={{marginBottom: 10, fontSize: 17, color: '#000', fontWeight: '900'}}>Campus Sphere Assurance</Text>
-                <View style={{marginBottom: 10, fontSize: 17, color: '#000'}}>
-                  <View>
-                    <View></View>
-                    <Text style={{marginBottom: 0, fontSize: 14, color: '#000', fontWeight: '600'}}>Secured Payments</Text>
-                  </View>
-                  <Text style={{fontSize: 12, color: '#1f1f1f', padding: 5}}>
-                    Payments is secured with Escrow Services
-                  </Text>
+    const updateUnits = (newUnits) => {
+        setUnits(newUnits);
+    };
+
+    const assuranceItems = [
+        {
+            icon: 'lock-closed-outline',
+            title: 'Secured Payments',
+            description: 'Payments are secured with Escrow Services',
+            color: '#4CAF50'
+        },
+        {
+            icon: 'shield-checkmark-outline',
+            title: 'Security And Privacy',
+            description: 'We respect your privacy so your personal details are safe',
+            color: '#2196F3'
+        },
+        {
+            icon: 'card-outline',
+            title: 'Buyer Protection',
+            description: "Get your money back if your order isn't delivered by estimated date or if you're not satisfied",
+            color: '#FF9800'
+        }
+    ];
+
+    return (
+        <View style={styles.container}>
+            <ScrollView 
+                style={styles.scrollContainer}
+                contentContainerStyle={styles.scrollContent}
+                showsVerticalScrollIndicator={false}
+            >
+                <OrderCard data={data} />
+                <Want data={data} updateUnits={updateUnits} units={units} />
+                
+                {/* Assurance Section */}
+                <View style={styles.assuranceContainer}>
+                    <Text style={styles.assuranceTitle}>Campus Sphere Assurance</Text>
+                    
+                    {assuranceItems.map((item, index) => (
+                        <View key={index} style={styles.assuranceItem}>
+                            <View style={[styles.assuranceIconContainer, { backgroundColor: `${item.color}20` }]}>
+                                <Icon name={item.icon} size={20} color={item.color} />
+                            </View>
+                            <View style={styles.assuranceTextContainer}>
+                                <Text style={styles.assuranceItemTitle}>{item.title}</Text>
+                                <Text style={styles.assuranceItemDescription}>{item.description}</Text>
+                            </View>
+                        </View>
+                    ))}
                 </View>
-                <View style={{marginBottom: 10, fontSize: 17, color: '#000'}}>
-                  <View>
-                    <View></View>
-                    <Text style={{marginBottom: 0, fontSize: 14, color: '#000', fontWeight: '600'}}>Security And Privacy</Text>
-                  </View>
-                  <Text style={{fontSize: 12, color: '#1f1f1f', padding: 5}}>
-                    We respect your privacy so your personal details are safe
-                  </Text>
-                </View>
-                <View style={{marginBottom: 10, fontSize: 17, color: '#000'}}>
-                  <View>
-                    <View></View>
-                    <Text style={{marginBottom: 0, fontSize: 14, color: '#000', fontWeight: '600'}}>Buyer Protection</Text>
-                  </View>
-                  <Text style={{fontSize: 12, color: '#1f1f1f', padding: 5}}>
-                    Get your money back if your order is'nt delivered by estimated date or if you are not satisfied with your order
-                  </Text>
-                </View>
-              </View>
+            </ScrollView>
+
+            {/* Fixed Bottom Button */}
+            <View style={styles.bottomBar}>
+                <TouchableOpacity 
+                    onPress={() => navigation.navigate('user-new-order', { product_id: data?.product_id })}
+                    style={styles.orderButton}
+                    activeOpacity={0.8}
+                >
+                    <Text style={styles.orderButtonText}>
+                        Create Order Now - ₦{new Intl.NumberFormat('en-US').format(totalPrice)}
+                    </Text>
+                    <Icon name="arrow-forward" size={20} color="#fff" />
+                </TouchableOpacity>
             </View>
-        </ScrollView>
-
-        
-      </View>
-      <View style={styles.btm}>
-        <TouchableOpacity onPress={e=> navigation.navigate('user-new-order', {product_id: data?.product_id})} style={[styles.btn, {width: '100%', backgroundColor: '#FF4500'}]}>
-          <Text style={{fontSize: 15, color: '#fff'}}>Create Order Now {new Intl.NumberFormat('en-us').format(0.95 * parseInt(data?.price))}</Text>
-        </TouchableOpacity>    
-      </View>
-    </>
-  )
+        </View>
+    );
 }
 
-
 const styles = StyleSheet.create({
-    btm:{
-        height: 65,
-        padding: 0,
+    container: {
+        flex: 1,
+        backgroundColor: '#f5f5f5',
+    },
+    scrollContainer: {
         width: '100%',
-
-        marginLeft: 0, 
-        marginRight: 0,
+    },
+    scrollContent: {
+        padding: 16,
+        paddingBottom: 100, // Space for bottom button
+    },
+    assuranceContainer: {
+        backgroundColor: '#fff',
+        borderRadius: 12,
+        padding: 16,
+        marginTop: 16,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 2,
+    },
+    assuranceTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#333',
+        marginBottom: 16,
+    },
+    assuranceItem: {
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        marginBottom: 16,
+    },
+    assuranceIconContainer: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 12,
+    },
+    assuranceTextContainer: {
+        flex: 1,
+    },
+    assuranceItemTitle: {
+        fontSize: 15,
+        fontWeight: '600',
+        color: '#333',
+        marginBottom: 4,
+    },
+    assuranceItemDescription: {
+        fontSize: 13,
+        color: '#666',
+        lineHeight: 18,
+    },
+    bottomBar: {
         position: 'absolute',
         bottom: 0,
-        display: 'flex',
-        alignItems: 'center',
-        flexDirection: 'row-reverse',
-        justifyContent: 'space-between',
-        padding: 10,
-        marginBottom: 0,
-        backgroundColor: '#fff'
+        left: 0,
+        right: 0,
+        height: 80,
+        backgroundColor: '#fff',
+        paddingHorizontal: 16,
+        paddingTop: 12,
+        borderTopWidth: 1,
+        borderTopColor: '#eee',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: -2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 5,
     },
-
-    btn:{
-        height: '100%',
+    orderButton: {
+        backgroundColor: '#FF4500',
+        height: 50,
+        borderRadius: 8,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    orderButtonText: {
         color: '#fff',
-        borderRadius: 5,
-        position: 'relative',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
+        fontSize: 16,
+        fontWeight: '600',
+        marginRight: 8,
     },
-
-    
-  });
+});

@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 
 import Card from './Card';
-import items from './item.json';
+import items from '../../../../../../../items.json';
 
 export default function ShowCase() {
     const [list, setList] = useState([]);
@@ -48,7 +48,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderBottomColor: '#FF4500',
         borderBottomWidth: 1.25,
-        marginBottom: 0,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.05,

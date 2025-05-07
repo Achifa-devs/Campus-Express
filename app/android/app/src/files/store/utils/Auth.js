@@ -80,7 +80,7 @@ export default function AuthStackScreen({updateActiveJsx}) {
                             <Text style={{color: '#FF4500', fontSize: 16, fontWeight: 'bold'}}>Campus Sphere</Text>
                         </View>
 
-                        <TouchableOpacity onPress={async(e) => {
+                        {/* <TouchableOpacity onPress={async(e) => {
                             let user = await getDeviceId();
                             updateActiveJsx({
                                 user
@@ -92,11 +92,11 @@ export default function AuthStackScreen({updateActiveJsx}) {
                             <Text>&nbsp;</Text>
                             <Text>&nbsp;</Text>
 
-                            {/* <Ionicons name={'log-out'} size={24} color={'#FF4500'} /> */}
+                            <Ionicons name={'log-out'} size={24} color={'#FF4500'} />
                             <Text>&nbsp;</Text>
                             <Text>&nbsp;</Text>
                             
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>
                 ),
             }}   name="user-signup" component={Signup} />
@@ -114,7 +114,7 @@ export default function AuthStackScreen({updateActiveJsx}) {
                             <Text style={{color: '#FF4500', fontSize: 16, fontWeight: 'bold'}}>Campus Sphere</Text>
                         </View>
 
-                        <TouchableOpacity onPress={async(e)=> {
+                        {/* <TouchableOpacity onPress={async(e)=> {
                             let user = await getDeviceId();
                             updateActiveJsx({
                                 user
@@ -126,11 +126,11 @@ export default function AuthStackScreen({updateActiveJsx}) {
                             <Text>&nbsp;</Text>
                             <Text>&nbsp;</Text>
 
-                            {/* <Ionicons name={'log-out'} size={24} color={'#FF4500'} /> */}
+                            <Ionicons name={'log-out'} size={24} color={'#FF4500'} />
                             <Text>&nbsp;</Text>
                             <Text>&nbsp;</Text>
                             
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>
                 ),
             }}  name="user-login" component={Login} />

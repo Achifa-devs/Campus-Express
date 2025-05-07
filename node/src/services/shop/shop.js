@@ -10,49 +10,49 @@ import {
 } from "../../repositories/shop/shop.js";
 
 export const getShopOwner = async (payload) => {
-  const { seller_id } = payload;
+  const { user_id } = payload;
 
   // Business logic
-  const response = await findShopOwnerById({ seller_id });
+  const response = await findShopOwnerById({ user_id });
 
   return response;
 };
 
 
 export const getShopReviews = async (payload) => {
-  const { seller_id } = payload;
+  const { user_id } = payload;
 
   // Business logic
-  const response = await findShopReviewsById({ seller_id });
+  const response = await findShopReviewsById({ user_id });
   return response;
 };
 
 
 export const getShopDetails = async (payload) => {
-  const { seller_id } = payload;
+  const { user_id } = payload;
 
   // Business logic
-  const response = await findShopDetailsById({ seller_id });
+  const response = await findShopDetailsById({ user_id });
 
   return response;
 };
 
 
 export const getShopContent = async (payload) => {
-  const { seller_id } = payload;
+  const { user_id } = payload;
 
   // Business logic
-  const response = await findShopContentById({ seller_id });
+  const response = await findShopContentById({ user_id });
 
   return response;
 };
 
 
 export const postShopReview = async (payload) => {
-  const { shop_id, seller_id, order_id, buyer_id, review, date, comment, rating } = payload;
+  const { shop_id, user_id, order_id, buyer_id, review, date, comment, rating } = payload;
 
   // Business logic
-  const response = await createShopReview({ shop_id, seller_id, order_id, buyer_id, review, date, comment, rating });
+  const response = await createShopReview({ shop_id, user_id, order_id, buyer_id, review, date, comment, rating });
 
   return response;
 };

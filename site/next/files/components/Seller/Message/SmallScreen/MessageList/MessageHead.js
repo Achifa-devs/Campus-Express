@@ -46,7 +46,7 @@ export default function MessageHead({data, index}) {
  
 // buyer_data
 // : 
-// {id: 1, fname: 'Akpulu', lname: 'Chinedu', buyer_id: 'CE-751620', email: 'akpulufabian@gmail.com', …}
+// {id: 1, fname: 'Akpulu', lname: 'Chinedu', user_id: 'CE-751620', email: 'akpulufabian@gmail.com', …}
 // mssg
 // : 
 // {id: 16, mssg_id: 'c033e3', mssg: 'Hi', date: 'Fri Mar 08 2024 19:42:11 GMT+0100 (West Africa Standard Time)'}

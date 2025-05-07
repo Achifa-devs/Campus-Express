@@ -8,21 +8,21 @@ import {
 } from "../../repositories/vendor/product.js";
 
 export const getProduct = async (payload) => {
-    const { product_id, seller_id } = payload;
+    const { product_id, user_id } = payload;
 
     // Business logic
-    const response = await findProductById({ product_id, seller_id });
+    const response = await findProductById({ product_id, user_id });
 
     return response;
 };
 
 
 export const getProducts = async (payload) => {
-    let { seller_id } = payload;
+    let { user_id } = payload;
     
     // Business logic
     try {
-        const response = await findProducts({ seller_id });
+        const response = await findProducts({ user_id });
         console.log(response)
     
         return response;

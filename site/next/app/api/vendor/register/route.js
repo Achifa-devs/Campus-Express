@@ -13,7 +13,7 @@ export async function POST(req) {
 
     const date = new Date().toLocaleString();
     const hashedPwd = await bcrypt.hash(pwd, 10);
-    const seller_id = `CE-${shortId.generate()}`;
+    const user_id = `CE-${shortId.generate()}`;
     const wallet_id = `CEW-${shortId.generate()}`;
 
     // Check if email already exists
@@ -37,7 +37,7 @@ export async function POST(req) {
     // Insert seller
     await pool.query(
       `INSERT INTO campus_sellers (
-        id, fname, lname, seller_id, email, phone, password, state,
+        id, fname, lname, user_id, email, phone, password, state,
         campus, isActive, isVerified, isEmailVerified, isPhoneVerified,
         date, lastseen, gender
       ) VALUES (
@@ -45,7 +45,7 @@ export async function POST(req) {
         $8, $9, $10, $11, $12, $13, $14, $15
       )`,
       [
-        fname, lname, seller_id, email, phone, hashedPwd, state, campus,
+        fname, lname, user_id, email, phone, hashedPwd, state, campus,
         false, false, false, false, date, date, gender,
       ]
     );
@@ -54,12 +54,12 @@ export async function POST(req) {
     // Insert wallet
     await pool.query(
       `INSERT INTO campus_express_seller_wallet (
-        id, wallet_id, seller_id, wallet_balance, wallet_pin, wallet_number, date
+        id, wallet_id, user_id, wallet_balance, wallet_pin, wallet_number, date
       ) VALUES (
         DEFAULT, $1, $2, $3, $4, $5, $6
       )`,
       [
-        wallet_id, seller_id, 0, '0000', phone, date
+        wallet_id, user_id, 0, '0000', phone, date
       ]
     );
 
@@ -67,11 +67,11 @@ export async function POST(req) {
     await pool.query(
       `INSERT INTO coverphoto (id, file, user_id, date)
        VALUES (DEFAULT, $1, $2, $3)`,
-      ['null', seller_id, new Date()]
+      ['null', user_id, new Date()]
     );
 
     // Create JWT and Set Secure Cookie
-    const token = createToken({ id: seller_id }, 'kdiU$28Fs!9shF&2xZpD3Q#1gLx@R7TkWzPq');
+    const token = createToken({ id: user_id }, 'kdiU$28Fs!9shF&2xZpD3Q#1gLx@R7TkWzPq');
 
     cookies().set('seller_secret', token, {
       httpOnly: true,
@@ -84,7 +84,7 @@ export async function POST(req) {
     return NextResponse.json({
       bool: true,
       cookie: token,
-      user: { fname, lname, seller_id, email, phone, state, campus, gender }
+      user: { fname, lname, user_id, email, phone, state, campus, gender }
     }, { status: 200 });
 
   } catch (err) {

@@ -22,7 +22,7 @@ const Shop = () => {
 
         let overlay = document.querySelector('.overlay')
         overlay.setAttribute('id', 'overlay');
-        GetItems(window.localStorage.getItem("CE_seller_id"))
+        GetItems(window.localStorage.getItem("CE_user_id"))
         .then((result) => { 
             setItems(result)
             overlay.removeAttribute('id')
@@ -40,7 +40,7 @@ const Shop = () => {
     function DeleteProduct(e,product_id) {
         let overlay = document.querySelector('.overlay')
         //overlay.setAttribute('id', 'overlay');
-        DeleteItem(window.localStorage.getItem('CE_buyer_id'),product_id)
+        DeleteItem(window.localStorage.getItem('CE_user_id'),product_id)
         .then((result) => {
             console.log(result)
             // e.target.disabled = false;

@@ -18,18 +18,18 @@ import axios from 'axios';
 
 const OrderConfirmation = () => {
     let {
-        buyer_id
-    }=useSelector(s=>s.buyer_id);
+        user_id
+    }=useSelector(s=>s.user_id);
     let pathname = usePathname()
     let [screenWidth, setScreenWidth] = useState(0);
     let [order_list, set_order_list] = useState('');
-    let [payment, setPayMent] = useState(<Flw buyer={buyer_id} price={order_list?.product?.price} product_id={location.pathname.split('/').splice(-1)[0]}  />)
+    let [payment, setPayMent] = useState(<Flw buyer={user_id} price={order_list?.product?.price} product_id={location.pathname.split('/').splice(-1)[0]}  />)
 
     useEffect(() => {setScreenWidth(window.innerWidth)},[]);
 
     useEffect(() => {
-        if(buyer_id !== null && buyer_id !== 'null' && buyer_id !== undefined){
-            axios.get('http://192.168.24.146:9090/order', {params: {buyer_id: buyer_id, product_id: pathname.split('/').splice(-1)[0]}})
+        if(user_id !== null && user_id !== 'null' && user_id !== undefined){
+            axios.get('http://192.168.24.146:9090/order', {params: {user_id: user_id, product_id: pathname.split('/').splice(-1)[0]}})
             .then(({data})=>{
                 set_order_list(data[0])
                 // console.log(data)
@@ -39,7 +39,7 @@ const OrderConfirmation = () => {
             })
         }
       
-    }, [buyer_id]) 
+    }, [user_id]) 
 
    
     // function set_up_payment_source(data) {if(data === 'wallet'){setPayMent(<CEStack price={Total} product_id={product_id}  />); set_type(data)}else{setPayMent(<PayStack buyer={buyer} price={Total} product_id={product_id} />); set_type(data)}}

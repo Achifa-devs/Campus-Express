@@ -32,7 +32,7 @@ const CheckOut = () => {
         let overlay = document.querySelector('.overlay'); 
         overlay.setAttribute('id', 'overlay');
 
-        GetOrder(buyerData?.buyer_id,location.pathname.split('/').splice(-1)[0])
+        GetOrder(buyerData?.user_id,location.pathname.split('/').splice(-1)[0])
         .then((result) => {
             // console.log(result)
             if(result){

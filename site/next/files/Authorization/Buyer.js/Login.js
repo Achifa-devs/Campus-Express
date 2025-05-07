@@ -48,7 +48,7 @@ const BuyerLogin = ({query}) => {
 
             let response = await LogBuyerIn(email,pwd)
             if(response.bool){
-                window.localStorage.setItem("CE_buyer_id", response.id)
+                window.localStorage.setItem("CE_user_id", response.id)
                 // window.localStorage.setItem("CE_buyer_name_initial", result.name)
                 location.search !== ''
                 ?

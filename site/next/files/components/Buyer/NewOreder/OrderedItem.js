@@ -51,7 +51,7 @@ export default function OrderedItem({item,updateStock}) {
                                   overflow: 'hidden', 
                                 visibility: 'hidden',
                                 textOverflow: 'ellipsis'
-                            }}>Shop ID: {item?.seller_id}</span>
+                            }}>Shop ID: {item?.user_id}</span>
                         </div>
                         <br />
                         <div className="stock">

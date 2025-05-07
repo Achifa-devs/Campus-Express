@@ -22,7 +22,7 @@ export default function Pin({ route, navigation }) {
 
     async function update_transfer_pin() {
       
-        return await axios.post('http://192.168.105.146:9090/seller.update-pin', {pwd: pwd,seller_id: user?.seller_id})
+        return await axios.post('http://192.168.209.146:9090/seller.update-pin', {pwd: pwd,user_id: user?.user_id})
         .then(({ data }) => ({bool: data.success}))
         .catch(err => (err.response?.data))
     }

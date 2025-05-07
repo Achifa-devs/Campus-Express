@@ -30,13 +30,13 @@ export async function GET(req) {
     let queryParams = [];
 
     if (category === 'trends') {
-      query = `SELECT * FROM seller_shop WHERE state->>'state' = 'active' AND others->>'gender' = $1 LIMIT $2`;
+      query = `SELECT * FROM products WHERE state->>'state' = 'active' AND others->>'gender' = $1 LIMIT $2`;
       queryParams = [capGender, limit];
     } else if (['fashion', 'lodge & apartments'].includes(category.toLowerCase())) {
-      query = `SELECT * FROM seller_shop WHERE category = $1 AND state->>'state' = 'active' AND others->>'gender' = $2 LIMIT $3`;
+      query = `SELECT * FROM products WHERE category = $1 AND state->>'state' = 'active' AND others->>'gender' = $2 LIMIT $3`;
       queryParams = [category, capGender, limit];
     } else if (category !== '') {
-      query = `SELECT * FROM seller_shop WHERE category = $1 AND state->>'state' = 'active' LIMIT $2`;
+      query = `SELECT * FROM products WHERE category = $1 AND state->>'state' = 'active' LIMIT $2`;
       queryParams = [category, limit];
     } else {
       return NextResponse.json({ bool: false, data: '' }, { status: 400 });

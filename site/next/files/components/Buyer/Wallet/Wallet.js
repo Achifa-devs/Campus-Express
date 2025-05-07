@@ -14,7 +14,7 @@
 //     let [Transactions, setTransactions] = useState([]);
 
 //     useEffect(() => {
-//         WalletData(window.localStorage.getItem("CE_buyer_id"))
+//         WalletData(window.localStorage.getItem("CE_user_id"))
 //         .then(({walletBalance, TransactionHistory}) => {
 //             setBalance(`${walletBalance[0].wallet_balance}.00`)
 //             //setTransactions([...JSON.parse(TransactionHistory[0].document)])
@@ -33,7 +33,7 @@
 //         amount: 20000, //Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
 //         publicKey: 'pk_live_c8a885e2b4bda68ee5940a527431030c4b32f6dd',
 //         metadata: {
-//             seller_id: `${window.localStorage.getItem("CE_seller_id")}`
+//             user_id: `${window.localStorage.getItem("CE_user_id")}`
 //         }
 //     };
     
@@ -57,8 +57,8 @@
 //     }
 
 //     useEffect(() => {
-//         socket.on('transaction_verification', ({amount, seller_id}) => {
-//             if(window.localStorage.getItem("CE_seller_id") === seller_id){
+//         socket.on('transaction_verification', ({amount, user_id}) => {
+//             if(window.localStorage.getItem("CE_user_id") === user_id){
 //                 setBalance(`${amount}.00`)
 //             }
 //         })

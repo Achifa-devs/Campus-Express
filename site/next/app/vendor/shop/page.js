@@ -11,8 +11,8 @@ import { open_notice } from '@/files/reusable.js/notice'
 
 export default function Shop() {
     let {
-        seller_id
-    }=useSelector(s=>s.seller_id);
+        user_id
+    }=useSelector(s=>s.user_id);
 
     let [shop, setShop] = useState('')
     let [newShopName, setNewShopName] = useState('')
@@ -30,7 +30,7 @@ export default function Shop() {
             headers: {
                 "Content-Type": "Application/json"
             },
-            body: JSON.stringify({seller_id,title:newShopName})
+            body: JSON.stringify({user_id,title:newShopName})
         })
         .then(async(result) => {
             let response = await result.json(); 
@@ -47,13 +47,13 @@ export default function Shop() {
     }
 
     useEffect(() => {
-        if(seller_id !== 'null' && seller_id !== null && seller_id !== ''){
+        if(user_id !== 'null' && user_id !== null && user_id !== ''){
             seller_overlay_setup(false, '')    
         }
-    }, [seller_id])
+    }, [user_id])
 
     useEffect(() => {
-        if(seller_id !== 'null' && seller_id !== null && seller_id !== '' && seller_id !== undefined){
+        if(user_id !== 'null' && user_id !== null && user_id !== '' && user_id !== undefined){
             seller_overlay_setup(true, 'Getting Your Shop Ready');
 
             fetch(`/api/vendor/shop`, {
@@ -62,7 +62,7 @@ export default function Shop() {
                     "Content-Type": "Application/json"
                 },
                 body: JSON.stringify({
-                    seller_id
+                    user_id
                 })
             })
             .then(async(result) => {
@@ -91,7 +91,7 @@ export default function Shop() {
         }else{
             // seller_overlay_setup(false, '')
         }
-    }, [seller_id])
+    }, [user_id])
 
     
 

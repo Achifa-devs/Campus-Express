@@ -5,7 +5,7 @@ import '@/app/vendor/listing/styles/x-large.css'
 import '@/app/vendor/listing/styles/large.css'
 import '@/app/vendor/listing/styles/medium.css'
 import '@/app/vendor/listing/styles/small.css'
-import database from '@/database/seller_shop.json'
+import database from '@/database/products.json'
 import js_ago from 'js-ago'
 import Thumbnail from '@/files/components/Buyer/Thumbnail'
 import { useSelector } from 'react-redux'
@@ -16,8 +16,8 @@ import { NextSeo } from 'next-seo'
 
 export default function Listing() {
     let {
-        seller_id
-    }=useSelector(s=>s.seller_id);
+        user_id
+    }=useSelector(s=>s.user_id);
     let [limit, setlimit] = useState(30)
     let [screenWidth, setScreenWidth] = useState(0)
     let [cards, setCards] = useState([])
@@ -28,9 +28,9 @@ export default function Listing() {
 
     useEffect(() => {
 
-        if(seller_id !== null && seller_id !== 'null'){
+        if(user_id !== null && user_id !== 'null'){
             seller_overlay_setup(true, 'Getting Your Products')
-            fetch(`/api/vendor/products?seller_id=${seller_id}`)
+            fetch(`/api/vendor/products?user_id=${user_id}`)
             .then(async(result) => {
                 let response = await result.json();  
                 console.log(response)
@@ -42,7 +42,7 @@ export default function Listing() {
                 console.log(error)
             }) 
         }
-    }, [seller_id])
+    }, [user_id])
 
   
     

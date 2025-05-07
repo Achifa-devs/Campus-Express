@@ -1,7 +1,7 @@
 // import { useState, useEffect } from 'react';
 // import { usePaystackPayment } from 'react-paystack';
 // import { GetBuyer } from '../../api/buyer';
-// const PayStack = ({price,product_id,buyer_id,stock}) => {
+// const PayStack = ({price,product_id,user_id,stock}) => {
 
 //     let [fname, setFname] = useState('loading')
 //     let [lname, setLname] = useState('loading')
@@ -14,7 +14,7 @@
 //     }
 
 //     useEffect(() => {
-//         GetBuyer(window.localStorage.getItem('CE_buyer_id'))
+//         GetBuyer(window.localStorage.getItem('CE_user_id'))
 //         .then((result) => {
 //             setFname(result.fname)
 //             setLname(result.lname)
@@ -35,7 +35,7 @@
 //         publicKey: 'pk_live_c8a885e2b4bda68ee5940a527431030c4b32f6dd',
         
 //         metadata: {
-//             buyer_id: `${window.localStorage.getItem("CE_seller_id")}`,
+//             user_id: `${window.localStorage.getItem("CE_user_id")}`,
 //             amount: amount,
 //             firstname: fname,
 //             lastname: lname,

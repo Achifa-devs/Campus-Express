@@ -4,24 +4,24 @@ import pool from '../../db';
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
-  const seller_id = searchParams.get('seller_id');
+  const user_id = searchParams.get('user_id');
 
-  if (!seller_id) {
-    return NextResponse.json({ error: 'Missing seller_id' }, { status: 400 });
+  if (!user_id) {
+    return NextResponse.json({ error: 'Missing user_id' }, { status: 400 });
   }
 
   try {
 
     const sellerShopRes = await pool.query(
-      'SELECT * FROM seller_shop WHERE seller_id = $1',
-      [seller_id]
+      'SELECT * FROM products WHERE user_id = $1',
+      [user_id]
     );
     const sellerShops = sellerShopRes.rows;
 
     const getOrders = async (item) => {
       try {
         const orderRes = await pool.query(
-          'SELECT * FROM campus_express_buyer_orders WHERE product_id = $1',
+          'SELECT * FROM orders WHERE product_id = $1',
           [item.product_id]
         );
 
@@ -44,18 +44,18 @@ export async function GET(request) {
     
       
     const reports = await pool.query(
-      'SELECT * FROM reports WHERE seller_id = $1',
-      [seller_id]
+      'SELECT * FROM reports WHERE user_id = $1',
+      [user_id]
     );
     
     const reviews = await pool.query(
-      'SELECT * FROM reviews WHERE seller_id = $1',
-      [seller_id]
+      'SELECT * FROM reviews WHERE user_id = $1',
+      [user_id]
     );
     
     const earnings = await pool.query(
-      'SELECT * FROM campus_express_seller_wallet WHERE seller_id = $1',
-      [seller_id]
+      'SELECT * FROM campus_express_seller_wallet WHERE user_id = $1',
+      [user_id]
     );
 
     return NextResponse.json({orders: filteredOrders, reviews, reports, earnings}, { status: 200 });

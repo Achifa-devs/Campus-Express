@@ -4,15 +4,15 @@ import { Alert, FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View }
 import StarRating from 'react-native-star-rating-widget';
 import VerifiedSvg from '../../../media/assets/verified-check-svgrepo-com.svg'
 
-export default function Btm({ size, seller_id }) {
+export default function Btm({ size, user_id }) {
     let [data, setData] = useState('')
     let [reviews, setReviews] = useState('')
     let [shop, setShop] = useState('')
     const [rating, setRating] = useState(0);
     
     useEffect(() => {
-        if (seller_id) {
-            fetch(`http://192.168.105.146:9090/owner?seller_id=${seller_id}`, {
+        if (user_id) {
+            fetch(`http://192.168.209.146:9090/owner?user_id=${user_id}`, {
                 headers: {
                 "Content-Type": "Application/json" 
                 }
@@ -28,7 +28,7 @@ export default function Btm({ size, seller_id }) {
                 console.log(err);
             });
 
-            fetch(`http://192.168.105.146:9090/reviews?seller_id=${seller_id}`, {
+            fetch(`http://192.168.209.146:9090/reviews?user_id=${user_id}`, {
                 headers: {
                 "Content-Type": "Application/json" 
                 }
@@ -43,7 +43,7 @@ export default function Btm({ size, seller_id }) {
                 Alert.alert('Network error, please try again.');
                 console.log(err);
             });
-            fetch(`http://192.168.105.146:9090/details?seller_id=${seller_id}`, {
+            fetch(`http://192.168.209.146:9090/details?user_id=${user_id}`, {
                 headers: {
                 "Content-Type": "Application/json" 
                 }
@@ -59,7 +59,7 @@ export default function Btm({ size, seller_id }) {
                 console.log(err);
             });
         }
-    }, [seller_id]);
+    }, [user_id]);
     return (
         <>
          

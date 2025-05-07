@@ -1,136 +1,272 @@
-import { useNavigation } from '@react-navigation/native';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
-  Image,
   Text,
   View,
-  Alert,
-  Dimensions,
   TouchableOpacity,
   FlatList,
+  StyleSheet,
+  Dimensions,
   ActivityIndicator
 } from 'react-native';
+import FastImage from 'react-native-fast-image';
+import { useNavigation } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { debounce } from 'lodash';
 
-export default function Hot() {
-  const navigation = useNavigation();
-  const [data, setData] = useState([]);
-  const [refreshing, setRefreshing] = useState(false);
-  const [loadingImages, setLoadingImages] = useState({});
-  const screenWidth = Dimensions.get('window').width / 2;
+const { width } = Dimensions.get('window');
+const CARD_WIDTH = (width - 25) / 2; // 16px padding on each side + 16px gap between cards
 
-  const fetchData = async () => {
-    try {
-      const res = await fetch(`http://192.168.105.146:9090/products?limit=15&category=${btoa('trends')}`, {
-        headers: { "Content-Type": "Application/json" }
-      });
-      const json = await res.json();
-      const uniqueData = Array.from(new Map(json?.data?.map(item => [item.product_id, item])).values());
-      setData(uniqueData);
-    } catch (err) {
-      Alert.alert('Network error, please try again.');
-      console.error(err);
-    }
-  };
+const ItemCard = React.memo(({ item, onPress }) => {
+  const [loading, setLoading] = useState(true);
+  const [wishlisted, setWishlisted] = useState(false);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    fetchData().finally(() => setRefreshing(false));
-  }, []);
-
-  const renderItem = useCallback(({ item }) => (
+  return (
     <TouchableOpacity
-      activeOpacity={0.8}
-      onPress={() => navigation.navigate('user-product', { product_id: item.product_id })}
-      style={{
-        width: screenWidth,
-        padding: 5,
-        backgroundColor: '#FFF',
-      }}
+      activeOpacity={0.9}
+      onPress={() => onPress(item.product_id)}
+      style={styles.cardContainer}
     >
-      <View style={{
-        backgroundColor: '#FFF',
-        borderRadius: 2.5,
-        overflow: 'hidden',
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 5,
-        elevation: 3,
-      }}>
-        <View style={{ width: '100%', height: 200, position: 'relative' }}>
-          <Image
-            source={{ uri: item.thumbnail_id }}
-            style={{
-              width: '100%',
-              height: '100%',
-              position: 'absolute',
-            }}
-            resizeMode="cover"
-            onLoadStart={() => setLoadingImages(prev => ({ ...prev, [item.product_id]: true }))}
-            onLoadEnd={() => setLoadingImages(prev => ({ ...prev, [item.product_id]: false }))}
+      {/* Product Image */}
+      <View style={styles.imageContainer}>
+        <FastImage
+          source={{ uri: item.thumbnail_id }}
+          style={styles.image}
+          resizeMode={FastImage.resizeMode.cover}
+          onLoadStart={() => setLoading(true)}
+          onLoadEnd={() => setLoading(false)}
+        />
+        
+        {loading && (
+          <View style={styles.loadingOverlay}>
+            <ActivityIndicator size="small" color="#5C6AC4" />
+          </View>
+        )}
+        
+        {/* Wishlist Button */}
+        <TouchableOpacity 
+          style={styles.wishlistButton}
+          onPress={() => setWishlisted(!wishlisted)}
+        >
+          <Icon 
+            name={wishlisted ? 'heart' : 'heart-outline'} 
+            size={20} 
+            color={wishlisted ? '#FF5A5F' : '#FFF'} 
           />
-          {loadingImages[item.product_id] && (
-            <View style={{
-              width: '100%',
-              height: '100%',
-              justifyContent: 'center',
-              alignItems: 'center',
-              backgroundColor: '#f0f0f0'
-            }}>
-              <ActivityIndicator size="small" color="#4CAF50" />
-            </View>
+        </TouchableOpacity>
+        
+        {/* Condition Badge */}
+        {item?.others?.condition && (
+          <View style={styles.conditionBadge}>
+            <Text style={styles.conditionText}>{item.others.condition}</Text>
+          </View>
+        )}
+      </View>
+
+      {/* Product Details */}
+      <View style={styles.detailsContainer}>
+        <Text style={styles.title} numberOfLines={2}>{item.title}</Text>
+        
+        <View style={styles.priceContainer}>
+          <Text style={styles.price}>₦{new Intl.NumberFormat('en-US').format(item?.price)}</Text>
+          {item.originalPrice && (
+            <Text style={styles.originalPrice}>₦{new Intl.NumberFormat('en-US').format(item.originalPrice)}</Text>
           )}
         </View>
-        <View style={{ height: 100, padding: 8, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-          <Text style={{ fontWeight: 'bold', fontSize: 16, color: '#4CAF50' }}>
-            ₦{new Intl.NumberFormat('en-us').format(item?.price)}
-          </Text>
-          <Text style={{ fontSize: 14, marginBottom: 8, color: '#000', marginVertical: 2 }}>
-            {item.title}
-          </Text>
-          <Text style={{ fontSize: 10, fontWeight: '500', color: '#000' }}>
-            {item.campus} {item?.others?.condition ? `- ${item.others.condition}` : ''}
-          </Text>
+        
+        <View style={styles.metaContainer}>
+          <View style={styles.ratingContainer}>
+            <Icon name="star" size={12} color="#FFC107" />
+            <Text style={styles.ratingText}>4.8</Text>
+          </View>
+          <View style={styles.locationContainer}>
+            <Icon name="location-outline" size={12} color="#919EAB" />
+            <Text style={styles.locationText}>{item.campus}</Text>
+          </View>
         </View>
       </View>
     </TouchableOpacity>
-  ), [navigation, loadingImages]);
+  );
+});
+
+export default function Hot({ data }) {
+  const navigation = useNavigation();
+
+  const handleNavigation = useCallback(
+    debounce((productId) => {
+      navigation.navigate('user-product', { product_id: productId });
+    }, 300, { leading: true, trailing: false }),
+    [navigation]
+  );
+
+  const renderItem = useCallback(
+    ({ item }) => <ItemCard item={item} onPress={handleNavigation} />,
+    [handleNavigation]
+  );
 
   return (
-    <View style={{ backgroundColor: '#f9f9f9', flex: 1 }}>
-      <View style={{
-        height: 50,
-        width: '100%',
-        paddingLeft: 10,
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: '#FFF',
-      }}>
-        <Text style={{ color: '#000', fontSize: 16, fontWeight: 'bold' }}>Trending</Text>
+    <View style={styles.container}>
+      {/* Section Header */}
+      <View style={styles.sectionHeader}>
+        <Text style={styles.sectionTitle}>Trending Products</Text>
+        <TouchableOpacity>
+          <Text style={styles.seeAll}>See all</Text>
+        </TouchableOpacity>
       </View>
 
+      {/* Product Grid */}
       <FlatList
         data={data}
         renderItem={renderItem}
         keyExtractor={(item, index) => `${item.product_id}-${index}`}
         numColumns={2}
-        refreshing={refreshing}
-        onRefresh={onRefresh}
-        contentContainerStyle={{
-          paddingHorizontal: 0,
-          backgroundColor: '#FFF',
-        }}
-        columnWrapperStyle={{ justifyContent: 'space-between' }}
-        removeClippedSubviews
+        contentContainerStyle={styles.listContent}
+        columnWrapperStyle={styles.columnWrapper}
+        showsVerticalScrollIndicator={false}
         initialNumToRender={6}
         maxToRenderPerBatch={8}
         windowSize={11}
-        updateCellsBatchingPeriod={50}
       />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#FFF',
+    marginTop: -4,
+    paddingHorizontal: 6,
+    paddingTop: 8,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+    // backgroundColor: '#FFF',
+    paddingHorizontal: 8,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#212B36',
+    fontFamily: 'System', // Use your custom font if available
+  },
+  seeAll: {
+    fontSize: 14,
+    color: '#FF4500',
+    fontWeight: '500',
+  },
+  listContent: {
+    paddingBottom: 24,
+  },
+  columnWrapper: {
+    justifyContent: 'space-between',
+    marginBottom: 16,
+  },
+  cardContainer: {
+    width: CARD_WIDTH,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 8,
+    overflow: 'hidden',
+    shadowColor: '#919EAB',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 3,
+    borderWidth: 1,
+    borderColor: '#F4F6F8',
+  },
+  imageContainer: {
+    width: '100%',
+    height: CARD_WIDTH * 1.25, // 5:4 aspect ratio
+    backgroundColor: '#F4F6F8',
+    position: 'relative',
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+  },
+  loadingOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(244, 246, 248, 0.8)',
+  },
+  wishlistButton: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  conditionBadge: {
+    position: 'absolute',
+    bottom: 8,
+    left: 8,
+    backgroundColor: '#FF4500',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
+  },
+  conditionText: {
+    fontSize: 10,
+    color: '#FFFFFF',
+    fontWeight: '600',
+    textTransform: 'uppercase',
+  },
+  detailsContainer: {
+    padding: 12,
+  },
+  title: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#212B36',
+    lineHeight: 20,
+    height: 40, // Fixed height for 2 lines
+    marginBottom: 8,
+  },
+  priceContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 6,
+  },
+  price: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#212B36',
+  },
+  originalPrice: {
+    fontSize: 12,
+    color: '#919EAB',
+    textDecorationLine: 'line-through',
+    marginLeft: 8,
+  },
+  metaContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  ratingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  ratingText: {
+    fontSize: 12,
+    color: '#212B36',
+    marginLeft: 4,
+  },
+  locationContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  locationText: {
+    fontSize: 12,
+    color: '#919EAB',
+    marginLeft: 4,
+  },
+});

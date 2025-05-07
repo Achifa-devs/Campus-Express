@@ -1,15 +1,15 @@
 import axios from 'axios'
 // import {IP} from '@env'
 
-let uri_1 = 'http://192.168.105.146:9090'
-let uri_2 = 'http://192.168.105.146:9090'
+let uri_1 = 'http://192.168.209.146:9090'
+let uri_2 = 'http://192.168.209.146:9090'
 let IP = uri_1
 
 
 const source = axios.CancelToken.source();
 
-// export function delete(seller_id,chat,type) {
-//     let response = delete_request_generators('delete-chat', {seller_id,chat,type})
+// export function delete(user_id,chat,type) {
+//     let response = delete_request_generators('delete-chat', {user_id,chat,type})
 //     console.log(response)
 // }
 

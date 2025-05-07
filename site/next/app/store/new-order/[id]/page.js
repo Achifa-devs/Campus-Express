@@ -29,8 +29,8 @@ import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup';
 export default function NewOrder() {
     let pathname = usePathname()
     let {
-        buyer_id
-    }=useSelector(s=>s.buyer_id);
+        user_id
+    }=useSelector(s=>s.user_id);
     let [deliveryOpt, setdeliveryOpt] = useState(-1);
     let [stock, setstock] = useState(1);
     let [screenWidth, setScreenWidth] = useState(0);
@@ -95,10 +95,10 @@ export default function NewOrder() {
         // let overlay = document.querySelector('.overlay');
         // overlay.setAttribute('id', 'overlay');
 
-        if (buyer_id !== '' && buyer_id !== null && order_id !== null) {
+        if (user_id !== '' && user_id !== null && order_id !== null) {
             
             
-            fetch(`/api/store/order?buyer_id=${buyer_id}&product_id=${pathname.split('/').splice(-1)[0]}`, {
+            fetch(`/api/store/order?user_id=${user_id}&product_id=${pathname.split('/').splice(-1)[0]}`, {
                 headers: {
                     'Gender': window.localStorage.getItem('cs-gender') 
                 }
@@ -122,7 +122,7 @@ export default function NewOrder() {
             });
         }
 
-    }, [buyer_id])
+    }, [user_id])
 
   return (
     <>

@@ -12,7 +12,7 @@ import Description from "@/files/components/Buyer/Product/Description";
 import { useSelector } from "react-redux";
 
 import imgSvg from '@/files/assets/image-svgrepo-com (4).svg'; 
-import database from '@/database/seller_shop.json'
+import database from '@/database/products.json'
 
 import Aside from "@/files/components/Buyer/Product/Aside";
 import { usePathname } from "next/navigation";
@@ -29,8 +29,8 @@ import { useParams } from 'next/navigation';
 const ProductPageClient = ({product, slug}) => {
     let pathname = usePathname()
     let {
-        buyer_id
-    }=useSelector(s=>s.buyer_id);
+        user_id
+    }=useSelector(s=>s.user_id);
 
     let {ItemImages} = useSelector(s => s.itemImages);
     let {ActiveImg} = useSelector(s => s.ActiveImg);
@@ -83,8 +83,8 @@ const ProductPageClient = ({product, slug}) => {
         try {
             let overlay = document.querySelector('.overlay');
             overlay.setAttribute('id', 'overlay');
-            if (product.seller_id) {
-                fetch(`/api/store/vendor?seller_id=${product?.seller_id}`, { cache: 'no-store',}).then(async (res) => {
+            if (product.user_id) {
+                fetch(`/api/store/vendor?user_id=${product?.user_id}`, { cache: 'no-store',}).then(async (res) => {
                     let response = await res.json()
                     set_seller(response.data)
                     overlay.removeAttribute('id')
@@ -98,14 +98,14 @@ const ProductPageClient = ({product, slug}) => {
         }
     },[product])
 
-    async function AddNewViewer(product_id,buyer_id) {
+    async function AddNewViewer(product_id,user_id) {
         fetch(`/api/store/new-view`, {
             headers: {
                 'Gender': window.localStorage.getItem('cs-gender') 
             },
             body: JSON.stringify({
                 product_id,
-                buyer_id
+                user_id
             })
         })
         .then(async(res) => {
@@ -129,11 +129,11 @@ const ProductPageClient = ({product, slug}) => {
         if (!item?.product_id || hasRun.current) return;
         hasRun.current = true;
 
-        const buyer_id =
-        window.localStorage.getItem("CE_buyer_id") ||
+        const user_id =
+        window.localStorage.getItem("CE_user_id") ||
         window.localStorage.getItem("id_for_unknown_buyer");
 
-        const finalBuyerId = buyer_id && buyer_id !== 'null' ? buyer_id : window.localStorage.getItem("id_for_unknown_buyer");
+        const finalBuyerId = user_id && user_id !== 'null' ? user_id : window.localStorage.getItem("id_for_unknown_buyer");
 
         try {
             setTimeout(() => {
@@ -145,9 +145,9 @@ const ProductPageClient = ({product, slug}) => {
     }, [product?.product_id]);
     
     async function handleOrder() {
-        let result = order_list.filter((data) => data.product.product_id === product.product_id && data.order.buyer_id === buyer_id).length
+        let result = order_list.filter((data) => data.product.product_id === product.product_id && data.order.user_id === user_id).length
         if(result<1){
-            if(buyer_id === null || buyer_id === '' || buyer_id === 'null'){
+            if(user_id === null || user_id === '' || user_id === 'null'){
                 window.location.href=(`/login`)
             }else{
                 window.location.href=(`/new-order/${product.product_id}`)
@@ -168,8 +168,8 @@ const ProductPageClient = ({product, slug}) => {
 
     useEffect(() => {
         
-        if (buyer_id) {
-            fetch(`/api/store/orders?buyer_id=${buyer_id}`, { cache: 'no-store', }).then(async (res) => {
+        if (user_id) {
+            fetch(`/api/store/orders?user_id=${user_id}`, { cache: 'no-store', }).then(async (res) => {
                 let response = await res.json();
                
                if (response?.bool) {
@@ -178,7 +178,7 @@ const ProductPageClient = ({product, slug}) => {
            }).catch(err => console.log(err))
         }
       
-    }, [buyer_id]) 
+    }, [user_id]) 
     
 
     const jsonLd = {
@@ -235,7 +235,7 @@ const ProductPageClient = ({product, slug}) => {
                             {/* <Contact phone={phone} SendMssg={SendMssg}  />
                             <br /> */}
                             <button style={{marginBottom: '15px', background: '#FF4500', color: '#fff', border: 'none', outline: 'none',borderRadius: '2.5px'}} className='shadow-sm' onClick={handleOrder}>{
-                                order_list.filter((data) => data.product.product_id === product.product_id && data.order.buyer_id === buyer_id).length > 0
+                                order_list.filter((data) => data.product.product_id === product.product_id && data.order.user_id === user_id).length > 0
                                 ?
 
                                 'View Order'

@@ -22,6 +22,8 @@ import {
   getToken,
   onMessage
 } from '@react-native-firebase/messaging';
+import { getData } from './android/app/src/files/utils/AsyncStore.js.js';
+import { setUserAuthTo } from './redux/reducer/auth.js';
 
 const flashMessageRef = React.createRef();
 
@@ -85,7 +87,7 @@ function App() {
 
     return unsubscribe;
   }, []);
-
+   
   return (
     <Provider store={store}>
       <NavigationContainer>
@@ -129,6 +131,20 @@ function NavCnt() {
     }
     dispatch(setToggleMessage(null));
   }, [toggleMessage]);
+
+  useEffect(() => {
+    (async function Auth() {
+      let response = await getData('user');
+      const user = (JSON.parse(response));
+      console.log("user auth:", user)
+      if (user.user_id) {
+        dispatch(setUserAuthTo(true))
+      } else {
+        dispatch(setUserAuthTo(true))
+      }
+    })();
+  }, [])
+      
 
   return (
     <SafeAreaProvider style={{ flex: 1 }}>

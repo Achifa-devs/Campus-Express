@@ -65,7 +65,7 @@ export default function TypeProducts() {
     const [rightColumn, setRightColumn] = useState([])
   useEffect(() => {
     // Alert.alert(type,category)
-    fetch(`http://192.168.105.146:9090/products-type?category=${category}&type=${type}`, {
+    fetch(`http://192.168.209.146:9090/products-type?category=${category}&type=${type}`, {
       headers: {
         "Content-Type": "Application/json" 
       }

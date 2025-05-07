@@ -2,20 +2,20 @@ import pool from "../../db";
 
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
-  const seller_id = searchParams.get('seller_id');
+  const user_id = searchParams.get('user_id');
 
-  if (!seller_id) {
-    return Response.json({ error: 'Missing seller_id' }, { status: 400 });
+  if (!user_id) {
+    return Response.json({ error: 'Missing user_id' }, { status: 400 });
   }
 
   try {
 
     const [shippingInfo, payoutInfo, shopInfo] = await Promise.all([
-    //   pool.query(`SELECT * FROM customer_care WHERE seller_id = '${seller_id}'`).then(r => r.rows),
-    //   pool.query(`SELECT * FROM return WHERE seller_id = '${seller_id}'`).then(r => r.rows),
-      pool.query(`SELECT * FROM shipping WHERE seller_id = '${seller_id}'`).then(r => r.rows),
-      pool.query(`SELECT * FROM payment WHERE seller_id = '${seller_id}'`).then(r => r.rows),
-      pool.query(`SELECT * FROM campus_shops WHERE seller_id = '${seller_id}'`).then(r => r.rows),
+    //   pool.query(`SELECT * FROM customer_care WHERE user_id = '${user_id}'`).then(r => r.rows),
+    //   pool.query(`SELECT * FROM return WHERE user_id = '${user_id}'`).then(r => r.rows),
+      pool.query(`SELECT * FROM shipping WHERE user_id = '${user_id}'`).then(r => r.rows),
+      pool.query(`SELECT * FROM payment WHERE user_id = '${user_id}'`).then(r => r.rows),
+      pool.query(`SELECT * FROM shopss WHERE user_id = '${user_id}'`).then(r => r.rows),
     ]);
 
     const ship = shippingInfo?.[0] || {};

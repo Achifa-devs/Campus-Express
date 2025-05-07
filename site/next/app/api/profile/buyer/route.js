@@ -5,9 +5,9 @@ import { NextResponse } from 'next/server';
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { buyer_id } = body;
+    const { user_id } = body;
 
-    const res = await pool.query(`SELECT * FROM campus_buyers WHERE buyer_id='${buyer_id}'`);
+    const res = await pool.query(`SELECT * FROM campus_buyers WHERE user_id='${user_id}'`);
     return NextResponse.json({ bool: true, user: res?.rows[0] }, { status: 200 });
 
   } catch (err) {

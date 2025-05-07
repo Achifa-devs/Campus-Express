@@ -22,7 +22,7 @@ const Me = () => {
     useEffect(() => {
         setUserData(sellerData)
         async function getPhoto(){
-          let result = await GetSellerPhoto(window.localStorage.getItem('CE_seller_id'))
+          let result = await GetSellerPhoto(window.localStorage.getItem('CE_user_id'))
           if(result?.file === 'null'){
               setPhoto(userPhoto)
           }else{
@@ -34,7 +34,7 @@ const Me = () => {
   
       useEffect(() => {
         async function getPhoto(){
-          let result = await GetSellerWallet(window.localStorage.getItem('CE_seller_id'))
+          let result = await GetSellerWallet(window.localStorage.getItem('CE_user_id'))
           if(result){
               setSellerWallet(result)
           }
@@ -46,7 +46,7 @@ const Me = () => {
         let overlay = document.querySelector('.overlay')
         overlay.setAttribute('id', 'overlay');
         async function getShop() {
-          let shop = await GetShop(window.localStorage.getItem("CE_seller_id"))
+          let shop = await GetShop(window.localStorage.getItem("CE_user_id"))
           setShop(shop)
           overlay.removeAttribute('id')
         }

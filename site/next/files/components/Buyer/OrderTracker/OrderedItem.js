@@ -10,8 +10,8 @@ export default function OrderedItem({item,order}) {
     let [screenWidth, setScreenWidth] = useState(0);
     useEffect(() => {setScreenWidth(window.innerWidth)},[]);
     let {
-        buyer_id 
-    } = useSelector(s => s.buyer_id);
+        user_id 
+    } = useSelector(s => s.user_id);
 
   return (
     <>
@@ -52,11 +52,11 @@ export default function OrderedItem({item,order}) {
                             <button class="button is-ghost" onClick={e=> {
                                 document.querySelector('.confirm-order-overlay').removeAttribute('id')
                             }}>Decline</button>
-                            {/* buyer_id,order_id,amount,reason */}
+                            {/* user_id,order_id,amount,reason */}
                             <button class="button is-primary" onClick={e => {
                                 buyer_overlay_setup(true, 'Confirming Order')
 
-                                axios.post('http://192.168.24.146:9090/confirm-order', {buyer_id: buyer_id, order_id: order?.order_id, product_id: order?.product_id})
+                                axios.post('http://192.168.24.146:9090/confirm-order', {user_id: user_id, order_id: order?.order_id, product_id: order?.product_id})
                                 .then(({data})=>{
                                     console.log(data)
                                     if(data){
@@ -120,9 +120,9 @@ export default function OrderedItem({item,order}) {
 
                     <div onClick={e => {
 
-                        const encodedMessage = encodeURIComponent(`Item Ordered:${item.title} Seller-id:\n\n\n${item.seller_id} \n\n\nPrice: ₦${new Intl.NumberFormat('en-us').format(item.price)} \n\n\n 'https://www.campusexpressng.com/product/${item.product_id}'`);
+                        const encodedMessage = encodeURIComponent(`Item Ordered:${item.title} Seller-id:\n\n\n${item.user_id} \n\n\nPrice: ₦${new Intl.NumberFormat('en-us').format(item.price)} \n\n\n 'https://www.campusexpressng.com/product/${item.product_id}'`);
         
-                        const whatsappUrl = `https://wa.me/${item?.seller_id}?text=${encodedMessage}`;
+                        const whatsappUrl = `https://wa.me/${item?.user_id}?text=${encodedMessage}`;
     
                         // Open WhatsApp with the share URL
                         window.open(whatsappUrl, '_blank');

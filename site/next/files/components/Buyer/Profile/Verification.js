@@ -19,7 +19,7 @@ const Verification = ({userData,ContactEdit,updateActiveJsx}) => {
                     cursor: 'pointer'
                 }} alt="" onClick={e => {
                 document.querySelector('.edit-overlay').setAttribute('id', 'edit-overlay')
-                updateActiveJsx(<ContactEdit email={userData?.email} phone={userData?.phone} name={`${userData?.fname} ${userData?.lname}`} buyer_id={userData?.buyer_id} />)
+                updateActiveJsx(<ContactEdit email={userData?.email} phone={userData?.phone} name={`${userData?.fname} ${userData?.lname}`} user_id={userData?.user_id} />)
                 
                 }} />
                 <div><b>Verification</b></div>

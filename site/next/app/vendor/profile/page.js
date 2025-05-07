@@ -17,15 +17,15 @@ import ReactFroala from 'react-froala-wysiwyg';
 import 'froala-editor/css/froala_editor.pkgd.min.css';
 
 import {
-    seller_shop_overlay_setup,
+    products_overlay_setup,
     MyEditor
 } from './editor'
 export default function Profile() {
     
     let dispatch = useDispatch();
     let {
-        seller_id
-    }=useSelector(s=>s.seller_id);
+        user_id
+    }=useSelector(s=>s.user_id);
     let [profileAnalytics, setProfileAnalytics] = useState('')
 
   
@@ -65,9 +65,9 @@ export default function Profile() {
     },[profile])
     
     useEffect(() => {
-        if(seller_id !== 'null' && seller_id !== null && seller_id !== ''){
+        if(user_id !== 'null' && user_id !== null && user_id !== ''){
 
-            fetch(`/api/vendor/profile`, {method: 'post', body: JSON.stringify({seller_id})})
+            fetch(`/api/vendor/profile`, {method: 'post', body: JSON.stringify({user_id})})
             .then(async(result) => {
                 let response = await result.json(); 
                 if (response.bool) {
@@ -78,7 +78,7 @@ export default function Profile() {
                 console.log(error)
             }) 
 
-            fetch(`/api/vendor/shop`,{method: 'post', body: JSON.stringify({seller_id})})
+            fetch(`/api/vendor/shop`,{method: 'post', body: JSON.stringify({user_id})})
             .then(async(result) => {
                 let response = await result.json(); 
                 console.log(response)
@@ -88,7 +88,7 @@ export default function Profile() {
                 console.log(error)
             }) 
         }
-    }, [seller_id])
+    }, [user_id])
 
     useEffect(() => {
         setCampusLocaleList([])
@@ -99,9 +99,9 @@ export default function Profile() {
     }, [state])
     
     useEffect(() => {
-        if(seller_id !== 'null' && seller_id !== null && seller_id !== ''){
+        if(user_id !== 'null' && user_id !== null && user_id !== ''){
 
-            fetch(`/api/vendor/analytics?seller_id=${seller_id}`)
+            fetch(`/api/vendor/analytics?user_id=${user_id}`)
             .then(async(result) => {
                 let response = await result.json(); 
                 console.log(response)
@@ -112,7 +112,7 @@ export default function Profile() {
             }) 
 
         }
-    }, [seller_id])
+    }, [user_id])
 
     let [activeCnt, setActiveCnt] = useState(<ShopInfo shop={shop} campusLocaleList={campusLocaleList} profile={profile}  />)
     let [activeCntTxt, setActiveCntTxt] = useState('shopInfo')
@@ -131,7 +131,7 @@ export default function Profile() {
             headers: {
                 "Content-Type": "Application/json"
             },
-            body: JSON.stringify({data,seller_id})
+            body: JSON.stringify({data,user_id})
         })   
         .then(async(result) => {
             let response = await result.json();
@@ -347,8 +347,8 @@ function PaymentInfo({ updatePaymentInfo }) {
         bankBeneficiary
     }=useSelector(s=>s.bankBeneficiary)
     let {
-        seller_id
-    }=useSelector(s=>s.seller_id);
+        user_id
+    }=useSelector(s=>s.user_id);
     let [payment_info, set_payment_info] = useState('')
 
     useEffect(() => {
@@ -360,10 +360,10 @@ function PaymentInfo({ updatePaymentInfo }) {
         updatePaymentInfo('accountBeneficiary', bankBeneficiary)
     }, [bankBeneficiary])
     useEffect(() => {
-        if(seller_id !== 'null' && seller_id !== null && seller_id !== ''){
+        if(user_id !== 'null' && user_id !== null && user_id !== ''){
             loader(true)
 
-            fetch(`/api/vendor/payment?seller_id=${seller_id}`)
+            fetch(`/api/vendor/payment?user_id=${user_id}`)
             .then(async(result) => {
                 let response = await result.json(); 
                 console.log(response)
@@ -381,7 +381,7 @@ function PaymentInfo({ updatePaymentInfo }) {
                 loader(false)
             }) 
         }
-    }, [seller_id])
+    }, [user_id])
     return(
         <>
             <div className="mid">
@@ -439,17 +439,17 @@ function ShippingInfo({updateShippingInfo}) {
     let [state2, setState2] = useState('')
 
     let {
-        seller_id
-    }=useSelector(s=>s.seller_id);
+        user_id
+    }=useSelector(s=>s.user_id);
     let [shipping_info, set_shipping_info] = useState('')
     let [profile, setProfile] = useState('')
 
     useEffect(() => {
-        if (seller_id !== 'null' && seller_id !== null && seller_id !== '') {
+        if (user_id !== 'null' && user_id !== null && user_id !== '') {
             loader(true)
 
            
-            fetch(`/api/vendor/shipping?seller_id=${seller_id}`)
+            fetch(`/api/vendor/shipping?user_id=${user_id}`)
             .then(async(result) => {
                 let response = await result.json(); 
                 console.log(response)
@@ -464,12 +464,12 @@ function ShippingInfo({updateShippingInfo}) {
                 loader(false)
             }) 
         }
-    }, [seller_id])
+    }, [user_id])
 
     useEffect(() => {
-        if(seller_id !== 'null' && seller_id !== null && seller_id !== ''){
+        if(user_id !== 'null' && user_id !== null && user_id !== ''){
 
-            fetch(`/api/vendor/profile`, {method: 'post', body: JSON.stringify({seller_id})})
+            fetch(`/api/vendor/profile`, {method: 'post', body: JSON.stringify({user_id})})
             .then(async(result) => {
                 let response = await result.json(); 
                 if (response.bool) {
@@ -481,7 +481,7 @@ function ShippingInfo({updateShippingInfo}) {
             }) 
 
         }
-    }, [seller_id])
+    }, [user_id])
 
     useEffect(() => {
         // console.log(shipping_info)
@@ -735,16 +735,16 @@ function ShippingInfo({updateShippingInfo}) {
 
 function ShopInfo({campusLocaleList}) {
     let {
-        seller_id
-    }=useSelector(s=>s.seller_id);
+        user_id
+    }=useSelector(s=>s.user_id);
     let [state, setState] = useState('')
     let [shop_details, set_shop_details] = useState('')
     let [profile, setProfile] = useState('')
 
 
     useEffect(() => {
-        if (seller_id !== 'null' && seller_id !== null && seller_id !== '') {
-            fetch(`/api/vendor/shop`,{method: 'post', body: JSON.stringify({seller_id})})
+        if (user_id !== 'null' && user_id !== null && user_id !== '') {
+            fetch(`/api/vendor/shop`,{method: 'post', body: JSON.stringify({user_id})})
             .then(async(result) => {
                 let response = await result.json(); 
                 console.log(response)
@@ -754,12 +754,12 @@ function ShopInfo({campusLocaleList}) {
                 console.log(error)
             }) 
         }
-    }, [seller_id])
+    }, [user_id])
 
     useEffect(() => {
-        if(seller_id !== 'null' && seller_id !== null && seller_id !== ''){
+        if(user_id !== 'null' && user_id !== null && user_id !== ''){
             loader(true)
-            fetch(`/api/vendor/profile`, {method: 'post', body: JSON.stringify({seller_id})})
+            fetch(`/api/vendor/profile`, {method: 'post', body: JSON.stringify({user_id})})
             .then(async(result) => {
                 let response = await result.json(); 
                 if (response.bool) {
@@ -776,7 +776,7 @@ function ShopInfo({campusLocaleList}) {
             }) 
 
         }
-    }, [seller_id])
+    }, [user_id])
     
 // let [shop, setShop] = useState('')
     let [newShopName, setNewShopName] = useState('');
@@ -786,7 +786,7 @@ function ShopInfo({campusLocaleList}) {
             headers: {
                 "Content-Type": "Application/json"
             },
-            body: JSON.stringify({seller_id,newShopName})
+            body: JSON.stringify({user_id,newShopName})
         })
         .then(async(result) => {
             // let response = await result.json(); 
@@ -961,7 +961,7 @@ function ShopInfo({campusLocaleList}) {
                         <span>Shipping policy</span>
                         <span>
                             <button onClick={e => {
-                                // seller_shop_overlay_setup(true, <MyEditor />)
+                                // products_overlay_setup(true, <MyEditor />)
                             }} style={{height: 'auto', padding: '2px 8px', marginBottom: '6px', borderRadius: '4.5px'}}>Edit</button>
                         </span>
                     </label>
@@ -974,7 +974,7 @@ function ShopInfo({campusLocaleList}) {
                         <span>Refund/return policy</span>
                         <span>
                             <button onClick={e => {
-                                // seller_shop_overlay_setup(true, <MyEditor />)
+                                // products_overlay_setup(true, <MyEditor />)
                             }} style={{height: 'auto', padding: '2px 8px', marginBottom: '6px', borderRadius: '4.5px'}}>Edit</button>
                         </span>
                     </label>

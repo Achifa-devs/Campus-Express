@@ -62,14 +62,15 @@ export default function StoreTab({navigation}) {
                         HomeRoute(navigationState, updateTabBarStyle)
                     } else if (route.name === 'Messages') {
                         iconName = focused ? 'chatbox' : 'chatbox-outline';
-                    } else if (route.name === 'Inventory') {
-                        iconName = focused ? 'cube' : 'cube-outline';
                     } else if (route.name === 'Orders') {
                         iconName = focused ? 'receipt' : 'receipt-outline';
                     } else if (route.name === 'Sales') {
                         iconName = focused ? 'pricetags-outline' : 'pricetags-outline';
                     } else if (route.name === 'Sell') {
                         iconName = focused ? 'storefront' : 'storefront-outline';
+                        CreateRoute(navigationState, updateTabBarStyle) 
+                    } else if (route.name === 'Inventory') {
+                        iconName = focused ? 'cube' : 'cube-outline';
                     } else if (route.name === 'Profile') {
                         iconName = focused ? 'person-circle' : 'person-circle-outline';
                         ProfileRoute(navigationState, updateTabBarStyle)
@@ -105,14 +106,23 @@ export default function StoreTab({navigation}) {
                 name="Home" 
                 component={HomeStackScreen} /> 
 
-            <Tab.Screen 
-                name="Inventory" 
-                component={InventoryStackScreen} />
+            
 
             <Tab.Screen 
                 name="Messages" 
                 component={MessageStackScreen} />
-
+            <Tab.Screen 
+                options={{
+                    header: ({navigation}) => 
+                        (
+                            <View style={{ height: 65, display: 'flex', flexDirection: 'row', width: '100%', backgroundColor: '#FF4500', alignItems: 'center', justifyContent: 'center'}}>
+                            
+                            </View>
+                        ),
+                }} 
+                name="Orders" 
+                component={OrderStackScreen} />
+                
             <Tab.Screen 
                 options={{
                 header: ({navigation}) =>
@@ -126,19 +136,9 @@ export default function StoreTab({navigation}) {
                 name="Sell"  
                 component={SellStackScreen} />
                 
-            
             <Tab.Screen 
-                options={{
-                    header: ({navigation}) => 
-                        (
-                            <View style={{ height: 65, display: 'flex', flexDirection: 'row', width: '100%', backgroundColor: '#FF4500', alignItems: 'center', justifyContent: 'center'}}>
-                            
-                            </View>
-                        ),
-                }} 
-                name="Orders" 
-                  component={OrderStackScreen} />
-              
+                name="Inventory" 
+                component={InventoryStackScreen} />
             <Tab.Screen 
                 options={{
                     header: ({navigation}) => 
@@ -209,8 +209,11 @@ function HomeRoute(navigationState, updateTabBarStyle) {
         updateTabBarStyle('none'); 
     }else if(currentRouteName === 'user-new-order'){
         updateTabBarStyle('none'); 
-    }
-    else if(currentRouteName === 'user-shops'){
+    }else if(currentRouteName === 'all-category'){
+        updateTabBarStyle('none'); 
+    }else if(currentRouteName === 'user-type'){
+        updateTabBarStyle('none'); 
+    }else if(currentRouteName === 'user-shops'){
         updateTabBarStyle('none'); 
     }else if(currentRouteName === 'user-type-product'){
         updateTabBarStyle('none'); 
@@ -218,14 +221,14 @@ function HomeRoute(navigationState, updateTabBarStyle) {
 }
 
 
-function MessageRoute(navigationState) {
-    if (route.name === 'Message') {
-        const currentRouteName = navigationState?.routes.find(r => r.name === 'Message')?.state?.routes[navigationState.routes.find(r => r.name === 'Message')?.state.index].name;
-        // console.log('Current MessageStack Route:', currentRouteName);
+function CreateRoute(navigationState, updateTabBarStyle) {
+    const currentRouteName = navigationState?.routes.find(r => r.name === 'Sell')?.state?.routes[navigationState.routes.find(r => r.name === 'Sell')?.state.index].name;
+    // console.log('Current SellStack Route:', currentRouteName);
 
-        if (currentRouteName === 'user-chat-room') {
-            tabBarStyle.display = 'none';
-        }
+    if (currentRouteName === 'user-sell') {
+        updateTabBarStyle('flex');
+    }else if (currentRouteName === 'user-new-listing') {
+        updateTabBarStyle('none');
     }
 }
 

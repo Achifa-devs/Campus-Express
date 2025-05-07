@@ -16,11 +16,11 @@ export default function AddressBook() {
     useEffect(() => {setScreenWidth(window.innerWidth)},[]);
     let [items, setItems] = useState([])
     let {
-        buyer_id 
-    } = useSelector(s => s.buyer_id);
+        user_id 
+    } = useSelector(s => s.user_id);
     useEffect(() => {
-        if (buyer_id !== '' && buyer_id !== 'null' && buyer_id !== undefined && buyer_id !== 'undefined' && buyer_id !== null) {
-            axios.get('http://192.168.24.146:9090/addresses', {params: {id: buyer_id}})
+        if (user_id !== '' && user_id !== 'null' && user_id !== undefined && user_id !== 'undefined' && user_id !== null) {
+            axios.get('http://192.168.24.146:9090/addresses', {params: {id: user_id}})
             .then(({data})=>{
                 setItems(data)
             })
@@ -29,7 +29,7 @@ export default function AddressBook() {
             })
         }
 
-    },[buyer_id]);
+    },[user_id]);
 
 
 

@@ -24,11 +24,14 @@ export const getVendor = async (payload) => {
 };
 
 export const postNewVendor = async (payload) => {
-  const { fname,lname,email,phone,pwd,state,campus,gender } = payload;
+  const { fname,lname,email,phone,pwd,state,campus,deviceId } = payload;
 
+  console.log(deviceId._j)
+  // return true
   // Business logic
-  let hashedPwd = bcrypt.hash(pwd, 10);
-  let buyer_id = shortId.generate(10);
+  let hashedPwd = await bcrypt.hash(pwd, 10);
+  console.log(hashedPwd)
+  let user_id = `CE-${shortId.generate(10)}`;
 
   let existingEmail = await countEmail({ email });
   let existingPhone = await countPhone({ phone });
@@ -40,9 +43,9 @@ export const postNewVendor = async (payload) => {
     throw new Error("Phone number exist");
   }
 
-  const response = await createVendor({ fname,lname,buyer_id,email,phone,hashedPwd,state,campus,gender: gender.toLowerCase() === 'male' ? 1 : 0 });
+  const response = await createVendor({ fname,lname,user_id,email,phone,hashedPwd,state,campus,gender: null, deviceId: deviceId._j });
 
-  return response;
+  return {...response, user: {fname,lname,user_id,email,phone,state,campus}};
 };
 
 export const postLoginVendor = async (payload) => {

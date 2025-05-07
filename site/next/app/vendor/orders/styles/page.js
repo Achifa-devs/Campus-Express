@@ -6,8 +6,8 @@ import '@/app/vendor/orders/styles/medium.css'
 import '@/app/vendor/orders/styles/small.css'
 import React, { useEffect, useState } from "react";
 
-import database1 from "@/database/campus_express_buyer_orders.json";
-import database2 from '@/database/seller_shop.json'
+import database1 from "@/database/orders.json";
+import database2 from '@/database/products.json'
 import js_ago from 'js-ago';
 import backSvg from '@/files/assets/back-svgrepo-com (3).svg';
 import Thumbnail from '@/files/components/Buyer/Thumbnail';

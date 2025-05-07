@@ -1,60 +1,98 @@
-import { useNavigation } from '@react-navigation/native';
-import React from 'react'
-import { 
-    Dimensions,
-    ScrollView,
-    StyleSheet, 
-    Text, 
-    TextInput, 
-    TouchableOpacity, 
-    View 
-} from 'react-native';
+import React from 'react';
+import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import WebView from 'react-native-webview';
 
-export default function Notification() {
-  let screenWidth = Dimensions.get('window').width;
-  let screenHeight = Dimensions.get('window').height;
-  let navigation = useNavigation()
- 
-  return (
-    <>
-      <ScrollView style={[styles.notificationCnt,{
-            height: screenHeight - 55
-        }]}>
-            <TouchableOpacity style={styles.notice}>
-                <View style={{height: 180, width: '100%'}}>  
+export default function NotificationDetailsScreen({ route }) {
+  let { data } = route?.params;
 
-                </View>
-                <View style={{backgroundColor: '#f9f9f9', padding: 10, borderRadius: 15}}>
-                    <Text style={{fontWeight: '1000', color: '#000', marginBottom: 5}} numberOfLines={2} ellipsizeMode="tail">Brand New Promo Set Now</Text>
-                    <Text numberOfLines={4} ellipsizeMode="tail" style={{fontWeight: '1000', marginBottom: 5, color: '#101010', fontSize: 10}}>After installing the library, you might need to link it, especially if you're using an older version of React Native. For React Native 0.60 and above, autolinking should handle it automatically. After installing the library, you might need to link it, especially if you're using an older version of React Native. For React Native 0.60 and above, autolinking should handle it automatically.</Text>
-                    <Text style={{fontWeight: '1000', color: '#000', fontSize: 10, width: '100%', textAlign: 'right'}}>2 day ago</Text>
-                </View>
-              
-            </TouchableOpacity>
-        
-      </ScrollView> 
-    </>
-  )
+  return ( 
+    <ScrollView style={styles.container}>
+      <Image source={{ uri: data.thumbnail }} style={styles.image} />
+
+      <View style={styles.contentWrapper}>
+        <Text style={styles.title}>{data.title}</Text>
+
+        <View style={styles.timeRow}>
+          <Icon name="time-outline" size={16} color="#666" />
+          <Text style={styles.timeText}>{data.date}</Text>
+        </View>
+
+        <Text style={styles.description}>{data.description}</Text>
+
+        {/* WebView moved outside of Text component */}
+        <View style={styles.webViewContainer}>
+          <WebView 
+            originWhitelist={['*']}
+            source={{ html: `
+              <!DOCTYPE html>
+              <html>
+                <head>
+                  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                  <style>
+                    body { 
+                      font-family: -apple-system, BlinkMacSystemFont, sans-serif; 
+                      font-size: 15px;
+                      color: #555;
+                      line-height: 22px;
+                      padding: 0;
+                      margin: 0;
+                    }
+                    img { max-width: 100%; height: auto; }
+                  </style>
+                </head>
+                <body>
+                  ${data.content}
+                </body>
+              </html>
+            ` }}
+            style={styles.webView}
+          />
+        </View>
+      </View>
+    </ScrollView>
+  );
 }
 
-
 const styles = StyleSheet.create({
-    notificationCnt:{
-        width: '100%',
-        paddingTop: 2,
-        paddingBottom: 8,
-        paddingLeft: 8,
-        paddingRight: 8,
-        backgroundColor: '#efefef',
-        marginTop: 5,
-        marginBottom: 5
-    },
-    notice:{
-        height: 'auto',
-        width: '100%',
-
-        borderRadius: 15,
-        padding: 10,
-        backgroundColor: '#fff'
-    }
-  });
+  container: {
+    flex: 1,
+    backgroundColor: '#FFF',
+  },
+  image: {
+    width: '100%',
+    height: 220,
+  },
+  contentWrapper: {
+    padding: 16,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#222',
+    marginBottom: 8,
+  },
+  timeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  timeText: {
+    fontSize: 13,
+    marginLeft: 6,
+    color: '#888',
+  },
+  description: {
+    fontSize: 16,
+    fontWeight: '500',
+    marginBottom: 12,
+    color: '#444',
+  },
+  webViewContainer: {
+    height: 900, // You might need to adjust this
+    marginTop: 12,
+  },
+  webView: {
+    flex: 1,
+  },
+});

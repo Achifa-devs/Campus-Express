@@ -90,7 +90,7 @@ const ProductPage = () => {
     useEffect(() => {
         try {
             async function getData() {
-                let result = await GetSeller(item?.seller_id)
+                let result = await GetSeller(item?.user_id)
                 set_phone(result?.phone)
                 SaveHistory()
             }
@@ -102,8 +102,8 @@ const ProductPage = () => {
 
   
  
-    async function AddNewViewer(product_id,buyer_id) {
-        let result = await AddView(product_id, buyer_id)
+    async function AddNewViewer(product_id,user_id) {
+        let result = await AddView(product_id, user_id)
         if(result?.length > 0){
             setItem(result[0])
         //    .removeAttribute('id');
@@ -112,20 +112,20 @@ const ProductPage = () => {
     }
 
     window.onload= (()=> {
-        let buyer_id = window.localStorage.getItem("CE_buyer_id")
-        if(buyer_id !== '' && buyer_id !== undefined && buyer_id !== null && buyer_id !== 'null'){
+        let user_id = window.localStorage.getItem("CE_user_id")
+        if(user_id !== '' && user_id !== undefined && user_id !== null && user_id !== 'null'){
             try {
                 setTimeout(() => {
-                    AddNewViewer(item?.product_id,buyer_id)
+                    AddNewViewer(item?.product_id,user_id)
                 }, 3000); 
             } catch (error) {
                 console.log(error)
             }
         }else{
-            let buyer_id = window.localStorage.getItem("unknownBuyer")
+            let user_id = window.localStorage.getItem("unknownBuyer")
             try {
                 setTimeout(() => { 
-                    AddNewViewer(item?.product_id,buyer_id)
+                    AddNewViewer(item?.product_id,user_id)
                 }, 3000);
             } catch (error) {
                 console.log(error)
@@ -139,18 +139,18 @@ const ProductPage = () => {
         overlay.setAttribute('id', 'overlay');
         if(screenWidth > 760){
             try {
-                let result = UploadChat(window.localStorage.getItem('CE_buyer_id'), item.seller_id)
+                let result = UploadChat(window.localStorage.getItem('CE_user_id'), item.user_id)
                 overlay.removeAttribute('id')
-                navigate(`/buyer.message/${item.seller_id}`, {seller_id: item.seller_id})
+                navigate(`/buyer.message/${item.user_id}`, {user_id: item.user_id})
     
             } catch (error) {
                 console.log(error)
             }
         }else{
             try {
-                let result = UploadChat(window.localStorage.getItem('CE_buyer_id'), item.seller_id)
+                let result = UploadChat(window.localStorage.getItem('CE_user_id'), item.user_id)
                 overlay.removeAttribute('id')
-                navigate(`/buyer.room/${item.seller_id}?room=''`, {seller_id: item.seller_id})
+                navigate(`/buyer.room/${item.user_id}?room=''`, {user_id: item.user_id})
     
             } catch (error) {
                 console.log(error)
@@ -169,7 +169,7 @@ const ProductPage = () => {
             email: buyerData?.email,
             phone_number: buyerData?.phone,
             name: buyerData?.name,
-            ce_id: item?.seller_id
+            ce_id: item?.user_id
         },
         customizations: {
         title: 'Campus Express',
@@ -181,9 +181,9 @@ const ProductPage = () => {
     const handleFlutterPayment = useFlutterwave(config);
 
     async function handleOrder() {
-        let result = order_list.filter((data) => data.product.product_id === item.product_id && data.order.buyer_id === buyerData.buyer_id).length
+        let result = order_list.filter((data) => data.product.product_id === item.product_id && data.order.user_id === buyerData.user_id).length
         if(result<1){
-            let buyer = window.localStorage.getItem('CE_buyer_id');
+            let buyer = window.localStorage.getItem('CE_user_id');
             if(buyer === null || buyer === '' || buyer === 'null'){
                 window.location.href=(`/login`)
                 
@@ -225,7 +225,7 @@ const ProductPage = () => {
     }
 
     useEffect(() => {
-        GetOrders(buyerData?.buyer_id)
+        GetOrders(buyerData?.user_id)
         .then((result) => {
             console.log(result)
             if(result){
@@ -269,7 +269,7 @@ const ProductPage = () => {
                                 {/* <Contact phone={phone} SendMssg={SendMssg}  />
                                 <br /> */}
                                 <button style={{marginBottom: '15px', background: '#FF4500', color: '#fff'}} onClick={handleOrder}>{
-                                    order_list.filter((data) => data.product.product_id === item.product_id && data.order.buyer_id === buyerData.buyer_id).length > 0
+                                    order_list.filter((data) => data.product.product_id === item.product_id && data.order.user_id === buyerData.user_id).length > 0
                                     ?
 
                                     'View Order'

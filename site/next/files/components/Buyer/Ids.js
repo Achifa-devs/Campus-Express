@@ -1,9 +1,9 @@
 
-export function CE_buyer_ID(params) {
-    let buyer_id = window.localStorage.getItem("CE_buyer_id")
+export function CE_user_id(params) {
+    let user_id = window.localStorage.getItem("CE_user_id")
     // let buyer_initial = window.localStorage.getItem("CE_buyer_name_initial")
-    if(buyer_id){
-      return buyer_id !== '' ? buyer_id : null
+    if(user_id){
+      return user_id !== '' ? user_id : null
     }else{
         return null
     }

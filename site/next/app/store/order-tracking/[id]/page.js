@@ -24,18 +24,18 @@ import axios from 'axios'
 
 export default function OrderTracker() {
     let {
-        buyer_id
-    }=useSelector(s=>s.buyer_id);
+        user_id
+    }=useSelector(s=>s.user_id);
     let pathname = usePathname()
     let [screenWidth, setScreenWidth] = useState(0);
     let [order_list, set_order_list] = useState('');
     useEffect(() => {setScreenWidth(window.innerWidth)},[]);
 
     useEffect(() => {
-        if (buyer_id !== null && buyer_id !== 'null' && buyer_id !== undefined) {
+        if (user_id !== null && user_id !== 'null' && user_id !== undefined) {
             const overlay = document.querySelector('.overlay');
             overlay.setAttribute('id', 'overlay')
-            axios.get('/api/store/order', {params: {buyer_id: buyer_id, product_id: pathname.split('/').splice(-1)[0]}})
+            axios.get('/api/store/order', {params: {user_id: user_id, product_id: pathname.split('/').splice(-1)[0]}})
             .then(({ data }) => {
                 console.log(data)
                 overlay.removeAttribute('id')
@@ -53,7 +53,7 @@ export default function OrderTracker() {
             
         }
       
-    }, [buyer_id]) 
+    }, [user_id]) 
 
   function updateJsx(data) {
     setActiveJsx(data)

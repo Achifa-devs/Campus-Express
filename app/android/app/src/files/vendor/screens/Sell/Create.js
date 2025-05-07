@@ -21,7 +21,7 @@ export default function Create({ route }) {
 
   let [uploading, set_uploading] = useState(false);
 
-  let seller_id;
+  let user_id;
   let locale;
 
   let [title, set_title] = useState('')
@@ -180,7 +180,7 @@ export default function Create({ route }) {
   //                 price: price,
   //                 photos: photo,
   //                 videos: video,
-  //                 seller_id : seller_id,
+  //                 user_id : user_id,
   //                 stock: stock,
   //                 product_id: product_id
   //               }, 
@@ -229,7 +229,7 @@ export default function Create({ route }) {
   //     })  
   //   }else{
 
-  //     fetch('http://192.168.105.146:9090/seller.product-upload', {
+  //     fetch('http://192.168.209.146:9090/seller.product-upload', {
   //       method: 'post',
   //       headers: {
   //           "Content-Type": "Application/json"
@@ -243,7 +243,7 @@ export default function Create({ route }) {
   //             price: price,
   //             photos: photo,
   //             videos: video,
-  //             seller_id : seller_id
+  //             user_id : user_id
   //           }, 
         
   //           dynamicData: {

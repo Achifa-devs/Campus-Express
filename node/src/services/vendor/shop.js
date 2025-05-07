@@ -9,34 +9,55 @@ import {
 
 
 export const getShopReviews = async (payload) => {
-  const { seller_id } = payload;
+  const { user_id } = payload;
 
   // Business logic
-  const response = await findShopReviewsById({ seller_id });
+  const response = await findShopReviewsById({ user_id });
   return response;
 };
 
 export const getShopDetails = async (payload) => {
-  const { seller_id } = payload;
+  const { user_id } = payload;
 
   // Business logic
-  const response = await findShopDetailsById({ seller_id });
+  const response = await findShopDetailsById({ user_id });
 
   return response;
 };
 
 export const postNewShop = async (payload) => {
-  const { seller_id,shop_id,newShopName } = payload;
+  const { 
+    logo,
+    shopName,
+    description,
+    address1,
+    address2,
+    address3,
+    user_id
+   } = payload;
 
   // Business logic
-  const response = await createShop({ seller_id,shop_id,newShopName });
-
-  return response;
+  console.log(user_id)
+  try {
+    const response = await createShop({ 
+      logo,
+      shopName,
+      description,
+      address1,
+      address2,
+      address3,
+      user_id
+     });
+  
+    return response;
+  } catch (error) {
+    console.log(error)
+  }
 };
 
 
 // export const postUpdateShop = async (payload) => {
-//     const { data, seller_id } = payload;
+//     const { data, user_id } = payload;
 
 //     let {
 //         customerCareName, 
@@ -52,7 +73,7 @@ export const postNewShop = async (payload) => {
 //     } = data
     
 //     // Business logic
-//     const response = await UpdateShopView({ data, seller_id });
+//     const response = await UpdateShopView({ data, user_id });
 
 //     return response;
 // };

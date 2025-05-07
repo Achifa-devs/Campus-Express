@@ -194,15 +194,15 @@ function EditProfile({ data, Validation }) {
   let [lname, setlname] = useState('')
   let [gender, setgender] = useState('')
   let {
-    buyer_id
-  } = useSelector(s => s.buyer_id);
+    user_id
+  } = useSelector(s => s.user_id);
   
   function update_buyer() {
     // let inputs = [...document.querySelectorAll('input')]
     if (fname !== '' && lname !== '' && gender !== '' && fname.length > 3 && lname.length > 3) {
       buyer_overlay_setup(true, 'Updating profile')
 
-      axios.post('http://192.168.24.146:9090/profile-update', {fname,lname,gender,buyer_id})
+      axios.post('http://192.168.24.146:9090/profile-update', {fname,lname,gender,user_id})
       .then(({data})=>{
         window.location.reload()
         buyer_overlay_setup(false, '')
@@ -260,8 +260,8 @@ function Edit({ edit, data }) {
   let [err, seterr] = useState('')
 
   let {
-    buyer_id
-  } = useSelector(s => s.buyer_id);
+    user_id
+  } = useSelector(s => s.user_id);
   
   function update_() {
     // let inputs = [...document.querySelectorAll('input')]
@@ -270,7 +270,7 @@ function Edit({ edit, data }) {
       buyer_overlay_setup(true, `Updating ${edit}`)
       // let ee = edit.toLowerCase() === 'email' ? 'email' : 'phone';
       let body = {
-        buyer_id: buyer_id,
+        user_id: user_id,
       }
       let value_state = edit.toLowerCase() === 'email'
         ?
@@ -355,17 +355,17 @@ function Password() {
   let [err, seterr] = useState('')
 
   let {
-    buyer_id
-  } = useSelector(s => s.buyer_id);
+    user_id
+  } = useSelector(s => s.user_id);
 
   function update_() {
     // let inputs = [...document.querySelectorAll('input')]
     if (oldpwd.length >= 8) {
       if (pwd.length >= 8) {
         if (pwd === cpwd) {
-          // alert(buyer_id)
+          // alert(user_id)
           buyer_overlay_setup(true, `Updating password`)
-          axios.post(`http://192.168.24.146:9090/alter-password`, {pwd,buyer_id,oldpwd})
+          axios.post(`http://192.168.24.146:9090/alter-password`, {pwd,user_id,oldpwd})
           .then(({data})=>{
             console.log(data)
             

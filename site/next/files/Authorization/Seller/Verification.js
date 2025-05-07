@@ -12,7 +12,7 @@ const Verification = () => {
 
     let location = useLocation()
     function sendEmail() {
-        SendEmail(location.search.split("=")[1],window.localStorage.getItem('CE_seller_id'))
+        SendEmail(location.search.split("=")[1],window.localStorage.getItem('CE_user_id'))
         .then((result) => {
 
             document.querySelector('.section').innerHTML = 'A Verification Link Has Been Sent To Your Email'

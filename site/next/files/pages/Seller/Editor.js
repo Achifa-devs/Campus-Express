@@ -34,7 +34,7 @@ const Editor = () => {
 
 
     function addLocation(channel) {
-        let buyer = window.localStorage.getItem('CE_buyer_id');
+        let buyer = window.localStorage.getItem('CE_user_id');
         if(buyer === null || buyer === '' || buyer === 'null'){
         // window.location.href=(`/login?page=product&data=${item.product_id}`)
         }else{ 
@@ -405,7 +405,7 @@ const Editor = () => {
         if(checkForError.length < 1 && lodgeAddress.length > 0){
             let overlay = document.querySelector('.overlay')
             overlay.setAttribute('id', 'overlay');
-            let seller_id = window.localStorage.getItem("CE_seller_id")
+            let user_id = window.localStorage.getItem("CE_user_id")
             //upload for here
 
             
@@ -425,7 +425,7 @@ const Editor = () => {
                                 price: price.current,
                                 photos: photos.current,
                                 videos: videos.current,
-                                seller_id : seller_id,
+                                user_id : user_id,
                                 product_id: product_id
                                 // pickupChannel: ''
                             }, 
@@ -488,7 +488,7 @@ const Editor = () => {
                                 price: price.current,
                                 photos: photos.current,
                                 videos: videos.current,
-                                seller_id : seller_id,
+                                user_id : user_id,
                                 stock: stock.current
                             }, 
                         

@@ -11,13 +11,13 @@ const CEStack = ({price,product_id}) => {
     let [buyerId, setBuyerId] = useState('loading')
 
     useEffect(() => {
-        GetBuyer(window.localStorage.getItem('CE_buyer_id'))
+        GetBuyer(window.localStorage.getItem('CE_user_id'))
         .then((result) => {
             setFname(result.fname)
             setLname(result.lname)
             setEmail(result.email)
             setPhone(result.phone)
-            setBuyerId(result.buyer_id)
+            setBuyerId(result.user_id)
         })   
         .catch(err => console.log(err))
     },[])
@@ -67,7 +67,7 @@ const CEStack = ({price,product_id}) => {
                             
                     <button onClick={e => {
                         e.preventDefault(); 
-                        // CreateOrder({fname,lname,email,phone,amount:price,wallet:'campus_express_wallet'},window.localStorage.getItem('CE_buyer_id'))
+                        // CreateOrder({fname,lname,email,phone,amount:price,wallet:'wallets'},window.localStorage.getItem('CE_user_id'))
                         // .then((result) => {
                             
                         // })

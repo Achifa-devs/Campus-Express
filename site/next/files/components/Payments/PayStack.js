@@ -15,7 +15,7 @@
 //         publicKey: 'pk_live_c8a885e2b4bda68ee5940a527431030c4b32f6dd',
         
 //         metadata: {
-//             seller_id: `${window.localStorage.getItem("CE_seller_id")}`,
+//             user_id: `${window.localStorage.getItem("CE_user_id")}`,
 //             amount: amount,
 //             firstname: fname,
 //             lastname: lname,

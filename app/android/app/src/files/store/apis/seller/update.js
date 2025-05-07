@@ -2,48 +2,48 @@ import axios from 'axios'
 // import {IP} from '@env'
 
 
-let uri_1 = 'http://192.168.105.146:9090'
-let uri_2 = 'http://192.168.105.146:9090'
+let uri_1 = 'http://192.168.209.146:9090'
+let uri_2 = 'http://192.168.209.146:9090'
 let IP = uri_1
 
 
 const source = axios.CancelToken.source();
 
 
-export async function UpdateSellerProfile(fname,lname,state,campus,seller_id,photo) {
-    let response = await update_request_generators('profile-update', {fname,lname,state,campus,seller_id,photo})
+export async function UpdateSellerProfile(fname,lname,state,campus,user_id,photo) {
+    let response = await update_request_generators('profile-update', {fname,lname,state,campus,user_id,photo})
     setTimeout(() => source.cancel('timeout'), 10000) 
     return(response)
 }
 
-export async function UpdateShopTitle(title,seller_id) {
-    let response = await update_request_generators('shop-title-update', {title,seller_id})
-    setTimeout(() => source.cancel('timeout'), 10000) 
-    return(response)
-}
-
-
-export async function UpdateShopDesc(description,seller_id) {
-    let response = await update_request_generators('shop-desc-update', {description,seller_id})
-    setTimeout(() => source.cancel('timeout'), 10000) 
-    return(response)
-}
-
-export async function UpdateInventory(inventory, seller_id) {
-    let response = await update_request_generators('inventory-update', {inventory, seller_id})
-    setTimeout(() => source.cancel('timeout'), 10000) 
-    return(response)
-}
-
-export async function UpdateUniversity(seller_id) {
-    let response = await update_request_generators('inventory-update', {seller_id})
+export async function UpdateShopTitle(title,user_id) {
+    let response = await update_request_generators('shop-title-update', {title,user_id})
     setTimeout(() => source.cancel('timeout'), 10000) 
     return(response)
 }
 
 
-export async function PayRent(rent, seller_id) {
-    let response = await update_request_generators('pay-rent', {rent, seller_id})
+export async function UpdateShopDesc(description,user_id) {
+    let response = await update_request_generators('shop-desc-update', {description,user_id})
+    setTimeout(() => source.cancel('timeout'), 10000) 
+    return(response)
+}
+
+export async function UpdateInventory(inventory, user_id) {
+    let response = await update_request_generators('inventory-update', {inventory, user_id})
+    setTimeout(() => source.cancel('timeout'), 10000) 
+    return(response)
+}
+
+export async function UpdateUniversity(user_id) {
+    let response = await update_request_generators('inventory-update', {user_id})
+    setTimeout(() => source.cancel('timeout'), 10000) 
+    return(response)
+}
+
+
+export async function PayRent(rent, user_id) {
+    let response = await update_request_generators('pay-rent', {rent, user_id})
     setTimeout(() => source.cancel('timeout'), 10000) 
     return (response)?.data
 }

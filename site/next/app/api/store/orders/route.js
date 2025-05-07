@@ -5,18 +5,18 @@ import { NextResponse } from 'next/server';
 
 export async function GET(req) {
   try {
-    // Extract buyer_id from the request query parameters
+    // Extract user_id from the request query parameters
     const { searchParams } = new URL(req.url);
-    const buyer_id = searchParams.get("buyer_id");
+    const user_id = searchParams.get("user_id");
 
-    if (!buyer_id) {
-      return NextResponse.json({ error: "buyer_id is required" }, { status: 400 });
+    if (!user_id) {
+      return NextResponse.json({ error: "user_id is required" }, { status: 400 });
     }
 
     // Fetch orders for the buyer
     const ordersResult = await pool.query(
-      `SELECT * FROM "campus_express_buyer_orders" WHERE buyer_id = $1`,
-      [buyer_id]
+      `SELECT * FROM "orders" WHERE user_id = $1`,
+      [user_id]
     );
     const orders = ordersResult.rows;
 
@@ -28,7 +28,7 @@ export async function GET(req) {
     // Fetch product details for each order
     const productPromises = orders.map(async (order) => {
       const productResult = await pool.query(
-        `SELECT * FROM "seller_shop" WHERE product_id = $1`,
+        `SELECT * FROM "products" WHERE product_id = $1`,
         [order.product_id]
       );
       return { order, product: productResult.rows[0] || null };

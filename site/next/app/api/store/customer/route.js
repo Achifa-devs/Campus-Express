@@ -8,11 +8,11 @@ export async function GET(req) {
 
   try {
     const searchParams = new URL(req.url).searchParams;
-    let buyer_id = searchParams.get('buyer_id');
+    let user_id = searchParams.get('user_id');
 
     const result = await pool.query(
-      `SELECT * FROM campus_buyers WHERE buyer_id = $1`,
-      [buyer_id]
+      `SELECT * FROM campus_buyers WHERE user_id = $1`,
+      [user_id]
     );
 
     return NextResponse.json({data: result.rows[0], bool: true}, { status: 200 });

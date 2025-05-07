@@ -10,13 +10,13 @@ const OrderTrackerSummary = ({order, Method, updateJsx, activeJsx}) => {
 
     // let meta = {
     //     immediate_purchase: window.location.pathname.split('/').length > 4 ? true : false,
-    //     ce_id: buyer.buyer_id,
+    //     ce_id: buyer.user_id,
     //     cart: {unit: parseInt(window.location.pathname.split('/')[4].split('-')[1]), product_id: atob(window.location.pathname.split('/')[2])},
     // }
     let pathname = usePathname();
     let {
-        buyer_id 
-    } = useSelector(s => s.buyer_id);
+        user_id 
+    } = useSelector(s => s.user_id);
 
     let [immediate_check, set_immediate_check] = useState('')
 
@@ -80,11 +80,11 @@ const OrderTrackerSummary = ({order, Method, updateJsx, activeJsx}) => {
                                 <button class="button is-ghost" onClick={e=> {
                                     document.querySelector('.cancel-order-overlay').removeAttribute('id')
                                 }}>Decline</button>
-                                {/* buyer_id,order_id,amount,reason */}
+                                {/* user_id,order_id,amount,reason */}
                                 <button class="button is-primary" onClick={e => {
                                     buyer_overlay_setup(true, 'Cancelling Order')
 
-                                    axios.post('http://192.168.24.146:9090/cancel-order', {buyer_id: buyer_id, order_id: order?.order_id, amount:order?.price, reason: 'cancelled', product_id: order?.product_id})
+                                    axios.post('http://192.168.24.146:9090/cancel-order', {user_id: user_id, order_id: order?.order_id, amount:order?.price, reason: 'cancelled', product_id: order?.product_id})
                                     .then(({data})=>{
                                         console.log(data)
                                         if(data){

@@ -39,7 +39,7 @@ import 'draft-js/dist/Draft.css';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-function ContactEdit({email,phone,seller_id, name}) {
+function ContactEdit({email,phone,user_id, name}) {
  
 
   return(
@@ -50,7 +50,7 @@ function ContactEdit({email,phone,seller_id, name}) {
 
               <input type="text" value={email} />
               <br />
-              <button onClick={e =>  SendEmail(email, seller_id, name)} style={{padding: '5px', height: 'fit-content'}}>Send verification link to this email</button>
+              <button onClick={e =>  SendEmail(email, user_id, name)} style={{padding: '5px', height: 'fit-content'}}>Send verification link to this email</button>
               
           </section>
           
@@ -61,7 +61,7 @@ function ContactEdit({email,phone,seller_id, name}) {
               <label htmlFor="">Verify Phone </label>
               <input type="text" value={phone} />
               <br />
-              <button onClick={e => SendSMS(phone, seller_id, name)} style={{padding: '5px', height: 'fit-content'}}>Send verification link to this phone</button>
+              <button onClick={e => SendSMS(phone, user_id, name)} style={{padding: '5px', height: 'fit-content'}}>Send verification link to this phone</button>
 
               
           </section>
@@ -76,7 +76,7 @@ function ContactEdit({email,phone,seller_id, name}) {
   )
 }
 
-function Coin({email,phone,seller_id, name}) {
+function Coin({email,phone,user_id, name}) {
 
   let [price, setPrice] = useState('')
   useEffect(() => {
@@ -93,7 +93,7 @@ function Coin({email,phone,seller_id, name}) {
         email: email,
         phone_number: phone,
         name: name,
-        ce_id: seller_id
+        ce_id: user_id
     },
     customizations: {
     title: 'Campus Express',
@@ -153,7 +153,7 @@ export default function Body({userData}) {
     let overlay = document.querySelector('.overlay')
     overlay.setAttribute('id', 'overlay');
     async function getShop() {
-      let shop = await GetShop(window.localStorage.getItem("CE_seller_id"))
+      let shop = await GetShop(window.localStorage.getItem("CE_user_id"))
       setShop(shop)
       overlay.removeAttribute('id')
     }
@@ -164,7 +164,7 @@ export default function Body({userData}) {
   useEffect(() => {
     
     async function getReviews() {
-      let reviews = await GetReviews(window.localStorage.getItem("CE_seller_id"))
+      let reviews = await GetReviews(window.localStorage.getItem("CE_user_id"))
       setSoldItems(reviews)
     }
     getReviews()

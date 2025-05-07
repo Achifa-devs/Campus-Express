@@ -5,53 +5,53 @@ import shortId from "short-id"
 import { errorHandler } from "../../utils/erroHandler.js";
 
 // Find shop owner by ID
-export async function findShopOwnerById({ seller_id }) {
+export async function findShopOwnerById({ user_id }) {
   const result = await pool.query(
-    `SELECT * FROM users WHERE seller_id = $1`,
-    [seller_id]
+    `SELECT * FROM users WHERE user_id = $1`,
+    [user_id]
   );
   return result.rows;
 };
 
 // Find shop reviews by ID
-export async function findShopReviewsById({ seller_id }) {
+export async function findShopReviewsById({ user_id }) {
   const result = await pool.query(
-    `SELECT * FROM reviews WHERE seller_id = $1`,
-    [seller_id]
+    `SELECT * FROM reviews WHERE user_id = $1`,
+    [user_id]
   );
   return result.rows;
 };
 
 
 // Find shop details by ID
-export async function findShopDetailsById({ seller_id }) {
+export async function findShopDetailsById({ user_id }) {
   const result = await pool.query(
-    `SELECT * FROM shops WHERE seller_id = $1`,
-    [seller_id]
+    `SELECT * FROM shops WHERE user_id = $1`,
+    [user_id]
   );
   return result.rows;
 };
 
 // Find shop content by ID
-export async function findShopContentById({ seller_id }) {
+export async function findShopContentById({ user_id }) {
   const result = await pool.query(
-    `SELECT * FROM products WHERE seller_id = $1`,
-    [seller_id]
+    `SELECT * FROM products WHERE user_id = $1`,
+    [user_id]
   );
   return result.rows;
 };
 
 
 // Create new shop review
-export async function createShopReview({ shop_id, seller_id, order_id, buyer_id, review, date, comment, rating }) {
+export async function createShopReview({ shop_id, user_id, order_id, buyer_id, review, date, comment, rating }) {
   const result = await pool.query(
     `INSERT INTO reviews (
-        id, shop_id, seller_id, order_id, buyer_id, review, date, comment, rating
+        id, shop_id, user_id, order_id, buyer_id, review, date, comment, rating
     ) VALUES (
         DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8
     )`,
     [
-      shop_id, seller_id, order_id, buyer_id, review, date, comment, rating
+      shop_id, user_id, order_id, buyer_id, review, date, comment, rating
     ]
   );
   let response = await errorHandler(result?.rowCount);

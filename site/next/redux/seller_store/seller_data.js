@@ -1,15 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-    seller_id: null,
+    user_id: null,
   }
   
   export const SellerIdSlice = createSlice({
-    name: 'seller_id',
+    name: 'user_id',
     initialState,
     reducers: {
       setSellerIdTo: (state, action) => {
-        state.seller_id = action.payload
+        state.user_id = action.payload
       },
     },
   })

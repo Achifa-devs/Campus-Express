@@ -22,7 +22,9 @@ import Reviews from "../../store/screens/Drawer/Reviews";
 import Branding from "../../store/screens/Drawer/Shop/Branding";
 import Preference from "../../store/screens/Drawer/Preference";
 import Shopile from "../../store/screens/Drawer/Shop";
-import Ionicons  from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, FontAwesome, etc.
+import Ionicons from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, FontAwesome, etc.
+import Icon from 'react-native-vector-icons/Ionicons';
+
 import { useDispatch, useSelector } from "react-redux";
 import BellSvg from '../../media/assets/notification-svgrepo-com (1).svg'
 import BackSvg from '../../media/assets/back-svgrepo-com (1).svg'
@@ -30,6 +32,8 @@ import React from "react";
 import { 
     Dimensions,
     Image,
+   
+    StatusBar,
    
     StyleSheet,
     Switch,
@@ -40,43 +44,181 @@ import {
 } from 'react-native';
 import { set_drawer } from "../../../../../../redux/vendor/drawer";
 import SearchBtn from "../../store/components/Home/Search";
+import LodgeListScreen from "../../store/screens/Lodge";
+import ProductDetailScreen from "../../store/screens/LodgeRoom";
+import ServicesScreen from "../../store/screens/Service";
+import CampusNewsScreen from "../../store/screens/News";
+// import InboxScreen from "../../store/screens/Inbox";
+import NotificationScreen from "../../store/screens/NotificationScreen";
+import Editor from "../../store/screens/HiddenScreens/Editor";
 const HomeStack = createNativeStackNavigator();
 export function HomeStackScreen() {
     let dispatch = useDispatch()
     let {drawer} = useSelector(s=> s.drawer)
     const [isModalOpen, setModalOpen] = React.useState(false);
-  return (
+  return ( 
     <HomeStack.Navigator>
+        
+        
+        <HomeStack.Screen  options={{
+                header: ({navigation}) =>
+                (
+                    <>
+                        <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', alignItems: 'center', padding: 7}}>
+                            
+                            <Image height={60} width={60} source={{ uri: 'https://res.cloudinary.com/daqbhghwq/image/upload/v1746402998/Untitled_design-removebg-preview_peqlme.png' }} />
+
+                            <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 0, alignItems: 'flex-end'}}>
+                               
+                                <TouchableOpacity onPress={e => navigation.navigate('user-notification')}>
+                                    <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 0, alignItems: 'flex-end'}}>
+                                        <View style={{backgroundColor: '#fff', height: '100%', width: 40, borderRadius: 10, padding: 4}}> 
+                                            <Text style={{backgroundColor: 'hsl(14.086956521739133, 100%, 54.90196078431373%);', height: 'auto', display: 'flex', flexDirection: 'row',width: 'fit-content', alignItems: 'center' ,justifyContent: 'center', position: 'absolute', color: '#fff', left: -8, top: -2.5, borderRadius: 15, borderRadius: 10, fontSize: 10, padding: 3.5}}>7</Text>
+                                            <Icon name="notifications-outline" size={24} color="#FF4500" />
+                                        </View>
+                                    </View>    
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                        
+                        {/* <SearchBtn /> */}
+                    </>
+                ),
+            // headerShown: false, 
+          }} name="user-home" component={Home} /> 
 
         <HomeStack.Screen  options={{
                 header: ({navigation}) =>
                 (
                     <>
-                        <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', alignItems: 'center', padding: '10px'}}>
-                            
-                            <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}  onPress={() => dispatch(set_drawer(!drawer))}>
-                                <View style={{backgroundColor: '#FF4500', height: '100%', width: 40, borderRadius: 10}}></View>
-                                <Text>&nbsp;</Text>
-                                <Text>Akpulu.F</Text>
+                        <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', paddingHorizontal: 10, width: '100%', backgroundColor: '#FFF', alignItems: 'center', padding: '10px' }}>
+                            <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5}}>
+                                <BackSvg width={22} height={22} />
                             </TouchableOpacity>
-
-                            <TouchableOpacity onPress={e => navigation.navigate('user-notification')}>
-                            <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                                <View style={{backgroundColor: '#fff', height: '100%', width: 40, borderRadius: 10, padding: 4}}> 
-                                    <Text style={{backgroundColor: 'hsl(14.086956521739133, 100%, 54.90196078431373%);', height: 'auto', display: 'flex', flexDirection: 'row',width: 'fit-content', alignItems: 'center' ,justifyContent: 'center', position: 'absolute', color: '#fff', left: -8, top: -2.5, borderRadius: 15, borderRadius: 10, fontSize: 10, padding: 3.5}}>20</Text>
-                                    <BellSvg width={'100%'} height={'100%'} />
-                                </View>
-                            </View>   
-                            </TouchableOpacity>
+                            <View>
+                                <Text style={{
+                                    fontSize: 20,
+                                    fontWeight: 'bold', 
+                                    color: '#111',
+                                }}>Notification details</Text>
+                                
+                            </View>
                         </View>
+                    
                         
-                        <SearchBtn />
                     </>
                 ),
             // headerShown: false, 
-            }}  name="user-home" component={Home} />
+          }} name="user-notification-details" component={Notification} />
+          
+        <HomeStack.Screen  options={{
+                header: ({navigation}) =>
+                (
+                    <>
+                        <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', paddingHorizontal: 10, width: '100%', backgroundColor: '#FFF', alignItems: 'center', padding: '10px' }}>
+                            <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5}}>
+                                <BackSvg width={22} height={22} />
+                            </TouchableOpacity>
+                            <View>
+                                <Text style={{
+                                    fontSize: 20,
+                                    fontWeight: 'bold', 
+                                    color: '#111',
+                                }}>Editor (Hidden Screen)</Text>
+                                
+                            </View>
+                        </View>
+                    
+                        
+                    </>
+                ),
+            // headerShown: false, 
+        }}  name="user-editor" component={Editor} />
+           
+        <HomeStack.Screen  options={{
+                header: ({navigation}) =>
+                (
+                    <>
+                        <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', paddingHorizontal: 10, width: '100%', backgroundColor: '#FFF', alignItems: 'center', padding: '10px' }}>
+                            <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5}}>
+                                <BackSvg width={22} height={22} />
+                            </TouchableOpacity>
+                            <View>
+                                <Text style={{
+                                    fontSize: 20,
+                                    fontWeight: 'bold', 
+                                    color: '#111',
+                                }}>Campus Lodge</Text>
+                                <Text style={{
+                                    fontSize: 13,
+                                    color: '#777',
+                                    marginTop: .4,
+                                }}>Find lodges at your campus area</Text>
+                            </View>
+                        </View>
+                    
+                        
+                    </>
+                ),
+            // headerShown: false, 
+            }}  name="user-lodge" component={LodgeListScreen} />
 
-        
+        <HomeStack.Screen  options={{
+                header: ({navigation}) =>
+                (
+                    <>
+                    <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', paddingHorizontal: 10, width: '100%', backgroundColor: '#FFF', alignItems: 'center', padding: '10px' }}>
+                        <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5}}>
+                            <BackSvg width={22} height={22} />
+                        </TouchableOpacity>
+                        <View>
+                            <Text style={{
+                                fontSize: 20,
+                                fontWeight: 'bold', 
+                                color: '#111',
+                            }}>Campus Services</Text>
+                            <Text style={{
+                                fontSize: 13,
+                                color: '#777',
+                                marginTop: .4,
+                            }}>Find reliable help around your campus</Text>
+                        </View>
+                    </View>
+                    
+                        
+                    </>
+                ),
+            // headerShown: false, 
+          }} name="user-service" component={ServicesScreen} />
+          
+        <HomeStack.Screen  options={{
+                header: ({navigation}) =>
+                (
+                    <>
+                    <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', paddingHorizontal: 10, width: '100%', backgroundColor: '#FFF', alignItems: 'center', padding: '10px' }}>
+                        <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5}}>
+                            <BackSvg width={22} height={22} />
+                        </TouchableOpacity>
+                        <View>
+                            <Text style={{
+                                fontSize: 20,
+                                fontWeight: 'bold', 
+                                color: '#111',
+                            }}>Campus News</Text>
+                            <Text style={{
+                                fontSize: 13,
+                                color: '#777',
+                                marginTop: .4,
+                            }}>Stay informed with the latest updates</Text>
+                        </View>
+                    </View>
+                    
+                        
+                    </>
+                ),
+            // headerShown: false, 
+            }}  name="user-news" component={CampusNewsScreen} />
+
         <HomeStack.Screen  options={{
             header: ({navigation}) =>
             (
@@ -90,13 +232,22 @@ export function HomeStackScreen() {
         <HomeStack.Screen  options={{
             header: ({navigation}) =>
             (
-                <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px'}}>
-                
-
+                <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', paddingHorizontal: 10, width: '100%', backgroundColor: '#FFF', alignItems: 'center', padding: '10px' }}>
+                    <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5}}>
+                        <BackSvg width={22} height={22} />
+                    </TouchableOpacity>
+                    <View>
+                        <Text style={{
+                            fontSize: 20,
+                            fontWeight: 'bold', 
+                            color: '#111',
+                        }}>Notification</Text>
+                        
+                    </View>
                 </View>
             ), 
             // headerShown: false, 
-        }}  name="user-notification" component={Notification} /> 
+        }}  name="user-notification" component={NotificationScreen} /> 
 
         <HomeStack.Screen  options={{
             header: ({navigation}) =>
@@ -111,12 +262,12 @@ export function HomeStackScreen() {
         <HomeStack.Screen  options={{
             header: ({navigation}) =>
             (
-                <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px'}}>
+                <View style={{ height: 55, display: 'none ', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px'}}>
 
                 </View>
             ), 
             // headerShown: false,  
-        }}  name="user-category" component={Category} />
+        }}  name="all-category" component={Category} />
 
         <HomeStack.Screen  options={{
             header: ({navigation}) =>
@@ -127,6 +278,15 @@ export function HomeStackScreen() {
             ), 
             // headerShown: false,  
         }}  name="user-product" component={Product} />
+        <HomeStack.Screen  options={{
+            header: ({navigation}) =>
+            (
+                <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px'}}>
+
+                </View>
+            ), 
+            // headerShown: false,  
+        }}  name="user-lodge-room" component={ProductDetailScreen} />
         
          <HomeStack.Screen  options={{
             header: ({navigation}) =>
@@ -140,7 +300,7 @@ export function HomeStackScreen() {
                         paddingBottom: 0,
                         paddingLeft: 15,
                         paddingRight: 15,
-                        backgroundColor: '#FF4500',
+                        backgroundColor: '#FFF',
                         display: 'flex',
                         flexDirection: 'row',
                         justifyContent: 'space-between',

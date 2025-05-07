@@ -98,7 +98,7 @@ export default function PickupChannel({updateLocation,title,edit,order_data}) {
 
     async function editPickupChannel() {
         // let response = await UpdatePickupChannel({
-        //     buyer_id: buyerData?.buyer_id, 
+        //     user_id: buyerData?.user_id, 
         //     product_id: order_data?.product_id, 
         //     pickup_channel:  {
         //         channel: edit?.channel, 

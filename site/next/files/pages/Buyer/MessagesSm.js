@@ -18,7 +18,7 @@ export default function MessagesSm() {
 
         try {
             async function getData(params) {
-                let result = await GetChatRooms(window.localStorage.getItem('CE_buyer_id'))
+                let result = await GetChatRooms(window.localStorage.getItem('CE_user_id'))
                 setRoom(result)
             }
             getData()

@@ -21,8 +21,8 @@ export default function OrderItem({item,order}) {
     }
 
     let {
-        buyer_id 
-    } = useSelector(s => s.buyer_id);
+        user_id 
+    } = useSelector(s => s.user_id);
 
     useEffect(() => {
         // Extract query parameters directly using URLSearchParams
@@ -75,11 +75,11 @@ export default function OrderItem({item,order}) {
                             <button class="button is-ghost" style={{background: '#FF4500'}} onClick={e=> {
                                 document.querySelector('.cancel-order-overlay').removeAttribute('id')
                             }}>Decline</button>
-                            {/* buyer_id,order_id,amount,reason */}
+                            {/* user_id,order_id,amount,reason */}
                             <button class="button is-primary" onClick={e => {
                                 buyer_overlay_setup(true, 'Cancelling Order')
 
-                                axios.post('http://192.168.24.146:9090/cancel-order', {buyer_id: buyer_id, order_id: order?.order_id, amount:order?.price, reason: 'cancelled', product_id: order?.product_id})
+                                axios.post('http://192.168.24.146:9090/cancel-order', {user_id: user_id, order_id: order?.order_id, amount:order?.price, reason: 'cancelled', product_id: order?.product_id})
                                 .then(({data})=>{
                                     console.log(data)
                                     if(data){
@@ -136,7 +136,7 @@ export default function OrderItem({item,order}) {
                                 whiteSpace: 'nowrap', /* Prevent text from wrapping */
                                 overflow: 'hidden',    /* Hide any overflow text */
                                 textOverflow: 'ellipsis'
-                            }}>Seller: {item?.seller_id}</span>
+                            }}>Seller: {item?.user_id}</span>
                         </div>
 
                         <div className="stock">

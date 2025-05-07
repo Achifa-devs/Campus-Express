@@ -23,21 +23,21 @@ export default function Listing() {
   let screenHeight = Dimensions.get('window').height;
       
   useEffect(() => {
-    if (user) {
+    // if (user) {
       console.log(user)
       get_list_data()
-    }
+    // } 
   },[user])
 
   function get_list_data() {
-    fetch(`http://192.168.105.146:3000/api/vendor/products?seller_id=${user?.seller_id}`, {
+    fetch(`http://192.168.209.146:9090/vendor/products?user_id=CE-2b04fb`, {
       headers: {
         "Content-Type": "Application/json"
       }
     })
     .then(async(result) => {
       let response = await result.json()
-      set_list(response.data)
+      set_list(response)
     })
     .catch((err) => {
       set_server_err(!true)

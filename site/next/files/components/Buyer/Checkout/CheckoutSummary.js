@@ -42,7 +42,7 @@ const CheckoutSummary = ({ Total, Method, order_list, type }) => {
     const baseAmount = productPrice * orderStock + shippingFee + 50;
 
     const metadata = {
-        buyer_info: { buyer_id: buyer_info?.buyer_id || "" },
+        buyer_info: { user_id: buyer_info?.user_id || "" },
         product_info: {
             product_id: order_list?.product?.product_id || "",
             title: order_list?.product?.title || "",

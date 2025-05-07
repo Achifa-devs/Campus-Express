@@ -16,7 +16,7 @@ export default function User() {
   useEffect(() => {
       let overlay = document.querySelector('.overlay')
       //overlay.setAttribute('id', 'overlay');
-      GetSeller(window.localStorage.getItem('CE_seller_id'))
+      GetSeller(window.localStorage.getItem('CE_user_id'))
       .then((result) => {
           setUserData(result)
           setFname(result.fname)

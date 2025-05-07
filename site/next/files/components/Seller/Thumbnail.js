@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { GetProductThumbnail } from '../../api/seller/get';
  
 
-const Thumbnail = ({product_id,seller_id}) => {
+const Thumbnail = ({product_id,user_id}) => {
     let [img, set_img] = useState(imgSvg);
     let navigate = useNavigate()
 
@@ -30,7 +30,7 @@ const Thumbnail = ({product_id,seller_id}) => {
         }
     })
 
-    // onClick={e => navigate(`/product/${product_id}?seller_id=${seller_id}`)}
+    // onClick={e => navigate(`/product/${product_id}?user_id=${user_id}`)}
 
     return ( 
         <>

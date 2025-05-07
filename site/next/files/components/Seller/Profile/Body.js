@@ -58,7 +58,7 @@ function TitleEdit({shop_title}) {
         <button onClick={async(e) => {
           let overlay = document.querySelector('.overlay');
           overlay.setAttribute('id', 'overlay');
-          let response = await UpdateShopTitle(title.current,window.localStorage.getItem('CE_seller_id'));
+          let response = await UpdateShopTitle(title.current,window.localStorage.getItem('CE_user_id'));
           
           if(response){
             window.location.reload()
@@ -121,7 +121,7 @@ function DescEdit({shop_description}) {
         <button onClick={async(e) => {
           let overlay = document.querySelector('.overlay');
           overlay.setAttribute('id', 'overlay');
-          let response = await UpdateShopDesc(desc.current, window.localStorage.getItem('CE_seller_id'));
+          let response = await UpdateShopDesc(desc.current, window.localStorage.getItem('CE_user_id'));
           
           if(response){
             window.location.reload()
@@ -148,7 +148,7 @@ function InvetoryEdit({list}) {
     async function UpdateInventoryHandler() {
       let overlay = document.querySelector('.overlay');
       overlay.setAttribute('id', 'overlay');
-      let result = await UpdateInventory(selectedList, window.localStorage.getItem("CE_seller_id"))
+      let result = await UpdateInventory(selectedList, window.localStorage.getItem("CE_user_id"))
       
       if(result){
         window.location.reload()
@@ -210,7 +210,7 @@ function InvetoryEdit({list}) {
   )
 }
 
-function ContactEdit({email,phone,seller_id, name}) {
+function ContactEdit({email,phone,user_id, name}) {
  
 
   return(
@@ -221,7 +221,7 @@ function ContactEdit({email,phone,seller_id, name}) {
 
               <input type="text" value={email} />
               <br />
-              <button onClick={e =>  SendEmail(email, seller_id, name)} style={{padding: '5px', height: 'fit-content'}}>Send verification link to this email</button>
+              <button onClick={e =>  SendEmail(email, user_id, name)} style={{padding: '5px', height: 'fit-content'}}>Send verification link to this email</button>
               
           </section>
           
@@ -232,7 +232,7 @@ function ContactEdit({email,phone,seller_id, name}) {
               <label htmlFor="">Verify Phone </label>
               <input type="text" value={phone} />
               <br />
-              <button onClick={e => SendSMS(phone, seller_id, name)} style={{padding: '5px', height: 'fit-content'}}>Send verification link to this phone</button>
+              <button onClick={e => SendSMS(phone, user_id, name)} style={{padding: '5px', height: 'fit-content'}}>Send verification link to this phone</button>
 
               
           </section>
@@ -357,7 +357,7 @@ function Rent({shop,userData,updateActiveJsx}) {
     if(parseInt(price) <= parseInt(shop?.coin)){
       let overlay = document.querySelector('.overlay');
       overlay.setAttribute('id', 'overlay');
-      let result = await PayRent(price,shop?.seller_id);
+      let result = await PayRent(price,shop?.user_id);
       
       if(result){
         window.location.reload()
@@ -647,12 +647,12 @@ export default function Body({userData,shop,sellerWallet}) {
     }
     getSoldItems()
     async function getReviews() {
-      let reviews = await GetReviews(window.localStorage.getItem("CE_seller_id"))
+      let reviews = await GetReviews(window.localStorage.getItem("CE_user_id"))
       setSoldItems(reviews)
     }
     getReviews()
     async function getSellerShop() {
-      let shop = await GetItems(window.localStorage.getItem("CE_seller_id"))
+      let shop = await GetItems(window.localStorage.getItem("CE_user_id"))
       
       if(shop?.length > 0){
         let result = shop.filter(item => item.status === 'sold');

@@ -11,16 +11,16 @@ const Header = () => {
         setScreenWidth(window.innerWidth)
     },[])
     let {
-        seller_id
-    }=useSelector(s=>s.seller_id);
+        user_id
+    }=useSelector(s=>s.user_id);
     let [profile, setProfile] = useState('')
 
     useEffect(() => {
-        if(seller_id !== 'null' && seller_id !== null && seller_id !== ''){
+        if(user_id !== 'null' && user_id !== null && user_id !== ''){
 
             fetch(`/api/profile/seller`, {
                 method: 'post',
-                body: JSON.stringify({seller_id})
+                body: JSON.stringify({user_id})
             })
             .then(async(result) => {
                 let response = await result.json(); 
@@ -40,7 +40,7 @@ const Header = () => {
             }) 
 
         }
-    }, [seller_id])
+    }, [user_id])
 
     let pathname = usePathname()
     return ( 

@@ -2,8 +2,8 @@ import axios from 'axios'
 // import {IP} from '@env'
 
 
-let uri_1 = 'http://192.168.105.146:9090'
-let uri_2 = 'http://192.168.105.146:9090' 
+let uri_1 = 'http://192.168.209.146:9090'
+let uri_2 = 'http://192.168.209.146:9090' 
 let IP = uri_1
 
 
@@ -21,35 +21,35 @@ export async function Filter_Cards(category,condition,price,state,campus) {
     return (response)?.data
 }
 
-export async function GetSeller(seller_id) {
-    let response = await get_request_generators(`profile`, {seller_id})
+export async function GetSeller(user_id) {
+    let response = await get_request_generators(`profile`, {user_id})
     setTimeout(() => source.cancel('timeout'), 10000) 
     return (response)?.data
 }
 
-export async function GetSellerWallet(seller_id) {
-    let response = await get_request_generators(`wallet`, {seller_id})
-    setTimeout(() => source.cancel('timeout'), 10000) 
-    return (response)?.data
-}
-
-
-export async function GetSellerPhoto(seller_id) {
-    let response = await get_request_generators(`profile-photo`, {seller_id})
+export async function GetSellerWallet(user_id) {
+    let response = await get_request_generators(`wallet`, {user_id})
     setTimeout(() => source.cancel('timeout'), 10000) 
     return (response)?.data
 }
 
 
-export async function GetReviews(seller_id) {
-    let response = await get_request_generators(`reviews`, {seller_id})
+export async function GetSellerPhoto(user_id) {
+    let response = await get_request_generators(`profile-photo`, {user_id})
     setTimeout(() => source.cancel('timeout'), 10000) 
     return (response)?.data
 }
 
 
-export async function GetShop(seller_id) {
-    let response = await get_request_generators(`shop`, {seller_id})
+export async function GetReviews(user_id) {
+    let response = await get_request_generators(`reviews`, {user_id})
+    setTimeout(() => source.cancel('timeout'), 10000) 
+    return (response)?.data
+}
+
+
+export async function GetShop(user_id) {
+    let response = await get_request_generators(`shop`, {user_id})
     setTimeout(() => source.cancel('timeout'), 10000) 
     return (response)?.data
 }
@@ -97,8 +97,8 @@ export async function GetProductThumbnail(product_id) {
     return (response)?.data
 }
 
-export async function GetChatRooms(seller_id) {
-    let response = await get_request_generators(`chat-rooms`, {seller_id})
+export async function GetChatRooms(user_id) {
+    let response = await get_request_generators(`chat-rooms`, {user_id})
     setTimeout(() => source.cancel('timeout'), 10000) 
     return (response)?.data
 }

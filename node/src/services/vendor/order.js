@@ -27,10 +27,10 @@ export const getOrder = async (payload) => {
 
 
 export const getOrders = async (payload) => {
-  const { seller_id } = payload;
+  const { user_id } = payload;
 
   // Business logic
-  const response = await findOrders({ seller_id });
+  const response = await findOrders({ user_id });
   if (!response.length > 0) {
     
     
@@ -48,7 +48,7 @@ export const getOrders = async (payload) => {
 
 
 export const postCancelOrder = async (payload) => {
-  const { seller_id,order_id,amount,reason } = payload;
+  const { user_id,order_id,amount,reason } = payload;
 
   // Business logic
   const response = await cancelOrder({ order_id });
@@ -58,7 +58,7 @@ export const postCancelOrder = async (payload) => {
     
   }
   if (response?.havepaid) {
-    const refundHandler = await createRefund({ seller_id, order_id,buyer_id: response.buyer_id, amount, reason });
+    const refundHandler = await createRefund({ user_id, order_id,buyer_id: response.buyer_id, amount, reason });
   
     return refundHandler;
   }

@@ -76,7 +76,7 @@ const Card = ({item, index}) => {
 
     //             if(duplicateSearch.length > 0){
     
-    //                 let result = await UnSaveItem(product_id, buyer_info?.buyer_id);
+    //                 let result = await UnSaveItem(product_id, buyer_info?.user_id);
     //                 setBtnMode(!btnMode) 
     //                 overlay.removeAttribute('id')
     //                 dispatch(setSaveTo(result))
@@ -84,7 +84,7 @@ const Card = ({item, index}) => {
     
     //             }else{
                     
-    //                 let result = await SaveItem(product_id, buyer_info?.buyer_id)
+    //                 let result = await SaveItem(product_id, buyer_info?.user_id)
     //                 setBtnMode(!btnMode) 
     //                 overlay.removeAttribute('id')
     //                 dispatch(setSaveTo(result))
@@ -93,7 +93,7 @@ const Card = ({item, index}) => {
     //             }
     //         }else{
     
-    //             let result = await SaveItem(product_id, buyer_info?.buyer_id)
+    //             let result = await SaveItem(product_id, buyer_info?.user_id)
     //             setBtnMode(!btnMode) 
     //             overlay.removeAttribute('id')
     //             dispatch(setSaveTo(result))
@@ -117,7 +117,7 @@ const Card = ({item, index}) => {
     // useEffect(() => {
     //     // console.log(JSON.stringify(buyer_info))
     //     if(buyer_info){
-    //         GetOrders(buyer_info?.buyer_id)
+    //         GetOrders(buyer_info?.user_id)
     //         .then((result) => {
     //             console.log(result)
     //             if(result){
@@ -257,7 +257,7 @@ const Card = ({item, index}) => {
                     </div>
 
                     <button style={BtnStyles} onClick={e => {
-                        order_list.filter((data) => data?.product?.product_id === item?.product_id && data?.order?.buyer_id === buyer_info?.buyer_id)?.length > 0
+                        order_list.filter((data) => data?.product?.product_id === item?.product_id && data?.order?.user_id === buyer_info?.user_id)?.length > 0
                         ?
                         window.location.href = `/checkout/${item?.product_id}`
                         :
@@ -272,7 +272,7 @@ const Card = ({item, index}) => {
                         &nbsp;
                         &nbsp;
                         <span style={{fontSize: 'x-small', background: '#FF4500'}}>{
-                            order_list.filter((data) => data?.product?.product_id === item?.product_id && data?.order?.buyer_id === buyer_info?.buyer_id)?.length > 0
+                            order_list.filter((data) => data?.product?.product_id === item?.product_id && data?.order?.user_id === buyer_info?.user_id)?.length > 0
                             ?
 
                             'View Order'

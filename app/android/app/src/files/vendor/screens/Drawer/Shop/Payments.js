@@ -21,12 +21,12 @@ export default function Payments() {
         setModalVisible(!modalVisible);
     };
    function get() {
-        fetch(`http://192.168.105.146:9090:9090/api/shop/payment/`, {
+        fetch(`http://192.168.209.146:9090:9090/api/shop/payment/`, {
             method: 'post',
             headers: {
                 "Content-Type": "Application/json"
             },
-            body: JSON.stringify({seller_id: user?.seller_id })
+            body: JSON.stringify({user_id: user?.user_id })
         })   
         .then(async(result) => {
             let response = await result.json();
@@ -47,7 +47,7 @@ export default function Payments() {
     useEffect(() => {
         setindicator(true)
         get()
-    }, [user?.seller_id])
+    }, [user?.user_id])
     useEffect(() => {
         console.log('payment_data: ', payment_data)
     }, [payment_data])

@@ -13,7 +13,6 @@ import LinearGradient from 'react-native-linear-gradient';
 import { 
     createBottomTabNavigator 
 } from "@react-navigation/bottom-tabs"
-import Ads from '../components/Home/Ads';
 import BackSvg from '../../media/assets/back-svgrepo-com (4).svg'
 import { useNavigation, useRoute } from '@react-navigation/native';
 
@@ -32,7 +31,7 @@ export default function Type() {
             <TouchableOpacity style={styles.back}> 
                 <BackSvg height={25} width={25} />
             </TouchableOpacity>
-            <Text>{ category }</Text>
+            <Text style={{ fontSize: 15, color: '#000', marginLeft: 20, fontWeight: 'bold'}}>{ category }</Text>
         </View>
       <ScrollView style={[styles.homeCnt,{
             // height: '100%'
@@ -76,7 +75,7 @@ export default function Type() {
 
 const styles = StyleSheet.create({
     searchCnt:{
-      height: 100,
+      height: 50,
       //   width: '100%',
       paddingTop: 0,
       paddingBottom: 0,
@@ -85,9 +84,9 @@ const styles = StyleSheet.create({
       backgroundColor: '#fff',
       display: 'flex',
       flexDirection: 'row',
-      justifyContent: 'space-between',
+    //   justifyContent: 'space-between',
       alignItems: 'center',
-      // marginBottom: 5
+      marginBottom: 1.5
   },
     homeCnt:{
         height: 'auto',

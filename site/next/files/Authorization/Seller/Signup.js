@@ -105,7 +105,7 @@ const Signup = () => {
             console.log(response)
             if(response.bool){
                 console.log(response)
-                window.localStorage.setItem("CE_seller_id", response.data)
+                window.localStorage.setItem("CE_user_id", response.data)
                 navigate('/seller?status=first_login')
             }else{
                 console.log(response)

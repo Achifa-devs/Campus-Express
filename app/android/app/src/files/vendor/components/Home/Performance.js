@@ -34,7 +34,7 @@ export default function Performance() {
     useEffect(() => {
 
         if (user) { 
-            set_id(user?.seller_id)   
+            set_id(user?.user_id)   
         }
 
     }, [user])
@@ -42,7 +42,7 @@ export default function Performance() {
    
     useEffect(() => {
         if (id) {
-            fetch(`http://192.168.105.146:3000/api/vendor/report?seller_id=${id}`) 
+            fetch(`http://192.168.209.146:3000/api/vendor/report?user_id=${id}`) 
             .then(async (result) => {
                 let res = await result.json();
                 const updateEarningThisMonth = (newValue, name) => {

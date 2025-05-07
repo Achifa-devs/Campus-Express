@@ -1,10 +1,10 @@
 import BuyerLogin from "../../Authorization/Buyer.js/Login"
 
 export function isBuyerLoggedIn(resource) {
-    let buyer_id = window.localStorage.getItem("CE_buyer_id")
+    let user_id = window.localStorage.getItem("CE_user_id")
     // let buyer_initial = window.localStorage.getItem("CE_buyer_name_initial")
-    if(buyer_id){
-      return buyer_id !== '' ? {bool: true, elem: ''} : {bool: false, elem: <div className="overlay" id="overlay" > <BuyerLogin query={resource}/> </div>}
+    if(user_id){
+      return user_id !== '' ? {bool: true, elem: ''} : {bool: false, elem: <div className="overlay" id="overlay" > <BuyerLogin query={resource}/> </div>}
     }else{
         return {bool: false, elem: <div className="overlay" id="overlay" > <BuyerLogin query={resource}/> </div>}
     }

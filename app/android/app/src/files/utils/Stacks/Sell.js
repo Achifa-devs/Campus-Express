@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Sell from "../../store/screens/Sell/Sell";
-import Create from "../../store/screens/Create";
 import Notice from "../../store/screens/Sell/Notice";
 import { 
     Dimensions,
@@ -16,6 +15,8 @@ import {
 } from 'react-native';
 import React from "react";
 import Ionicons  from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, FontAwesome, etc.
+import BackSvg from '../../media/assets/back-svgrepo-com (1).svg'
+import Create from "../../store/screens/Sell/Create";
 
 const SellStack = createNativeStackNavigator();
 export function SellStackScreen() {
@@ -27,7 +28,7 @@ export function SellStackScreen() {
         <SellStack.Screen  options={{
             header: ({navigation}) =>
             (
-              <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', elevation: 2, alignItems: 'center', padding: '10px' }}>
+              <View style={{ height: 55, display: 'none', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', elevation: 2, alignItems: 'center', padding: '10px' }}>
                   
                      
                     <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}} onPress={() => dispatch(set_drawer(!drawer))}>
@@ -56,20 +57,13 @@ export function SellStackScreen() {
         <SellStack.Screen  options={{
             header: ({navigation}) =>
             (
-                <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px'}}>
-                  
-                    
-                    <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                        <View style={{backgroundColor: '#FF4500', height: '100%', width: 40, borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}><Text style={{color: '#fff',display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>A.F</Text></View>
+               <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
+                    <TouchableOpacity style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5 }}>
+                        <BackSvg width={22} height={22} />
                     </TouchableOpacity>
-
-                    <TouchableOpacity onPress={e => navigation.navigate('new-listing')}>
-                    <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                        <View style={{backgroundColor: '#FF4500', height: '100%', width: 40, borderRadius: 10}}>
-
-                        </View>
+                    <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
+                        <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Create new ads</Text>
                     </View>
-                    </TouchableOpacity>
                 </View>
             ),
         }}  name="user-new-listing" component={Create} />

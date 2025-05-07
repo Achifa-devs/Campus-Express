@@ -17,11 +17,11 @@ export default function Favourite() {
   let dispatch = useDispatch()
 
   let {
-    buyer_id 
-  } = useSelector(s => s.buyer_id);
+    user_id 
+  } = useSelector(s => s.user_id);
   useEffect(() => {
-    if (buyer_id !== '' && buyer_id !== null && buyer_id !== 'undefined' && buyer_id !== undefined && buyer_id !== 'null') {
-      axios.get('/api/store/inbox', {params: {buyer_id: buyer_id}})
+    if (user_id !== '' && user_id !== null && user_id !== 'undefined' && user_id !== undefined && user_id !== 'null') {
+      axios.get('/api/store/inbox', {params: {user_id: user_id}})
       .then(({data})=>{
           setItems(data.data)
           console.log(data)
@@ -31,7 +31,7 @@ export default function Favourite() {
       })
     }
 
-  },[buyer_id])
+  },[user_id])
   return (
     <>
       <div className='favourite-card' style={{width: screenWidth > 760 ? 'calc(100vw - 350px)' : '100%', float: 'right', padding: screenWidth > 760 ? '10px 40px': '10px'}}>

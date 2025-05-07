@@ -31,7 +31,7 @@ export default function NewListing() {
     const isClient = useIsClient();
     let [screenWidth, setScreenWidth] = useState(0);
     let book = []
-    let {seller_id}=useSelector(s=>s.seller_id);
+    let {user_id}=useSelector(s=>s.user_id);
     let [product_id, set_product_id] = useState('')
     let [categoriesList, setCategoriesList] = useState([])
     let [typeList, setTypeList] = useState([]) 
@@ -66,7 +66,7 @@ export default function NewListing() {
         const queryParams = new URLSearchParams(window.location.search);
         const product_id = queryParams.get("product_id");
         seller_overlay_setup(true, 'Loading')
-        if (seller_id !== '' && seller_id !== undefined && seller_id !== 'undefined' && seller_id !== null && seller_id !== 'null') {
+        if (user_id !== '' && user_id !== undefined && user_id !== 'undefined' && user_id !== null && user_id !== 'null') {
             if (is_update) {
                 fetch(`/api/vendor/product?product_id=${product_id}`)
                 .then(async(result) => {
@@ -115,7 +115,7 @@ export default function NewListing() {
                 
             }
         }
-    }, [seller_id])
+    }, [user_id])
 
 
     let [sample_img, set_sample_img] = useState('')
@@ -137,7 +137,7 @@ export default function NewListing() {
                 console.log(error)
             }
         }
-    }, [seller_id,thumbnail])
+    }, [user_id,thumbnail])
     
 
     useEffect(() => {
@@ -739,7 +739,7 @@ export default function NewListing() {
         });
     }
 
-    async function uploadProduct(product_id, seller_id, thumbnail_url) {
+    async function uploadProduct(product_id, user_id, thumbnail_url) {
         let url = is_update ? 'http://192.168.24.146:9090/seller.product-update' : 'http://192.168.24.146:9090/seller.product-upload';
 
         const queryParams = new URLSearchParams(window.location.search);
@@ -759,7 +759,7 @@ export default function NewListing() {
                         category: category.current,
                         price: price.current,
                         product_id: is_update ? update_product_id : product_id,
-                        seller_id: seller_id,
+                        user_id: user_id,
                         campus: profile?.campus,
                         state: profile?.state,
                         stock: stock.current,
@@ -894,7 +894,7 @@ export default function NewListing() {
             if (category_state !== 'Lodge & Apartments') {
                 if (valid) {
                     is_update ? seller_overlay_setup(true, 'Updating Product Details...') : seller_overlay_setup(true, 'Uploading Product Details...')
-                    await uploadProduct(product_id,seller_id,thumbnail)
+                    await uploadProduct(product_id,user_id,thumbnail)
                 }else{
                     let newElem = document.createElement('div')
                     newElem.className = 'err-mssg';
@@ -915,7 +915,7 @@ export default function NewListing() {
                 }
             } else {
                 seller_overlay_setup(true, 'Uploading Product Details...')
-                await uploadProduct(product_id,seller_id,thumbnail)
+                await uploadProduct(product_id,user_id,thumbnail)
             }
             
         }
@@ -962,9 +962,9 @@ export default function NewListing() {
     let [profile, setProfile] = useState('')
 
     useEffect(() => {
-        if(seller_id !== 'null' && seller_id !== null && seller_id !== ''){
+        if(user_id !== 'null' && user_id !== null && user_id !== ''){
 
-            fetch(`http://192.168.24.146:9090/seller.profile?seller_id=${seller_id}`)
+            fetch(`http://192.168.24.146:9090/seller.profile?user_id=${user_id}`)
             .then(async(result) => {
                 let response = await result.json(); 
                 setProfile(response)
@@ -974,7 +974,7 @@ export default function NewListing() {
             }) 
 
         }
-    }, [seller_id])
+    }, [user_id])
 
     let [range_price, set_range_price] = useState(0)
     let [edit_range, set_edit_range] = useState(0)

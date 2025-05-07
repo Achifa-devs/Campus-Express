@@ -1,7 +1,7 @@
 "use client"
 import OrderItem from "@/files/components/Buyer/Order/OrderItem";
 import { useEffect, useState } from "react";
-import database from '@/database/seller_shop.json'
+import database from '@/database/products.json'
 import '@/app/store/orders/styles/xx-large.css'
 import '@/app/store/orders/styles/x-large.css'
 import '@/app/store/orders/styles/large.css'
@@ -19,12 +19,12 @@ const Order = () => {
     useEffect(() => {setScreenWidth(window.innerWidth)},[]);
     let [items, setItems] = useState([])
     let {
-        buyer_id 
-    } = useSelector(s => s.buyer_id);
+        user_id 
+    } = useSelector(s => s.user_id);
    
     useEffect(() => {
-        if(buyer_id !== '' && buyer_id !== null){
-            axios.get('/api/store/orders', {params: {buyer_id: buyer_id.trim()}})
+        if(user_id !== '' && user_id !== null){
+            axios.get('/api/store/orders', {params: {user_id: user_id.trim()}})
             .then(({data})=>{
                 console.log(data)
                 setItems(data?.data)
@@ -35,7 +35,7 @@ const Order = () => {
 
         }
 
-    },[buyer_id])
+    },[user_id])
 
 
     return ( 

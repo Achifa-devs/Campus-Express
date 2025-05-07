@@ -5,9 +5,9 @@ import { NextResponse } from 'next/server';
 export async function POST(req) {
     try {
         const body = await req.json();
-        const { seller_id, title } = body;
+        const { user_id, title } = body;
 
-        const res = await pool.query(`UPDATE campus_shops set title = '${title}' WHERE seller_id='${seller_id}'`);
+        const res = await pool.query(`UPDATE shopss set title = '${title}' WHERE user_id='${user_id}'`);
         return NextResponse.json({ bool: res?.rowCount > 0 ? true : false }, { status: 200 });
 
   } catch (err) {

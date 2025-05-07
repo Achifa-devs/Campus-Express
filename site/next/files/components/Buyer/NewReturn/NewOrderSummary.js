@@ -8,7 +8,7 @@ import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup';
 export default function NewOrderSummary({item,stock,deliveryOpt,refund_id}) {
 
     let {pickup_channel} = useSelector(s=>s.pickup_channel)
-    let {buyer_id}=useSelector(s=>s.buyer_id);
+    let {user_id}=useSelector(s=>s.user_id);
     useEffect(() => {let width = window.innerWidth;setScreenWidth(width)},[]);
 
     let [screenWidth, setScreenWidth] = useState(0);
@@ -28,7 +28,7 @@ export default function NewOrderSummary({item,stock,deliveryOpt,refund_id}) {
                         "Content-Type": "Application/json"
                     },
                     body: JSON.stringify({
-                        buyer: buyer_id, product_id: item.product_id, price: parseInt(item.price)*parseInt(stock), stock: stock, locale: pickup_channel
+                        buyer: user_id, product_id: item.product_id, price: parseInt(item.price)*parseInt(stock), stock: stock, locale: pickup_channel
                     })
                 })
                 .then(async(result)=> {
@@ -72,7 +72,7 @@ export default function NewOrderSummary({item,stock,deliveryOpt,refund_id}) {
                         "Content-Type": "Application/json"
                     },
                     body: JSON.stringify({
-                        buyer: buyer_id, product_id: item.product_id, price: parseInt(item.price)*parseInt(stock), stock: stock, locale: pickup_channel, refund_id: refund_id
+                        buyer: user_id, product_id: item.product_id, price: parseInt(item.price)*parseInt(stock), stock: stock, locale: pickup_channel, refund_id: refund_id
                     })
                 })
                 .then(async(result)=> {

@@ -15,7 +15,7 @@ export default function CoinComp({Coin,userData,shop,updateActiveJsx}) {
           cursor: 'pointer'
         }} alt="" onClick={e => {
         document.querySelector('.edit-overlay').setAttribute('id', 'edit-overlay')
-        updateActiveJsx(<Coin email={userData.email} phone={userData.phone} name={`${userData.fname} ${userData.lname}`} seller_id={userData.seller_id}  />)
+        updateActiveJsx(<Coin email={userData.email} phone={userData.phone} name={`${userData.fname} ${userData.lname}`} user_id={userData.user_id}  />)
         
       }} />
         <div><b>Campus Coin</b></div>

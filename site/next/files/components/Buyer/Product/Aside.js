@@ -17,7 +17,7 @@ export default function Aside({item,order_list,seller}) {
   let dispatch = useDispatch()
 
   function addLocation(channel) {
-    let buyer = window.localStorage.getItem('CE_buyer_id');
+    let buyer = window.localStorage.getItem('CE_user_id');
     if(buyer === null || buyer === '' || buyer === 'null'){
       window.location.href=(`/login?page=product&data=${item.product_id}`)
     }else{

@@ -118,7 +118,7 @@ const BuyerSignup = () => {
                 // window.localStorage.setItem("CE_buyer_name_initial", result.name)
                 if(result){
                     console.log(result)
-                    window.localStorage.setItem("CE_buyer_id", result.id)
+                    window.localStorage.setItem("CE_user_id", result.id)
                     if(location.search){
                         navigate(`/${page}?product_id=${data_}`)
                     }else{

@@ -8,7 +8,7 @@ export default function Messages() {
     let [item, setItem] = useState([1,3,4,5,6,7,8,9])
 
     useEffect(() => {
-        GetChat(window.localStorage.getItem('CE_seller_id'))
+        GetChat(window.localStorage.getItem('CE_user_id'))
         .then((result) => setItem(result.data))
         .catch((err) => err) 
        

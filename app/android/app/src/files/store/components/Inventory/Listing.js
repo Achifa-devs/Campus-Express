@@ -28,7 +28,7 @@ export default function Listing() {
   },[user])
 
   function get_list_data() {
-    fetch(`http://192.168.105.146:3000/api/vendor/products?seller_id=${user?.seller_id}`, {
+    fetch(`http://192.168.209.146:3000/api/vendor/products?user_id=${user?.user_id}`, {
       headers: {
         "Content-Type": "Application/json"
       }

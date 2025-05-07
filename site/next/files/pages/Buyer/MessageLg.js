@@ -28,13 +28,13 @@ export default function MessageLg() {
 
         try {
             async function getData() {
-                let result = await GetChatRooms(window.localStorage.getItem('CE_buyer_id'))
+                let result = await GetChatRooms(window.localStorage.getItem('CE_user_id'))
                 setRoom(result)
                 // console.log(result)
 
                 let path = location.pathname.split('/').splice(-1)[0].split('-')[0] === 'CE'
                 if(path){
-                    let response = result.filter(item => item?.buyer_data?.buyer_id === location.pathname.split('/').splice(-1)[0]);  
+                    let response = result.filter(item => item?.buyer_data?.user_id === location.pathname.split('/').splice(-1)[0]);  
                     setRoomData(response[0]?.mssg?.mssg_id);
                     setActiveRoom(response[0]);
                 }
@@ -62,7 +62,7 @@ export default function MessageLg() {
             let chat_box = result;
             let heads = []
             console.log(chat_box)
-            chat_box.map(item => heads.push({id: item.buyer_id, name: item.buyer_name}))
+            chat_box.map(item => heads.push({id: item.user_id, name: item.buyer_name}))
             setChatHead(heads)
             setChatList(chat_box)
           }
@@ -74,7 +74,7 @@ export default function MessageLg() {
     }, [])
 
     useEffect(() => {
-        let r = chatList.filter(item => item.buyer_id === selected_head)[0]
+        let r = chatList.filter(item => item.user_id === selected_head)[0]
         console.log(chatList)
         if(r !== undefined) {
             set_chat(r?.mssg)
