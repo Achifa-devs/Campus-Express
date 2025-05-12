@@ -8,8 +8,8 @@ export default function Size({ updateSubCategory, category, sub_type_list, error
   const [value, setValue] = useState(null);
 
   const handleChange = (item) => {
-    setValue(item.value);
-    updateSubCategory(item.value);
+    setValue(item.title);
+    updateSubCategory(item.title);
   };
 
   return (
@@ -20,7 +20,7 @@ export default function Size({ updateSubCategory, category, sub_type_list, error
         style={[
           styles.dropdown,
           isFocused && styles.dropdownFocused,
-          error && styles.dropdownError
+          error && styles.dropdownError 
         ]}
         placeholderStyle={styles.placeholderStyle}
         selectedTextStyle={styles.selectedTextStyle}
@@ -33,7 +33,7 @@ export default function Size({ updateSubCategory, category, sub_type_list, error
         placeholder={`Select ${category} sub-category`}
         value={value}
         onFocus={() => {
-          setIsFocused(true);
+          // setIsFocused(true);
           onFocus?.();
         }}
         onBlur={() => setIsFocused(false)}

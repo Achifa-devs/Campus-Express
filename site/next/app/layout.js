@@ -19,7 +19,7 @@ export async function generateMetadata({ params }) {
 
   if (!slug) {
     return {
-      title: 'Campus Sphere Nigeria',
+      title: 'Campus Sphere Nigeria | Online Marketplace For Campus Students',
     };
   }
   const data = await res.json();
@@ -27,7 +27,7 @@ export async function generateMetadata({ params }) {
   const imageUrl = 'https://www.campussphere.net/api/logo';
 
   return {
-    title: `Campus Sphere Nigeria`,
+    title: `Campus Sphere Nigeria | Online Marketplace For Campus Students`,
     alternates: {
       canonical: `https://www.campussphere.net`
     },
@@ -37,7 +37,7 @@ export async function generateMetadata({ params }) {
       follow: true,
     },
     openGraph: {
-      title: `Campus Sphere Nigeria`,
+      title: `Campus Sphere Nigeria | Online Marketplace For Campus Students`,
       description: `Enjoy Free Commerce From The Comfort Of Your Lodge.`,
       url: `https://www.campussphere.net`,
       type: 'website',
@@ -51,7 +51,7 @@ export async function generateMetadata({ params }) {
     },
     twitter: {
       card: 'summary_large_image',
-      title: `Campus Sphere Nigeria`,
+      title: `Campus Sphere Nigeria | Online Marketplace For Campus Students`,
       url: `https://www.campussphere.net`,
       description: `Enjoy Free Commerce From The Comfort Of Your Lodge.`,
       images: [imageUrl],

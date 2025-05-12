@@ -267,7 +267,7 @@ export default function Profile() {
             <div className="top">
                 <section>
                     <h3>
-                    Welcome to Campus Express! Let’s take your shop live!
+                    Welcome to Campus Sphere! Let’s take your shop live!
                     </h3>
                     <h6>Complete all the sections below to take your shop live.</h6>
                 </section>
@@ -912,7 +912,7 @@ function ShopInfo({campusLocaleList}) {
                     <h3>
                         Shop Details
                     </h3>
-                    <h6>Manage your shop on Campus Express from below</h6>
+                    <h6>Manage your shop on Campus Sphere from below</h6>
                 </section>
 
                 <div className="input-cnt shop-info-input">
@@ -934,7 +934,7 @@ function ShopInfo({campusLocaleList}) {
                     <h3>
                         Communication Details
                     </h3>
-                    <h6>Choose the contact preference for communications from Campus Express. We ll send communications and contact you on the details below</h6>
+                    <h6>Choose the contact preference for communications from Campus Sphere. We ll send communications and contact you on the details below</h6>
                 </section>
 
                 <div className="input-cnt">

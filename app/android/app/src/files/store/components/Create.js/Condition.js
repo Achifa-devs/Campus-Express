@@ -4,20 +4,20 @@ import { Dropdown } from 'react-native-element-dropdown';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const conditionOptions = [
-  { label: 'Brand New', value: 'new' },
-  { label: 'Like New', value: 'like_new' },
-  { label: 'Good', value: 'good' },
-  { label: 'Fair', value: 'fair' },
-  { label: 'Refurbished', value: 'refurbished' },
+  { title: 'Brand New', value: 'new' },
+  { title: 'Fairly Used', value: 'fair' },
+  { title: 'Refurbished', value: 'refurbished' },
+  { title: 'In Good Condition', value: 'good' },
+
 ];
 
-export default function Condition({ updateCondition, category, error, onFocus }) {
+export default function Condition({ updateCondition, category, error }) {
   const [isFocused, setIsFocused] = useState(false);
   const [value, setValue] = useState(null);
 
   const handleChange = (item) => {
-    setValue(item.value);
-    updateCondition(item.value);
+    setValue(item.title);
+    updateCondition(item.title);
   };
 
   return (
@@ -37,15 +37,15 @@ export default function Condition({ updateCondition, category, error, onFocus })
         data={conditionOptions}
         search={false}
         maxHeight={300}
-        labelField="label"
-        valueField="value"
+        labelField="title"
+        valueField="title"
         placeholder={`Select ${category?.toLowerCase() || 'product'} condition`}
         searchPlaceholder="Search..."
         value={value}
-        onFocus={() => {
-          setIsFocused(true);
-          onFocus?.();
-        }}
+        // onFocus={() => {
+        //   setIsFocused(true);
+        //   onFocus?.();
+        // }}
         onBlur={() => setIsFocused(false)}
         onChange={handleChange}
         renderLeftIcon={() => (
@@ -58,8 +58,8 @@ export default function Condition({ updateCondition, category, error, onFocus })
         )}
         renderItem={(item) => (
           <View style={styles.item}>
-            <Text style={styles.textItem}>{item.label}</Text>
-            {value === item.value && (
+            <Text style={styles.textItem}>{item.title}</Text>
+            {value === item.title && (
               <Ionicons name="checkmark" size={20} color="#FF4500" />
             )}
           </View>

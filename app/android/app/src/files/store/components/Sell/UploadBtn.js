@@ -1,47 +1,78 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useTheme } from '@react-navigation/native'; // Optional: for theme support
+import { useTheme } from '@react-navigation/native';
 import Svg, { Path } from 'react-native-svg';
-// import UploadIcon from './UploadIcon'; // Extracted SVG to separate component
 
 export default function UploadBtn({ navigation }) {
-  const { colors } = useTheme(); // Optional: for theme support
+  const { colors } = useTheme();
 
-  const handlePress = () => {
-    navigation.navigate('user-new-listing', { update: false });
+  const handlePress = (type) => {
+    navigation.navigate(type, { type, update: false });
   };
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity 
-        style={styles.button}
-        onPress={handlePress}
-        activeOpacity={0.8}
-      > 
-        <View style={styles.iconContainer}>
-          <UploadIcon />
-        </View>
-        <Text style={styles.text}>Click Here To Upload New Product Now</Text>
-      </TouchableOpacity>
+      {/* Product Upload Button */}
+      <UploadOption 
+        title="Upload Product"
+        description="List physical goods for sale"
+        icon={<UploadIcon />}
+        color="#FF4500"
+        onPress={() => handlePress('user-new-listing')}
+      />
+
+      {/* Accommodation Upload Button */}
+      <UploadOption 
+        title="Upload Accommodation"
+        description="Add lodging options"
+        icon={<UploadIcon />}
+        color="#00C853"
+        onPress={() => handlePress('user-new-lodge')}
+      />
+
+      {/* Service Upload Button */}
+      <UploadOption 
+        title="Upload Service"
+        description="Offer your professional services"
+        icon={<UploadIcon />}
+        color="#2962FF"
+        onPress={() => handlePress('service')}
+      />
     </View>
   );
 }
 
-// Extracted SVG component for better organization
+const UploadOption = ({ title, description, icon, color, onPress }) => (
+  <TouchableOpacity 
+    style={[styles.button, { backgroundColor: color }]}
+    onPress={onPress}
+    activeOpacity={0.7}
+  > 
+    <View style={styles.iconContainer}>
+      {icon}
+    </View>
+    <Text style={styles.title}>{title}</Text>
+    <Text style={styles.description}>{description}</Text>
+  </TouchableOpacity>
+);
+
+// Refined SVG Icon Component
 function UploadIcon() {
   return (
-    <Svg width={45} height={45} viewBox="0 0 1024 1024">
+    <Svg width={32} height={32} viewBox="0 0 24 24" fill="none">
       <Path
-        d="M220.5 245.4c-32.8 32.8-55.1 73.2-65.2 117.3h16.5c18.8-75.3 75.1-135.9 148-160.7v-16.9c-37.1 11.6-71 32-99.3 60.3z" 
-        fill="#fff" 
+        d="M12 15V3M12 3L8 7M12 3L16 7"
+        stroke="#fff"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
-      <Path 
-        d="M959.9 540.8c0 113.6-92.1 205.8-205.7 205.9H590.9v-44h163.3c43.2 0 83.8-16.9 114.3-47.4 30.6-30.6 47.4-71.2 47.4-114.5 0-43.2-16.8-83.9-47.4-114.4S797.2 379 754 379c-11.5 0-22.8 1.2-33.8 3.5-15 3.2-29.4 8.4-42.8 15.7-1-15.4-3.3-30.7-6.8-45.6v-0.1c-3.6-15.6-8.6-30.8-14.9-45.7-14.4-33.9-34.9-64.4-61.1-90.6-26.2-26.2-56.6-46.7-90.6-61.1-35.1-14.8-72.4-22.4-110.9-22.4s-75.8 7.5-110.9 22.4c-33.9 14.3-64.4 34.9-90.6 61.1-26.2 26.2-46.7 56.7-61.1 90.6-14.9 35.1-22.4 72.4-22.4 110.9s7.5 75.8 22.4 110.9c14.3 33.9 34.9 64.4 61.1 90.6 26.2 26.2 56.7 46.7 90.6 61.1 35.1 14.8 72.4 22.4 110.9 22.4h39.7v44h-41C210.7 746 64.1 599 64.1 417.7c0-181.7 147.3-329 329-329 154.6 0 284.3 106.6 319.5 250.3v0.1c13.4-2.7 27.2-4.2 41.4-4.2 113.7 0.1 205.9 92.2 205.9 205.9z" 
-        fill="#fff" 
-      />
-      <Path 
-        d="M692.9 636.1h-22.6L519.8 485.6v449.6h-16V485.8L353.4 636.1h-22.6l181-181z" 
-        fill="#fff" 
+      <Path
+        d="M8 13H4V21H20V13H16"
+        stroke="#fff"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </Svg>
   );
@@ -49,31 +80,42 @@ function UploadIcon() {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
+    padding: 20,
+    gap: 16,
   },
   button: {
-    height: 160,
-    borderRadius: 8,
-    borderWidth: 2,
-    borderColor: '#FF4500',
-    backgroundColor: '#FF4500',
+    height: 140,
+    borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 16,
+    padding: 24,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 5,
   },
   iconContainer: {
     marginBottom: 12,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  text: {
-    fontSize: 20,
-    fontWeight: '500',
+  title: {
+    fontSize: 18,
+    fontWeight: '600',
     color: '#fff',
     textAlign: 'center',
-    lineHeight: 28,
+    marginBottom: 4,
+  },
+  description: {
+    fontSize: 14,
+    fontWeight: '400',
+    color: 'rgba(255,255,255,0.9)',
+    textAlign: 'center',
+    lineHeight: 20,
   },
 });

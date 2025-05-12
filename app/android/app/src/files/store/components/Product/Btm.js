@@ -12,7 +12,7 @@ export default function Btm({ size, user_id }) {
     
     useEffect(() => {
         if (user_id) {
-            fetch(`http://192.168.209.146:9090/owner?user_id=${user_id}`, {
+            fetch(`http://192.168.75.146:9090/owner?user_id=${user_id}`, {
                 headers: {
                 "Content-Type": "Application/json" 
                 }
@@ -28,7 +28,7 @@ export default function Btm({ size, user_id }) {
                 console.log(err);
             });
 
-            fetch(`http://192.168.209.146:9090/reviews?user_id=${user_id}`, {
+            fetch(`http://192.168.75.146:9090/reviews?user_id=${user_id}`, {
                 headers: {
                 "Content-Type": "Application/json" 
                 }
@@ -43,7 +43,7 @@ export default function Btm({ size, user_id }) {
                 Alert.alert('Network error, please try again.');
                 console.log(err);
             });
-            fetch(`http://192.168.209.146:9090/details?user_id=${user_id}`, {
+            fetch(`http://192.168.75.146:9090/details?user_id=${user_id}`, {
                 headers: {
                 "Content-Type": "Application/json" 
                 }

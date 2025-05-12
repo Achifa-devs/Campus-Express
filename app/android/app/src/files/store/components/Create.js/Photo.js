@@ -15,7 +15,7 @@ import axios from 'axios';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-export default function Photo({ photos, updatePhotos, setUploading, updateThumbnail, productId }) {
+export default function Photo({ photos, updatePhotos, setUploading, updateThumbnail, productId, error }) {
   const [uploadProgress, setUploadProgress] = useState({});
   const [deletingIndex, setDeletingIndex] = useState(null);
   const screenWidth = Dimensions.get('window').width;
@@ -60,21 +60,22 @@ export default function Photo({ photos, updatePhotos, setUploading, updateThumbn
       formData.append('productId', productId);
       formData.append('isThumbnail', index === 0);
 
-      const response = await axios.post('http://192.168.209.146:9090/upload', formData, {
+      const response = await axios.post('http://192.168.75.146:9090/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         onUploadProgress: (progressEvent) => {
           const progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
           setUploadProgress(prev => ({ ...prev, [index]: progress }));
         },
       });
+      console.log('Updated photos:', response.data.success, response.data.data?.url, index);
 
-      if (response.data?.success && response.data?.url) {
+      if (response.data?.success && response.data.data?.url) {
         const newPhotos = [...photos];
-        newPhotos[index] = { uri: response.data.url, publicId: response.data.publicId };
+        newPhotos[index] = { uri: response.data.data?.url, publicId: response.data.data?.public_id };
         updatePhotos(newPhotos);
         
         if (index === 0) {
-          updateThumbnail(response.data.url);
+          updateThumbnail(response.data.data?.url, response.data.data?.public_id);
         }
       }
     } catch (error) {
@@ -90,10 +91,11 @@ export default function Photo({ photos, updatePhotos, setUploading, updateThumbn
     try {
       setDeletingIndex(index);
       const photoToDelete = photos[index];
+      console.error('Upload failed:', photoToDelete, index);
       
       if (photoToDelete?.publicId) {
-        await axios.delete('http://192.168.209.146:9090/delete', {
-          data: { publicId: photoToDelete.publicId }
+        await axios.post('http://192.168.75.146:9090/delete', {
+          publicId: photoToDelete.publicId 
         });
       }
 
@@ -133,9 +135,12 @@ export default function Photo({ photos, updatePhotos, setUploading, updateThumbn
         <Text style={styles.headerText}>
           Photos ({photos.filter(Boolean).length}/{maxPhotos})
         </Text>
-        <Text style={styles.subHeaderText}>
-          First photo will be used as thumbnail
-        </Text>
+        <Text style={styles.hintText}>
+            First photo will be used as thumbnail
+          </Text>
+        {error && (
+          <Text style={styles.errorText}>{error}</Text>
+        )}
       </View>
 
       <ScrollView
@@ -199,6 +204,8 @@ export default function Photo({ photos, updatePhotos, setUploading, updateThumbn
           </View>
         ))}
       </ScrollView>
+
+      
     </View>
   );
 }
@@ -208,13 +215,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 16,
     height: 240,
-    marginBottom: 8,
+    marginBottom: 0,
     borderRadius: 0,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
+  },
+  errorText: {
+    color: '#ff3333',
+    fontSize: 13,
+    marginTop: 4,
   },
   header: {
     marginBottom: 12,

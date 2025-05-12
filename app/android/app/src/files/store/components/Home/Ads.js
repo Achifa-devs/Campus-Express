@@ -11,7 +11,10 @@ const navItems = [
   { name: 'bed-outline', activeName: 'bed', label: 'Lodges', route: 'user-lodge' },
   { name: 'construct-outline', activeName: 'construct', label: 'Services', route: 'user-service' },
   { name: 'newspaper-outline', activeName: 'newspaper', label: 'News', route: 'user-news' },
+  
 ];
+
+
 
 const NavigationTabs = React.memo(() => {
   const navigation = useNavigation();

@@ -1,610 +1,428 @@
 import { useEffect, useRef, useState } from "react";
-import menuSvg from '../../../assets/menu-alt-01-svgrepo-com.svg'
-
-import dArrowSvg from '../../../assets/down-arrow-backup-2-svgrepo-com.svg'
-import filterSvg from '../../../assets/filter-edit-svgrepo-com.svg'
-import '../../../styles/Buyer/overlays.css'
-import '../../../styles/filter.css'
-import '../../../styles/search.css'
-import img from '../../../assets/logo.png'
 import { useDispatch, useSelector } from "react-redux";
+import { usePathname } from "next/navigation";
+import Image from "next/image";
+import {
+  FiMenu,
+  FiChevronDown,
+  FiFilter,
+  FiHelpCircle,
+  FiUser,
+  FiLogIn,
+  FiShoppingCart,
+  FiMessageSquare,
+  FiLogOut
+} from "react-icons/fi";
+import {
+  FiBookmark,
+  FiHardDrive,
+  FiShoppingBag,
+  FiSmile,
+  FiSmartphone,
+  FiTablet,
+  FiMonitor,
+  FiHeadphones,
+  FiCpu,
+  FiGitlab,
+  FiTruck,
+  FiHome,
+  FiLayers,
+  FiMicrowave,
+  FiCoffee
+} from 'react-icons/fi';
+import { FaStoreAlt, FaPaw, FaUtensils } from 'react-icons/fa';
+import { IoIosArrowDown } from "react-icons/io";
+
 import SearchResult from "./SearchResult";
 import Aside from "./Aside";
-import login from '../../../assets/login.svg'
-
 import SearchBar from "./SearchBar";
 import { setSearchListTo } from "@/redux/buyer_store/SearchList";
-import { usePathname } from "next/navigation";
 import FloatingMenu from "./FloatingMenu";
-
-import foodSvg from '../../../assets/food-market-purchasing-svgrepo-com.svg'
-import electronicsSvg from '../../../assets/broadcast-device-electronics-svgrepo-com.svg'
-import vehicleSvg from '../../../assets/car-hand-drawn-outlined-vehicle-svgrepo-com.svg'
-import phoneSvg from '../../../assets/phone-rounded-svgrepo-com (1).svg'
-import laptopSvg from '../../../assets/laptop-svgrepo-com.svg'
-import lodgeSvg from '../../../assets/apartment-left-svgrepo-com.svg'
-import appliancesSvg from '../../../assets/appliances-svgrepo-com.svg'
-import furnitureSvg from '../../../assets/furniture-svgrepo-com.svg'
-import fashionSvg from '../../../assets/casual-clothing-fashion-svgrepo-com.svg'
-import utensilSvg from '../../../assets/utensils-svgrepo-com.svg'
-import petSvg from '../../../assets/pets-svgrepo-com.svg'
-import termsSvg from '../../../assets/condition-point-svgrepo-com.svg'
-import phoneassSvg from '../../../assets/phone-repair-symbol-svgrepo-com.svg'
-import laptopassSvg from '../../../assets/laptop-fix-svgrepo-com.svg'
-import cosmeticsSvg from '../../../assets/medical-medicine-health-23-svgrepo-com.svg'
-import tabletsSvg from '../../../assets/tablet-svgrepo-com.svg'
-
-import orderSvg from '../../../assets/order-completed-svgrepo-com.svg'
-import cartSvg from '../../../assets/cart-shopping-fast-svgrepo-com.svg'
-import acctSvg from '../../../assets/user-svgrepo-com (2).svg'
-import inboxSvg from '../../../assets/inbox-alt-svgrepo-com (1).svg'
-import savedSvg from '../../../assets/bookmark-outlined-saved-svgrepo-com.svg'
-import helpSvg from '../../../assets/help-svgrepo-com.svg'
-import refundSvg from '../../../assets/return-svgrepo-com.svg'
-import cancelSvg from '../../../assets/cancel-delivery-svgrepo-com.svg'
-import paySvg from '../../../assets/money-total-line-svgrepo-com.svg'
-import contactvg from '../../../assets/costumer-support-call-svgrepo-com.svg'
-import chatSvg from '../../../assets/messages-1-svgrepo-com (1).svg'
-import sellSvg from '../../../assets/sell-svgrepo-com (1).svg'
-import logoutSvg from '../../../assets/logout-2-svgrepo-com.svg'
 import Filter from "./Filter";
-import bookSvg from '../../../assets/book-svgrepo-com.svg'
 
 const Header = () => {
+  const { storedCategory } = useSelector(s => s.storedCategory);
+  const { buyer_info } = useSelector(s => s.buyer_info);
+  const { Cart } = useSelector(s => s.Cart);
+  const dispatch = useDispatch();
+  const pathname = usePathname();
 
-  
-  let {
-      storedCategory
-  } = useSelector(s => s.storedCategory);
-
-  let {buyer_info} = useSelector(s => s.buyer_info)
-  let {Cart} = useSelector(s => s.Cart)
-  let dispatch = useDispatch()
-  let pathname = usePathname()
-
-
-  let [cartList,setCartList] = useState(0)
-  let [searchChar, setSearchChar] = useState('')
-  let [screenWidth, setScreenWidth] = useState(0)
-  let [searchRes, setSearchRes] = useState([])
-
-  let [getSelectedOption, setgetSelectedOption]  =useState('')
-  let [list, setList] = useState([])
-  let [right, setright] = useState(0)
-  let [top, settop] = useState(0)
-  
-  let [searchResultElem, setSearchResultElem] = useState(
+  const [cartList, setCartList] = useState(0);
+  const [searchChar, setSearchChar] = useState('');
+  const [screenWidth, setScreenWidth] = useState(0);
+  const [searchRes, setSearchRes] = useState([]);
+  const [getSelectedOption, setgetSelectedOption] = useState('');
+  const [list, setList] = useState([]);
+  const [right, setright] = useState(0);
+  const [top, settop] = useState(0);
+  const [searchResultElem, setSearchResultElem] = useState(
     <SearchResult list={[searchRes]} />
-  )
-  let [visible, setvisible] = useState('none')
-  let [task, settask] = useState('none')
+  );
+  const [visible, setvisible] = useState('none');
+  const [task, settask] = useState('none');
+  const [width, setWidth] = useState(0);
+
+  // Refs
+  const categoryRef = useRef('');
+  const subCategoryRef = useRef('');
+  const conditionRef = useRef('');
+  const stateRef = useRef('');
+  const campusRef = useRef('');
+  const priceRef = useRef([]);
+
+  // Responsive width
   useEffect(() => {
-    let width = window.innerWidth;
-    setScreenWidth(width)
-  }, [])
-
-  // useEffect(() => {
-  //   setCartList([...Cart].length)
-  //   console.log([...Cart]) 
-  // }, [Cart])
-
-  let [width, setWidth] = useState(0)
-
-  
-  
-  useEffect(() => {
-    if(pathname.split('/').splice(-1)[0] === 'product'){
-      setWidth('100%')
-    }else{
-        setWidth(`calc(100% - 350px)`)
-    }
-  }, [pathname])
- 
-
-  function openAside() {
-    document.querySelector('.aside-overlay').setAttribute('id', 'aside-overlay')
-  }
-
-  
-  function openProfileAside() {
-    document.querySelector('.profile-aside-overlay').setAttribute('id', 'profile-aside-overlay')
-  }
-
-  function openFilter() {
-    document.querySelector('.filter-overlay').setAttribute('id', 'filter-overlay')
-  }
-
-  function openSearchResult(e) {
-   
-
-    let position = e.target.getBoundingClientRect();
-    let top = position.top
-    let left = position.left
-    document.querySelector('.buyer-search-overlay').setAttribute('id', 'buyer-search-overlay')
-
-    let searchWidth = document.querySelector('.search-cnt')?.getBoundingClientRect().width
-    setSearchResultElem(<SearchResult  searchLeft={left} searchTop={top} searchWidth={searchWidth}  />)
-  }
+    const handleResize = () => setScreenWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    handleResize();
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
-    async function getData() {
-      if(searchChar !== '' && searchChar !== ' '){ 
-        try {
+    setWidth(pathname.split('/').splice(-1)[0] === 'product' ? '100%' : `calc(100% - 350px)`);
+  }, [pathname]);
 
-          fetch(`/api/store/search?word=${searchChar}`, {
-            headers: {
-              'Gender': window.localStorage.getItem('cs-gender') 
-            }
-          })
-          .then(async(res) => {
-            let response = await res.json();
-              console.log(response)
-            if (response.bool) {
-              dispatch(setSearchListTo(response.data))
-            }else{
-              // buyer_overlay_setup(false, '')
-            }
-          })
-          .catch(err =>{
-            console.log(err)
-            // buyer_overlay_setup(false, '')
-          });
-        } catch (error) {
-          console.log(error)
+  // Helper functions
+  const openAside = () => document.querySelector('.aside-overlay').setAttribute('id', 'aside-overlay');
+  const openProfileAside = () => document.querySelector('.profile-aside-overlay').setAttribute('id', 'profile-aside-overlay');
+  const openFilter = () => document.querySelector('.filter-overlay').setAttribute('id', 'filter-overlay');
+  const closeFilter = () => document.querySelector('.filter-overlay').removeAttribute('id');
+  const handleCancelOrder = () => document.querySelector('.cancel-order-overlay').setAttribute('id', 'cancel-order-overlay');
+
+  const openSearchResult = (e) => {
+    const position = e.target.getBoundingClientRect();
+    const searchWidth = document.querySelector('.search-cnt')?.getBoundingClientRect().width;
+    setSearchResultElem(<SearchResult searchLeft={position.left} searchTop={position.top} searchWidth={searchWidth} />);
+    document.querySelector('.buyer-search-overlay').setAttribute('id', 'buyer-search-overlay');
+  };
+
+  // Search functionality
+  useEffect(() => {
+    if (searchChar.trim() !== '') {
+      fetch(`/api/store/search?word=${searchChar}`, {
+        headers: {
+          'Gender': window.localStorage.getItem('cs-gender') 
         }
-   
-          
-   
-      }
+      })
+      .then(async(res) => {
+        const response = await res.json();
+        if (response.bool) {
+          dispatch(setSearchListTo(response.data));
+        }
+      })
+      .catch(console.error);
     }
-    getData()
-  }, [searchChar])
+  }, [searchChar, dispatch]);
 
-  function handleCancelOrder() {
-    let overlay = document.querySelector('.cancel-order-overlay')
-    overlay.setAttribute('id', 'cancel-order-overlay');
-  }
-  function closeFilter() {
-          document.querySelector('.filter-overlay').removeAttribute('id')
-      }
-  function openFloatingMenu(e,task) {
-    settask(task)
-
-    if(task === 'help'){
-      if(visible === 'none')
-      {
-        let list = [
-          { txt: 'Contact Us', svg: contactvg, uri: 'contact-us' },
-        
-          // {txt:'Help Center', svg: helpSvg, uri: 'help-center'},
-          {txt:'Refund & Return', svg: refundSvg, uri: 'refund'},
-          {txt:'Manage Orders', svg: cancelSvg, uri: 'orders'},
-          // {txt:'Payment Option', svg: paySvg, uri: 'payments'},
-          { txt: 'Terms Of Use', svg: termsSvg, uri: 'terms-of-use' },
-          
-          // {txt:'Live Chat', svg: chatSvg, uri: 'live-chat'}
-        ]
-        setList(list)
-        setvisible('flex')
-        let rect = e.target.getBoundingClientRect();
-        let t = rect.top;
-
-        let r = rect.right;
-        setright(r)
-        settop(t)
-
-        setTimeout(() => {
-          setvisible('none')
-        }, 8000);
-      }
-      else{
-        setvisible('none')
-
-      }
-
-
-
-    } else if (task === 'categories') { 
-      let categories = [
-        {txt: "Books", svg: bookSvg, uri: ''},
-        {txt: "Food", svg: foodSvg, uri: ''},
-        {txt: "Electronics", svg: electronicsSvg, uri: ''},
-        {txt: "Fashion", svg: fashionSvg, uri: ''},
-        {txt: "Health & Beauty", svg: cosmeticsSvg, uri: ''},
-        {txt: "Mobile Phones", svg: phoneSvg, uri: ''},
-        {txt: "Tablets", svg: tabletsSvg, uri: ''},
-        {txt: "Laptops & Desktops", svg: laptopSvg, uri: ''},
-        {txt: "Laptops & Desktops Accessories", svg: laptopassSvg, uri: ''},
-        {txt: "Phone & Tablet Accessories", svg: phoneassSvg, uri: ''},
-        {txt: "Pets", svg: petSvg, uri: ''},
-        {txt: "Vehicle", svg: vehicleSvg, uri: ''},
-        {txt: "Lodge & Apartments", svg: lodgeSvg, uri: ''},
-        {txt: "Furnitures", svg: furnitureSvg, uri: ''},
-        {txt: "Appliances", svg: appliancesSvg, uri: ''},
-        { txt: "Utensils", svg: utensilSvg, uri: '' }
-      ]
-
-      if(visible === 'none')
-      {
-        setList(categories)
-        setvisible('flex')
-        let rect = e.target.getBoundingClientRect();
-        let t = rect.top;
-
-        let r = rect.right;
-        setgetSelectedOption('categories')
-        setright(r)
-        settop(t)
-
-        setTimeout(() => {
-          setvisible('none')
-        }, 8000);
-      }
-      else{
-        setvisible('none')
-
-      }
-    } else{
-      if(visible === 'none')
-      {
-        let list = [
-          {txt:'My Account', svg: acctSvg, uri: 'account-managements'},
-          {txt:'Orders', svg: orderSvg, uri: 'orders'},
-          {txt:'Inbox', svg: inboxSvg, uri: 'inbox'},
-          {txt:'Favourite', svg: savedSvg, uri: 'favourites'},
-          // {txt:'Voucher', svg: '', uri: ''},
-          {txt: 'Logout', svg: logoutSvg, uri: 'logout'}
-        ]
-        setList(list)
-        setvisible('flex')
-        let rect = e.target.getBoundingClientRect();
-        let t = rect.top;
-
-        let r = rect.right;
-        setright(r)
-        settop(t)
-
-
-        setTimeout(() => {
-          setvisible('none')
-        }, 8000);
-
-      }else{
-        setvisible('none')
-
-      }
-
-
-
-    }
+  // Floating menu handlers
+  const openFloatingMenu = (e, task) => {
+    settask(task);
     
-  }
+    const menuItems = {
+      help: [
+        { txt: 'Contact Us', icon: <FiMessageSquare />, uri: 'contact-us' },
+        { txt: 'Refund & Return', icon: <FiHelpCircle />, uri: 'refund' },
+        { txt: 'Manage Orders', icon: <FiShoppingCart />, uri: 'orders' },
+        { txt: 'Terms Of Use', icon: <FiBookmark />, uri: 'terms-of-use' },
+      ],
+      categories: [
+        { txt: "Books", icon: <FiBookmark />, uri: '' },
+        { txt: "Food", icon: <FaStoreAlt />, uri: '' },
+        { txt: "Electronics", icon: <FiHardDrive />, uri: '' },
+        { txt: "Fashion", icon: <FiShoppingBag />, uri: '' },
+        { txt: "Health & Beauty", icon: <FiSmile />, uri: '' },
+        { txt: "Mobile Phones", icon: <FiSmartphone />, uri: '' },
+        { txt: "Tablets", icon: <FiTablet />, uri: '' },
+        { txt: "Laptops & Desktops", icon: <FiMonitor />, uri: '' },
+        { txt: "Laptops & Desktops Accessories", icon: <FiHeadphones />, uri: '' },
+        { txt: "Phone & Tablet Accessories", icon: <FiCpu />, uri: '' },
+        { txt: "Pets", icon: <FaPaw />, uri: '' },
+        { txt: "Vehicle", icon: <FiTruck />, uri: '' },
+        { txt: "Lodge & Apartments", icon: <FiHome />, uri: '' },
+        { txt: "Furnitures", icon: <FiLayers />, uri: '' },  
+        { txt: "Appliances", icon: <FiCoffee />, uri: '' },
+        { txt: "Utensils", icon: <FaUtensils />, uri: '' },
+        { txt: "Books", icon: <FiBookmark />, uri: '' },
+        { txt: "Food", icon: <FaStoreAlt />, uri: '' }
+        // Add other categories...
+      ],
+      user: [
+        { txt: 'My Account', icon: <FiUser />, uri: 'account-managements' },
+        { txt: 'Orders', icon: <FiShoppingCart />, uri: 'orders' },
+        { txt: 'Favourite', icon: <FiBookmark />, uri: 'favourites' },
+        { txt: 'Logout', icon: <FiLogOut />, uri: 'logout' }
+      ]
+    };
 
+    if (visible === 'none') {
+      setList(menuItems[task]);
+      setvisible('flex');
+      const rect = e.target.getBoundingClientRect();
+      setright(rect.right);
+      settop(rect.top);
+      setgetSelectedOption(task === 'categories' ? 'categories' : '');
 
-   let categoryRef = useRef('')
-    let subCategoryRef = useRef('')
-    let conditionRef = useRef('')
-    let stateRef = useRef('')
-    let campusRef = useRef('')
-    let priceRef = useRef([])
-
-    async function applyFilter(category_checked, price_checked, condition_checked, location_checked) {
-      let overlay = document.querySelector('.overlay');
-      overlay.setAttribute('id', 'overlay');
-
-      try {
-        let response = await Filter_Cards(
-          !category_checked ? '' : categoryRef.current,
-          !category_checked ? '' : subCategoryRef.current,
-          !condition_checked ? '' : conditionRef.current,
-          !price_checked ? '' : priceRef.current,
-          !location_checked ? '' : stateRef.current,
-          !location_checked ? '' : campusRef.current
-        )
-        .then((result) => {
-          setCards(
-            result?.map((item, index) => 
-              <Card index={index} key={index} item={item} />
-            )
-          )
-          document.querySelector('.filter-overlay').removeAttribute('id')
-          overlay.removeAttribute('id');
-        })
-        .catch((err )=> console.log(err))            
-      } catch (error) {
-        console.log(error)
-          overlay.removeAttribute('id');
-
-      }
+      setTimeout(() => setvisible('none'), 8000);
+    } else {
+      setvisible('none');
     }
+  };
 
+  // Filter handlers
+  const applyFilter = async (category_checked, price_checked, condition_checked, location_checked) => {
+    const overlay = document.querySelector('.overlay');
+    overlay.setAttribute('id', 'overlay');
 
-    function ChangeCategory(data) {
-      categoryRef.current = data;
-      dispatch(setCategoryTo(data))
-
-        // setcategory(data)
-        // navigate(`/?category=${data.toLowerCase()}`)
+    try {
+      // Implement your filter logic here
+      document.querySelector('.filter-overlay').removeAttribute('id');
+      overlay.removeAttribute('id');
+    } catch (error) {
+      console.error(error);
+      overlay.removeAttribute('id');
     }
+  };
 
-    function ChangeSubCategory(data) {
-        subCategoryRef.current = data
-    }
-
-    function ChangeCondition(data) {
-        conditionRef.current = data
-    }
-
-    function ChangeState(data) {
-        stateRef.current = data
-        // setstate(data)
-    }
-
-    function ChangeCampus(data) {
-        campusRef.current = data
-        // alert(data)
-    } 
-
-    function ChangePrice(data) {
-        priceRef.current = data
-    }
-
-   
-
-  return ( 
+  return (
     <>
-     
-      {
-        <Aside />
-      }
+      <Aside />
+      {searchResultElem}
+      <FloatingMenu list={list} right={right} top={top} visible={visible} getSelectedOption={getSelectedOption} />
 
-        {
-          searchResultElem
-        }
-
-        {
-          <FloatingMenu list={list}right={right}top={top}visible={visible} getSelectedOption={getSelectedOption} />
-        }
-
-        <div className="filter-overlay" onClick={e=>e.target === e.currentTarget ? closeFilter():''}>
-          <Filter 
-            applyFilter ={applyFilter}
-            ChangeCampus ={ChangeCampus}
-            ChangeCondition ={ChangeCondition}
-            ChangePrice ={ChangePrice}
-            ChangeCategory ={ChangeCategory}
-            ChangeState ={ChangeState}
-            ChangeSubCategory ={ChangeSubCategory}
-            category ={storedCategory}  
-          />
-        </div>
-      <div className="buyer-header shadow-sm"  style={{position: 'sticky', top: '0', zIndex: '10000', background: '#fff'}}>
-
-
-        <img onClick={e => window.location.href = '/store'} src={'https://res.cloudinary.com/daqbhghwq/image/upload/f_jpg/2024-06-27_dqlq3a.jpg'} style={{ height: screenWidth > 760 ? '50px' : '50px', width: screenWidth > 760 ? '50px' : '50px', borderRadius: '5px' }} alt="" />
-        
-
-        {
-
-          screenWidth > 760
-          ?
-          <>
-            &nbsp;
-            &nbsp;
-            &nbsp;
-              <ul style={{
-                width: 'fit-content'
-              }}>
-                <li style={{background: '#FF4500'}} onClick={e => openFloatingMenu(e,'categories')}>
-                <span style={{color: '#fff'}}><b>Categories</b></span>
-                
-              </li>
-            </ul>
-          </>
-          :
-          <>
-            
-          </>
-        }
-        {
-          screenWidth > 760
-          ?
-          
-          <div className="input-cnt search-cnt">
-            <input onFocus={e => openSearchResult(e)} onInput={e => {
-              if(e.target.value !== '' && e.target.value !== ' '){ 
-                try {
-                  fetch(`/api/store/search?word=${e.target.value}`, {
-                    headers: {
-                      'Gender': window.localStorage.getItem('cs-gender') 
-                    }
-                  })
-                  .then(async(res) => {
-                    let response = await res.json();
-                    console.log(response.data)
-        
-                    if (response.bool) {
-                      dispatch(setSearchListTo(response.data))
-
-                    }else{
-                    }
-                  })
-                  .catch(err =>{
-                    console.log(err)
-                  });
-                } catch (error) {
-                  console.log(error)
-                }
-          
-              }
-            }} type="search" name="" placeholder="What Are You Looking For..." id="" />
-            <button style={{borderRadius: '5px'}}>Search</button>
-          </div> 
-          :
-          ''
-          
-        }
-
-        {
-          
-          <ul style={{
-            width: 'fit-content',
-          }}>
-            {/* <li onClick={e => navigate('/buyer.message')}>  
-              <img src={cartSvg.src} style={{height: '25px', width: '25px'}} alt="" />
-              
-              <span style={{height: 'fit-content', marginTop: '-19px', borderRadius: '50%', width: '20px', fontSize: 'small', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'orangered', color: '#fff'}}>
-                { 
-                  cartList
-                }
-              </span>
-            </li>  */}
-
-              {
-                screenWidth < 480
-                ?
-
-                ''
-                :
-                screenWidth > 760
-                ?
-                <>
-
-                  <li style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}} onClick={e => buyer_info?.fname? openFloatingMenu(e,'user') : navigate('/login')}>
-                      <span style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '100%'}}>
-                      
-                        {
-                          buyer_info?.fname
-                          ?
-                          <h6>
-                          Hi {buyer_info?.fname}
-                          </h6>
-                          :
-                          <h6 onClick={e=>window.location.href='/store/login'}>
-                          Login
-                          </h6>
-                        }
-                      </span>
-
-                      <span style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '100%'}}>
-                        <img src={buyer_info?.fname ? dArrowSvg.src : login.src} style={{height: buyer_info?.fname ? '22px' : '16px', width: buyer_info?.fname ? '12px' : '30px', marginTop: buyer_info?.fname ? '5px' : '0px', marginLeft: buyer_info?.fname ? '5px' : '-3px', rotate: visible === 'flex' && task === 'user' ? '0deg' : '180deg'}} alt="" />
-                      </span>
-                    </li>
-                    
-                    
-
-                  <li onClick={e => openFloatingMenu(e,'help')}> 
-                    <span><h6>Help</h6></span>
-                    <span>
-                      <img src={dArrowSvg.src} style={{height: '22px', width: '12px', marginTop: '5px', marginLeft: '5px', rotate: visible === 'flex' && task === 'help' ? '0deg' : '180deg'}} alt="" />
-                    </span>
-                  </li>
-
-                </>
-                :
-
-                ''
-
-              }
-
-              <>
-              
-                
-                &nbsp;
-                {
-                  screenWidth > 760
-                  ? 
-                  ''
-                  :
-                  pathname.split('/').length > 2
-                  ?
-                  <li style={{padding: '5px'}} onClick={e => openFilter(e)}>
-                    <span>
-                      <img src={filterSvg.src} style={{height: '20px', width: '20px', rotate: visible === 'flex' && task === 'help' ? '0deg' : '180deg'}} alt="" />
-                    </span>
-                    </li>
-                  :
-                  ''
-                }
-
-                   
-                &nbsp;
-              &nbsp;
-            
-                {
-                  screenWidth > 760
-                  ? 
-                  ''
-                  :
-                  pathname.split('/')[1] === 'account-managements'
-                  ?
-                  <li style={{padding: '5px'}} onClick={e => openProfileAside(e)}>
-                    <span>
-                      <img src={menuSvg.src} style={{height: '20px', width: '20px', rotate: visible === 'flex' && task === 'help' ? '0deg' : '180deg'}} alt="" />
-                    </span>
-                  </li>
-                  :
-                  <li style={{padding: '5px'}} onClick={e => openAside(e)}>
-                    <span>
-                      <img src={menuSvg.src} style={{height: '20px', width: '20px', rotate: visible === 'flex' && task === 'help' ? '0deg' : '180deg'}} alt="" />
-                    </span>
-                  </li>
-              }
-              
-                
-                {/* <li style={{padding: '5px 10px 5px 10px', background: '#FF4500', color: '#fff', fontSize: 'medium'}} onClick={e => window.href = (`/seller`) }>
-                  <span>
-                    <img src={sellSvg} style={{height: '25px', width: '25px'}} alt="" />
-                  </span>
-                  &nbsp;
-
-                  <span>Sell</span>
-
-                </li> */}
-              </>
-            {/* } */}
-          </ul>
-          
-        }
-        {
-          screenWidth < 760 && pathname.split('/').splice(-1)[0]==='order-tracking'
-          ? 
-          <div style={{height: "100%", padding: '5px', width: '30%'}}>
-            <button className="shadow-sm" style={{padding: '0 8px 0 8px'}} onClick={handleCancelOrder}>
-                <small>Cancel Order&nbsp; </small>
-                {/* <span><small>(₦</small>{Total})</span> */}
-            </button>
-          </div>
-          :
-          ''
-        }
-        
-        
-
+      <div className="filter-overlay" onClick={e => e.target === e.currentTarget && closeFilter()}>
+        {/* <Filter 
+          applyFilter={applyFilter}
+          ChangeCampus={ChangeCampus}
+          ChangeCondition={ChangeCondition}
+          ChangePrice={ChangePrice}
+          ChangeCategory={ChangeCategory}
+          ChangeState={ChangeState}
+          ChangeSubCategory={ChangeSubCategory}
+          category={storedCategory}  
+        /> */}
       </div>
 
-      
+      <header className="buyer-header">
+        {/* Logo */}
+        <div className="logo-container" style={{marginLeft: '-15px'}} onClick={() => window.location.href = '/store'}>
+          <Image 
+            src="https://res.cloudinary.com/daqbhghwq/image/upload/v1746402998/Untitled_design-removebg-preview_peqlme.png" 
+            alt="Campus Store Logo"
+            width={65}
+            height={65}
+            className="logo"
+          />
+        </div>
 
-      {
-        screenWidth < 479 && pathname.split('/')[1]==='search'
-        ? 
-        <SearchBar />
-        :
-        screenWidth < 479 && pathname.split('/')[1]===''
-        ?
-        <SearchBar />
-        :
-        ''
-        
-      }
+        {/* Desktop Navigation */}
+        {screenWidth > 760 && (
+          <>
+            {
+              pathname.split('/')[1] === 'store'
+              ?
+              <ul className="nav-links">
+                <li className="categories-btn" onClick={e => openFloatingMenu(e, 'categories')}>
+                  <span>Categories</span>
+                  <IoIosArrowDown className={`arrow ${visible === 'flex' && task === 'categories' ? 'up' : ''}`} />
+                </li>
+              </ul>
+            :
+            ''
+            }
 
-      
-      {/* <Filter /> */}
+            <div className="search-container">
+              <input 
+                type="search" 
+                placeholder="What Are You Looking For..." 
+                onFocus={openSearchResult}
+                onChange={e => setSearchChar(e.target.value)}
+              />
+              <button className="search-btn">Search</button>
+            </div>
+          </>
+        )}
 
+        {/* User Actions */}
+        <ul className="user-actions">
+          {screenWidth > 480 && (
+            <>
+              <li className="user-menu" onClick={e => buyer_info?.fname ? openFloatingMenu(e, 'user') : window.location.href='/store/login'}>
+                {buyer_info?.fname ? (
+                  <>
+                    <span>Hi {buyer_info.fname}</span>
+                    <IoIosArrowDown className={`arrow ${visible === 'flex' && task === 'user' ? 'up' : ''}`} />
+                  </>
+                ) : (
+                  <>
+                    <FiLogIn className="login-icon" />
+                    <span>Login</span>
+                  </>
+                )}
+              </li>
 
-    
+              <li className="help-menu" onClick={e => openFloatingMenu(e, 'help')}>
+                <span>Help</span>
+                <IoIosArrowDown className={`arrow ${visible === 'flex' && task === 'help' ? 'up' : ''}`} />
+              </li>
+            </>
+          )}
+
+          {/* Mobile Menu */}
+          {screenWidth <= 760 && (
+            <li className="mobile-menu-btn" onClick={pathname.split('/')[1] === 'account-managements' ? openProfileAside : openAside}>
+              <FiMenu className="menu-icon" />
+            </li>
+          )}
+        </ul>
+
+        {/* Mobile Search */}
+        {screenWidth < 480 && (pathname.split('/')[1] === 'search' || pathname === '/') && (
+          <SearchBar />
+        )}
+      </header>
+
+      <style jsx>{`
+        .buyer-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 5%;
+          height: 70px;
+          background: #fff;
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+          position: sticky;
+          top: 0;
+          z-index: 1000;
+        }
+
+        .logo-container {
+          cursor: pointer;
+          flex-shrink: 0;
+        }
+
+        .logo {
+          border-radius: 5px;
+          object-fit: contain;
+        }
+
+        .nav-links {
+          display: flex;
+          list-style: none;
+          margin: 0;
+          padding: 0;
+        }
+
+        .categories-btn {
+          display: flex;
+          align-items: center;
+          padding: 8px 16px;
+          background: #FF4500;
+          color: white;
+          border-radius: 5px;
+          cursor: pointer;
+          font-weight: 500;
+          gap: 8px;
+        }
+
+        .search-container {
+          display: flex;
+          width: 50%;
+          max-width: 600px;
+          margin: 0 auto;
+        }
+
+        .search-container input {
+          flex: 1;
+          height: 40px;
+          padding: 0 15px;
+          border: 1px solid #e2e8f0;
+          border-right: none;
+          border-radius: 5px 0 0 5px;
+          font-size: 14px;
+          outline: none;
+          transition: all 0.3s ease;
+        }
+
+        .search-container input:focus {
+          border-color: #FF4500;
+          box-shadow: 0 0 0 3px rgba(255, 69, 0, 0.1);
+        }
+
+        .search-btn {
+          height: 40px;
+          padding: 0 20px;
+          background: #FF4500;
+          color: white;
+          border: none;
+          border-radius: 0 5px 5px 0;
+          font-weight: 500;
+          cursor: pointer;
+          transition: background 0.3s ease;
+        }
+
+        .search-btn:hover {
+          background: #e03d00;
+        }
+
+        .user-actions {
+          display: flex;
+          list-style: none;
+          margin: 0;
+          padding: 0;
+          gap: 15px;
+        }
+
+        .user-menu, .help-menu {
+          display: flex;
+          align-items: center;
+          padding: 8px 12px;
+          color: #FF4500;
+          font-weight: 500;
+          cursor: pointer;
+          gap: 5px;
+        }
+
+        .arrow {
+          transition: transform 0.3s ease;
+        }
+
+        .arrow.up {
+          transform: rotate(180deg);
+        }
+
+        .mobile-menu-btn {
+          padding: 8px;
+          cursor: pointer;
+        }
+
+        .menu-icon {
+          font-size: 20px;
+          color: #4B5563;
+        }
+
+        .login-icon {
+          font-size: 18px;
+          margin-right: 5px;
+        }
+
+        @media (max-width: 768px) {
+          .buyer-header {
+            padding: 0 3%;
+          }
+          
+          .search-container {
+            width: 70%;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .buyer-header {
+            padding: 0 15px;
+          }
+        }
+      `}</style>
     </>
   );
-}
-  
-export default Header; 
+};
+
+export default Header;

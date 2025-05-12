@@ -8,7 +8,6 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   TextInput,
@@ -209,7 +208,7 @@ const Signup = ({updateActiveJsx}) => {
       
       // Replace with actual API call
       
-      const response = await fetch('http://192.168.209.146:9090/vendor/registration', {
+      const response = await fetch('http://192.168.75.146:9090/vendor/registration', {
         method: 'POST',
         headers: { "Content-Type": "Application/json" },
         body: JSON.stringify(formData)
@@ -321,7 +320,6 @@ const Signup = ({updateActiveJsx}) => {
 
     return (
         <>
-            <StatusBar backgroundColor="#FFF" barStyle="dark-content" />
           
             {serverLoading && (
                 <View style={styles.loadingOverlay}>

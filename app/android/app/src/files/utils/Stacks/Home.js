@@ -67,6 +67,7 @@ export function HomeStackScreen() {
                         <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', alignItems: 'center', padding: 7}}>
                             
                             <Image height={60} width={60} source={{ uri: 'https://res.cloudinary.com/daqbhghwq/image/upload/v1746402998/Untitled_design-removebg-preview_peqlme.png' }} />
+                           
 
                             <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 0, alignItems: 'flex-end'}}>
                                

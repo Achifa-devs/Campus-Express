@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Dimensions, StyleSheet, Text, TextInput, View } from 'react-native';
 
-export default function Stock({ updateStock }) {
+export default function Stock({ updateStock, error }) {
   const [stock, setStock] = useState('');
-  const [error, setError] = useState('');
+  // const [error, setError] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const screenWidth = Dimensions.get('window').width;
   const maxStock = 9999; // Maximum allowed stock quantity

@@ -16,6 +16,7 @@ export default function Dashboard() {
   useEffect(() => {
       setScreenWidth(window.innerWidth)
   }, [])
+  
   return (
     <>
       <div className="buyer-dashboard-cnt" style={{background: screenWidth > 760 ? '#f9f9f9' : '#fff'}}>
@@ -34,3 +35,5 @@ export default function Dashboard() {
     </>
   )
 }
+
+

@@ -8,8 +8,8 @@ export default function Size({ updateSize, size_list, error, onFocus }) {
   const [value, setValue] = useState(null);
 
   const handleChange = (item) => {
-    setValue(item.value);
-    updateSize(item.value);
+    setValue(item.title);
+    updateSize(item.title);
   };
 
   return (

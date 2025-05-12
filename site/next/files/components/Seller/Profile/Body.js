@@ -269,7 +269,7 @@ function Coin({user}) {
       phone_number: JSON.stringify(user)
     },
     customizations: {
-    title: 'Campus Express',
+    title: 'Campus Sphere',
     description: 'Campus Coin Purchase',
     logo: 'https://st2.depositphotos.com/4403291/7418/v/450/depositphotos_74189661-stock-illustration-online-shop-log.jpg',
     },
@@ -421,7 +421,7 @@ function Ads({shop}) {
       cost: '0 coins per month (Free)',
       duration: '30 days',
       features: [
-        'Basic visibility on the Campus Express website.',
+        'Basic visibility on the Campus Sphere website.',
         'Listings appear in standard search results without any special highlighting.',
         'Suitable for vendors who are just starting out or have a limited budget.'
     ]
@@ -442,7 +442,7 @@ function Ads({shop}) {
       cost: '15 coins per month',
       duration: '30 days',
       features: [
-        'Significant boost in visibility on the Campus Express platform.',
+        'Significant boost in visibility on the Campus Sphere platform.',
         'Listings appear higher in search results.',
         'Includes eye-catching highlighting and a featured badge.',
         'Suitable for vendors aiming for moderate to high engagement with potential customers.'
@@ -555,7 +555,7 @@ function CashOut({user}) {
       phone_number: JSON.stringify(user)
     },
     customizations: {
-    title: 'Campus Express',
+    title: 'Campus Sphere',
     description: 'Campus Coin Purchase',
     logo: 'https://st2.depositphotos.com/4403291/7418/v/450/depositphotos_74189661-stock-illustration-online-shop-log.jpg',
     },

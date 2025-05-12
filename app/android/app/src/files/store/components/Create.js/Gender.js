@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-export default function Size({ updateGender, type_list, error, onFocus }) {
+export default function Size({ updateGender, error, onFocus }) {
   const [isFocused, setIsFocused] = useState(false);
   const [value, setValue] = useState(null);
 
@@ -14,8 +14,8 @@ export default function Size({ updateGender, type_list, error, onFocus }) {
   ];
 
   const handleChange = (item) => {
-    setValue(item.value);
-    updateType(item.value);
+    setValue(item.title);
+    updateGender(item.title);
   };
 
   return (

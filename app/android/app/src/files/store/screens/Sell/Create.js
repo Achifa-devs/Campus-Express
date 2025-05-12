@@ -14,6 +14,10 @@ import Description from '../../components/Create.js/Description';
 import Type from '../../components/Create.js/Type';
 import UploadBtn from '../../components/Create.js/UploadBtn';
 import { generateId } from '../../utils/IdGen';
+import Address1 from '../../components/Create.js/Address1';
+import Address2 from '../../components/Create.js/Address2';
+import { err } from 'react-native-svg';
+import DeliveryRangeSelector from '../../components/Create.js/Delivery';
 export default function Create({ route }) {
   let screenWidth = Dimensions.get('window').width;
   let screenHeight = Dimensions.get('window').height;
@@ -22,16 +26,22 @@ export default function Create({ route }) {
   let [shipping_policy, set_shipping_policy] = useState('')
   let [shipping_duration, set_shipping_duration] = useState('')
   let [active_range, set_active_range] = useState('')
-  let [shipping_range, set_shipping_range] = useState({
-    in_campus: {selected: false, price: 0},
-    in_state: {selected: false, price: 0},
-    out_state: {selected: false, price: 0}
-  })
+  // let [shipping_range, set_shipping_range] = useState({
+  //   in_campus: {selected: false, price: 0},
+  //   in_state: {selected: false, price: 0},
+  //   out_state: {selected: false, price: 0}
+  // })
+  const [shippingRange, setShippingRange] = useState({
+    in_campus: { selected: true, price: '0' },
+    in_state: { selected: false, price: '' },
+    out_state: { selected: false, price: '' }
+  });
   const [photos, setPhotos] = useState(Array(6).fill(null));
   const [productId, setProductId] = useState('');
   const [uploading, setUploading] = useState(false);
 
   function updatePhotos(data) {
+    // console.log(data)
     setPhotos(data)
   }
   useEffect(() => {
@@ -45,6 +55,8 @@ export default function Create({ route }) {
     }
   }, [route])
 
+  let [address1, set_address1] = useState('')
+  let [address2, set_address2] = useState('')
   let [title, set_title] = useState('')
   let [category, set_category] = useState('')
   let [type, set_type] = useState('')
@@ -52,10 +64,41 @@ export default function Create({ route }) {
   let [description, set_description] = useState('')
   let [price, set_price] = useState('')
   let [stock, set_stock] = useState('')
-  let [thumbnail, set_thumbnail] = useState('')
-  function updateThumbnail(data) {
-    set_thumbnail(data)
+  let [thumbnail, set_thumbnail] = useState('');
+  let [thumbnail_public_id, set_thumbnail_public_id] = useState('');
+
+  function updateThumbnail(data,id) {
+    validation()
+    set_thumbnail(data);
+    set_thumbnail_public_id(id)
   }
+
+  function updateShippingRange(range) {
+    if (range === 'in_campus') return; // in_campus is mandatory
+      
+    setShippingRange(prev => ({
+      ...prev,
+      [range]: {
+        ...prev[range],
+        selected: !prev[range].selected,
+        price: !prev[range].selected ? '0' : ''
+      }
+    }));
+
+    
+  }
+
+  function updateShippingRangePrice(range, value) {
+    const numericValue = value.replace(/[^0-9]/g, '');
+      setShippingRange(prev => ({
+        ...prev,
+        [range]: {
+          ...prev[range],
+          price: numericValue
+        }
+    }));
+  }
+
   let [gender, set_gender] = useState('')
   let [size, set_size] = useState([])
   let [sub_category, set_sub_category] = useState('')
@@ -65,10 +108,147 @@ export default function Create({ route }) {
   let [size_list, set_size_list] = useState([])
   let [sub_type_list, set_sub_type_list] = useState([])
 
+  
+  useEffect(() => {
+    validation()
+  },[
+    category,
+    title,
+    thumbnail,
+    price,
+    type,
+    description,
+    stock,
+    sub_category,
+    gender,
+    condition,
+    size,
+    address1,
+    address2,
+  ]);
+
+  let fields = {
+    category,
+    title, 
+    thumbnail,
+    price, 
+    type, 
+    shippingRange,
+    description,
+
+    stock,
+
+    sub_category,
+    gender,
+    condition,
+    size,
+
+
+    address1, 
+    address2, 
+  }
+
+  let [errs, setErrs] = useState('');
+  let [errList, setErrList] = useState({});
+
+  useEffect(() => {
+    if (category === 'Fashion') {
+      if (type !== 'Clothing' && type !== 'Foot Wear') {
+        setErrList({
+          categoryErr: '',
+          titleErr: '',   
+          shippingRangeErr: '',          
+          genderErr: '',  
+          thumbnailErr: '',
+          priceErr: '', 
+          typeErr: '', 
+          conditionErr: '',
+          stockErr: '',
+        })
+      } else if (type === 'Accessories') {
+        setErrList({
+          categoryErr: '',
+          titleErr: '',      
+          shippingRangeErr: '',          
+          genderErr: '',  
+          thumbnailErr: '',
+          priceErr: '', 
+          typeErr: '', 
+          sub_categoryErr: '',
+          conditionErr: '',
+          stockErr: '',
+        })
+      } else {
+        setErrList({
+          categoryErr: '',
+          titleErr: '',
+          shippingRangeErr: '',          
+          genderErr: '',  
+          thumbnailErr: '',
+          priceErr: '', 
+          typeErr: '', 
+          sub_categoryErr: '',
+          sizeErr: '',
+          conditionErr: '',
+          stockErr: '',
+        })
+      }
+
+      
+    } else if (category === 'Services') {
+      setErrList({
+        categoryErr: '',
+        titleErr: '',
+        // shippingRangeErr: '', 
+        thumbnailErr: '',
+        priceErr: '', 
+        typeErr: '', 
+        address1Err: '',
+        address2Err: ''
+      })
+    } else if (category === 'Lodge & Apartments') {
+      setErrList({
+        categoryErr: '',
+        genderErr: '',  
+        titleErr: '',
+        // shippingRangeErr: '', 
+        thumbnailErr: '',
+        priceErr: '', 
+        typeErr: '', 
+        sub_categoryErr: '',
+        address1Err: '',
+        address2Err: ''
+      })
+    } else if(category === 'Pets'){
+      setErrList({
+        categoryErr: '',
+        titleErr: '',
+        shippingRangeErr: '', 
+        thumbnailErr: '',
+        priceErr: '', 
+        typeErr: '', 
+        stockErr: ''
+      })
+    }else {
+      setErrList({
+        categoryErr: '',
+        titleErr: '',
+        shippingRangeErr: '', 
+        thumbnailErr: '',
+        conditionErr: '',
+        priceErr: '', 
+        typeErr: '', 
+        stockErr: ''
+      })
+    }
+  }, [category,type])
+
+
+
   useEffect(() => {
     set_size_list([])
 
-    if (type.toLowerCase() === 'clothing') {
+    if (type === 'Foot Wear') {
 
       for(let i=1; i<=50; i++){
         // set_size_list([])
@@ -105,20 +285,30 @@ export default function Create({ route }) {
     let result = x.filter(item => (Object.keys(item)[0] === data.trim()));
     set_type_list([])
     result[0][data.trim()].map(item => set_type_list(data=> [...data, {title: item}]))
-    if(data.trim() === 'Fashion'){
-      set_sub_type_list([])
-      result[0]['ClothingMale'].map(item => set_sub_type_list(data => [...data, {title: item}]))
-    }
+    
   }
 
   function updateType(data) {
     set_type(data);
+    set_sub_category('')
     const index = data === 'For Single Occupancy' ? 'Single' : 'Roomate';
     let x = items.items.category;
     let result = x.filter(item => (Object.keys(item)[0] === category.trim()))
     set_sub_type_list([])
-    category !== 'Fashion' ? result[0][index].map(item => set_sub_type_list(data => [...data, {title: item}])) : ''
-
+    category === 'Lodge & Apartments' ? result[0][index].map(item => set_sub_type_list(data => [...data, { title: item }])) : ''
+    
+    if(data.trim() === 'Clothing'){
+      set_sub_type_list([])
+      if (gender === 'Male') {
+        result[0]['ClothingMale'].map(item => set_sub_type_list(data => [...data, {title: item}]))
+      } else {
+        result[0]['ClothingFemale'].map(item => set_sub_type_list(data => [...data, {title: item}]))
+      }
+    } else if (data.trim() === 'Foot Wear') {
+      result[0]['FootWear'].map(item => set_sub_type_list(data => [...data, {title: item}]))
+    } else if (data.trim() === 'Accessories') {
+      result[0]['Accessories'].map(item => set_sub_type_list(data => [...data, {title: item}]))
+    }
   }
 
   function updateCondition(data) {
@@ -127,6 +317,7 @@ export default function Create({ route }) {
  
   function updateGender(data) {
     set_gender(data)  
+    // console.log(data)
 
     let x = items.items.category;
     let result = x.filter(item => (Object.keys(item)[0] === category.trim()))
@@ -187,165 +378,117 @@ export default function Create({ route }) {
 
   
 
+  // Update the validation function to include shipping range validation
   function validation() {
-    
-      let result = data.current.filter(item => 
-        Array.isArray(item) 
-        ?  
-          item.length === 0
-          ?
-          false
-          :
-          true
-        :
-          item === ''
-          ?
-          false
-          :
-          true
-      )
- 
-    console.log('data: ', data.current)
+    const newErrors = {};
+    Object.entries(errList).forEach(([key, _]) => {
+      const field = key.replace('Err', '');
+      const value = fields[field];
+      
+      if (!value || (Array.isArray(value) && value.length === 0)) {
+        newErrors[key] = `${field} is required`;
+      } else {
+        if (field === 'price') {
+          const digitsOnly = value.replace(/\D/g, '');
+          if (digitsOnly <= 0) {
+            newErrors[key] = ('price must be greater than ₦500');
+          }
+        }
+      }
+    });
+
+    // Add shipping range validation
+    if (parseInt(shippingRange.in_campus.price) < 500) {
+      newErrors.shippingRangeErr = 'Campus delivery fee must be at least ₦500';
+    }
+
+    setErrs(Object.keys(newErrors).length ? 'Please fill all required fields.' : '');
+    setErrList(prev => ({ ...prev, ...newErrors }));
+
+    return Object.keys(newErrors).length === 0;
   }
 
+  // Update the uploadData function to include shipping range in the request
   function uploadData() {
     let response = validation();
+    if (!response) return;
 
-    
-    
-    console.log(response)
-    if(update){
-      let product_id = searchParams.get('product_id');
-      fetch('http://localhost:2222/seller.product-update', {
-          method: 'post',
-          headers: {
-              "Content-Type": "Application/json"
-          },
-          body: JSON.stringify(
-            {}
-          )
-      })
-      .then(async(result) => {
-          let response = await result.json();
-          if(response){
-              // window.localStorage.setItem('draft_gender', '')
-              // window.localStorage.setItem('draft_size', '')
-              // window.localStorage.setItem('draft_sub_category', '')
-              // window.localStorage.setItem('draft_locale', '')
-              // window.localStorage.setItem('draft_condition', '')
-              // window.localStorage.setItem('draft_title', '')
-              // window.localStorage.setItem('draft_description', '')
-              // window.localStorage.setItem('draft_category', '')
-              // window.localStorage.setItem('draft_c_type', '')
-              // window.localStorage.setItem('draft_price', '')
+    // Prepare shipping data
+    const shippingData = {
+      in_campus: {
+        selected: true,
+        price: shippingRange.in_campus.price
+      },
+      in_state: shippingRange.in_state.selected ? {
+        selected: true,
+        price: shippingRange.in_state.price
+      } : null,
+      out_state: shippingRange.out_state.selected ? {
+        selected: true,
+        price: shippingRange.out_state.price
+      } : null
+    };
 
-              // openNotice('Update Successful, Redirecting...')
-              // window.location.href = '/seller.shop';
-              // document.querySelector('.overlay').removeAttribute('id')
-          
-              
-          }else{
-              let overlay = document.querySelector('.overlay'); 
-              overlay.removeAttribute('id')
-              openNotice('Upload Failed, Please Try Again')
-          }
-      })
-      .catch((error) => {
-          console.log('Error:', error.message);
-          let overlay = document.querySelector('.overlay'); 
-          overlay.removeAttribute('id')
-          openNotice('Upload Failed, Please Try Again')
-      })  
-    }else{
-
-      fetch('http://192.168.209.146:9090/seller.product-upload', {
-        method: 'post',
-        headers: {
-            "Content-Type": "Application/json"
+    fetch('http://192.168.75.146:9090/seller.product-upload', {
+      method: 'post',
+      headers: {
+        "Content-Type": "Application/json"
+      },
+      body: JSON.stringify({
+        constantData: { 
+          title: title,
+          description: description,
+          category: category,
+          price: price,
+          product_id: productId,
+          user_id: user.user_id,
+          campus: user?.campus,
+          state: user?.state,
+          stock: stock,
+          thumbnail_id: thumbnail,
+          thumbnail_public_id: thumbnail_public_id
+        }, 
+        dynamicData: {
+          cType: type,
+          subCategory: sub_category,
+          gender: gender,
+          condition: condition,
+          size: size,
+          address1: address1,
+          address2: address2,
         },
-        body: JSON.stringify(
-          {
-            constantData: { 
-              title: title,
-              description: description,
-              category: category,
-              price: price,
-              product_id: productId,
-              user_id: user.user_id,
-              campus: user?.campus,
-              state: user?.state,
-              stock: stock,
-              thumbnail_id: thumbnail,
-              thumbnail_public_id: thumbnail_public_id
-            }, 
-        
-            dynamicData: {
-              cType: type,
-              locale: locale,
-              subCategory: sub_category,
-              gender: gender,
-              condition: condition,
-              size: size,
-
-              lodge_data: {
-                lodge_active: category === "Lodge & Apartments" ? true : false,
-                lodge_name: lodge_name,
-                address1: address1,
-                address2: address2,
-                address3: address3,
-                address4: address4,
-              }
-            },
-
-            shipping_data: {
-              shipping_range,
-              shipping_policy,
-              shipping_duration: shipping_duration.split(' ')[0]
-            }
-          }
-        )
-      })
-      .then(async(result) => {
-        let response = await result.json();
-        console.log(response)
-        if(response){
-            // window.localStorage.setItem('draft_gender', '')
-            // window.localStorage.setItem('draft_size', '')
-            // window.localStorage.setItem('draft_sub_category', '')
-            // window.localStorage.setItem('draft_locale', '')
-            // window.localStorage.setItem('draft_condition', '')
-            // window.localStorage.setItem('draft_title', '')
-            // window.localStorage.setItem('draft_description', '')
-            // window.localStorage.setItem('draft_category', '')
-            // window.localStorage.setItem('draft_c_type', '')
-            // window.localStorage.setItem('draft_price', '')
-        
-            // openNotice('Upload Successful, Redirecting...')
-            // window.location.href = '/seller.shop';
-            // document.querySelector('.overlay').removeAttribute('id')
-        }else{
-          let overlay = document.querySelector('.overlay'); 
-          overlay.removeAttribute('id')
-          openNotice('Upload Failed, Please Try Again')
+        shipping_data: {
+          shipping_range: shippingData,
+          shipping_policy,
+          shipping_duration: shipping_duration.split(' ')[0]
         }
       })
-      .catch((error) => {
-        console.log('Error:', error);
-        let overlay = document.querySelector('.overlay'); 
-        overlay.removeAttribute('id')
-        openNotice('Upload Failed, Please Try Again')
-      })  
-    
-    }
+    })
+    .then(async(result) => {
+      let response = await result.json();
+      console.log(response);
+      if(response){
+        // Handle success
+      } else {
+        // Handle error
+      }
+    })
+    .catch((error) => {
+      console.log('Error:', error);
+      // Handle error
+    });  
   }
 
   useEffect(() => {
     console.log(data.current)
   }, [data])
 
-  useEffect(() => {
-
-  }, [])
+  function updateAddress1(data) {
+    set_address1(data)
+  }
+  function updateAddress2(data) {
+    set_address2(data)
+  }
 
   return (
     <>
@@ -364,23 +507,21 @@ export default function Create({ route }) {
             padding: .5
           }}
           contentContainerStyle={{display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'flex-start', flexWrap: 'wrap'}}
-          >
-            <Title updateTitle={updateTitle} />
+        >
+            <Category error={errList.categoryErr} category_list={category_list} updateCategory={updateCategory} />
 
-            <Price updatePrice={updatePrice} />
-            <Stock updateStock={updateStock} />
-            <Photo productId={productId} updateThumbnail={updateThumbnail} updatePhotos={updatePhotos} photos={photos} setUploading={setUploading} />
             
-            <Category category_list={category_list} updateCategory={updateCategory} />
+            <Photo error={errList.thumbnailErr} productId={productId} updateThumbnail={updateThumbnail} updatePhotos={updatePhotos} photos={photos} setUploading={setUploading} />
+            
             <View style={{width: '100%', marginTop: 5, opacity: category !== '' ? 1 : .5, pointerEvents: category !== '' ? 'auto' : 'none', marginBottom: 5, padding: 0, backgroundColor: '#efefef'}}>
               {
                 category === 'Fashion' || category === 'Lodge & Apartments' 
                 ? 
-                <Gender updateGender={updateGender} />
+                <Gender error={errList.genderErr} updateGender={updateGender} />
                 :
                 ""
               }
-              <Type category={category} type_list={type_list} updateType={updateType} />
+              <Type category={category} error={errList.typeErr} type_list={type_list} updateType={updateType} />
 
               
               {
@@ -389,22 +530,36 @@ export default function Create({ route }) {
                   type === 'Clothing' || type === 'Foot Wear'
                   ?
                   <>
-                    <SubCategory category={category} updateSubCategory={updateSubCategory} sub_type_list={sub_type_list} />
+                    <SubCategory error={errList.sub_categoryErr} category={category} updateSubCategory={updateSubCategory} sub_type_list={sub_type_list} />
 
-                    <Size size_list={size_list} updateSize={updateSize}  />
+                    <Size error={errList.sizeErr} size_list={size_list} updateSize={updateSize}  />
                   </>
                   :
                   ""
                 : 
                 ""
-            }
+              }
+              {
+                category === 'Fashion' 
+                ? 
+                  type === 'Accessories'
+                  ?
+                  <>
+                    <SubCategory error={errList.sub_categoryErr} category={category} updateSubCategory={updateSubCategory} sub_type_list={sub_type_list} />
+
+                  </>
+                  :
+                  ""
+                : 
+                ""
+              }
               {
                 category === 'Lodge & Apartments' 
                 ? 
 
                   
                   <>
-                    <SubCategory updateSubCategory={updateSubCategory} sub_type_list={sub_type_list} />
+                    <SubCategory error={errList.sub_categoryErr} category={category} updateSubCategory={updateSubCategory} sub_type_list={sub_type_list} />
 
                   </>
                 : 
@@ -412,17 +567,42 @@ export default function Create({ route }) {
               }
               
               {
-                category === 'Lodge & Apartments' || category === 'Pets' || category === 'Food'
+                category === 'Lodge & Apartments' || category === 'Pets' || category === 'Food' || category === 'Services'
                 ? 
                 ""
                 : 
-                <Condition category={category} updateCondition={updateCondition} />
+                <Condition error={errList.conditionErr} category={category} updateCondition={updateCondition} />
               } 
+              {
+                category === 'Lodge & Apartments' || category === 'Services'
+                ? 
+                <>
+                  <Address1 error={errList.address1Err} updateAddress1={updateAddress1} category={category} />
+                  <Address2 error={errList.address2Err} updateAddress2={updateAddress2} category={category} />
+                </>
+                :
+                ""
+              }
             </View>
-            
+            <Title error={errList.titleErr} updateTitle={updateTitle} category={category} />
+
+            <Price error={errList.priceErr} updatePrice={updatePrice} />
+          
+            {
+              category !== 'Lodge & Apartments' && category !== 'Services'
+              ? 
+              <Stock error={errList.stockErr} updateStock={updateStock} />
+              :
+              ""
+            }
             <Description updateDescription={updateDescription} /> 
 
-            
+            <DeliveryRangeSelector 
+              shippingRange={shippingRange} 
+              updateShippingRangePrice={updateShippingRangePrice} 
+              updateShippingRange={updateShippingRange}
+              error={errList.shippingRangeErr}
+            />
 
         </ScrollView>
       </View>

@@ -19,7 +19,7 @@ export default function NotificationScreen() {
   const fetchData = async () => {
     try {
       const res = await fetch(
-        `http://192.168.209.146:9090/notice`,  // Fixed URL typo
+        `http://192.168.75.146:9090/notice`,  // Fixed URL typo
         {
           headers: { 'Content-Type': 'application/json' },
         }

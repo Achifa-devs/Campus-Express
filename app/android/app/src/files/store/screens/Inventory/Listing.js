@@ -30,7 +30,7 @@ export default function Listing() {
   },[user])
 
   function get_list_data() {
-    fetch(`http://192.168.209.146:9090/vendor/products?user_id=CE-2b04fb`, {
+    fetch(`http://192.168.75.146:9090/vendor/products?user_id=CE-2b04fb`, {
       headers: {
         "Content-Type": "Application/json"
       }

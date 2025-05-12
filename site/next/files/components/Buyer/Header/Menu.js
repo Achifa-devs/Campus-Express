@@ -75,7 +75,7 @@ const BuyerMenu = () => {
 
                   </span>
                   &nbsp;
-                  <span>Sell on Campus Express</span>
+                  <span>Sell on Campus Sphere</span>
                 </li>
                 <li className="">
                   <span>
@@ -83,7 +83,7 @@ const BuyerMenu = () => {
 
                   </span>
                   &nbsp;
-                  <span>Advertise with Campus Express</span>
+                  <span>Advertise with Campus Sphere</span>
                 </li>
 
                 <hr />

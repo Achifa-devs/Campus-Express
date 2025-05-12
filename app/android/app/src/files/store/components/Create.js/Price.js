@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dimensions, StyleSheet, Text, TextInput, View } from 'react-native';
 
-export default function Price({ updatePrice }) {
+export default function Price({ updatePrice, error }) {
   const [price, setPrice] = useState('');
-  const [error, setError] = useState('');
+  const [localError, setLocalError] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const screenWidth = Dimensions.get('window').width;
 
@@ -17,6 +17,8 @@ export default function Price({ updatePrice }) {
       ? cleanedText.substring(0, cleanedText.lastIndexOf('.'))
       : cleanedText;
 
+    updatePrice(sanitizedText)
+    
     // Format as currency while typing
     let formattedValue = '';
     if (sanitizedText) {
@@ -30,24 +32,11 @@ export default function Price({ updatePrice }) {
       });
       
       // Validate
-      if (numericValue <= 0) {
-        setError('Price must be greater than 0');
-      } else if (numericValue > 1000000) {
-        setError('Maximum price is ₦1,000,000');
-      } else {
-        setError('');
-      }
       
-      if (updatePrice) {
-        updatePrice(numericValue);
-      }
-    } else {
-      formattedValue = '';
-      setError('');
     }
-    
     setPrice(formattedValue);
   };
+
 
   return (
     <View style={[styles.container, { width: screenWidth }]}>

@@ -330,7 +330,7 @@ const Dashboard = () => {
             <Helmet>
                 <meta name="description" content="Online Shopping On Campus In Nigeria." />
                 <meta name="keywords" content="Campus, Express, Nigeria, Products, Services, Shopping, Jumia. Jiji, Shopify, Online-Shopping" />
-                <meta name="author" content="Campus Express Nigeria" />
+                <meta name="author" content="Campus Sphere Nigeria" />
             </Helmet>
             
             <div className="notice-cnt" style={{margin: 'auto'}}>
@@ -340,24 +340,24 @@ const Dashboard = () => {
                     </button>
             </div>
             <Helmet>
-                    <meta name="title" content={`Campus Express (Connecting Campus Express)`} />
-                    <meta name="description" content={`Welcome to Campus Express, Your Online Market Place  For Easy Shopping On Campus.`} />
+                    <meta name="title" content={`Campus Sphere (Connecting Campus Sphere)`} />
+                    <meta name="description" content={`Welcome to Campus Sphere, Your Online Market Place  For Easy Shopping On Campus.`} />
                     {/* <meta name="google-site-verification" content="+nxGUDJ4QpAZ5l9Bsjdi102tLVC21AIh5d1Nl23908vVuFHs34=" /> */}
                     <meta name="robots" content="nosnippet" />
                     <meta name="googlebot" content="nosnippet" />
                     <meta name="google" content="sitelinkssearchbox" />
 
                     {/* FaceBook Tags */}
-                    <meta property="og:site_name" content="Campus Express (Connecting Campus Express)" />
-                    <meta property="og:title" content="Campus Express (Connecting Campus Express)" />
-                    <meta property="og:description" content={`Welcome to Campus Express, Your Online Market Place  For Easy Shopping On Campus.`} />
+                    <meta property="og:site_name" content="Campus Sphere (Connecting Campus Sphere)" />
+                    <meta property="og:title" content="Campus Sphere (Connecting Campus Sphere)" />
+                    <meta property="og:description" content={`Welcome to Campus Sphere, Your Online Market Place  For Easy Shopping On Campus.`} />
                     {/* <meta property="og:image" itemprop="image" content="http://pollosweb.wesped.es/programa_pollos/play.png" /> */}
                     <meta property="og:type" content="website" />
                     <meta property="og:url"  content="https://www.campusexpressng.com" />
                     {/* <meta property="og:updated_time" content="1440432930" /> */}
 
                     {/* Twitter */}
-                    <meta name="twitter:title" content="Campus Express (Connecting Campus Express)" />
+                    <meta name="twitter:title" content="Campus Sphere (Connecting Campus Sphere)" />
                     <meta name="twitter:description" content={`Shop category is ${storedCategory}`} />
                     <meta name="twitter:card" content="summary_large_image" />
 

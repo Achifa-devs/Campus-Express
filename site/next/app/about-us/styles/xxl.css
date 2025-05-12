@@ -1,0 +1,262 @@
+@media screen  and (min-width: 1200px) {
+    *{
+        box-sizing: border-box;
+    }
+    :root {
+        --primary: #4F46E5;
+        --secondary: #10B981;
+        --dark: #FF4500;
+        --light: #F9FAFB;
+        --accent: #FF4500;
+    }
+    
+    html,body{
+        height: 100%;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        background-color: #f9f9f9;
+    }
+
+    .buyer-header{
+        height: 70px;
+        width: 100%; 
+        background-color: #fff;
+        display: flex;
+        position: sticky;
+        top: 0;
+        align-items: center;
+        padding: 20px 85px 20px 85px;
+        
+    }
+    .buyer-header .input-cnt{
+        height: 100%;
+        width: 50%;
+        position: relative;
+        display: flex;
+        margin: auto;
+        align-items: center;
+        flex-direction: row;
+
+    }
+    .buyer-header ul{
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        width: 20%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .buyer-header ul li{
+        cursor: pointer;
+        display: flex;
+        white-space: nowrap;
+        align-items: center;
+        color: orangered;
+        font-weight: 500;
+        font-size: small;
+        height: 35px;
+        border-radius: 5px;
+        padding: 0 10px 0 10px;
+        justify-content: space-between;
+    }
+    .buyer-header ul li:hover{
+        background-color: rgb(255, 68, 0);
+        background-color: rgb(255, 68, 0, .1);
+    }
+    .buyer-header .input-cnt input{
+        height: 45px;
+        float: left;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+        font-size: large;
+        padding: 20px;
+        font-family: 'Times New Roman', Times, serif;
+        font-weight: bolder;
+        width: 100%;
+
+    }
+    .buyer-header .input-cnt button{
+        font-family: 'Times New Roman', Times, serif;
+        height: 45px;
+        font-weight: bold;
+        float: right;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        position: relative;
+        width: 100px;
+        background-color: orangered;
+        color: #fff;
+        outline: none;
+        margin-left: 5px;
+        font-weight: 500;
+        border: none;
+
+    }
+
+    .buyer-dashboard-cnt{
+        height: 100vh;
+        width: 100vw;
+        overflow: auto;
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px 100px;
+        background-color: #FF4500;
+    }
+
+    .buyer-showcase{
+        height: fit-content;
+        width: 100%;
+        padding: 0px;
+        position: relative;
+        margin: 20px 0 0 0;
+        /* background-color: #FF4500; */
+    }
+    .buyer-showcase-cnt {
+        height: fit-content;
+        width: calc(100% - 0px);
+        padding: 0px;
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        border-radius: 5px;
+        text-align: center; 
+        /* margin: 10px 0 10px 0; */
+        background-color: #fff;
+
+    }
+    .buyer-showcase-cnt .card{
+        position: relative;
+        display: flex;
+        height: auto;
+        width: calc(16.67% - 12px);
+        flex-shrink: 0;
+        float: left;
+        margin: 0 5px 0 5px;
+        padding: 10px;
+        text-align: left;
+        cursor: pointer;
+        background-color: #fff;
+    }
+
+
+
+    .buyer-ads-cnt{
+        height: 450px;
+        width: 100%;
+        position: relative;
+        padding: 0;
+        margin: 20px 0 0 0;
+        background-color: red;
+    }
+    .buyer-ads-cnt section:nth-child(odd){
+        width: 250px;
+        margin: 0 0 0 0;
+        height: 100%;
+        float: left;
+        border-radius: 1px;
+        background-color: orangered;
+    }
+    .buyer-ads-cnt section:nth-child(even){
+        width: calc(100% - 250px);
+        margin: 0 0 0 0;
+        height: 100%;
+        float: right;
+        position: relative;
+        border-radius: 1px;
+        background-color: orangered;
+    }
+    .buyer-ads-cnt .img-cnt img{
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        position: relative;
+        padding: 0;
+        border-radius: 1px;
+    }
+
+    header{
+        height: 250px;
+        width: 100%;
+        display: flex;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #FF4500;
+        justify-content: center;
+        margin-bottom: 5px;
+    }
+
+    .input-cnt{
+        display: flex;
+        flex-direction: row;
+
+    }
+
+    .input-cnt input{
+        width: 400px;
+        border-radius: 5px 0px 0px 5px;
+        background-color: #e7e7e7;
+    }
+    .input-cnt button{
+        border-radius: 0px 5px 5px 0px;
+        color: #FF4500;
+        height: 45px;
+        width: 80px;
+        background-color: #fff;
+        font-weight: 500;
+    }
+
+    .header{
+        width: 100%;
+        padding: 20px 10px;
+       
+        background-color: #fff;
+        font-size: 3vh;
+        font-weight: 500;
+        margin-bottom: 2.5px;
+        color: #FF4500;
+    }
+
+    .sub-header{
+        width: 100%;
+        padding: 20px 10px;
+        background-color: #fff;
+        font-size: 3vh;
+        font-weight: 500;
+    }
+   
+    .overview{
+        height: fit-content;
+        width: 100%;
+        padding: 10px;
+        display: flex;
+        background-color: #fff;
+        margin-bottom: 2.5px;
+        flex-direction: column;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    ul{
+        list-style-type: decimal-leading-zero;
+    }
+
+    .overview-links{
+        padding: 8px;
+        width: fit-content;
+        font-size: large;
+        color: #000;
+        font-weight: 400;
+        text-decoration: underline;
+    }
+
+    article{
+        padding: 15px;
+
+    }
+    
+}

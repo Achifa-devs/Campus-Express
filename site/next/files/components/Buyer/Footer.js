@@ -125,11 +125,11 @@ const bottomFooterStyles = {
             &nbsp;
             &nbsp;
 
-          <small style={{fontSize: '3.5vh'}}><b>Campus Express</b></small>
+          <small style={{fontSize: '3.5vh'}}><b>Campus Sphere</b></small>
         </section>
 
         <section style={{display: 'flex', width: screenWidth > 760 ? '25%' : '100%', justifyContent: screenWidth > 760 ? 'flex-start' : 'center', alignItems: screenWidth > 760 ? 'flex-start' : 'center', flexDirection: 'column'}}>
-          <h6>New To Campus Express</h6>
+          <h6>New To Campus Sphere</h6>
           <small style={{marginBottom: '10px'}}>Subscribe to our newsletter to get updates on our latest offers!</small>
           
           <div style={{display: 'flex', width: screenWidth > 760 ? '33.3%' : '100%', justifyContent: 'flex-start', alignItems: 'flex-start', flexDirection: 'row', marginBottom: '10px'}}>
@@ -153,7 +153,7 @@ const bottomFooterStyles = {
             &nbsp;
             &nbsp;
             <label style={{padding: '0', margin: '0'}} htmlFor="terms">
-              <small style={{fontSize: 'x-small', textAlign: 'left', display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-start', flexDirection: 'row', padding: '0', margin: '0'}}>I agree to Campus Express’s Privacy and Cookie Policy. You can unsubscribe from newsletters at any time.</small>
+              <small style={{fontSize: 'x-small', textAlign: 'left', display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-start', flexDirection: 'row', padding: '0', margin: '0'}}>I agree to Campus Sphere’s Privacy and Cookie Policy. You can unsubscribe from newsletters at any time.</small>
             </label>
           </div> 
 
@@ -168,7 +168,7 @@ const bottomFooterStyles = {
             &nbsp;
             &nbsp;
             <div style={{display: 'flex', width: '100%', justifyContent: 'flex-start', alignItems: 'flex-start', flexDirection: 'column', marginBottom: '10px'}}>
-              <small><b>Download Campus Express Free App</b></small>
+              <small><b>Download Campus Sphere Free App</b></small>
               <small style={{marginBottom: '10px'}}>Get access to exclusive offers!</small>
             </div>
 
@@ -211,39 +211,22 @@ const bottomFooterStyles = {
         <div style={sectionStyles}>
           <h4 style={sectionTitleStyles}>Customer Service</h4>
           <ul style={listStyles}>
-            <li style={listItemStyles}><a href="/" style={linkStyles}>Help Center</a></li>
             <li style={listItemStyles}><a href="/" style={linkStyles}>Contact Us</a></li>
+            <li style={listItemStyles}><a href="/help-center" style={linkStyles}>Help Center</a></li>
             <li style={listItemStyles}><a href="/" style={linkStyles}>Chat With Us</a></li>
-            {/* <li style={listItemStyles}><a href="/" style={linkStyles}>Return Policy</a></li> */}
           </ul>
-          {/* <br />
-          <h4 style={sectionTitleStyles}>Useful Links</h4>
-          <ul style={listStyles}>
-            <li style={listItemStyles}><a href="/" style={linkStyles}>Service Center</a></li>
-            <li style={listItemStyles}><a href="/" style={linkStyles}>How to shop on Campus Express?</a></li>
-            <li style={listItemStyles}><a href="/" style={linkStyles}>Delivery options and timelines</a></li>
-            <li style={listItemStyles}><a href="/" style={linkStyles}>How to return a product on Campus Express?</a></li>
-            <li style={listItemStyles}><a href="/" style={linkStyles}>Corporate and bulk purchases</a></li>
-            <li style={listItemStyles}><a href="/" style={linkStyles}>Report a Product</a></li>
-            <li style={listItemStyles}><a href="/" style={linkStyles}>Dispute Resolution Policy</a></li>
-            <li style={listItemStyles}><a href="/" style={linkStyles}>Returns & Refund Timeline</a></li>
-            <li style={listItemStyles}><a href="/" style={linkStyles}>Return Policy</a></li>
-          </ul> */}
-
           
         </div>
 
         {/* Quick Links Section */}
         <div style={sectionStyles}>
-          <h4 style={sectionTitleStyles}>About Campus Express</h4>
+          <h4 style={sectionTitleStyles}>About Campus Sphere</h4>
           <ul style={listStyles}>
-            <li style={listItemStyles}><a href="/" style={linkStyles}></a>About us</li>
-            {/* <li style={listItemStyles}><a href="/" style={linkStyles}>Buying Safety Center</a></li> */}
-            <li style={listItemStyles}><a href="/" style={linkStyles}>Delivery</a></li>
-            <li style={listItemStyles}><a href="/" style={linkStyles}>Campus Express Return Policy</a></li>
-            <li style={listItemStyles}><a href="/" style={linkStyles}>Terms and Conditions</a></li>
-            {/* <li style={listItemStyles}><a href="/" style={linkStyles}>Privacy Notice</a></li> */}
-            <li style={listItemStyles}><a href="/" style={linkStyles}>Campus Express Payment Information Guidelines</a></li>
+            <li style={listItemStyles}><a href="/about-us" style={linkStyles}></a>About us</li>
+            <li style={listItemStyles}><a href="/privacy-policy" style={linkStyles}>Privacy policy</a></li>
+            <li style={listItemStyles}><a href="/terms-of-use" style={linkStyles}>Terms and Conditions</a></li>
+            <li style={listItemStyles}><a href="/" style={linkStyles}>Campus Sphere Return Policy</a></li>
+            <li style={listItemStyles}><a href="/" style={linkStyles}>Campus Sphere Payment Information Guidelines</a></li>
             {/* <li style={listItemStyles}><a href="/" style={linkStyles}>Official Stores</a></li> */}
           </ul>
         </div>
@@ -251,21 +234,21 @@ const bottomFooterStyles = {
         {/* Quick Links Section */}
         
         <div style={sectionStyles}>
-          <h4 style={sectionTitleStyles}>Make Money On Campus Express</h4>
+          <h4 style={sectionTitleStyles}>Make Money On Campus Sphere</h4>
           <ul style={listStyles}>
-            <li style={listItemStyles}><a href="/" style={linkStyles}>Sell On Campus Express</a></li>
-            <li style={listItemStyles}><a href="/" style={linkStyles}>Become A Campus Express Affiliate</a></li>
+            <li style={listItemStyles}><a href="/vendor/shop" style={linkStyles}>Sell On Campus Sphere</a></li>
+            {/* <li style={listItemStyles}><a href="/" style={linkStyles}>Become A Campus Sphere Affiliate</a></li> */}
           </ul>
         </div>
 
         <div style={sectionStyles}>
-          <h4 style={sectionTitleStyles}>Campus Express International</h4>
+          <h4 style={sectionTitleStyles}>Campus Sphere International</h4>
           <ul style={listStyles}>
-            <li style={listItemStyles}><a href="/" style={linkStyles}>Campus Express Nigeria</a></li>
-            {/* <li style={listItemStyles}><a href="/" style={linkStyles}>Campus Express Ghana</a></li>
-            <li style={listItemStyles}><a href="/" style={linkStyles}>Campus Express Niger</a></li>
-            <li style={listItemStyles}><a href="/" style={linkStyles}>Campus Express Cameroun</a></li>
-            <li style={listItemStyles}><a href="/" style={linkStyles}>Campus Express Senegal</a></li> */}
+            <li style={listItemStyles}><a href="/" style={linkStyles}>Campus Sphere Nigeria</a></li>
+            {/* <li style={listItemStyles}><a href="/" style={linkStyles}>Campus Sphere Ghana</a></li>
+            <li style={listItemStyles}><a href="/" style={linkStyles}>Campus Sphere Niger</a></li>
+            <li style={listItemStyles}><a href="/" style={linkStyles}>Campus Sphere Cameroun</a></li>
+            <li style={listItemStyles}><a href="/" style={linkStyles}>Campus Sphere Senegal</a></li> */}
           </ul>
           
         </div>
@@ -324,7 +307,7 @@ const bottomFooterStyles = {
       </div>
 
       <div style={bottomFooterStyles}>
-        <p style={{ margin: 0, color: '#fff'}}>&copy; 2024 Campus Express. All Rights Reserved.</p>
+        <p style={{ margin: 0, color: '#fff'}}>&copy; 2024 Campus Sphere. All Rights Reserved.</p>
       </div>
     </footer>
   );

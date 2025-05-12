@@ -32,7 +32,7 @@ export default function ChangePhone({ route, navigation }) {
 
     async function update_phone_pin() {
       
-        return await axios.post('http://192.168.209.146:9090/system.phone-update', {phone: new_phone, id: user?.id})
+        return await axios.post('http://192.168.75.146:9090/system.phone-update', {phone: new_phone, id: user?.id})
         .then(({ data }) => ({bool: data.success}))
         .catch(err => (err.response?.data))
     }

@@ -33,7 +33,7 @@ const AsideMenu = ({}) => {
         <>
             <div className="menu-card-aside" style={{float: 'left', padding: screenWidth > 1200 ? '10px 0px 0px 40px' : '10px 0px 0px 10px'}}>
 
-                <h6 className="" style={{padding:'10px', margin: '0', borderBottom: '1px solid #efefef', height: '50px', fontSize: 'medium', width: '100%', background: '#fff', fontWeight: '500', display: 'flex', alignItems: 'center', fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue'"}}>My Campus Express Account</h6>
+                <h6 className="" style={{padding:'10px', margin: '0', borderBottom: '1px solid #efefef', height: '50px', fontSize: 'medium', width: '100%', background: '#fff', fontWeight: '500', display: 'flex', alignItems: 'center', fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue'"}}>My Campus Sphere Account</h6>
 
                 <div className="menu-confirmation" style={{width: '100%'}}>
                     <div className="menu-confirmation-cnt" style={{width: '100%'}}>

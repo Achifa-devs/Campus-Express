@@ -15,9 +15,9 @@ export default function Faq() {
         },
         
         {
-            title: 'Campus Express Payment',
-            uri: 'Understand Campus Express Payment',
-            description: 'Gain a comprehensive understanding of the various payment options available on Campus Express. Learn how to securely make payments and manage your transactions with ease and confidence.',
+            title: 'Campus Sphere Payment',
+            uri: 'Understand Campus Sphere Payment',
+            description: 'Gain a comprehensive understanding of the various payment options available on Campus Sphere. Learn how to securely make payments and manage your transactions with ease and confidence.',
             link: 'https://www.campusexpress.com/payment-info',
             actionButton: 'Learn More',
             icon: 'path/to/payment-icon.png'
@@ -33,9 +33,9 @@ export default function Faq() {
         },
         
         {
-            title: 'Security On Campus Express',
+            title: 'Security On Campus Sphere',
             uri: '',
-            description: 'Explore the extensive security measures we have in place on Campus Express. Learn about our escrow services designed to prevent fraud and ensure a safe shopping experience for all users.',
+            description: 'Explore the extensive security measures we have in place on Campus Sphere. Learn about our escrow services designed to prevent fraud and ensure a safe shopping experience for all users.',
             link: 'https://www.campusexpress.com/security',
             actionButton: 'Explore Security',
             icon: 'path/to/security-icon.png'
@@ -44,7 +44,7 @@ export default function Faq() {
         {
             title: 'Billing Method',
             uri: '',
-            description: 'Get detailed information about the billing methods supported by Campus Express. Understand how our billing system works to ensure transparent and accurate transactions for your purchases.',
+            description: 'Get detailed information about the billing methods supported by Campus Sphere. Understand how our billing system works to ensure transparent and accurate transactions for your purchases.',
             link: 'https://www.campusexpress.com/billing-method',
             actionButton: 'Explore Billing',
             icon: 'path/to/billing-icon.png'
@@ -62,7 +62,7 @@ export default function Faq() {
         {
             title: 'Pay For Your Order',
             uri: '',
-            description: 'Learn how to complete the payment process for your orders on Campus Express. Follow our step-by-step guide to make secure payments and confirm your purchases effortlessly.',
+            description: 'Learn how to complete the payment process for your orders on Campus Sphere. Follow our step-by-step guide to make secure payments and confirm your purchases effortlessly.',
             link: 'https://www.campusexpress.com/pay-for-order',
             actionButton: 'Pay Now',
             icon: 'path/to/payment-icon.png'
@@ -80,7 +80,7 @@ export default function Faq() {
         {
             title: 'Cancel Your Order',
             uri: '',
-            description: 'Understand the process to cancel an order on Campus Express. Learn about the conditions under which you can cancel your order and the steps to follow for a successful cancellation.',
+            description: 'Understand the process to cancel an order on Campus Sphere. Learn about the conditions under which you can cancel your order and the steps to follow for a successful cancellation.',
             link: 'https://www.campusexpress.com/cancel-order',
             actionButton: 'Cancel Order',
             icon: 'path/to/cancel-icon.png'

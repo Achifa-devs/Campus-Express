@@ -21,7 +21,7 @@ export default function Category({ updateCategory, category_list, error, onFocus
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Product Category</Text>
+      <Text style={styles.label}>Listing Category</Text>
       
       <View style={[
         styles.dropdownWrapper,

@@ -48,7 +48,7 @@ export default function TypeProducts() {
     try {
       setRefreshing(true);
       const result = await fetch(
-        `http://192.168.209.146:9090/products-type?category=${category}&type=${type}`,
+        `http://192.168.75.146:9090/products-type?category=${category}&type=${type}`,
         {
           headers: {
             'Content-Type': 'application/json',

@@ -3,39 +3,35 @@
         "category": 
         [
             
+            
+
             {
-                "Lodge & Apartments": [
-                    "For Single Occupancy", "For Shared Accommodation (Roommates)"
+                "Laptops & Desktops": 
+                [
+                    "Windows","Mac","Chrome","Ubuntu","Linux"
                 ],
-                "Single": [
-                    "Private Room for Rent","Exclusive Student Accommodation"
-                ],
-                "Roomate": [
-                    "Roommate Needed for Student Lodge [Searching for Roomate]","Shared Room Available [New Occupants]"
-                ],
-                "img": ""
+                "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1745876593/Artboard_1_copy_3-removebg-preview_x7cvmo.png"
             },
 
             
-
             {
                 "Electronics":
                 [
                     "Audio/Musical Equipment","Photo/Video Camera","Printer","Scanners","T.V","DVD","MIFI/Routers"
                 ],
-                "img": ""
+                "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1745876568/electronics_1_wzemwa.png"
             },
 
             {
                 "Fashion": 
                 [
-                    "Bags","Clothing","Jewelry","Foot Wear","Watch", "Sneakers","Accessories"
+                    "Bags","Clothing","Jewelry","Foot Wear","Watch","Accessories"
                 ],
                 "FootWear":  ["Sandals","Shoes","Cotina","Palms","Boots","Slippers"],
                 "ClothingMale": ["Underwear","Tops","Trousees","Nicker/Shorts","Sports-wear","Swim-suit"],
                 "ClothingFemale": ["Underwear","Tops","Trousees","Nicker/Shorts","Sports-wear","Gown","Skirt","Swim-suit"],
                 "Accessories": ["Belt","Solks","Bangos","Chain","Necklace","Cap","Ski-Mask"],
-                "img": ""
+                "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1745876569/fashion_gd69s2.png"
             },
 
             {
@@ -43,27 +39,7 @@
                 [
                     "Bath & Body","Hair Care","Skin Care","Wig & Weavon","Fragrance","Make-Up","Tool Accessories","Sexual Wellness"
                 ],
-                "img": ""
-            },
-            {
-                "Services": [
-                    "Barber", 
-                    "Hairdresser", 
-                    "Cleaner", 
-                    "Laundry", 
-                    "Photographer", 
-                    "Make-Up Artist", 
-                    "Tailor/Fashion Designer", 
-                    "Home Tutor", 
-                    "Chef/Cook", 
-                    "Manicure/Pedicure", 
-                    "Massage Therapist", 
-                    "Painter", 
-                    "Phone/Laptop Repair", 
-                    "Plumber", 
-                    "Electrician"
-                ],
-                "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1746200400/services_icon_1_w5lpuy.png"
+                "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1745876568/beauty_p5llrg.png"
             },
             {
             "Games": 
@@ -78,24 +54,14 @@
                 [
                     "Android","Samsung","IOS","Windows","BalckBerry","Cell Phone"
                 ],
-                "img": ""
+                "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1745876566/phones_zs8mrl.png"
             },
-
-
             {
-                "Tablets": 
+                "Pets": 
                 [
-                    "Android","Samsung","IOS","Windows","BalckBerry"
+                    "Cat","Dog","Bird","Rabbit","Snakes","Mice","Parrot"
                 ],
-                "img": ""
-            },
-
-            {
-                "Laptops & Desktops": 
-                [
-                    "Windows","Mac","Chrome","Ubuntu","Linux"
-                ],
-                "img": ""
+                "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1745876878/OIP_jtaygg.jpg"
             },
 
             {
@@ -115,13 +81,13 @@
             },
 
             {
-                "Pets": 
+                "Tablets": 
                 [
-                    "Cat","Dog","Bird","Rabbit","Snakes","Mice","Parrot"
+                    "Android","Samsung","IOS","Windows","BalckBerry"
                 ],
                 "img": ""
             },
-
+            
             {
                 "Stationery & Study Supplies": [
                     "Textbooks", "Notebooks", "Pens & Pencils", "Highlighters", "Calculators", "Drawing Materials", "Staplers", "Whiteboard & Markers", "Folders"
@@ -164,13 +130,6 @@
             },
 
             {
-                "Subscription & Gift Cards": [
-                    "Netflix", "Spotify", "Apple Music", "Google Play", "Amazon", "PlayStation Store", "iTunes"
-                ],
-                "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1746200225/gift_cards_vmxlvl.png"
-            },
-
-            {
                 "Beddings & Linens": [
                     "Blankets", "Mattress", "Duvets", "Pillow Cases", "Bed Covers", "Mosquito Net"
                 ],
@@ -185,15 +144,6 @@
                 "img": ""
             },
 
-            
-            {
-                "Cleaning Agents": 
-                [
-                    "Detergents","Insecticide","Disinfectants","Acid Cleaners"
-                ],
-                "img": ""
-            },
-            
             {
                 "Furnitures": 
                 [
@@ -216,6 +166,39 @@
                     "Plate","Pot","Spoon/Fork","Knife","Tray","Basket","Cup"
                 ],
                 "img": ""
+            },
+            {
+                "Lodge & Apartments": [
+                    "For Single Occupancy", "For Shared Accommodation (Roommates)"
+                ],
+                "Single": [
+                    "Private Room for Rent"
+                ],
+                "Roomate": [
+                    "Roommate Needed for Student Lodge [Searching for Roomate]","Shared Room Available [New Occupants]"
+                ],
+                "img": ""
+            },
+
+            {
+                "Services": [
+                    "Barber", 
+                    "Hairdresser", 
+                    "Cleaner", 
+                    "Laundry", 
+                    "Photographer", 
+                    "Make-Up Artist", 
+                    "Tailor/Fashion Designer", 
+                    "Home Tutor", 
+                    "Chef/Cook", 
+                    "Manicure/Pedicure", 
+                    "Massage Therapist", 
+                    "Painter", 
+                    "Phone/Laptop Repair", 
+                    "Plumber", 
+                    "Electrician"
+                ],
+                "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1746200400/services_icon_1_w5lpuy.png"
             }
 
         ]

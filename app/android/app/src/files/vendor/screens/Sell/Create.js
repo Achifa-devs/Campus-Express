@@ -229,7 +229,7 @@ export default function Create({ route }) {
   //     })  
   //   }else{
 
-  //     fetch('http://192.168.209.146:9090/seller.product-upload', {
+  //     fetch('http://192.168.75.146:9090/seller.product-upload', {
   //       method: 'post',
   //       headers: {
   //           "Content-Type": "Application/json"

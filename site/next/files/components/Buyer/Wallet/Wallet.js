@@ -88,13 +88,13 @@
 //                     <div>
 //                         <section><Link to={'https://sandbox-flw-web-v3.herokuapp.com/pay/campus-express-buyer-wallet'} target='_blank'>Withdraw</Link></section>
 //                         <br />
-//                         <section><small>Withdraw funds from campus express every Tuesday.</small></section>
+//                         <section><small>Withdraw funds from Campus Sphere every Tuesday.</small></section>
 //                     </div>
 //                     <div>
 //                         <section><Link to={'https://sandbox-flw-web-v3.herokuapp.com/pay/campus-express-buyer-wallet'} target='_blank'>Deposit</Link></section>
 //                         <br />
 
-//                         <section><small>Fund your campus express account.</small></section>
+//                         <section><small>Fund your Campus Sphere account.</small></section>
 //                     </div>
 //                     <div>
 //                         <section><button onClick={e => 

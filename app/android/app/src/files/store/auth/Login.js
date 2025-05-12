@@ -72,7 +72,7 @@ const Login = ({updateActiveJsx}) => {
       await new Promise(resolve => setTimeout(resolve, 1500));
       
       // Replace with actual API call
-      const response = await fetch('http://192.168.209.146:9090/vendor/login', {
+      const response = await fetch('http://192.168.75.146:9090/vendor/login', {
         method: 'POST',
         headers: { "Content-Type": "Application/json" },
         body: JSON.stringify(formData)

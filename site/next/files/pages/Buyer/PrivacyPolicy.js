@@ -32,7 +32,7 @@ const PrivacyPolicy = () => {
                 <h1 style={styles.heading}>Privacy Policy</h1>
 
                 <p style={styles.paragraph}>
-                    Welcome to Campus Express. Your privacy is critically important to us. This privacy policy document outlines the types of personal information that is received and collected by Campus Express and how it is used.
+                    Welcome to Campus Sphere. Your privacy is critically important to us. This privacy policy document outlines the types of personal information that is received and collected by Campus Sphere and how it is used.
                 </p>
 
                 <h2 style={styles.subheading}>Information Collection and Use</h2>
@@ -42,7 +42,7 @@ const PrivacyPolicy = () => {
 
                 <h2 style={styles.subheading}>Return/Refund Policy</h2>
                 <p style={styles.paragraph}>
-                    At Campus Express, we strive to ensure customer satisfaction. If you are not entirely satisfied with your purchase, we're here to help.
+                    At Campus Sphere, we strive to ensure customer satisfaction. If you are not entirely satisfied with your purchase, we're here to help.
                 </p>
                 <p style={styles.paragraph}>
                     <strong>Returns</strong>: You have 30 calendar days to return an item from the date you received it. To be eligible for a return, your item must be unused and in the same condition that you received it. Your item must be in the original packaging. Your item needs to have the receipt or proof of purchase.

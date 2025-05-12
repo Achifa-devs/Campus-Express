@@ -172,7 +172,7 @@ const ProductPage = () => {
             ce_id: item?.user_id
         },
         customizations: {
-        title: 'Campus Express',
+        title: 'Campus Sphere',
         description: 'Campus Purchase',
         logo: 'https://st2.depositphotos.com/4403291/7418/v/450/depositphotos_74189661-stock-illustration-online-shop-log.jpg',
         },
@@ -294,7 +294,7 @@ const ProductPage = () => {
 
                         <section style={{fontWeight: '400', padding: '15px', background: '#fff4e0', }}>
                             
-                            <small style={{fontSize: 'small', color: '#FF4500', lineHeight: '12px', borderRadius: '6px'}}>Payment Must Be Made Via Campus Express Platform To Avoid Fraud Else You Can <b>Trade With The Seller Outside The Platform At Your Own Risk.</b></small>
+                            <small style={{fontSize: 'small', color: '#FF4500', lineHeight: '12px', borderRadius: '6px'}}>Payment Must Be Made Via Campus Sphere Platform To Avoid Fraud Else You Can <b>Trade With The Seller Outside The Platform At Your Own Risk.</b></small>
                         </section>
 
                         <br />

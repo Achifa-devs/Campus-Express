@@ -42,7 +42,7 @@ export default function Sales() {
   
 
   function get_list_data() {
-    fetch(`http://192.168.209.146:3000/api/vendor/orders?user_id=${user?.user_id}`, {
+    fetch(`http://192.168.75.146:3000/api/vendor/orders?user_id=${user?.user_id}`, {
       headers: {
         "Content-Type": "Application/json"
       }

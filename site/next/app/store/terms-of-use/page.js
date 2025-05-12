@@ -22,7 +22,7 @@ export default function TermsOfUse() {
                         <div>
                             <ol style={{listStyleType: 'unset', background: '#fff'}} type='a'>
                                 <li>
-                                    “Campus Express” is the trading name for the U-COMMERCE LIMITED SUB-SIDIARY(IES) companies. Campus Express company (“Campus Express” or “we”) operates an e-commerce platform consisting of a website and mobile application (“marketplace”) together with payment infrastructure for the sale and purchase of consumer products and services (“products”) in its allocated territory.
+                                    “Campus Sphere” is the trading name for the U-COMMERCE LIMITED SUB-SIDIARY(IES) companies. Campus Sphere company (“Campus Sphere” or “we”) operates an e-commerce platform consisting of a website and mobile application (“marketplace”) together with payment infrastructure for the sale and purchase of consumer products and services (“products”) in its allocated territory.
                                 </li>
                                 <li>These general terms and conditions shall apply to buyers and sellers on the marketplace and shall govern your use of the marketplace and related services.</li>
                                 <li>By using our marketplace you accept these general terms and conditions in full. If you disagree with these general terms and conditions or any part of these general terms and conditions you must not use our marketplace.</li>
@@ -77,7 +77,7 @@ export default function TermsOfUse() {
                             <li>You acknowledge and agree that:</li>
                              <ol style={{listStyleType: 'unset'}} type='a'>
                                 <li>The marketplace provides an online location for sellers to sell and buyers to purchase products;</li>
-                                <li>We shall accept binding sales on behalf of sellers but (unless Campus Express is indicated as the seller) Campus Express is not a party to the transaction between the seller and the buyer; and</li>
+                                <li>We shall accept binding sales on behalf of sellers but (unless Campus Sphere is indicated as the seller) Campus Sphere is not a party to the transaction between the seller and the buyer; and</li>
                                 <li>A contract for the sale and purchase of a product or products will come into force between the buyer and seller and accordingly you commit to buying or selling the relevant product or products upon the buyer’s confirmation of purchase via the marketplace.</li>
                              </ol>
 
@@ -116,7 +116,7 @@ export default function TermsOfUse() {
                             </ol>
 
 
-                            <li>Returned products shall be accepted and refunds issued by Campus Express acting for and on behalf of the seller. Notwithstanding paragraphs 4.1 and 4.2 above in respect of digital products or services and fresh food Campus Express shall issue refunds in respect of failures in delivery only. Refunds of payment for such products for any other reasons shall be subject to the seller’s terms and conditions of sale.</li>
+                            <li>Returned products shall be accepted and refunds issued by Campus Sphere acting for and on behalf of the seller. Notwithstanding paragraphs 4.1 and 4.2 above in respect of digital products or services and fresh food Campus Sphere shall issue refunds in respect of failures in delivery only. Refunds of payment for such products for any other reasons shall be subject to the seller’s terms and conditions of sale.</li>
 
                             <li>Changes to our returns page or refunds page shall be effective in respect of all purchases made from the date of publication of the change on our website.</li>
                         </ol>
@@ -135,7 +135,7 @@ export default function TermsOfUse() {
                     <section style={{padding: '20px'}}>
                         <li><h6>Store Credit</h6></li>
                         <ol style={{listStyleType: 'unset'}} type='a'>
-                            <li>Store Credits may be earned and managed in accordance with the Campus Express Store Credit Terms and Conditions as may be amended from time to time. Campus Express reserves the right to cancel or withdraw Campus Express store credit rewards for any reason in its discretion including if we suspect fraud or foul play. You can view Reward Store Credit terms and conditions on our website</li>
+                            <li>Store Credits may be earned and managed in accordance with the Campus Sphere Store Credit Terms and Conditions as may be amended from time to time. Campus Sphere reserves the right to cancel or withdraw Campus Sphere store credit rewards for any reason in its discretion including if we suspect fraud or foul play. You can view Reward Store Credit terms and conditions on our website</li>
                         </ol>
                     </section>
 
@@ -144,7 +144,7 @@ export default function TermsOfUse() {
                     <section style={{padding: '20px'}}>
                         <li><h6>Promotions</h6></li>
                         <ol style={{listStyleType: 'unset'}} type='a'>
-                            <li>Promotions and competitions run by Campus Express and/or other promoters shall be managed in accordance with the Promotions Terms and Conditions. You can view each Promotion&apos;s terms and conditions on our website</li>
+                            <li>Promotions and competitions run by Campus Sphere and/or other promoters shall be managed in accordance with the Promotions Terms and Conditions. You can view each Promotion&apos;s terms and conditions on our website</li>
                         </ol>
                     </section>
 
@@ -218,7 +218,7 @@ export default function TermsOfUse() {
                         <li><h6>Use of website and mobile applications</h6></li>
 
                         <ol style={{listStyleType: 'unset'}} type='a'>
-                            <li>In this section 10 words “marketplace” and website” shall be used interchangeably to refer to Campus Express’s websites and mobile applications.</li>
+                            <li>In this section 10 words “marketplace” and website” shall be used interchangeably to refer to Campus Sphere’s websites and mobile applications.</li>
 
                             <li>You may:</li>
 
@@ -288,7 +288,7 @@ export default function TermsOfUse() {
                             </ol>
 
 
-                            <li>Campus Express’s logos and our other registered and unregistered trademarks are trademarks belonging to us; we give no permission for the use of these trademarks and such use may constitute an infringement of our rights.</li>
+                            <li>Campus Sphere’s logos and our other registered and unregistered trademarks are trademarks belonging to us; we give no permission for the use of these trademarks and such use may constitute an infringement of our rights.</li>
 
                             <li>The third party registered and unregistered trademarks or service marks on our website are the property of their respective owners and we do not endorse and are not affiliated with any of the holders of any such rights and as such we cannot grant any license to exercise such rights.</li>
                         </ol>
@@ -300,18 +300,18 @@ export default function TermsOfUse() {
                         <li><h6>Due diligence and audit rights</h6></li>
 
                         <ol style={{listStyleType: 'unset'}} type='a'>
-                            <li>Buyers agree to processing of their personal data in accordance with the terms of Campus Express’s Privacy and Cookie Notice.</li>
+                            <li>Buyers agree to processing of their personal data in accordance with the terms of Campus Sphere’s Privacy and Cookie Notice.</li>
 
-                            <li>Campus Express shall process all personal data obtained through the marketplace and related services in accordance with the terms of our Privacy and Cookie Notice and Privacy Policy.</li>
+                            <li>Campus Sphere shall process all personal data obtained through the marketplace and related services in accordance with the terms of our Privacy and Cookie Notice and Privacy Policy.</li>
 
-                            <li>Sellers shall be directly responsible to buyers for any misuse of their personal data and Campus Express shall bear no liability to buyers in respect of any misuse by sellers of their personal data.</li>
+                            <li>Sellers shall be directly responsible to buyers for any misuse of their personal data and Campus Sphere shall bear no liability to buyers in respect of any misuse by sellers of their personal data.</li>
                         </ol>
                     </section>
 
                     <br />
 
                     <section style={{padding: '20px'}}>
-                        <li><h6>Campus Express role as a marketplace</h6></li>
+                        <li><h6>Campus Sphere role as a marketplace</h6></li>
 
                         <ol style={{listStyleType: 'unset'}} type='a'>
                             <li>We operate an anti-fraud and anti-money laundering compliance program and reserve the right to perform due diligence checks on all users of the marketplace.</li>
@@ -336,30 +336,30 @@ export default function TermsOfUse() {
 
                             <ol style={{listStyleType: 'unset'}} type='a'>
                                 
-                                <li>Campus Express facilitates a marketplace for buyers and third party sellers or Campus Express where Campus Express is the seller of a product;</li>
+                                <li>Campus Sphere facilitates a marketplace for buyers and third party sellers or Campus Sphere where Campus Sphere is the seller of a product;</li>
                                 
-                                <li>The relevant seller of the product (whether Campus Express is the seller or whether it is a third party seller) shall at all times remain exclusively liable for the products they sell on the marketplace; and</li>
+                                <li>The relevant seller of the product (whether Campus Sphere is the seller or whether it is a third party seller) shall at all times remain exclusively liable for the products they sell on the marketplace; and</li>
                                 
-                                <li>In the event that there is an issue arising from the purchase of a product on the marketplace the buyer should seek recourse from the relevant seller of the product by following the process set out in Campus Express&apos;s Dispute Resolution Policy</li>
+                                <li>In the event that there is an issue arising from the purchase of a product on the marketplace the buyer should seek recourse from the relevant seller of the product by following the process set out in Campus Sphere&apos;s Dispute Resolution Policy</li>
                             </ol>
 
 
-                            <li>We commit to ensure that Campus Express or third party sellers as applicable submit information relating to their products on the marketplace that is complete accurate and up to date and pursuant thereto:</li>
+                            <li>We commit to ensure that Campus Sphere or third party sellers as applicable submit information relating to their products on the marketplace that is complete accurate and up to date and pursuant thereto:</li>
                             
                             <ol style={{listStyleType: 'unset'}} type='a'>
                                 <li>The relevant seller warrants and represents the completeness and accuracy of their information published on our marketplace relating to their products;</li>
                                 
                                 <li>The relevant seller warrants and represents that the material on the marketplace is up to date; and</li>
                                 
-                                <li>If a buyer has a complaint relating to the accuracy or completeness of the product information received from a seller (including where Campus Express is the seller) the buyer can seek recourse from the relevant seller by following the process set out in the Campus Express&apos;s Dispute Resolution Policy.</li>
+                                <li>If a buyer has a complaint relating to the accuracy or completeness of the product information received from a seller (including where Campus Sphere is the seller) the buyer can seek recourse from the relevant seller by following the process set out in the Campus Sphere&apos;s Dispute Resolution Policy.</li>
                             </ol>
 
 
-                            <li>We do not warrant or represent that the marketplace will operate without fault; or that the marketplace or any service on the marketplace will remain available during the occurrence of events beyond Campus Express’s control (force majeure events) which include but are not limited to; flood drought earthquake or other natural disasters; hacking viruses malware or other malicious software attacks on the marketplace; terrorist attacks civil war civil commotion or riots; war threat of or preparation for war; epidemics or pandemics; or extra-constitutional events or circumstances which materially and adversely affect the political or macro-economic stability of the territory as a whole.</li>
+                            <li>We do not warrant or represent that the marketplace will operate without fault; or that the marketplace or any service on the marketplace will remain available during the occurrence of events beyond Campus Sphere’s control (force majeure events) which include but are not limited to; flood drought earthquake or other natural disasters; hacking viruses malware or other malicious software attacks on the marketplace; terrorist attacks civil war civil commotion or riots; war threat of or preparation for war; epidemics or pandemics; or extra-constitutional events or circumstances which materially and adversely affect the political or macro-economic stability of the territory as a whole.</li>
 
-                            <li>We reserve the right to discontinue or alter any or all of our marketplace services and to stop publishing our marketplace at any time in our sole discretion without notice or explanation; and you will not be entitled to any compensation or other payment upon the discontinuance or alteration of any marketplace services or if we stop publishing the marketplace. This is without prejudice to your rights in respect of any unfulfilled orders or other existing liabilities of Campus Express.</li>
+                            <li>We reserve the right to discontinue or alter any or all of our marketplace services and to stop publishing our marketplace at any time in our sole discretion without notice or explanation; and you will not be entitled to any compensation or other payment upon the discontinuance or alteration of any marketplace services or if we stop publishing the marketplace. This is without prejudice to your rights in respect of any unfulfilled orders or other existing liabilities of Campus Sphere.</li>
 
-                            <li>If we discontinue or alter any or all of our marketplace in circumstances not relating to force majeure we will provide prior notice to the buyers and sellers of not less than fifteen (15) days with clear guidance on the way forward for the pending transactions or other existing liabilities of Campus Express.</li>
+                            <li>If we discontinue or alter any or all of our marketplace in circumstances not relating to force majeure we will provide prior notice to the buyers and sellers of not less than fifteen (15) days with clear guidance on the way forward for the pending transactions or other existing liabilities of Campus Sphere.</li>
 
                             <li>We do not guarantee any commercial results concerning the use of the marketplace.</li>
 
@@ -377,7 +377,7 @@ export default function TermsOfUse() {
 
                             
                             <ol style={{listStyleType: 'unset'}} type='a'>
-                                <li>Any and all losses damages costs liabilities and expenses (including without limitation legal expenses and any amounts paid by us to any third party in settlement of a claim or dispute) incurred or suffered by us and arising directly or indirectly out of your use of our marketplace or any breach by you of any provision of these general terms and conditions or the Campus Express codes policies or guidelines; and</li>
+                                <li>Any and all losses damages costs liabilities and expenses (including without limitation legal expenses and any amounts paid by us to any third party in settlement of a claim or dispute) incurred or suffered by us and arising directly or indirectly out of your use of our marketplace or any breach by you of any provision of these general terms and conditions or the Campus Sphere codes policies or guidelines; and</li>
                                 
                                 <li>Any VAT liability or other tax liability that we may incur in relation to any sale supply or purchase made through our marketplace where that liability arises out of your failure to pay withhold declare or register to pay any VAT or other tax properly due in any jurisdiction.</li>
                             </ol>
@@ -392,7 +392,7 @@ export default function TermsOfUse() {
                         <ol style={{listStyleType: 'unset'}} type='a'>
                             <li>If we permit the registration of an account on our marketplace it will remain open indefinitely subject to these general terms and conditions.</li>
 
-                            <li>If you breach these general terms and conditions or if we reasonably suspect that you have breached these general terms and conditions or any Campus Express codes policies or guidelines in any way we may:</li>
+                            <li>If you breach these general terms and conditions or if we reasonably suspect that you have breached these general terms and conditions or any Campus Sphere codes policies or guidelines in any way we may:</li>
 
                             
                             <ol style={{listStyleType: 'unset'}} type='a'>
@@ -420,7 +420,7 @@ export default function TermsOfUse() {
                         <li><h6>Entire agreement</h6></li>
 
                         <ol style={{listStyleType: 'unset'}} type='a'>
-                            <li>These general terms and conditions and the Campus Express codes policies and guidelines (and in respect of sellers the seller terms and conditions) shall constitute the entire agreement between you and us in relation to your use of our marketplace and shall supersede all previous agreements between you and us in relation to your use of our marketplace</li>
+                            <li>These general terms and conditions and the Campus Sphere codes policies and guidelines (and in respect of sellers the seller terms and conditions) shall constitute the entire agreement between you and us in relation to your use of our marketplace and shall supersede all previous agreements between you and us in relation to your use of our marketplace</li>
                         </ol>
                     </section>
 
@@ -429,7 +429,7 @@ export default function TermsOfUse() {
                     <section style={{padding: '20px'}}>
                         <li><h6>Hierarchy</h6></li>
                         <ol style={{listStyleType: 'unset'}} type='a'>
-                            <li>Should these general terms and conditions the seller terms and conditions and the Campus Express codes policies and guidelines be in conflict these terms and conditions the seller terms and conditions and the Campus Express codes policies and guidelines shall prevail in the order here stated.</li>
+                            <li>Should these general terms and conditions the seller terms and conditions and the Campus Sphere codes policies and guidelines be in conflict these terms and conditions the seller terms and conditions and the Campus Sphere codes policies and guidelines shall prevail in the order here stated.</li>
                         </ol>
                     </section>
 
@@ -439,7 +439,7 @@ export default function TermsOfUse() {
                         <li><h6>Variation</h6></li>
 
                         <ol style={{listStyleType: 'unset'}} type='a'>
-                            <li>We may revise these general terms and conditions the seller terms and conditions and the Campus Express codes policies and guidelines from time to time.</li>
+                            <li>We may revise these general terms and conditions the seller terms and conditions and the Campus Sphere codes policies and guidelines from time to time.</li>
 
                             <li>The revised general terms and conditions shall apply from the date of publication on the marketplace.</li>
                         </ol>
@@ -511,7 +511,7 @@ export default function TermsOfUse() {
                         <ol style={{listStyleType: 'unset'}} type='a'>
                             <li>You can contact us by using the contact details listed in Appendix 1.</li>
 
-                            <li>You may contact our sellers for after-sales queries including any disputes by requesting their contact details from the Campus Express in accordance with the Dispute Resolution Policy pursuant to which Campus Express shall be obliged to ensure that the seller is clearly identifiable.</li>
+                            <li>You may contact our sellers for after-sales queries including any disputes by requesting their contact details from the Campus Sphere in accordance with the Dispute Resolution Policy pursuant to which Campus Sphere shall be obliged to ensure that the seller is clearly identifiable.</li>
 
                             <li>You consent to receive notices electronically from us. We may provide all communications and information related to your use of the marketplace in electronic format either by posting to our website or application or by email to the email address on your account. All such communications will be deemed to be notices in writing and received by and properly given to you.</li>
                         </ol>

@@ -348,6 +348,18 @@ const BuyerLayout = ({children,setCookie}) => {
                     ?
                     ''
                     :
+                    pathname.split('/').splice(-1)[0] === 'help-center'
+                    ?
+                    ''
+                    :
+                    pathname.split('/').splice(-1)[0] === 'privacy-policy'
+                    ?
+                    ''
+                    :
+                    pathname.split('/').splice(-1)[0] === 'terms-of-use'
+                    ?
+                    ''
+                    :
                     <Header />
             }
 

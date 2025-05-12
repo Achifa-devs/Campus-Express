@@ -6,7 +6,7 @@ const ErrorPage = () => {
             <section style={{display: 'flex', flexDirection: 'column', position: 'fixed', top: '0', zIndex: '1000', width: '100vw', height: '100vh', alignItems: 'center', justifyContent: 'center', color: '#fff', background: 'orangered'}}>
 
                 
-                <h1>Campus Express</h1>
+                <h1>Campus Sphere</h1>
 
                 <br />
                 <br />

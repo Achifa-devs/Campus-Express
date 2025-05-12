@@ -69,7 +69,7 @@ export default function NewsLetterPreference() {
                     <hr />
 
                     <div className='input-cnt' style={{display: 'flex', alignItems: 'center', justifyContent: 'left', flexDirection: 'row-reverse'}}>
-                        <label>I agree to Campus Expresss Privacy and Cookie Policy. You can unsubscribe from newsletters at any time.</label>
+                        <label>I agree to Campus Spheres Privacy and Cookie Policy. You can unsubscribe from newsletters at any time.</label>
                         &nbsp;                        &nbsp;
                         <input name='options' style={{background: '#efefef', height: '18px', width: '18px'}} type='checkbox' />
                     </div>

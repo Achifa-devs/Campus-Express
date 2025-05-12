@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { Dimensions, StyleSheet, Text, TextInput, View } from 'react-native';
-
-export default function Title({ updateTitle }) {
+import pluralize from 'pluralize';
+export default function Title({ updateTitle, category, error }) {
   const screenWidth = Dimensions.get('window').width;
   const [title, setTitle] = useState('');
-  const [error, setError] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const maxWords = 30;
 
@@ -13,15 +12,15 @@ export default function Title({ updateTitle }) {
     updateTitle(text); // Pass the title up to parent component
     
     // Word count validation
-    const words = text.trim().split(/\s+/).filter(word => word.length > 0);
+    // const words = text.trim().split(/\s+/).filter(word => word.length > 0);
     
-    if (words.length < 3) {
-      setError('Title should be at least 3 words');
-    } else if (words.length > maxWords) {
-      setError(`Maximum ${maxWords} words allowed`);
-    } else {
-      setError('');
-    }
+    // if (words.length < 3) {
+    //   setError('Title should be at least 3 words');
+    // } else if (words.length > maxWords) {
+    //   setError(`Maximum ${maxWords} words allowed`);
+    // } else {
+    //   setError('');
+    // }
   };
 
   const wordCount = title.trim() === '' ? 0 : title.trim().split(/\s+/).filter(word => word.length > 0).length;
@@ -29,7 +28,7 @@ export default function Title({ updateTitle }) {
   return (
     <View style={[styles.container, { width: screenWidth }]}>
       <View style={styles.labelContainer}>
-        <Text style={styles.label}>Product Title</Text>
+        <Text style={styles.label}>{pluralize.singular(category)} Title {category === 'Lodge & Apartments' ? '(Name)' : ''}</Text>
         <Text style={styles.wordCounter}>
           {wordCount}/{maxWords}
         </Text>
