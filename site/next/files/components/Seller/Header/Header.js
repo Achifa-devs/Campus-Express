@@ -18,7 +18,7 @@ const Header = () => {
     useEffect(() => {
         if(user_id !== 'null' && user_id !== null && user_id !== ''){
 
-            fetch(`/api/profile/seller`, {
+            fetch(`https://www.campussphere.net/api/vendor/profile`, {
                 method: 'post',
                 body: JSON.stringify({user_id})
             })

@@ -7,23 +7,30 @@ import './styles/large.css'
 import './styles/medium.css'
 import './styles/small.css'
 import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup'
-import { useSearchParams } from 'next/navigation'
+// import { useSearchParams } from 'react-router-dom'
 
 
 export default function PasswordRecovery() {
 
     
-    let [token, setToken] = useState('')
-    const searchParams = useSearchParams()
+    const [token, setToken] = useState('')
     const [email, setEmail] = useState('')
     const validation = useRef(false)
 
     useEffect(() => {
-        const emailParam = searchParams.get('email')
+        const params = new URLSearchParams(window.location.search)
+
+        const emailParam = params.get('email')
+        const tokenParam = params.get('token')
+
         if (emailParam) {
-            setEmail(emailParam)
+        setEmail(emailParam)
         }
-    }, [searchParams])
+
+        if (tokenParam) {
+        setToken(tokenParam)
+        }
+    }, [])
 
 
     let VerifyToken = async(e, inputs, check) => {
@@ -191,31 +198,26 @@ export default function PasswordRecovery() {
 
   return (
     <>
-       <div className="seller-login-cnt" >
+        <div className="seller-login-cnt" >
             {/* <h6 style={{background: 'orangered', color: '#fff', padding: '10px', borderRadius: '5px', marginBottom: '-2px', height: 'auto'}}>Vendor Center</h6> */}
-
-            
+        
             <section className="shadow">
-                
+        
                 <div className="err-cnt">
-
                 </div>
                 <br />
-                
-                 <form action="" >
-                    
-
+        
+                    <form action="" >
+        
                     <div className="seller-input-cnt">
                         <label htmlFor="">Enter Token</label>
                         <input style={{background: '#efefef'}}  name="token" onInput={e => updateToken(e.target.value)}  placeholder='Token...' type="number" />
-                        
+        
                     </div>
-
-                
+        
                     <div className="seller-input-cnt" style={{justifyContent: 'space-between', flexDirection: 'row'}}>
-
-                        
-                        
+        
+        
                         <button style={{ background: '#ff4500', color: '#fff', border: 'none', outline: 'none', height: '40px', width: '100%', borderRadius: '5px' }} onClick={e => {
                             // alert()
                             e.preventDefault();
@@ -223,7 +225,7 @@ export default function PasswordRecovery() {
                         }}>
                             Verify Token
                         </button>
-                        
+        
                     </div>
                 </form>
                 <div style={{textAlign: 'center'}} onClick={e => window.location.href=('/login')}>

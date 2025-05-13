@@ -112,7 +112,7 @@ const BuyerLayout = ({children,setCookie}) => {
 
         if (!excludedPaths.includes(currentPath)) {
             // alert()
-            fetch('/api/store/auth', {
+            fetch('https://www.campussphere.net/api/store/auth', {
             method: 'GET'
             })
             .then(async (res) => {

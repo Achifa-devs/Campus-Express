@@ -7,23 +7,25 @@ import './styles/large.css'
 import './styles/medium.css'
 import './styles/small.css'
 import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup'
-import { usePathname, useSearchParams } from 'next/navigation'
 
 
 export default function PasswordRecovery() {
 
     
-    const searchParams = useSearchParams()
     const [pwd, setPwd] = useState('')
     const [email, setEmail] = useState('')
     const validation = useRef(false)
 
     useEffect(() => {
-        const emailParam = searchParams.get('email')
+        const params = new URLSearchParams(window.location.search)
+
+        const emailParam = params.get('email')
+        const tokenParam = params.get('token')
+
         if (emailParam) {
-            setEmail(emailParam)
+        setEmail(emailParam)
         }
-    }, [searchParams])
+    }, [])
     let ResetPassword = async(e, inputs, check) => {
         
 
@@ -177,17 +179,15 @@ export default function PasswordRecovery() {
 
   return (
     <>
-       <div className="seller-login-cnt" >
+        <div className="seller-login-cnt" >
             {/* <h6 style={{background: 'orangered', color: '#fff', padding: '10px', borderRadius: '5px', marginBottom: '-2px', height: 'auto'}}>Vendor Center</h6> */}
-
-            
+        
             <section className="shadow">
-                
+        
                 <div className="err-cnt">
-
                 </div>
                 <br />
-                
+        
                 <form action="" >
                     <div className="seller-input-cnt" style={{flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between'}}>
                         <div style={{width: '80%'}}>
@@ -207,10 +207,10 @@ export default function PasswordRecovery() {
                         </div>
                     </div>
                     <div className="seller-input-cnt" style={{justifyContent: 'space-between', flexDirection: 'row'}}>
-                          <button style={{ background: '#ff4500', color: '#fff', border: 'none', outline: 'none', height: '40px', width: '100%', borderRadius: '5px' }} onClick={e => {
+                            <button style={{ background: '#ff4500', color: '#fff', border: 'none', outline: 'none', height: '40px', width: '100%', borderRadius: '5px' }} onClick={e => {
                             e.preventDefault();
                             ResetPassword(e, [...document.querySelectorAll('input')])
-                          }}>
+                            }}>
                             Reset Password
                         </button>
                     </div>

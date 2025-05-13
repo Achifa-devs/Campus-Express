@@ -1,3 +1,4 @@
+import { NextResponse } from "next/server";
 import pool from "../../db";
 
 export async function GET(req) {
@@ -5,7 +6,7 @@ export async function GET(req) {
   const user_id = searchParams.get('user_id');
 
   if (!user_id) {
-    return Response.json({ error: 'Missing user_id' }, { status: 400 });
+    return NextResponse.json({ error: 'Missing user_id' }, { status: 400 });
   }
 
   try {
@@ -30,7 +31,7 @@ export async function GET(req) {
 
     const shipping_return_bool = hasShippingInfo;
 
-    return Response.json({
+    return NextResponse.json({
       paymentInfo: hasPayoutInfo,
       shopInfo: true,
       shippingInfo: shipping_return_bool,
@@ -38,6 +39,6 @@ export async function GET(req) {
 
   } catch (err) {
     console.error(err);
-    return Response.json({ error: 'Server error' }, { status: 500 });
+    return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }
