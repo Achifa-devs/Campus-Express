@@ -8,7 +8,6 @@ import {
     useDispatch, 
     useSelector 
 } from 'react-redux'
-import phn from '../../../assets/phone-rounded-svgrepo-com.svg'
 
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -22,7 +21,6 @@ import { setSaveTo } from '@/redux/buyer_store/Save'
 // import { SaveItem } from '@/app/api/buyer/post'
 import { open_notice } from '@/files/reusable.js/notice'
 import Contact from './Contact'
-import { Link } from 'react-router-dom'
 
 
 
@@ -217,16 +215,16 @@ const Product = ({ item, seller, order_list }) => {
                         screenWidth > 481
                         ?
                         <>
-                            {/* <Contact phone={phone}   /> */}
-                            <button style={{borderRadius: '2.5px',border: 'none', outline: 'none', width: '100%'}} className='shadow' onClick={e=>handleOrder(item.product_id)}>
-                                {
+                            <Contact phone={item.phone} item={item} />
+                            {/* <button style={{borderRadius: '2.5px',border: 'none', outline: 'none', width: '100%'}} className='shadow' onClick={e=>handleOrder(item.product_id)}> */}
+                                {/*
                                     order_list?.filter((data) => data?.product?.product_id === item?.product_id && data?.order?.user_id === user_id).length > 0
                                     ?
 
                                     'View Order'
                                     :
                                     'Place Order Now'
-                                }
+                                */}
                                 {/* <Link to={`tel:+234${phone}`} style={{height: '50px', width: '45%', borderRadius: '5px', display: 'flex', alignItems: 'center', cursor: 'pointer', justifyContent: 'space-evenly', fontSize: 'x-small', background: 'orangered', color: '#fff'}}>
                                     {
                                         
@@ -242,7 +240,7 @@ const Product = ({ item, seller, order_list }) => {
                                         
                                     }
                                 </Link> */}
-                            </button>
+                            {/* </button> */}
 
                             <br />
 

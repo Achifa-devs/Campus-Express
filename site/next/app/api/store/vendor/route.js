@@ -11,7 +11,7 @@ export async function GET(req) {
     let user_id = searchParams.get('user_id');
 
     const result = await pool.query(
-      `SELECT * FROM campus_sellers WHERE user_id = $1`,
+      `SELECT * FROM users WHERE user_id = $1`,
       [user_id]
     );
 

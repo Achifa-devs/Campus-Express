@@ -13,7 +13,7 @@ export async function generateMetadata({ params }) {
 
   try {
     const res = await fetch(
-      `https://www.campussphere.net/api/products/details?slug=${slug}`,
+      `https://www.campussphere.net/api/store/products/details?slug=${slug}`,
       { cache: "no-store" }
     );
 
@@ -38,9 +38,9 @@ export async function generateMetadata({ params }) {
     return {
       title: formattedTitle,
       alternates: {
-        canonical: `https://www.campussphere.net/product/${product?.product_id}`,
+        canonical: `https://www.campussphere.net/store/product/${product?.product_id}`,
       },
-      url: `https://www.campussphere.net/product/${product?.product_id}`,
+      url: `https://www.campussphere.net/store/product/${product?.product_id}`,
       robots: {
         index: true,
         follow: true,
@@ -48,7 +48,7 @@ export async function generateMetadata({ params }) {
       openGraph: {
         title: formattedTitle,
         description: product?.description || "",
-        url: `https://www.campussphere.net/product/${product?.product_id}`,
+        url: `https://www.campussphere.net/store/product/${product?.product_id}`,
         type: isImg ? "website" : "video.other",
         ...(isImg
           ? {
@@ -98,10 +98,11 @@ export default async function ProductPage({ params }) {
 
   try {
     const res = await fetch(
-      `https://www.campussphere.net/api/products/details?slug=${slug}`,
+      `https://www.campussphere.net/api/store/products/details?slug=${slug}`, 
       { cache: "no-store" }
     );
 
+    
     if (!res.ok) throw new Error("Failed to fetch product");
 
     product = await res.json();
@@ -109,6 +110,8 @@ export default async function ProductPage({ params }) {
     console.error("Error fetching product:", error);
     return <div>Error loading product. Please try again later.</div>;
   }
+  console.log(product?.data)
 
-  return <ProductPageClient slug={slug} product={product} />;
+  return <ProductPageClient slug={slug} product={product?.data} />; 
 }
+   

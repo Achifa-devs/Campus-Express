@@ -47,7 +47,7 @@ const ProductPageClient = ({product, slug}) => {
     useEffect(() => {
     
         const product = pathname.split('/').splice(-1)[0];
-        set_searchParams(product)
+        set_searchParams(product);
         //set_searchParams(new URLSearchParams(window.location.search).get('product'))
     }, []);
     
