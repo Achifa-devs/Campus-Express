@@ -34,11 +34,11 @@ import {
 } from 'next/navigation'
 // import {
 //   // GetSavedItem
-// } from '@/app/api/buyer/get'
+// } from '@/app/storeapi/buyer/get'
 // import {
 //   Filter_Cards,
 //   NewVisitor
-// } from '@/app/api/buyer/post'
+// } from '@/app/storeapi/buyer/post'
 import Head from 'next/head'
 import {
   v4

@@ -1,12 +1,11 @@
 "use client"
 import OrderItem from "@/files/components/Buyer/Refund/OrderItem";
 import { useEffect, useState } from "react";
-import database from '@/database/products.json'
-import '@/app/refunds/styles/xx-large.css'
-import '@/app/refunds/styles/x-large.css'
-import '@/app/refunds/styles/large.css'
-import '@/app/refunds/styles/medium.css'
-import '@/app/refunds/styles/small.css'
+import '@/app/store/refunds/styles/xx-large.css'
+import '@/app/store/refunds/styles/x-large.css'
+import '@/app/store/refunds/styles/large.css'
+import '@/app/store/refunds/styles/medium.css'
+import '@/app/store/refunds/styles/small.css'
 
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios';

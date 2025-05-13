@@ -4,7 +4,7 @@ import deleteSvg from '../../../assets/delete-svgrepo-com (1).svg';
 import { openNotice, open_notice } from '../../../reusable.js/notice';
 import { setPickupChannelTo } from '@/redux/buyer_store/pickup_channel';
 import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup';
-import { UpdatePickupChannel } from '@/app/api/buyer/update';
+// import { UpdatePickupChannel } from '@/app/api/store/update-order';
 import ReactDOMServer from 'react-dom/server';
 import country from '@/states-and-cities.json';
 import axios from 'axios';
@@ -353,21 +353,21 @@ function PickupChannel({updateLocation,title,edit,refund_data}) {
        
     }
 
-    async function editPickupChannel() {
-        let response = await UpdatePickupChannel({
-            user_id: buyerData?.user_id, 
-            product_id: refund_data?.product_id, 
-            pickup_channel:  {
-                channel: edit?.channel, 
-                locale: [state,city,town,address1,address2,address3].map(item=>item).join(', '), 
-                date: {yr: new Date().getFullYear(), mth: selectedMonth, dy: day},
-                index: edit?.index
-            }
-        })
-        if(response.bool){
-            updateLocation(response.locale)
-        }
-    }
+    // async function editPickupChannel() {
+    //     let response = await UpdatePickupChannel({
+    //         user_id: buyerData?.user_id, 
+    //         product_id: refund_data?.product_id, 
+    //         pickup_channel:  {
+    //             channel: edit?.channel, 
+    //             locale: [state,city,town,address1,address2,address3].map(item=>item).join(', '), 
+    //             date: {yr: new Date().getFullYear(), mth: selectedMonth, dy: day},
+    //             index: edit?.index
+    //         }
+    //     })
+    //     if(response.bool){
+    //         updateLocation(response.locale)
+    //     }
+    // }
   
     function rmLocation() {
         let overlay = document.querySelector('.pickup-overlay')

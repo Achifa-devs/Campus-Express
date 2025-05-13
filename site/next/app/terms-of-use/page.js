@@ -11,7 +11,7 @@ export default function page() {
             
               <h1 style={{ color: '#fff', fontSize: '4vh', fontWeight: '500' }}>Terms of Service for Campus Sphere</h1>
               
-              <small className='overview'>Welcome to Campus Sphere Nigeria ("we," "us," or "our"). By accessing or using our platform, including our website and mobile applications (collectively, the "Service"), you agree to comply with and be bound by the following terms and conditions of use. Please read these terms carefully.</small>
+              <small className='overview'>Welcome to Campus Sphere Nigeria (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;). By accessing or using our platform, including our website and mobile applications (collectively, the &quot;Service&quot;), you agree to comply with and be bound by the following terms and conditions of use. Please read these terms carefully.</small>
         </header>
         <article>
             <p>

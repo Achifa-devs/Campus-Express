@@ -12,21 +12,16 @@ import OrderedItem from '@/files/components/Buyer/NewReturn/OrderedItem';
 import BuyerAddress from '@/files/components/Buyer/NewReturn/BuyerAddress';
 import DeliveryAddress from '@/files/components/Buyer/NewReturn/DeliveryAddress';
 import NewOrderSummary from '@/files/components/Buyer/NewReturn/NewOrderSummary';
-import { 
-    GetItem 
-} from '@/app/api/buyer/get';
-import { 
-    openNotice
-} from '@/files/reusable.js/notice';
+
 import { 
     usePathname 
 } from 'next/navigation';
 import Carousel from '@/files/components/Buyer/dashboard/Carousel';
-import '@/app/new-order/styles/xx-large.css'
-import '@/app/new-order/styles/x-large.css'
-import '@/app/new-order/styles/large.css'
-import '@/app/new-order/styles/medium.css'
-import '@/app/new-order/styles/small.css'
+import '@/app/store/new-order/styles/xx-large.css'
+import '@/app/store/new-order/styles/x-large.css'
+import '@/app/store/new-order/styles/large.css'
+import '@/app/store/new-order/styles/medium.css'
+import '@/app/store/new-order/styles/small.css'
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup';

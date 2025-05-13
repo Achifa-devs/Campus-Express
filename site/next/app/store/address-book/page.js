@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import '@/app/address-book/styles/xx-large.css'
+import '@/app/store/address-book/styles/xx-large.css'
 import AddressItem from '@/files/components/Buyer/AddressBook/AddressItem'
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux'

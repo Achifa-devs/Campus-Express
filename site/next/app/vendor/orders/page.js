@@ -6,12 +6,9 @@ import '@/app/vendor/orders/styles/medium.css'
 import '@/app/vendor/orders/styles/small.css'
 import React, { useEffect, useRef, useState } from "react";
 
-import database1 from "@/database/orders.json";
-import database2 from '@/database/products.json'
 import js_ago from 'js-ago';
 import backSvg from '@/files/assets/back-svgrepo-com (3).svg';
 import Thumbnail from '@/files/components/Buyer/Thumbnail';
-import { useIsClient } from '@/files/reusable.js/isClieent'
 import { useSelector } from 'react-redux'
 import axios from 'axios'
 import { open_notice } from '@/files/reusable.js/notice'

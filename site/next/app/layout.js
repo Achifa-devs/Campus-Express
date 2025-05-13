@@ -4,7 +4,6 @@ import App from "./App";
 import './globals.css'; 
 import { cookies } from "next/headers";
 
-
 const maxAge = 90 * 24 * 60 * 60; 
  
 // export async function setNewCookie(data,role) {

@@ -12,18 +12,16 @@ import Description from "@/files/components/Buyer/Product/Description";
 import { useSelector } from "react-redux";
 
 import imgSvg from '@/files/assets/image-svgrepo-com (4).svg'; 
-import database from '@/database/products.json'
 
 import Aside from "@/files/components/Buyer/Product/Aside";
 import { usePathname } from "next/navigation";
-// import { GetSeller } from "@/app/api/seller/get";
+// import { GetSeller } from "@/app/storeapi/seller/get";
 import Reviews from '@/files/components/Buyer/Product/Reviews';
 import Carousel from '@/files/components/Buyer/dashboard/Carousel';
 import axios from 'axios';
 import { open_notice } from '@/files/reusable.js/notice';
 import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup';
 import Share from '@/files/components/Buyer/Product/Share';
-import { NextSeo } from 'next-seo'
 import { useParams } from 'next/navigation';
 
 const ProductPageClient = ({product, slug}) => {

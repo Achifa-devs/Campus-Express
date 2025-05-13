@@ -206,7 +206,7 @@ export default function page() {
           </div>
           <div class="vision-card">
               <h2>Our Vision</h2>
-              <p>"To be the leading platform that empowers students and campus vendors by bridging gaps and creating a seamless marketplace experience."</p>
+              <p>&quot;To be the leading platform that empowers students and campus vendors by bridging gaps and creating a seamless marketplace experience.&quot;</p>
           </div>
           <div class="mission-section">
             <h2>Our Mission</h2>
@@ -227,7 +227,7 @@ export default function page() {
               <div class="mission-card">
                   <div class="mission-icon">③</div>
                   <h3>Vendor Visibility</h3>
-                  <p>To improve the visibility of vendors' ads to customers across Nigerian campuses, maximizing their reach and opportunities for growth.</p>
+                  <p>To improve the visibility of vendors&quot; ads to customers across Nigerian campuses, maximizing their reach and opportunities for growth.</p>
               </div>
             </div>
           </div>
@@ -273,7 +273,7 @@ export default function page() {
                 Campus Sphere is revolutionizing campus commerce by connecting students with trusted vendors in a seamless digital marketplace. 
                 Our platform eliminates information gaps, ensures secure transactions, and empowers campus entrepreneurs to thrive.
                 <br/><br/>
-                In this video, you'll discover how we're transforming campus economies across Nigeria - from streamlined vendor-student interactions 
+                In this video, you&quot;ll discover how we&quot;re transforming campus economies across Nigeria - from streamlined vendor-student interactions 
                 to our innovative escrow payment system that guarantees safety for all transactions.
                 <br/><br/>
                 Join thousands of students and vendors who are already experiencing the future of campus commerce.

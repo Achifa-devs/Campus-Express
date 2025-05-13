@@ -6,8 +6,6 @@ import '@/app/vendor/balance/styles/medium.css'
 import '@/app/vendor/balance/styles/small.css'
 import React, { useEffect, useState } from "react";
 
-import database1 from "@/database/orders.json";
-import database2 from '@/database/products.json'
 import js_ago from 'js-ago';
 import backSvg from '@/files/assets/back-svgrepo-com (3).svg';
 import Thumbnail from '@/files/components/Buyer/Thumbnail';

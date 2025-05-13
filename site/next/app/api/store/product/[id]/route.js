@@ -1,8 +1,8 @@
 'use server'
 
+import pool from '@/app/api/db';
 // app/api/og/route.js
 import { ImageResponse } from 'next/og';
-import pool from '../../db';
 import { NextResponse } from 'next/server';
 // import pool from '../db';
 

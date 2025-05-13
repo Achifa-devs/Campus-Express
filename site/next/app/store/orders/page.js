@@ -1,7 +1,6 @@
 "use client"
 import OrderItem from "@/files/components/Buyer/Order/OrderItem";
 import { useEffect, useState } from "react";
-import database from '@/database/products.json'
 import '@/app/store/orders/styles/xx-large.css'
 import '@/app/store/orders/styles/x-large.css'
 import '@/app/store/orders/styles/large.css'
@@ -10,7 +9,6 @@ import '@/app/store/orders/styles/small.css'
 
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios';
-import { setAccessoryTo } from "@/redux/buyer_store/Aceessories";
 
 const Order = () => {
     let [screenWidth, setScreenWidth] = useState(0);

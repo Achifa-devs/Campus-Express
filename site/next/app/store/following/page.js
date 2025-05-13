@@ -1,6 +1,6 @@
 "use client"
 import React from 'react'
-import '@/app/following/styles/xx-large.css'
+import '@/app/store/following/styles/xx-large.css'
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios';

@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import '@/app/news-letter-preference/styles/xx-large.css'
+import '@/app/store/news-letter-preference/styles/xx-large.css'
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux'
 

@@ -8,11 +8,11 @@ import PaymentMethod from '@/files/components/Buyer/OrderConfirmation/PaymentMet
 import CheckoutSummary from '@/files/components/Buyer/OrderConfirmation/CheckoutSummary';
 import { usePathname } from 'next/navigation';
 import Flw from '@/files/components/Payments/Flw';
-import '@/app/order-confirmation/styles/xx-large.css'
-import '@/app/order-confirmation/styles/x-large.css'
-import '@/app/order-confirmation/styles/large.css'
-import '@/app/order-confirmation/styles/medium.css'
-import '@/app/order-confirmation/styles/small.css'
+import '@/app/store/order-confirmation/styles/xx-large.css'
+import '@/app/store/order-confirmation/styles/x-large.css'
+import '@/app/store/order-confirmation/styles/large.css'
+import '@/app/store/order-confirmation/styles/medium.css'
+import '@/app/store/order-confirmation/styles/small.css'
 import OrderedItem from '@/files/components/Buyer/OrderConfirmation/OrderedItem';
 import axios from 'axios';
 
