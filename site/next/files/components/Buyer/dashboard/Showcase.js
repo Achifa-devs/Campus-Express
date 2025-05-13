@@ -211,7 +211,7 @@ export default function Showcase({type}) {
                         <b>Phone Deals</b>
                     </div>
                     <button onClick={e=> {
-                        window.location.href=`/category/Mobile Phones`
+                        window.location.href=`/store/category/Mobile Phones`
                     }} style={{padding: '3px 8px', borderRadius: '5px'}}>View more</button>
                 </div>
             </div>

@@ -28,7 +28,7 @@ export default function Dashboard() {
               {/* <img src={sellSvg} style={{height: '25px', width: '25px'}} alt="" /> */}
           </span>
           &nbsp;
-          <span style={{color: '#fff'}}>Become a vendor</span>
+          <span style={{color: '#fff'}}>Sell my property</span>
 
         </button>
       </div>
