@@ -158,7 +158,7 @@ async function reset_pwd(req,res){
             await query_tool(
                 'SELECT',
                 '*',
-                'campus_buyers',
+                'users',
                 {
                     bool: 1,
                     search_word: ['buyer_id'],

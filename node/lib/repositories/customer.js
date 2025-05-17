@@ -15,7 +15,7 @@ export async function createCustomer({
   campus,
   gender
 }) {
-  const result = await pool.query(`INSERT INTO campus_buyers (
+  const result = await pool.query(`INSERT INTO users (
     id, fname, lname, buyer_id, email, phone, password, state,
     campus, isActive, isVerified, isEmailVerified, isPhoneVerified,
     date, gender
@@ -34,7 +34,7 @@ export async function countEmail({
 }) {
   const result = await pool.query(`
     SELECT COUNT(*) as count
-    FROM campus_buyers
+    FROM users
     WHERE email = '${email}'
   `);
   return parseInt(result.rows[0].count);
@@ -46,7 +46,7 @@ export async function countPhone({
 }) {
   const result = await pool.query(`
     SELECT COUNT(*) as count
-    FROM campus_buyers
+    FROM users
     WHERE phone = '${phone}'
   `);
   return parseInt(result.rows[0].count);
@@ -56,14 +56,14 @@ export async function countPhone({
 export async function findUserById({
   buyer_id
 }) {
-  const result = await pool.query(`SELECT * FROM campus_buyers WHERE buyer_id = $1`, [buyer_id]);
+  const result = await pool.query(`SELECT * FROM users WHERE buyer_id = $1`, [buyer_id]);
   return result.rows[0];
 }
 ;
 export async function findUserByEmail({
   email
 }) {
-  const result = await pool.query(`SELECT * FROM campus_buyers WHERE email = $1`, [email]);
+  const result = await pool.query(`SELECT * FROM users WHERE email = $1`, [email]);
   return result.rows[0];
 }
 ;
@@ -71,7 +71,7 @@ export async function updateCustomerPhoneById({
   buyer_id,
   phone
 }) {
-  const result = await pool.query(`UPDATE campus_buyers set phone = $1 WHERE buyer_id = $2`, [phone, buyer_id]);
+  const result = await pool.query(`UPDATE users set phone = $1 WHERE buyer_id = $2`, [phone, buyer_id]);
   return result.rows[0];
 }
 ;
@@ -79,7 +79,7 @@ export async function updateCustomerEmailById({
   buyer_id,
   email
 }) {
-  const result = await pool.query(`UPDATE campus_buyers set email = $1 WHERE buyer_id = $2`, [email, buyer_id]);
+  const result = await pool.query(`UPDATE users set email = $1 WHERE buyer_id = $2`, [email, buyer_id]);
   return result.rows[0];
 }
 ;
@@ -89,7 +89,7 @@ export async function updateCustomerProfileById({
   lname,
   gender
 }) {
-  const result = await pool.query(`UPDATE campus_buyers set fname=$1, lname=$2, gender=$3 WHERE buyer_id = $4`, [fname, lname, gender, buyer_id]);
+  const result = await pool.query(`UPDATE users set fname=$1, lname=$2, gender=$3 WHERE buyer_id = $4`, [fname, lname, gender, buyer_id]);
   return result.rows[0];
 }
 ;
@@ -97,7 +97,7 @@ export async function updateCustomerPasswordById({
   buyer_id,
   pwd
 }) {
-  const result = await pool.query(`UPDATE campus_buyers set password=$1 WHERE buyer_id = $2`, [pwd, buyer_id]);
+  const result = await pool.query(`UPDATE users set password=$1 WHERE buyer_id = $2`, [pwd, buyer_id]);
   return result.rows[0];
 }
 ;

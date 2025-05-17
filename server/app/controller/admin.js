@@ -2,7 +2,7 @@ const { shortId, bcrypt, jwt } = require("../reuseables/modules");
 const { NeonDB } = require("../reuseables/db");
 const maxAge = 90 * 24 * 60 * 60; 
 const createToken = (id) => {
-    return jwt.sign({ id }, 'seller_secret', {
+    return jwt.sign({ id }, 'user_secret', {
         expiresIn: maxAge
     });
 };
@@ -72,14 +72,14 @@ async function GetAdmin(req,res) {
 
 async function GetUsers(req,res) {
     let sellers = await NeonDB.then((pool) => 
-        pool.query(`SELECt * FROM campus_sellers`)
+        pool.query(`SELECt * FROM users`)
         .then(result => result.rows)
         .catch(err => console.log(err))
     )
     .catch(err => console.log(err))
 
     let buyers = await NeonDB.then((pool) => 
-        pool.query(`SELECt * FROM campus_buyers`)
+        pool.query(`SELECt * FROM users`)
         .then(result => result.rows)
         .catch(err => console.log(err))
     )
@@ -102,7 +102,7 @@ function updateSellerProfile(req,res) {
 
     new Promise((resolve, reject) => {
         NeonDB.then((pool) => 
-            pool.query(`UPDATE campus_sellers set date='${date}', fname='${fname}', lname='${lname}', state='${state}', campus='${campus}' WHERE seller_id = '${seller_id}'`)
+            pool.query(`UPDATE users set date='${date}', fname='${fname}', lname='${lname}', state='${state}', campus='${campus}' WHERE seller_id = '${seller_id}'`)
             .then(result => {
                 result.rowCount > 0 ? resolve(true) : reject(false)
             })
@@ -691,7 +691,7 @@ async function updatePwd(req,res) {
     let hPwd = await bcrypt.hash(pwd, 10)
 
     NeonDB.then((pool) => 
-        pool.query(`UPDATE campus_sellers set password='${hPwd}' WHERE seller_id = '${seller_id}'`)
+        pool.query(`UPDATE users set password='${hPwd}' WHERE seller_id = '${seller_id}'`)
         .then(result => {
             result.rowCount > 0 ? resolve(true) : reject(false)
         })

@@ -2,14 +2,14 @@ import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import pool from '../../db';
+import pool from '../db'; 
 
 export async function POST(req) {
   try {
     const { email, pwd } = await req.json();
 
     const result = await pool.query(
-      `SELECT id FROM campus_buyers WHERE email = $1`,
+      `SELECT id FROM users WHERE email = $1`,
       [email]
     );
 
@@ -23,7 +23,7 @@ export async function POST(req) {
     const buyerId = result.rows[0].id;
 
     const userResult = await pool.query(
-      `SELECT user_id, email, password, fname, lname FROM campus_buyers WHERE id = $1`,
+      `SELECT user_id, email, password, fname, lname FROM users WHERE id = $1`,
       [buyerId]
     );
 
@@ -46,7 +46,7 @@ export async function POST(req) {
     );
 
     // Set cookie (optional)
-    cookies().set('buyer_secret', token, {
+    cookies().set('user_secret', token, {
       httpOnly: true,
       secure: true,
       sameSite: 'strict',

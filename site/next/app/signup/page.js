@@ -103,25 +103,26 @@ const Signup = () => {
     let Registration = (e) => {
         // e.target.disabled = true;
         let overlay = document.querySelector('.overlay')
-        overlay.setAttribute('id', 'overlay');
 
         Validation();
         Object.values(book.current).filter(item => item !== true).length > 0 ? validation.current = false : validation.current = true;
 
-        if(validation.current){
+        if (validation.current) {
+            overlay.setAttribute('id', 'overlay');
+            
             setBtn(
                 <div className="Authloader" style={{background: '#fff',border: '1px solid orangered'}}></div>
             )
             // e.target.disabled = true;
             buyer_overlay_setup(true, 'Signing You Up')
 
-            axios.post('/api/registration/buyer', {fname,lname,gender,email,phone,pwd,state,campus})
+            axios.post('/api/signup', {fname,lname,gender,email,phone,pwd,state,campus})
             .then(({data})=>{
                 console.log(data)
                 if(data.bool){
                     // dispatch(setBuyerTo(data.cookie))
                     // buyer_overlay_setup(false, '')
-                    window.location.href = '/'
+                    window.location.href = '/store'
                 }else{
                     
                     buyer_overlay_setup(false, '')
@@ -138,6 +139,8 @@ const Signup = () => {
                 .catch((err) => {
                 console.log(err)
                 setBtn("Signup")
+                overlay.removeAttribute('id');
+                
                 buyer_overlay_setup(false, '')
                 e.target.disabled = false;
             })
@@ -207,7 +210,7 @@ const Signup = () => {
 
                     list.length > 0 ? book.current.pwd = false : book.current.pwd = true
                 }
-            }else if(item.type === 'number'){
+            }else if(item.type === 'tel'){
                 if(item.name === 'phone'){
                     let empty = item.value !== '' ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please field cannot be empty.'}
                     let length = item.value.length >= 11 ? {bool: true, mssg: ''} :  {bool: false, mssg: 'Invalid Phone Number'}
@@ -315,7 +318,7 @@ const Signup = () => {
                                 </section> 
                             </div>
 
-                            <div className="seller-input-cnt">
+                            <div className="seller-input-cnt" style={{flexDirection: 'column', height: 'fit-content'}}>
                                 <section style={{flexDirection: 'row', alignItems: 'center', width: '100%'}}>
                                     <section style={{width: '25%'}}>
                                         <label htmlFor="">Phone</label>
@@ -323,7 +326,7 @@ const Signup = () => {
                                     </section>
                                     <section style={{width: '75%', margin: '20px 0px 0px 0px'}}>
                                         <input style={{background: '#efefef'}} name='phone'
-                                        className='phone' onInput={e => setPhone(e.target.value)}  placeholder='Phone Number...' type="number" />
+                                        className='phone' onInput={e => setPhone(e.target.value)}  placeholder='Phone Number...' type="tel" />
                                     </section>
                                 </section>
                                 
@@ -404,7 +407,7 @@ const Signup = () => {
                         <div className='btn-cnt'>
                             <button style={{background: '#ff4500', color: '#fff'}} onClick={e => {e.preventDefault(); Registration(e)}}>Register</button>
                             <br />
-                            <small onClick={e => window.location.href='/store/login'} style={{cursor: 'pointer', color: '#ff4500'}}>Already Have An Account, Signin Here</small>
+                            <small onClick={e => window.location.href='/login'} style={{cursor: 'pointer', color: '#ff4500'}}>Already Have An Account, Signin Here</small>
                         </div>
 
                     </div>

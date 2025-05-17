@@ -7,14 +7,15 @@ import { NextResponse } from 'next/server';
 export async function GET(req) {
   try {
     const cookieStore = cookies();
-    const buyer_secret = cookieStore.get('buyer_secret')?.value;
+    const user_secret = cookieStore.get('user_secret')?.value;
+    console.log("user_secret: ", user_secret)
 
-    if (!buyer_secret) {
+    if (!user_secret) {
       return NextResponse.json({ bool: false, id: '' }, { status: 401 });
     }
 
     try {
-      const decoded = jwt.verify(buyer_secret, 'kdiU$28Fs!9shF&2xZpD3Q#1gLx@R7TkWzPq');
+      const decoded = jwt.verify(user_secret, 'kdiU$28Fs!9shF&2xZpD3Q#1gLx@R7TkWzPq');
       return NextResponse.json({ bool: true, id: decoded.id }, { status: 200 });
     } catch (err) {
       console.error('JWT error:', err.message);

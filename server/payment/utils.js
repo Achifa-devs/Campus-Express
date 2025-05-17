@@ -85,7 +85,7 @@ function retrieve_seller(product_id) {
 function retrieve_seller_info(seller_id) {
     return(
         NeonDB.then((pool) => 
-            pool.query(`SELECT * FROM campus_sellers WHERE seller_id = '${seller_id}'`)
+            pool.query(`SELECT * FROM users WHERE seller_id = '${seller_id}'`)
             .then(result => (result.rows[0]))
             .catch(err => console.log(err))
             // .finally(() => pool.end())
@@ -117,7 +117,7 @@ async function retrieve_room(buyer_id,seller_id) {
 async function retrieve_buyer_info(buyer_id) {
     return(
         await NeonDB.then((pool) => 
-            pool.query(`SELECT * FROM campus_buyers WHERE buyer_id = '${buyer_id}'`)
+            pool.query(`SELECT * FROM users WHERE buyer_id = '${buyer_id}'`)
             .then(result => result.rows[0])
             .catch(err => console.log(err))
             // .finally(() => pool.end())

@@ -7,7 +7,7 @@ export async function POST(req) {
     const body = await req.json();
     const { user_id } = body;
 
-    const res = await pool.query(`SELECT * FROM campus_sellers WHERE user_id='${user_id}'`);
+    const res = await pool.query(`SELECT * FROM users WHERE user_id='${user_id}'`);
     return NextResponse.json({ bool: true, user: res?.rows[0] }, { status: 200 });
 
   } catch (err) {

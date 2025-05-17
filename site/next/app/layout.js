@@ -9,7 +9,7 @@ const maxAge = 90 * 24 * 60 * 60;
 // export async function setNewCookie(data,role) {
 //   let cookieStore = cookies();
 //   const expires = new Date();
-//   let result = cookieStore.set(role === 0 ? 'buyer_secret' : 'seller_secret', data, {expires: expires.setTime(expires.getTime() + (30 * 24 * 60 * 60 * 1000))});
+//   let result = cookieStore.set(role === 0 ? 'user_secret' : 'user_secret', data, {expires: expires.setTime(expires.getTime() + (30 * 24 * 60 * 60 * 1000))});
 //   return JSON.stringify(result);
 // }
 

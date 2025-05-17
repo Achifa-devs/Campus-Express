@@ -9,7 +9,7 @@ export async function POST(req) {
     const { email, pwd } = await req.json();
     console.log(email)
     const result = await pool.query(
-      `SELECT id FROM campus_sellers WHERE email = $1`,
+      `SELECT id FROM users WHERE email = $1`,
       [email]
     );
 
@@ -23,7 +23,7 @@ export async function POST(req) {
     const sellerId = result.rows[0].id;
 
     const userResult = await pool.query(
-      `SELECT user_id, email, password, fname, lname, gender, state, campus, phone FROM campus_sellers WHERE id = $1`,
+      `SELECT user_id, email, password, fname, lname, gender, state, campus, phone FROM users WHERE id = $1`,
       [sellerId]
     );
 
@@ -45,7 +45,7 @@ export async function POST(req) {
     );
 
     // Set cookie (optional)
-    cookies().set('seller_secret', token, {
+    cookies().set('user_secret', token, {
       httpOnly: true,
       secure: true,
       sameSite: 'strict',

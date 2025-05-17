@@ -59,7 +59,7 @@ async function update_pwd(req,res) {
     let hPwd = await bcrypt.hash(pwd, 10)
 
     NeonDB.then((pool) => 
-        pool.query(`UPDATE campus_buyers set password='${hPwd}' WHERE buyer_id = '${buyer_id}'`)
+        pool.query(`UPDATE users set password='${hPwd}' WHERE buyer_id = '${buyer_id}'`)
         .then(result => {
             result.rowCount > 0 ? res.send(true) : res.send(false)
         })
@@ -76,7 +76,7 @@ async function alter_pwd(req,res) {
     let hPwd = await bcrypt.hash(pwd, 10)
 
     let c_pwd = await NeonDB.then((pool) => 
-        pool.query(`SELECT password FROM campus_buyers WHERE buyer_id = '${buyer_id}'`)
+        pool.query(`SELECT password FROM users WHERE buyer_id = '${buyer_id}'`)
         .then(result => result.rows[0].password)
         .catch(err => {
             console.log(err)
@@ -93,7 +93,7 @@ async function alter_pwd(req,res) {
     if (pwd !== oldpwd) {
         if (auth) {
             NeonDB.then((pool) => 
-                pool.query(`UPDATE campus_buyers set password='${hPwd}' WHERE buyer_id = '${buyer_id}'`)
+                pool.query(`UPDATE users set password='${hPwd}' WHERE buyer_id = '${buyer_id}'`)
                 .then(result => {
                     result.rowCount > 0 ? res.status(200).send({bool: true}) : res.status(500).send({bool: false})
                 })
@@ -122,7 +122,7 @@ async function update_email(req,res) {
     
 
     NeonDB.then((pool) => 
-        pool.query(`UPDATE campus_buyers set email='${email}' WHERE buyer_id = '${buyer_id}'`)
+        pool.query(`UPDATE users set email='${email}' WHERE buyer_id = '${buyer_id}'`)
         .then(result => {
             result.rowCount > 0 ? res.send(true) : res.send(false)
         })
@@ -138,7 +138,7 @@ async function update_phone(req,res) {
     console.log(phone)
 
     NeonDB.then((pool) => 
-        pool.query(`UPDATE campus_buyers set phone='${phone}' WHERE buyer_id = '${buyer_id}'`)
+        pool.query(`UPDATE users set phone='${phone}' WHERE buyer_id = '${buyer_id}'`)
         .then(result => {
             result.rowCount > 0 ? res.send(true) : res.send(false)
         })
@@ -154,7 +154,7 @@ async function update_profile(req,res) {
     let p_gender = gender.toLowerCase() === 'male' ? 1 : 0
 
     NeonDB.then((pool) => 
-        pool.query(`UPDATE campus_buyers set fname='${fname}', lname='${lname}', gender='${p_gender}' WHERE buyer_id = '${buyer_id}'`)
+        pool.query(`UPDATE users set fname='${fname}', lname='${lname}', gender='${p_gender}' WHERE buyer_id = '${buyer_id}'`)
         .then(result => {
             result.rowCount > 0 ? res.send(true) : res.send(false)
         })

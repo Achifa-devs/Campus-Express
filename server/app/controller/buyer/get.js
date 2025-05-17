@@ -15,7 +15,7 @@ async function get_buyer(req,res) {
     let {buyer_id} = req.query;
      NeonDB
     .then(async(pool) => {
-        pool.query(`select * from "campus_buyers" where "buyer_id" = '${buyer_id}'`, (err, result) => {
+        pool.query(`select * from "users" where "buyer_id" = '${buyer_id}'`, (err, result) => {
             if(!err){
                 console.log(result)
                 if(result.rows.length > 0){

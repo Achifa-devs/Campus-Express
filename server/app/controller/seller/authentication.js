@@ -11,7 +11,7 @@ async function UpdatePwd(req,res) {
     let hPwd = await bcrypt.hash(pwd, 10)
 
     NeonDB.then((pool) => 
-        pool.query(`UPDATE campus_sellers set password='${hPwd}' WHERE email = '${email}'`)
+        pool.query(`UPDATE users set password='${hPwd}' WHERE email = '${email}'`)
         .then(result => {
             result.rowCount > 0 ? res.send({bool:true}) : res.send({bool:false, Mssg: 'Error Occured, Please Try Again'})
         })
@@ -32,7 +32,7 @@ async function ConfirmEmail(req,res) {
            await  NeonDB.then((pool) => 
                 pool.query(`
                     SELECT fname, lname, phone
-                    FROM campus_sellers
+                    FROM users
                     WHERE email = '${email}'
                 `)
                 .then(result => result.rows.length > 0 ? ({bool: true, data: result.rows[0]}) : ({bool: false, data: ''}))

@@ -15,36 +15,12 @@ export default function Shop() {
     }=useSelector(s=>s.user_id);
 
     let [shop, setShop] = useState('')
-    let [newShopName, setNewShopName] = useState('')
 
     useEffect(() => {
-        document.querySelector('.shop-overlay').removeAttribute('id')
         seller_overlay_setup(true, 'Loading Page...')    
     }, [])
 
 
-
-    function set_shop_name() {
-        fetch(`/api/vendor/create`, {
-            method: 'post',
-            headers: {
-                "Content-Type": "Application/json"
-            },
-            body: JSON.stringify({user_id,title:newShopName})
-        })
-        .then(async(result) => {
-            let response = await result.json(); 
-            if (response?.bool) {
-                document.querySelector('.shop-overlay').removeAttribute('id');
-                window.location.reload()
-                seller_overlay_setup(false, '')
-            }
-        })
-        .catch((error) => {
-            console.log(error)
-            seller_overlay_setup(false, '')
-        })
-    }
 
     useEffect(() => {
         if(user_id !== 'null' && user_id !== null && user_id !== ''){
@@ -102,30 +78,6 @@ export default function Shop() {
 
   return (
     <>
-        <div className="shop-overlay">
-            <section style={{width: 'auto', height: 'fit-content', borderRadius: '5px', padding: '10px', background: '#fff'}}>
-                <div className="seller-input-cnt" style={{height: 'auto'}}>
-                    <label htmlFor="">Shop Name</label>
-                    <input type="text" onInput={e=>setNewShopName(e.target.value)} name="" placeholder='Shop Name' id="" />
-                </div>
-                
-                <div className="seller-input-cnt">
-                    <button onClick={e=> {
-                        seller_overlay_setup(true, 'Setting Up Your Shop Name')
-                        set_shop_name()                         
-                    }} style={{
-                        background: '#FF4500',
-                        color: '#FFF', 
-                        border: 'none', 
-                        outline: 'none',
-                        padding: '10px',
-                        borderRadius: '5px'
-                    }}>
-                        <b><small>Set Shop Name</small></b>
-                    </button>
-                </div>
-            </section> 
-        </div>
         
         <div className="seller-shop">
             <div>

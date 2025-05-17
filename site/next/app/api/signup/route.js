@@ -2,8 +2,8 @@
 import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import shortId from 'shortid';
-import pool from '../../db';
-import { createToken } from '../../auth';
+import pool from '../db';
+import { createToken } from '../auth';
 import { cookies } from 'next/headers';
 
 export async function POST(req) {
@@ -18,7 +18,7 @@ export async function POST(req) {
 
     // Check if email already exists
     const emailCheck = await pool.query(
-      'SELECT COUNT(*) FROM campus_sellers WHERE email = $1',
+      'SELECT COUNT(*) FROM users WHERE email = $1',
       [email]
     );
     if (parseInt(emailCheck.rows[0].count) > 0) {
@@ -27,7 +27,7 @@ export async function POST(req) {
 
     // Check if phone already exists
     const phoneCheck = await pool.query(
-      'SELECT COUNT(*) FROM campus_sellers WHERE phone = $1',
+      'SELECT COUNT(*) FROM users WHERE phone = $1',
       [phone]
     );
     if (parseInt(phoneCheck.rows[0].count) > 0) {
@@ -36,24 +36,24 @@ export async function POST(req) {
 
     // Insert seller
     await pool.query(
-      `INSERT INTO campus_sellers (
+      `INSERT INTO users (
         id, fname, lname, user_id, email, phone, password, state,
         campus, isActive, isVerified, isEmailVerified, isPhoneVerified,
-        date, lastseen, gender
+        date, lastseen, gender, deviceid
       ) VALUES (
         DEFAULT, $1, $2, $3, $4, $5, $6, $7,
-        $8, $9, $10, $11, $12, $13, $14, $15
+        $8, $9, $10, $11, $12, $13, $14, $15, $16
       )`,
       [
         fname, lname, user_id, email, phone, hashedPwd, state, campus,
-        false, false, false, false, date, date, gender,
+        false, false, false, false, date, date, gender, 'NULL'
       ]
     );
 
     
     // Insert wallet
     await pool.query(
-      `INSERT INTO campus_express_seller_wallet (
+      `INSERT INTO wallet (
         id, wallet_id, user_id, wallet_balance, wallet_pin, wallet_number, date
       ) VALUES (
         DEFAULT, $1, $2, $3, $4, $5, $6
@@ -73,7 +73,7 @@ export async function POST(req) {
     // Create JWT and Set Secure Cookie
     const token = createToken({ id: user_id }, 'kdiU$28Fs!9shF&2xZpD3Q#1gLx@R7TkWzPq');
 
-    cookies().set('seller_secret', token, {
+    cookies().set('user_secret', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',

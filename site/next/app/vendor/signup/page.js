@@ -1,6 +1,5 @@
 "use client"
 import { useEffect, useRef, useState } from 'react';
-import { data, school_choices } from './location';
 import 'react-phone-input-2/lib/style.css'
 import './styles/xx-large.css'
 import './styles/x-large.css'
@@ -8,48 +7,40 @@ import './styles/large.css'
 import './styles/medium.css'
 import './styles/small.css'
 import logoSvg from '@/files/assets/default.svg'
-import { useDispatch } from 'react-redux';
-import { setSellerTo } from '@/redux/seller_store/seller';
 import { seller_overlay_setup } from '@/files/reusable.js/overlay-setup';
+import axios from 'axios';
+import shortid from 'shortid';
+import { open_notice } from '@/files/reusable.js/notice';
+import { useSelector } from 'react-redux';
 
 
 const Signup = () => {
     let [screenWidth, setScreenWidth] = useState(0) 
-    let dispatch = useDispatch();
+    let {
+        user_id
+    }=useSelector(s=>s.user_id);
+
     useEffect(() => {
         setScreenWidth(window.innerWidth)
-    },[])
+        console.log("user_id: ", user_id)
+    },[user_id])
 
 
-    let [fname, setFname] = useState('')
-    let [lname, setLname] = useState('')
-    let [email, setEmail] = useState('')
-    let [gender, setGender] = useState('')
-    let [phone, setPhone] = useState('')
-    let [pwd, setPwd] = useState('')
-    let [cPwd, setCPwd] = useState('')
+    let [logo, setLogo] = useState('');
+    let [name, setName] = useState('');
+    let [summary, setSummary] = useState('');
+    let [address1, setAddress1] = useState('');
+    let [address2, setAddress2] = useState('');
+    let [address3, setAddress3] = useState('');
 
-    let [state, setState] = useState('')
-    let [campus, setCampus] = useState('')
-
-    const [value, setValue] = useState('Select State');
     const validation = useRef(false);
-    // const [validation, setvalidation] = useState(false);
-    const [campusLocale, setCampusLocale] = useState('Select Campus');
-    const [campusLocaleList, setCampusLocaleList] = useState([]);
-    const [isFocus, setIsFocus] = useState(false);
-    const [CampusisFocus, setCampusIsFocus] = useState(false);
-    let [btn, setBtn] = useState("Signup")
-    let [emailResponse,setEmailResponse] = useState('')
+   
     let book = useRef({
-        fname: false,
-        lname: false,
-        email: false,
-        pwd: false,
-        phn: false,
-        gender: false,
-        campus: false,
-        state: false
+        name: false,
+        logo: false,
+        address1: false,
+        address2: false,
+        address3: false
     })
 
     function addErrMssg(err,pElem) {
@@ -99,50 +90,37 @@ const Signup = () => {
     }
 
     let Registration = (e) => {
-        e.target.disabled = true;
-        let overlay = document.querySelector('.overlay')
-        overlay.setAttribute('id', 'overlay');
+        
 
         Validation();
         console.log(book)
         Object.values(book.current).filter(item => item !== true).length > 0 ? validation.current = false : validation.current = true;
 
-        if(validation.current){
-            setBtn(
-                <div className="Authloader" style={{background: '#fff',border: '1px solid orangered'}}></div>
-            )
+        if (validation.current) {
             e.target.disabled = true;
-            seller_overlay_setup(true, 'Signing You Up')
-            fetch('/api/registration/seller', {
+
+            let overlay = document.querySelector('.overlay')
+            overlay.setAttribute('id', 'overlay');
+            fetch('/api/vendor/create-shop', {
                 method: 'post',
                 headers: {
                     "Content-Type": "Application/json"
                 },
-                body: JSON.stringify({fname,lname,email,phone,pwd,state,campus,gender})
+                body: JSON.stringify({name,logo,address1,address2,address3,summary,user_id})
             })
             .then(async(result) => {
                 let response = await result.json();
                 console.log(response)
                 if(response.bool){
-                    window.location.href = '/seller/shop'
-                    // seller_overlay_setup(false, '')
+                    window.location.href = '/vendor/shop'
                 }else{
                     seller_overlay_setup(false, '')
                     overlay.removeAttribute('id');
-                    if(response.message === 'Email already exists'){
-                        addErrMssg([{ mssg: 'Email already exist, please try something else' }], document.querySelector('.email').parentElement)
-                        window.location.href='#email'
-                    }else if(response.message === 'Phone already exists'){
-                        addErrMssg([{ mssg: 'Phone Number already exist, please try something else' }], document.querySelector('.phone').parentElement.parentElement.parentElement)
-                        window.location.href='#phone'
-                        
-                    }
-                    setBtn("Signup")
+                    open_notice(true, 'Error occured, try again.')
                     e.target.disabled = false;
                 }
             })
             .catch((err) => {
-                setBtn("Signup")
                 seller_overlay_setup(false, '')
                 e.target.disabled = false;
             })
@@ -154,118 +132,125 @@ const Signup = () => {
 
     function Validation() {
         let inputs = [...document.querySelectorAll('input')]
-        let select = [...document.querySelectorAll('select')]
-        
 
         inputs.map(async(item) => {
             if(item.type === 'text'){
 
-                if(item.name === 'fname'){
+                if(item.name === 'shop_name'){
 
                     let empty = item.value !== '' ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please field cannot be empty'}
-                    let length = item.value.length > 3 ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please name must be at least 3 letters.'}
+                    let length = item.value.length > 3 ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please shop name must be at least 3 letters.'}
                     let specialCharFree = /^[a-zA-Z]+$/.test(item.value.trim()) ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please enter only alphabets.'}
                     let errs = [empty,length,specialCharFree];
                     
                     addErrMssg(errs.filter(item => item.mssg !== ''),item.parentElement);
                     let list =errs.filter(item => item.mssg !== '')
 
-                    list.length > 0 ? book.current.fname = false : book.current.fname = true
+                    list.length > 0 ? book.current.name = false : book.current.name = true
                     
-                }else if(item.name === 'lname'){
+                }else if(item.name.toLowerCase() === 'address1'){
 
                     let empty = item.value !== '' ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please field cannot be empty'}
-                    let length = item.value.length > 3 ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please name must be at least 3 letters.'}
-                    let specialCharFree = /^[a-zA-Z]+$/.test(item.value.trim()) ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please enter only alphabets.'}
+                    let length = item.value.length > 3 ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please address (1) must be at least 3 letters.'}
+                    // let specialCharFree = /^[a-zA-Z]+$/.test(item.value.trim()) ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please enter only alphabets.'}
 
-                    let errs = [empty,length,specialCharFree];
-                    
-                    addErrMssg(errs.filter(item => item.mssg !== ''),item.parentElement)
-                    let list =errs.filter(item => item.mssg !== '')
-
-                    list.length > 0 ? book.current.lname = false : book.current.lname = true
-
-                }else if(item.name === 'email'){
-
-                    // let emailvailidity = await checkEmailDuplicate();
-                    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    let empty = item.value !== '' ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please field cannot be empty.'}
-                    let validEmail = emailRegex.test(item.value) ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please enter a valid email address.'}
-                    // let emailDuplicate =  emailvailidity ? {bool: true, mssg: ''} : {bool: false, mssg: 'Email already exist, please try something else'} 
-                    let errs = [empty,validEmail];
-                    addErrMssg(errs.filter(item => item.mssg !== ''),item.parentElement)
-                    let list = errs.filter(item => item.mssg !== '')
-                    list.length > 0 ? book.current.email = false : book.current.email = true
-
-                }
-                
-            }else if(item.type === 'password'){
-                if(item.name === 'password'){
-                    let empty = item.value !== '' ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please field cannot be empty.'}
-                    let length = item.value.length >= 8 ? {bool: true, mssg: ''} :  {bool: false, mssg: 'Password must contain at least 8 characters.'}
                     let errs = [empty,length];
                     
                     addErrMssg(errs.filter(item => item.mssg !== ''),item.parentElement)
-
                     let list =errs.filter(item => item.mssg !== '')
 
-                    list.length > 0 ? book.current.pwd = false : book.current.pwd = true
-                }
-            }else if(item.type === 'tel'){
-                if(item.name === 'phone'){
-                    let empty = item.value !== '' ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please field cannot be empty.'}
-                    let length = item.value.length >= 10 ? {bool: true, mssg: ''} :  {bool: false, mssg: 'Invalid Phone Number'}
-                    let errs = [empty, length];
+                    list.length > 0 ? book.current.address1 = false : book.current.address1 = true
+
+                }else if(item.name.toLowerCase() === 'address2'){
+
+                    let empty = item.value !== '' ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please field cannot be empty'}
+                    let length = item.value.length > 3 ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please address (2) must be at least 3 letters.'}
+                    // let specialCharFree = /^[a-zA-Z]+$/.test(item.value.trim()) ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please enter only alphabets.'}
+
+                    let errs = [empty,length];
                     
-                    addErrMssg(errs.filter(item => item.mssg !== ''),item.parentElement.parentElement.parentElement)
+                    addErrMssg(errs.filter(item => item.mssg !== ''),item.parentElement)
+                    let list =errs.filter(item => item.mssg !== '')
 
-                    let list = errs.filter(item => item.mssg !== '')
+                    list.length > 0 ? book.current.address2 = false : book.current.address2 = true
 
-                    list.length > 0 ? book.current.phn = false : book.current.phn = true
+                }else if(item.name.toLowerCase() === 'address3'){
+
+                    let empty = item.value !== '' ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please field cannot be empty'}
+                    let length = item.value.length > 3 ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please address (3) must be at least 3 letters.'}
+                    // let specialCharFree = /^[a-zA-Z]+$/.test(item.value.trim()) ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please enter only alphabets.'}
+
+                    let errs = [empty,length];
+                    
+                    addErrMssg(errs.filter(item => item.mssg !== ''),item.parentElement)
+                    let list =errs.filter(item => item.mssg !== '')
+
+                    list.length > 0 ? book.current.address3 = false : book.current.address3 = true
+
                 }
+                
+            } else {
+                let errs = [logo !== '' ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please upload logo'}]
+                addErrMssg(errs.filter(item => item.mssg !== ''),item.parentElement.parentElement);
+                let list =errs.filter(item => item.mssg !== '')
+
+                list.length > 0 ? book.current.logo = false : book.current.logo = true
+               
             }
         })
 
-        select.map(item => {
-            if(item.name === 'state'){
-                let empty = state !== '' ?  {bool: true, mssg: ''} :  {bool: false, mssg: 'Please select a state'}
-                let errs = [empty];
-                    
-                addErrMssg(errs.filter(item => item.mssg !== ''),item.parentElement)
-                let list =errs.filter(item => item.mssg !== '')
-
-                list.length > 0 ? book.current.state = false : book.current.state = true
-            }else if(item.name === 'campus'){
-                let empty = campus !== '' ?  {bool: true, mssg: ''} :  {bool: false, mssg: 'Please select a campus'}
-                let errs = [empty];
-                    
-                addErrMssg(errs.filter(item => item.mssg !== ''),item.parentElement)
-                let list =errs.filter(item => item.mssg !== '')
-
-                list.length > 0 ? book.current.campus = false : book.current.campus = true
-            }else if(item.name === 'gender'){
-                let empty = gender !== '' ?  {bool: true, mssg: ''} :  {bool: false, mssg: 'Please select your gender'}
-                let errs = [empty];
-                    
-                addErrMssg(errs.filter(item => item.mssg !== ''),item.parentElement)
-                let list = errs.filter(item => item.mssg !== '')
-                // console.log(list.length, JSON.stringify(errs),gender)
-
-                list.length > 0 ? book.current.gender = false : book.current.gender = true
-            }
-        })
     }
 
+    const uploadToServer = async (file) => {
+        try {
+            let overlay = document.querySelector('.overlay')
+            overlay.setAttribute('id', 'overlay');
+            const formData = new FormData();
+            formData.append('file', file); // Directly append the file object for web
+            formData.append('productId', shortid.generate(10)); // Directly append the file object for web
+    
+            const response = await axios.post('http://192.168.213.146:9090/upload', formData, {
+                headers: { 
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+    
+            if (response.data.success && response.data.data.url) {
+                // Create a preview URL for the image
+                const previewUrl = URL.createObjectURL(file);
+                // setLogo(previewUrl);
+                
+                // If you also need to keep the server URL:
+                setLogo(response.data.data.url);
+                
+                overlay.removeAttribute('id');
+            }
+        } catch (err) {
+            console.error('Upload failed:', err);
+            overlay.removeAttribute('id');
+            throw err; // Re-throw the error for handling in the calling function
 
-    useEffect(() => {
-        setCampusLocaleList([])
-        let stateIndex = data.filter(item =>  item.label.toLocaleLowerCase() === state.toLocaleLowerCase())
-        let index = data.indexOf(stateIndex[0]); 
-        let campuses = Object.values(school_choices).reverse();
-        console.log(campuses[index])
-        index < 0 ? setCampusLocaleList([]) : setCampusLocaleList(campuses[index])
-
-    }, [state])
+        }
+    };
+    
+    const deleteFromServer = async (url) => {
+        let overlay = document.querySelector('.overlay')
+        overlay.setAttribute('id', 'overlay');
+        try {
+        //   setIsLoading(true);
+          const response = await axios.post('http://192.168.213.146:9090/delete', {
+            url
+          });
+    
+          if (response.data && response.data.data.result === "ok") {
+            setLogo('')
+            overlay.removeAttribute('id');
+          }
+        } catch (err) {
+          console.error('Delete failed:', err.message);
+          overlay.removeAttribute('id');
+        }
+    };
 
 
     return ( 
@@ -289,126 +274,121 @@ const Signup = () => {
                     </div>
                     <div className="right">
                         <div  className="head-cnt">
-                            Signup form
+                            Create Shop
                         </div>
                         <form action="">
-                            <div className="seller-input-cnt" style={{flexDirection: 'row'}}>
-                                <section>
-                                    <label htmlFor="">FirstName</label>
-                                    <input style={{background: '#efefef'}} name='fname' onInput={e => setFname(e.target.value)} placeholder='FirstName...' type="text" />
-                                </section>
-                                <section>
-                                    <label htmlFor="">LastName</label>
-                                    <input style={{background: '#efefef'}} name='lname' onInput={e => setLname(e.target.value)}  placeholder='LastName' type="text" />
-                                </section>
-                            </div>
-
-
-                            <div className="seller-input-cnt" style={{display: 'flex', flexDirection: 'column'}}>
-                                <label htmlFor="">Gender</label>
-                                <select onInput={e => setGender(e.target.value)} name='gender'>
-                                    <option value=''>Select your gender</option>
-                                    <option value={0}>Male</option>
-                                    <option value={1}>Female</option>
-                                </select>
-                            </div>
-
-                            <div className="seller-input-cnt">
-                                <section style={{width: '100%'}} id='email'>
-                                    <label htmlFor="">Email</label>
-                                    <input style={{background: '#efefef'}} name='email' onInput={e => {setEmail(e.target.value)}} className='email'  placeholder='Email...' type="text" />
-                                </section> 
-                            </div>
-
-                            <div className="seller-input-cnt">
-                                <section id='phone' style={{flexDirection: 'row', alignItems: 'center', width: '100%'}}>
-                                    <section style={{width: '25%'}} >
-                                        <label htmlFor="">Phone</label>
-                                        <input style={{background: '#efefef'}} name='code' value={+234} className='phone' type="tel" />
-                                    </section>
-                                    <section style={{width: '75%', margin: '20px 0px 0px 0px'}}>
-                                        <input style={{background: '#efefef'}} name='phone'
-                                        className='phone' onInput={e => setPhone(e.target.value)} maxlength={11}   placeholder='Phone Number...' type="tel" />
-                                    </section>
-                                </section>
+                            <div className="seller-input-cnt" style={{ flexDirection: 'column', height: '140px' }}>
+                                <label htmlFor="">Shop Logo</label>
                                 
+                                <div 
+                                className="logo-upload-container"
+                                style={{
+                                    height: '120px',
+                                    width: '100px',
+                                    borderRadius: '5px',
+                                    border: '1px solid #FF4500',
+                                    backgroundColor: '#f9f9f9',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.2s ease',
+                                    position: 'relative',
+                                    overflow: 'hidden',
+                                    ':hover': {
+                                    borderColor: '#FF6347',
+                                    backgroundColor: '#f0f0f0'
+                                    }
+                                }}
+                                >
+                                    <input 
+                                        onChange={e => {
+                                            // console.log(e.target.files[0])
+                                            uploadToServer(e.target.files[0])
+                                        }}
+                                        type="file"
+                                        id="logo"
+                                        accept="image/*"
+                                        name='logo'
+                                        style={{ display: 'none' }}
+                                    />
+                                    {
+                                        logo === ''
+                                        ?
+                                        <label 
+                                            htmlFor="logo"
+                                            style={{
+                                            width: '100%',
+                                            height: '100%',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            color: '#FF4500',
+                                            fontWeight: '500',
+                                            fontSize: '14px',
+                                            cursor: 'pointer'
+                                            }}
+                                        >
+                                            Add Logo
+                                        </label>
+                                        :
+                                        <>
+                                            <button style={{
+                                                position: 'absolute',
+                                                top: '10px',
+                                                width: '20px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                height: '20px',
+                                                padding: '0px',
+                                                right: '10px',
+                                                background: 'red',
+                                                borderRadius: '5px'
+                                            }} onClick={e => {
+                                                e.preventDefault();
+                                                deleteFromServer(logo);
+                                            }}>x</button>
+                                            <img src={logo} style={{height: '100%', width: '100%'}} />
+                                        </>
+                                    }
+                                </div>
                             </div>
-
-                            <div className="seller-input-cnt">
-                                <section style={{flexDirection: 'row', alignItems: 'center', width: '100%'}}>
-                                    <section style={{width: '70%'}}>
-                                        <label htmlFor="">Password</label>
-                                        <input style={{background: '#efefef'}} name='password' className='pwd' onInput={e => setPwd(e.target.value)}  placeholder='Password...' type="password" />
-                                    </section>
-                                    <section style={{width: '30%', margin: '20px 0px 0px 0px'}}>
-                                        <button onClick={e => {
-                                            e.target.disabled = true
-                                            e.preventDefault();
-                                            let pwd = document.querySelector('.pwd');
-                                            if(pwd.type !== 'text'){
-                                                pwd.type = 'text'
-                                                setTimeout(( ) => {pwd.type = 'password'; e.target.disabled = false}, 800)
-                                            }
-                                        }}>Show</button>
-                                    </section>
-                                </section>
-                                
-                            </div>
-
-                            {/* <div className="seller-input-cnt">
-                                <section style={{width: '100%'}}>
-                                    <label htmlFor="">Confirm Password</label>
-                                    <input name='confirm-password' onInput={e => setCPwd(e.target.value)}  placeholder='Confirm Password...' type="password" />
-                                </section>
-                                
-                            </div> */}
-
-                            <div className="seller-input-cnt">
-                                <section style={{width: '100%'}}>
-                                    <label htmlFor="">State </label>
-                                    <select onInput={e => setState(e.target.value)}  name="state" id="">
-                                        <option value="">Select State</option>
-                                        {
-                                            data.map((item,index) => {
-                                                return(
-                                                    <option key={index} value={item.label}>{item.label}</option>
-                                                )
-                                            })
-                                        }
-                                    </select>
-                                </section>
-                                
-                            </div>
-
-                            <div className="seller-input-cnt">
-                                <section style={{width: '100%'}}>
-                                    <label htmlFor="">Campus </label>
-                                    <select onInput={e => setCampus(e.target.value)}  name="campus" id="">
-                                        <option value="">Select Campus</option>
-                                        {
-                                            campusLocaleList.map((item,index) => {
-                                                return(
-                                                    <option key={index} value={item.text}>{item.text}</option>
-                                                )
-                                            })
-                                        }
-                                    </select>
-                                </section>
-                                
-                            </div>
-
-
-
                             
 
-                            
-                            
+                            <div className="seller-input-cnt" style={{flexDirection: 'column'}}>
+                                <label htmlFor="">Shop Name</label>
+                                <input style={{background: '#efefef', width: '100%'}} name='shop_name' onInput={e => setName(e.target.value)}  placeholder='Shop Name' type="text" />
+                            </div>
+
+
+                            <div className="seller-input-cnt" style={{display: 'flex', flexDirection: 'column', height: 'fit-content'}}>
+                                <label htmlFor="" style={{height: '20%', background: '#fff'}}>Shop Description (Optional)</label>
+                                <textarea onInput={e => setSummary(e.target.value)} style={{resize: 'none', height: '80%', borderRadius: '5px'}} rows={10} name="" id="" placeholder='Describe your shop details here. e.g: At "Lorex" Shop we sell female wig and also advertise vacant lodge.'></textarea>
+                            </div>
+
+                            <div style={{width: '100%', flexDirection: 'column'}} className="seller-input-cnt">
+                                <label htmlFor="">Address1 (Town) e.g: Ifite-Awka...</label>
+                                <input style={{background: '#efefef'}} name='Address1' onInput={e => {setAddress1(e.target.value)}} className='Address1'  placeholder='Address (Town) e.g: Ifite-Awka...' type="text" />
+                            </div>
+
+                            <div style={{width: '100%', flexDirection: 'column'}} className="seller-input-cnt">
+                                <label htmlFor="">Address2 (Street | Bus Stop) e.g: Yahoo junction...</label>
+                                <input style={{background: '#efefef'}} name='Address2' onInput={e => {setAddress2(e.target.value)}} className='Address2'  placeholder='Address (Street | Bus Stop) e.g: Yahoo junction...' type="text" />
+                            </div>
+
+                            <div style={{width: '100%', flexDirection: 'column'}} className="seller-input-cnt">
+                                <label htmlFor="">Address3 (Lodge Name) e.g: Novena Lodge...</label>
+                                <input style={{background: '#efefef'}} name='Address3' onInput={e => {setAddress3(e.target.value)}} className='Address3'  placeholder='Address (Lodge Name) e.g: Novena Lodge...' type="text" />
+                            </div>
+
+                           
+
                         </form>
                     
                         <div className='btn-cnt'>
-                            <button style={{background: '#ff4500', color: '#fff'}} onClick={e => {e.preventDefault(); Registration(e)}}>Register</button>
-                            <br />
-                            <small onClick={e => {window.location.href='/seller/login'}} style={{cursor: 'pointer', color: '#ff4500'}}>Already Have An Account, Signin Here</small>
+                            <button style={{background: '#ff4500', color: '#fff'}} onClick={e => {e.preventDefault(); Registration(e)}}>Register New Shop</button>
+                            
                         </div>
 
                     </div>

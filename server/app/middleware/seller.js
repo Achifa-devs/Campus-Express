@@ -3,11 +3,11 @@ const {Pool, Client} = require("pg");
 
 
 const SellerAuth = async(req, res, next) => {
-    const seller_secret = req.headers.authorization;
-    if(seller_secret){
+    const user_secret = req.headers.authorization;
+    if(user_secret){
         try {
 
-            const { id } = jwt.verify(seller_secret, 'seller_secret');
+            const { id } = jwt.verify(user_secret, 'user_secret');
             // Proceed with the decoded token data
             console.log('Decoded ID:', id);
             res.status(200).send({bool: true, id:id})

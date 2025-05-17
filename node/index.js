@@ -168,49 +168,49 @@ CAMPUSSPHERE_SERVER.post('/upload', upload.single('file'), async (req, res) => {
 
 CAMPUSSPHERE_SERVER.post('/delete', async (req, res) => {
   try {
-    const { publicId } = req.body;
-    // console.log(url)
+    const { url } = req.body;
+    console.log(url)
 
     // Validate input
-    if (!publicId) {
-      return res.status(400).json({ 
-        success: false,
-        message: 'publicId is required' 
-      });
-    }
+    // if (!publicId) {
+    //   return res.status(400).json({ 
+    //     success: false,
+    //     message: 'publicId is required' 
+    //   });
+    // }
 
     // Extract public ID from URL
-    // const extractPublicId = (url) => {
-    //   try {
-    //     const parts = url.split('/upload/');
+    const extractPublicId = (url) => {
+      try {
+        const parts = url.split('/upload/');
 
-    //     if (parts.length < 2) {
-    //       throw new Error('Invalid Cloudinary URL');
-    //     }
+        if (parts.length < 2) {
+          throw new Error('Invalid Cloudinary URL');
+        }
 
-    //     // Remove version and extension
-    //     const pathWithVersion = parts[1]; // e.g., v1746561234/user_uploads/file.jpg
-    //     const pathParts = pathWithVersion.split('/');
+        // Remove version and extension
+        const pathWithVersion = parts[1]; // e.g., v1746561234/user_uploads/file.jpg
+        const pathParts = pathWithVersion.split('/');
 
-    //     // Remove the version (starts with 'v')
-    //     if (pathParts[0].startsWith('v')) {
-    //       pathParts.shift(); // remove version
-    //     }
+        // Remove the version (starts with 'v')
+        if (pathParts[0].startsWith('v')) {
+          pathParts.shift(); // remove version
+        }
 
-    //     // Extract file name without extension
-    //     const fileWithExt = pathParts.pop(); // e.g., file.jpg
-    //     const fileName = fileWithExt.split('.')[0]; // e.g., file
+        // Extract file name without extension
+        const fileWithExt = pathParts.pop(); // e.g., file.jpg
+        const fileName = fileWithExt.split('.')[0]; // e.g., file
 
-    //     // Reconstruct the public_id
-    //     return [...pathParts, fileName].join('/');
-    //   } catch (error) {
-    //     console.error('Error extracting public ID:', error);
-    //     throw new Error('Failed to extract public ID from URL');
-    //   }
-    // };
+        // Reconstruct the public_id
+        return [...pathParts, fileName].join('/');
+      } catch (error) {
+        console.error('Error extracting public ID:', error);
+        throw new Error('Failed to extract public ID from URL');
+      }
+    };
 
 
-    // const publicId = extractPublicId(url);
+    const publicId = extractPublicId(url);
     
     if (!publicId) {
       return res.status(400).json({ 

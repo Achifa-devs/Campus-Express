@@ -1,3 +1,4 @@
+"use client"
 import React from 'react'
 import './styles/xx-large.css'
 import './styles/x-large.css'
@@ -27,26 +28,42 @@ export default function page() {
             }}>
               The next-generation platform revolutionizing campus commerce. Our innovative solutions are designed to empower students and vendors with smarter, faster, and more secure ways to buy, sell, and connect across campus communities.
             </h4>
+            <button onClick={e => window.location.href='/signup'} style={{
+              height: '200px',
+              width: '200px',
+              textAlign: 'center',
+              color: '#ffff',
+              fontSize: '18px',
+              borderRadius: '10px',
+              lineHeight: '1.6',
+              maxWidth: '800px',
+              margin: '10px auto',
+              padding: '10px 20px',
+              fontWeight: '400',
+              fontStyle: 'italic'
+            }}>
+              Get Started
+            </button>
             <div style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
               <div
                 style={{
                   display: 'flex',
                   flexWrap: 'wrap',
-                  justifyContent: 'center',
+                  justifyContent: 'space-between',
                   alignItems: 'center',
                   margin: '40px 0',
                   gap: '20px'
                 }}
               >
                 {[
-                  { title: 'Lodge & Accomodation', icon: '🏠', color: '#FF6B6B' },
-                  { title: 'Services', icon: '🛠️', color: '#4ECDC4' },
-                  { title: 'Appliances', icon: '🔌', color: '#45B7D1' },
-                  { title: 'Mobile Phones', icon: '📱', color: '#A78BFA' },
-                  { title: 'Laptops', icon: '💻', color: '#F9A8D4' },
-                  { title: 'Fashion & Clothing', icon: '👕', color: '#F472B6' },
-                  { title: 'Study Materials', icon: '📚', color: '#FBBF24' },
-                  { title: 'Explore More', icon: '🔍', color: '#818CF8' },
+                  { uri: '/store/category/Lodge & Accomodation', title: 'Lodge & Accomodation', icon: '🏠', color: '#FF6B6B' },
+                  { uri: '/store/category/Services', title: 'Services', icon: '🛠️', color: '#4ECDC4' },
+                  { uri: '/store/category/Appliances', title: 'Appliances', icon: '🔌', color: '#45B7D1' },
+                  { uri: '/store/category/Mobile Phones', title: 'Mobile Phones', icon: '📱', color: '#A78BFA' },
+                  { uri: '/store/category/Laptops', title: 'Laptops', icon: '💻', color: '#F9A8D4' },
+                  { uri: '/store/category/Fashion & Clothing', title: 'Fashion & Clothing', icon: '👕', color: '#F472B6' },
+                  { uri: '/store/category/Study Materials', title: 'Study Materials', icon: '📚', color: '#FBBF24' },
+                  { uri: '/store/', title: 'Explore More', icon: '🔍', color: '#818CF8' },
                 ].map((item, index) => (
                   <div
                     key={index}
@@ -58,8 +75,8 @@ export default function page() {
                       cursor: 'pointer',
                       transition: 'transform 0.2s ease'
                     }}
-                    // onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
-                    // onMouseLeave={(e) => e.currentTarget.style.transform = 'none'}
+                    // onClick={(e)=> window.location.href=`${item.uri}`}
+                    
                   >
                     <div
                       style={{
@@ -188,16 +205,12 @@ export default function page() {
           </div>
         </div>
 
+        <br />
+        <br />
 
-        <div className="roles-section">
-          <div className='grid-box1'></div>
-          <div className='grid-box2'></div>
-          <div className='grid-box3'></div>
-          <div className='grid-box4'></div>
-          <div className='grid-box5'></div>
-          <div className='grid-box6'></div>
-          <div className='grid-box7'></div>
-        </div>
+        {/* <div className="roles-section">
+          
+        </div> */}
 
         <div className="vision-section">
           <div className='vision-header'>
@@ -239,20 +252,15 @@ export default function page() {
             <video
               src="https://res.cloudinary.com/daqbhghwq/video/upload/v1742848836/6a28cdee-b6c5-42c6-91a5-a432019a5d0e/541FAq0Zn%7C6a28cdee-b6c5-42c6-91a5-a432019a5d0e.mp4"
               style={{
-                width: '50%',
-                height: '100%',
-                borderRadius: '10px 0px 0px 10px',
                 objectFit: 'cover'
               }}
               controls
             />
 
             <div style={{
-              width: '50%',
               height: '100%',
               padding: '2rem',
               backgroundColor: '#FF4500',
-              borderRadius: '0px 10px 10px 0px',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center'

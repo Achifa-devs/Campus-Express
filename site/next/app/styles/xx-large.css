@@ -345,11 +345,11 @@
     }
 
     .roles-section .grid-box3{
-        grid-column-start: 3;
-        grid-column-end: 5;
+        grid-column-start: 4;
+        grid-column-end: 6;
         border-radius: 10px;
         background-color: #08f563;
-        grid-row-start: 3;
+        grid-row-start: 2;
         grid-row-end: 4;
     }
 
@@ -363,12 +363,12 @@
     }
 
     .roles-section .grid-box5{
-        grid-column-start: 4;
-        grid-column-end: 6;
+        grid-column-start: 1;
+        grid-column-end: 4;
         border-radius: 10px;
         background-color: #d37e7e;
-        grid-row-start: 2;
-        grid-row-end: 3;
+        grid-row-start: 3;
+        grid-row-end: 4;
     }
 
     .roles-section .grid-box6{
@@ -511,6 +511,17 @@
         border-radius: 10px;
         margin: 0 auto;
         margin-top: 25px;
+    }
+
+    .video-statement video{
+        width: 50%;
+        height: 100%;
+        border-radius: 10px 0px 0px 10px;
+    }
+
+    .video-statement div{
+        width: 50%;
+        border-radius: 0px 10px 10px 0px;
     }
 
 

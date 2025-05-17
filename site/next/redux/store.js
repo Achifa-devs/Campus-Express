@@ -36,7 +36,6 @@ let store = configureStore({
     savedItem: savedItem,
     buyerData: BuyerData,
     user: userReducer,
-    user_id: seller_data,
     user_id: buyer_data,
     accessory: accessory,
     buyer_info: buyerInfo,

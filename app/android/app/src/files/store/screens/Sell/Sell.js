@@ -111,7 +111,7 @@ export default function Sell() {
 
       if (result.success && result.data.url) {
         handleInputChange('logo', result.data.url);
-        setShopLogo(result.data.url ); // Updated for proper Image rendering
+        setShopLogo(result.data.url); // Updated for proper Image rendering
       }
     } catch (err) {
       console.error('Upload failed:', err.message);

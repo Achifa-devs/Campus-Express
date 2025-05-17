@@ -73,7 +73,7 @@ async function retrieve_buyer(buyer_id) {
             // let conn = pool.connect();
 
             // if(conn){
-                return pool.query(`SELECT * FROM campus_buyers WHERE buyer_id = '${buyer_id}'`)
+                return pool.query(`SELECT * FROM users WHERE buyer_id = '${buyer_id}'`)
                 .then(result => result.rows[0])
                 .catch(err => console.log(err))
             // }
@@ -91,7 +91,7 @@ async function retrieve_seller(seller_id) {
             // let conn = pool.connect();
 
             // if(conn){
-                return pool.query(`SELECT * FROM campus_sellers WHERE seller_id = '${seller_id}'`)
+                return pool.query(`SELECT * FROM users WHERE seller_id = '${seller_id}'`)
                 .then(result => result.rows[0])
                 .catch(err => console.log(err))
             // }

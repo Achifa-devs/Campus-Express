@@ -14,7 +14,7 @@ import { setBuyerInfoTo } from '@/redux/buyer_store/buyerInfo';
 import FilterAside from '../components/Buyer/dashboard/FilterAside'
 import { buyer_overlay_setup } from '../reusable.js/overlay-setup'
 
-const BuyerLayout = ({children,setCookie}) => {
+const BuyerLayout = ({children}) => {
 
     let dispatch = useDispatch()
     let [screenWidth, setScreenWidth] = useState(0) 
@@ -25,6 +25,37 @@ const BuyerLayout = ({children,setCookie}) => {
     let {
         user_id
     } = useSelector(s => s.user_id)
+
+    useEffect(() => {
+        const currentPath = pathname.split('/').splice(-1)[0];
+        const excludedPaths = ['login', 'signup', 'password-recovery'];
+
+        if (!excludedPaths.includes(currentPath)) {
+            // alert()
+            fetch('https://www.campussphere.net/api/store/auth', {
+            method: 'GET'
+            })
+            .then(async (res) => {
+                const data = await res.json();
+
+                alert(JSON.stringify(data))
+                if (data.bool) {
+                    dispatch(setBuyerIdTo(data.id));
+                } else {
+                // Optionally redirect to login
+                    // window.location.href = '/buyer/login';
+                }
+            })
+            .catch((err) => {
+                alert(JSON.stringify(err))
+                
+                console.error('Auth Error:', err);
+                // window.location.href = '/buyer/login';
+            });
+        }
+        
+    }, [])
+
 
     let [load_start, set_load_start] = useState(0);
 
@@ -50,9 +81,10 @@ const BuyerLayout = ({children,setCookie}) => {
     // }, [buyerData])   
     
     useEffect(() => {
+        // alert(user_id)
 
         if(user_id !== null){
-            fetch(`/api/store/customer?user_id=${user_id}`,
+            fetch(`https://www.campussphere.net/api/store/customer?user_id=${user_id}`,
             {
                 headers: {
                     'Content-Type': 'application/json'
@@ -61,7 +93,7 @@ const BuyerLayout = ({children,setCookie}) => {
             })
             .then(async(result) => {
                 let response = await result.json(); 
-                // alert(JSON.stringify(response))
+                alert(JSON.stringify(response))
                 if (response?.bool) {
                     dispatch(setBuyerInfoTo(response?.data));
                     // window.localStorage.removeItem('id_for_unknown_buyer')
@@ -106,33 +138,7 @@ const BuyerLayout = ({children,setCookie}) => {
         })
     }
 
-    useEffect(() => {
-        const currentPath = pathname.split('/').splice(-1)[0];
-        const excludedPaths = ['login', 'signup', 'password-recovery'];
-
-        if (!excludedPaths.includes(currentPath)) {
-            // alert()
-            fetch('https://www.campussphere.net/api/store/auth', {
-            method: 'GET'
-            })
-            .then(async (res) => {
-                const data = await res.json();
-
-                if (data.bool) {
-                    dispatch(setBuyerIdTo(data.id));
-                } else {
-                // Optionally redirect to login
-                    // window.location.href = '/buyer/login';
-                }
-            })
-            .catch((err) => {
-                
-                console.error('Auth Error:', err);
-                // window.location.href = '/buyer/login';
-            });
-        }
-        
-    }, [])
+    
 
     useEffect(() => {
         // Add a request interceptor to modify headers

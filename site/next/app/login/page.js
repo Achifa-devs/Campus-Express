@@ -7,8 +7,8 @@ import './styles/large.css'
 import './styles/medium.css'
 import './styles/small.css'
 import { useDispatch } from 'react-redux'
-import { setSellerTo } from '@/redux/seller_store/seller'
-import { seller_overlay_setup } from '@/files/reusable.js/overlay-setup'
+import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup'
+import { setBuyerTo } from '@/redux/buyer_store/BuyerData'
 export default function Login() {
 
     let [btn, setBtn] = useState("Login")
@@ -33,8 +33,8 @@ export default function Login() {
                 <div className="Authloader" style={{background: '#fff'}}></div>
             )
             e.target.disabled = true;
-            seller_overlay_setup(true, 'Veryfying Credentials')
-            fetch('/api/vendor/login/', { 
+            buyer_overlay_setup(true, 'Veryfying Credentials')
+            fetch('/api/signin', {
                 method: 'post',
                 headers: {
                     "Content-Type": "Application/json"
@@ -45,12 +45,15 @@ export default function Login() {
             })
             .then(async(result) => {
                 let response = await result.json();
-        
-                if(response.success){
-                    window.location.href = '/vendor/shop'
-
+                if(response.bool){
+                    
+                    // alert(response.cookie)
+                    // dispatch(setBuyerTo(response.cookie))
+                    window.location.href = '/store'
+                    // buyer_overlay_setup(false, '')
                 }else{
-                    seller_overlay_setup(false, '')
+                    buyer_overlay_setup(false, '')
+
 
                     let check = document.querySelector('.err-cnt').querySelector('.err-mssg');
                     if(check){
@@ -78,7 +81,7 @@ export default function Login() {
             })
             .catch((err) => {
                 console.log(err)
-                seller_overlay_setup(false, '')
+                buyer_overlay_setup(false, '')
 
                 let check = document.querySelector('.err-cnt').querySelector('.err-mssg');
                 if(check){
@@ -99,7 +102,6 @@ export default function Login() {
                     document.querySelector('.err-cnt').append(div)
                 }
                 e.target.disabled = false; 
-                setBtn("Login")
             })
 
         }
@@ -196,8 +198,6 @@ export default function Login() {
   return (
     <>
        <div className="seller-login-cnt" >
-            <h6 style={{background: 'orangered', color: '#fff', padding: '10px', borderRadius: '5px', marginBottom: '-2px', height: 'auto'}}>Vendor Center</h6>
-
             
             <section className="shadow">
                 
@@ -233,10 +233,10 @@ export default function Login() {
                         
                     </div>
                 </form>
-                <div style={{textAlign: 'center'}} onClick={e => window.location.href=('/vendor/password-recovery')}>
+                <div style={{textAlign: 'center'}} onClick={e => window.location.href=('/store/password-recovery')}>
                     <small style={{cursor: 'pointer', color: 'orangered', fontWeight: '400'}}>Recover Forgotten Password Here</small>
                 </div>
-                <div style={{textAlign: 'center'}} onClick={e => window.location.href=('/vendor/signup')}>
+                <div style={{textAlign: 'center'}} onClick={e => window.location.href=('/store/signup')}>
                     <small style={{cursor: 'pointer', color: 'orangered', fontWeight: '400'}}>Don t Have An Account, Signup Here</small>
                 </div>
             </section>

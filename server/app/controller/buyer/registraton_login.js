@@ -10,7 +10,7 @@ const { send_email, send_sms, send_mail_via_outlook } = require("../../reuseable
 const maxAge = 90 * 24 * 60 * 60; 
 
 const createToken = (id) => {
-    return jwt.sign({ id }, 'buyer_secret', {
+    return jwt.sign({ id }, 'user_secret', {
        expiresIn: maxAge
     });
 };
@@ -29,7 +29,7 @@ async function register_buyer(req,res) {
     async function CreateNewBuyer() {
         return(
             NeonDB.then((pool) => 
-                pool.query(`insert into campus_buyers(id,fname,lname,buyer_id,email,phone,password,state,campus,isActive,isVerified,isEmailVerified,isPhoneVerified,date,gender ) values(DEFAULT, '${fname}', '${lname}', '${buyer_id}', '${email}', '${phone}', '${hPwd}', '${state}', '${campus}', '${false}','${false}','${false}','${false}', '${date}', '${gender}')`)
+                pool.query(`insert into users(id,fname,lname,buyer_id,email,phone,password,state,campus,isActive,isVerified,isEmailVerified,isPhoneVerified,date,gender ) values(DEFAULT, '${fname}', '${lname}', '${buyer_id}', '${email}', '${phone}', '${hPwd}', '${state}', '${campus}', '${false}','${false}','${false}','${false}', '${date}', '${gender}')`)
                 .then(result => result.rowCount > 0 ?(true) : (false))
                 .catch(err => console.log(err))
             )
@@ -77,7 +77,7 @@ async function register_buyer(req,res) {
             await NeonDB.then((pool) => 
                 pool.query(`
                     SELECT COUNT(*) as count
-                    FROM campus_buyers
+                    FROM users
                     WHERE phone = '${phone}'
                 `)
                 .then(result => parseInt(result.rows[0].count, 10) > 0 ? {err: 'duplicate phone', bool: false} : {bool: true, err: ''})
@@ -91,7 +91,7 @@ async function register_buyer(req,res) {
             await NeonDB.then((pool) => 
                 pool.query(`
                     SELECT COUNT(*) as count
-                    FROM campus_buyers
+                    FROM users
                     WHERE email = '${email}'
                 `)
                 .then(result => parseInt(result.rows[0].count, 10) > 0 ? {err: 'duplicate email', bool: false} : {bool: true, err: ''})
@@ -155,7 +155,7 @@ async function log_buyer_in(req, res) {
         NeonDB
         .then(async(pool) => {
                 
-            pool.query(`select "id" from "campus_buyers" where "email" = '${email}'`, (err, result) => {
+            pool.query(`select "id" from "users" where "email" = '${email}'`, (err, result) => {
                 
                 if(!err){
                     if(result.rows.length > 0){
@@ -178,7 +178,7 @@ async function log_buyer_in(req, res) {
             NeonDB
             .then(async(pool) => {
                 let database_return_value = await pool.query(
-                    `select "buyer_id","email","password","fname","lname" from  "campus_buyers" where "id" = '${id}'`
+                    `select "buyer_id","email","password","fname","lname" from  "users" where "id" = '${id}'`
                 )
                 .then(result => result.rows[0])
                 .catch(err => console.log(err))

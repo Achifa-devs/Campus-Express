@@ -8,7 +8,7 @@ import { errorHandler } from "../utils/erroHandler.js";
 export async function findShopOwnerById({
   seller_id
 }) {
-  const result = await pool.query(`SELECT * FROM campus_sellers WHERE seller_id = $1`, [seller_id]);
+  const result = await pool.query(`SELECT * FROM users WHERE seller_id = $1`, [seller_id]);
   return result.rows;
 }
 ;
