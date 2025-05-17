@@ -18,24 +18,27 @@ const SellerLayout = ({children,setCookie}) => {
 
         if (!excludedPaths.includes(currentPath)) {
             // alert()
-            fetch('/api/vendor/auth', {
-                method: 'GET'
+            fetch('https://www.campussphere.net/api/store/auth', {
+            method: 'GET'
             })
             .then(async (res) => {
                 const data = await res.json();
+
+                alert(JSON.stringify(data))
                 if (data.bool) {
-                    dispatch(setSellerIdTo(data.id));
+                    dispatch(setBuyerIdTo(data.id));
                 } else {
                 // Optionally redirect to login
-                    window.location.href = '/vendor/login';
+                    // window.location.href = '/buyer/login';
                 }
             })
             .catch((err) => {
+                alert(JSON.stringify(err))
+                
                 console.error('Auth Error:', err);
-                window.location.href = '/vendor/login';
+                // window.location.href = '/login';
             });
         }
-
         
     }, [])
 
