@@ -23,6 +23,7 @@ import { open_notice } from '@/files/reusable.js/notice';
 import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup';
 import Share from '@/files/components/Buyer/Product/Share';
 import { useParams } from 'next/navigation';
+import Contact from '@/files/components/Buyer/Product/Contact';
 
 const ProductPageClient = ({product, slug}) => {
     let pathname = usePathname()
@@ -230,16 +231,16 @@ const ProductPageClient = ({product, slug}) => {
                         ''
                         :
                         <>
-                            {/* <Contact phone={phone} SendMssg={SendMssg}  />
-                            <br /> */}
-                            <button style={{marginBottom: '15px', background: '#FF4500', color: '#fff', border: 'none', outline: 'none',borderRadius: '2.5px'}} className='shadow-sm' onClick={handleOrder}>{
+                            <Contact phone={seller?.phone} item={product}  />
+                            <br /> 
+                            {/* <button style={{marginBottom: '15px', background: '#FF4500', color: '#fff', border: 'none', outline: 'none',borderRadius: '2.5px'}} className='shadow-sm' onClick={handleOrder}>{
                                 order_list.filter((data) => data.product.product_id === product.product_id && data.order.user_id === user_id).length > 0
                                 ?
 
                                 'View Order'
                                 :
                                 'Place Order Now'
-                            }</button>
+                            }</button> */}
                         </>
                     }
 

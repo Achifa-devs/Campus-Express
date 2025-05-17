@@ -5,9 +5,9 @@ export default function Contact({phone,item}) {
   return (
     <>
       <div style={{
-            height: '60px',
+            height: '120px',
             width: '100%',
-            borderRadius: '10px',
+            // borderRadius: '10px',
             outline: 'none',
             border: 'none',
             textAlign: 'center',
