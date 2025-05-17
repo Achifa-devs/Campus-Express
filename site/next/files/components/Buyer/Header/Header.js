@@ -352,7 +352,7 @@ const Header = () => {
           <FloatingMenu list={list}right={right}top={top}visible={visible} getSelectedOption={getSelectedOption} />
         }
 
-        <div className="filter-overlay" onClick={e=>e.target === e.currentTarget ? closeFilter():''}>
+      <div className="filter-overlay" onClick={e => e.target === e.currentTarget ? closeFilter() : ''} >
           <Filter 
             applyFilter ={applyFilter}
             ChangeCampus ={ChangeCampus}
@@ -364,21 +364,27 @@ const Header = () => {
             category ={storedCategory}  
           />
         </div>
-      <div className="buyer-header shadow-sm"  style={{position: 'sticky', top: '0', zIndex: '10000', background: '#fff'}}>
+      <div className="buyer-header shadow-sm"  style={{position: 'sticky', top: '0', zIndex: '10000', background: '#fff', padding: pathname.split('/').splice(-1)[0] !== '' || pathname.split('/').length === 1 ? '0px' : '10px', justifyContent: pathname.split('/').splice(-1)[0] !== '' || pathname.split('/').length === 1 ? 'space-between' : 'space-between'}}>
 
 
-      <Image 
-          src="https://res.cloudinary.com/daqbhghwq/image/upload/v1746402998/Untitled_design-removebg-preview_peqlme.png" 
-          alt="Campus Store Logo"
-          width={65}
-          height={65}
-          className="logo"
-      />
+      <div style={{cursor: 'pointer'}} onClick={e => {
+        pathname.split('/').splice(-1)[0] !== '' || pathname.split('/').length === 1 ? '' : '/store'
+      }}>
+        <Image
+            src="https://res.cloudinary.com/daqbhghwq/image/upload/v1746402998/Untitled_design-removebg-preview_peqlme.png"
+            alt="Campus Store Logo"
+            width={65}
+            height={65}
+            className="logo"
+            
+        />
+      </div>
 
         {
 
           screenWidth > 760
-          ?
+            ?
+            pathname.split('/').splice(-1)[0] !== '' || pathname.split('/').length === 1 ?
           <>
             &nbsp;
             &nbsp;
@@ -391,43 +397,50 @@ const Header = () => {
                 
               </li>
             </ul>
-          </>
+              </>
+              :''
           :
           <>
             
           </>
         }
+
         {
           screenWidth > 760
           ?
-          
-          <div className="input-cnt search-cnt">
-            <input onFocus={e => openSearchResult(e)} onInput={e => {
-              async function getData() {
-                if(e.target.value !== '' && e.target.value !== ' '){ 
-                  try {
-                    fetch(`/api/store/search?word=${e.target.value}`, {
-                      headers: {
-                        'Gender': window.localStorage.getItem('cs-gender') 
-                      }
-                    })
-                    .then(async(res) => {
-                      const response = await res.json();
-                      if (response.bool) {
-                        dispatch(setSearchListTo(response.data));
-                      }
-                    })
-                    .catch(console.error);
-                  } catch (error) {
-                    console.log(error)
+            pathname.split('/').splice(-1)[0] !== '' || pathname.split('/').length === 1
+            ? 
+            <div className="input-cnt search-cnt">
+              <input onFocus={e => openSearchResult(e)} onInput={e => {
+                async function getData() {
+                  if(e.target.value !== '' && e.target.value !== ' '){ 
+                    try {
+                      fetch(`/api/store/search?word=${e.target.value}`, {
+                        headers: {
+                          'Gender': window.localStorage.getItem('cs-gender') 
+                        }
+                      })
+                      .then(async(res) => {
+                        const response = await res.json();
+                        if (response.bool) {
+                          dispatch(setSearchListTo(response.data));
+                        }
+                      })
+                      .catch(console.error);
+                    } catch (error) {
+                      console.log(error)
+                    }
+              
                   }
-            
                 }
-              }
-              getData()
-            }} type="search" name="" placeholder="What Are You Looking For..." id="" />
-            <button style={{borderRadius: '5px'}}>Search</button>
-          </div> 
+                getData()
+              }} type="search" name="" placeholder="What Are You Looking For..." id="" />
+              <button style={{borderRadius: '5px'}}>Search</button>
+            </div> : <h1 style={{
+              fontSize: '4vh',
+              fontWeight: '800',
+              color: '#FF4500'
+            }}>Campus Sphere</h1> 
           :
           ''
           
@@ -456,6 +469,7 @@ const Header = () => {
                 :
                 screenWidth > 760
                 ?
+                 pathname.split('/').splice(-1)[0] !== '' || pathname.split('/').length === 1 ?
                 <>
 
                   <li style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}} onClick={e => buyer_info?.fname? openFloatingMenu(e,'user') : navigate('/login')}>
@@ -488,7 +502,24 @@ const Header = () => {
                     </span>
                   </li>
 
-                </>
+                    </> :
+                    <button onClick={e => {
+                      let isAuth = buyer_info!==null && buyer_info ? true : false
+                       isAuth?
+                      window.location.href = '/store' : window.location.href = '/login'
+                    }} style={{
+                      height: '40px',
+                      width: '100px',
+                      textAlign: 'center',
+                      color: '#ffff',
+                      borderRadius: '5px',
+                      lineHeight: '1.6',
+                      margin: '10px auto',
+                      padding: '5px',
+                      fontWeight: '500',
+                    }}>
+                      Get Started
+                    </button>
                 :
 
                 ''

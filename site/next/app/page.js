@@ -28,22 +28,7 @@ export default function page() {
             }}>
               The next-generation platform revolutionizing campus commerce. Our innovative solutions are designed to empower students and vendors with smarter, faster, and more secure ways to buy, sell, and connect across campus communities.
             </h4>
-            <button onClick={e => window.location.href='/signup'} style={{
-              height: '200px',
-              width: '200px',
-              textAlign: 'center',
-              color: '#ffff',
-              fontSize: '18px',
-              borderRadius: '10px',
-              lineHeight: '1.6',
-              maxWidth: '800px',
-              margin: '10px auto',
-              padding: '10px 20px',
-              fontWeight: '400',
-              fontStyle: 'italic'
-            }}>
-              Get Started
-            </button>
+            
             <div style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
               <div
                 style={{

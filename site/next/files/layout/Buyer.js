@@ -18,9 +18,6 @@ const BuyerLayout = ({children}) => {
 
     let dispatch = useDispatch()
     let [screenWidth, setScreenWidth] = useState(0) 
-    let {
-        buyerData
-    }=useSelector(s=> s.buyerData) 
       
     let {
         user_id
@@ -31,14 +28,12 @@ const BuyerLayout = ({children}) => {
         const excludedPaths = ['login', 'signup', 'password-recovery'];
 
         if (!excludedPaths.includes(currentPath)) {
-            // alert()
             fetch('https://www.campussphere.net/api/store/auth', {
             method: 'GET'
             })
             .then(async (res) => {
                 const data = await res.json();
 
-                alert(JSON.stringify(data))
                 if (data.bool) {
                     dispatch(setBuyerIdTo(data.id));
                 } else {
@@ -47,7 +42,6 @@ const BuyerLayout = ({children}) => {
                 }
             })
             .catch((err) => {
-                alert(JSON.stringify(err))
                 
                 console.error('Auth Error:', err);
                 // window.location.href = '/buyer/login';
@@ -93,7 +87,7 @@ const BuyerLayout = ({children}) => {
             })
             .then(async(result) => {
                 let response = await result.json(); 
-                alert(JSON.stringify(response))
+                console.log(response?.data)
                 if (response?.bool) {
                     dispatch(setBuyerInfoTo(response?.data));
                     // window.localStorage.removeItem('id_for_unknown_buyer')
