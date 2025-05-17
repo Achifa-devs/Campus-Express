@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { usePathname } from 'next/navigation'
 import Header from '../components/Seller/Header/Header'
 import { setSellerIdTo } from '@/redux/seller_store/seller_data'
+import { setBuyerIdTo } from '@/redux/buyer_store/buyer_data';
+import { setBuyerInfoTo } from '@/redux/buyer_store/buyerInfo';
 
 const SellerLayout = ({children,setCookie}) => {
     let dispatch = useDispatch()
