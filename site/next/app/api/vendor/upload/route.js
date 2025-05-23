@@ -3,7 +3,6 @@ import shortid from 'shortid';
 import pool from '../../db';
 import { NextResponse } from 'next/server';
 
-res
 export async function POST(req) {
   const body = await req.json();
   try {
