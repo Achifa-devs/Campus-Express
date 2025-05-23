@@ -1,23 +1,30 @@
-import { NextResponse } from 'next/server';
+'use server'
+import shortid from 'shortid';
 import pool from '../../db';
+import { NextResponse } from 'next/server';
 
 export async function POST(req) {
+  const body = await req.json();
   try {
     const {
-        constantData,
-        dynamicData,
-        shipping_data
-    } = req.body
-    
-      let {
-        category,product_id,
-        price,
-        stock,
-        user_id,
-        thumbnail_id,
-        campus,
-        state,
-        thumbnail_public_id,
+      constantData,
+      dynamicData,
+      shipping_data
+    } = await body
+
+  
+
+  
+    let {
+      category,
+      product_id,
+      price,
+      stock,
+      user_id,
+      thumbnail_id,
+      campus,
+      state,
+      thumbnail_public_id,
     }=constantData
 
     

@@ -23,7 +23,6 @@ export async function POST(req) {
     const buffer = Buffer.from(arrayBuffer);
 
     const id = shortId.generate();
-    const fileId = `${id}|${product_id}`;
 
     return new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
