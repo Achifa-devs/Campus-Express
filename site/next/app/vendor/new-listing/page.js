@@ -961,7 +961,7 @@ export default function NewListing() {
     useEffect(() => {
         if(user_id !== 'null' && user_id !== null && user_id !== ''){
 
-            fetch(`http://192.168.24.146:9090/seller.profile?user_id=${user_id}`)
+            fetch(`/api/vendor/profile?user_id=${user_id}`)
             .then(async(result) => {
                 let response = await result.json(); 
                 setProfile(response)
