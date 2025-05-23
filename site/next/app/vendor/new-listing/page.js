@@ -698,7 +698,7 @@ export default function NewListing() {
         formData.append('file_name', `${file.name}`);
         formData.append('product_id', `${product_id}`);
 
-        return await axios.post('/api/upload/files', formData, {
+        return await axios.post('/api/vendor/upload/files', formData, {
             headers: {
                 "Content-Type": "multipart/form-data"
             }
@@ -724,7 +724,7 @@ export default function NewListing() {
         formData.append('file_name', `${thumbnail.name}`);
         formData.append('product_id', `${product_id}`);
     
-        return await axios.post('/api/upload/thumbnail', formData, {
+        return await axios.post('/api/vendor/upload/thumbnail', formData, {
             headers: {
                 "Content-Type": "multipart/form-data" 
             }

@@ -30,14 +30,14 @@ export async function POST(req) {
         {
           resource_type: 'auto',
           folder: product_id.trim(),
-          public_id: fileId.trim(),
+          public_id: id.trim(),
           overwrite: false,
         },
         (error, result) => {
           if (error) {
             reject(NextResponse.json({ error: 'Upload failed', details: error.message }, { status: 500 }));
           } else {
-            resolve(NextResponse.json({ url: result.secure_url, id: fileId, success: true }));
+            resolve(NextResponse.json({ url: result.secure_url, id: id, success: true }));
           }
         }
       );
