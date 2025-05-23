@@ -60,7 +60,12 @@ export default function page() {
                       cursor: 'pointer',
                       transition: 'transform 0.2s ease'
                     }}
-                    // onClick={(e)=> window.location.href=`${item.uri}`}
+                    onClick={(e) => {
+                      
+                      let isAuth = buyer_info!==null && buyer_info ? true : false
+                       isAuth?
+                       window.location.href = `${item.uri}` : window.location.href = '/login'
+                    }}
                     
                   >
                     <div

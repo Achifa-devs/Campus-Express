@@ -740,7 +740,7 @@ export default function NewListing() {
     }
 
     async function uploadProduct(product_id, user_id, thumbnail_url) {
-        let url = is_update ? 'http://192.168.24.146:9090/seller.product-update' : 'http://192.168.24.146:9090/seller.product-upload';
+        let url = is_update ? '/api/vendor/update' : '/api/vendor/upload';
 
         const queryParams = new URLSearchParams(window.location.search);
         const update_product_id = queryParams.get("product_id");
@@ -785,9 +785,7 @@ export default function NewListing() {
                             address4: address4.current,
                             country: country.current,
                             state: state.current,
-                            city: city.current,
-                            to_pay: to_pay.current,
-                            agent_fee: agent_fee.current
+                            city: city.current
                         }
                     },
 

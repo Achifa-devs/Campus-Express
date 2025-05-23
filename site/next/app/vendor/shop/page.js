@@ -29,6 +29,7 @@ export default function Shop() {
     }, [user_id])
 
     useEffect(() => {
+        alert(user_id)
         if(user_id !== 'null' && user_id !== null && user_id !== '' && user_id !== undefined){
             seller_overlay_setup(true, 'Getting Your Shop Ready');
 
