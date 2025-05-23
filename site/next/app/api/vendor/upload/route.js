@@ -39,8 +39,8 @@ export async function POST(req) {
     let replacedTitle = constantData.title.replace(/'/g, '"');
 
     // Optional cleanup
-    if (others?.lodge_data && !others.lodge_data.lodge_active) {
-      delete others.lodge_data
+    if (dynamicData?.lodge_data && !dynamicData.lodge_data.lodge_active) {
+      delete dynamicData.lodge_data
     }
 
     const status = {
