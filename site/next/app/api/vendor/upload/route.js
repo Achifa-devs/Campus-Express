@@ -3,6 +3,7 @@ import shortid from 'shortid';
 import pool from '../../db';
 import { NextResponse } from 'next/server';
 
+res
 export async function POST(req) {
   const body = await req.json();
   try {
@@ -103,7 +104,7 @@ export async function POST(req) {
     )
 
     if (result.rowCount > 0) {
-        return NextResponse.json({ success: res.rowCount > 0 ? true : false}, { status: res.rowCount > 0 ? 200 : 501 });
+        return NextResponse.json({ success: result.rowCount > 0 ? true : false}, { status: result.rowCount > 0 ? 200 : 501 });
         
     } else {
           return NextResponse.json({ success: false, message: 'Something went wrong' }, { status: 500 });
