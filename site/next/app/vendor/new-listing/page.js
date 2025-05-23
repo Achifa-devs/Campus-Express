@@ -65,7 +65,7 @@ export default function NewListing() {
     useEffect(() => {
         const queryParams = new URLSearchParams(window.location.search);
         const product_id = queryParams.get("product_id");
-        // seller_overlay_setup(true, 'Loading')
+        seller_overlay_setup(true, 'Loading')
         if (user_id !== '' && user_id !== undefined && user_id !== 'undefined' && user_id !== null && user_id !== 'null') {
             if (is_update) {
                 fetch(`/api/vendor/product?product_id=${product_id}`)
@@ -835,9 +835,9 @@ export default function NewListing() {
 
                 
             
-                // is_update ? open_notice(true, 'Update Successful, Redirecting...') : open_notice(true, 'Upload Successful, Redirecting...') 
-                // window.location.href = '/vendor/listing';
-                // seller_overlay_setup(false, '')
+                is_update ? open_notice(true, 'Update Successful, Redirecting...') : open_notice(true, 'Upload Successful, Redirecting...') 
+                window.location.href = '/vendor/listing';
+                seller_overlay_setup(false, '')
 
             }else{
                 open_notice(true, 'Upload Failed, Please Try Again')
