@@ -200,7 +200,7 @@ const ProductPageClient = ({product, slug}) => {
     },
     "offers": {
       "@type": "Offer",
-      "url": `https://www.campussphere.net/product/${product?.product_id}`,
+      "url": `https://www.campussphere.net/store/product/${product?.product_id}`,
       "priceCurrency": "NGN",
       "price": product?.price,
    

@@ -110,7 +110,7 @@ export default async function ProductPage({ params }) {
     console.error("Error fetching product:", error);
     return <div>Error loading product. Please try again later.</div>;
   }
-  console.log(product?.data)
+  // console.log(product?.data)
 
   return <ProductPageClient slug={slug} product={product?.data} />; 
 }

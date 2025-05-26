@@ -16,7 +16,7 @@ export async function GET(req) {
     //   pool.query(`SELECT * FROM return WHERE user_id = '${user_id}'`).then(r => r.rows),
       pool.query(`SELECT * FROM shipping WHERE user_id = '${user_id}'`).then(r => r.rows),
       pool.query(`SELECT * FROM payment WHERE user_id = '${user_id}'`).then(r => r.rows),
-      pool.query(`SELECT * FROM shopss WHERE user_id = '${user_id}'`).then(r => r.rows),
+      pool.query(`SELECT * FROM shops WHERE user_id = '${user_id}'`).then(r => r.rows),
     ]);
 
     const ship = shippingInfo?.[0] || {};

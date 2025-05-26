@@ -7,7 +7,7 @@ export async function POST(req) {
         const body = await req.json();
         const { user_id, title } = body;
 
-        const res = await pool.query(`UPDATE shopss set title = '${title}' WHERE user_id='${user_id}'`);
+        const res = await pool.query(`UPDATE shops set title = '${title}' WHERE user_id='${user_id}'`);
         return NextResponse.json({ bool: res?.rowCount > 0 ? true : false }, { status: 200 });
 
   } catch (err) {

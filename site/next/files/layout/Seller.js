@@ -35,13 +35,13 @@ const SellerLayout = ({children,setCookie}) => {
                     dispatch(setBuyerIdTo(data.id));
                 } else {
                 // Optionally redirect to login
-                    // window.location.href = '/buyer/login';
+                    window.location.href = '/login';
                 }
             })
             .catch((err) => {
                 
                 console.error('Auth Error:', err);
-                // window.location.href = '/login';
+                window.location.href = '/login';
             });
         }
         
