@@ -3,8 +3,6 @@ import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import shortId from 'shortid';
 import pool from '../../db';
-import { createToken } from '../../auth';
-import { cookies } from 'next/headers';
 
 export async function POST(req) {
   try {
@@ -23,9 +21,9 @@ export async function POST(req) {
       // Insert new view
       await pool.query(
         `INSERT INTO views(
-          id, $1, $2, $3, $4
+          id, view_id, product_id, user_id, date
         ) values(
-          DEFAULT, '${view_id}', '${product_id}', '${user_id}', '${date}'
+          DEFAULT, $1, $2, $3, $4,
         )`,
         [
           view_id, product_id, user_id, date
@@ -40,7 +38,7 @@ export async function POST(req) {
         return NextResponse.json({ bool: true}, { status: 200 });
         
       }
-      // return NextResponse.json({ bool: true}, { status: 200 });
+      return NextResponse.json({ bool: false}, { status: 500 });
 
     }
 

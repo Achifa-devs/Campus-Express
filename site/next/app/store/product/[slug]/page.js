@@ -21,6 +21,7 @@ export async function generateMetadata({ params }) {
 
     const product = await res.json();
 
+    console.log('product: ', product)
     if (!product || Object.keys(product).length === 0) {
       return { title: "Product Not Found" };
     }

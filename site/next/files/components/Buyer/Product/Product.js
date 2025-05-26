@@ -96,7 +96,7 @@ const Product = ({ item, seller, order_list }) => {
         let result = order_list.filter((data) => data?.product?.product_id === item?.product_id && data?.order?.user_id === user_id)?.length
         if(result<1){
             if(user_id === null || user_id === '' || user_id === 'null'){
-                window.location.href=(`/store/login`)
+                window.location.href=(`/login`)
                 
             }else{
                 
