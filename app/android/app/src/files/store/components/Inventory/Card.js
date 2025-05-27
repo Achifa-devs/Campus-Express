@@ -16,7 +16,11 @@ import CardContent from './CardContent';
 import CardAnalytics from './CardAnalytics';
 
 export default function Card({ data, index }) {
-    let [deleted, set_deleted] = useState(false)
+  let [deleted, set_deleted] = useState(false)
+  
+  function updateDelete(data) {
+    set_deleted(data)
+  }
     let navigation = useNavigation()    
     return (
         <>
@@ -32,7 +36,7 @@ export default function Card({ data, index }) {
                     </TouchableOpacity>
 
                     <View style={styles.listCntBtm}>
-                        <CardAnalytics data={data} />
+                        <CardAnalytics updateDelete={updateDelete} data={data} />
                     </View>
 
                 </View> 

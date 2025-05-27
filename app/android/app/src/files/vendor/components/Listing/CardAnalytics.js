@@ -44,7 +44,7 @@ export default function CardAnalytics({data}) {
                 <Text style={{color: '#fff', fontSize: 12, }}> Share</Text>
             </TouchableOpacity>
             <TouchableOpacity style={{ height: '90%', marginLeft: 5, alignItems: 'center', padding: 5, display: 'flex', justifyContent: 'center', flexDirection: 'row', borderRadius: 2.5, width: 'auto', backgroundColor: '#ff3030', }} onPress={e => {
-                fetch(`http://192.168.75.146:9090/seller.product-delete?product_id=${data?.product_id}`)
+                fetch(`https://cs-server-olive.vercel.app/seller.product-delete?product_id=${data?.product_id}`)
                 .then(async(result) => {
                     let response = await result.json();
                     if(response){

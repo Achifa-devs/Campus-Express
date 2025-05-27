@@ -12,7 +12,7 @@ import Ionicons  from 'react-native-vector-icons/Ionicons'; // or MaterialIcons,
 import js_ago from 'js-ago';
 
 
-export default function CardAnalytics({data}) {
+export default function CardAnalytics({data, updateDelete}) {
   return (
     <>
         <View style={{display: 'flex', height: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
@@ -44,18 +44,18 @@ export default function CardAnalytics({data}) {
                 <Text style={{color: '#fff', fontSize: 12, }}> Share</Text>
             </TouchableOpacity>
             <TouchableOpacity style={{ height: '90%', marginLeft: 5, alignItems: 'center', padding: 5, display: 'flex', justifyContent: 'center', flexDirection: 'row', borderRadius: 2.5, width: 'auto', backgroundColor: '#ff3030', }} onPress={e => {
-                fetch(`http://192.168.75.146:9090/seller.product-delete?product_id=${data?.product_id}`)
+                fetch(`https://cs-server-olive.vercel.app/vendor/delete-product?product_id=${data?.product_id}`)
                 .then(async(result) => {
                     let response = await result.json();
                     if(response){
-                        set_deleted(true)
+                        updateDelete(true)
                     }else{
-                        set_deleted(false)
+                        updateDelete(false)
                     }
                     
                 })
                 .catch((error) => {
-                    set_deleted(false)
+                    updateDelete(false)
                     
                     // seller_overlay_setup(false, '')
                     console.log(error)

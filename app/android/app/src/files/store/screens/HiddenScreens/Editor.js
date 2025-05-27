@@ -26,7 +26,7 @@ const EditorScreen = () => {
 
         try {
             console.log('Uploading image to server...');
-            const response = await axios.post('http://192.168.75.146:9090/upload', formData, {
+            const response = await axios.post('https://cs-server-olive.vercel.app/upload', formData, {
                 headers: {
                 'Content-Type': 'multipart/form-data',
                 },
@@ -79,7 +79,7 @@ const EditorScreen = () => {
         };
 
         try {
-            const response = await axios.post('http://192.168.75.146:9090/save-article', articleData);
+            const response = await axios.post('https://cs-server-olive.vercel.app/save-article', articleData);
             console.log('Article saved successfully:', response.data);
             Alert.alert('Success', 'Article published successfully!');
         } catch (error) {

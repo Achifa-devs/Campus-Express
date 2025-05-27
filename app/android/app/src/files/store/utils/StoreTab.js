@@ -108,10 +108,10 @@ export default function StoreTab({navigation}) {
 
             
 
-            <Tab.Screen 
+            {/* <Tab.Screen 
                 name="Messages" 
-                component={MessageStackScreen} />
-            <Tab.Screen 
+                component={MessageStackScreen} /> */}
+            {/* <Tab.Screen 
                 options={{
                     header: ({navigation}) => 
                         (
@@ -121,7 +121,7 @@ export default function StoreTab({navigation}) {
                         ),
                 }} 
                 name="Orders" 
-                component={OrderStackScreen} />
+                component={OrderStackScreen} /> */}
                 
             <Tab.Screen 
                 options={{
@@ -139,7 +139,7 @@ export default function StoreTab({navigation}) {
             <Tab.Screen 
                 name="Inventory" 
                 component={InventoryStackScreen} />
-            <Tab.Screen 
+            {/* <Tab.Screen 
                 options={{
                     header: ({navigation}) => 
                         (
@@ -149,7 +149,7 @@ export default function StoreTab({navigation}) {
                         ),
                 }} 
                 name="Sales" 
-                component={SalesStackScreen} />
+                component={SalesStackScreen} /> */}
 
             <Tab.Screen 
                  

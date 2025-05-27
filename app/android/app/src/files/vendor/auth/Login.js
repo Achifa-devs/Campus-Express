@@ -64,7 +64,7 @@ const Login = ({}) => {
         if (data) {
             set_server_err(true)
 
-            fetch('http://192.168.75.146:9090/vendor/login', {
+            fetch('https://cs-server-olive.vercel.app/vendor/login', {
                 method: 'post',
                 headers: {
                     "Content-Type": "Application/json"

@@ -1,6 +1,5 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux'
 import { setAccessoryTo } from "@/redux/buyer_store/Aceessories";
 import { useRouter } from 'next/navigation';
@@ -15,7 +14,7 @@ const AsideMenu = ({}) => {
     useEffect(() => {let width = window.innerWidth;setScreenWidth(width)},[]);
     
     let list = [
-        {name: 'Orders', svg: '', uri: 'orders'},
+        // {name: 'Orders', svg: '', uri: 'orders'},
         {name: 'Inbox', svg: '', uri: 'inbox'},
         {name: 'Favourites', svg: '', uri: 'favourites'},
         // {name: 'Followed Sellers', svg: '', uri: 'following'},

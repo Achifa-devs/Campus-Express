@@ -18,13 +18,13 @@ export default function Stock({ updateStock, error }) {
     setStock(limitedText);
     
     // Validate
-    if (limitedText && parseInt(limitedText) <= 0) {
-      setError('Stock must be at least 1');
-    } else if (limitedText && parseInt(limitedText) > maxStock) {
-      setError(`Maximum stock is ${maxStock}`);
-    } else {
-      setError('');
-    }
+    // if (limitedText && parseInt(limitedText) <= 0) {
+    //   setError('Stock must be at least 1');
+    // } else if (limitedText && parseInt(limitedText) > maxStock) {
+    //   setError(`Maximum stock is ${maxStock}`);
+    // } else {
+    //   setError('');
+    // }
     
     // Pass numeric value to parent
     if (updateStock) {

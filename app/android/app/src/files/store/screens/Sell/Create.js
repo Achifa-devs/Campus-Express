@@ -18,6 +18,10 @@ import Address1 from '../../components/Create.js/Address1';
 import Address2 from '../../components/Create.js/Address2';
 import { err } from 'react-native-svg';
 import DeliveryRangeSelector from '../../components/Create.js/Delivery';
+import ShippingPolicy from '../../components/Create.js/ShippingPolicy';
+import ShippingDuration from '../../components/Create.js/ShippingDuration';
+import { getData } from '../../../utils/AsyncStore.js';
+import { useNavigation } from '@react-navigation/native';
 export default function Create({ route }) {
   let screenWidth = Dimensions.get('window').width;
   let screenHeight = Dimensions.get('window').height;
@@ -25,12 +29,21 @@ export default function Create({ route }) {
   const [user, setUser] = useState('')
   let [shipping_policy, set_shipping_policy] = useState('')
   let [shipping_duration, set_shipping_duration] = useState('')
-  let [active_range, set_active_range] = useState('')
+  // let [active_range, set_active_range] = useState('')
   // let [shipping_range, set_shipping_range] = useState({
   //   in_campus: {selected: false, price: 0},
   //   in_state: {selected: false, price: 0},
   //   out_state: {selected: false, price: 0}
   // })
+
+  useEffect(() => {
+      
+    (async function getUser(params) {
+      let user = await getData('user');
+      const id = JSON.parse(user)
+      setUser(id)
+    })()
+  }, []);
   const [shippingRange, setShippingRange] = useState({
     in_campus: { selected: true, price: '0' },
     in_state: { selected: false, price: '' },
@@ -117,6 +130,8 @@ export default function Create({ route }) {
     thumbnail,
     price,
     type,
+    shipping_policy,
+    shipping_duration,
     description,
     stock,
     sub_category,
@@ -135,7 +150,8 @@ export default function Create({ route }) {
     type, 
     shippingRange,
     description,
-
+    shipping_policy,
+    shipping_duration,
     stock,
 
     sub_category,
@@ -164,6 +180,8 @@ export default function Create({ route }) {
           typeErr: '', 
           conditionErr: '',
           stockErr: '',
+          shipping_policyErr: '',
+          shipping_durationErr: ''
         })
       } else if (type === 'Accessories') {
         setErrList({
@@ -177,6 +195,8 @@ export default function Create({ route }) {
           sub_categoryErr: '',
           conditionErr: '',
           stockErr: '',
+          shipping_policyErr: '',
+          shipping_durationErr: ''
         })
       } else {
         setErrList({
@@ -191,6 +211,8 @@ export default function Create({ route }) {
           sizeErr: '',
           conditionErr: '',
           stockErr: '',
+          shipping_policyErr: '',
+          shipping_durationErr: ''
         })
       }
 
@@ -227,7 +249,9 @@ export default function Create({ route }) {
         thumbnailErr: '',
         priceErr: '', 
         typeErr: '', 
-        stockErr: ''
+        stockErr: '',
+        shipping_policyErr,
+        shipping_durationErr
       })
     }else {
       setErrList({
@@ -238,7 +262,9 @@ export default function Create({ route }) {
         conditionErr: '',
         priceErr: '', 
         typeErr: '', 
-        stockErr: ''
+        stockErr: '',
+        shipping_policyErr: '',
+          shipping_durationErr: ''
       })
     }
   }, [category,type])
@@ -341,6 +367,7 @@ export default function Create({ route }) {
   }
 
   function updatePrice(data) {
+    Alert.alert(price)
     set_price(data)
   }
 
@@ -351,6 +378,14 @@ export default function Create({ route }) {
 
   function updateSize(data) {
     set_size(data)
+  }
+
+  function updateShippingPolicy(data) {
+    set_shipping_policy(data)
+  }
+
+  function updateShippingDuration(data) {
+    set_shipping_duration(data)
   }
 
   function setUploadToTrue(data) {
@@ -393,9 +428,11 @@ export default function Create({ route }) {
           if (digitsOnly <= 0) {
             newErrors[key] = ('price must be greater than ₦500');
           }
+        } else {
+          newErrors[key] = ``;
         }
       }
-    });
+    }); 
 
     // Add shipping range validation
     if (parseInt(shippingRange.in_campus.price) < 500) {
@@ -403,14 +440,18 @@ export default function Create({ route }) {
     }
 
     setErrs(Object.keys(newErrors).length ? 'Please fill all required fields.' : '');
+    // console.log(Object.values(newErrors))
     setErrList(prev => ({ ...prev, ...newErrors }));
 
-    return Object.keys(newErrors).length === 0;
+    return !Object.values(newErrors).filter((item) => item !== '').length > 0;
   }
+
+  const navigation = useNavigation()
 
   // Update the uploadData function to include shipping range in the request
   function uploadData() {
     let response = validation();
+    console.log(user)
     if (!response) return;
 
     // Prepare shipping data
@@ -429,7 +470,8 @@ export default function Create({ route }) {
       } : null
     };
 
-    fetch('http://192.168.75.146:9090/seller.product-upload', {
+    console.log(productId)
+    fetch('https://cs-server-olive.vercel.app/vendor/create-product', {
       method: 'post',
       headers: {
         "Content-Type": "Application/json"
@@ -441,7 +483,7 @@ export default function Create({ route }) {
           category: category,
           price: price,
           product_id: productId,
-          user_id: user.user_id,
+          user_id: user?.user_id,
           campus: user?.campus,
           state: user?.state,
           stock: stock,
@@ -454,8 +496,18 @@ export default function Create({ route }) {
           gender: gender,
           condition: condition,
           size: size,
-          address1: address1,
-          address2: address2,
+          lodge_data: {
+              lodge_active: category === "Lodge & Apartments" ? true : false,
+              // lodge_name: lodge_name,
+              // flat_location: flat_location, 
+              address1: address1,
+              address2: address2,
+              // address3: address3,
+              // address4: address4,
+              // country: country,
+              // state: state,
+              // city: city
+          }
         },
         shipping_data: {
           shipping_range: shippingData,
@@ -467,7 +519,8 @@ export default function Create({ route }) {
     .then(async(result) => {
       let response = await result.json();
       console.log(response);
-      if(response){
+      if (response.success) {
+        navigation.navigate('inventory')
         // Handle success
       } else {
         // Handle error
@@ -582,7 +635,17 @@ export default function Create({ route }) {
                 </>
                 :
                 ""
-              }
+            }
+            {
+                category !== 'Lodge & Apartments' && category !== 'Services'
+                ? 
+                <>
+                  <ShippingPolicy updateShippingPolicy={updateShippingPolicy} error={errList.shipping_policyErr} />
+                  <ShippingDuration updateShippingDuration={updateShippingDuration} error={errList.shipping_durationErr} />
+                </>
+              :
+              ''
+            }
             </View>
             <Title error={errList.titleErr} updateTitle={updateTitle} category={category} />
 
@@ -596,7 +659,7 @@ export default function Create({ route }) {
               ""
             }
             <Description updateDescription={updateDescription} /> 
-
+            
             <DeliveryRangeSelector 
               shippingRange={shippingRange} 
               updateShippingRangePrice={updateShippingRangePrice} 
@@ -604,6 +667,7 @@ export default function Create({ route }) {
               error={errList.shippingRangeErr}
             />
 
+            
         </ScrollView>
       </View>
       <UploadBtn setUploadToTrue={setUploadToTrue} /> 

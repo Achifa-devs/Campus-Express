@@ -12,7 +12,7 @@ export default function Home() {
   const fetchData = async () => {
      try {
        const res = await fetch(
-         `http://192.168.75.146:9090/products?limit=20&category=${btoa('trends')}`,
+         `https://cs-server-olive.vercel.app/products?limit=20&category=${btoa('trends')}`,
          {
            headers: { 'Content-Type': 'application/json' },
          }

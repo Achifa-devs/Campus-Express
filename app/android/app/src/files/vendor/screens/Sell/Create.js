@@ -160,137 +160,146 @@ export default function Create({ route }) {
     console.log('data: ', data.current)
   }
 
-  // function uploadData() {
-  //   let response = validation();
+  function uploadData() {
+    let response = validation();
     
-  //   console.log(response)
-  //   if(update){
-  //     let product_id = searchParams.get('product_id');
-  //     fetch('http://localhost:2222/seller.product-update', {
-  //         method: 'post',
-  //         headers: {
-  //             "Content-Type": "Application/json"
-  //         },
-  //         body: JSON.stringify(
-  //             {
-  //               constantData: { 
-  //                 title: title,
-  //                 description: description,
-  //                 category: category,
-  //                 price: price,
-  //                 photos: photo,
-  //                 videos: video,
-  //                 user_id : user_id,
-  //                 stock: stock,
-  //                 product_id: product_id
-  //               }, 
+    // console.log(response)
+    if(update){
+      let product_id = searchParams.get('product_id');
+      fetch('http://localhost:2222/seller.product-update', {
+          method: 'post',
+          headers: {
+              "Content-Type": "Application/json"
+          },
+          body: JSON.stringify(
+              {
+                constantData: { 
+                  title: title,
+                  description: description,
+                  category: category,
+                  price: price,
+                  photos: photo,
+                  videos: video,
+                  user_id : user_id,
+                  stock: stock,
+                  product_id: product_id
+                }, 
             
-  //               dynamicData: {
-  //                 type: type,
-  //                 locale: locale_state,
-  //                 sub_category: sub_category,
-  //                 gender: gender,
-  //                 size: size,
-  //                 lodge_address: lodge_address
-  //               }
-  //             }
-  //         )
-  //     })
-  //     .then(async(result) => {
-  //         let response = await result.json();
-  //         if(response){
-  //             // window.localStorage.setItem('draft_gender', '')
-  //             // window.localStorage.setItem('draft_size', '')
-  //             // window.localStorage.setItem('draft_sub_category', '')
-  //             // window.localStorage.setItem('draft_locale', '')
-  //             // window.localStorage.setItem('draft_condition', '')
-  //             // window.localStorage.setItem('draft_title', '')
-  //             // window.localStorage.setItem('draft_description', '')
-  //             // window.localStorage.setItem('draft_category', '')
-  //             // window.localStorage.setItem('draft_c_type', '')
-  //             // window.localStorage.setItem('draft_price', '')
+                dynamicData: {
+                  type: type,
+                  locale: locale_state,
+                  sub_category: sub_category,
+                  gender: gender,
+                  size: size,
+                  lodge_address: lodge_address
+                }
+              }
+          )
+      })
+      .then(async(result) => {
+          let response = await result.json();
+          if(response){
+              // window.localStorage.setItem('draft_gender', '')
+              // window.localStorage.setItem('draft_size', '')
+              // window.localStorage.setItem('draft_sub_category', '')
+              // window.localStorage.setItem('draft_locale', '')
+              // window.localStorage.setItem('draft_condition', '')
+              // window.localStorage.setItem('draft_title', '')
+              // window.localStorage.setItem('draft_description', '')
+              // window.localStorage.setItem('draft_category', '')
+              // window.localStorage.setItem('draft_c_type', '')
+              // window.localStorage.setItem('draft_price', '')
 
-  //             // openNotice('Update Successful, Redirecting...')
-  //             // window.location.href = '/seller.shop';
-  //             // document.querySelector('.overlay').removeAttribute('id')
+              // openNotice('Update Successful, Redirecting...')
+              // window.location.href = '/seller.shop';
+              // document.querySelector('.overlay').removeAttribute('id')
           
               
-  //         }else{
-  //             let overlay = document.querySelector('.overlay'); 
-  //             overlay.removeAttribute('id')
-  //             openNotice('Upload Failed, Please Try Again')
-  //         }
-  //     })
-  //     .catch((error) => {
-  //         console.log('Error:', error.message);
-  //         let overlay = document.querySelector('.overlay'); 
-  //         overlay.removeAttribute('id')
-  //         openNotice('Upload Failed, Please Try Again')
-  //     })  
-  //   }else{
+          }else{
+              let overlay = document.querySelector('.overlay'); 
+              overlay.removeAttribute('id')
+              openNotice('Upload Failed, Please Try Again')
+          }
+      })
+      .catch((error) => {
+          console.log('Error:', error.message);
+          let overlay = document.querySelector('.overlay'); 
+          overlay.removeAttribute('id')
+          openNotice('Upload Failed, Please Try Again')
+      })  
+    }else{
 
-  //     fetch('http://192.168.75.146:9090/seller.product-upload', {
-  //       method: 'post',
-  //       headers: {
-  //           "Content-Type": "Application/json"
-  //       },
-  //       body: JSON.stringify(
-  //         {
-  //           constantData: { 
-  //             title: title,
-  //             description: description,
-  //             category: category,
-  //             price: price,
-  //             photos: photo,
-  //             videos: video,
-  //             user_id : user_id
-  //           }, 
+      fetch('https://cs-server-olive.vercel.app/create-product', {
+        method: 'post',
+        headers: {
+            "Content-Type": "Application/json"
+        },
+        body: JSON.stringify(
+          {
+            constantData: { 
+              title: title,
+              description: description,
+              category: category,
+              price: price,
+              product_id: is_update ? update_product_id : product_id,
+              user_id: user_id,
+              campus: profile?.campus,
+              state: profile?.state,
+              stock: stock,
+              thumbnail_id: thumbnail_url,
+              thumbnail_public_id: thumbnail_id
+            }, 
         
-  //           dynamicData: {
-  //             type: type,
-  //             locale: locale,
-  //             sub_category: sub_category,
-  //             gender: gender,
-  //             size: size,
-  //             stock: stock,
-  //             lodge_address: lodge_address
-  //           }
-  //         }
-  //       )
-  //     })
-  //     .then(async(result) => {
-  //       let response = await result.json();
-  //       console.log(response)
-  //       if(response){
-  //           // window.localStorage.setItem('draft_gender', '')
-  //           // window.localStorage.setItem('draft_size', '')
-  //           // window.localStorage.setItem('draft_sub_category', '')
-  //           // window.localStorage.setItem('draft_locale', '')
-  //           // window.localStorage.setItem('draft_condition', '')
-  //           // window.localStorage.setItem('draft_title', '')
-  //           // window.localStorage.setItem('draft_description', '')
-  //           // window.localStorage.setItem('draft_category', '')
-  //           // window.localStorage.setItem('draft_c_type', '')
-  //           // window.localStorage.setItem('draft_price', '')
-        
-  //           // openNotice('Upload Successful, Redirecting...')
-  //           // window.location.href = '/seller.shop';
-  //           // document.querySelector('.overlay').removeAttribute('id')
-  //       }else{
-  //         let overlay = document.querySelector('.overlay'); 
-  //         overlay.removeAttribute('id')
-  //         openNotice('Upload Failed, Please Try Again')
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.log('Error:', error);
-  //       let overlay = document.querySelector('.overlay'); 
-  //       overlay.removeAttribute('id')
-  //       openNotice('Upload Failed, Please Try Again')
-  //     })  
+            dynamicData: {
+                cType: cType,
+                locale: locale,
+                subCategory: subCategory,
+                gender: gender,
+                condition: condition_state,
+                size: size,
+
+                // lodge_data: {
+                //     lodge_active: category_state === "Lodge & Apartments" ? true : false,
+                //     lodge_name: lodge_name,
+                //     flat_location: flat_location, 
+                //     address1: address1,
+                //     address2: address2,
+                //     address3: address3,
+                //     address4: address4,
+                //     country: country,
+                //     state: state,
+                //     city: city
+                // }
+            },
+
+            shipping_data: {
+                shipping_range,
+                shipping_policy,
+                shipping_duration: shipping_duration.split(' ')[0]
+            }
+          }
+        )
+      })
+      .then(async(result) => {
+        let response = await result.json();
+        console.log(response)
+        if(response){
+            
+        }else{
+          let overlay = document.querySelector('.overlay'); 
+          overlay.removeAttribute('id')
+          openNotice('Upload Failed, Please Try Again')
+        }
+      })
+      .catch((error) => {
+        console.log('Error:', error);
+        let overlay = document.querySelector('.overlay'); 
+        overlay.removeAttribute('id')
+        openNotice('Upload Failed, Please Try Again')
+      })  
     
-  //   }
-  // }
+    }
+  }
 
   useEffect(() => {
     console.log(data.current)

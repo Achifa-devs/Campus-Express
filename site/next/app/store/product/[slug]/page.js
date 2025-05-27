@@ -20,7 +20,7 @@ export async function generateMetadata({ params }) {
     if (!res.ok) throw new Error("Failed to fetch product data");
 
     const {data} = await res.json();
-    const product = data
+    const product = data;
 
     console.log('product: ', product)
     if (!product || Object.keys(product).length === 0) {
@@ -31,7 +31,7 @@ export async function generateMetadata({ params }) {
       product?.thumbnail_id?.split(".").pop()?.toLowerCase()
     );
     const thumbnail = product?.thumbnail_id || slug;
-    const videoUrl = product?.thumbnail_id; // If video is applicable
+    const videoUrl = product?.thumbnail_id; // If video is applicgitable
 
     const formattedTitle = `${product?.title || slug} - ₦${new Intl.NumberFormat(
       "en-US"

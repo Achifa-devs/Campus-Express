@@ -19,7 +19,6 @@ export const getProduct = async (payload) => {
 
 export const getProducts = async (payload) => {
     let { user_id } = payload;
-    
     // Business logic
     try {
         const response = await findProducts({ user_id });
@@ -45,6 +44,7 @@ export const getProductThumbnail = async (payload) => {
 
 export const postProduct = async (payload) => {
     const { constantData, dynamicData, shipping_data } = payload;
+    // console.log(constantData, dynamicData, shipping_data )
 
     // Business logic
     let response = await createProduct({ constantData, dynamicData, shipping_data });

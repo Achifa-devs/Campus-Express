@@ -17,9 +17,11 @@ export async function findProductById({ product_id, user_id }) {
 export async function findProducts({ user_id }) {
 
   const result = await pool.query(
-    `SELECT * FROM products WHERE user_id = $1 `
+    `SELECT * FROM products WHERE user_id = $1`,
     [user_id]
   );
+  
+
   return result.rows;
 };
 
@@ -50,7 +52,7 @@ export async function createProduct({ constantData, dynamicData, shipping_data }
     let replacedTitle = constantData.title.replace(/'/g, '"');
 
     let {
-        category, price, stock, productId, user_id, thumbnail_id, campus, state, thumbnail_public_id
+        category, price, stock, product_id, user_id, thumbnail_id, campus, state, thumbnail_public_id
     }=constantData
 
     
@@ -88,7 +90,7 @@ export async function createProduct({ constantData, dynamicData, shipping_data }
             $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21
         )`,
         [
-            productId,
+            product_id,
             user_id,
             'unsold',
             replacedTitle,

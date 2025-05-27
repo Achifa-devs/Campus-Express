@@ -44,14 +44,14 @@ export default function UploadBtn({ setUploadToTrue }) {
         </TouchableOpacity>    
       </Animated.View>
       
-      <View style={styles.draftContainer}>
+      {/* <View style={styles.draftContainer}>
         <TouchableOpacity 
           style={styles.draftButton}
           disabled={true}
         >
           <Text style={styles.draftButtonText}>Save Draft</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </View>
   );
 }

@@ -21,23 +21,7 @@ export default function UploadBtn({ navigation }) {
         onPress={() => handlePress('user-new-listing')}
       />
 
-      {/* Accommodation Upload Button */}
-      <UploadOption 
-        title="Upload Accommodation"
-        description="Add lodging options"
-        icon={<UploadIcon />}
-        color="#00C853"
-        onPress={() => handlePress('user-new-lodge')}
-      />
-
-      {/* Service Upload Button */}
-      <UploadOption 
-        title="Upload Service"
-        description="Offer your professional services"
-        icon={<UploadIcon />}
-        color="#2962FF"
-        onPress={() => handlePress('service')}
-      />
+      
     </View>
   );
 }
