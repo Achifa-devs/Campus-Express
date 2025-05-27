@@ -19,7 +19,8 @@ export async function generateMetadata({ params }) {
 
     if (!res.ok) throw new Error("Failed to fetch product data");
 
-    const product = await res.json();
+    const {data} = await res.json();
+    const product = data
 
     console.log('product: ', product)
     if (!product || Object.keys(product).length === 0) {
