@@ -75,7 +75,6 @@ const BuyerLayout = ({children}) => {
     // }, [buyerData])   
     
     useEffect(() => {
-        // alert(user_id)
 
         if(user_id !== null){
             fetch(`https://www.campussphere.net/api/store/customer?user_id=${user_id}`,
