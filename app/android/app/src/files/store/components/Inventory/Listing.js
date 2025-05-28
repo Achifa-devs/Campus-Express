@@ -28,7 +28,7 @@ export default function Listing() {
   },[user])
 
   function get_list_data() {
-    fetch(`https://cs-server-olive.vercel.app:3000/api/vendor/products?user_id=${user?.user_id}`, {
+    fetch(`http://192.168.168.146:9090:3000/api/vendor/products?user_id=${user?.user_id}`, {
       headers: {
         "Content-Type": "Application/json"
       }

@@ -25,7 +25,7 @@ export default function ChangePwd({ route, navigation }) {
 
     async function update_pwd_pin() {
       
-        return await axios.post('https://cs-server-olive.vercel.app/system.passcode-update', {pin: pwd, old_pin: current_pwd, id: user?.id})
+        return await axios.post('http://192.168.168.146:9090/system.passcode-update', {pin: pwd, old_pin: current_pwd, id: user?.id})
         .then(({ data }) => ({bool: data.success}))
         .catch(err => (err.response?.data))
     }

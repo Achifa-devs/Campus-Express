@@ -20,7 +20,7 @@ export default function PersonalData() {
     const [campusLocaleList, setCampusLocaleList] = useState([]);
 
     function update_user(){
-        axios.post('https://cs-server-olive.vercel.app/system.profile-update', {
+        axios.post('http://192.168.168.146:9090/system.profile-update', {
             id:user?.id,gender,birth,address: {"state": state, "city": city, "country": "Nigeria", "home_address": home_address, "postal_code": postal_code},
         })
         .then((result) => {

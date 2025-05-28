@@ -53,7 +53,7 @@ export default function Product() {
     };
 
     useEffect(() => {
-        fetch(`https://cs-server-olive.vercel.app/product?product_id=${product_id}`, {
+        fetch(`http://192.168.168.146:9090/product?product_id=${product_id}`, {
             headers: { "Content-Type": "Application/json" }
         })
         .then(async (result) => {

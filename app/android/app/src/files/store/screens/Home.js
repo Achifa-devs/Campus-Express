@@ -12,7 +12,7 @@ export default function Home() {
   const fetchData = async () => {
      try {
        const res = await fetch(
-         `https://cs-server-olive.vercel.app/products?limit=20&category=${btoa('trends')}`,
+         `http://192.168.168.146:9090/products?limit=20&category=${btoa('trends')}`,
          {
            headers: { 'Content-Type': 'application/json' },
          }
@@ -29,7 +29,7 @@ export default function Home() {
   };
   
   const sections = [
-    { key: 'flashads', component: <NavigationTabs /> },
+    // { key: 'flashads', component: <NavigationTabs /> },
     { key: 'flashads', component: <FlasAds /> },
     { key: 'showcase', component: <ShowCase category="trends" bg="rgb(255, 244, 224)" limit={30} /> },
     { key: 'hot', component: <Hot data={data}/> },

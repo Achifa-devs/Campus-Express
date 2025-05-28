@@ -471,7 +471,7 @@ export default function Create({ route }) {
     };
 
     console.log(productId)
-    fetch('https://cs-server-olive.vercel.app/vendor/create-product', {
+    fetch('http://192.168.168.146:9090/vendor/create-product', {
       method: 'post',
       headers: {
         "Content-Type": "Application/json"

@@ -60,7 +60,7 @@ export default function Photo({ photos, updatePhotos, setUploading, updateThumbn
       formData.append('productId', productId);
       formData.append('isThumbnail', index === 0);
 
-      const response = await axios.post('https://cs-server-olive.vercel.app/upload', formData, {
+      const response = await axios.post('http://192.168.168.146:9090/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         onUploadProgress: (progressEvent) => {
           const progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
@@ -94,7 +94,7 @@ export default function Photo({ photos, updatePhotos, setUploading, updateThumbn
       console.error('Upload failed:', photoToDelete, index);
       
       if (photoToDelete?.publicId) {
-        await axios.post('https://cs-server-olive.vercel.app/delete', {
+        await axios.post('http://192.168.168.146:9090/delete', {
           publicId: photoToDelete.publicId 
         });
       }

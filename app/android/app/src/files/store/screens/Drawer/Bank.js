@@ -31,7 +31,7 @@ export default function Bank() {
     }
 
     function verify() {
-        fetch(`https://cs-server-olive.vercel.app/bank-verification`, {
+        fetch(`http://192.168.168.146:9090/bank-verification`, {
             method: 'post',
             headers: {
                 "Content-Type": "Application/json"
@@ -55,7 +55,7 @@ export default function Bank() {
     }
 
     function create() {
-        fetch(`https://cs-server-olive.vercel.app:9090/api/shop/payment/create`, {
+        fetch(`http://192.168.168.146:9090:9090/api/shop/payment/create`, {
             method: 'post',
             headers: {
                 "Content-Type": "Application/json"

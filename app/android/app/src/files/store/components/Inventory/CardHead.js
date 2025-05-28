@@ -22,12 +22,12 @@ export default function CardHead({data}) {
         </View>
         <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
             <Text style={{ fontSize: 17, color: data?.state?.state === 'active' ? 'green' : 'red', fontWeight: '500'}}>{data?.state?.state}</Text>
-                <TouchableOpacity style={{ height: '90%', marginLeft: 15, paddingLeft: 5, paddingRight: 5, paddingTop: 2.5, paddingBottom: 2.5, display: 'flex', justifyContent: 'center', flexDirection: 'row', borderRadius: 3.5, width: 'auto', backgroundColor: '#1E90FF', alignItems: 'center' }} onPress={e => {
+            {/* <TouchableOpacity style={{ height: '90%', marginLeft: 15, paddingLeft: 5, paddingRight: 5, paddingTop: 2.5, paddingBottom: 2.5, display: 'flex', justifyContent: 'center', flexDirection: 'row', borderRadius: 3.5, width: 'auto', backgroundColor: '#1E90FF', alignItems: 'center' }} onPress={e => {
                     navigation.navigate('user-new-listing', {update: true})
             }}>
                 <Text style={{color: '#fff', fontSize: 12, marginRight: 5}}>Edit</Text>
                 <Ionicons  name={'create-outline'} size={20} color={'#fff'} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
         </View>
     </>
   )
