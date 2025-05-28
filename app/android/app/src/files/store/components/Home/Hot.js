@@ -73,7 +73,7 @@ const ItemCard = React.memo(({ item, onPress }) => {
           )}
         </View>
         
-        <View style={styles.metaContainer}>
+        {/* <View style={styles.metaContainer}>
           <View style={styles.ratingContainer}>
             <Icon name="star" size={12} color="#FFC107" />
             <Text style={styles.ratingText}>4.8</Text>
@@ -82,7 +82,7 @@ const ItemCard = React.memo(({ item, onPress }) => {
             <Icon name="location-outline" size={12} color="#919EAB" />
             <Text style={styles.locationText}>{item.campus}</Text>
           </View>
-        </View>
+        </View> */}
       </View>
     </TouchableOpacity>
   );

@@ -1,14 +1,16 @@
-import { cancelOrder, confirmOrder, createOrder, createOrderWithId, deleteOrder, deleteOrderById, findOrderById, findOrders } from "../../repositories/order.js";
-import { findProductById } from "../../repositories/product.js";
-import { createRefund } from "../../repositories/refund.js";
+import { cancelOrder, confirmOrder, createOrder, createOrderWithId, deleteOrder, deleteOrderById, findOrderById, findOrders } from "../../repositories/shop/order.js";
+import { findProductById } from "../../repositories/shop/product.js";
+import { createRefund } from "../../repositories/shop/refund.js";
 export const getOrder = async payload => {
   const {
-    order_id
+    product_id,
+    buyer_id
   } = payload;
 
   // Business logic
   const response = await findOrderById({
-    order_id
+    product_id,
+    buyer_id
   });
   if (!response.length === 0) {
     throw new Error("Error getting order");

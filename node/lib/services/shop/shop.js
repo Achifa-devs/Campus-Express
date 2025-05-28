@@ -3,55 +3,55 @@ import { createShopReview,
 findShopContentById, findShopDetailsById, findShopOwnerById, findShopReviewsById
 // findShopViewById, 
 // UpdateShopView
-} from "../../repositories/shop.js";
+} from "../../repositories/shop/shop.js";
 export const getShopOwner = async payload => {
   const {
-    seller_id
+    user_id
   } = payload;
 
   // Business logic
   const response = await findShopOwnerById({
-    seller_id
+    user_id
   });
   return response;
 };
 export const getShopReviews = async payload => {
   const {
-    seller_id
+    user_id
   } = payload;
 
   // Business logic
   const response = await findShopReviewsById({
-    seller_id
+    user_id
   });
   return response;
 };
 export const getShopDetails = async payload => {
   const {
-    seller_id
+    user_id
   } = payload;
 
   // Business logic
   const response = await findShopDetailsById({
-    seller_id
+    user_id
   });
   return response;
 };
 export const getShopContent = async payload => {
   const {
-    seller_id
+    user_id
   } = payload;
 
   // Business logic
   const response = await findShopContentById({
-    seller_id
+    user_id
   });
   return response;
 };
 export const postShopReview = async payload => {
   const {
     shop_id,
-    seller_id,
+    user_id,
     order_id,
     buyer_id,
     review,
@@ -63,7 +63,7 @@ export const postShopReview = async payload => {
   // Business logic
   const response = await createShopReview({
     shop_id,
-    seller_id,
+    user_id,
     order_id,
     buyer_id,
     review,

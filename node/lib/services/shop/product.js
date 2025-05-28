@@ -1,4 +1,4 @@
-import { createProductView, findProductById, findProducts, findProductsByCategory, findProductsByCategoryAndGender, findProductsThumbnailById, findProductViewById, updateProductView, updateProductViewForUnkownBuyer } from "../../repositories/product.js";
+import { createProductView, findProductById, findProducts, findProductsByCategory, findProductsByCategoryAndGender, findProductsThumbnailById, findProductsType, findProductViewById, updateProductView, updateProductViewForUnkownBuyer } from "../../repositories/shop/product.js";
 export const getProduct = async payload => {
   const {
     product_id
@@ -9,6 +9,17 @@ export const getProduct = async payload => {
     product_id
   });
   return response;
+};
+export const getSearch = async payload => {
+  let {
+    word
+  } = payload;
+  const response = await findProducts({
+    limit: null
+  });
+  const filteredList = response.filter(item => item.title.toLowerCase().indexOf(word.toLowerCase()) > -1);
+  console.log("response: ", filteredList);
+  return filteredList;
 };
 export const getProducts = async payload => {
   let {
@@ -36,6 +47,12 @@ export const getProducts = async payload => {
       limit
     });
     return response;
+  } else if (trimmed.toLowerCase() === 'trends') {
+    const response = await findProducts({
+      limit
+    });
+    console.log("response: ", response);
+    return response;
   }
   const response = await findProductsByCategory({
     category,
@@ -53,6 +70,23 @@ export const getProductThumbnail = async payload => {
     product_id
   });
   return response;
+};
+export const getProductType = async payload => {
+  const {
+    category,
+    type
+  } = payload;
+
+  // Business logic
+  try {
+    const response = await findProductsType({
+      type,
+      limit: 40
+    });
+    return response;
+  } catch (error) {
+    console.log('error: ', error);
+  }
 };
 export const postProductView = async payload => {
   const {

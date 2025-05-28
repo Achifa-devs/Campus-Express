@@ -12,7 +12,7 @@ export default function Btm({ size, user_id }) {
     
     useEffect(() => {
         if (user_id) {
-            fetch(`http://192.168.168.146:9090/owner?user_id=${user_id}`, {
+            fetch(`https://cs-server-olive.vercel.app/owner?user_id=${user_id}`, {
                 headers: {
                 "Content-Type": "Application/json" 
                 }
@@ -28,7 +28,7 @@ export default function Btm({ size, user_id }) {
                 console.log(err);
             });
 
-            fetch(`http://192.168.168.146:9090/reviews?user_id=${user_id}`, {
+            fetch(`https://cs-server-olive.vercel.app/reviews?user_id=${user_id}`, {
                 headers: {
                 "Content-Type": "Application/json" 
                 }
@@ -43,7 +43,7 @@ export default function Btm({ size, user_id }) {
                 Alert.alert('Network error, please try again.');
                 console.log(err);
             });
-            fetch(`http://192.168.168.146:9090/details?user_id=${user_id}`, {
+            fetch(`https://cs-server-olive.vercel.app/details?user_id=${user_id}`, {
                 headers: {
                 "Content-Type": "Application/json" 
                 }
@@ -129,12 +129,12 @@ export default function Btm({ size, user_id }) {
                 </View>
             </View>
             
-            <View style={styles.top}>
+            {/* <View style={styles.top}>
                 <Text style={{marginBottom: 10, fontSize: 17, color: '#000'}}>Reviews ({reviews?.length})</Text>
                 <Text style={{fontSize: size ? size :  12, color: '#000', padding: 5}}>
                     {null}
                 </Text>
-            </View>
+            </View> */}
 
             {/* <View style={styles.filter}>
                 <Text style={{margin: 10, fontSize: 14, color: '#000', borderRadius: 10, backgroundColor: 'rgb(255, 244, 224)', width: 'fit-content', padding: 10}}>Poor (25)</Text>
@@ -142,7 +142,7 @@ export default function Btm({ size, user_id }) {
                 <Text style={{margin: 10, fontSize: 14, color: '#000', borderRadius: 10, backgroundColor: 'rgb(255, 244, 224)', width: 'fit-content', padding: 10}}>Best (135)</Text>
             </View> */}
 
-            <View style={styles.cardCnt}>
+            {/* <View style={styles.cardCnt}>
                 {
                     <FlatList
                         data={reviews}
@@ -187,7 +187,7 @@ export default function Btm({ size, user_id }) {
                     />
 
                 }
-            </View>
+            </View> */}
 
         </>
       )

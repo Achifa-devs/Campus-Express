@@ -1,4 +1,4 @@
-import { createFavourite, deleteFavourite, findFavouriteById, findFavourites } from "../../repositories/favourite.js";
+import { createFavourite, deleteFavourite, findFavouriteById, findFavourites } from "../../repositories/shop/favourite.js";
 export const getFavourite = async payload => {
   const {
     saveditems_id

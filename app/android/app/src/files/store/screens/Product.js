@@ -53,7 +53,7 @@ export default function Product() {
     };
 
     useEffect(() => {
-        fetch(`http://192.168.168.146:9090/product?product_id=${product_id}`, {
+        fetch(`https://cs-server-olive.vercel.app/product?product_id=${product_id}`, {
             headers: { "Content-Type": "Application/json" }
         })
         .then(async (result) => {
@@ -126,7 +126,7 @@ export default function Product() {
                 </View>
 
                 {/* Mark unavailable & Report abuse */}
-                <View style={styles.rowButtonContainer}>
+                {/* <View style={styles.rowButtonContainer}>
                     <TouchableOpacity style={styles.markButton}>
                         <Text style={styles.markText}>Mark unavailable</Text>
                     </TouchableOpacity>
@@ -134,7 +134,7 @@ export default function Product() {
                         <ReportSvg height={21} width={21} />
                         <Text style={styles.reportText}>Report abuse</Text>
                     </TouchableOpacity>
-                </View>
+                </View> */}
 
                 {/* Post similar ad */}
                 <View style={styles.rowButtonContainer}>

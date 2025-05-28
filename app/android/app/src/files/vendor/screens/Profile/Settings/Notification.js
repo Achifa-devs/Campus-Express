@@ -34,7 +34,7 @@ export default function Notification() {
         } = useSelector(s=>s.user);
 
     function update_notification(target, src, value) {
-        axios.post('http://192.168.168.146:9090/system.notice-update', {
+        axios.post('https://cs-server-olive.vercel.app/system.notice-update', {
             id: user?.id,
             data: {
                 target: target,

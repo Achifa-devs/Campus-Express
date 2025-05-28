@@ -229,7 +229,7 @@ export default function Create({ route }) {
       })  
     }else{
 
-      fetch('http://192.168.168.146:9090/create-product', {
+      fetch('https://cs-server-olive.vercel.app/create-product', {
         method: 'post',
         headers: {
             "Content-Type": "Application/json"

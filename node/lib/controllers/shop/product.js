@@ -1,4 +1,4 @@
-import { getProduct, getProducts, getProductThumbnail, postProductView, postUpdateProductViewForUnknownCustomer } from "../../services/shop/product.js";
+import { getProduct, getProducts, getProductThumbnail, getProductType, getSearch, postProductView, postUpdateProductViewForUnknownCustomer } from "../../services/shop/product.js";
 export async function GET_PRODUCT(req, res) {
   try {
     const product = await getProduct(req.query);
@@ -22,6 +22,34 @@ export async function GET_PRODUCTS(req, res) {
     res.status(201).json({
       success: true,
       data: products
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
+}
+export async function GET_PRODUCTS_TYPE(req, res) {
+  try {
+    const products = await getProductType(req.query);
+    res.status(201).json({
+      success: true,
+      data: products
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
+}
+export async function GET_SEARCH(req, res) {
+  try {
+    const search_response = await getSearch(req.query);
+    res.status(201).json({
+      success: true,
+      data: search_response
     });
   } catch (error) {
     res.status(400).json({

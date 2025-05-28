@@ -17,7 +17,7 @@ export default function Search() {
        
     if (search_char !== '' && search_char.trim() !== '') {
       setIsReady(false)
-      fetch(`http://192.168.168.146:9090/search?word=${search_char}`, {
+      fetch(`https://cs-server-olive.vercel.app/search?word=${search_char}`, {
         headers: {
           "Content-Type": "Application/json" 
         }
