@@ -179,10 +179,10 @@ export default function Listing() {
                                                 {item.stock} in stock
                                             </div>
                                             |
-                                            <div className="product-orders">
+                                            {/* <div className="product-orders">
                                                 {item.orders} orders placed 
                                             </div>
-                                            |
+                                            | */}
                                             <div className="product-views">
                                                 {item.views} views 
                                             </div>

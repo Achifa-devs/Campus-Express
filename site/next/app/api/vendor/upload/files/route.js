@@ -22,21 +22,26 @@ export async function POST(req) {
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    const id = shortId.generate();
 
     return new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
           resource_type: 'auto',
-          folder: product_id.trim(),
-          public_id: id.trim(),
-          overwrite: false,
+          folder: product_id.trim(), // Organize files in a folder
+          public_id: `${shortId.generate()}-${product_id}`,
+          use_filename: false, // Keep original filename
+          unique_filename: false, // Allow duplicates
+          overwrite: false, // Overwrite existing files with same name
+          transformation: [
+            { width: 1000, height: 1000, crop: 'limit' }, // Limit dimensions
+            { quality: 'auto' }, // Auto-optimize quality
+          ],
         },
         (error, result) => {
           if (error) {
             reject(NextResponse.json({ error: 'Upload failed', details: error.message }, { status: 500 }));
           } else {
-            resolve(NextResponse.json({ url: result.secure_url, id: id, success: true }));
+            resolve(NextResponse.json({ url: result.secure_url, id: result.public_id, success: true }));
           }
         }
       );

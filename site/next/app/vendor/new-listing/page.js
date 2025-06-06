@@ -1553,8 +1553,10 @@ export default function NewListing() {
                                             <div onClick={e => { 
                                                 seller_overlay_setup(true, `Deleting thumbnail...`)
                             
-                                                axios.post('http://192.168.24.146:9090/seller.thumbnail-delete', {
-                                                    url: thumbnail,type:'video'
+                                                axios.get('/api/vendor/upload/delete', {
+                                                    params: {
+                                                        url: thumbnail,type:'video'
+                                                    }
                                                 })
                                                 .then(response => {
                                                     console.log('delete successful', response);
