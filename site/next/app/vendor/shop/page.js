@@ -15,6 +15,7 @@ export default function Shop() {
     }=useSelector(s=>s.user_id);
 
     let [shop, setShop] = useState('')
+    // let [shopExist, setShopExist] = useState(false)
 
     useEffect(() => {
         seller_overlay_setup(true, 'Loading Page...')    
@@ -52,7 +53,7 @@ export default function Shop() {
                 }else{
                     // seller_overlay_setup(false, '')
                     // open_notice(true, 'Error occured, refresh. please check your network')
-                    // window.location.reload()
+                    window.location.href='/signup'
                     document.querySelector('.shop-overlay').setAttribute('id', 'shop-overlay')
                 }
 
@@ -60,7 +61,7 @@ export default function Shop() {
             .catch((error) => {
                 // seller_overlay_setup(false, '')
                 // window.location.reload()
-                open_notice(true, 'Error occured, refresh. please check your network')
+                open_notice(true, 'Error occured, please check your network and refresh.')
                 
                 console.log(error)
             }) 

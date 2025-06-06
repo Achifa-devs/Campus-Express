@@ -25,7 +25,7 @@ const BuyerLayout = ({children}) => {
 
     useEffect(() => {
         const currentPath = pathname.split('/').splice(-1)[0];
-        const excludedPaths = ['login', 'signup', 'password-recovery'];
+        const excludedPaths = ['login', 'signup', 'password-recovery', ''];
 
         if (!excludedPaths.includes(currentPath)) {
             fetch('https://www.campussphere.net/api/store/auth', {
