@@ -24,7 +24,7 @@ const BuyerMenu = () => {
               </section>
               <hr />
               <ul>
-                <li className="" onClick={e => navigate('/history')}>
+                <li className="" onClick={e => navigate('/store/history')}>
                   <span>
                     <img src={subSvg} style={{height: '20px', width: '20px', marginBottom: '5px'}} alt="" />
 
@@ -32,7 +32,7 @@ const BuyerMenu = () => {
                   &nbsp;
                   <span>History</span>
                 </li>
-                <li className="" onClick={e => navigate('/orders')}>
+                <li className="" onClick={e => navigate('/store/orders')}>
                   <span>
                     <img src={orderSvg} style={{height: '20px', width: '20px', marginBottom: '5px'}} alt="" />
 
@@ -41,7 +41,7 @@ const BuyerMenu = () => {
                   <span>Orders</span>
                 </li>
                 
-                <li className="" onClick={e => navigate('/wallet')}>
+                <li className="" onClick={e => navigate('/store/wallet')}>
                   <span>
                     <img src={walletSvg} style={{height: '20px', width: '20px', marginBottom: '5px'}} alt="" />
 
@@ -50,7 +50,7 @@ const BuyerMenu = () => {
                   <span>Wallet</span>
                 </li>
                 
-                <li className="" onClick={e => navigate('/cart')}>
+                <li className="" onClick={e => navigate('/store/cart')}>
                   <span>
                     <img src={cartSvg} style={{height: '20px', width: '20px', marginBottom: '5px'}} alt="" />
 
@@ -58,7 +58,7 @@ const BuyerMenu = () => {
                   &nbsp;
                   <span>Cart</span>
                 </li>
-                <li className="" onClick={e => navigate('/saved-item')}>
+                <li className="" onClick={e => navigate('/store/saved-item')}>
                   <span>
                     <img src={savedSvg} style={{height: '20px', width: '20px', marginBottom: '5px'}} alt="" />
 
@@ -69,7 +69,7 @@ const BuyerMenu = () => {
 
                 <hr />
 
-                <li className="" onClick={e => navigate('/seller/signup')}>
+                <li className="" onClick={e => navigate('/vendor/shop')}>
                   <span>
                     <img src={sellSvg} style={{height: '20px', width: '20px', marginBottom: '5px'}} alt="" />
 

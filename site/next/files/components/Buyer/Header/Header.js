@@ -162,9 +162,9 @@ const Header = () => {
         let list = [
           { txt: 'Contact Us', svg: contactvg, uri: 'contact-us' },
         
-          // {txt:'Help Center', svg: helpSvg, uri: 'help-center'},
-          {txt:'Refund & Return', svg: refundSvg, uri: 'refund'},
-          {txt:'Manage Orders', svg: cancelSvg, uri: 'orders'},
+          {txt:'Help Center', svg: helpSvg, uri: 'help-center'},
+          // {txt:'Refund & Return', svg: refundSvg, uri: 'refund'},
+          // {txt:'Manage Orders', svg: cancelSvg, uri: 'orders'},
           // {txt:'Payment Option', svg: paySvg, uri: 'payments'},
           { txt: 'Terms Of Use', svg: termsSvg, uri: 'terms-of-use' },
           
@@ -235,7 +235,7 @@ const Header = () => {
       {
         let list = [
           {txt:'My Account', svg: acctSvg, uri: 'account-managements'},
-          {txt:'Orders', svg: orderSvg, uri: 'orders'},
+          // {txt:'Orders', svg: orderSvg, uri: 'orders'},
           {txt:'Inbox', svg: inboxSvg, uri: 'inbox'},
           {txt:'Favourite', svg: savedSvg, uri: 'favourites'},
           // {txt:'Voucher', svg: '', uri: ''},

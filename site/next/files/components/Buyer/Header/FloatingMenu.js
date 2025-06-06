@@ -20,7 +20,7 @@ const FloatingMenu = ({list,right,top,visible,getSelectedOption,setDisplay}) => 
                                         getSelectedOption === 'categories' ?
                                         window.location.href = `/category/${item?.txt}`
                                         : 
-                                        window.location.href=`/${item?.uri}`;
+                                        window.location.href=`/store/${item?.uri}`;
                                         setDisplay('none');
                                     }}>
                                     <span>
@@ -38,7 +38,7 @@ const FloatingMenu = ({list,right,top,visible,getSelectedOption,setDisplay}) => 
                                     getSelectedOption === 'categories' ?
                                     window.location.href = `/category/${item?.txt}`
                                     : 
-                                    window.location.href=`/${item?.uri}`;
+                                    window.location.href=`/store/${item?.uri}`;
                                     setDisplay('none');
                                 }} >
                                 <span>
