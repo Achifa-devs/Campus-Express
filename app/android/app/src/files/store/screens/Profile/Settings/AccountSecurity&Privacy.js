@@ -222,7 +222,7 @@ export default function AccountSecurity({navigation}) {
                         
                     </TouchableOpacity> */}
 
-                    <TouchableOpacity onPress={e => navigation.navigate('user-logout')} style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 10, marginBottom: 0, flexDirection: 'row', borderTopLeftRadius: 10, borderTopRightRadius: 10, height: 75, width: '100%', backgroundColor: '#fff'}}>
+                    {/* <TouchableOpacity onPress={e => navigation.navigate('user-logout')} style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 10, marginBottom: 0, flexDirection: 'row', borderTopLeftRadius: 10, borderTopRightRadius: 10, height: 75, width: '100%', backgroundColor: '#fff'}}>
                         <View style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row'}}>
                             <View style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 10}}>
                                 <LogoutSvg width={25} height={25} />
@@ -237,7 +237,7 @@ export default function AccountSecurity({navigation}) {
                             <AngleSvg width={35} height={35} />
                         </View>
                         
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
 
                     
                     <Text style={[styles.label, {borderBottomColor: '#000', borderBottomWidth: .5, paddingBottom: 10, marginBottom: 10, marginTop: 25}]}>Privacy</Text>

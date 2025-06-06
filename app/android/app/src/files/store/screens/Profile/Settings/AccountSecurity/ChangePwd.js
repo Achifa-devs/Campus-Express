@@ -114,7 +114,7 @@ export default function ChangePwd({ route, navigation }) {
                       if (token === undefined) {
                         set_token_sent(true);
                           
-                        let response = await send_token(user?.phone);
+                        let response = await send_token({phone: user?.phone});
                           
                         if (response) {
                         navigation.navigate('user-token', { redirect: 'user-settings-1-password' })

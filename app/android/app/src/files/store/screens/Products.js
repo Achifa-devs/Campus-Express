@@ -121,7 +121,7 @@ export default function TypeProducts() {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#FF4500" />
+        <ActivityIndicator size="large" color="#0077ff" />
       </View>
     );
   }
@@ -135,7 +135,7 @@ export default function TypeProducts() {
           onPress={() => toggleModal('Sort')} 
           style={styles.sortBtn}
         >
-          <Icon name="filter" size={18} color="#FF4500" />
+          <Icon name="filter" size={18} color="#0077ff" />
           <Text style={styles.sortText}> Sort</Text>
         </TouchableOpacity>
       </View>
@@ -215,7 +215,7 @@ export default function TypeProducts() {
             >
               <Text style={styles.modalOptionText}>{condition}</Text>
               {filterWord.condition === condition && (
-                <Icon name="checkmark" size={18} color="#FF4500" />
+                <Icon name="checkmark" size={18} color="#0077ff" />
               )}
             </TouchableOpacity>
           ))}
@@ -229,7 +229,7 @@ export default function TypeProducts() {
             >
               <Text style={styles.modalOptionText}>{sort}</Text>
               {filterWord.priceSort === sort && (
-                <Icon name="checkmark" size={18} color="#FF4500" />
+                <Icon name="checkmark" size={18} color="#0077ff" />
               )}
             </TouchableOpacity>
           ))}
@@ -243,7 +243,7 @@ export default function TypeProducts() {
             >
               <Text style={styles.modalOptionText}>{sort}</Text>
               {filterWord.priceSort === sort && (
-                <Icon name="checkmark" size={18} color="#FF4500" />
+                <Icon name="checkmark" size={18} color="#0077ff" />
               )}
             </TouchableOpacity>
           ))}
@@ -288,7 +288,7 @@ const styles = StyleSheet.create({
   },
   sortText: {
     fontSize: 14,
-    color: '#FF4500',
+    color: '#0077ff',
     fontWeight: '500',
     marginLeft: 4,
   },
@@ -311,8 +311,8 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   activeFilterBtn: {
-    backgroundColor: '#FF4500',
-    borderColor: '#FF4500',
+    backgroundColor: '#0077ff',
+    borderColor: '#0077ff',
   },
   filterBtnText: {
     fontSize: 14,
@@ -405,7 +405,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 8,
-    backgroundColor: '#FF4500',
+    backgroundColor: '#0077ff',
   },
   resetFiltersText: {
     color: '#FFF',

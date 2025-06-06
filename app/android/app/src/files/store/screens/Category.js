@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         paddingVertical: 14,
         backgroundColor: '#fff',
-        borderBottomColor: '#FF4500',
+        borderBottomColor: '#0077ff',
         borderBottomWidth: 1.25,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 1 },
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: '#FF4500',
+        color: '#0077ff',
         letterSpacing: 0.5,
     },
 

@@ -75,7 +75,7 @@ export function HomeStackScreen() {
                                     <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 0, alignItems: 'flex-end'}}>
                                         <View style={{backgroundColor: '#fff', height: '100%', width: 40, borderRadius: 10, padding: 4}}> 
                                             <Text style={{backgroundColor: 'hsl(14.086956521739133, 100%, 54.90196078431373%);', height: 'auto', display: 'flex', flexDirection: 'row',width: 'fit-content', alignItems: 'center' ,justifyContent: 'center', position: 'absolute', color: '#fff', left: -8, top: -2.5, borderRadius: 15, borderRadius: 10, fontSize: 10, padding: 3.5}}>7</Text>
-                                            <Icon name="notifications-outline" size={24} color="#FF4500" />
+                                            <Icon name="notifications-outline" size={24} color="#0077ff" />
                                         </View>
                                     </View>    
                                 </TouchableOpacity>
@@ -292,7 +292,7 @@ export function HomeStackScreen() {
          <HomeStack.Screen  options={{
             header: ({navigation}) =>
             (
-                <View style={{ height: 60, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FF4500', alignItems: 'center', padding: '10px'}}>  
+                <View style={{ height: 60, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#0077ff', alignItems: 'center', padding: '10px'}}>  
                     
                     <View style={{
                         height: '100%',

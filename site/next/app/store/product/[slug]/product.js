@@ -33,7 +33,6 @@ const ProductPageClient = ({product, slug}) => {
 
     let {ItemImages} = useSelector(s => s.itemImages);
     let {ActiveImg} = useSelector(s => s.ActiveImg);
-    let {buyerData} = useSelector(s => s.buyerData);
 
     let [seller, set_seller] = useState(1);
     let [screenWidth, setScreenWidth] = useState(0);
@@ -99,6 +98,7 @@ const ProductPageClient = ({product, slug}) => {
 
     async function AddNewViewer(product_id,user_id) {
         fetch(`/api/store/new-view`, {
+            method: 'post',
             headers: {
                 'Gender': window.localStorage.getItem('cs-gender') 
             },

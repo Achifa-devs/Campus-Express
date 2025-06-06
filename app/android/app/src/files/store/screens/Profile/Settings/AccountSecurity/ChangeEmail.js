@@ -29,9 +29,9 @@ export default function ChangeEmail({ route, navigation }) {
     let [new_email, set_new_email] = useState('')
     let [emailErr, setEmailErr] = useState('')
 
-    async function update_phone_pin() {
+    async function update_email() {
       
-        return await axios.post('https://cs-server-olive.vercel.app/system.email-update', {email: new_email, id: user?.id})
+        return await axios.post('https://cs-server-olive.vercel.app/vendor/email-update', {email: new_email, id: user?.id})
         .then(({ data }) => ({bool: data.success}))
         .catch(err => (err.response?.data))
     }
@@ -118,7 +118,7 @@ export default function ChangeEmail({ route, navigation }) {
                                 
                                 set_token_sent(true);
                           
-                                let response = await send_token(user?.email);
+                                let response = await send_token({email: user?.email});
                             
                                 if (response) {
                                     navigation.navigate('user-token', { redirect: 'user-settings-1-email' })
@@ -141,7 +141,7 @@ export default function ChangeEmail({ route, navigation }) {
                                 } else {
                                     set_phone_sent(true)
 
-                                    let response = await update_phone_pin();
+                                    let response = await update_email();
                                     console.log(response)
                                     if (response.success) {
                                         //Alert message

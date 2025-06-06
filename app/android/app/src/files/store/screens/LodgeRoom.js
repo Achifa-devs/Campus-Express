@@ -63,14 +63,14 @@ export default function ProductDetailScreen({ route }) {
         
         <Text style={styles.title}>{lodge.title}</Text>
         <View style={styles.locationContainer}>
-          <Icon name="location-outline" size={16} color="#FF4500" />
+          <Icon name="location-outline" size={16} color="#0077ff" />
           <Text style={styles.locationText}>{lodge.location} • {lodge.lodgeName}</Text>
         </View>
 
         {/* Features Section */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Icon name="star-outline" size={20} color="#FF4500" />
+            <Icon name="star-outline" size={20} color="#0077ff" />
             <Text style={styles.sectionTitle}>Key Features</Text>
           </View>
           <View style={styles.featuresContainer}>
@@ -86,7 +86,7 @@ export default function ProductDetailScreen({ route }) {
         {/* Description Section */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Icon name="document-text-outline" size={20} color="#FF4500" />
+            <Icon name="document-text-outline" size={20} color="#0077ff" />
             <Text style={styles.sectionTitle}>Description</Text>
           </View>
           <Text style={styles.description}>{lodge.description}</Text>
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -25,
     right: 20,
-    backgroundColor: '#FF4500',
+    backgroundColor: '#0077ff',
     paddingVertical: 6,
     paddingHorizontal: 12,
     borderRadius: 12,
@@ -224,13 +224,13 @@ const styles = StyleSheet.create({
   },
   contactButton: {
     marginTop: 16,
-    backgroundColor: '#FF4500',
+    backgroundColor: '#0077ff',
     paddingVertical: 14,
     borderRadius: 12,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#FF4500',
+    shadowColor: '#0077ff',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 8,

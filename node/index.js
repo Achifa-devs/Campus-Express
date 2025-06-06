@@ -118,7 +118,7 @@ CAMPUSSPHERE_SERVER.post('/upload', upload.single('file'), async (req, res) => {
     // Upload to Cloudinary with additional options
     const uploadOptions = {
       resource_type: 'auto',
-      folder: productId, // Organize files in a folder
+      folder: productId.trim(), // Organize files in a folder
       public_id: `${shortId.generate()}-${productId}`,
       use_filename: false, // Keep original filename
       unique_filename: false, // Allow duplicates

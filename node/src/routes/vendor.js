@@ -30,6 +30,7 @@ import {
     GET_SHOP_REVIEWS,
     // UPDATE_SHOP
 } from "../controllers/vendor/shop.js";
+import { SEND_TOKEN, SEND_TOKEN_PWD } from "../controllers/vendor/send_token.js";
 
 export const VENDOR_ROUTE = express.Router()
 
@@ -42,6 +43,8 @@ VENDOR_ROUTE.post('/vendor/phone-update', parser, RESET_VENDOR_PHONE)
 VENDOR_ROUTE.post('/vendor/profile-update', parser, UPDATE_VENDOR_PROFILE)
 VENDOR_ROUTE.post('/vendor/reset-password', parser, RESET_PWD)
 
+VENDOR_ROUTE.post('/vendor/send-token', parser, SEND_TOKEN)
+VENDOR_ROUTE.post('/vendor/send-token-pwd', parser, SEND_TOKEN_PWD)
 // VENDOR_ROUTE.post('/vendor/confirm-email',)
 // VENDOR_ROUTE.post('/vendor/verify-token',)
 
