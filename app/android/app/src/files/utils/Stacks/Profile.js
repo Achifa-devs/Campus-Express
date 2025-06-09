@@ -49,7 +49,7 @@ export function ProfileStackScreen() {
                     style={{
                     width: '100%',
                     height: 100,
-                    backgroundColor: '#FF4500',
+                    backgroundColor: '#2962FF',
                     paddingHorizontal: 15,
                     paddingTop: 10,
                     flexDirection: 'row',
@@ -226,14 +226,14 @@ export function ProfileStackScreen() {
                 <View style={{ height: 55, display: 'none', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', alignItems: 'center', padding: '10px'}}>
                     
                     <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                    <View style={{backgroundColor: '#FF4500', height: '100%', width: 40, borderRadius: 10}}></View>
+                    <View style={{backgroundColor: '#2962FF', height: '100%', width: 40, borderRadius: 10}}></View>
                     <Text>&nbsp;</Text>
                     <Text>Akpulu.F</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={e => navigation.navigate('user-notification')}>
                     <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                        <View style={{backgroundColor: '#FF4500', height: '100%', width: 40, borderRadius: 10}}>
+                        <View style={{backgroundColor: '#2962FF', height: '100%', width: 40, borderRadius: 10}}>
 
                         </View>
                     </View>
@@ -248,14 +248,14 @@ export function ProfileStackScreen() {
                 <View style={{ height: 55, display: 'none', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', alignItems: 'center', padding: '10px'}}>
                     
                     <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                    <View style={{backgroundColor: '#FF4500', height: '100%', width: 40, borderRadius: 10}}></View>
+                    <View style={{backgroundColor: '#2962FF', height: '100%', width: 40, borderRadius: 10}}></View>
                     <Text>&nbsp;</Text>
                     <Text>Akpulu.F</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={e => navigation.navigate('user-notification')}>
                     <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                        <View style={{backgroundColor: '#FF4500', height: '100%', width: 40, borderRadius: 10}}>
+                        <View style={{backgroundColor: '#2962FF', height: '100%', width: 40, borderRadius: 10}}>
 
                         </View>
                     </View>

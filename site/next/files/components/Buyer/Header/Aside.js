@@ -83,7 +83,7 @@ const Aside = ({
     
 
     let list1 = [
-        {text: 'Orders', svg: orderSvg.src, uri: 'orders'},
+        // {text: 'Orders', svg: orderSvg.src, uri: 'orders'},
         {text: 'Inbox', svg: inboxSvg.src, uri: 'inbox'},
         {text: 'Favourites', svg: savedSvg.src, uri: 'favourites'},
         // {text: 'Followed Sellers', svg: '', uri: 'following'},

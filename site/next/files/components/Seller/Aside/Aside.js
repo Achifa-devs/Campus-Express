@@ -30,9 +30,8 @@ export default function Aside() {
             {/* <hr /> */}
             <ul>
 
-                <li style={{background: active === 'orders' ? '#f9f9f9' : '#fff'}} onClick={e => {
+                {/* <li style={{background: active === 'orders' ? '#f9f9f9' : '#fff'}} onClick={e => {
                     window.location.href=('/vendor/orders')
-                    // alert('Check back later')
                 }}>
                     <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect x="5" y="4" width="14" height="17" rx="2" stroke="#000" stroke-width="2"/>
@@ -43,7 +42,7 @@ export default function Aside() {
                     &nbsp;
                     &nbsp;
                     <span>Orders</span>
-                </li> 
+                </li>  */}
 
 
                 <li style={{background: active === 'listing' ? '#f9f9f9' : '#fff'}} onClick={e => window.location.href=('/vendor/listing')}>
@@ -62,10 +61,8 @@ strokeLinejoin
                     <span>Listing</span>
                 </li>
 
-                <li style={{background: active === 'balance' ? '#f9f9f9' : '#fff'}} onClick={e => {
+                {/* <li style={{background: active === 'balance' ? '#f9f9f9' : '#fff'}} onClick={e => {
                         window.location.href=('/vendor/balance')
-                        // alert('Check back later')
-
                     }}>
                     <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M7 15L7 9" stroke="#000" stroke-width="1.5" stroke-linecap="round" strokeLinejoin="round"/>
@@ -77,7 +74,7 @@ strokeLinejoin
                     &nbsp;
 
                     <span>Balance</span>
-                </li>
+                </li> */}
 
              
                 {/* <li onClick={e => window.location.href=('/vendor/editor')}>

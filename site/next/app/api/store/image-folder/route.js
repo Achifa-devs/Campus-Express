@@ -11,13 +11,12 @@ export async function GET(req) {
   try {
     const searchParams = new URL(req.url).searchParams;
     const folder = searchParams.get('folder')
-    console.log("folder: ", folder)
 
-    const result = await cloudinary.api.resources({
-      type: 'upload',
-      prefix: folder, // Ensure this folder name is correct
-      resource_type: 'image'
-    });
+    const result = await cloudinary.search
+    .expression(`folder:${folder}`)
+    .sort_by('public_id', 'desc') // Optional: Sort results by public_id
+    .max_results(100) // Adjust as needed; max is 500
+    .execute();
     
     return NextResponse.json({data: result.resources, bool: true}, { status: 200 });
 
@@ -28,4 +27,3 @@ export async function GET(req) {
     }, { status: 500 });
   }
 }
-    
