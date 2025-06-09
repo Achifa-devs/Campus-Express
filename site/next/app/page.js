@@ -7,7 +7,7 @@ import './styles/medium.css'
 import './styles/small.css' 
 import { useSelector } from 'react-redux'
 
-export default function page() {
+export default function Page() {
   
   const {
     buyer_info
