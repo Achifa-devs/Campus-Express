@@ -101,7 +101,7 @@ export default function Listing() {
                                         item?.date ? js_ago(new Date(item?.date)) : ''
                                     }
                                 </div>
-                                <div style={{color: item.state.state === 'active' ? 'green' : 'red', fontWeight: '500'}}>
+                                {/* <div style={{color: item.state.state === 'active' ? 'green' : 'red', fontWeight: '500'}}>
                                     {
                                         item.state.state
                                     }
@@ -112,7 +112,7 @@ export default function Listing() {
                                     }}>
                                         Edit
                                     </button>
-                                </div>
+                                </div> */}
                             </header>
                             <section>
                                 <ul>
@@ -201,7 +201,7 @@ export default function Listing() {
                                                         navigator.share({
                                                             title: item?.title,
                                                             text: item?.description,
-                                                            url: `https://www.campussphere.net/product/${item?.product_id}`, // or any custom URL
+                                                            url: `https://www.campussphere.net/store/product/${item?.product_id}`, // or any custom URL
                                                         })
                                                         .then(() => console.log('Share successful'))
                                                         .catch((error) => console.error('Error sharing:', error));
@@ -216,7 +216,7 @@ export default function Listing() {
 
                                                 <button onClick={e=> {
                                                     seller_overlay_setup(true, 'Deleting Product...')
-                                                    fetch(`/api/vendor/upload/delete?product_id=${item?.product_id}`)
+                                                    fetch(`https://www.campussphere.net/api/vendor/upload/delete?product_id=${item?.product_id}`)
                                                     .then(async(result) => {
                                                         let response = await result.json();
                                                         if(response){
