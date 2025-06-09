@@ -219,7 +219,7 @@ const BuyerLayout = ({children}) => {
                     </svg>
                 </div>
                 <form action="#">
-                    <p class="heading">What's your gender?</p>
+                    <h3 class="heading">What's your gender?</h3>
                     <div class="radio-wrapper">
                     <input onInput={e=> {
                         window.localStorage.setItem('cs-gender', 'male')
