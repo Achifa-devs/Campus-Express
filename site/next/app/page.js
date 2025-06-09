@@ -5,7 +5,13 @@ import './styles/x-large.css'
 import './styles/large.css'
 import './styles/medium.css'
 import './styles/small.css' 
+import { useSelector } from 'react-redux'
+
 export default function page() {
+  
+  const {
+    buyer_info
+  } = useSelector(s => s.buyer_info)
   return (
     <>
       <div className="home">
@@ -61,8 +67,7 @@ export default function page() {
                       transition: 'transform 0.2s ease'
                     }}
                     onClick={(e) => {
-                      
-                      let isAuth = buyer_info!==null && buyer_info ? true : false
+                      let isAuth = buyer_info !== null && buyer_info !==undefined && buyer_info !== 'null' && buyer_info !=='undefined' && buyer_info !== '' ? true : false
                        isAuth?
                        window.location.href = `${item.uri}` : window.location.href = '/login'
                     }}
