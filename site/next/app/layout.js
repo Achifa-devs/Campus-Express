@@ -80,7 +80,7 @@ export default async function RootLayout({ children }) {
       "item": {
         "@type": "WebPage",
         "name": category.title,
-        "url": `https://www.campussphere.net${category.uri}`
+        "url": `https://www.campussphere.net${category.uri}` 
       }
     }))
   };

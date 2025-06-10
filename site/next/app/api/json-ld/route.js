@@ -15,7 +15,7 @@ export async function GET() {
         state->>'state' as status
       FROM products 
       WHERE state->>'state' = 'active'
-      ORDER BY created_at DESC
+      ORDER BY date DESC
       LIMIT 10
     `;
 
