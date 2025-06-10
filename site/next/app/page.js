@@ -106,16 +106,16 @@ export default function Page() {
   };
 
   const handleCategoryClick = (uri) => {
-    const isAuth = buyer_info && buyer_info !== 'null' && buyer_info !== 'undefined';
-    window.location.href = isAuth ? uri : '/login';
+    // const isAuth = buyer_info && buyer_info !== 'null' && buyer_info !== 'undefined';
+    window.location.href = uri;
   };
 
   return (
     <>
-      <Head>
+      {/* <Head> */}
         {/* Primary Schema Markup */}
-        <StructuredData data={websiteSchema} />
-        <StructuredData data={categorySchema} />
+        {/* <StructuredData data={websiteSchema} />
+        <StructuredData data={categorySchema} /> */}
         
         {/* Product Carousel Markup */}
         {data.length > 0 && (
@@ -125,7 +125,7 @@ export default function Page() {
             "itemListElement": data
           }} />
         )}
-      </Head>
+      {/* </Head> */}
 
       <div className="home">
         {/* Hero Section */}

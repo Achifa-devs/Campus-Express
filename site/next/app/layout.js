@@ -3,6 +3,7 @@
 import App from "./App";
 import './globals.css'; 
 import { cookies } from "next/headers";
+import StructuredData from './StructuredData'
 
 const maxAge = 90 * 24 * 60 * 60; 
  
@@ -59,7 +60,87 @@ export async function generateMetadata({ params }) {
 }
 
 
+
+
 export default async function RootLayout({ children }) {
+  // let data = [];
+  const categories = [
+    { uri: '/store/category/Lodge & Accomodation', title: 'Lodge & Accomodation' },
+    { uri: '/store/category/Services', title: 'Services' },
+    { uri: '/store/category/Appliances', title: 'Appliances' },
+    { uri: '/store/category/Mobile Phones', title: 'Mobile Phones' },
+    { uri: '/store/category/Laptops', title: 'Laptops' },
+    { uri: '/store/category/Fashion & Clothing', title: 'Fashion & Clothing' },
+    { uri: '/store/category/Study Materials', title: 'Study Materials' },
+    { uri: '/store/', title: 'Explore More' },
+  ];
+
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Campus Sphere",
+    "url": "https://www.campussphere.net/",
+    "potentialAction": [{
+      "@type": "LoginAction",
+      "target": "https://www.campussphere.net/login",
+      "name": "Login"
+    }, {
+      "@type": "CreateAccountAction",
+      "target": "https://www.campussphere.net/signup",
+      "name": "Sign Up"
+    }]
+  };
+
+  const categorySchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Product Categories",
+    "description": "Browse products by category on Campus Sphere",
+    "url": "https://www.campussphere.net/store/",
+    "numberOfItems": categories.length,
+    "itemListElement": categories.map((category, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "item": {
+        "@type": "WebPage",
+        "name": category.title,
+        "url": `https://www.campussphere.net${category.uri}`
+      }
+    }))
+  };
+
+  // (async function getData() {  // Added async here
+  //   try {
+  //     const res = await fetch(`https://www.campussphere.net/api/products/category?category=${btoa('trends')}&limit=${25}`, {
+  //       headers: {
+  //         'Gender': window.localStorage.getItem('cs-gender') 
+  //       }
+  //     })
+  
+  //     let jsonData = await res.json();  // Added await here
+  //     console.log('jsonData: ', jsonData)
+  //     if(jsonData.bool){
+  //       const productData = jsonData.map((item, index) => ({
+  //         "@type": "ListItem",
+  //         "position": index + 1,
+  //         "item": {
+  //           "@type": "Product",
+  //           "name": item.title,
+  //           "image": item.thumbnail_id,
+  //           "url": `https://www.campussphere.net/store/product/${item?.product_id}`,
+  //           "offers": {
+  //             "@type": "Offer",
+  //             "price": item?.price,
+  //             "priceCurrency": "NGN"
+  //           }
+  //         }
+  //       }));
+  //       data=(productData);
+  //     }
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // })();
 
   return (
     <html lang="en">
@@ -87,8 +168,20 @@ export default async function RootLayout({ children }) {
           gtag('config', 'AW-11150712607');
         </script> */}
 
+        <StructuredData data={websiteSchema} />
+        <StructuredData data={categorySchema} />
+        {/* Add product schema when data is available */}
+        {/* {data.length > 0 && (
+          <StructuredData data={{
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            "itemListElement": data
+          }} />
+        )} */}
+
         <script defer src="https://js.pusher.com/7.2/pusher.min.js"></script>
        
+        
 
       </head>
       <body style={{ overflowX: 'hidden', background: '#f9f9f9' }}>
