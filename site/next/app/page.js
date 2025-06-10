@@ -1,91 +1,134 @@
+
 "use client"
-import React from 'react'
-import './styles/xx-large.css'
-import './styles/x-large.css'
-import './styles/large.css'
-import './styles/medium.css'
-import './styles/small.css' 
-import { useSelector } from 'react-redux'
-import Head from 'next/head'
-import { 
-  useEffect,
-  useState
-} from 'react'
-import StructuredData from './StructuredData'
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import Head from 'next/head';
+import StructuredData from './StructuredData';
+import './styles/xx-large.css';
+import './styles/x-large.css';
+import './styles/large.css';
+import './styles/medium.css';
+import './styles/small.css';
 
 export default function Page() {
-  
-  const {
-    buyer_info
-  } = useSelector(s => s.buyer_info);
+  const { buyer_info } = useSelector(s => s.buyer_info);
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  
+  // Define categories
+  const categories = [
+    { uri: '/store/category/Lodge & Accomodation', title: 'Lodge & Accomodation' },
+    { uri: '/store/category/Services', title: 'Services' },
+    { uri: '/store/category/Appliances', title: 'Appliances' },
+    { uri: '/store/category/Mobile Phones', title: 'Mobile Phones' },
+    { uri: '/store/category/Laptops', title: 'Laptops' },
+    { uri: '/store/category/Fashion & Clothing', title: 'Fashion & Clothing' },
+    { uri: '/store/category/Study Materials', title: 'Study Materials' },
+    { uri: '/store/', title: 'Explore More' },
+  ];
 
-  
+  // Fetch product data
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const gender = window.localStorage.getItem('cs-gender') || '';
+        const res = await fetch(
+          `https://www.campussphere.net/api/products/category?category=${btoa('trends')}&limit=25`,
+          { headers: { 'Gender': gender } }
+        );
+
+        if (!res.ok) throw new Error('Failed to fetch products');
+        
+        const jsonData = await res.json();
+        
+        if (jsonData.bool) {
+          setData(jsonData.map((item, index) => ({
+            "@type": "ListItem",
+            "position": index + 1,
+            "item": {
+              "@type": "Product",
+              "name": item.title,
+              "image": item.thumbnail_id,
+              "url": `https://www.campussphere.net/store/product/${item?.product_id}`,
+              "offers": {
+                "@type": "Offer",
+                "price": item?.price,
+                "priceCurrency": "NGN"
+              }
+            }
+          })));
+        }
+      } catch (err) {
+        console.error('Fetch error:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getData();
+  }, []);
+
+  // Schema.org markup
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Campus Sphere",
+    "url": "https://www.campussphere.net/",
+    "potentialAction": [{
+      "@type": "LoginAction",
+      "target": "https://www.campussphere.net/login",
+      "name": "Login"
+    }, {
+      "@type": "CreateAccountAction",
+      "target": "https://www.campussphere.net/signup",
+      "name": "Sign Up"
+    }]
+  };
+
+  const categorySchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Product Categories",
+    "description": "Browse products by category on Campus Sphere",
+    "url": "https://www.campussphere.net/store/",
+    "numberOfItems": categories.length,
+    "itemListElement": categories.map((category, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "item": {
+        "@type": "WebPage",
+        "name": category.title,
+        "url": `https://www.campussphere.net${category.uri}`
+      }
+    }))
+  };
+
+  const handleCategoryClick = (uri) => {
+    const isAuth = buyer_info && buyer_info !== 'null' && buyer_info !== 'undefined';
+    window.location.href = isAuth ? uri : '/login';
+  };
+
   return (
     <>
-      {/* <Head> */}
+      <Head>
+        {/* Primary Schema Markup */}
+        <StructuredData data={websiteSchema} />
+        <StructuredData data={categorySchema} />
         
-        {/* <script 
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "ItemList",
-              "itemListElement": data
-            })
-          }}
-        /> */}
+        {/* Product Carousel Markup */}
+        {data.length > 0 && (
+          <StructuredData data={{
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            "itemListElement": data
+          }} />
+        )}
+      </Head>
 
-        {/* <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "WebSite",
-              "name": "Campus Sphere",
-              "url": "https://www.campussphere.net/",
-              "potentialAction": [{
-                "@type": "LoginAction",
-                "target": "https://www.campussphere.net/login",
-                "name": "Login"
-              }, {
-                "@type": "CreateAccountAction",
-                "target": "https://www.campussphere.net/signup",
-                "name": "Sign Up"
-              }]
-            })
-          }}
-        /> */}
-        
-        {/* Category List Schema */}
-        {/* <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "ItemList",
-              "name": "Product Categories",
-              "description": "Browse products by category on Campus Sphere",
-              "url": "https://www.campussphere.net/store/",
-              "numberOfItems": categories.length,
-              "itemListElement": categories.map((category, index) => ({
-                "@type": "ListItem",
-                "position": index + 1,
-                "item": {
-                  "@type": "WebPage",
-                  "name": category.title,
-                  "url": `https://www.campussphere.net${category.uri}`
-                }
-              }))
-            })
-          }}
-        /> */}
-
-        
-      {/* </Head> */}
       <div className="home">
-         
+        {/* Hero Section */}
         <div className="hero-section">
           <div id="left">
             <h1>
@@ -396,5 +439,83 @@ export default function Page() {
         </div>
       </div>
     </>
-  )
+  );
 }
+
+// Styles object for cleaner JSX
+const styles = {
+  subtitle: {
+    textAlign: 'center',
+    color: '#4B5563',
+    fontSize: '18px',
+    lineHeight: '1.6',
+    maxWidth: '800px',
+    margin: '20px auto',
+    padding: '0 20px',
+    fontWeight: '400',
+    fontStyle: 'italic'
+  },
+  categoriesContainer: {
+    padding: '20px', 
+    maxWidth: '1200px', 
+    margin: '0 auto'
+  },
+  categoryCard: {
+    width: 'calc(25% - 20px)',
+    minWidth: '120px',
+    marginBottom: '20px',
+    textAlign: 'center',
+    cursor: 'pointer',
+    transition: 'transform 0.2s ease'
+  },
+  categoryIcon: {
+    height: '80px',
+    width: '80px',
+    margin: '0 auto 10px',
+    borderRadius: '50%',
+    boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: 'white',
+    fontSize: '30px'
+  },
+  categoryTitle: {
+    margin: 0,
+    fontWeight: '600',
+    color: '#374151',
+    fontSize: '14px'
+  },
+  downloadTitle: {
+    fontSize: '18px',
+    fontWeight: '600',
+    color: '#333',
+    marginBottom: '15px',
+    textShadow: '0 1px 2px rgba(0,0,0,0.1)'
+  },
+  downloadButtons: {
+    display: 'flex',
+    justifyContent: 'center',
+    gap: '12px',
+    flexWrap: 'wrap'
+  },
+  downloadButton: {
+    backgroundColor: '#000',
+    display: 'flex',
+    alignItems: 'center',
+    padding: '8px 15px 8px 12px',
+    borderRadius: '6px',
+    textDecoration: 'none',
+    transition: 'transform 0.2s ease'
+  },
+  appBadge: {
+    height: '28px',
+    width: 'auto'
+  },
+  appPreview: {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+    borderRadius: '22px'
+  }
+};
