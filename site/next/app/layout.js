@@ -89,18 +89,7 @@ export default async function RootLayout({ children }) {
 
         <script defer src="https://js.pusher.com/7.2/pusher.min.js"></script>
        
-        <script type="application/ld+json">
-          {
-            "@context": "https://schema.org",
-            "@type": "WebSite",
-            "url": "https://www.campussphere.net/",
-            "potentialAction": {
-              "@type": "SearchAction",
-              "target": "https://www.campussphere.net/search?q={search_term_string}",
-              "query-input": "required name=search_term_string"
-            }
-          }
-        </script>
+        
 
       </head>
       <body style={{ overflowX: 'hidden', background: '#f9f9f9' }}>
