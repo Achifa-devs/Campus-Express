@@ -81,14 +81,17 @@ export default async function RootLayout({ children }) {
     "name": "Campus Sphere",
     "url": "https://www.campussphere.net/",
     "potentialAction": [{
-      "@type": "LoginAction",
-      "target": "https://www.campussphere.net/login",
-      "name": "Login"
-    }, {
-      "@type": "CreateAccountAction",
-      "target": "https://www.campussphere.net/signup",
-      "name": "Sign Up"
-    }]
+      "@type": "SearchAction",
+      "name": "Login",
+      "target": "https://www.campussphere.net/login?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }],
+    "action": {
+      "@type": "Action",
+      "name": "Sign Up",
+      "url": "https://www.campussphere.net/signup",
+      "actionStatus": "PotentialActionStatus"
+    }
   };
 
   const categorySchema = {
