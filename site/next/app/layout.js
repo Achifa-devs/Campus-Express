@@ -5,65 +5,40 @@ import './globals.css';
 import { cookies } from "next/headers";
 import StructuredData from './StructuredData'
 
-const maxAge = 90 * 24 * 60 * 60; 
- 
-// export async function setNewCookie(data,role) {
-//   let cookieStore = cookies();
-//   const expires = new Date();
-//   let result = cookieStore.set(role === 0 ? 'user_secret' : 'user_secret', data, {expires: expires.setTime(expires.getTime() + (30 * 24 * 60 * 60 * 1000))});
-//   return JSON.stringify(result);
-// }
-
-export async function generateMetadata({ params }) {
-  const slug = params?.slug;
-
-  if (!slug) {
-    return {
-      title: 'Campus Sphere Nigeria | Online Marketplace For Campus Students',
-    };
-  }
-  const data = await res.json();
-
+export async function generateMetadata() {
   const imageUrl = 'https://www.campussphere.net/api/logo';
 
   return {
-    title: `Campus Sphere Nigeria | Online Marketplace For Campus Students`,
+    title: 'Campus Sphere Nigeria | Online Marketplace For Campus Students',
+    description: 'Enjoy Free Commerce From The Comfort Of Your Lodge.',
     alternates: {
-      canonical: `https://www.campussphere.net`
+      canonical: 'https://www.campussphere.net'
     },
-    url: `https://www.campussphere.net`,
     robots: {
       index: true,
       follow: true,
     },
     openGraph: {
-      title: `Campus Sphere Nigeria | Online Marketplace For Campus Students`,
-      description: `Enjoy Free Commerce From The Comfort Of Your Lodge.`,
-      url: `https://www.campussphere.net`,
+      title: 'Campus Sphere Nigeria | Online Marketplace For Campus Students',
+      description: 'Enjoy Free Commerce From The Comfort Of Your Lodge.',
+      url: 'https://www.campussphere.net',
       type: 'website',
-      images: [
-        {
-          url: imageUrl,
-          width: 1200,
-          height: 630,
-        },
-      ],
+      images: [{
+        url: imageUrl,
+        width: 1200,
+        height: 630,
+      }],
     },
     twitter: {
       card: 'summary_large_image',
-      title: `Campus Sphere Nigeria | Online Marketplace For Campus Students`,
-      url: `https://www.campussphere.net`,
-      description: `Enjoy Free Commerce From The Comfort Of Your Lodge.`,
+      title: 'Campus Sphere Nigeria | Online Marketplace For Campus Students',
+      description: 'Enjoy Free Commerce From The Comfort Of Your Lodge.',
       images: [imageUrl],
     },
   };
 }
 
-
-
-
 export default async function RootLayout({ children }) {
-  // let data = [];
   const categories = [
     { uri: '/store/category/Lodge & Accomodation', title: 'Lodge & Accomodation' },
     { uri: '/store/category/Services', title: 'Services' },
@@ -75,27 +50,25 @@ export default async function RootLayout({ children }) {
     { uri: '/store/', title: 'Explore More' },
   ];
 
+  // Website schema
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "Campus Sphere",
     "url": "https://www.campussphere.net/",
-    "potentialAction": [{
+    "potentialAction": {
       "@type": "SearchAction",
-      "name": "Login",
-      "target": "https://www.campussphere.net/login?q={search_term_string}",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "https://www.campussphere.net/search?q={search_term_string}"
+      },
       "query-input": "required name=search_term_string"
-    }],
-    "action": {
-      "@type": "Action",
-      "name": "Sign Up",
-      "url": "https://www.campussphere.net/signup",
-      "actionStatus": "PotentialActionStatus"
     }
   };
 
+  // Category schema
   const categorySchema = {
-    "@context": "https://schema.org",
+    "@context": "https://schema.org", 
     "@type": "ItemList",
     "name": "Product Categories",
     "description": "Browse products by category on Campus Sphere",
@@ -112,93 +85,72 @@ export default async function RootLayout({ children }) {
     }))
   };
 
-  // (async function getData() {  // Added async here
-  //   try {
-  //     const res = await fetch(`https://www.campussphere.net/api/products/category?category=${btoa('trends')}&limit=${25}`, {
-  //       headers: {
-  //         'Gender': window.localStorage.getItem('cs-gender') 
-  //       }
-  //     })
-  
-  //     let jsonData = await res.json();  // Added await here
-  //     console.log('jsonData: ', jsonData)
-  //     if(jsonData.bool){
-  //       const productData = jsonData.map((item, index) => ({
-  //         "@type": "ListItem",
-  //         "position": index + 1,
-  //         "item": {
-  //           "@type": "Product",
-  //           "name": item.title,
-  //           "image": item.thumbnail_id,
-  //           "url": `https://www.campussphere.net/store/product/${item?.product_id}`,
-  //           "offers": {
-  //             "@type": "Offer",
-  //             "price": item?.price,
-  //             "priceCurrency": "NGN"
-  //           }
-  //         }
-  //       }));
-  //       data=(productData);
-  //     }
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // })();
+  // Fetch product schema
+  let productSchema = null;
+  try {
+    const res = await fetch(`https://www.campussphere.net/api/json-ld`, {
+      next: { revalidate: 3600 }, // Revalidate every hour
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
+    });
+ 
+    // First check if response is OK
+    if (!res.ok) {
+      throw new Error(`API request failed with status ${res.status}`);
+    }
+
+    // Then verify content type is JSON
+    const contentType = res.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      throw new Error('Invalid content type received');
+    }
+
+    const { bool, data } = await res.json();
+    if (bool) productSchema = data;
+  } catch (error) {
+    console.error("Error fetching product schema:", error.message);
+    // You might want to log this to an error tracking service
+  }
 
   return (
     <html lang="en">
-      
       <head>
-        <meta charset="utf-8" />
+        <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#ffffff" />
         <meta name="facebook-domain-verification" content="98x6w3kel0z4gmv2ofg7bcoybfckmg" />
 
-        <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" as="style" onload="this.rel='stylesheet'" />
-        <noscript>
-          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
-        </noscript>
+        {/* Bootstrap CSS */}
+        <link 
+          rel="stylesheet" 
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" 
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" 
+          crossOrigin="anonymous"
+        />
 
-        <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-          integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
-          crossorigin="anonymous"></script>
-
-        <script defer src="https://www.googletagmanager.com/gtag/js?id=AW-11150712607"></script>
-        {/* <script>
-          window?.dataLayer = window.dataLayer || [];
-          function gtag() { dataLayer.push(arguments) }
-          gtag('js', new Date());
-          gtag('config', 'AW-11150712607');
-        </script> */}
-
+        {/* Structured Data */}
         <StructuredData data={websiteSchema} />
         <StructuredData data={categorySchema} />
-        {/* Add product schema when data is available */}
-        {/* {data.length > 0 && (
-          <StructuredData data={{
-            "@context": "https://schema.org",
-            "@type": "ItemList",
-            "itemListElement": data
-          }} />
-        )} */}
+        {productSchema && <StructuredData data={productSchema} />}
 
-        <script defer src="https://js.pusher.com/7.2/pusher.min.js"></script>
-       
-        
-
+        {/* External Scripts */}
+        <script 
+          defer 
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" 
+          crossOrigin="anonymous"
+        ></script>
       </head>
       <body style={{ overflowX: 'hidden', background: '#f9f9f9' }}>
         <div className="overlay">
-          <div className="loader">
-          </div>
+          <div className="loader"></div>
         </div>
-        {
-          <App>
-            {children}
-          </App>
-        }
+        <App>
+          {children}
+        </App>
       </body>
     </html>
   );
 }
- 
