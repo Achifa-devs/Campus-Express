@@ -36,7 +36,7 @@ export default function SearchOutput() {
                             padding: '20px 10px',
                             borderLeft: '1px solid #FF4500', 
                             marginBottom: '6px',
-                        }} onClick={e => window.location.href=(`/product/${item.product_id}`)} key={index} className='shadow-sm'>
+                        }} onClick={e => window.location.href=(`/store/product/${item?.product_id}`)} key={index} className='shadow-sm'>
                             {item.title}
                         </div>
                     )

@@ -56,6 +56,17 @@ export default function Page() {
     }
   }
 
+  const categories = [
+    { uri: '/store/category/Lodge & Accomodation', title: 'Lodge & Accomodation' },
+    { uri: '/store/category/Services', title: 'Services' },
+    { uri: '/store/category/Appliances', title: 'Appliances' },
+    { uri: '/store/category/Mobile Phones', title: 'Mobile Phones' },
+    { uri: '/store/category/Laptops', title: 'Laptops' },
+    { uri: '/store/category/Fashion & Clothing', title: 'Fashion & Clothing' },
+    { uri: '/store/category/Study Materials', title: 'Study Materials' },
+    { uri: '/store/', title: 'Explore More' },
+  ];
+
   return (
     <>
       <Head>
@@ -67,6 +78,51 @@ export default function Page() {
               "@context": "https://schema.org",
               "@type": "ItemList",
               "itemListElement": data
+            })
+          }}
+        />
+
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "name": "Campus Sphere",
+              "url": "https://www.campussphere.net/",
+              "potentialAction": [{
+                "@type": "LoginAction",
+                "target": "https://www.campussphere.net/login",
+                "name": "Login"
+              }, {
+                "@type": "CreateAccountAction",
+                "target": "https://www.campussphere.net/signup",
+                "name": "Sign Up"
+              }]
+            })
+          }}
+        />
+        
+        {/* Category List Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "ItemList",
+              "name": "Product Categories",
+              "description": "Browse products by category on Campus Sphere",
+              "url": "https://www.campussphere.net/store/",
+              "numberOfItems": categories.length,
+              "itemListElement": categories.map((category, index) => ({
+                "@type": "ListItem",
+                "position": index + 1,
+                "item": {
+                  "@type": "WebPage",
+                  "name": category.title,
+                  "url": `https://www.campussphere.net${category.uri}`
+                }
+              }))
             })
           }}
         />
@@ -124,9 +180,10 @@ export default function Page() {
                       transition: 'transform 0.2s ease'
                     }}
                     onClick={(e) => {
-                      let isAuth = buyer_info !== null && buyer_info !==undefined && buyer_info !== 'null' && buyer_info !=='undefined' && buyer_info !== '' ? true : false
-                       isAuth?
-                       window.location.href = `${item.uri}` : window.location.href = '/login'
+                      // let isAuth = buyer_info !== null && buyer_info !==undefined && buyer_info !== 'null' && buyer_info !=='undefined' && buyer_info !== '' ? true : false
+                      //  isAuth?
+                      //   : window.location.href = '/login'
+                      window.location.href = `${item.uri}`
                     }}
                     
                   >
