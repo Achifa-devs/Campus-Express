@@ -1,4 +1,4 @@
-import { sendToken, sendTokenPwd } from "../../services/vendor/send_token";
+import { sendToken, sendTokenPwd } from "../../services/vendor/send_token.js";
 
 export async function SEND_TOKEN(req, res) {
     

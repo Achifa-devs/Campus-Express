@@ -6,14 +6,70 @@ import './styles/large.css'
 import './styles/medium.css'
 import './styles/small.css' 
 import { useSelector } from 'react-redux'
+import Head from 'next/head'
+import { 
+  useEffect,
+  useState
+} from 'react'
 
 export default function Page() {
   
   const {
     buyer_info
-  } = useSelector(s => s.buyer_info)
+  } = useSelector(s => s.buyer_info);
+
+  const [data, setData] = useState([]);
+  
+  useEffect(() => {
+    getData()
+  }, []);
+
+  async function getData() {  // Added async here
+    try {
+      const res = await fetch(`https://www.campussphere.net/api/products/category?category=${btoa('trends')}&limit=${25}`, {
+        headers: {
+            'Gender': window.localStorage.getItem('cs-gender') 
+        }
+      })
+
+      let jsonData = await res.json();  // Added await here
+      if(jsonData.bool){
+        const productData = jsonData.map((item, index) => ({
+          "@type": "ListItem",
+          "position": index + 1,
+          "item": {
+            "@type": "Product",
+            "name": item.title,
+            "image": item.thumbnail_id,
+            "url": `https://www.campussphere.net/store/product/${item?.product_id}`,
+            "offers": {
+              "@type": "Offer",
+              "price": item?.price,
+              "priceCurrency": "NGN"
+            }
+          }
+        }));
+        setData(productData);
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <>
+      <Head>
+        <script 
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "ItemList",
+              "itemListElement": data
+            })
+          }}
+        />
+      </Head>
       <div className="home">
          
         <div className="hero-section">

@@ -1,6 +1,6 @@
-import { tokenTemplate } from "../../mails/template/token";
-import { findUserByEmail, findUserByPhone } from "../../repositories/vendor/vendor";
-import { send_email } from "../../utils/email_sender";
+import { tokenTemplate } from "../../mails/template/token.js";
+import { findUserByEmail, findUserByPhone } from "../../repositories/vendor/vendor.js";
+import { send_email } from "../../utils/email_sender.js";
 
 
 
