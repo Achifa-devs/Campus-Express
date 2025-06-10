@@ -11,6 +11,7 @@ import {
   useEffect,
   useState
 } from 'react'
+import StructuredData from './StructuredData'
 
 export default function Page() {
   
@@ -67,11 +68,45 @@ export default function Page() {
     { uri: '/store/', title: 'Explore More' },
   ];
 
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Campus Sphere",
+    "url": "https://www.campussphere.net/",
+    "potentialAction": [{
+      "@type": "LoginAction",
+      "target": "https://www.campussphere.net/login",
+      "name": "Login"
+    }, {
+      "@type": "CreateAccountAction",
+      "target": "https://www.campussphere.net/signup",
+      "name": "Sign Up"
+    }]
+  };
+
+  const categorySchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Product Categories",
+    "description": "Browse products by category on Campus Sphere",
+    "url": "https://www.campussphere.net/store/",
+    "numberOfItems": categories.length,
+    "itemListElement": categories.map((category, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "item": {
+        "@type": "WebPage",
+        "name": category.title,
+        "url": `https://www.campussphere.net${category.uri}`
+      }
+    }))
+  };
+
   return (
     <>
       <Head>
         
-        <script 
+        {/* <script 
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
@@ -80,9 +115,9 @@ export default function Page() {
               "itemListElement": data
             })
           }}
-        />
+        /> */}
 
-        <script
+        {/* <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
@@ -101,10 +136,10 @@ export default function Page() {
               }]
             })
           }}
-        />
+        /> */}
         
         {/* Category List Schema */}
-        <script
+        {/* <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
@@ -125,7 +160,18 @@ export default function Page() {
               }))
             })
           }}
-        />
+        /> */}
+
+        <StructuredData data={websiteSchema} />
+        <StructuredData data={categorySchema} />
+        {/* Add product schema when data is available */}
+        {data.length > 0 && (
+          <StructuredData data={{
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            "itemListElement": data
+          }} />
+        )}
       </Head>
       <div className="home">
          
