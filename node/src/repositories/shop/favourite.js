@@ -4,32 +4,32 @@ import shortId from "short-id"
 import { errorHandler } from "../../utils/erroHandler.js";
 
 // Find order by ID
-export async function findFavouriteById({ saveditems_id }) {
+export async function findFavouriteById({ user_id, product_id }) {
     const result = await pool.query(
-    `SELECT * FROM favourite WHERE saveditems_id = $1`,
-    [saveditems_id]
+    `SELECT * FROM favourite WHERE user_id = $1 AND product_id = $2`,
+    [user_id, product_id]
     );
   return result.rows;
 };
 
 // Find orders
-export async function findFavourites({ buyer_id }) {
+export async function findFavourites({ user_id }) {
   const result = await pool.query(
-    `SELECT * FROM favourite WHERE buyer_id = $1`,
-    [buyer_id]
+    `SELECT * FROM favourite WHERE user_id = $1`,
+    [user_id]
   );
   return result.rows;
 };
 
 // Create order
-export async function createFavourite({ buyer_id, product_id }) {
+export async function createFavourite({ user_id, product_id }) {
   const result = await pool.query(
     `INSERT INTO favourite(
-        id,savedItems_id ,product_id ,date ,buyer_id
+        id,savedItems_id ,product_id ,date ,user_id
     ) VALUES (
         DEFAULT, $1, $2, $3, $4
     )`,
-    [shortId.generate(10),product_id,`${new Date()}`,buyer_id]
+    [shortId.generate(10),product_id,`${new Date()}`,user_id]
     );
     
   let response = await errorHandler(result?.rowCount);
@@ -38,10 +38,10 @@ export async function createFavourite({ buyer_id, product_id }) {
 
 
 // deleteOrder
-export async function deleteFavourite({ buyer_id, product_id }) {
+export async function deleteFavourite({ user_id, product_id }) {
   const result = await pool.query(
-    `DELETE FROM favourite WHERE buyer_id=$1 AND product_id=$2`,
-    [buyer_id, product_id]
+    `DELETE FROM favourite WHERE user_id=$1 AND product_id=$2`,
+    [user_id, product_id]
   );
   let response = await errorHandler(result?.rowCount);
   return response;

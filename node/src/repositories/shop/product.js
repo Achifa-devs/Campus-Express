@@ -68,14 +68,14 @@ export async function findProductsThumbnailById({ product_id }) {
 
 
 // Create product view
-export async function createProductView({ product_id, buyer_id }) {
+export async function createProductView({ product_id, user_id }) {
   const result = await pool.query(
     `INSERT INTO views (
-        id, view_id, product_id, buyer_id, date
+        id, view_id, product_id, user_id, date
     ) VALUES (
         DEFAULT, $1, $2, $3, $4
     )`,
-    [shortId.generate(10), product_id, buyer_id, `${new Date()}`]
+    [shortId.generate(10), product_id, user_id, `${new Date()}`]
     );
     
   let response = await errorHandler(result?.rowCount);
@@ -84,10 +84,10 @@ export async function createProductView({ product_id, buyer_id }) {
 
 
 // Find product view by ID
-export async function findProductViewById({ product_id, buyer_id }) {
+export async function findProductViewById({ product_id, user_id }) {
   const result = await pool.query(
-    `SELECT * FROM views WHERE product_id = $1 AND buyer_id = $2`,
-    [product_id, buyer_id]
+    `SELECT * FROM views WHERE product_id = $1 AND user_id = $2`,
+    [product_id, user_id]
   );
   return result.rows;
 };
@@ -103,10 +103,10 @@ export async function updateProductView({ product_id }) {
   return response;
 };
 
-export async function updateProductViewForUnkownBuyer({ unknown_buyer_id, registered_id }) {
+export async function updateProductViewForUnkownBuyer({ unknown_user_id, registered_id }) {
   const result = await pool.query(
-    `UPDATE views set buyer_id = $1 WHERE buyer_id = $2`,
-    [registered_id, unknown_buyer_id]
+    `UPDATE views set user_id = $1 WHERE user_id = $2`,
+    [registered_id, unknown_user_id]
   );
   let response = await errorHandler(result?.rowCount);
   return response;

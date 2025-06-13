@@ -58,7 +58,7 @@ export const postCancelOrder = async (payload) => {
     
   }
   if (response?.havepaid) {
-    const refundHandler = await createRefund({ user_id, order_id,buyer_id: response.buyer_id, amount, reason });
+    const refundHandler = await createRefund({ user_id, order_id,user_id: response.user_id, amount, reason });
   
     return refundHandler;
   }

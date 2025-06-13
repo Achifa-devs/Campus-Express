@@ -23,7 +23,7 @@ async function process_payment(req,res) {
     console.log(buyer_info,product_info,purchase_info)
 
 
-    let {buyer_id}=buyer_info
+    let {user_id}=buyer_info
     let {product_id,title,price}=product_info
     let {amount_paid,unit,payment_type,isBulkPurchase}=purchase_info
 
@@ -55,7 +55,7 @@ async function process_payment(req,res) {
             let thumbnail = await NeonDB.then((pool) => pool.query(`select thumbnail_id from seller_shop where product_id = '${product_id}'`).then(result =>  (result.rows[0])).catch(err => console.log(err)))
 
             new Promise(async(resolve, reject) => { 
-                let buyer_tansaction_response = await  save_buyer_tansaction(buyer_id,payment_src,payment_type,50,parseInt(price),date,'checkout'); 
+                let buyer_tansaction_response = await  save_buyer_tansaction(user_id,payment_src,payment_type,50,parseInt(price),date,'checkout'); 
                 buyer_tansaction_response.bool ? resolve(buyer_tansaction_response) : reject(buyer_tansaction_response)
             })
         
@@ -63,7 +63,7 @@ async function process_payment(req,res) {
                 // CREATE ORDER
                 if(result.bool){
                     console.log(result, 'transaction saved and order is been created...') 
-                    let update_order_response = await update_order(product_id,buyer_id)
+                    let update_order_response = await update_order(product_id,user_id)
                     return update_order_response.bool ? update_order_response : ({bool: false})
                 }else{
                     console.log(result,'error occcured while saving transaction and order is cancelled...')

@@ -14,10 +14,10 @@ import {
 } from "../../repositories/shop/refund.js";
 
 export const getOrder = async (payload) => {
-  const { product_id, buyer_id } = payload;
+  const { product_id, user_id } = payload;
 
   // Business logic
-  const response = await findOrderById({ product_id, buyer_id });
+  const response = await findOrderById({ product_id, user_id });
 
   if (!response.length === 0) {
     throw new Error("Error getting order");
@@ -30,10 +30,10 @@ export const getOrder = async (payload) => {
 
 
 export const getOrders = async (payload) => {
-  const { buyer_id } = payload;
+  const { user_id } = payload;
 
   // Business logic
-  const response = await findOrders({ buyer_id });
+  const response = await findOrders({ user_id });
   if (!response.length > 0) {
     
     
@@ -51,7 +51,7 @@ export const getOrders = async (payload) => {
 
 
 export const postCancelOrder = async (payload) => {
-  const { buyer_id,order_id,amount,reason } = payload;
+  const { user_id,order_id,amount,reason } = payload;
 
   // Business logic
   const response = await cancelOrder({ order_id });
@@ -60,7 +60,7 @@ export const postCancelOrder = async (payload) => {
     return response;
     
   }
-  const refundHandler = await createRefund({ buyer_id, order_id, amount, reason });
+  const refundHandler = await createRefund({ user_id, order_id, amount, reason });
 
   return refundHandler;
 
@@ -88,27 +88,27 @@ export const postRemoveOrder = async (payload) => {
 
 
 export const postConfirmOrder = async (payload) => {
-  const { order_id,buyer_id,product_id } = payload;
+  const { order_id,user_id,product_id } = payload;
 
   // Business logic
-  const response = await confirmOrder({ order_id, buyer_id, product_id });
+  const response = await confirmOrder({ order_id, user_id, product_id });
   // create inbox notification
 
   return response;
 };
 
 export const postUpdateOrder = async (payload) => {
-  const { buyer_id,product_id,stock,price,locale,order_id } = payload;
+  const { user_id,product_id,stock,price,locale,order_id } = payload;
 
   // Business logic
-  let deleteHandler = await deleteOrder({ buyer_id, product_id });
+  let deleteHandler = await deleteOrder({ user_id, product_id });
   
   
   if (deleteHandler === 0) {
     throw new Error("error updating order");
   }
 
-  let response = await createOrderWithId({ buyer_id, product_id, stock, price, locale, order_id });
+  let response = await createOrderWithId({ user_id, product_id, stock, price, locale, order_id });
   
   return response;
 };

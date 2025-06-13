@@ -34,10 +34,10 @@ function DeleteItem(req,res) {
 }
 
 async function unsave_item(req,res) {
-    let { product_id, buyer_id } = req.query;
-    console.log(product_id,buyer_id)
+    let { product_id, user_id } = req.query;
+    console.log(product_id,user_id)
     let delete_result = await NeonDB.then((pool) => 
-        pool.query(`DELETE FROM campus_express_buyer_saveditems WHERE buyer_id = '${buyer_id}' AND product_id = '${product_id}'`)
+        pool.query(`DELETE FROM campus_express_buyer_saveditems WHERE user_id = '${user_id}' AND product_id = '${product_id}'`)
         .then(result => result.rowCount > 0 ? (true) : (false))
         .catch(err => console.log(err))
     )
@@ -46,7 +46,7 @@ async function unsave_item(req,res) {
     function get_saved_item() { 
         return(
             NeonDB.then((pool) => 
-                pool.query(`SELECt * FROM campus_express_buyer_saveditems WHERE buyer_id = '${buyer_id}'`)
+                pool.query(`SELECt * FROM campus_express_buyer_saveditems WHERE user_id = '${user_id}'`)
                 .then(result => (result.rows))
                 .catch(err => console.log(err))
             )

@@ -7,12 +7,12 @@ import bcrypt from "bcryptjs";
 import shortId from "short-id";
 export const getCustomer = async payload => {
   const {
-    buyer_id
+    user_id
   } = payload;
 
   // Business logic
   const response = await findUserById({
-    buyer_id
+    user_id
   });
   return response;
 };
@@ -53,7 +53,7 @@ export const postNewCustomer = async payload => {
 
   // Business logic
   let hashedPwd = bcrypt.hash(pwd, 10);
-  let buyer_id = shortId.generate(10);
+  let user_id = shortId.generate(10);
   let existingEmail = await countEmail({
     email
   });
@@ -68,7 +68,7 @@ export const postNewCustomer = async payload => {
   const response = await createCustomer({
     fname,
     lname,
-    buyer_id,
+    user_id,
     email,
     phone,
     hashedPwd,
@@ -91,7 +91,7 @@ export const postLoginCustomer = async payload => {
   if (user) {
     const auth = await bcrypt.compare(pwd, user.password);
     if (auth) {
-      const token = generateCustomerJwtToken(user.buyer_id);
+      const token = generateCustomerJwtToken(user.user_id);
       return {
         user: user,
         cookie: token
@@ -104,7 +104,7 @@ export const postLoginCustomer = async payload => {
 export const postResetCustomerEmail = async payload => {
   const {
     email,
-    buyer_id
+    user_id
   } = payload;
 
   // Business logic
@@ -118,7 +118,7 @@ export const postResetCustomerEmail = async payload => {
   }
   const response = await updateCustomerEmailById({
     email,
-    buyer_id
+    user_id
   });
   return response;
 };
@@ -149,7 +149,7 @@ export const postConfirmEmail = async payload => {
 export const postResetCustomerPhone = async payload => {
   const {
     phone,
-    buyer_id
+    user_id
   } = payload;
 
   // Business logic
@@ -161,20 +161,20 @@ export const postResetCustomerPhone = async payload => {
   }
   const response = await updateCustomerPhoneById({
     phone,
-    buyer_id
+    user_id
   });
   return response;
 };
 export const postUpdateCustomerProfile = async payload => {
   const {
-    buyer_id,
+    user_id,
     fname,
     lname,
     gender
   } = payload;
   // Business logic
   const response = await updateCustomerProfileById({
-    buyer_id,
+    user_id,
     fname,
     lname,
     gender: gender.toLowerCase() === 'male' ? 1 : 0
@@ -201,7 +201,7 @@ export const postResetCustomerPwd = async payload => {
   }
   const hashedPwd = await bcrypt.hash(password, 10);
   const response = await updateCustomerPasswordById({
-    buyer_id: customer?.buyer_id,
+    user_id: customer?.user_id,
     password: hashedPwd
   });
   return response;
@@ -209,13 +209,13 @@ export const postResetCustomerPwd = async payload => {
 export const postAlterCustomerPwd = async payload => {
   const {
     pwd,
-    buyer_id,
+    user_id,
     oldpwd
   } = payload;
 
   // Business logic
   let customer = await findUserById({
-    buyer_id
+    user_id
   });
   if (!customer) {
     throw new Error("Internal server error, please try again.");
@@ -231,7 +231,7 @@ export const postAlterCustomerPwd = async payload => {
   }
   const hashedPwd = await bcrypt.hash(pwd, 10);
   const response = await updateCustomerPasswordById({
-    buyer_id: buyer_id,
+    user_id: user_id,
     password: hashedPwd
   });
   return response;

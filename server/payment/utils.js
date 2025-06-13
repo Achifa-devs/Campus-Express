@@ -2,12 +2,12 @@ const { NeonDB } = require("./db");
 const { coinTxtMail } = require("./mails/coin");
 const { express,path,fs,parser,mocha,morgan,cors,shortId,jwt,io} = require('./modules');
 require('dotenv').config(); 
-async function save_buyer_tansaction(buyer_id,payment_src,payment_type,app_fee,amount,date,reason) {
+async function save_buyer_tansaction(user_id,payment_src,payment_type,app_fee,amount,date,reason) {
     return(
       await NeonDB.then((pool) => 
         pool.query(`insert into buyer_transactions(
           id,
-          buyer_id,
+          user_id,
           payment_src,
           payment_type,
           app_fee,
@@ -17,7 +17,7 @@ async function save_buyer_tansaction(buyer_id,payment_src,payment_type,app_fee,a
         ) 
         values(
           DEFAULT, 
-          '${buyer_id}',
+          '${user_id}',
           '${payment_src}',
           '${payment_type}',
           '${app_fee}',
@@ -96,13 +96,13 @@ function retrieve_seller_info(seller_id) {
     // return book;
 }
 
-async function retrieve_room(buyer_id,seller_id) {
+async function retrieve_room(user_id,seller_id) {
     return(
         await NeonDB.then((pool) => 
             pool.query(`SELECT * FROM room_id`)
             .then(result => {
                 let m = result.rows;
-                let room = m.filter(item => JSON.parse(item.members_id).buyer_id === buyer_id && JSON.parse(item.members_id).seller_id === seller_id);
+                let room = m.filter(item => JSON.parse(item.members_id).user_id === user_id && JSON.parse(item.members_id).seller_id === seller_id);
                 return room.map(item => ({room_id: item.room_id, seller_id}));
                 // room.map(item => (item.room_id));
             })
@@ -114,10 +114,10 @@ async function retrieve_room(buyer_id,seller_id) {
     )
 }
 
-async function retrieve_buyer_info(buyer_id) {
+async function retrieve_buyer_info(user_id) {
     return(
         await NeonDB.then((pool) => 
-            pool.query(`SELECT * FROM users WHERE buyer_id = '${buyer_id}'`)
+            pool.query(`SELECT * FROM users WHERE user_id = '${user_id}'`)
             .then(result => result.rows[0])
             .catch(err => console.log(err))
             // .finally(() => pool.end())
@@ -140,11 +140,11 @@ function retrieve_room_with_room_id(id) {
     )
 }
 
-function retrieve_mssg_meta_data(buyer_id,room_id,order_id) {
+function retrieve_mssg_meta_data(user_id,room_id,order_id) {
     // console.log('order_id: ', order_id)
     return(
         NeonDB.then((pool) => 
-            pool.query(`SELECT * FROM message_meta_data WHERE sender_id = '${buyer_id}' AND room_id = '${room_id}' AND order_id = '${order_id}'`)
+            pool.query(`SELECT * FROM message_meta_data WHERE sender_id = '${user_id}' AND room_id = '${room_id}' AND order_id = '${order_id}'`)
             .then(result => (result.rows))
             .catch(err => console.log(err))
             // .finally(() => pool.end())
@@ -167,10 +167,10 @@ function retrieve_mssg_meta_data_via_room(room_id) {
     )
 }
 
-function retrive_cart(buyer_id) { 
+function retrive_cart(user_id) { 
     return(
         NeonDB.then((pool) => 
-            pool.query(`SELECT * FROM campus_express_buyer_cart WHERE buyer_id = '${buyer_id}'`)
+            pool.query(`SELECT * FROM campus_express_buyer_cart WHERE user_id = '${user_id}'`)
             .then(result => (result.rows))
             .catch(err => console.log(err))
             // .finally(() => pool.end())
@@ -284,10 +284,10 @@ function send_sms(recipient,message) {
     }))
 }
 
-async function retrive_order(buyer_id,product_id) { 
+async function retrive_order(user_id,product_id) { 
     return(
         NeonDB.then((pool) => 
-            pool.query(`SELECT order_id FROM campus_express_buyer_orders WHERE buyer_id = '${buyer_id}' AND product_id = '${product_id}'`)
+            pool.query(`SELECT order_id FROM campus_express_buyer_orders WHERE user_id = '${user_id}' AND product_id = '${product_id}'`)
             .then(result => (result.rows[0]))
             .catch(err => console.log(err))
             // .finally(() => pool.end())
@@ -297,10 +297,10 @@ async function retrive_order(buyer_id,product_id) {
     )
 }
 
-async function delete_cart(product_id,buyer_id) {
+async function delete_cart(product_id,user_id) {
     return(
         NeonDB.then((pool) => 
-            pool.query(`DELETE FROM campus_express_buyer_cart WHERE buyer_id = '${buyer_id}' AND product_id = '${product_id}'`)
+            pool.query(`DELETE FROM campus_express_buyer_cart WHERE user_id = '${user_id}' AND product_id = '${product_id}'`)
             .then(result => result.rowCount > 0 ? (true) : (false))
             .catch(err => console.log(err))
             // .finally(() => pool.end())
@@ -337,14 +337,14 @@ async function send_proposal_message(mssg_type,mssg,order_id,sender_id,room_id) 
     )
 }
 
-async function update_order(product_id,buyer_id) {
+async function update_order(product_id,user_id) {
     //stock
     let order_id = shortId.generate()
     let date = new Date()
-    console.log(product_id,buyer_id)
+    console.log(product_id,user_id)
     return(
       await NeonDB.then((pool) => 
-        pool.query(`UPDATE campus_express_buyer_orders SET havePaid=${true} WHERE buyer_id='${buyer_id}' AND product_id='${product_id}' RETURNING order_id, stock, pick_up_channels`)
+        pool.query(`UPDATE campus_express_buyer_orders SET havePaid=${true} WHERE user_id='${user_id}' AND product_id='${product_id}' RETURNING order_id, stock, pick_up_channels`)
             .then(result => {
                 return result.rowCount > 0 ? ({bool: true, order_id: result.rows[0].order_id, stock: result.rows[0].stock, address: result.rows[0].pick_up_channels[0].locale}) : ({bool: false})
             })
@@ -356,17 +356,17 @@ async function update_order(product_id,buyer_id) {
     )
 }
 
-async function create_room_id(seller_id,buyer_id) {
+async function create_room_id(seller_id,user_id) {
     let room_id = shortId.generate()
     let date = new Date()
 
-    let check = await check_if_room_exist(seller_id,buyer_id);
+    let check = await check_if_room_exist(seller_id,user_id);
     console.log('check :', check)
 
   
     if(check){
         await NeonDB.then((pool) => 
-        pool.query(`insert into room_id (id,room_id,members_id,date) values(DEFAULT,'${room_id}','${JSON.stringify({buyer_id: buyer_id, seller_id: seller_id})}','${date}')`)
+        pool.query(`insert into room_id (id,room_id,members_id,date) values(DEFAULT,'${room_id}','${JSON.stringify({user_id: user_id, seller_id: seller_id})}','${date}')`)
             .then(result => result.rowCount > 0 ? (true) : (false))
             .catch(err => console.log(err))
             // .finally(() => pool.end())
@@ -378,12 +378,12 @@ async function create_room_id(seller_id,buyer_id) {
     }
 }
 
-async function check_if_room_exist(seller_id,buyer_id) {
+async function check_if_room_exist(seller_id,user_id) {
   return(
     await NeonDB.then((pool) => 
       pool.query(`SELECT * FROM room_id`)
         .then(result => {
-            let l = result.rows.filter(item => JSON.parse(item.members_id).buyer_id === buyer_id && JSON.parse(item.members_id).seller_id === seller_id)
+            let l = result.rows.filter(item => JSON.parse(item.members_id).user_id === user_id && JSON.parse(item.members_id).seller_id === seller_id)
         //   if(l.length > 0){return false}else{return true}
             let response =l.length > 0 ? false : true
             return response;
@@ -397,10 +397,10 @@ async function check_if_room_exist(seller_id,buyer_id) {
   )
 }
 
-async function update_buyer_assets(amount,buyer_id) {
+async function update_buyer_assets(amount,user_id) {
     return(
         await NeonDB.then((pool) => 
-            pool.query(`update campus_buyer_assets set coin = coin + ${amount} where buyer_id = '${buyer_id}'`)
+            pool.query(`update campus_buyer_assets set coin = coin + ${amount} where user_id = '${user_id}'`)
             .then(result => result.rowCount > 0 ? (true) : (false))
             .catch(err => console.log(err))
             )
@@ -428,11 +428,11 @@ function refill_coin(role,user,payment_src,payment_type,amount,date,coin,fee) {
     if(role === 'buyer'){
 
         new Promise((resolve,reject) => {
-            let result = save_buyer_tansaction(user.buyer_id,payment_src,payment_type,fee,amount,date,'coin refill')
+            let result = save_buyer_tansaction(user.user_id,payment_src,payment_type,fee,amount,date,'coin refill')
             result?resolve(result):reject(false)
         })
         .then(() => {
-            let result = update_buyer_assets(amount,user.buyer_id)
+            let result = update_buyer_assets(amount,user.user_id)
             return result?(true):(false)
         })
         .then(() => {

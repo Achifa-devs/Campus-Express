@@ -4,13 +4,13 @@ import { createRefund } from "../../repositories/shop/refund.js";
 export const getOrder = async payload => {
   const {
     product_id,
-    buyer_id
+    user_id
   } = payload;
 
   // Business logic
   const response = await findOrderById({
     product_id,
-    buyer_id
+    user_id
   });
   if (!response.length === 0) {
     throw new Error("Error getting order");
@@ -25,12 +25,12 @@ export const getOrder = async payload => {
 };
 export const getOrders = async payload => {
   const {
-    buyer_id
+    user_id
   } = payload;
 
   // Business logic
   const response = await findOrders({
-    buyer_id
+    user_id
   });
   if (!response.length > 0) {}
   let book = response.map(async item => {
@@ -47,7 +47,7 @@ export const getOrders = async payload => {
 };
 export const postCancelOrder = async payload => {
   const {
-    buyer_id,
+    user_id,
     order_id,
     amount,
     reason
@@ -61,7 +61,7 @@ export const postCancelOrder = async payload => {
     return response;
   }
   const refundHandler = await createRefund({
-    buyer_id,
+    user_id,
     order_id,
     amount,
     reason
@@ -101,14 +101,14 @@ export const postRemoveOrder = async payload => {
 export const postConfirmOrder = async payload => {
   const {
     order_id,
-    buyer_id,
+    user_id,
     product_id
   } = payload;
 
   // Business logic
   const response = await confirmOrder({
     order_id,
-    buyer_id,
+    user_id,
     product_id
   });
   // create inbox notification
@@ -117,7 +117,7 @@ export const postConfirmOrder = async payload => {
 };
 export const postUpdateOrder = async payload => {
   const {
-    buyer_id,
+    user_id,
     product_id,
     stock,
     price,
@@ -127,14 +127,14 @@ export const postUpdateOrder = async payload => {
 
   // Business logic
   let deleteHandler = await deleteOrder({
-    buyer_id,
+    user_id,
     product_id
   });
   if (deleteHandler === 0) {
     throw new Error("error updating order");
   }
   let response = await createOrderWithId({
-    buyer_id,
+    user_id,
     product_id,
     stock,
     price,

@@ -29,7 +29,7 @@ export async function cancelOrder({ order_id }) {
     `UPDATE orders 
     SET status='{"state": "cancelled"}' 
     WHERE order_id = $1 
-    RETURNING havepaid, buyer_id`,
+    RETURNING havepaid, user_id`,
     [order_id]
   );
 

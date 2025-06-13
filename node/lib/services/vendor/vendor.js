@@ -4,12 +4,12 @@ import bcrypt from "bcryptjs";
 import shortId from "short-id";
 export const getVendor = async payload => {
   const {
-    buyer_id
+    user_id
   } = payload;
 
   // Business logic
   const response = await findUserById({
-    buyer_id
+    user_id
   });
   return response;
 };
@@ -79,7 +79,7 @@ export const postLoginVendor = async payload => {
   if (user) {
     const auth = await bcrypt.compare(pwd, user.password);
     if (auth) {
-      const token = generateVendorJwtToken(user.buyer_id);
+      const token = generateVendorJwtToken(user.user_id);
       return {
         user: user,
         cookie: token
@@ -92,39 +92,39 @@ export const postLoginVendor = async payload => {
 export const postResetVendorEmail = async payload => {
   const {
     email,
-    buyer_id
+    user_id
   } = payload;
 
   // Business logic
   const response = await updateVendorEmailById({
     email,
-    buyer_id
+    user_id
   });
   return response;
 };
 export const postResetVendorPhone = async payload => {
   const {
     phone,
-    buyer_id
+    user_id
   } = payload;
 
   // Business logic
   const response = await updateVendorPhoneById({
     phone,
-    buyer_id
+    user_id
   });
   return response;
 };
 export const postUpdateVendorProfile = async payload => {
   const {
-    buyer_id,
+    user_id,
     fname,
     lname,
     gender
   } = payload;
   // Business logic
   const response = await updateVendorProfileById({
-    buyer_id,
+    user_id,
     fname,
     lname,
     gender: gender.toLowerCase() === 'male' ? 1 : 0
@@ -133,13 +133,13 @@ export const postUpdateVendorProfile = async payload => {
 };
 export const postResetVendorPwd = async payload => {
   const {
-    buyer_id,
+    user_id,
     pwd
   } = payload;
 
   // Business logic
   let Vendor = await findUserById({
-    buyer_id
+    user_id
   });
   let oldPwd = Vendor.password;
   let comparison = await bcrypt.compare(pwd, oldPwd);
@@ -147,7 +147,7 @@ export const postResetVendorPwd = async payload => {
     throw new Error("New password cannot be the same as old password");
   }
   const response = await updateVendorPasswordById({
-    buyer_id,
+    user_id,
     pwd
   });
   return response;

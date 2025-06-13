@@ -41,13 +41,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setToggleMessage } from '../../../../../../redux/toggleMssg.js';
 import Ionicons from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, FontAwesome, etc.
 import Top from '../components/Product/Top';
-import { save_prod } from '../utils/Saver.js';
+import { get_saved, save_prod, unsave_prod } from '../utils/Saver.js';
 
   export default function Product() {
     const dispatch = useDispatch();
     const [imageIndex, setImageIndex] = useState(0);
     const {user} = useSelector(s => s?.user)
     const [data, setData] = useState(null); 
+    const [Favourites, seSa] = useState([]); 
     const [seller, setSeller] = useState('')
     const [loading, setLoading] = useState(true);
     const [saved, setSaved] = useState(false);
@@ -74,21 +75,52 @@ import { save_prod } from '../utils/Saver.js';
     }, []);
 
     useEffect(() => {
-      if (data) {
+      if (data !== '' && data !== undefined && data !== null && data !== 'undefined' && data !== 'null') {
+        try {
+          (async function getFavourite() {
+            const result = await get_saved({
+              user_id: user?.user_id,
+              product_id: data?.product_id
+            })
+            if (result?.success) {
+              if (result.data.length === 0) {
+                setSaved(true)
+              } else {
+                setSaved(false)
+              }
+            } else {
+              setSaved(false)
+            }
+          })()
+        } catch (error) {
+          console.log(error)
+        }
+      }
+    }, [data])
+
+    useEffect(() => {
+      if (data !== '' && data !== undefined && data !== null && data !== 'undefined' && data !== 'null') {
         setTimeout(async() => {
-          const res = await fetch(`https://cs-server-olive.vercel.app/favourite`, {
+          const res = await fetch(`https://cs-server-olive.vercel.app/product-view`, {
             method: 'post',
             body: JSON.stringify({
-              buyer_id: user?.user_id,
+              user_id: user?.user_id,
               product_id: data?.product_id
             })
           });
           let response = res.json();
           console.log("response: ", response)
           if (response?.success) {
-            
+            let newHistory = {date: new Date(), data: data}
+            let prevHistory = await getData('history');
+            let arr = JSON.parse(prevHistory);
+            if (Array.isArray(arr) && arr.length > 0) {
+              storeData('history', JSON.stringify([...arr, newHistory]))
+            } else {
+              storeData('history', JSON.stringify([newHistory]))
+            }
           } else {
-            
+            // 
           }
         }, 3000);
       }
@@ -124,35 +156,32 @@ import { save_prod } from '../utils/Saver.js';
       setSeller(data)
     }
   
-    async function saveHistory() {
-      if (!data) return;
-      
-      try {
-        const prevData = await getData('history');
-        let newData = [];
-  
-        if (prevData) {
-          const parsedData = JSON.parse(prevData);
-          if (Array.isArray(parsedData)) {
-            newData = parsedData;
-          }
+    const handleSave = async() => {
+      // setSaved(!saved);
+      // dispatch(setToggleMessage(saved ? 'Removed from saved' : 'Product saved!'));
+      if (!saved) {
+        const result = await save_prod({
+          user_id: user?.user_id,
+          product_id: data?.product_id
+        })
+        if (result?.success && result?.data?.length > 0) {
+          setSaved(true);
+        } else {
+          // 
         }
-  
-        newData.push(data);
-        const refinedArray = [...new Set(newData)];
-        await storeData('history', JSON.stringify(refinedArray));
-      } catch (err) {
-        console.log('Error saving data:', err);
       }
-    }
-  
-    const handleSave = () => {
-      setSaved(!saved);
-      dispatch(setToggleMessage(saved ? 'Removed from saved' : 'Product saved!'));
-      save_prod({
-        buyer_id: user?.user_id,
-        product_id: data?.product_id
-      })
+       else {
+        const result = await unsave_prod({
+          user_id: user?.user_id,
+          product_id: data?.product_id
+        })
+        if (result?.success && result?.data?.length > 0) {
+          setSaved(false);
+        } else {
+          // 
+        }
+      
+      }
     };
   
     const handleShare = () => {

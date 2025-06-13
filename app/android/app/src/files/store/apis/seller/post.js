@@ -38,7 +38,7 @@ export async function SendSMS(phone,user_id, name) {
     return (response)?.data
 }
 
-export async function UploadChat(buyer_id,user_id) {
+export async function UploadChat(user_id,user_id) {
     let response = await post_request_generators('new-chat', {user_id,user_id})
     setTimeout(() => source.cancel('timeout'), 10000) 
     return (response)?.data

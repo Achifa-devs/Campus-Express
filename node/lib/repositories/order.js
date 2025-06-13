@@ -15,9 +15,9 @@ export async function findOrderById({
 
 // Find orders
 export async function findOrders({
-  buyer_id
+  user_id
 }) {
-  const result = await pool.query(`SELECT * FROM campus_express_buyer_orders WHERE buyer_id = $1`, [buyer_id]);
+  const result = await pool.query(`SELECT * FROM campus_express_buyer_orders WHERE user_id = $1`, [user_id]);
   return result.rows;
 }
 ;
@@ -31,7 +31,7 @@ export async function createOrder({
   locale
 }) {
   const result = await pool.query(`INSERT INTO campus_express_buyer_orders(
-        id, order_id, product_id, status, date, stock, buyer_id, price, pick_up_channels, havePaid
+        id, order_id, product_id, status, date, stock, user_id, price, pick_up_channels, havePaid
     ) VALUES (
         DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9
     )`, [shortId.generate(10), product_id, '{"state": "pending"}', `${new Date()}`, stock, buyer, price, `${JSON.stringify(locale)}`, `${false}`]);
@@ -42,13 +42,13 @@ export async function createOrder({
 
 // Find products by category
 export async function updateCancelOrder({
-  buyer_id,
+  user_id,
   order_id,
   amount,
   reason,
   product_id
 }) {
-  const result = await pool.query(`SELECT * FROM seller_shop WHERE category = $1 AND state->>'state' = 'active'LIMIT $2`, [buyer_id, order_id, amount, reason, product_id]);
+  const result = await pool.query(`SELECT * FROM seller_shop WHERE category = $1 AND state->>'state' = 'active'LIMIT $2`, [user_id, order_id, amount, reason, product_id]);
   return result.rows;
 }
 ;
@@ -56,7 +56,7 @@ export async function updateCancelOrder({
 // Confirm order
 export async function confirmOrder({
   order_id,
-  buyer_id,
+  user_id,
   product_id
 }) {
   const result = await pool.query(`UPDATE campus_express_buyer_orders set status='{"state": "completed"}' WHERE order_id=$1`, [order_id]);
@@ -66,10 +66,10 @@ export async function confirmOrder({
 
 // deleteOrder
 export async function deleteOrder({
-  buyer_id,
+  user_id,
   product_id
 }) {
-  const result = await pool.query(`DELETE FROM campus_express_buyer_orders WHERE buyer_id=$1 AND product_id=$2`, [buyer_id, product_id]);
+  const result = await pool.query(`DELETE FROM campus_express_buyer_orders WHERE user_id=$1 AND product_id=$2`, [user_id, product_id]);
   let response = await errorHandler(result?.rowCount);
   return response;
 }
@@ -85,7 +85,7 @@ export async function deleteOrderById({
 
 // Create order with order_id
 export async function createOrderWithId({
-  buyer_id,
+  user_id,
   product_id,
   stock,
   price,
@@ -93,10 +93,10 @@ export async function createOrderWithId({
   order_id
 }) {
   const result = await pool.query(`INSERT INTO campus_express_buyer_orders(
-        id, order_id, product_id, status, date, stock, buyer_id, price, pick_up_channels, havePaid
+        id, order_id, product_id, status, date, stock, user_id, price, pick_up_channels, havePaid
     ) VALUES (
         DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9
-    )`, [order_id, product_id, '{"state": "pending"}', `${new Date()}`, stock, buyer_id, price, `${JSON.stringify(locale)}`, `${false}`]);
+    )`, [order_id, product_id, '{"state": "pending"}', `${new Date()}`, stock, user_id, price, `${JSON.stringify(locale)}`, `${false}`]);
   let response = await errorHandler(result?.rowCount);
   return response;
 }

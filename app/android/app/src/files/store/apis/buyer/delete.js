@@ -13,13 +13,13 @@ const source = axios.CancelToken.source();
 //     console.log(response)
 // }
 
-export async function DeleteItemFromCart(product_id,buyer_id) {
-    let response = await delete_request_generators('delete-cart', {product_id,buyer_id})
+export async function DeleteItemFromCart(product_id,user_id) {
+    let response = await delete_request_generators('delete-cart', {product_id,user_id})
     return (response)?.data;
 }
 
-export async function UnSaveItem(product_id,buyer_id) {
-    let response = await delete_request_generators('unsave-item', {product_id,buyer_id})
+export async function UnSaveItem(product_id,user_id) {
+    let response = await delete_request_generators('unsave-item', {product_id,user_id})
     return (response)?.data;
 }
 

@@ -12,10 +12,10 @@ const {
     retrieve_products
 } = require("../../reuseables/utils");
 async function get_buyer(req,res) {
-    let {buyer_id} = req.query;
+    let {user_id} = req.query;
      NeonDB
     .then(async(pool) => {
-        pool.query(`select * from "users" where "buyer_id" = '${buyer_id}'`, (err, result) => {
+        pool.query(`select * from "users" where "user_id" = '${user_id}'`, (err, result) => {
             if(!err){
                 console.log(result)
                 if(result.rows.length > 0){
@@ -182,9 +182,9 @@ async function get_item_thumbnail(req,res) {
 }
 
 async function get_address_book(req, res) {
-    let {buyer_id} = req.query
+    let {user_id} = req.query
     NeonDB.then((pool) => 
-        pool.query(`SELECT * FROM buyer_address_book WHERE buyer_id = ${buyer_id}`)
+        pool.query(`SELECT * FROM buyer_address_book WHERE user_id = ${user_id}`)
             .then((result) => {
                 res.status(200).send({bool: true, data: result.rows})
             })
@@ -200,7 +200,7 @@ async function get_inbox(req,res) {
 
     let {id} = req.query;
     NeonDB.then((pool) => 
-        pool.query(`select * from buyer_inbox where buyer_id = '${id}'`)
+        pool.query(`select * from buyer_inbox where user_id = '${id}'`)
         .then(result =>  {
             res.status(200).send({bool: true, data: result.rows})
             console.log(result.rows,id)
@@ -246,12 +246,12 @@ async function get_thumbnail(req,res) {
 }
 
 async function get_saved_item(req,res) {
-    let {buyer_id} = req.query;
+    let {user_id} = req.query;
     
     function get_saved_item() { 
         return(
             NeonDB.then((pool) => 
-                pool.query(`SELECt * FROM campus_express_buyer_saveditems WHERE buyer_id = '${buyer_id}'`)
+                pool.query(`SELECt * FROM campus_express_buyer_saveditems WHERE user_id = '${user_id}'`)
                 .then(result => (result.rows))
                 .catch(err => console.log(err))
             )
@@ -276,12 +276,12 @@ async function get_saved_item(req,res) {
 async function get_saved_item_data(req,res) {
 
     let book = [];
-    let {buyer_id} = req.query;
+    let {user_id} = req.query;
 
     function get_savedItems() { 
         return(
             NeonDB.then((pool) => 
-                pool.query(`SELECt * FROM campus_express_buyer_saveditems WHERE buyer_id = '${buyer_id}'`)
+                pool.query(`SELECt * FROM campus_express_buyer_saveditems WHERE user_id = '${user_id}'`)
                 .then(result => result.rows)
                 .catch(err => console.log(err))
             )
@@ -340,13 +340,13 @@ function get_search_word(req,res) {
 }
 
 async function get_order(req,res) {
-    let {buyer_id,product_id} = req.query;
+    let {user_id,product_id} = req.query;
 
     let book = []
 
     function get_order_id(){
         return(NeonDB.then((pool) => 
-            pool.query(`select * from "campus_express_buyer_orders" where buyer_id = '${buyer_id}' and product_id='${product_id}'`)
+            pool.query(`select * from "campus_express_buyer_orders" where user_id = '${user_id}' and product_id='${product_id}'`)
             .then((result) => {
                 return(result.rows)
             })
@@ -386,13 +386,13 @@ async function get_order(req,res) {
 }
 
 async function get_orders(req,res) {
-    let {buyer_id} = req.query;
+    let {user_id} = req.query;
 
     let book = []
 
     function get_order_id(){
         return(NeonDB.then((pool) => 
-            pool.query(`select * from "campus_express_buyer_orders" where buyer_id = '${buyer_id}'`)
+            pool.query(`select * from "campus_express_buyer_orders" where user_id = '${user_id}'`)
             .then((result) => {
                 return(result.rows)
             })
@@ -404,7 +404,7 @@ async function get_orders(req,res) {
     }
 
     let list = await get_order_id();
-    // console.log(list,buyer_id)
+    // console.log(list,user_id)
 
 
     function get_item(item) {
@@ -433,13 +433,13 @@ async function get_orders(req,res) {
 
 
 async function get_refund(req,res) {
-    let {buyer_id,product_id} = req.query;
+    let {user_id,product_id} = req.query;
 
     let book = []
 
     function get_order_id(){
         return(NeonDB.then((pool) => 
-            pool.query(`select * from "campus_express_buyer_refunds" where buyer_id = '${buyer_id}' and product_id='${product_id}'`)
+            pool.query(`select * from "campus_express_buyer_refunds" where user_id = '${user_id}' and product_id='${product_id}'`)
             .then((result) => {
                 return(result.rows)
             })
@@ -479,13 +479,13 @@ async function get_refund(req,res) {
 }
 
 async function get_refunds(req,res) {
-    let {buyer_id} = req.query;
+    let {user_id} = req.query;
 
     let book = []
 
     function get_refund_id(){
         return(NeonDB.then((pool) => 
-            pool.query(`select * from "campus_express_buyer_refunds" where buyer_id = '${buyer_id}'`)
+            pool.query(`select * from "campus_express_buyer_refunds" where user_id = '${user_id}'`)
             .then((result) => {
                 return(result.rows)
             })
@@ -497,7 +497,7 @@ async function get_refunds(req,res) {
     }
 
     let list = await get_refund_id();
-    // console.log(list,buyer_id)
+    // console.log(list,user_id)
 
 
     function get_item(item) {
@@ -526,9 +526,9 @@ async function get_refunds(req,res) {
 
 
 async function get_chat_rooms(req, res) {
-    let {buyer_id}= req.query;
+    let {user_id}= req.query;
     let book = []
-    let room = await retrieve_room_with_buyer(buyer_id);
+    let room = await retrieve_room_with_buyer(user_id);
     console.log(room)
 
     if(room.length > 0){
@@ -598,7 +598,7 @@ async function get_chat(req,res){
 } 
 
 async function get_carts(req,res) {
-    let {buyer_id} = req?.query;
+    let {user_id} = req?.query;
     let book = []
 
     function get_items(item) { 
@@ -613,7 +613,7 @@ async function get_carts(req,res) {
     }
 
     async function getCartedItems(cb) {
-        let carts = await retrive_cart(buyer_id)
+        let carts = await retrive_cart(user_id)
         console.log(carts)
         cb(carts)
     }

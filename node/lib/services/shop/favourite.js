@@ -12,38 +12,38 @@ export const getFavourite = async payload => {
 };
 export const getFavourites = async payload => {
   const {
-    buyer_id
+    user_id
   } = payload;
 
   // Business logic
   const response = await findFavourites({
-    buyer_id
+    user_id
   });
   return response;
 };
 export const postFavourite = async payload => {
   const {
     product_id,
-    buyer_id
+    user_id
   } = payload;
 
   // Business logic
   const response = await createFavourite({
     product_id,
-    buyer_id
+    user_id
   });
   return response;
 };
 export const postDeleteFavourite = async payload => {
   const {
     product_id,
-    buyer_id
+    user_id
   } = payload;
 
   // Business logic
   const response = await deleteFavourite({
     product_id,
-    buyer_id
+    user_id
   });
   return response;
 };

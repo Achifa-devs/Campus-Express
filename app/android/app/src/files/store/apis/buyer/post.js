@@ -21,20 +21,20 @@ export async function LogBuyerIn(email,pwd) {
     return (response)
 }
 
-export async function AddItemToCart(product_id,buyer_id) {
-    let response = await post_request_generators('add-cart', {product_id,buyer_id})
+export async function AddItemToCart(product_id,user_id) {
+    let response = await post_request_generators('add-cart', {product_id,user_id})
     setTimeout(() => source.cancel('timeout'), 10000) 
     return (response)
 }
 
-export async function SaveItem(product_id,buyer_id) {
-    let response = await post_request_generators('save-item', {product_id,buyer_id})
+export async function SaveItem(product_id,user_id) {
+    let response = await post_request_generators('save-item', {product_id,user_id})
     setTimeout(() => source.cancel('timeout'), 10000) 
     return (response)
 }
 
-export async function ResetPwd(email,buyer_id) {
-    let response = await post_request_generators('password-reset', {email,buyer_id})
+export async function ResetPwd(email,user_id) {
+    let response = await post_request_generators('password-reset', {email,user_id})
     setTimeout(() => source.cancel('timeout'), 10000) 
     return (response)
 }
@@ -46,8 +46,8 @@ export async function Filter_Cards(category,subCategory,condition,price,state,ca
     return (response)
 }
 
-export async function CheckPwdResetToken(buyer_id,token) {
-    let response = await post_request_generators('password-token-check', {buyer_id,token})
+export async function CheckPwdResetToken(user_id,token) {
+    let response = await post_request_generators('password-token-check', {user_id,token})
     setTimeout(() => source.cancel('timeout'), 10000) 
     return (response)
 }
@@ -58,8 +58,8 @@ export async function ValidateEmail(token) {
     return (response)
 }
 
-export async function SendEmail(email,buyer_id) {
-    let response = await post_request_generators('send-email', {email,buyer_id})
+export async function SendEmail(email,user_id) {
+    let response = await post_request_generators('send-email', {email,user_id})
     setTimeout(() => source.cancel('timeout'), 10000) 
     return (response)
 }
@@ -70,14 +70,14 @@ export async function CreateOrder(buyer,product_id,price,locale) {
     return (response)
 }
 
-export async function UploadChat(buyer_id,user_id) {
-    let response = await post_request_generators('new-chat', {buyer_id,user_id})
+export async function UploadChat(user_id,user_id) {
+    let response = await post_request_generators('new-chat', {user_id,user_id})
     setTimeout(() => source.cancel('timeout'), 10000) 
     return (response)
 }
 
-export async function AddView(product_id,buyer_id) {
-    let response = await post_request_generators('new-view', {product_id,buyer_id})
+export async function AddView(product_id,user_id) {
+    let response = await post_request_generators('new-view', {product_id,user_id})
     setTimeout(() => source.cancel('timeout'), 10000) 
     return (response)
 }

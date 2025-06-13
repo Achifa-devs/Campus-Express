@@ -22,14 +22,14 @@ async function register_buyer(req,res) {
     console.log(fname,lname,email,phone,pwd,state,campus,gender)
     let date = new Date().toLocaleString();
     let hPwd = await bcrypt.hash(pwd, 10) 
-    let buyer_id = `CE-${shortId.generate()}`
-    let wallet_id = `CEW-${buyer_id}`
+    let user_id = `CE-${shortId.generate()}`
+    let wallet_id = `CEW-${user_id}`
 
 
     async function CreateNewBuyer() {
         return(
             NeonDB.then((pool) => 
-                pool.query(`insert into users(id,fname,lname,buyer_id,email,phone,password,state,campus,isActive,isVerified,isEmailVerified,isPhoneVerified,date,gender ) values(DEFAULT, '${fname}', '${lname}', '${buyer_id}', '${email}', '${phone}', '${hPwd}', '${state}', '${campus}', '${false}','${false}','${false}','${false}', '${date}', '${gender}')`)
+                pool.query(`insert into users(id,fname,lname,user_id,email,phone,password,state,campus,isActive,isVerified,isEmailVerified,isPhoneVerified,date,gender ) values(DEFAULT, '${fname}', '${lname}', '${user_id}', '${email}', '${phone}', '${hPwd}', '${state}', '${campus}', '${false}','${false}','${false}','${false}', '${date}', '${gender}')`)
                 .then(result => result.rowCount > 0 ?(true) : (false))
                 .catch(err => console.log(err))
             )
@@ -40,7 +40,7 @@ async function register_buyer(req,res) {
     async function CreateNewBuyerWallet() {
         return(
             NeonDB.then((pool) => 
-                pool.query(`insert into campus_express_buyer_wallet(id,wallet_id,buyer_id,wallet_balance,wallet_pin,wallet_number,date) values(DEFAULT,'${wallet_id}','${buyer_id}','${0.00}','${pwd}','${phone}','${date}')`)
+                pool.query(`insert into campus_express_buyer_wallet(id,wallet_id,user_id,wallet_balance,wallet_pin,wallet_number,date) values(DEFAULT,'${wallet_id}','${user_id}','${0.00}','${pwd}','${phone}','${date}')`)
                 .then(result => result.rowCount > 0 ? true : false)
                 .catch(err => console.log(err))
             )
@@ -51,7 +51,7 @@ async function register_buyer(req,res) {
     async function CreateCoverPhoto() {
         return(
             NeonDB.then((pool) => 
-                pool.query(`insert into coverphoto(id,file,user_id,date) values(DEFAULT,'${null}','${buyer_id}','${new Date()}')`)
+                pool.query(`insert into coverphoto(id,file,user_id,date) values(DEFAULT,'${null}','${user_id}','${new Date()}')`)
                 .then(result => result.rowCount > 0 ?(true) : (false))
                 .catch(err => console.log(err))
             )
@@ -129,7 +129,7 @@ async function register_buyer(req,res) {
             return(newBuyerWallet ? (true) : (false))
         })
         .then((result) => {
-            result ? res.status(200).send({bool: true, data: buyer_id}) : ({bool: false, data: ''})
+            result ? res.status(200).send({bool: true, data: user_id}) : ({bool: false, data: ''})
             SendEmail()
             SendSMS()
         })
@@ -178,7 +178,7 @@ async function log_buyer_in(req, res) {
             NeonDB
             .then(async(pool) => {
                 let database_return_value = await pool.query(
-                    `select "buyer_id","email","password","fname","lname" from  "users" where "id" = '${id}'`
+                    `select "user_id","email","password","fname","lname" from  "users" where "id" = '${id}'`
                 )
                 .then(result => result.rows[0])
                 .catch(err => console.log(err))
@@ -194,8 +194,8 @@ async function log_buyer_in(req, res) {
             const auth = await bcrypt.compare(pwd, user.password);
             console.log(auth)
             if (auth) {
-                const token = createToken(user.buyer_id);
-                res.status(200).send({bool: true, id: user.buyer_id, cookie: token});
+                const token = createToken(user.user_id);
+                res.status(200).send({bool: true, id: user.user_id, cookie: token});
     
             }else{
                 res.status(400).send({

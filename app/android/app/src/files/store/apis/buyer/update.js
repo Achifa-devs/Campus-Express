@@ -8,14 +8,14 @@ let IP = uri_1
 const source = axios.CancelToken.source();
 
 
-export async function UpdateCartUnit(type,buyer_id,product_id) {
-    let response = await update_request_generators('update-cart-unit', {type,buyer_id,product_id})
+export async function UpdateCartUnit(type,user_id,product_id) {
+    let response = await update_request_generators('update-cart-unit', {type,user_id,product_id})
     setTimeout(() => source.cancel('timeout'), 10000) 
     return(response)
 }
 
-export async function UpdatePwd(buyer_id, pwd) {
-    let response = await update_request_generators('password-update', {buyer_id, pwd})
+export async function UpdatePwd(user_id, pwd) {
+    let response = await update_request_generators('password-update', {user_id, pwd})
     setTimeout(() => source.cancel('timeout'), 10000) 
     return(response)
 }

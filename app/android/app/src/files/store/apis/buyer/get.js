@@ -15,8 +15,8 @@ export async function _(params) {
     return (response)?.data 
 }
 
-export async function GetBuyer(buyer_id) {
-    let response = await get_request_generators(`buyer`, {buyer_id})
+export async function GetBuyer(user_id) {
+    let response = await get_request_generators(`buyer`, {user_id})
     setTimeout(() => source.cancel('timeout'), 10000) 
     return (response)?.data
 }
@@ -63,32 +63,32 @@ export async function GetProductVideo(product_id,folder) {
     return (response)?.data
 }
 
-export async function GetCart(buyer_id) {
-    let response = await get_request_generators(`cart`, {buyer_id})
+export async function GetCart(user_id) {
+    let response = await get_request_generators(`cart`, {user_id})
     setTimeout(() => source.cancel('timeout'), 10000) 
     return (response)?.data
 }
 
-export async function GetCartItems(buyer_id) {
-    let response = await get_request_generators(`cart-items`, {buyer_id})
+export async function GetCartItems(user_id) {
+    let response = await get_request_generators(`cart-items`, {user_id})
     setTimeout(() => source.cancel('timeout'), 10000) 
     return (response)?.data
 }
 
-export async function GetOrders(buyer_id) {
-    let response = await get_request_generators(`orders`, {buyer_id})
+export async function GetOrders(user_id) {
+    let response = await get_request_generators(`orders`, {user_id})
     setTimeout(() => source.cancel('timeout'), 10000) 
     return (response)?.data
 }
 
-export async function GetOrder(buyer_id,product_id) {
-    let response = await get_request_generators(`order`, {buyer_id,product_id})
+export async function GetOrder(user_id,product_id) {
+    let response = await get_request_generators(`order`, {user_id,product_id})
     setTimeout(() => source.cancel('timeout'), 10000) 
     return (response)?.data
 }
 
-export async function GetSavedItem(buyer_id) {
-    let response = await get_request_generators(`saved-items`, {buyer_id})
+export async function GetSavedItem(user_id) {
+    let response = await get_request_generators(`saved-items`, {user_id})
     setTimeout(() => source.cancel('timeout'), 10000) 
     return (response)?.data
 }
@@ -105,8 +105,8 @@ export async function GetSearchWord(word) {
     return (response)?.data
 }
 
-export async function GetChatRooms(buyer_id) {
-    let response = await get_request_generators(`get-chat-rooms`, {buyer_id})
+export async function GetChatRooms(user_id) {
+    let response = await get_request_generators(`get-chat-rooms`, {user_id})
     setTimeout(() => source.cancel('timeout'), 10000) 
     return (response)?.data
 }

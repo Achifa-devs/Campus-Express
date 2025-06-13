@@ -95,12 +95,12 @@ export const getProductType = async (payload) => {
 
 
 export const postProductView = async (payload) => {
-  const { product_id, buyer_id } = payload;
+  const { product_id, user_id } = payload;
 
   // Business logic
-  let existingView = await findProductViewById({ product_id, buyer_id });
+  let existingView = await findProductViewById({ product_id, user_id });
 
-  let newView = await createProductView({ buyer_id, product_id });
+  let newView = await createProductView({ user_id, product_id });
   
   if (existingView.length > 0) {
     throw new Error("Already viewed")
@@ -114,11 +114,11 @@ export const postProductView = async (payload) => {
 
 
 export const postUpdateProductViewForUnknownCustomer = async (payload) => {
-  const { unknown_buyer_id, registered_id } = payload;
+  const { unknown_user_id, registered_id } = payload;
 
   // Business logic
   
-  const response = await updateProductViewForUnkownBuyer({ unknown_buyer_id, registered_id });
+  const response = await updateProductViewForUnkownBuyer({ unknown_user_id, registered_id });
   
   return response;
 };

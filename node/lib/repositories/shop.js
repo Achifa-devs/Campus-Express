@@ -45,32 +45,32 @@ export async function createShopReview({
   shop_id,
   seller_id,
   order_id,
-  buyer_id,
+  user_id,
   review,
   date,
   comment,
   rating
 }) {
   const result = await pool.query(`INSERT INTO reviews (
-        id, shop_id, seller_id, order_id, buyer_id, review, date, comment, rating
+        id, shop_id, seller_id, order_id, user_id, review, date, comment, rating
     ) VALUES (
         DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8
-    )`, [shop_id, seller_id, order_id, buyer_id, review, date, comment, rating]);
+    )`, [shop_id, seller_id, order_id, user_id, review, date, comment, rating]);
   let response = await errorHandler(result?.rowCount);
   return response;
 }
 ;
 
 // // Create shop view
-// export async function createShopView({ buyer_id, product_id }) {
+// export async function createShopView({ user_id, product_id }) {
 //   const result = await pool.query(
 //     `INSERT INTO views (
-//         id, view_id, product_id, buyer_id, date
+//         id, view_id, product_id, user_id, date
 //     ) VALUES (
 //         DEFAULT, $1, $2, $3, $4
 //     )`,
 //     [
-//       shortId.generate(10), product_id, buyer_id, `${new Date()}`
+//       shortId.generate(10), product_id, user_id, `${new Date()}`
 //     ]
 //     );
 
@@ -79,10 +79,10 @@ export async function createShopReview({
 // };
 
 // // Find shop view by ID
-// export async function findShopViewById({ product_id, buyer_id }) {
+// export async function findShopViewById({ product_id, user_id }) {
 //   const result = await pool.query(
-//     `SELECT * FROM views WHERE product_id = $1 AND buyer_id = $2`,
-//     [product_id, buyer_id]
+//     `SELECT * FROM views WHERE product_id = $1 AND user_id = $2`,
+//     [product_id, user_id]
 //   );
 //   return result.rows;
 // };

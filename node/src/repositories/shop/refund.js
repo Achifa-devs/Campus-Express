@@ -14,23 +14,23 @@ export async function findRefundById({ refund_id }) {
 };
 
 // Find refunds
-export async function findRefunds({ buyer_id }) {
+export async function findRefunds({ user_id }) {
   const result = await pool.query(
-    `SELECT * FROM refund_list WHERE buyer_id = $1`,
-    [buyer_id]
+    `SELECT * FROM refund_list WHERE user_id = $1`,
+    [user_id]
   );
   return result.rows;
 };
 
 // Create refund
-export async function createRefund({ buyer_id, order_id, amount, reason }) {
+export async function createRefund({ user_id, order_id, amount, reason }) {
   const result = await pool.query(
     `INSERT INTO refund_list(
-        id, buyer_id, order_id, amount, reason, status, created_at
+        id, user_id, order_id, amount, reason, status, created_at
     ) VALUES (
         DEFAULT, $1, $2, $3, $4, $5, $6
     )`,
-    [buyer_id, order_id, amount, reason, 'pending', `${new Date()}`]
+    [user_id, order_id, amount, reason, 'pending', `${new Date()}`]
     );
     
   let response = await errorHandler(result?.rowCount);

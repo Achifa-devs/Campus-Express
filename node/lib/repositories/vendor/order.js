@@ -29,7 +29,7 @@ export async function cancelOrder({
   const result = await pool.query(`UPDATE orders 
     SET status='{"state": "cancelled"}' 
     WHERE order_id = $1 
-    RETURNING havepaid, buyer_id`, [order_id]);
+    RETURNING havepaid, user_id`, [order_id]);
   await errorHandler(result?.rowCount);
   return result.rows[0];
 }

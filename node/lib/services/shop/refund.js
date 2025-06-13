@@ -12,12 +12,12 @@ export const getRefund = async payload => {
 };
 export const getRefunds = async payload => {
   const {
-    buyer_id
+    user_id
   } = payload;
 
   // Business logic
   const response = await findRefunds({
-    buyer_id
+    user_id
   });
   return response;
 };
@@ -34,7 +34,7 @@ export const postCancelRefund = async payload => {
 };
 export const postNewRefund = async payload => {
   const {
-    buyer_id,
+    user_id,
     order_id,
     amount,
     reason
@@ -42,7 +42,7 @@ export const postNewRefund = async payload => {
 
   // Business logic
   const response = await createRefund({
-    buyer_id,
+    user_id,
     order_id,
     amount,
     reason

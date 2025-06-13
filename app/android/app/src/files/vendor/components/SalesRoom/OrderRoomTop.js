@@ -20,7 +20,7 @@ export default function OrderRoomTop({ order, product }) {
             headers: {
             "Content-Type": "Application/json"
             },
-            body: JSON.stringify({buyer_id: order?.buyer_id})
+            body: JSON.stringify({user_id: order?.user_id})
         })
         .then(async(result) => {
             

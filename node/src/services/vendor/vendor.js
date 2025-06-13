@@ -15,10 +15,10 @@ import {
 import bcrypt from "bcryptjs"
 import shortId from "short-id"
 export const getVendor = async (payload) => {
-  const { buyer_id } = payload;
+  const { user_id } = payload;
 
   // Business logic
-  const response = await findUserById({ buyer_id });
+  const response = await findUserById({ user_id });
 
   return response;
 };
@@ -57,7 +57,7 @@ export const postLoginVendor = async (payload) => {
   if (user) {
     const auth = await bcrypt.compare(pwd, user.password);
     if (auth) {
-      const token = generateVendorJwtToken(user.buyer_id);
+      const token = generateVendorJwtToken(user.user_id);
       return({user: user, cookie: token});
     }
     throw new Error("Invalid password");
@@ -69,41 +69,41 @@ export const postLoginVendor = async (payload) => {
 };
 
 export const postResetVendorEmail = async (payload) => {
-  const { email, buyer_id } = payload;
+  const { email, user_id } = payload;
 
   // Business logic
-  const response = await updateVendorEmailById({ email, buyer_id });
+  const response = await updateVendorEmailById({ email, user_id });
 
   return response;
 };
 
 export const postResetVendorPhone = async (payload) => {
-  const { phone, buyer_id } = payload;
+  const { phone, user_id } = payload;
 
   // Business logic
-  const response = await updateVendorPhoneById({ phone, buyer_id });
+  const response = await updateVendorPhoneById({ phone, user_id });
 
   return response;
 };
 
 export const postUpdateVendorProfile = async (payload) => {
-  const { buyer_id, fname, lname, gender } = payload;
+  const { user_id, fname, lname, gender } = payload;
   // Business logic
-  const response = await updateVendorProfileById ({ buyer_id, fname, lname, gender:  gender.toLowerCase() === 'male' ? 1 : 0 });
+  const response = await updateVendorProfileById ({ user_id, fname, lname, gender:  gender.toLowerCase() === 'male' ? 1 : 0 });
 
   return response;
 };
 
 export const postResetVendorPwd = async (payload) => {
-  const { buyer_id, pwd } = payload;
+  const { user_id, pwd } = payload;
 
   // Business logic
-  let Vendor = await findUserById({ buyer_id });
+  let Vendor = await findUserById({ user_id });
   let oldPwd = Vendor.password;
   let comparison = await bcrypt.compare(pwd, oldPwd);
   if (comparison) {
     throw new Error("New password cannot be the same as old password");
   } 
-  const response = await updateVendorPasswordById({ buyer_id, pwd });
+  const response = await updateVendorPasswordById({ user_id, pwd });
   return response;
 };

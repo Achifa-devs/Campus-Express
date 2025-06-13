@@ -91,16 +91,16 @@ export const getProductType = async payload => {
 export const postProductView = async payload => {
   const {
     product_id,
-    buyer_id
+    user_id
   } = payload;
 
   // Business logic
   let existingView = await findProductViewById({
     product_id,
-    buyer_id
+    user_id
   });
   let newView = await createProductView({
-    buyer_id,
+    user_id,
     product_id
   });
   if (existingView.length > 0) {
@@ -115,14 +115,14 @@ export const postProductView = async payload => {
 };
 export const postUpdateProductViewForUnknownCustomer = async payload => {
   const {
-    unknown_buyer_id,
+    unknown_user_id,
     registered_id
   } = payload;
 
   // Business logic
 
   const response = await updateProductViewForUnkownBuyer({
-    unknown_buyer_id,
+    unknown_user_id,
     registered_id
   });
   return response;

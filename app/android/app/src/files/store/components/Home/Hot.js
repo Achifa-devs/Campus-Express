@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Text,
   View,
@@ -12,13 +12,54 @@ import FastImage from 'react-native-fast-image';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { debounce } from 'lodash';
+import { save_prod, unsave_prod } from '../../utils/Saver';
+import { useSelector } from 'react-redux';
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - 25) / 2; // 16px padding on each side + 16px gap between cards
 
-const ItemCard = React.memo(({ item, onPress }) => {
+const ItemCard = React.memo(({ item, onPress, Fav }) => {
   const [loading, setLoading] = useState(true);
   const [wishlisted, setWishlisted] = useState(false);
+  const {user} = useSelector(s => s?.user)
+
+  useEffect(() => {
+    let isSaved = Fav.filter(data => data?.product_id === item?.product_id).length > 0;
+
+    if (isSaved) {
+      setWishlisted(true)
+    } else {
+      setWishlisted(false)
+    }
+  }, [Fav])
+
+  const handleSave = async() => {
+    // setSaved(!saved);
+    // dispatch(setToggleMessage(saved ? 'Removed from saved' : 'Product saved!'));
+    if (!wishlisted) {
+      const result = await save_prod({
+        user_id: user?.user_id,
+        product_id: item?.product_id
+      })
+      if (result?.success) {
+        setWishlisted(true)
+      } else {
+        // 
+      }
+    }
+      else {
+      const result = await unsave_prod({
+        user_id: user?.user_id,
+        product_id: item?.product_id
+      })
+      if (result?.success) {
+        setWishlisted(false)
+      } else {
+        // 
+      }
+    
+    }
+  };
 
   return (
     <TouchableOpacity
@@ -45,7 +86,9 @@ const ItemCard = React.memo(({ item, onPress }) => {
         {/* Wishlist Button */}
         <TouchableOpacity 
           style={styles.wishlistButton}
-          onPress={() => setWishlisted(!wishlisted)}
+          onPress={() => {
+            handleSave()
+          }}
         >
           <Icon 
             name={wishlisted ? 'heart' : 'heart-outline'} 
@@ -88,7 +131,7 @@ const ItemCard = React.memo(({ item, onPress }) => {
   );
 });
 
-export default function Hot({ data }) {
+export default function Hot({ data, Fav }) {
   const navigation = useNavigation();
 
   const handleNavigation = useCallback(
@@ -99,7 +142,7 @@ export default function Hot({ data }) {
   );
 
   const renderItem = useCallback(
-    ({ item }) => <ItemCard item={item} onPress={handleNavigation} />,
+    ({ item }) => <ItemCard item={item} Fav={Fav} onPress={handleNavigation} />,
     [handleNavigation]
   );
 

@@ -2,7 +2,7 @@ const { NeonDB } = require("./db");
 const { shortId } = require("./modules");
 require('dotenv').config();    
 
-async function retrieve_room(seller_id,buyer_id) {
+async function retrieve_room(seller_id,user_id) {
 
     return(
  
@@ -11,8 +11,8 @@ async function retrieve_room(seller_id,buyer_id) {
             return pool.query(`SELECT * FROM room_id`)
             .then(result => {
                 let m = result?.rows; 
-                let room = m.filter(item => JSON.parse(JSON.parse(item.members_id).seller_id === seller_id) && JSON.parse(JSON.parse(item.members_id).buyer_id === buyer_id));
-                return room.map(item => ({room_id: item.room_id, buyer_id: JSON.parse(item.members_id).buyer_id }));
+                let room = m.filter(item => JSON.parse(JSON.parse(item.members_id).seller_id === seller_id) && JSON.parse(JSON.parse(item.members_id).user_id === user_id));
+                return room.map(item => ({room_id: item.room_id, user_id: JSON.parse(item.members_id).user_id }));
                 // room.map(item => (item.room_id));
             })
             .catch(err => console.log(err)) 
@@ -21,7 +21,7 @@ async function retrieve_room(seller_id,buyer_id) {
     )
 }
 
-async function retrieve_room_with_buyer(buyer_id) {
+async function retrieve_room_with_buyer(user_id) {
 
     return(
  
@@ -30,7 +30,7 @@ async function retrieve_room_with_buyer(buyer_id) {
             return pool.query(`SELECT * FROM room_id`)
             .then(result => {
                 let m = result?.rows; 
-                let room = m.filter(item => JSON.parse(JSON.parse(item.members_id).buyer_id === buyer_id));
+                let room = m.filter(item => JSON.parse(JSON.parse(item.members_id).user_id === user_id));
                 return room.map(item => ({room_id: item.room_id, seller_id: JSON.parse(item.members_id).seller_id }));
                 // room.map(item => (item.room_id));
             })
@@ -54,7 +54,7 @@ async function retrieve_room_with_seller(seller_id) {
                 let room = m.filter(item => JSON.parse(JSON.parse(item.members_id).seller_id === seller_id));
                 // console.log('seller room : ', room)
                 
-                return room.map(item => ({room_id: item.room_id, buyer_id: JSON.parse(item.members_id).buyer_id }));
+                return room.map(item => ({room_id: item.room_id, user_id: JSON.parse(item.members_id).user_id }));
                 // room.map(item => (item.room_id));
                 
             })
@@ -65,7 +65,7 @@ async function retrieve_room_with_seller(seller_id) {
 }
 
 
-async function retrieve_buyer(buyer_id) {
+async function retrieve_buyer(user_id) {
     return(
         
         await NeonDB
@@ -73,7 +73,7 @@ async function retrieve_buyer(buyer_id) {
             // let conn = pool.connect();
 
             // if(conn){
-                return pool.query(`SELECT * FROM users WHERE buyer_id = '${buyer_id}'`)
+                return pool.query(`SELECT * FROM users WHERE user_id = '${user_id}'`)
                 .then(result => result.rows[0])
                 .catch(err => console.log(err))
             // }
@@ -469,17 +469,17 @@ async function update_photos(productId, seller_id, photos, imageId) {
     }
 }
 
-async function create_room_id(seller_id,buyer_id) {
+async function create_room_id(seller_id,user_id) {
     let room_id = shortId.generate()
     let date = new Date()
 
-    let check = await check_if_room_exist(seller_id,buyer_id);
+    let check = await check_if_room_exist(seller_id,user_id);
     console.log('check :', check)
 
   
     if(check){
         await NeonDB.then((pool) => 
-        pool.query(`insert into room_id (id,room_id,members_id,date) values(DEFAULT,'${room_id}','${JSON.stringify({buyer_id: buyer_id, seller_id: seller_id})}','${date}')`)
+        pool.query(`insert into room_id (id,room_id,members_id,date) values(DEFAULT,'${room_id}','${JSON.stringify({user_id: user_id, seller_id: seller_id})}','${date}')`)
             .then(result => result.rowCount > 0 ? (true) : (false))
             .catch(err => console.log(err))
             // .finally(() => pool.end())
@@ -491,12 +491,12 @@ async function create_room_id(seller_id,buyer_id) {
     }
 }
 
-async function check_if_room_exist(seller_id,buyer_id) {
+async function check_if_room_exist(seller_id,user_id) {
     return(
       await NeonDB.then((pool) => 
         pool.query(`SELECT * FROM room_id`)
           .then(result => {
-              let l = result.rows.filter(item => JSON.parse(item.members_id).buyer_id === buyer_id && JSON.parse(item.members_id).seller_id === seller_id)
+              let l = result.rows.filter(item => JSON.parse(item.members_id).user_id === user_id && JSON.parse(item.members_id).seller_id === seller_id)
           //   if(l.length > 0){return false}else{return true}
               let response =l.length > 0 ? false : true
               return response;
@@ -510,10 +510,10 @@ async function check_if_room_exist(seller_id,buyer_id) {
     )
   }
 
-  async function upload_new_view(buyer_id,product_id,view_id,) {
+  async function upload_new_view(user_id,product_id,view_id,) {
     let date = new Date();
     let duplicateViews = await NeonDB.then((pool) => 
-        pool.query(`SELECT * FROM views WHERE buyer_id = ${buyer_id} AND product_id = ${product_id}`)
+        pool.query(`SELECT * FROM views WHERE user_id = ${user_id} AND product_id = ${product_id}`)
           .then(result => result.rows.length > 0 ? false : true)
           .catch(err => console.log(err))
         )
@@ -521,7 +521,7 @@ async function check_if_room_exist(seller_id,buyer_id) {
 
     if(duplicateViews){
         await NeonDB.then((pool) => 
-            pool.query(`insert into views(id,buyer_id,product_id,view_id,date) values(DEFAULT, '${buyer_id}','${product_id}','${view_id}','${date}')` )
+            pool.query(`insert into views(id,user_id,product_id,view_id,date) values(DEFAULT, '${user_id}','${product_id}','${view_id}','${date}')` )
             .then(result => result.rowCount > 0 ? result.send(true) : result.send(false))
             .catch(err => console.log(err))
             )
@@ -911,11 +911,11 @@ async function retrive_item_with_seller_id(seller_id) {
 }
  
 
-async function create_inbox(buyer_id,subject,message_content,action_id) {
+async function create_inbox(user_id,subject,message_content,action_id) {
     
     return (
         await NeonDB.then((pool) => 
-            pool.query(`insert into buyer_inbox(id,message_content,subject ,created_at,buyer_id,action_id) values(DEFAULT, '${message_content}', '${subject}', '${new Date()}', '${buyer_id}', '${action_id}')`)
+            pool.query(`insert into buyer_inbox(id,message_content,subject ,created_at,user_id,action_id) values(DEFAULT, '${message_content}', '${subject}', '${new Date()}', '${user_id}', '${action_id}')`)
             .then(result => result.rowCount > 0 ? (true) : (false))
             .catch(err => console.log(err))
         )

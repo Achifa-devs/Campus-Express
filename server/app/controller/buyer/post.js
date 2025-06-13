@@ -13,12 +13,12 @@ const { retrieve_product_with_id, retrieve_seller, retrieve_products, create_inb
 
 async function save_item(req,res) {
 
-    let {product_id,buyer_id} = req.body;
+    let {product_id,user_id} = req.body;
     let savedItems_id = shortId.generate();
     let date = new Date();
 
     let save_result = await NeonDB.then((pool) => 
-        pool.query(`insert into campus_express_buyer_saveditems(id,savedItems_id ,product_id ,date ,buyer_id) values(DEFAULT, '${savedItems_id}', '${product_id}', '${date}', '${buyer_id}')`)
+        pool.query(`insert into campus_express_buyer_saveditems(id,savedItems_id ,product_id ,date ,user_id) values(DEFAULT, '${savedItems_id}', '${product_id}', '${date}', '${user_id}')`)
         .then(result => result.rowCount > 0 ? (true) : (false))
         .catch(err => console.log(err))
     )
@@ -27,7 +27,7 @@ async function save_item(req,res) {
     function get_saved_item() { 
         return(
             NeonDB.then((pool) => 
-                pool.query(`SELECt * FROM campus_express_buyer_saveditems WHERE buyer_id = '${buyer_id}'`)
+                pool.query(`SELECt * FROM campus_express_buyer_saveditems WHERE user_id = '${user_id}'`)
                 .then(result => (result.rows))
                 .catch(err => console.log(err))
             )
@@ -56,20 +56,20 @@ async function save_item(req,res) {
 
 async function add_item_to_cart(req,res) {
 
-    let {product_id,buyer_id} = req.body;
+    let {product_id,user_id} = req.body;
     let cart_id = shortId.generate();
     let date = new Date();
-    async function create_cart(cart_id, product_id, date, buyer_id) {
-        // console.log(cart_id, product_id, date, buyer_id)-
+    async function create_cart(cart_id, product_id, date, user_id) {
+        // console.log(cart_id, product_id, date, user_id)-
         let handle_cart_insert = await NeonDB.then((pool) => 
-            pool.query(`insert into campus_express_buyer_cart(id,cart_id,product_id,date,buyer_id,unit) values(DEFAULT, '${cart_id}', '${product_id}', '${date}', '${buyer_id}', ${1})`)
+            pool.query(`insert into campus_express_buyer_cart(id,cart_id,product_id,date,user_id,unit) values(DEFAULT, '${cart_id}', '${product_id}', '${date}', '${user_id}', ${1})`)
             .then(result => result.rowCount > 0 ? (true) : (false))
             .catch(err => console.log(err))
         )
         .catch(err => console.log(err))
     
         if(handle_cart_insert){
-            let response = await retrive_cart(buyer_id)
+            let response = await retrive_cart(user_id)
             return {bool: true, doc: response}
         }else{
             return {bool: false, doc: null}
@@ -77,9 +77,9 @@ async function add_item_to_cart(req,res) {
         }
     }
 
-    let response = await create_cart(cart_id, product_id, date, buyer_id)
+    let response = await create_cart(cart_id, product_id, date, user_id)
     
-    // console.log(cart_id, product_id, date, buyer_id)
+    // console.log(cart_id, product_id, date, user_id)
 
     if(response.bool){
         res.status(200).send((await response).doc)
@@ -91,9 +91,9 @@ async function add_item_to_cart(req,res) {
 }
 
 async function delete_item_from_cart(req,res) {
-    let {product_id,buyer_id} = req.query;
+    let {product_id,user_id} = req.query;
     
-    let response = delete_cart(product_id,buyer_id);
+    let response = delete_cart(product_id,user_id);
     if(response.bool){
         res.status(200).send((await response).doc)
     }else{
@@ -149,7 +149,7 @@ async function filter_items(req,res){
 
 async function reset_pwd(req,res){
 
-    let {email,buyer_id} = req.body;
+    let {email,user_id} = req.body;
     let date = new Date()
 
     async function query_db() {
@@ -161,8 +161,8 @@ async function reset_pwd(req,res){
                 'users',
                 {
                     bool: 1,
-                    search_word: ['buyer_id'],
-                    identifier: [buyer_id],
+                    search_word: ['user_id'],
+                    identifier: [user_id],
                     //for delete and select and update
             
                 }, 
@@ -179,7 +179,7 @@ async function reset_pwd(req,res){
     async function send_email_to_buyer(params) {
         let token = shortId.generate();
     
-        let get_token = await create_token_for_pwd(email,buyer_id,token,date)
+        let get_token = await create_token_for_pwd(email,user_id,token,date)
 
         if(get_token){
             let get_email_mssg = pwd_reset(token,email,result.rows[0].fname + " " + result.rows[0].lname)
@@ -201,16 +201,16 @@ async function reset_pwd(req,res){
 }
 
 async function upload_chat(req,res) {
-    let {seller_id, buyer_id} = req.body
+    let {seller_id, user_id} = req.body
     let mssg_id = shortId.generate();
     let date = new Date();
 
-    let genRoom = await create_room_id(seller_id,buyer_id)
+    let genRoom = await create_room_id(seller_id,user_id)
 
     if(genRoom){
-        let room = await retrieve_room(seller_id, buyer_id);
+        let room = await retrieve_room(seller_id, user_id);
 
-        let response = await new Chat().Upload('Hi, I am interestd in the item you are selling.', mssg_id, 'text', buyer_id, room, date)
+        let response = await new Chat().Upload('Hi, I am interestd in the item you are selling.', mssg_id, 'text', user_id, room, date)
 
         res.send(true)
     }else{
@@ -242,7 +242,7 @@ async function create_order(req,res) {
     let order_id = shortId.generate();
 
     let duplicate = NeonDB.then((pool) => 
-        pool.query(`SELECT * FROM campus_express_buyer_orders WHERE buyer_id='${buyer}' AND product_id='${product_id}'`)
+        pool.query(`SELECT * FROM campus_express_buyer_orders WHERE user_id='${buyer}' AND product_id='${product_id}'`)
         .then((result) => result.rowCount > 0 ? (false) : (true))
         .catch((err) => {
             console.log(err) 
@@ -254,7 +254,7 @@ async function create_order(req,res) {
         res.send(true)
     }else{
         let new_order = await NeonDB.then((pool) => 
-            pool.query(`INSERT INTO campus_express_buyer_orders(id, order_id, product_id, status, date, stock, buyer_id, price, pick_up_channels, havePaid) values(DEFAULT, '${order_id}', '${product_id}', '{"state": "pending"}', '${date}', ${stock}, '${buyer}', ${price}, '${JSON.stringify(locale)}', ${false})`)
+            pool.query(`INSERT INTO campus_express_buyer_orders(id, order_id, product_id, status, date, stock, user_id, price, pick_up_channels, havePaid) values(DEFAULT, '${order_id}', '${product_id}', '{"state": "pending"}', '${date}', ${stock}, '${buyer}', ${price}, '${JSON.stringify(locale)}', ${false})`)
             .then((result) => result.rowCount > 0 ? (true) : (false))
             .catch((err) => {
                 console.log(err) 
@@ -288,14 +288,14 @@ async function create_order(req,res) {
 function cancel_order(req,res) {
 
     let {
-        buyer_id,order_id,amount,reason,product_id
+        user_id,order_id,amount,reason,product_id
     }=req.body
 
-    console.log(buyer_id,order_id,amount,reason)
+    console.log(user_id,order_id,amount,reason)
     function UpdateRefundlist() {
         return(    
             NeonDB.then((pool) => 
-                pool.query(`INSERT INTO refund_list(id, buyer_id, order_id, amount, reason, status, created_at) values(DEFAULT, '${buyer_id}', '${order_id}', '${amount}', '${reason}', 'pending', '${new Date()}')`)
+                pool.query(`INSERT INTO refund_list(id, user_id, order_id, amount, reason, status, created_at) values(DEFAULT, '${user_id}', '${order_id}', '${amount}', '${reason}', 'pending', '${new Date()}')`)
                 .then((result) => result.rowCount > 0 ? (true) : (false))
                 .catch((err) => {
                     console.log(err) 
@@ -334,7 +334,7 @@ function cancel_order(req,res) {
     .then((result) => {
         let mssg_obj = get_mssg('order-cancellation')
         if (result) {
-            let inbox = create_inbox(buyer_id, mssg_obj.subject, mssg_obj.mssg,product_id);
+            let inbox = create_inbox(user_id, mssg_obj.subject, mssg_obj.mssg,product_id);
             if (inbox) {
                 res.status(200).send(true)
             } else {
@@ -364,7 +364,7 @@ function remove_order(req,res) {
 }
 
 function confirm_order(req,res) {
-    let {order_id,buyer_id,product_id} = req.body;
+    let {order_id,user_id,product_id} = req.body;
     
     
     
@@ -384,7 +384,7 @@ function confirm_order(req,res) {
     .then((result) => {
         let mssg_obj = get_mssg('order-completion')
         if (result) {
-            let inbox = create_inbox(buyer_id, mssg_obj.subject, mssg_obj.mssg,product_id);
+            let inbox = create_inbox(user_id, mssg_obj.subject, mssg_obj.mssg,product_id);
             if (inbox) {
                 res.status(200).send({bool: true, data: ''})
             } else {
@@ -411,7 +411,7 @@ async function create_refund(req,res) {
     let refund_id = shortId.generate();
 
     let duplicate = NeonDB.then((pool) => 
-        pool.query(`SELECT * FROM campus_express_buyer_refunds WHERE buyer_id='${buyer}' AND product_id='${product_id}'`)
+        pool.query(`SELECT * FROM campus_express_buyer_refunds WHERE user_id='${buyer}' AND product_id='${product_id}'`)
         .then((result) => result.rowCount > 0 ? (false) : (true))
         .catch((err) => {
             console.log(err) 
@@ -423,7 +423,7 @@ async function create_refund(req,res) {
         res.send(true)
     }else{
         let new_refund = await NeonDB.then((pool) => 
-            pool.query(`INSERT INTO campus_express_buyer_refunds(id, refund_id, product_id, status, date, stock, buyer_id, price, pick_up_channels, haverefunded) values(DEFAULT, '${refund_id}', '${product_id}', '{"state": "pending"}', '${date}', ${stock}, '${buyer}', ${price}, '${JSON.stringify(locale)}', ${false})`)
+            pool.query(`INSERT INTO campus_express_buyer_refunds(id, refund_id, product_id, status, date, stock, user_id, price, pick_up_channels, haverefunded) values(DEFAULT, '${refund_id}', '${product_id}', '{"state": "pending"}', '${date}', ${stock}, '${buyer}', ${price}, '${JSON.stringify(locale)}', ${false})`)
             .then((result) => result.rowCount > 0 ? (true) : (false))
             .catch((err) => {
                 console.log(err) 
@@ -454,7 +454,7 @@ async function create_refund(req,res) {
 function cancel_refund(req,res) {
 
     let {
-        buyer_id,refund_id,product_id
+        user_id,refund_id,product_id
     }=req.body
 
     
@@ -484,7 +484,7 @@ function cancel_refund(req,res) {
     .then((result) => {
         let mssg_obj = get_mssg('refund-cancellation')
         if (result) {
-            let inbox = create_inbox(buyer_id, mssg_obj.subject, mssg_obj.mssg,product_id);
+            let inbox = create_inbox(user_id, mssg_obj.subject, mssg_obj.mssg,product_id);
             if (inbox) {
                 res.status(200).send(true)
             } else {
@@ -514,7 +514,7 @@ function remove_refund(req,res) {
 }
 
 function confirm_refund(req,res) {
-    let {refund_id,buyer_id,product_id} = req.body;
+    let {refund_id,user_id,product_id} = req.body;
     
     
     
@@ -534,7 +534,7 @@ function confirm_refund(req,res) {
     .then((result) => {
         let mssg_obj = get_mssg('refund-completed')
         if (result) {
-            let inbox = create_inbox(buyer_id, mssg_obj.subject, mssg_obj.mssg,product_id);
+            let inbox = create_inbox(user_id, mssg_obj.subject, mssg_obj.mssg,product_id);
             if (inbox) {
                 res.status(200).send({bool: true, data: ''})
             } else {
@@ -555,13 +555,13 @@ function confirm_refund(req,res) {
 
 function update_id_for_unknown_buyer(req,res) {
     let {
-        unknown_buyer_id,
+        unknown_user_id,
         registered_id
     } = req.query
     
 
     NeonDB.then((pool) => 
-        pool.query(`UPDATE views set buyer_id = ${registered_id} WHERE buyer_id = '${unknown_buyer_id}'`)
+        pool.query(`UPDATE views set user_id = ${registered_id} WHERE user_id = '${unknown_user_id}'`)
         .then((result) => result.rowCount === 1 ? res.send(true) : res.send(false))
         .catch((err) => {
             console.log(err)
