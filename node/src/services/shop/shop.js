@@ -49,21 +49,21 @@ export const getShopContent = async (payload) => {
 
 
 export const postShopReview = async (payload) => {
-  const { shop_id, user_id, order_id, user_id, review, date, comment, rating } = payload;
+  const { shop_id, user_id, order_id, buyer_id, review, date, comment, rating } = payload;
 
   // Business logic
-  const response = await createShopReview({ shop_id, user_id, order_id, user_id, review, date, comment, rating });
+  const response = await createShopReview({ shop_id, user_id, order_id, buyer_id, review, date, comment, rating });
 
   return response;
 };
 
 
 // export const postShopVisit = async (payload) => {
-//   const { user_id, product_id } = payload;
+//   const { buyer_id, product_id } = payload;
 //   // Business logic
 
-//   let existingView = await findShopViewById({ product_id, user_id });
-//   let newView = await createShopView ({ user_id, product_id });
+//   let existingView = await findShopViewById({ product_id, buyer_id });
+//   let newView = await createShopView ({ buyer_id, product_id });
 //   if (existingView.length > 0) {
 //     throw new Error("Already viewed")
 //   } else if(newView < 1){
