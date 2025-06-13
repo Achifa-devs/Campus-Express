@@ -6,7 +6,8 @@ import {
   Alert,
   Dimensions,
   ScrollView,
-  View
+  View,TouchableOpacity,Text,
+  StyleSheet
 } from 'react-native'
 import {
   useSelector
@@ -17,6 +18,7 @@ import { getData } from '../../../utils/AsyncStore.js'
 import { useNavigation } from '@react-navigation/native'
 // import Card from '../../components/Listing/Card'
 // import UploadBtn from '../../components/Home/UploadBtn'
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export default function Listing() {
   let [server_err, set_server_err] = useState(false)
@@ -60,15 +62,16 @@ export default function Listing() {
           ?
             list.map((item, index) => <Card data={item} index={index}  />)
           : 
-          <View style={{
-            height: screenHeight, width: '100%', padding: 0, margin: 0,
-            display: 'flex',
-            // alignItems: 'center',
-            justifyContent: 'center',
-            flex: 1,
-          }}>
-            <UploadBtn navigation={navigation} />
-          </View> 
+          <TouchableOpacity
+            style={styles.container}
+            activeOpacity={0.7} // Smooth press effect
+            onPress={() => {navigation.navigate('user-new-listing')}}
+          >
+            <View style={styles.content}>
+              <Icon name="folder-open" size={120} color="#FF4500" />
+              <Text style={styles.text}>Click here to upload your property</Text>
+            </View>
+          </TouchableOpacity>
         }
       </ScrollView>  
     </>
@@ -76,3 +79,27 @@ export default function Listing() {
 }
 
 
+const screenHeight = Dimensions.get('screen').height
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    width: '100%',
+    height: screenHeight*0.7, 
+    padding: 0,
+    margin: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    // backgroundColor: '#fff', // Add a background color
+  },
+  content: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  text: {
+    marginTop: 16,
+    fontSize: 16,
+    color: '#FF4500', // Better readability
+    textAlign: 'center',
+  },
+});

@@ -27,7 +27,7 @@ export async function createFavourite({ buyer_id, product_id }) {
     `INSERT INTO favourite(
         id,savedItems_id ,product_id ,date ,buyer_id
     ) VALUES (
-        DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9
+        DEFAULT, $1, $2, $3, $4
     )`,
     [shortId.generate(10),product_id,`${new Date()}`,buyer_id]
     );

@@ -7,7 +7,7 @@ export default function Mid({size, description}) {
          
             
             <View style={styles.card}>
-                <Text style={{marginBottom: 10, fontSize: 17, color: '#000', fontWeight: 'bold'}}>Description</Text>
+                {/* <Text style={{marginBottom: 10, fontSize: 17, color: '#000', fontWeight: 'bold'}}>Description</Text> */}
                 <Text style={{fontSize: size ? size :  12, color: '#000', padding: 5,backgroundColor: '#fff', width: '100%'}}>
                     {description}
                 </Text>

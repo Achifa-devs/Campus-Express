@@ -4,7 +4,7 @@ import { Alert, FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View }
 import StarRating from 'react-native-star-rating-widget';
 import VerifiedSvg from '../../../media/assets/verified-check-svgrepo-com.svg'
 
-export default function Btm({ size, user_id }) {
+export default function Btm({ updateUser, user_id }) {
     let [data, setData] = useState('')
     let [reviews, setReviews] = useState('')
     let [shop, setShop] = useState('')
@@ -21,6 +21,7 @@ export default function Btm({ size, user_id }) {
                 let response = await result.json();
                 console.log(response)
                 setData(response.data[0]);
+                updateUser(response?.data[0])
                 
             })
             .catch((err) => {
@@ -52,6 +53,7 @@ export default function Btm({ size, user_id }) {
                 let response = await result.json();
                 console.log(response)
                 setShop(response.data[0]);
+                // updateUser(response?.data[0])
                 
             })
             .catch((err) => {
@@ -123,9 +125,9 @@ export default function Btm({ size, user_id }) {
                     backgroundColor: '#FFF'
 
                 }}>
-                    <TouchableOpacity onPress={e=> navigation.navigate('user-new-order', {data: data})} style={[styles.btn, {width: 'auto', padding: 4, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff'}]}>
+                    {/* <TouchableOpacity onPress={e=> navigation.navigate('user-new-order', {data: data})} style={[styles.btn, {width: 'auto', padding: 4, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff'}]}>
                         <Text style={{fontSize: 12, color: '#000'}}>View ads (23)</Text> 
-                    </TouchableOpacity>  
+                    </TouchableOpacity>   */}
                 </View>
             </View>
             

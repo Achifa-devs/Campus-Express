@@ -24,8 +24,8 @@ export default function CardAnalytics({data, updateDelete}) {
         <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}>
             <TouchableOpacity style={{height: '90%', marginLeft: 2.5, padding: 5, display: 'flex', justifyContent: 'center', flexDirection: 'row', borderRadius: 2.5, width: 'auto', alignItems: 'center', backgroundColor: '#00BFFF', }} onPress={async(e) => {
                 const result = await Share.share({
-                    message: `Check out this product on Campus Sphere! https://campussphere.net/product/${data?.product_id}`,
-                    url: `https://campussphere.net/product/${data?.product_id}`, // works mostly on iOS
+                    message: `Check out this product on Campus Sphere! https://www.campussphere.net/store/product/${data?.product_id}`,
+                    url: `https://www.campussphere.net/store/product/${data?.product_id}`, // works mostly on iOS
                     title: data?.title,
                     
                 });

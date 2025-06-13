@@ -43,13 +43,13 @@ export default function Top({ data }) {
         <View style={styles.metaRow}>
           {data.condition && (
             <View style={styles.metaItem}>
-              <Ionicons name="build" size={16} color="#666" />
+              <Ionicons name="build" size={16} color="#FF4500" />
               <Text style={styles.metaText}>{data.condition}</Text>
             </View>
           )}
           {data.category && (
             <View style={styles.metaItem}>
-              <Ionicons name="grid" size={16} color="#666" />
+              <Ionicons name="grid" size={16} color="#FF4500" />
               <Text style={styles.metaText}>{data.category}</Text>
             </View>
           )}
@@ -61,7 +61,7 @@ export default function Top({ data }) {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 12,
+    padding: 6,
     backgroundColor: '#fff',
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',

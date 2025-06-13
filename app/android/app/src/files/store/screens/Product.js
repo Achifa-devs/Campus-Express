@@ -1,49 +1,54 @@
 import {
-    useNavigation,
-    useRoute
-  } from '@react-navigation/native';
-  import React, {
-    useEffect,
-    useState
-  } from 'react';
-  import {
-    Alert,
-    Dimensions,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-    FlatList,
-    TouchableWithoutFeedback,
-    StatusBar,
-    Image,
-    ScrollView,
-    SafeAreaView,
-    Animated,
-    Easing,
-    ActivityIndicator
-  } from 'react-native';
-  
-  // import Top from '../components/Product/Top';
-  import Mid from '../components/Product/Mid';
-  import Btm from '../components/Product/Btm';
-  import Thumbnail from '../utils/Thumbnail';
-  import CallSvg from '../../media/assets/call-svgrepo-com.svg';
-  import WpSvg from '../../media/assets/whatsapp-svgrepo-com.svg';
-  import ReportSvg from '../../media/assets/report-svgrepo-com.svg';
+  useNavigation,
+  useRoute
+} from '@react-navigation/native';
+import React, {
+  useEffect,
+  useState
+} from 'react';
+import {
+  Alert,
+  Dimensions,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  FlatList,
+  TouchableWithoutFeedback,
+  StatusBar,
+  Image,
+  ScrollView,
+  SafeAreaView,
+  Animated,
+  Easing,
+  ActivityIndicator,
+  Share,
+  Linking
+} from 'react-native';
+
+// import Top from '../components/Product/Top';
+import Mid from '../components/Product/Mid';
+import Btm from '../components/Product/Btm';
+import Thumbnail from '../utils/Thumbnail';
+import CallSvg from '../../media/assets/call-svgrepo-com.svg';
+import WpSvg from '../../media/assets/whatsapp-svgrepo-com.svg';
+import ReportSvg from '../../media/assets/report-svgrepo-com.svg';
 //   import HeartSvg from '../../media/assets/heart-svgrepo-com.svg';
 //   import ShareSvg from '../../media/assets/share-svgrepo-com.svg';
-  
-  import { getData, storeData } from '../../utils/AsyncStore.js';
-  import { useDispatch } from 'react-redux';
-  import { setToggleMessage } from '../../../../../../redux/toggleMssg.js';
-  import Ionicons from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, FontAwesome, etc.
+
+import { getData, storeData } from '../../utils/AsyncStore.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { setToggleMessage } from '../../../../../../redux/toggleMssg.js';
+import Ionicons from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, FontAwesome, etc.
 import Top from '../components/Product/Top';
-  
+import { save_prod } from '../utils/Saver.js';
+
   export default function Product() {
     const dispatch = useDispatch();
     const [imageIndex, setImageIndex] = useState(0);
-    const [data, setData] = useState(null);
+    const {user} = useSelector(s => s?.user)
+    const [data, setData] = useState(null); 
+    const [seller, setSeller] = useState('')
     const [loading, setLoading] = useState(true);
     const [saved, setSaved] = useState(false);
     const navigation = useNavigation();
@@ -67,6 +72,29 @@ import Top from '../components/Product/Top';
     useEffect(() => {
       fetchProductData();
     }, []);
+
+    useEffect(() => {
+      if (data) {
+        setTimeout(async() => {
+          const res = await fetch(`https://cs-server-olive.vercel.app/favourite`, {
+            method: 'post',
+            body: JSON.stringify({
+              buyer_id: user?.user_id,
+              product_id: data?.product_id
+            })
+          });
+          let response = res.json();
+          console.log("response: ", response)
+          if (response?.success) {
+            
+          } else {
+            
+          }
+        }, 3000);
+      }
+    }, [data])
+
+    
   
     const fetchProductData = async () => {
       try {
@@ -91,6 +119,10 @@ import Top from '../components/Product/Top';
         setLoading(false);
       }
     };
+
+    function updateUser(data) {
+      setSeller(data)
+    }
   
     async function saveHistory() {
       if (!data) return;
@@ -117,12 +149,69 @@ import Top from '../components/Product/Top';
     const handleSave = () => {
       setSaved(!saved);
       dispatch(setToggleMessage(saved ? 'Removed from saved' : 'Product saved!'));
+      save_prod({
+        buyer_id: user?.user_id,
+        product_id: data?.product_id
+      })
     };
   
     const handleShare = () => {
       // Implement share functionality
       dispatch(setToggleMessage('Share link copied to clipboard'));
     };
+
+    const handleWhatsAppChat = () => {
+      if (!seller?.phone) {
+        return Alert.alert('Error', 'Seller phone number is missing.');
+      }
+    
+      // Ensure Nigerian number format, remove leading 0 if present
+      let phoneNumber = seller.phone.replace(/\s+/g, ''); // remove spaces
+      if (phoneNumber.startsWith('0')) {
+        phoneNumber = phoneNumber.substring(1);
+      }
+    
+      const fullPhoneNumber = `234${phoneNumber}`;
+      const productLink = `https://www.campussphere.net/store/product/${data?.product_id}`;
+      const message = `Hello, I am interested in your product on Campus Sphere. ${productLink}`;
+    
+      const whatsappURL = `whatsapp://send?phone=${fullPhoneNumber}&text=${encodeURIComponent(message)}`;
+      const fallbackURL = `https://wa.me/${fullPhoneNumber}?text=${encodeURIComponent(message)}`;
+    
+      Linking.canOpenURL(whatsappURL)
+        .then((supported) => {
+          if (supported) {
+            Linking.openURL(whatsappURL);
+          } else {
+            Linking.openURL(fallbackURL);
+          }
+        })
+        .catch((err) => {
+          console.error("WhatsApp linking error:", err);
+          Alert.alert('Error', 'Unable to open WhatsApp.');
+        });
+    };
+    
+
+    const handlePhoneCall = () => {
+      if (!seller?.phone) return Alert.alert('Error', 'Seller phone number is missing.');
+    
+      const callURL = `tel:+234${seller.phone}`;
+    
+      Linking.canOpenURL(callURL)
+      .then((supported) => {
+        if (supported) {
+          Linking.openURL(callURL);
+        } else {
+          Alert.alert('Error', 'Phone call not supported on this device.');
+        }
+      })
+      .catch((err) => {
+        console.error("Phone call linking error:", err);
+        Alert.alert('Error', 'Unable to initiate phone call.');
+      });
+    };
+    
   
     if (loading) {
       return (
@@ -212,11 +301,11 @@ import Top from '../components/Product/Top';
             <View style={styles.priceContainer}>
               <Text style={styles.priceText}></Text>
               <View style={styles.actionRow}>
-                <TouchableOpacity style={styles.wpButton}>
+                <TouchableOpacity style={styles.wpButton} onPress={handleWhatsAppChat}>
                   <WpSvg height={20} width={20} />
                   <Text style={styles.wpText}>Chat</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.callButton}>
+                <TouchableOpacity style={styles.callButton} onPress={handlePhoneCall}>
                   <CallSvg height={18} width={18} />
                   <Text style={styles.callText}>Call</Text>
                 </TouchableOpacity>
@@ -224,15 +313,15 @@ import Top from '../components/Product/Top';
             </View>
   
             {/* Description */}
-            <View style={styles.section}>
+            {data.description === '' ? '' :<View style={styles.section}>
               <Text style={styles.sectionTitle}>Description</Text>
               <Mid description={data?.description} />
-            </View>
+            </View>}
   
             {/* Seller Info */}
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Seller Information</Text>
-              <Btm user_id={data?.user_id} />
+              <Btm user_id={data?.user_id} updateUser={updateUser} />
             </View>
   
             {/* Safety Tips */} 
@@ -267,9 +356,28 @@ import Top from '../components/Product/Top';
           
           <TouchableOpacity
             style={styles.orderButton}
-            onPress={() => navigation.navigate('user-new-order', { data })}
+            // onPress={() => navigation.navigate('user-new-order', { data })}
+            onPress={async(e) => {
+              const result = await Share.share({
+                message: `Check out this product on Campus Sphere! https://www.campussphere.net/store/product/${data?.product_id}`,
+                url: `https://www.campussphere.net/store/product/${data?.product_id}`, // works mostly on iOS
+                title: data?.title,
+                  
+              });
+
+              if (result.action === Share.sharedAction) {
+                if (result.activityType) {
+                    console.log('Shared with activity type:', result.activityType);
+                } else {
+                    console.log('Shared successfully');
+                }
+              } else if (result.action === Share.dismissedAction) {
+                console.log('Share dismissed');
+              }
+          }}
           >
-            <Text style={styles.orderButtonText}>Order Now</Text>
+            <Ionicons  name={'share-outline'} size={15} color={'#fff'} />
+            <Text style={styles.orderButtonText}>Share Now</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -469,11 +577,13 @@ import Top from '../components/Product/Top';
       flex: 3,
       backgroundColor: '#FF4500',
       borderRadius: 6,
+      flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center',
     },
     orderButtonText: {
       color: '#FFF',
+      paddingHorizontal: 10,
       fontWeight: '600',
       fontSize: 16,
     },
