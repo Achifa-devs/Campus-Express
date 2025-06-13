@@ -23,15 +23,15 @@ export default function PersonalData() {
     const [campusLocaleList, setCampusLocaleList] = useState([]);
 
     function update_user(){
-        axios.post('https://cs-server-olive.vercel.app/system.profile-update', {
-            id:user?.id,gender,birth,address: {"state": state, "city": city, "country": "Nigeria", "home_address": home_address, "postal_code": postal_code},
-        })
-        .then((result) => {
+        // axios.post('https://estate-dun-eta.vercel.app/system.profile-update', {
+        //     id:user?.id,gender,birth,address: {"state": state, "city": city, "country": "Nigeria", "home_address": home_address, "postal_code": postal_code},
+        // })
+        // .then((result) => {
             
-        })
-        .catch(err => {
-            console.log(err)
-        }) 
+        // })
+        // .catch(err => {
+        //     console.log(err)
+        // }) 
     }
 
     useEffect(() => {
@@ -84,7 +84,8 @@ export default function PersonalData() {
             <ScrollView >
                 <View style={styles.inputCnt}>
                     <Text style={styles.label}>Country of residence</Text>
-                    <TextInput style={styles.input} defaultValue='Nigeria' />
+                    <TextInput 
+ placeholderTextColor={"#333333"} style={styles.input} defaultValue='Nigeria' />
                 </View>
 
 
@@ -93,14 +94,16 @@ export default function PersonalData() {
 
                     <View style={{display: 'flex', height: 60, color: '#000', width: '48%', flexDirection: 'column'}}>
                         <Text style={{width: '100%', color: '#000', marginLeft: 4}}>Firstname</Text>
-                        <TextInput style={{height: 50, fontFamily: 'Roboto', padding: 10, borderRadius: 10, marginBottom: 2, width: '100%',  backgroundColor: '#fff', borderColor: '#000',borderWidth: .7,borderRadius: 7}}   placeholder="FirstName" value={user?.fname} />
+                        <TextInput 
+ placeholderTextColor={"#333333"} style={{height: 50, fontFamily: 'Roboto', padding: 10, borderRadius: 10, marginBottom: 2, width: '100%',  backgroundColor: '#fff', borderColor: '#000',borderWidth: .7,borderRadius: 7}}   placeholder="FirstName" value={user?.fname} />
                         {/* <Text style={{color: '#000', marginBottom: 15, display: fnameErr.length > 0 ? 'flex' : 'none', fontSize: 10, paddingLeft: 5, color: 'red'}}>{fnameErr}</Text> */}
                     </View>
         
 
                     <View style={{display: 'flex', height: 60, color: '#000', width: '48%', flexDirection: 'column'}}>
                         <Text style={{width: '100%', color: '#000', marginLeft: 4}}>Lastname</Text>
-                        <TextInput style={{height: 50, fontFamily: 'Roboto', padding: 10, borderRadius: 10, marginBottom: 2, width: '100%',  backgroundColor: '#fff', borderColor: '#000',borderWidth: .7,borderRadius: 7}} placeholder="LastName" value={user?.lname} />
+                        <TextInput 
+ placeholderTextColor={"#333333"} style={{height: 50, fontFamily: 'Roboto', padding: 10, borderRadius: 10, marginBottom: 2, width: '100%',  backgroundColor: '#fff', borderColor: '#000',borderWidth: .7,borderRadius: 7}} placeholder="LastName" value={user?.lname} />
                         {/* <Text style={{color: '#000', marginBottom: 15, display: lnameErr.length > 0 ? 'flex' : 'none', fontSize: 10, paddingLeft: 5, color: 'red'}}>{lnameErr}</Text> */}
                     </View>
 
@@ -151,12 +154,14 @@ export default function PersonalData() {
 
                 <View style={styles.inputCnt}>
                     <Text style={styles.label}>Phone number</Text>
-                    <TextInput style={styles.input} value={`${user?.phone}`} />
+                    <TextInput 
+ placeholderTextColor={"#333333"} style={styles.input} value={`${user?.phone}`} />
                 </View>
                 
                 <View style={styles.inputCnt}>
                     <Text style={styles.label}>Email</Text>
-                    <TextInput style={styles.input} value={`${user?.email}`} />
+                    <TextInput 
+ placeholderTextColor={"#333333"} style={styles.input} value={`${user?.email}`} />
                 </View>
 
                 {/* <Text style={[styles.label, {borderBottomColor: '#000', borderBottomWidth: 1}]}>Change phone number</Text> */}
@@ -166,17 +171,20 @@ export default function PersonalData() {
 
                 {/* <View style={styles.inputCnt}>
                     <Text style={styles.label}>Street or junction (e.g. Yahoo junction)</Text>
-                    <TextInput style={styles.input} defaultValue={home_address} onChangeText={txt=> set_home_address(txt)}/>
+                    <TextInput 
+ placeholderTextColor={"#333333"} style={styles.input} defaultValue={home_address} onChangeText={txt=> set_home_address(txt)}/>
                 </View>
                 
                 <View style={styles.inputCnt}>
                     <Text style={styles.label}>Lodge Name</Text>
-                    <TextInput style={styles.input} defaultValue={home_address} onChangeText={txt=> set_home_address(txt)}/>
+                    <TextInput 
+ placeholderTextColor={"#333333"} style={styles.input} defaultValue={home_address} onChangeText={txt=> set_home_address(txt)}/>
                 </View> */}
                 
                 {/* <View style={styles.inputCnt}>
                     <Text style={styles.label}>Postal code</Text>
-                    <TextInput style={styles.input} defaultValue={postal_code} keyboardType='numeric' onChangeText={txt=> set_postal_code(txt)}/>
+                    <TextInput 
+ placeholderTextColor={"#333333"} style={styles.input} defaultValue={postal_code} keyboardType='numeric' onChangeText={txt=> set_postal_code(txt)}/>
                 </View> */}
 
                 {/* <View style={styles.inputCnt}>

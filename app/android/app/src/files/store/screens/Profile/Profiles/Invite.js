@@ -11,6 +11,7 @@ export default function Invite() {
     let [search_char, set_search_char] = useState('')
 
     
+  
     // Load contacts
     useEffect(() => {
       Contacts.getAll()
@@ -59,7 +60,8 @@ export default function Invite() {
             <Text style={{fontSize: 21, marginLeft: 10, color: '#000', fontWeight: '600', height: 'auto', backgroundColor: '#fff'}}>Invite your friends to start earning</Text>
             <View style={styles.inputCnt}>
                 {/* <Text style={styles.label}>Country of residence</Text> */}
-                <TextInput style={styles.input} onChangeText={txt=> set_search_char(txt)} placeholder='Search contact here' />
+                <TextInput 
+ placeholderTextColor={"#333333"} style={styles.input} onChangeText={txt=> set_search_char(txt)} placeholder='Search contact here' />
             </View>
             <ScrollView >
               {

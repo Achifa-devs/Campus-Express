@@ -4,25 +4,24 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import StackNavigator from "../store/utils/Nav.js";
 import Aside from "../vendor/utils/Aside.js";
+import { getData } from "./AsyncStore.js.js";
+import { set_user } from "../../../../../redux/vendor/user.js";
 
 export function Shop() {
   let dispatch = useDispatch()
   let Stack = createNativeStackNavigator()
 
   let {
-    cookie
-  } = useSelector(s => s.cookie); 
+    user
+  } = useSelector(s => s.user); 
  
   useEffect(() => {
-    CookieManager.get('https://campussphere.net')
-    .then((result) => {
-      if(result.jwt_token.value !== null && result.jwt_token.value !== '') {
-        dispatch(set_cookie(true))
-      }else{
-        dispatch(set_cookie(false))
-      }
-    })
-    .catch(err => console.log(err))
+    
+    async function getter() {
+      let r = await getData('user');
+      dispatch(set_user(JSON.parse(r)))
+    }
+    getter()
   }, [])
   
  

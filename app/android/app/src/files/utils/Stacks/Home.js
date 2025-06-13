@@ -56,7 +56,10 @@ export function HomeStackScreen() {
     let dispatch = useDispatch()
     let {drawer} = useSelector(s=> s.drawer)
     const [isModalOpen, setModalOpen] = React.useState(false);
-  return ( 
+    const {user} = useSelector(s => s.user)
+
+    return ( 
+      
     <HomeStack.Navigator>
         
         
@@ -69,20 +72,22 @@ export function HomeStackScreen() {
                             <Image height={60} width={60} source={{ uri: 'https://res.cloudinary.com/daqbhghwq/image/upload/v1746402998/Untitled_design-removebg-preview_peqlme.png' }} />
                            
 
-                            <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 0, alignItems: 'flex-end'}}>
+                            <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 0, alignItems: 'center'}}>
                                
-                                <TouchableOpacity onPress={e => navigation.navigate('user-notification')}>
+                                {/* <TouchableOpacity onPress={e => navigation.navigate('user-notification')}>
                                     <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 0, alignItems: 'flex-end'}}>
                                         <View style={{backgroundColor: '#fff', height: '100%', width: 40, borderRadius: 10, padding: 4}}> 
                                             <Text style={{backgroundColor: 'hsl(14.086956521739133, 100%, 54.90196078431373%);', height: 'auto', display: 'flex', flexDirection: 'row',width: 'fit-content', alignItems: 'center' ,justifyContent: 'center', position: 'absolute', color: '#fff', left: -8, top: -2.5, borderRadius: 15, borderRadius: 10, fontSize: 10, padding: 3.5}}>7</Text>
-                                            <Icon name="notifications-outline" size={24} color="#0077ff" />
+                                            <Icon name="notifications-outline" size={24} color="#FF4500" />
                                         </View>
                                     </View>    
-                                </TouchableOpacity>
+                                </TouchableOpacity> */}
+                                <Ionicons name={"location-outline"} size={18} color={"#FF4500"} />
+                                <Text style={{color: '#FF4500', fontWeight: '500'}}>{user?.campus}</Text>
                             </View>
                         </View>
                         
-                        {/* <SearchBtn /> */}
+                        {/* <SearchBtn /> */} 
                     </>
                 ),
             // headerShown: false, 
@@ -263,7 +268,7 @@ export function HomeStackScreen() {
         <HomeStack.Screen  options={{
             header: ({navigation}) =>
             (
-                <View style={{ height: 55, display: 'none ', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px'}}>
+                <View style={{ height: 0, display: 'none ', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px'}}>
 
                 </View>
             ), 
@@ -273,7 +278,7 @@ export function HomeStackScreen() {
         <HomeStack.Screen  options={{
             header: ({navigation}) =>
             (
-                <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px'}}>
+                <View style={{ height: 45, display: 'none', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px'}}>
 
                 </View>
             ), 
@@ -292,7 +297,7 @@ export function HomeStackScreen() {
          <HomeStack.Screen  options={{
             header: ({navigation}) =>
             (
-                <View style={{ height: 60, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#0077ff', alignItems: 'center', padding: '10px'}}>  
+                <View style={{ height: 60, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FF4500', alignItems: 'center', padding: '10px'}}>  
                     
                     <View style={{
                         height: '100%',

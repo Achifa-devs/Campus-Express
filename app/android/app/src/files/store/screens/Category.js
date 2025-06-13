@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         paddingVertical: 14,
         backgroundColor: '#fff',
-        borderBottomColor: '#0077ff',
+        borderBottomColor: '#FF4500',
         borderBottomWidth: 1.25,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 1 },
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: '#0077ff',
+        color: '#FF4500',
         letterSpacing: 0.5,
     },
 
@@ -74,6 +74,7 @@ const styles = StyleSheet.create({
     },
 
     columnWrapper: {
+        backgroundColor: '#FFF',
         justifyContent: 'space-between',
     },
 
@@ -86,6 +87,6 @@ const styles = StyleSheet.create({
 
     noItemsText: {
         fontSize: 14,
-        color: '#888',
+        color: '#ffff',
     },
 });

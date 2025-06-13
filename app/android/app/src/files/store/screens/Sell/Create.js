@@ -470,6 +470,7 @@ export default function Create({ route }) {
       } : null
     };
 
+    setUploading(true)
     console.log(productId)
     fetch('https://cs-server-olive.vercel.app/vendor/create-product', {
       method: 'post',
@@ -520,7 +521,7 @@ export default function Create({ route }) {
       let response = await result.json();
       console.log(response);
       if (response.success) {
-        navigation.navigate('inventory')
+        navigation.navigate('user-listing')
         // Handle success
       } else {
         // Handle error

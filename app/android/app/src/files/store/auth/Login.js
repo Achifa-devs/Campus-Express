@@ -17,6 +17,7 @@ import { useNavigation } from '@react-navigation/native';
 import { setUserAuthTo } from '../../../../../../redux/reducer/auth';
 import { useDispatch } from 'react-redux';
 import { storeData } from '../../utils/AsyncStore.js';
+import { set_user } from '../../../../../../redux/vendor/user.js';
 
 const Login = ({updateActiveJsx}) => {
   const [formData, setFormData] = useState({
@@ -83,6 +84,7 @@ const Login = ({updateActiveJsx}) => {
       
       if (data.success) {
         await storeData('user', JSON.stringify(data.data.user));
+        dispatch(set_user(data.data.user))
         dispatch(setUserAuthTo(true))
       } else {
         // Handle specific errors

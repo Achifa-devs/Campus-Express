@@ -73,16 +73,16 @@ const ItemCard = React.memo(({ item, onPress }) => {
           )}
         </View>
         
-        {/* <View style={styles.metaContainer}>
-          <View style={styles.ratingContainer}>
+        <View style={styles.metaContainer}>
+          {/* <View style={styles.ratingContainer}>
             <Icon name="star" size={12} color="#FFC107" />
             <Text style={styles.ratingText}>4.8</Text>
-          </View>
+          </View> */}
           <View style={styles.locationContainer}>
             <Icon name="location-outline" size={12} color="#919EAB" />
-            <Text style={styles.locationText}>{item.campus}</Text>
+            <Text style={styles.locationText}>{item?.campus}</Text>
           </View>
-        </View> */}
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -108,9 +108,9 @@ export default function Hot({ data }) {
       {/* Section Header */}
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>Trending Products</Text>
-        <TouchableOpacity>
+        {/* <TouchableOpacity>
           <Text style={styles.seeAll}>See all</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
 
       {/* Product Grid */}

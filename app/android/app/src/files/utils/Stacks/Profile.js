@@ -35,8 +35,11 @@ import PrivacyPolicy from "../../store/screens/PrivacyPolicy";
 import ForumScreen from "../../store/screens/Forum";
 import CreateTopicScreen from "../../store/screens/NewTopic";
 import TopicDetailScreen from "../../store/screens/Replies";
+import { useSelector } from "react-redux";
 const ProfileStack = createNativeStackNavigator();
 export function ProfileStackScreen() {
+
+    const {user} = useSelector(s => s.user)
   return (
     <ProfileStack.Navigator>
 
@@ -49,7 +52,7 @@ export function ProfileStackScreen() {
                     style={{
                     width: '100%',
                     height: 100,
-                    backgroundColor: '#2962FF',
+                    backgroundColor: '#FF4500',
                     paddingHorizontal: 15,
                     paddingTop: 10,
                     flexDirection: 'row',
@@ -72,27 +75,27 @@ export function ProfileStackScreen() {
                     />
                     <View>
                         <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>
-                        Fabian.A {/* Replace with user.email */}
+                            {user?.fname}.{user?.lname[0]}
                         </Text>
-                        <TouchableOpacity onPress={() => navigation.navigate('user-shop')}>
+                        {/* <TouchableOpacity onPress={() => navigation.navigate('user-shop')}>
                         <Text style={{ color: '#fff', textDecorationLine: 'underline', fontSize: 13 }}>
                             Visit Shop
                         </Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>
                     </View>
 
                     {/* Right: Shop Balance */}
-                    <View style={{ alignItems: 'flex-end' }}>
-                    <TouchableOpacity onPress={() => navigation.navigate('user-report')}>
-                        <Text style={{ color: '#fff', textDecorationLine: 'underline', fontSize: 13 }}>
-                            Balance
+                    {/* <View style={{ alignItems: 'flex-end' }}>
+                        <TouchableOpacity onPress={() => navigation.navigate('user-report')}>
+                            <Text style={{ color: '#fff', textDecorationLine: 'underline', fontSize: 13 }}>
+                                Balance
+                            </Text>
+                        </TouchableOpacity>
+                        <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 18 }}>
+                            ₦3,500.00 
                         </Text>
-                    </TouchableOpacity>
-                    <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 18 }}>
-                        ₦3,500.00 {/* Replace with shop.balance */}
-                    </Text>
-                    </View>
+                    </View> */}
                 </View>
                 ),
             }}
@@ -226,14 +229,14 @@ export function ProfileStackScreen() {
                 <View style={{ height: 55, display: 'none', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', alignItems: 'center', padding: '10px'}}>
                     
                     <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                    <View style={{backgroundColor: '#2962FF', height: '100%', width: 40, borderRadius: 10}}></View>
+                    <View style={{backgroundColor: '#FF4500', height: '100%', width: 40, borderRadius: 10}}></View>
                     <Text>&nbsp;</Text>
                     <Text>Akpulu.F</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={e => navigation.navigate('user-notification')}>
                     <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                        <View style={{backgroundColor: '#2962FF', height: '100%', width: 40, borderRadius: 10}}>
+                        <View style={{backgroundColor: '#FF4500', height: '100%', width: 40, borderRadius: 10}}>
 
                         </View>
                     </View>
@@ -248,14 +251,14 @@ export function ProfileStackScreen() {
                 <View style={{ height: 55, display: 'none', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', alignItems: 'center', padding: '10px'}}>
                     
                     <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                    <View style={{backgroundColor: '#2962FF', height: '100%', width: 40, borderRadius: 10}}></View>
+                    <View style={{backgroundColor: '#FF4500', height: '100%', width: 40, borderRadius: 10}}></View>
                     <Text>&nbsp;</Text>
                     <Text>Akpulu.F</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={e => navigation.navigate('user-notification')}>
                     <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                        <View style={{backgroundColor: '#2962FF', height: '100%', width: 40, borderRadius: 10}}>
+                        <View style={{backgroundColor: '#FF4500', height: '100%', width: 40, borderRadius: 10}}>
 
                         </View>
                     </View>

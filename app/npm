@@ -3,3 +3,38 @@ removed 4 packages in 1m
 
 206 packages are looking for funding
   run `npm fund` for details
+
+
+// {
+//     "Lodge & Apartments": [
+//         "For Single Occupancy", "For Shared Accommodation (Roommates)"
+//     ],
+//     "Single": [
+//         "Private Room for Rent"
+//     ],
+//     "Roomate": [
+//         "Roommate Needed for Student Lodge [Searching for Roomate]","Shared Room Available [New Occupants]"
+//     ],
+//     "img": ""
+// },
+
+// {
+//     "Services": [
+//         "Barber", 
+//         "Hairdresser", 
+//         "Cleaner", 
+//         "Laundry", 
+//         "Photographer", 
+//         "Make-Up Artist", 
+//         "Tailor/Fashion Designer", 
+//         "Home Tutor", 
+//         "Chef/Cook", 
+//         "Manicure/Pedicure", 
+//         "Massage Therapist", 
+//         "Painter", 
+//         "Phone/Laptop Repair", 
+//         "Plumber", 
+//         "Electrician"
+//     ],
+//     "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1746200400/services_icon_1_w5lpuy.png"
+// }

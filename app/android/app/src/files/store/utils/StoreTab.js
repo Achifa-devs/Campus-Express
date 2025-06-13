@@ -4,6 +4,7 @@ import {
     Alert,
     Dimensions,
     Image,
+    StatusBar,
     StyleSheet,
     Switch,
     Text,
@@ -50,6 +51,8 @@ export default function StoreTab({navigation}) {
 
   return (
     <>
+        <StatusBar backgroundColor={"#FF4500"} barStyle={"light-content"} />
+    
         <Tab.Navigator 
          
             screenOptions={({ route }) => ({
@@ -59,7 +62,7 @@ export default function StoreTab({navigation}) {
 
                     if (route.name === 'Home') {
                         iconName = focused ? 'home' : 'home-outline';
-                        HomeRoute(navigationState, updateTabBarStyle)
+                        HomeRoute(navigationState, updateTabBarStyle);
                     } else if (route.name === 'Messages') {
                         iconName = focused ? 'chatbox' : 'chatbox-outline';
                     } else if (route.name === 'Orders') {
@@ -68,12 +71,12 @@ export default function StoreTab({navigation}) {
                         iconName = focused ? 'pricetags-outline' : 'pricetags-outline';
                     } else if (route.name === 'Sell') {
                         iconName = focused ? 'storefront' : 'storefront-outline';
-                        CreateRoute(navigationState, updateTabBarStyle) 
+                        CreateRoute(navigationState, updateTabBarStyle); 
                     } else if (route.name === 'Inventory') {
                         iconName = focused ? 'cube' : 'cube-outline';
                     } else if (route.name === 'Profile') {
                         iconName = focused ? 'person-circle' : 'person-circle-outline';
-                        ProfileRoute(navigationState, updateTabBarStyle)
+                        ProfileRoute(navigationState, updateTabBarStyle);
                     }
                     return <Ionicons  name={iconName} size={size} color={color} />;
                     // console.log('Icon name: ', iconName);
@@ -90,8 +93,8 @@ export default function StoreTab({navigation}) {
                 
 
         })}>
-        
-         
+          
+            
             <Tab.Screen 
                 
                 options={{
@@ -206,16 +209,17 @@ function HomeRoute(navigationState, updateTabBarStyle) {
     }else if(currentRouteName === 'user-category') {
         updateTabBarStyle('none'); 
     }else if(currentRouteName === 'user-product') {
+        // console.log('Current MessageStack Route:', currentRouteName);
         updateTabBarStyle('none'); 
-    }else if(currentRouteName === 'user-new-order'){
+    }else if(currentRouteName === 'user-new-order') {
         updateTabBarStyle('none'); 
-    }else if(currentRouteName === 'all-category'){
+    }else if(currentRouteName === 'all-category') {
         updateTabBarStyle('none'); 
-    }else if(currentRouteName === 'user-type'){
+    }else if(currentRouteName === 'user-type') {
         updateTabBarStyle('none'); 
-    }else if(currentRouteName === 'user-shops'){
+    }else if(currentRouteName === 'user-shops') {
         updateTabBarStyle('none'); 
-    }else if(currentRouteName === 'user-type-product'){
+    }else if(currentRouteName === 'user-type-product') {
         updateTabBarStyle('none'); 
     }
 }

@@ -18,7 +18,7 @@ const FloatingMenu = ({list,right,top,visible,getSelectedOption,setDisplay}) => 
                                 <div style={{borderBottom: '.5px solid #FF4500', width: '100%', margin: '7px 0px'}}></div>
                                     <li style={{  color: '#fff', background: '#FF4500'}} onClick={e => {
                                         getSelectedOption === 'categories' ?
-                                        window.location.href = `/category/${item?.txt}`
+                                        window.location.href = `/store/category/${item?.txt}`
                                         : 
                                         window.location.href=`/store/${item?.uri}`;
                                         setDisplay('none');
@@ -36,7 +36,7 @@ const FloatingMenu = ({list,right,top,visible,getSelectedOption,setDisplay}) => 
                             :
                             <li onClick={e => {
                                     getSelectedOption === 'categories' ?
-                                    window.location.href = `/category/${item?.txt}`
+                                    window.location.href = `/store/category/${item?.txt}`
                                     : 
                                     window.location.href=`/store/${item?.uri}`;
                                     setDisplay('none');

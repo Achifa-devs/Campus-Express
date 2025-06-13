@@ -29,6 +29,8 @@ import {
     useSelector
 } from 'react-redux'
 import BottomModal from '../../../utils/BtmModal'
+// import BottomModal from '../../../../utils/BtmModal'
+// import BottomModal from '../../../utils/BtmModal'
 // import BottomModal from '../utils/BtmModal'
 
 // import InAppBrowser from 'react-native-inappbrowser-reborn';
@@ -120,9 +122,9 @@ export default function AccountSecurity({navigation}) {
                 {/* <Text style={{fontSize: 30, color: '#000', fontWeight: '600', height: 60, backgroundColor: '#fff'}}>Account Security & Privacy</Text> */}
     
                 <ScrollView >
-                    <Text style={[styles.label, {borderBottomColor: '#000', borderBottomWidth: .5, paddingBottom: 10, marginBottom: 10, marginTop: 25}]}>Security</Text>
+                    <Text style={[styles.label, {borderBottomColor: '#000', borderBottomWidth: .5, paddingBottom: 10, marginBottom: 10, marginTop: 25, color: '#000'}]}>Security</Text>
 
-                    <TouchableOpacity onPress={e => toggleModal()} style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 10, marginBottom: 0, flexDirection: 'row', borderTopLeftRadius: 10, borderTopRightRadius: 10, height: 75, width: '100%', backgroundColor: '#fff'}}>
+                    {/* <TouchableOpacity onPress={e => toggleModal()} style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 10, marginBottom: 0, flexDirection: 'row', borderTopLeftRadius: 10, borderTopRightRadius: 10, height: 75, width: '100%', backgroundColor: '#fff'}}>
                         <View style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row'}}>
                             <View style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 10}}>
                                 <DailPadSvg width={25} height={25} />
@@ -139,11 +141,11 @@ export default function AccountSecurity({navigation}) {
                             <AngleSvg width={35} height={35} />
                         </View>
                         
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                         
                         
 
-                    <TouchableOpacity onPress={e => navigation.navigate('user-email-update')} style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 10, marginBottom: 0, flexDirection: 'row', borderTopLeftRadius: 10, borderTopRightRadius: 10, height: 75, width: '100%', backgroundColor: '#fff'}}>
+                    <TouchableOpacity onPress={e => navigation.navigate('Email')} style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 10, marginBottom: 0, flexDirection: 'row', borderTopLeftRadius: 10, borderTopRightRadius: 10, height: 75, width: '100%', backgroundColor: '#fff'}}>
                         <View style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row'}}>
                             <View style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 10}}>
                                 <EmailSvg width={25} height={25} />
@@ -159,14 +161,14 @@ export default function AccountSecurity({navigation}) {
                         
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={e => navigation.navigate('user-phone-update')} style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 10, marginBottom: 0, flexDirection: 'row', borderTopLeftRadius: 10, borderTopRightRadius: 10, height: 75, width: '100%', backgroundColor: '#fff'}}>
+                    <TouchableOpacity onPress={e => navigation.navigate('Phone')} style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 10, marginBottom: 0, flexDirection: 'row', borderTopLeftRadius: 10, borderTopRightRadius: 10, height: 75, width: '100%', backgroundColor: '#fff'}}>
                         <View style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row'}}>
                             <View style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 10}}>
                                 <PhoneSvg width={25} height={25} />
                             </View>
                             <View style={{width: '100%'}}>
                                 <Text style={{fontFamily: 'Roboto', fontWeight: 700, fontSize: 15, color: '#000'}}>Change primary phone number</Text>
-                                <Text style={{fontFamily: 'Roboto', fontWeight: 500, fontSize: 12, color: '#464646', width: '70%'}}>+234 {user?.phone_number}</Text>
+                                <Text style={{fontFamily: 'Roboto', fontWeight: 500, fontSize: 12, color: '#464646', width: '70%'}}>+234 {user?.phone}</Text>
                             </View>
                         </View>
                         <View style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#fff', borderRadius: 50, padding: 5}}>
@@ -189,7 +191,7 @@ export default function AccountSecurity({navigation}) {
                         
                     </TouchableOpacity> */}
 
-                    <TouchableOpacity onPress={e => navigation.navigate('user-pwd-update')} style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 10, marginBottom: 0, flexDirection: 'row', borderTopLeftRadius: 10, borderTopRightRadius: 10, height: 75, width: '100%', backgroundColor: '#fff'}}>
+                    <TouchableOpacity onPress={e => navigation.navigate('Password')} style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 10, marginBottom: 0, flexDirection: 'row', borderTopLeftRadius: 10, borderTopRightRadius: 10, height: 75, width: '100%', backgroundColor: '#fff'}}>
                         <View style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row'}}>
                             <View style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 10}}>
                                 <PwdSvg width={25} height={25} />
@@ -222,7 +224,7 @@ export default function AccountSecurity({navigation}) {
                         
                     </TouchableOpacity> */}
 
-                    {/* <TouchableOpacity onPress={e => navigation.navigate('user-logout')} style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 10, marginBottom: 0, flexDirection: 'row', borderTopLeftRadius: 10, borderTopRightRadius: 10, height: 75, width: '100%', backgroundColor: '#fff'}}>
+                    {/* <TouchableOpacity onPress={e => navigation.navigate('LogOut')} style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 10, marginBottom: 0, flexDirection: 'row', borderTopLeftRadius: 10, borderTopRightRadius: 10, height: 75, width: '100%', backgroundColor: '#fff'}}>
                         <View style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row'}}>
                             <View style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 10}}>
                                 <LogoutSvg width={25} height={25} />
@@ -240,7 +242,7 @@ export default function AccountSecurity({navigation}) {
                     </TouchableOpacity> */}
 
                     
-                    <Text style={[styles.label, {borderBottomColor: '#000', borderBottomWidth: .5, paddingBottom: 10, marginBottom: 10, marginTop: 25}]}>Privacy</Text>
+                    <Text style={[styles.label, {borderBottomColor: '#000', color: '#000', borderBottomWidth: .5, paddingBottom: 10, marginBottom: 10, marginTop: 25}]}>Privacy</Text>
 
                     <TouchableOpacity onPress={e => navigation.navigate('user-data')} style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 10, marginBottom: 0, flexDirection: 'row', borderTopLeftRadius: 10, borderTopRightRadius: 10, height: 75, width: '100%', backgroundColor: '#fff'}}>
                         <View style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', width: '80%'}}>
@@ -256,8 +258,8 @@ export default function AccountSecurity({navigation}) {
                         <View style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#fff', borderRadius: 50, padding: 5}}>
                             <Switch
                                 
-                                trackColor={{ false: '#767577', true: '#81b0ff' }} // Customize colors
-                                thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}   // Thumb color
+                                trackColor={{ false: '#767577', true: '#007AFF' }} // Customize colors
+                                thumbColor={isEnabled ? '#9cb5d1' : '#f4f3f4'}   // Thumb color
                                 ios_backgroundColor="#3e3e3e"                    // iOS background color
                                 onValueChange={toggleSwitch}                    // Function to call on toggle
                                 value={isEnabled}    

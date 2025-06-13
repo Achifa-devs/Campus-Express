@@ -80,7 +80,7 @@ const DeliveryRangeSelector = ({ shippingRange, updateShippingRangePrice, update
       <Text style={styles.note}>
         Note: On-campus delivery is required. You can add additional delivery options.
       </Text>
-      <UploadGuidelines />
+      {/* <UploadGuidelines /> */}
     </KeyboardAvoidingView>
   );
 };

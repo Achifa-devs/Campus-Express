@@ -26,7 +26,6 @@ const ProfileCnt = ({ navigation }) => {
         { label: "Favourite", icon: "heart-outline", nav: "user-favourite" },
         { label: "Personal info", icon: "person-outline", nav: "user-data" },
         { label: "Invite Friends", icon: "people-outline", nav: "user-invite" },
-        { label: "Subscription & Billing", icon: "card-outline", nav: "use-sub" },
 
       ],
     },
@@ -34,8 +33,10 @@ const ProfileCnt = ({ navigation }) => {
       section: "Settings",
       links: [
         { label: "Account", icon: "wallet-outline", nav: "user-account" },
-        { label: "Preference", icon: "options-outline", nav: "user-preference" },
-        { label: "Notification", icon: "notifications-outline", nav: "user-notification" },
+        // { label: "Subscription & Billing", icon: "card-outline", nav: "use-sub" },
+
+        // { label: "Preference", icon: "options-outline", nav: "user-preference" },
+        // { label: "Notification", icon: "notifications-outline", nav: "user-notification" },
       ],
     },
     {

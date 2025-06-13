@@ -22,7 +22,7 @@ export default function Pin({ route, navigation }) {
 
     async function update_transfer_pin() {
       
-        return await axios.post('https://cs-server-olive.vercel.app/seller.update-pin', {pwd: pwd,user_id: user?.user_id})
+        return await axios.post('https://estate-dun-eta.vercel.app/seller.update-pin', {pwd: pwd,userid: user?.userid})
         .then(({ data }) => ({bool: data.success}))
         .catch(err => (err.response?.data))
     }
@@ -60,7 +60,8 @@ export default function Pin({ route, navigation }) {
                     </View>
                     {/* <View style={styles.inputCnt}>
                         <Text style={styles.label}>Token</Text>
-                        <TextInput style={styles.input} placeholder='Token' />
+                        <TextInput 
+ placeholderTextColor={"#333333"} style={styles.input} placeholder='Token' />
                     </View> */}
 
                     {
@@ -69,7 +70,8 @@ export default function Pin({ route, navigation }) {
                         <>
                             <View style={styles.inputCnt}>
                                 <Text style={styles.label}>New pin</Text>
-                                  <TextInput keyboardType='numeric' maxLength={4} onChangeText={(text) => set_pwd(text)} style={styles.input} placeholder='New pin' />
+                                  <TextInput 
+ placeholderTextColor={"#333333"} keyboardType='numeric' maxLength={4} onChangeText={(text) => set_pwd(text)} style={styles.input} placeholder='New pin' />
                                   <Text style={{fontSize: 12, marginLeft: 5, color: 'red', fontWeight: '400', marginBottom: 10, fontFamily: 'Roboto', height: 'auto', width: '100%', textAlign: 'left', display: pwdErr !== '' ? 'flex' : 'none'}}>{
                                     pwdErr
                                 }</Text>
@@ -77,7 +79,8 @@ export default function Pin({ route, navigation }) {
                             
                             <View style={styles.inputCnt}>
                                 <Text style={styles.label}>Confirm new pin</Text>
-                                  <TextInput keyboardType='numeric' maxLength={4} onChangeText={(text) => set_c_pwd(text)} style={styles.input} placeholder='Confirm new pin' />
+                                  <TextInput 
+ placeholderTextColor={"#333333"} keyboardType='numeric' maxLength={4} onChangeText={(text) => set_c_pwd(text)} style={styles.input} placeholder='Confirm new pin' />
                                   <Text style={{fontSize: 12, marginLeft: 5, color: 'red', fontWeight: '400', marginBottom: 10, fontFamily: 'Roboto', height: 'auto', width: '100%', textAlign: 'left', display: c_pwdErr !== '' ? 'flex' : 'none'}}>{
                                     c_pwdErr
                                 }</Text>
@@ -152,7 +155,7 @@ export default function Pin({ route, navigation }) {
                                 }
                             }
                       }
-                    }} style={{height: 60, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#FF4500', borderRadius: 8}}>
+                    }} style={{height: 60, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#2962FF', borderRadius: 8}}>
                       <Text style={{ color: '#FFF', fontWeight: '500' }}>{ 
                           token ? 'Save' : 'Send token'
                       }</Text>

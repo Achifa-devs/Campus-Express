@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 // import { send_token } from '../../utils/sms_token';
 import axios from 'axios';
 import { send_token } from '../../../../../vendor/utils/sms_token';
-// import { send_token } from '../../../../../utils/sms_token';
+// import { send_token } from '../../../../../vendor/utils/sms_token';
 
 
 export default function ChangePhone({ route, navigation }) {
@@ -32,7 +32,7 @@ export default function ChangePhone({ route, navigation }) {
 
     async function update_phone_pin() {
       
-        return await axios.post('https://cs-server-olive.vercel.app/system.phone-update', {phone: new_phone, id: user?.id})
+        return await axios.post('https://estate-dun-eta.vercel.app/system.phone-update', {phone: new_phone, id: user?.userid})
         .then(({ data }) => ({bool: data.success}))
         .catch(err => (err.response?.data))
     }
@@ -60,7 +60,7 @@ export default function ChangePhone({ route, navigation }) {
                 ''
             }
             <View style={styles.cnt} >
-                <Text style={{fontSize: 30, color: '#000', fontWeight: '600', height: 'auto', backgroundColor: '#fff'}}>Change primary phone number</Text>
+                {/* <Text style={{fontSize: 30, color: '#000', fontWeight: '600', height: 'auto', backgroundColor: '#fff'}}>Change primary phone number</Text> */}
     
                 <ScrollView >
 
@@ -79,10 +79,12 @@ export default function ChangePhone({ route, navigation }) {
                     
  
                     <View style={styles.inputCnt}>
-                        <Text style={styles.label}>Primary phone Number</Text>
+                        <Text style={styles.label}>Primary Phone Number</Text>
                         <View style={{flexDirection: 'row', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
-                            <TextInput style={styles.countryCode} placeholder='+___' value='+234' />
-                            <TextInput style={styles.input} value={user?.phone_number} placeholder='Phone number' />
+                            <TextInput 
+ placeholderTextColor={"#333333"} style={styles.countryCode} placeholder='+___' value='+234' />
+                            <TextInput 
+ placeholderTextColor={"#333333"} style={styles.input} value={user?.phone} placeholder='Phone number' />
                         </View>
                     </View>
 
@@ -92,8 +94,10 @@ export default function ChangePhone({ route, navigation }) {
                             <View style={styles.inputCnt}>
                                 <Text style={styles.label}>New primary phone Number</Text>
                                 <View style={{flexDirection: 'row', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
-                                    <TextInput style={styles.countryCode} placeholder='+___' value='+234' />
-                                    <TextInput keyboardType='numeric' maxLength={11} style={styles.input} onChangeText={text => set_new_phone(text)} placeholder='New Phone number' />
+                                    <TextInput 
+ placeholderTextColor={"#333333"} style={styles.countryCode} placeholder='+___' value='+234' />
+                                    <TextInput 
+ placeholderTextColor={"#333333"} keyboardType='numeric' maxLength={11} style={styles.input} onChangeText={text => set_new_phone(text)} placeholder='New Phone number' />
                                     
                                 </View>
                                 <Text style={{fontSize: 12, marginLeft: 5, color: 'red', width: '100%', fontWeight: '400', marginBottom: 10, fontFamily: 'Roboto', height: 'auto', textAlign: 'left', display: phoneErr !== '' ? 'flex' : 'none'}}>{
@@ -106,14 +110,14 @@ export default function ChangePhone({ route, navigation }) {
 
                     <Text style={{fontSize: 14, color: '#646464', marginTop: 10, padding: 0, fontWeight: '400', fontFamily: 'Roboto', height: 30, justifyContent: 'flex-start', textAlign: 'center', width: 'auto'}}>
                         <TouchableOpacity  onPress={e=> navigation.navigate('recover-pwd')}>
-                            <Text style={{color: '#ff4400', height: 'auto', fontWeight: '500'}}>Register new number instead.</Text>
+                            <Text style={{color: '#2962FF', height: 'auto', fontWeight: '500'}}>Register new number instead.</Text>
                         </TouchableOpacity>
                     </Text>
 
                 </ScrollView>
     
                 <View style={{height: 80, padding: 10, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                    <TouchableOpacity style={{ height: 60, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#FF4500', borderRadius: 8 }} onPress={async (e) => {
+                    <TouchableOpacity style={{ height: 60, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#2962FF', borderRadius: 8 }} onPress={async (e) => {
 
                        if(true) {
                             setPhoneErr('')
@@ -123,10 +127,10 @@ export default function ChangePhone({ route, navigation }) {
                                 
                                 set_token_sent(true);
                           
-                                let response = await send_token({phone: user?.phone});
+                                let response = await send_token(user?.phone_number);
                             
                                 if (response) {
-                                    navigation.navigate('user-token', { redirect: 'user-settings-1-phone' })
+                                    navigation.navigate('Token', { redirect: 'Phone' })
                                     set_token_sent(false)
                                 }
                                 
@@ -233,7 +237,8 @@ const styles = StyleSheet.create({
         // position: 'absolute', 
         backgroundColor: '#fff',
         height: 50,
-        borderColor: '#000',
+            borderColor: '#000'
+        , color: '#000',
         borderWidth: .7,
         borderRadius: 7
 
@@ -244,7 +249,8 @@ const styles = StyleSheet.create({
         fontSize: 12,
         width: '100%',
         marginLeft: 5,
-        fontWeight: '900',
+            fontWeight: '900'
+        , color: '#000',
         marginBottom: 1
         }
     });

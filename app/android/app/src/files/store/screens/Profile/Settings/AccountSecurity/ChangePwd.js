@@ -3,7 +3,7 @@ import { ActivityIndicator, Alert, Dimensions, ScrollView, StyleSheet, Text, Tex
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { send_token } from '../../../../../vendor/utils/sms_token';
-// import { send_token } from '../../../../../utils/sms_token';
+// import { send_token } from '../../../../../vendor/utils/sms_token';
 
 
 export default function ChangePwd({ route, navigation }) {
@@ -26,7 +26,7 @@ export default function ChangePwd({ route, navigation }) {
 
     async function update_pwd_pin() {
       
-        return await axios.post('https://cs-server-olive.vercel.app/system.passcode-update', {pin: pwd, old_pin: current_pwd, id: user?.id})
+        return await axios.post('https://estate-dun-eta.vercel.app/system.passcode-update', {pin: pwd, old_pin: current_pwd, id: user?.id})
         .then(({ data }) => ({bool: data.success}))
         .catch(err => (err.response?.data))
     }
@@ -53,7 +53,7 @@ export default function ChangePwd({ route, navigation }) {
                 ''
             }
             <View style={styles.cnt} >
-                <Text style={{fontSize: 30, color: '#000', fontWeight: '600', height: 60, backgroundColor: '#fff'}}>Change passcode</Text>
+                {/* <Text style={{fontSize: 30, color: '#000', fontWeight: '600', height: 60, backgroundColor: '#fff'}}>Change passcode</Text> */}
     
                 <ScrollView >
 
@@ -70,7 +70,7 @@ export default function ChangePwd({ route, navigation }) {
                             <Text style={{color: '#000', height: 'auto'}}>Forgot passcode? </Text>
                         </TouchableOpacity>
                         <TouchableOpacity  onPress={e=> navigation.navigate('recover-pwd')}>
-                            <Text style={{color: '#FF4500', height: 'auto'}}>Recover it now.</Text>
+                            <Text style={{color: '#2962FF', height: 'auto'}}>Recover it now.</Text>
                         </TouchableOpacity>
                     </Text>
                     {
@@ -79,7 +79,8 @@ export default function ChangePwd({ route, navigation }) {
                         <>
                         <View style={styles.inputCnt}>
                             <Text style={styles.label}>Current passcode</Text>
-                            <TextInput onChangeText={(text) => set_current_pwd(text)} style={styles.input} placeholder='Current Passcode' />
+                            <TextInput 
+ placeholderTextColor={"#333333"} onChangeText={(text) => set_current_pwd(text)} style={styles.input} placeholder='Current Passcode' />
                             <Text style={{fontSize: 12, marginLeft: 5, color: 'red', fontWeight: '400', marginBottom: 10, fontFamily: 'Roboto', height: 'auto', width: '100%', textAlign: 'left', display: currentPwdErr !== '' ? 'flex' : 'none'}}>{
                                 currentPwdErr
                             }</Text>
@@ -87,7 +88,8 @@ export default function ChangePwd({ route, navigation }) {
 
                         <View style={styles.inputCnt}>
                             <Text style={styles.label}>New passcode</Text>
-                            <TextInput  onChangeText={(text) => set_pwd(text)} style={styles.input} placeholder='New Passcode' />
+                            <TextInput 
+ placeholderTextColor={"#333333"}  onChangeText={(text) => set_pwd(text)} style={styles.input} placeholder='New Passcode' />
                             <Text style={{fontSize: 12, marginLeft: 5, color: 'red', fontWeight: '400', marginBottom: 10, fontFamily: 'Roboto', height: 'auto', width: '100%', textAlign: 'left', display: pwdErr !== '' ? 'flex' : 'none'}}>{
                                 pwdErr
                             }</Text>
@@ -95,7 +97,8 @@ export default function ChangePwd({ route, navigation }) {
 
                         <View style={styles.inputCnt}>
                             <Text style={styles.label}>Confirm new passcode</Text>
-                            <TextInput onChangeText={(text) => set_c_pwd(text)} style={styles.input} placeholder='Confirm new Passcode' />
+                            <TextInput 
+ placeholderTextColor={"#333333"} onChangeText={(text) => set_c_pwd(text)} style={styles.input} placeholder='Confirm new Passcode' />
                             <Text style={{fontSize: 12, marginLeft: 5, color: 'red', fontWeight: '400', marginBottom: 10, fontFamily: 'Roboto', height: 'auto', width: '100%', textAlign: 'left', display: c_pwdErr !== '' ? 'flex' : 'none'}}>{
                                 c_pwdErr
                             }</Text>
@@ -108,16 +111,16 @@ export default function ChangePwd({ route, navigation }) {
                 </ScrollView>
     
                 <View style={{height: 80, padding: 10, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                    <TouchableOpacity style={{height: 60, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#FF4500', borderRadius: 8}} onPress={async () => {
+                    <TouchableOpacity style={{height: 60, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#2962FF', borderRadius: 8}} onPress={async () => {
                      
                     
                       if (token === undefined) {
                         set_token_sent(true);
                           
-                        let response = await send_token({phone: user?.phone});
+                        let response = await send_token(user?.phone);
                           
                         if (response) {
-                        navigation.navigate('user-token', { redirect: 'user-settings-1-password' })
+                        navigation.navigate('Token', { redirect: 'Password' })
                         set_token_sent(false)
                         }
                       } else {
@@ -248,7 +251,7 @@ const styles = StyleSheet.create({
         height: 50,
         borderColor: '#000',
         borderWidth: .7,
-        borderRadius: 7
+        borderRadius: 7, color: '#000'
 
         },
 
@@ -257,7 +260,7 @@ const styles = StyleSheet.create({
         fontSize: 12,
         marginLeft: 3.5,
         fontWeight: '800',
-        marginBottom: 5
+        marginBottom: 5, color: '#000'
         }
     });
     

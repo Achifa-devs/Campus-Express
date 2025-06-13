@@ -39,7 +39,7 @@ export default function NotificationSettings() {
 
   const updateNotification = async (category, channel, value) => {
     try {
-      await axios.post('http://192.168.67.146:9090/system.notice-update', {
+      await axios.post('https://estate-dun-eta.vercel.app/system.notice-update', {
         id: user?.id,
         data: {
           target: channel,
@@ -89,14 +89,14 @@ export default function NotificationSettings() {
       <Text style={styles.sectionDescription}>{description}</Text>
 
       <NotificationToggle
-        icon={<Feather name="mail" size={20} color="#FF4500" />}
+        icon={<Feather name="mail" size={20} color="#2962FF" />}
         label="Email"
         value={emailValue}
         onValueChange={onEmailChange}
       />
 
       <NotificationToggle
-        icon={<Feather name="phone" size={20} color="#FF4500" />}
+        icon={<Feather name="phone" size={20} color="#2962FF" />}
         label="Push Notifications"
         value={smsValue}
         onValueChange={onSmsChange}
@@ -109,7 +109,7 @@ export default function NotificationSettings() {
       <View style={styles.toggleIcon}>{icon}</View>
       <Text style={styles.toggleLabel}>{label}</Text>
       <Switch
-        trackColor={{ false: "#E0E0E0", true: "#FF4500" }}
+        trackColor={{ false: "#E0E0E0", true: "#2962FF" }}
         thumbColor="#FFFFFF"
         ios_backgroundColor="#E0E0E0"
         onValueChange={onValueChange}
@@ -123,11 +123,11 @@ export default function NotificationSettings() {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.globalToggleContainer}>
           <View style={styles.globalToggleIcon}>
-            <Feather name="bell" size={24} color="#FF4500" />
+            <Feather name="bell" size={24} color="#2962FF" />
           </View>
           <Text style={styles.globalToggleLabel}>Allow Notifications</Text>
           <Switch
-            trackColor={{ false: "#E0E0E0", true: "#FF4500" }}
+            trackColor={{ false: "#E0E0E0", true: "#2962FF" }}
             thumbColor="#FFFFFF"
             ios_backgroundColor="#E0E0E0"
             onValueChange={toggleAllNotifications}

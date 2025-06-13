@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 // import { send_token } from '../../utils/sms_token';
 import axios from 'axios';
 import { send_token } from '../../../../../vendor/utils/sms_token';
+// import { send_token } from '../../../../../vendor/utils/sms_token';
 
 
 export default function ChangeEmail({ route, navigation }) {
@@ -29,9 +30,9 @@ export default function ChangeEmail({ route, navigation }) {
     let [new_email, set_new_email] = useState('')
     let [emailErr, setEmailErr] = useState('')
 
-    async function update_email() {
+    async function update_phone_pin() {
       
-        return await axios.post('https://cs-server-olive.vercel.app/vendor/email-update', {email: new_email, id: user?.id})
+        return await axios.post('https://estate-dun-eta.vercel.app/system.email-update', {email: new_email, id: user?.id})
         .then(({ data }) => ({bool: data.success}))
         .catch(err => (err.response?.data))
     }
@@ -53,13 +54,13 @@ export default function ChangeEmail({ route, navigation }) {
                 ?
                 <View style={{ position: 'absolute', top: 0, height: screenHeight, width: screenWidth, backgroundColor: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center'}}> 
                     <ActivityIndicator size="large" color="#fff" />
-                        <Text style={{ fontSize: 16, color: '#fff', marginTop: 15, fontWeight: '400', fontFamily: 'Roboto', height: 'auto', textAlign: 'center' }}>Updating email.{'\n'}please wait.</Text>
+                        <Text style={{ fontSize: 16, color: '#fff', marginTop: 15, fontWeight: '400', fontFamily: 'Roboto', color: '#000', height: 'auto', textAlign: 'center' }}>Updating email.{'\n'}please wait.</Text>
                 </View>
                 :
                 ''
             }
             <View style={styles.cnt} >
-                <Text style={{fontSize: 30, color: '#000', fontWeight: '600', height: 'auto', backgroundColor: '#fff'}}>Change primary email</Text>
+                {/* <Text style={{fontSize: 30, color: '#000', fontWeight: '600', color: '#000', height: 'auto', backgroundColor: '#fff'}}>Change primary email</Text> */}
     
                 <ScrollView >
 
@@ -80,7 +81,8 @@ export default function ChangeEmail({ route, navigation }) {
                     <View style={styles.inputCnt}>
                         <Text style={styles.label}>Primary email</Text>
                         <View style={{flexDirection: 'row', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
-                            <TextInput style={styles.input} value={user?.email} placeholder='Email' />
+                            <TextInput 
+ placeholderTextColor={"#333333"} style={styles.input} value={user?.email} placeholder='Email' />
                         </View>
                     </View>
 
@@ -89,7 +91,8 @@ export default function ChangeEmail({ route, navigation }) {
                         ?
                             <View style={styles.inputCnt}>
                                 <Text style={styles.label}>New primary email</Text>
-                                <TextInput style={styles.input} onChangeText={txt=>set_new_email(txt)} placeholder='Email' />
+                                <TextInput 
+ placeholderTextColor={"#333333"} style={styles.input} onChangeText={txt=>set_new_email(txt)} placeholder='Email' />
 
                                 <Text style={{fontSize: 12, marginLeft: 5, color: 'red', width: '100%', fontWeight: '400', marginBottom: 10, fontFamily: 'Roboto', height: 'auto', textAlign: 'left', display: emailErr !== '' ? 'flex' : 'none'}}>{
                                     emailErr
@@ -101,14 +104,14 @@ export default function ChangeEmail({ route, navigation }) {
 
                     <Text style={{fontSize: 14, color: '#646464', marginTop: 10, padding: 0, fontWeight: '400', fontFamily: 'Roboto', height: 30, justifyContent: 'flex-start', textAlign: 'center', width: 'auto'}}>
                         <TouchableOpacity  onPress={e=> navigation.navigate('recover-pwd')}>
-                            <Text style={{color: '#ff4400', height: 'auto', fontWeight: '500'}}>Register new email instead.</Text>
+                            <Text style={{color: '#2962FF', height: 'auto', fontWeight: '500'}}>Register new email instead.</Text>
                         </TouchableOpacity>
                     </Text>
 
                 </ScrollView>
     
                 <View style={{height: 80, padding: 10, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                    <TouchableOpacity style={{ height: 60, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#FF4500', borderRadius: 8 }} onPress={async (e) => {
+                    <TouchableOpacity style={{ height: 60, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#2962FF', borderRadius: 8 }} onPress={async (e) => {
 
                        if(true) {
                             setEmailErr('')
@@ -118,10 +121,10 @@ export default function ChangeEmail({ route, navigation }) {
                                 
                                 set_token_sent(true);
                           
-                                let response = await send_token({email: user?.email});
+                                let response = await send_token(user?.email);
                             
                                 if (response) {
-                                    navigation.navigate('user-token', { redirect: 'user-settings-1-email' })
+                                    navigation.navigate('Token', { redirect: 'Email' })
                                     set_token_sent(false)
                                 }
                                 
@@ -141,7 +144,7 @@ export default function ChangeEmail({ route, navigation }) {
                                 } else {
                                     set_phone_sent(true)
 
-                                    let response = await update_email();
+                                    let response = await update_phone_pin();
                                     console.log(response)
                                     if (response.success) {
                                         //Alert message
@@ -238,7 +241,8 @@ const styles = StyleSheet.create({
 
         label: {
         fontFamily: 'Roboto',
-        fontSize: 12,
+        fontSize: 12, 
+        color: '#000',
         width: '100%',
         marginLeft: 5,
         fontWeight: '900',
