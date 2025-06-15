@@ -69,13 +69,14 @@ export async function findProductsThumbnailById({ product_id }) {
 
 // Create product view
 export async function createProductView({ product_id, user_id }) {
+  let date = new Date();
   const result = await pool.query(
     `INSERT INTO views (
         id, view_id, product_id, user_id, date
     ) VALUES (
         DEFAULT, $1, $2, $3, $4
     )`,
-    [shortId.generate(10), product_id, user_id, `${new Date()}`]
+    [shortId.generate(10), product_id, user_id, date]
     );
     
   let response = await errorHandler(result?.rowCount);
@@ -96,7 +97,7 @@ export async function findProductViewById({ product_id, user_id }) {
 // UPdate product view by ID
 export async function updateProductView({ product_id }) {
   const result = await pool.query(
-    `UPDATE products set views = views+1 WHERE product_id = $1'`,
+    `UPDATE products set views = views+1 WHERE product_id = $1`,
     [product_id]
   );
   let response = await errorHandler(result?.rowCount);

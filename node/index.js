@@ -10,6 +10,7 @@ import multer from "multer";
 import { v2 } from 'cloudinary'
 import pool from "./src/config/db.js";
 import shortId from 'short-id'
+import { parser } from "./src/utils/parser.js";
 v2.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
@@ -84,6 +85,37 @@ CAMPUSSPHERE_SERVER.get('/notice', async (req, res) => {
     console.error('Error fetching notifications:', err);
     res.status(500).json({ error: 'Server error' });
   }
+});
+
+
+CAMPUSSPHERE_SERVER.post('/version-check', parser, async (req, res) => {
+  try {
+    const result = await pool.query(
+      `SELECT * FROM app
+      ORDER BY id DESC
+      LIMIT 1`
+    );
+
+    const {
+      current_version
+    } = req?.body;
+
+    let response = result.rows[0];
+    console.log("body: ", parseInt(current_version) === parseInt(response?.version))
+
+    if(parseInt(current_version) === parseInt(response?.version)){
+      res.status(201).json({success: true, is_latest: true, url: response?.url, summary: response?.summary});
+      
+    } else {
+      res.status(201).json({success: true, is_latest: false, url: response?.url, summary: response?.summary});
+
+    }
+
+  } catch (err) {
+    console.error('Error:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+  
 });
 
 

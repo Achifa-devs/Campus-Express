@@ -96,20 +96,24 @@ export const getProductType = async (payload) => {
 
 export const postProductView = async (payload) => {
   const { product_id, user_id } = payload;
-
-  // Business logic
-  let existingView = await findProductViewById({ product_id, user_id });
-
-  let newView = await createProductView({ user_id, product_id });
+  // console.log(product_id,user_id)
+  try {
+    // Business logic
+    let existingView = await findProductViewById({ product_id, user_id });
   
-  if (existingView.length > 0) {
-    throw new Error("Already viewed")
-  } else if(newView < 1){
-    throw new Error("Error occured while updating view");
+    let newView = await createProductView({ user_id, product_id });
+    
+    if (existingView.length > 0) {
+      throw new Error("Already viewed")
+    } else if(newView < 1){
+      throw new Error("Error occured while updating view");
+    }
+    let response = await updateProductView({ product_id });
+  
+    return response;
+  } catch (error) {
+    console.log(error)
   }
-  let response = await updateProductView({ product_id });
-
-  return response;
 };
 
 

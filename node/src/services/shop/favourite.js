@@ -17,7 +17,6 @@ export const getFavourite = async (payload) => {
 
 export const getFavourites = async (payload) => {
   const { user_id } = payload;
-
   // Business logic
   const response = await findFavourites({ user_id });
 
@@ -46,11 +45,13 @@ export const postDeleteFavourite = async (payload) => {
 
   try {
     // Business logic
-    await deleteFavourite({ product_id, user_id });
+    const res = await deleteFavourite({ product_id, user_id });
   
-    const response = await findFavouriteById({ user_id, product_id });
-  
-    return response;
+    if (res) {
+      const response = await findFavouriteById({ user_id, product_id });
+    
+      return response;
+    }
   } catch (error) {
     console.log(error)
   }
