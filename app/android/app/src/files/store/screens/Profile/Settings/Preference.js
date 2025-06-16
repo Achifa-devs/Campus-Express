@@ -50,7 +50,7 @@ const Preference = ({navigation}) => {
 
                         <Switch
                             trackColor={{false: '#efefef', true: '#b7caff'}}
-                            thumbColor={isStatusEnabled ? '#2962FF' : '#2962FF'}
+                            thumbColor={isStatusEnabled ? '#FF4500' : '#FF4500'}
                             ios_backgroundColor="#3e3e3e"
                             onValueChange={toggleSwitch2}
                             value={isStatusEnabled}

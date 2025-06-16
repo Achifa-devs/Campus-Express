@@ -42,6 +42,7 @@ import { setToggleMessage } from '../../../../../../redux/toggleMssg.js';
 import Ionicons from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, FontAwesome, etc.
 import Top from '../components/Product/Top';
 import { get_saved, save_prod, unsave_prod } from '../utils/Saver.js';
+import axios from 'axios';
 
   export default function Product() {
     const dispatch = useDispatch();
@@ -75,6 +76,7 @@ import { get_saved, save_prod, unsave_prod } from '../utils/Saver.js';
     }, []);
 
     useEffect(() => {
+      setFavLoading(true);
       if (data !== '' && data !== undefined && data !== null && data !== 'undefined' && data !== 'null') {
         try {
           (async function getFavourite() {
@@ -82,17 +84,22 @@ import { get_saved, save_prod, unsave_prod } from '../utils/Saver.js';
               user_id: user?.user_id,
               product_id: data?.product_id
             })
+            console.log("result: ", result)
+
             if (result?.success) {
-              if (result.data.length === 0) {
+              setFavLoading(false);
+              if (result.data.length > 0) {
                 setSaved(true)
               } else {
                 setSaved(false)
               }
             } else {
+              setFavLoading(false);
               setSaved(false)
             }
           })()
         } catch (error) {
+          setFavLoading(false);
           console.log(error)
         }
       }
@@ -100,32 +107,39 @@ import { get_saved, save_prod, unsave_prod } from '../utils/Saver.js';
 
     useEffect(() => {
       if (data !== '' && data !== undefined && data !== null && data !== 'undefined' && data !== 'null') {
-        setTimeout(async() => {
-          const res = await fetch(`https://cs-server-olive.vercel.app/product-view`, {
-            method: 'post',
-            body: JSON.stringify({
+        setTimeout(async () => {
+          try {
+            const res = await axios.post('https://cs-server-olive.vercel.app/product-view', {
               user_id: user?.user_id,
               product_id: data?.product_id
-            })
-          });
-          let response = res.json();
-          console.log("response: ", response)
-          if (response?.success) {
-            let newHistory = {date: new Date(), data: data}
-            let prevHistory = await getData('history');
-            let arr = JSON.parse(prevHistory);
-            if (Array.isArray(arr) && arr.length > 0) {
-              storeData('history', JSON.stringify([...arr, newHistory]))
+            });
+        
+            const response = res.data;
+            console.log('response:', response);
+        
+            if (response?.success) {
+              const newHistory = { date: new Date(), data: data };
+              const prevHistory = await getData('history');
+              if (prevHistory) {
+                const arr = JSON.parse(prevHistory);
+          
+                if (Array.isArray(arr) && arr.length > 0) {
+                  storeData('history', JSON.stringify([...arr, newHistory]));
+                } else {
+                  storeData('history', JSON.stringify([newHistory]));
+                }
+              }
             } else {
-              storeData('history', JSON.stringify([newHistory]))
+              // Handle unsuccessful case
             }
-          } else {
-            // 
+          } catch (error) {
+            console.error('Error in product view request:', error);
           }
         }, 3000);
       }
     }, [data])
 
+    const [favLoading, setFavLoading] = useState(true);
     
   
     const fetchProductData = async () => {
@@ -156,7 +170,8 @@ import { get_saved, save_prod, unsave_prod } from '../utils/Saver.js';
       setSeller(data)
     }
   
-    const handleSave = async() => {
+    const handleSave = async () => {
+      setFavLoading(true);
       // setSaved(!saved);
       // dispatch(setToggleMessage(saved ? 'Removed from saved' : 'Product saved!'));
       if (!saved) {
@@ -166,8 +181,10 @@ import { get_saved, save_prod, unsave_prod } from '../utils/Saver.js';
         })
         if (result?.success && result?.data?.length > 0) {
           setSaved(true);
+          setFavLoading(false);
         } else {
           // 
+          setFavLoading(false);
         }
       }
        else {
@@ -177,8 +194,10 @@ import { get_saved, save_prod, unsave_prod } from '../utils/Saver.js';
         })
         if (result?.success && result?.data?.length > 0) {
           setSaved(false);
+          setFavLoading(false);
         } else {
           // 
+          setFavLoading(false);
         }
       
       }
@@ -371,7 +390,12 @@ import { get_saved, save_prod, unsave_prod } from '../utils/Saver.js';
             style={styles.saveButton}
             onPress={handleSave}
           >
-            <Ionicons name={"heart"} size={20} color={"#FF4500"} />
+            {favLoading && (
+              <View style={[styles.loadingOverlay, {backgroundColor: 'rgba(0, 0, 0, 0.3)'}]}>
+                <ActivityIndicator size="small" color="#FF4500" />
+              </View>
+            )}
+            {!favLoading &&(<Ionicons name={saved ? "heart" : "heart-outline"} size={20} color={"#FF4500"} />)}
             {/* <HeartSvg 
               height={20} 
               width={20} 
@@ -467,6 +491,12 @@ import { get_saved, save_prod, unsave_prod } from '../utils/Saver.js';
       right: 0,
       flexDirection: 'row',
       justifyContent: 'center',
+    },
+    loadingOverlay: {
+      ...StyleSheet.absoluteFillObject,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'rgba(244, 246, 248, 0.8)',
     },
     paginationDot: {
       width: 8,

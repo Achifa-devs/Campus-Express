@@ -53,7 +53,7 @@ export default function Reviews() {
                                     rating={item.rating}
                                     onChange={setRating}
                                     starSize={30}
-                                    color="#2962FF"
+                                    color="#FF4500"
                                 />
                                 <View style={{paddingLeft: 10}}>
                                     <Text style={{ fontWeight: '400',  padding: 3, width: '100%', fontSize: 20, color: '#000', marginBottom: .5, textAlign: 'left' }}>{item.review}</Text>

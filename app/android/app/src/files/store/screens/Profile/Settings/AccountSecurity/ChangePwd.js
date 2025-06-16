@@ -70,7 +70,7 @@ export default function ChangePwd({ route, navigation }) {
                             <Text style={{color: '#000', height: 'auto'}}>Forgot passcode? </Text>
                         </TouchableOpacity>
                         <TouchableOpacity  onPress={e=> navigation.navigate('recover-pwd')}>
-                            <Text style={{color: '#2962FF', height: 'auto'}}>Recover it now.</Text>
+                            <Text style={{color: '#FF4500', height: 'auto'}}>Recover it now.</Text>
                         </TouchableOpacity>
                     </Text>
                     {
@@ -111,7 +111,7 @@ export default function ChangePwd({ route, navigation }) {
                 </ScrollView>
     
                 <View style={{height: 80, padding: 10, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                    <TouchableOpacity style={{height: 60, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#2962FF', borderRadius: 8}} onPress={async () => {
+                    <TouchableOpacity style={{height: 60, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#FF4500', borderRadius: 8}} onPress={async () => {
                      
                     
                       if (token === undefined) {

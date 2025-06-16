@@ -123,7 +123,7 @@ export default function Profile({navigation}) {
             </View>
 
             <View style={{height: 75, textAlign: 'center', width: '100%', fontFamily: 'Roboto', display: 'flex', fontSize: 18, alignItems: 'center', padding: 20, justifyContent: 'space-between', flexDirection: 'row', backgroundColor: '#fff'}}>
-                <Text style={{fontSize: 11, color: '#000', color: '#727272', textAlign: 'center', display: 'flex', justifyContent: 'center', fontWeight: 'bold', fontFamily: 'Roboto'}}>Campus Express   v-1.1.0</Text>
+                <Text style={{fontSize: 11, color: '#000', color: '#727272', textAlign: 'center', display: 'flex', justifyContent: 'center', fontWeight: 'bold', fontFamily: 'Roboto'}}>Campus Express   v-1.0.0</Text>
 
             </View>
         </ScrollView>

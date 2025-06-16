@@ -16,19 +16,22 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { set_drawer } from '../../../../../../../redux/vendor/drawer';
-import Subscription from '../../components/Sell/Subscription';
+// import Subscription from '../../components/Sell/Subscription';
 import UploadBtn from '../../components/Sell/UploadBtn';
 import Performance from '../../components/Sell/Performance';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { launchImageLibrary } from 'react-native-image-picker';
 import axios from 'axios';
 import { getData } from '../../../utils/AsyncStore.js';
-
+import SubscriptionModal from './SubModal.js';
+import Subscription from './Sub.js';
+import  { Paystack }  from 'react-native-paystack-webview';
 export default function Sell() {
   const screenHeight = Dimensions.get('window').height;
   const screenWidth = Dimensions.get('window').width;
 
   const navigation = useNavigation();
+  const {user} = useSelector(s => s.user)
   const [formError, setFormError] = useState('');
 
   const [shopExists, setShopExists] = useState(false);
@@ -195,6 +198,18 @@ export default function Sell() {
   };
 
 
+  const [isSubscriptionModalVisible, setIsSubscriptionModalVisible] = useState(false);
+
+  // Add this function to handle subscription selection
+  const handleSelectSubscription = (tier) => {
+    console.log('Selected tier:', tier);
+    setIsSubscriptionModalVisible(false);
+    // Here you would typically send the selected tier to your backend
+    // and handle the subscription process
+  };
+
+  const [isPaying, setIsPaying] = useState(false)
+  const [PaymentData, setPaymentData] = useState({})
   
   const removePhoto = async () => {
     
@@ -342,11 +357,45 @@ export default function Sell() {
     <>
       <ScrollView style={[styles.homeCnt, { height: screenHeight - 55 }]}>
         <UploadBtn navigation={navigation} />
-        <View style={styles.contentContainer}>
+        <View style={styles.contentContainer}> 
           <Performance user_id={shopForm.user_id} />
-          <Subscription /> 
+          {/* <Subscription onPress={() => setIsSubscriptionModalVisible(true)} />  */}
         </View>
       </ScrollView>
+      {/* <Subscription  />  */}
+      {/* <SubscriptionModal
+        visible={isSubscriptionModalVisible}
+        onClose={() => setIsSubscriptionModalVisible(false)}
+        onSelect={(tier) => {
+          setIsSubscriptionModalVisible(false);
+          setIsPaying(true)
+          setPaymentData(tier)
+          navigation.navigate('PaystackPayment', {
+            amount: parseFloat(tier.price.replace('₦', '')),
+            subscriptionPlan: tier.name
+          });
+        }}
+      /> */}
+
+      {
+        isPaying && (
+        <View style={{ flex: 1 }}>
+          <Paystack  
+            paystackKey="pk_live_13343a7bd4deeebc644070871efcdf8fdcf280f7"
+            amount={PaymentData?.price}
+            billingEmail={user?.email}
+            activityIndicatorColor="green"
+            onCancel={(e) => {
+              // handle response here
+            }}
+            onSuccess={(res) => {
+              // handle response here
+            }}
+            autoStart={true}
+          />
+        </View>
+        )
+      }
     </> 
   );
 }

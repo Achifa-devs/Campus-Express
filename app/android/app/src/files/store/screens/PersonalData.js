@@ -8,7 +8,7 @@ export default function PersonalData() {
     let {
         user
     } = useSelector(s => s.user);
-    console.log(user)
+    // console.log(user)
  
     
     let [states, set_states] =  useState('')
@@ -18,18 +18,6 @@ export default function PersonalData() {
     let [state, setState] = useState('')
     let [campus, setCampus] = useState('')
     const [campusLocaleList, setCampusLocaleList] = useState([]);
-
-    function update_user(){
-        axios.post('https://cs-server-olive.vercel.app/system.profile-update', {
-            id:user?.id,gender,birth,address: {"state": state, "city": city, "country": "Nigeria", "home_address": home_address, "postal_code": postal_code},
-        })
-        .then((result) => {
-            
-        })
-        .catch(err => {
-            console.log(err)
-        }) 
-    }
 
     useEffect(() => {
         if (user !== null && user !== undefined && user !== 'null' && user !== 'undefined') { 
@@ -159,7 +147,7 @@ export default function PersonalData() {
                         save="value"
                         placeholder='Select state'
                     /> */}
-                    <DropdownExample updateData={updateData} default_value={{title: user?.state}} dropdownData={data}  input_name={'state'} placeholder={'Select your state'} />
+                    <DropdownExample updateData={updateData} default_value={{title: user?.state}} dropdownData={data} dropdownPosition={"top"}  input_name={'state'} placeholder={'Select your state'} />
                     
                 </View>
                 
@@ -173,7 +161,7 @@ export default function PersonalData() {
                         placeholder='Select city'
                         
                     /> */}
-                    <DropdownExample updateData={updateData} default_value={{title: user?.campus}}  dropdownData={campusLocaleList} input_name={'campus'} placeholder={'Select your campus'} />
+                    <DropdownExample updateData={updateData} default_value={{title: user?.campus}}  dropdownData={campusLocaleList} dropdownPosition={"top"} input_name={'campus'} placeholder={'Select your campus'} />
                     
                 </View>
                 
@@ -182,11 +170,11 @@ export default function PersonalData() {
                 
             </ScrollView>
 
-            <View style={{height: 80, padding: 10, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+            {/* <View style={{height: 80, padding: 10, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                 <TouchableOpacity onPress={e=> update_user()} style={{height: 60, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: 'green', borderRadius: 8}}>
                     <Text>Save</Text>
                 </TouchableOpacity>
-            </View>
+            </View> */}
         </View>
     </>
   )

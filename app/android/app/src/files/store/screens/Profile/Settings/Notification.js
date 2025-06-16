@@ -89,14 +89,14 @@ export default function NotificationSettings() {
       <Text style={styles.sectionDescription}>{description}</Text>
 
       <NotificationToggle
-        icon={<Feather name="mail" size={20} color="#2962FF" />}
+        icon={<Feather name="mail" size={20} color="#FF4500" />}
         label="Email"
         value={emailValue}
         onValueChange={onEmailChange}
       />
 
       <NotificationToggle
-        icon={<Feather name="phone" size={20} color="#2962FF" />}
+        icon={<Feather name="phone" size={20} color="#FF4500" />}
         label="Push Notifications"
         value={smsValue}
         onValueChange={onSmsChange}
@@ -109,7 +109,7 @@ export default function NotificationSettings() {
       <View style={styles.toggleIcon}>{icon}</View>
       <Text style={styles.toggleLabel}>{label}</Text>
       <Switch
-        trackColor={{ false: "#E0E0E0", true: "#2962FF" }}
+        trackColor={{ false: "#E0E0E0", true: "#FF4500" }}
         thumbColor="#FFFFFF"
         ios_backgroundColor="#E0E0E0"
         onValueChange={onValueChange}
@@ -123,11 +123,11 @@ export default function NotificationSettings() {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.globalToggleContainer}>
           <View style={styles.globalToggleIcon}>
-            <Feather name="bell" size={24} color="#2962FF" />
+            <Feather name="bell" size={24} color="#FF4500" />
           </View>
           <Text style={styles.globalToggleLabel}>Allow Notifications</Text>
           <Switch
-            trackColor={{ false: "#E0E0E0", true: "#2962FF" }}
+            trackColor={{ false: "#E0E0E0", true: "#FF4500" }}
             thumbColor="#FFFFFF"
             ios_backgroundColor="#E0E0E0"
             onValueChange={toggleAllNotifications}

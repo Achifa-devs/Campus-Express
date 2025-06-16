@@ -36,6 +36,7 @@ import ForumScreen from "../../store/screens/Forum";
 import CreateTopicScreen from "../../store/screens/NewTopic";
 import TopicDetailScreen from "../../store/screens/Replies";
 import { useSelector } from "react-redux";
+import Support from "../../store/screens/Profile/Profiles/Support";
 const ProfileStack = createNativeStackNavigator();
 export function ProfileStackScreen() {
 
@@ -453,6 +454,21 @@ export function ProfileStackScreen() {
             ),
             
         }}   name="user-forum" component={ForumScreen} />
-    </ProfileStack.Navigator>
+        
+        <ProfileStack.Screen  options={{
+            header: ({navigation}) =>
+            (
+                <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
+                    <TouchableOpacity style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5 }}>
+                        <BackSvg width={22} height={22} />
+                    </TouchableOpacity>
+                    <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
+                        <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Campus forum</Text>
+                    </View>
+                </View>
+            ),
+            
+        }}   name="user-support" component={Support} />
+    </ProfileStack.Navigator>  
   ); 
 }

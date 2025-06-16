@@ -6,7 +6,8 @@ import {
   FlatList,
   StyleSheet,
   Dimensions,
-  ActivityIndicator
+  ActivityIndicator,
+  Alert
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { useNavigation } from '@react-navigation/native';
@@ -20,22 +21,32 @@ const CARD_WIDTH = (width - 25) / 2; // 16px padding on each side + 16px gap bet
 
 const ItemCard = React.memo(({ item, onPress, Fav }) => {
   const [loading, setLoading] = useState(true);
+  const [favLoading, setFavLoading] = useState(true);
   const [wishlisted, setWishlisted] = useState(false);
-  const {user} = useSelector(s => s?.user)
+  const { user } = useSelector(s => s?.user)
+  
+  console.log("Fav: ", Fav)
 
   useEffect(() => {
+    setFavLoading(true);
+
     let isSaved = Fav.filter(data => data?.product_id === item?.product_id).length > 0;
 
     if (isSaved) {
       setWishlisted(true)
+      setFavLoading(false);
+
     } else {
       setWishlisted(false)
+      setFavLoading(false);
+
     }
   }, [Fav])
 
   const handleSave = async() => {
-    // setSaved(!saved);
+    setFavLoading(true);
     // dispatch(setToggleMessage(saved ? 'Removed from saved' : 'Product saved!'));
+    // Alert.alert(item.product_id)
     if (!wishlisted) {
       const result = await save_prod({
         user_id: user?.user_id,
@@ -43,7 +54,11 @@ const ItemCard = React.memo(({ item, onPress, Fav }) => {
       })
       if (result?.success) {
         setWishlisted(true)
+        setFavLoading(false);
+
       } else {
+        setFavLoading(false);
+
         // 
       }
     }
@@ -54,7 +69,11 @@ const ItemCard = React.memo(({ item, onPress, Fav }) => {
       })
       if (result?.success) {
         setWishlisted(false)
+        setFavLoading(false);
+
       } else {
+        setFavLoading(false);
+
         // 
       }
     
@@ -79,7 +98,7 @@ const ItemCard = React.memo(({ item, onPress, Fav }) => {
         
         {loading && (
           <View style={styles.loadingOverlay}>
-            <ActivityIndicator size="small" color="#5C6AC4" />
+            <ActivityIndicator size="small" color="#FF4500" />
           </View>
         )}
         
@@ -90,11 +109,17 @@ const ItemCard = React.memo(({ item, onPress, Fav }) => {
             handleSave()
           }}
         >
-          <Icon 
+          {favLoading && (
+            <View style={[styles.loadingOverlay, {backgroundColor: 'rgba(0, 0, 0, 0.3)'}]}>
+              <ActivityIndicator size="small" color="#FF4500" />
+            </View>
+          )}
+        
+          {!favLoading &&(<Icon 
             name={wishlisted ? 'heart' : 'heart-outline'} 
             size={20} 
             color={wishlisted ? '#FF5A5F' : '#FFF'} 
-          />
+          />)}
         </TouchableOpacity>
         
         {/* Condition Badge */}
@@ -281,7 +306,7 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#212B36',
+    color: '#00ff00',
   },
   originalPrice: {
     fontSize: 12,

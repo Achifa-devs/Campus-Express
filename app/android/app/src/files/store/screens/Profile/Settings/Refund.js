@@ -99,7 +99,7 @@ const Refund = ({ navigation }) => {
                             <Text style={{ color: '#000', marginBottom: 15, display: stateErr.length > 0 ? 'flex' : 'none', fontSize: 10, paddingLeft: 5, color: 'red' }}>{stateErr}</Text>
                             
                         </View> 
-                        <TouchableOpacity onPress={e=> toggleModal()} style={{display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 10, marginBottom: 0, flexDirection: 'row', borderRadius: 5, height: 45, width: '100%', backgroundColor: '#2962FF'}}>
+                        <TouchableOpacity onPress={e=> toggleModal()} style={{display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 10, marginBottom: 0, flexDirection: 'row', borderRadius: 5, height: 45, width: '100%', backgroundColor: '#FF4500'}}>
                             <Text style={{color: '#FFF'}}>Set up</Text>
                         </TouchableOpacity>
                     </ScrollView>
@@ -125,7 +125,7 @@ const Refund = ({ navigation }) => {
                     </View> 
                 </ScrollView>
                 
-                <TouchableOpacity onPress={e=> toggleModal()} style={{display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 10, marginBottom: 0, flexDirection: 'row', borderRadius: 5, height: 45, width: '100%', backgroundColor: '#2962FF'}}>
+                <TouchableOpacity onPress={e=> toggleModal()} style={{display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 10, marginBottom: 0, flexDirection: 'row', borderRadius: 5, height: 45, width: '100%', backgroundColor: '#FF4500'}}>
                     <Text style={{color: '#FFF'}}>Update</Text>
                 </TouchableOpacity>
             </View>

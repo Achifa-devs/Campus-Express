@@ -20,7 +20,7 @@ const Privacy = () => {
       {/* Content */}
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <View style={styles.introContainer}>
-          {/* <Shield stroke="#2962FF" width={48} height={48} /> */}
+          {/* <Shield stroke="#FF4500" width={48} height={48} /> */}
           <Text style={styles.introTitle}>Your Privacy Matters</Text>
           <Text style={styles.introText}>
             We are committed to protecting your personal information and being transparent about what we collect.
@@ -72,7 +72,7 @@ const Privacy = () => {
         </Text>
 
         <View style={styles.contactContainer}>
-          {/* <Mail stroke="#2962FF" width={20} height={20} /> */}
+          {/* <Mail stroke="#FF4500" width={20} height={20} /> */}
           <Text style={styles.contactText}>
             Contact our Privacy Officer at {' '}
             <Text 
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   introTitle: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#2962FF',
+    color: '#FF4500',
     marginVertical: 12,
   },
   introText: {
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#2962FF',
+    color: '#FF4500',
     marginTop: 16,
     marginBottom: 8,
   },
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
     marginLeft: 12,
   },
   linkText: {
-    color: '#2962FF',
+    color: '#FF4500',
     textDecorationLine: 'underline',
   },
 });

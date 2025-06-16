@@ -1,13 +1,17 @@
 import React, {
   useEffect,
-  useState
+  useState,
+  useCallback
 } from 'react'
 import {
   Alert,
   Dimensions,
   ScrollView,
-  View,TouchableOpacity,Text,
-  StyleSheet
+  View,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  RefreshControl
 } from 'react-native'
 import {
   useSelector
@@ -15,27 +19,20 @@ import {
 import Card from '../../components/Inventory/Card'
 import UploadBtn from '../../components/Sell/UploadBtn'
 import { getData } from '../../../utils/AsyncStore.js'
-import { useNavigation } from '@react-navigation/native'
-// import Card from '../../components/Listing/Card'
-// import UploadBtn from '../../components/Home/UploadBtn'
+import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import Icon from 'react-native-vector-icons/Ionicons';
 
 export default function Listing() {
   let [server_err, set_server_err] = useState(false)
   let [list, set_list] = useState([])
-    const navigation = useNavigation()
-  
+  const [refreshing, setRefreshing] = useState(false)
+  const navigation = useNavigation()
+  const { user } = useSelector(s => s.user);
   let screenHeight = Dimensions.get('window').height;
-  useEffect(() => {
-      
-    (async function getUser(params) {
-      let user = await getData('user');
-      const id = JSON.parse(user)
-      get_list_data(id?.user_id)
-    })()
-  }, []);
 
-  function get_list_data(id) {
+  // Fetch data function
+  const get_list_data = useCallback((id) => {
+    setRefreshing(true)
     fetch(`https://cs-server-olive.vercel.app/vendor/products?user_id=${id}`, {
       headers: {
         "Content-Type": "Application/json"
@@ -45,26 +42,57 @@ export default function Listing() {
       let response = await result.json()
       set_list(response?.data)
       console.log('response: ', response)
+      setRefreshing(false)
     })       
     .catch((err) => {
       set_server_err(!true)
       Alert.alert('Network error, please try again.')
       console.log(err)
+      setRefreshing(false)
     })
-  }
+  }, [])
+
+  // Initial load
+  useEffect(() => {
+    get_list_data(user?.user_id)
+  }, [get_list_data, user?.user_id]);
+
+  // Refresh when screen comes into focus
+  useFocusEffect(
+    useCallback(() => {
+      get_list_data(user?.user_id)
+    }, [get_list_data, user?.user_id])
+  )
+
+  // Pull-to-refresh handler
+  const onRefresh = useCallback(() => {
+    get_list_data(user?.user_id)
+  }, [get_list_data, user?.user_id])
+
   return (
     <>
-      <ScrollView style={{
-        height: '100%', width: '100%', padding: 0, margin: 0
-      }}>  
+      <ScrollView 
+        style={{
+          height: '100%', 
+          width: '100%', 
+          padding: 0, 
+          margin: 0
+        }}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
+      >  
         {
           list.length > 0
           ?
-            list.map((item, index) => <Card data={item} index={index}  />)
+            list.map((item, index) => <Card data={item} index={index} key={index} />)
           : 
           <TouchableOpacity
             style={styles.container}
-            activeOpacity={0.7} // Smooth press effect
+            activeOpacity={0.7}
             onPress={() => {navigation.navigate('user-new-listing')}}
           >
             <View style={styles.content}>
@@ -78,7 +106,6 @@ export default function Listing() {
   )
 }
 
-
 const screenHeight = Dimensions.get('screen').height
 const styles = StyleSheet.create({
   container: {
@@ -89,7 +116,6 @@ const styles = StyleSheet.create({
     margin: 0,
     alignItems: 'center',
     justifyContent: 'center',
-    // backgroundColor: '#fff', // Add a background color
   },
   content: {
     alignItems: 'center',
@@ -99,7 +125,7 @@ const styles = StyleSheet.create({
   text: {
     marginTop: 16,
     fontSize: 16,
-    color: '#FF4500', // Better readability
+    color: '#FF4500',
     textAlign: 'center',
   },
 });

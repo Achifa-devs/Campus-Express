@@ -88,7 +88,7 @@ export default function Payments() {
                         alignItems: 'center',
                         flexDirection: 'row',}}>
                             <View style={{width: '20%'}}>
-                                <Ionicons name={'business-outline'} size={48} color={'#2962FF'} />
+                                <Ionicons name={'business-outline'} size={48} color={'#FF4500'} />
                             </View>
                             <View style={{width: '80%', backgroundColor: '#ffffff'}}>
                                 
@@ -107,7 +107,7 @@ export default function Payments() {
                         <TouchableOpacity onPress={e=> navigation.navigate('user-bank')} style={{
                             height: 50,
                             width: '100%',
-                            backgroundColor: '#2962FF',
+                            backgroundColor: '#FF4500',
                             borderRadius: 8,
                             marginTop: 0,
                             display: 'flex',
@@ -143,7 +143,7 @@ export default function Payments() {
                         <TouchableOpacity onPress={openModal} style={{
                             height: 50,
                             width: '100%',
-                            backgroundColor: '#2962FF',
+                            backgroundColor: '#FF4500',
                             borderRadius: 8,
                             marginTop: 0,
                             display: 'flex',
@@ -177,7 +177,7 @@ export default function Payments() {
                         <TouchableOpacity onPress={toggleModal} style={{
                             height: 50,
                             width: '60%',
-                            backgroundColor: '#2962FF',
+                            backgroundColor: '#FF4500',
                             borderRadius: 8,
                             marginTop: 20,
                             display: 'flex',

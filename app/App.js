@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, StatusBar } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import FlashMessage from 'react-native-flash-message';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -132,6 +132,8 @@ function NavCnt() {
     dispatch(setToggleMessage(null));
   }, [toggleMessage]);
 
+  // const {user} = useSelector(s => s?.user)
+
   useEffect(() => {
     (async function Auth() {
       let response = await getData('user');
@@ -144,7 +146,8 @@ function NavCnt() {
       }
     })();
   }, [])
-      
+
+  
 
   return (
     <SafeAreaProvider style={{ flex: 1 }}>

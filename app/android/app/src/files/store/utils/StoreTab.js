@@ -278,6 +278,8 @@ function ProfileRoute(navigationState, updateTabBarStyle) {
         updateTabBarStyle('none'); 
     }else if(currentRouteName === 'user-blog'){
         updateTabBarStyle('none'); 
+    }else if(currentRouteName === 'user-support'){
+        updateTabBarStyle('none'); 
     }
 }
 

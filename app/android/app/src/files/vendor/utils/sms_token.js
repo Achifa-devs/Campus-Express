@@ -5,7 +5,7 @@ import { storeData } from '../../utils/AsyncStore.js';
 export async function send_token(info) {
     let token = generateSixDigitId();
     storeData('token', token)
-    let {data} = await axios.post('http://192.168.0.3:9090/vendor/send-token', {token, info});
+    let {data} = await axios.post('https://cs-server-olive.vercel.app/vendor/send-token', {token, info});
     if (!data?.success)return;
     return true;
 }

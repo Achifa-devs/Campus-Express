@@ -5,11 +5,14 @@ import ShowCase from '../components/Home/ShowCase';
 import Hot from '../components/Home/Hot';
 import NavigationTabs from '../components/Home/Ads';
 import { get_saved_list } from '../utils/Saver';
+import { useSelector } from 'react-redux';
 
 
 export default function Home() {
   const [refreshing, setRefreshing] = useState(false);
   const [data, setData] = useState([])
+  const {user} = useSelector(s => s?.user)
+  
   const [Fav, setFav] = useState([])
   const fetchData = async () => {
      try {
@@ -36,7 +39,7 @@ export default function Home() {
         user_id: user?.user_id
       })
       if (result?.success) {
-        setFav(res?.data)
+        setFav(result?.data)
       } else {
         setFav([])
       }
@@ -53,15 +56,22 @@ export default function Home() {
   ];
 
  
-   useEffect(() => {
-     fetchData();
-     fetchFavourites();
-   }, []);
+  useEffect(() => {
+    if (user !== '' && user !== undefined && user !== null && user !== 'undefined' && user !== 'null') {
+      fetchFavourites();
+     }
+  }, [user]);
+  
+  useEffect(() => {
+    if (user !== '' && user !== undefined && user !== null && user !== 'undefined' && user !== 'null') {
+      fetchData();
+     }
+   }, [user]);
  
    const onRefresh = useCallback(() => {
     setRefreshing(true);
     fetchData().then(() => fetchFavourites()).finally(() => setRefreshing(false));
-   }, []);
+   }, [user]);
 
   return (
     <FlatList

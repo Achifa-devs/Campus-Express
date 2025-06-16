@@ -44,8 +44,9 @@ const ProfileCnt = ({ navigation }) => {
       links: [
         { label: "Terms Of Service", icon: "document-text-outline", nav: "user-terms" },
         { label: "Privacy Policy", icon: "lock-closed-outline", nav: "user-privacy" },
-        { label: "Blogs", icon: "book-outline", nav: "user-blog" },
-        { label: "Forum", icon: "chatbubbles-outline", nav: "user-forum" },
+        { label: "Campus Community", icon: "school-outline", nav: "user-support" },
+        // { label: "Blogs", icon: "book-outline", nav: "user-blog" },
+        // { label: "Forum", icon: "chatbubbles-outline", nav: "user-forum" },
       ],
     },
   ];
@@ -76,7 +77,7 @@ const ProfileCnt = ({ navigation }) => {
       ))}
 
       <View style={styles.footer}>
-        <Text style={styles.footerText}>V 1.1.0</Text>
+        <Text style={styles.footerText}>V 1.0.0</Text>
       </View>
       <View style={styles.footer} />
     </ScrollView>

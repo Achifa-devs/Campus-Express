@@ -145,7 +145,7 @@ export default function AccountSecurity({navigation}) {
                         
                         
 
-                    <TouchableOpacity onPress={e => navigation.navigate('Email')} style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 10, marginBottom: 0, flexDirection: 'row', borderTopLeftRadius: 10, borderTopRightRadius: 10, height: 75, width: '100%', backgroundColor: '#fff'}}>
+                    <TouchableOpacity onPress={e => navigation.navigate('user-email-update')} style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 10, marginBottom: 0, flexDirection: 'row', borderTopLeftRadius: 10, borderTopRightRadius: 10, height: 75, width: '100%', backgroundColor: '#fff'}}>
                         <View style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row'}}>
                             <View style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 10}}>
                                 <EmailSvg width={25} height={25} />
@@ -161,7 +161,7 @@ export default function AccountSecurity({navigation}) {
                         
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={e => navigation.navigate('Phone')} style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 10, marginBottom: 0, flexDirection: 'row', borderTopLeftRadius: 10, borderTopRightRadius: 10, height: 75, width: '100%', backgroundColor: '#fff'}}>
+                    <TouchableOpacity onPress={e => navigation.navigate('user-phone-update')} style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 10, marginBottom: 0, flexDirection: 'row', borderTopLeftRadius: 10, borderTopRightRadius: 10, height: 75, width: '100%', backgroundColor: '#fff'}}>
                         <View style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row'}}>
                             <View style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 10}}>
                                 <PhoneSvg width={25} height={25} />
@@ -191,7 +191,7 @@ export default function AccountSecurity({navigation}) {
                         
                     </TouchableOpacity> */}
 
-                    <TouchableOpacity onPress={e => navigation.navigate('Password')} style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 10, marginBottom: 0, flexDirection: 'row', borderTopLeftRadius: 10, borderTopRightRadius: 10, height: 75, width: '100%', backgroundColor: '#fff'}}>
+                    <TouchableOpacity onPress={e => navigation.navigate('user-pwd-update')} style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 10, marginBottom: 0, flexDirection: 'row', borderTopLeftRadius: 10, borderTopRightRadius: 10, height: 75, width: '100%', backgroundColor: '#fff'}}>
                         <View style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row'}}>
                             <View style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 10}}>
                                 <PwdSvg width={25} height={25} />
@@ -258,8 +258,8 @@ export default function AccountSecurity({navigation}) {
                         <View style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#fff', borderRadius: 50, padding: 5}}>
                             <Switch
                                 
-                                trackColor={{ false: '#767577', true: '#007AFF' }} // Customize colors
-                                thumbColor={isEnabled ? '#9cb5d1' : '#f4f3f4'}   // Thumb color
+                                trackColor={{ false: '#767577', true: '#FF4500' }} // Customize colors
+                                thumbColor={isEnabled ? '#f19472' : '#f4f3f4'}   // Thumb color
                                 ios_backgroundColor="#3e3e3e"                    // iOS background color
                                 onValueChange={toggleSwitch}                    // Function to call on toggle
                                 value={isEnabled}    

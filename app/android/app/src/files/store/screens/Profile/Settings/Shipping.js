@@ -112,7 +112,7 @@ const Shipping = ({ navigation }) => {
                         </View> 
                         
                        
-                        <TouchableOpacity onPress={e=> toggleModal()} style={{display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 10, marginBottom: 0, flexDirection: 'row', borderRadius: 5, height: 45, width: '100%', backgroundColor: '#2962FF'}}>
+                        <TouchableOpacity onPress={e=> toggleModal()} style={{display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 10, marginBottom: 0, flexDirection: 'row', borderRadius: 5, height: 45, width: '100%', backgroundColor: '#FF4500'}}>
                             <Text style={{color: '#FFF'}}>Set up</Text>
                         </TouchableOpacity>
                     </ScrollView>
@@ -186,7 +186,7 @@ const Shipping = ({ navigation }) => {
                     
                 </ScrollView>
                 
-                <TouchableOpacity onPress={e=> toggleModal()} style={{display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 10, marginBottom: 0, flexDirection: 'row', borderRadius: 5, height: 45, width: '100%', backgroundColor: '#2962FF'}}>
+                <TouchableOpacity onPress={e=> toggleModal()} style={{display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 10, marginBottom: 0, flexDirection: 'row', borderRadius: 5, height: 45, width: '100%', backgroundColor: '#FF4500'}}>
                     <Text style={{color: '#FFF'}}>Edit</Text>
                 </TouchableOpacity>
             </View>

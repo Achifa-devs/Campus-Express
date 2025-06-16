@@ -104,14 +104,14 @@ export default function ChangeEmail({ route, navigation }) {
 
                     <Text style={{fontSize: 14, color: '#646464', marginTop: 10, padding: 0, fontWeight: '400', fontFamily: 'Roboto', height: 30, justifyContent: 'flex-start', textAlign: 'center', width: 'auto'}}>
                         <TouchableOpacity  onPress={e=> navigation.navigate('recover-pwd')}>
-                            <Text style={{color: '#2962FF', height: 'auto', fontWeight: '500'}}>Register new email instead.</Text>
+                            <Text style={{color: '#FF4500', height: 'auto', fontWeight: '500'}}>Register new email instead.</Text>
                         </TouchableOpacity>
                     </Text>
 
                 </ScrollView>
     
                 <View style={{height: 80, padding: 10, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                    <TouchableOpacity style={{ height: 60, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#2962FF', borderRadius: 8 }} onPress={async (e) => {
+                    <TouchableOpacity style={{ height: 60, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#FF4500', borderRadius: 8 }} onPress={async (e) => {
 
                        if(true) {
                             setEmailErr('')

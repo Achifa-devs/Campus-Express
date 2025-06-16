@@ -15,6 +15,7 @@ export default function DropdownExample({ dropdownData, defaultValue, fieldName,
     <View style={styles.container}>
       <Dropdown
         style={styles.dropdown}
+        
         placeholderStyle={styles.placeholder}
         selectedTextStyle={styles.selectedText}
         inputSearchStyle={styles.searchInput}

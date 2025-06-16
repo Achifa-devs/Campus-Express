@@ -155,7 +155,7 @@ export default function Pin({ route, navigation }) {
                                 }
                             }
                       }
-                    }} style={{height: 60, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#2962FF', borderRadius: 8}}>
+                    }} style={{height: 60, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#FF4500', borderRadius: 8}}>
                       <Text style={{ color: '#FFF', fontWeight: '500' }}>{ 
                           token ? 'Save' : 'Send token'
                       }</Text>

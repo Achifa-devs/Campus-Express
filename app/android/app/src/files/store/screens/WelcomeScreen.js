@@ -1,4 +1,5 @@
-import React from 'react';
+
+import React, { useState, useEffect } from 'react';
 import {
   Dimensions,
   Image,
@@ -9,7 +10,12 @@ import {
   Animated,
   Easing,
   SafeAreaView,
+  Modal,
+  TouchableOpacity,
+  Linking,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import RNFS from 'react-native-fs';
 
 const WelcomeScreen = () => {
   const screenWidth = Dimensions.get('window').width;
@@ -18,7 +24,7 @@ const WelcomeScreen = () => {
   const scaleValue = React.useRef(new Animated.Value(0.8)).current;
   const opacityValue = React.useRef(new Animated.Value(0)).current;
 
-  React.useEffect(() => {
+  useEffect(() => {
     Animated.parallel([
       Animated.timing(scaleValue, {
         toValue: 1,
@@ -32,11 +38,14 @@ const WelcomeScreen = () => {
         useNativeDriver: true,
       }),
     ]).start();
+
   }, []);
+
+  
 
   return (
     <SafeAreaView style={styles.safeContainer}>
-      <StatusBar backgroundColor="#FFF" barStyle="dark-content" />
+      {/* <StatusBar backgroundColor="#FFF" barStyle="dark-content" /> */}
 
       <View style={styles.container}>
         <Animated.View
@@ -66,11 +75,15 @@ const WelcomeScreen = () => {
           <Text style={styles.sponsorName}>U-COMMERCE LIMITED</Text>
         </View>
       </View>
+
+     
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  // ... keep all your existing styles ...
+
   safeContainer: {
     flex: 1,
     backgroundColor: '#FFF',
@@ -130,6 +143,50 @@ const styles = StyleSheet.create({
     color: '#FF4500',
     fontSize: 14,
     fontWeight: '600',
+  },
+  // Add these new styles for the modal
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  modalContainer: {
+    backgroundColor: '#FFF',
+    borderRadius: 10,
+    padding: 20,
+    width: '90%',
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#FF4500',
+    marginBottom: 10,
+  },
+  modalText: {
+    fontSize: 16,
+    color: '#333',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  updateButton: {
+    backgroundColor: '#FF4500',
+    padding: 12,
+    borderRadius: 6,
+    width: '100%',
+    alignItems: 'center',
+  },
+  updateButtonText: {
+    color: '#FFF',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  noteText: {
+    fontSize: 12,
+    color: '#888',
+    marginTop: 10,
   },
 });
 

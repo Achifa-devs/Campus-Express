@@ -114,7 +114,7 @@ export default function Bank() {
                 
             </View>
             
-            <TouchableOpacity style={{height: 50, fontFamily: 'Roboto', padding: 0, borderRadius: 5, marginBottom: 0, width: '100%',  backgroundColor: '#2962FF',  display: 'flex',justifyContent: 'center',alignItems: 'center',flexDirection: 'row',}} onPress={e => {
+            <TouchableOpacity style={{height: 50, fontFamily: 'Roboto', padding: 0, borderRadius: 5, marginBottom: 0, width: '100%',  backgroundColor: '#FF4500',  display: 'flex',justifyContent: 'center',alignItems: 'center',flexDirection: 'row',}} onPress={e => {
                 if(beneficiary !== ''){
                     setindicator(true)
                     create()

@@ -130,7 +130,7 @@ export default function Shopile() {
                                             set_list(data => [...data, Object.keys(item)[0]])
                                         }}>
                                             <Text>{Object.keys(item)[0]}</Text>
-                                            <Ionicons name={'add'} size={20} color={'#2962FF'} />
+                                            <Ionicons name={'add'} size={20} color={'#FF4500'} />
                                         </TouchableOpacity>
                                     )
                                 }
@@ -149,7 +149,7 @@ export default function Shopile() {
                                             set_list(new_list);
                                         }}>
                                             <Text>{(item)}</Text>
-                                            <Ionicons name={'remove'} size={20} color={'#2962FF'} />
+                                            <Ionicons name={'remove'} size={20} color={'#FF4500'} />
                                         </TouchableOpacity>
                                     )
                                 }
@@ -159,7 +159,7 @@ export default function Shopile() {
                     </>
                 }
                 
-                <TouchableOpacity onPress={e=> toggleModal()} style={{display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 10, marginBottom: 0, flexDirection: 'row', borderRadius: 5, height: 45, width: '100%', backgroundColor: '#2962FF'}}>
+                <TouchableOpacity onPress={e=> toggleModal()} style={{display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 10, marginBottom: 0, flexDirection: 'row', borderRadius: 5, height: 45, width: '100%', backgroundColor: '#FF4500'}}>
                     <Text style={{color: '#FFF'}}>Set up</Text>
                 </TouchableOpacity>
             </ScrollView>
@@ -186,13 +186,13 @@ export default function Shopile() {
                         position: 'absolute',
                         left: 10,
                         borderWidth: 3,
-                        borderColor: shop?.logo_url ? '#fff' : '#2962FF',
+                        borderColor: shop?.logo_url ? '#fff' : '#FF4500',
                         top: -40,
                         display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'row',
                         borderRadius: 50,
                         backgroundColor: '#fff'
                     }}>
-                        {shop?.logo_url ? <Image height={'100%'} borderRadius={50} width={'100%'} source={{uri: shop?.logo_url}} /> : <Ionicons name={'storefront'} size={40} color={'#2962FF'} />}
+                        {shop?.logo_url ? <Image height={'100%'} borderRadius={50} width={'100%'} source={{uri: shop?.logo_url}} /> : <Ionicons name={'storefront'} size={40} color={'#FF4500'} />}
                     </View>
                     
                     <View style={{
@@ -206,12 +206,12 @@ export default function Shopile() {
                         borderColor: '#fff',
                         bottom: -45,
                         borderRadius: 50,
-                        // backgroundColor: '#2962FF'
+                        // backgroundColor: '#FF4500'
                     }}>
                         <Text style={{ fontWeight: '500', fontSize: 18, color: '#000', marginLeft: 8, marginBottom: 5 }}>{shop?.title}</Text>
-                        <View style={{ marginLeft: 8, borderWidth: 1, borderColor: '#2962FF', borderStyle: 'dashed', width: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', borderRadius: 50, paddingLeft: 14, paddingRight: 14, paddingTop: 3, paddingBottom: 3 }}>
-                        <Ionicons name={'shield-outline'} size={17} color={'#2962FF'} />
-                        <Text style={{fontWeight: '400', marginLeft: 8, fontSize: 12, color: '#2962FF'}}>
+                        <View style={{ marginLeft: 8, borderWidth: 1, borderColor: '#FF4500', borderStyle: 'dashed', width: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', borderRadius: 50, paddingLeft: 14, paddingRight: 14, paddingTop: 3, paddingBottom: 3 }}>
+                        <Ionicons name={'shield-outline'} size={17} color={'#FF4500'} />
+                        <Text style={{fontWeight: '400', marginLeft: 8, fontSize: 12, color: '#FF4500'}}>
                             Add your verification badge
                         </Text>
                         </View>
@@ -227,7 +227,7 @@ export default function Shopile() {
                         borderColor: '#fff',
                         bottom: -10,
                         borderRadius: 50,
-                        // backgroundColor: '#2962FF'
+                        // backgroundColor: '#FF4500'
                     }}>
                         <TouchableOpacity style={{elevation: 2, height: 30, width: 30}} onPress={e => toggleModal(false)}>
                             <Ionicons  name={'create-outline'} size={25} color={'#000'} />
@@ -320,7 +320,7 @@ export default function Shopile() {
                                                     rating={item.rating}
                                                     onChange={setRating}
                                                     starSize={30}
-                                                    color="#2962FF"
+                                                    color="#FF4500"
                                                 />
                                                 <View style={{paddingLeft: 10}}>
                                                     <Text style={{ fontWeight: '400',  padding: 3, width: '100%', fontSize: 20, color: '#000', marginBottom: .5, textAlign: 'left' }}>{item.review}</Text>
