@@ -57,7 +57,7 @@ import {
 } from "../utils/parser.js"
 export const CUSTOMER_ROUTE = express.Router()
 
-// HANDLES SHOP REQ ---
+// HANDLES SHOP REQ --- ##NOT IMPLEMENTED##
 CUSTOMER_ROUTE.get('/owner', GET_SHOP_OWNER)
 CUSTOMER_ROUTE.get('/reviews', GET_SHOP_REVIEWS)
 CUSTOMER_ROUTE.get('/details', GET_SHOP_DETAILS)
@@ -81,7 +81,7 @@ CUSTOMER_ROUTE.post('/reset-password', parser, RESET_PWD);
 
 // buyer_route.post('/new-visitor', parser, add_new_referral);
 
-// HANDLES CUSTOMER ORDER REQ
+// HANDLES CUSTOMER ORDER REQ --- ##NOT IMPLEMENTED##
 CUSTOMER_ROUTE.get('/order', GET_ORDER)
 CUSTOMER_ROUTE.get('/orders', GET_ORDERS)
 CUSTOMER_ROUTE.post('/new-order', parser, POST_NEW_ORDER)
@@ -91,7 +91,7 @@ CUSTOMER_ROUTE.post('/confirm-order', parser, CONFIRM_ORDER)
 CUSTOMER_ROUTE.post('/update-order', parser, UPDATE_ORDER)
 
 
-// HANDLES CUSTOMER REFUND REQ
+// HANDLES CUSTOMER REFUND REQ --- ##NOT IMPLEMENTED##
 CUSTOMER_ROUTE.get('/refund', GET_REFUND);
 CUSTOMER_ROUTE.get('/refunds', GET_REFUNDS);
 CUSTOMER_ROUTE.post('/new-refund', parser, CREATE_REFUND);

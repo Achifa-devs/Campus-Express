@@ -15,7 +15,7 @@ import {
   Linking,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import RNFS from 'react-native-fs';
+// import RNFS from 'react-native-fs';
 
 const WelcomeScreen = () => {
   const screenWidth = Dimensions.get('window').width;

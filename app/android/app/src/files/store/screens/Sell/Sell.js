@@ -25,7 +25,7 @@ import axios from 'axios';
 import { getData } from '../../../utils/AsyncStore.js';
 import SubscriptionModal from './SubModal.js';
 import Subscription from './Sub.js';
-import  { Paystack }  from 'react-native-paystack-webview';
+// import  { Paystack }  from 'react-native-paystack-webview';
 export default function Sell() {
   const screenHeight = Dimensions.get('window').height;
   const screenWidth = Dimensions.get('window').width;
@@ -377,7 +377,7 @@ export default function Sell() {
         }}
       /> */}
 
-      {
+      {/*
         isPaying && (
         <View style={{ flex: 1 }}>
           <Paystack  
@@ -395,7 +395,7 @@ export default function Sell() {
           />
         </View>
         )
-      }
+      */}
     </> 
   );
 }

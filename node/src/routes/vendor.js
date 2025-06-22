@@ -34,7 +34,7 @@ import { SEND_TOKEN, SEND_TOKEN_PWD } from "../controllers/vendor/send_token.js"
 
 export const VENDOR_ROUTE = express.Router()
 
-
+// ##NOT IN USE##
 VENDOR_ROUTE.get('/vendor', GET_VENDOR)
 VENDOR_ROUTE.post('/vendor/registration', parser, REGISTER_VENDOR)
 VENDOR_ROUTE.post('/vendor/login', parser, LOGIN_VENDOR)
@@ -63,7 +63,7 @@ VENDOR_ROUTE.post('/vendor/create-shop', parser, CREATE_SHOP)
 // VENDOR_ROUTE.post('/vendor/delete-shop',)
 
 
-
+// ##NOT IMPLEMENTED##
 VENDOR_ROUTE.get('/vendor/order', GET_ORDER)
 VENDOR_ROUTE.get('/vendor/orders', GET_ORDERS)
 VENDOR_ROUTE.post('/vendor/cancel-order', parser, parser, CANCEL_ORDER)

@@ -1,1 +1,42 @@
-.qodo
+# .qodo
+
+
+
+
+
+# @legendapp/motion
+#  @react-native-picker/picker
+#  @react-navigation/stack
+#  paystack-react-native
+#  react-native-animated-loader
+#  react-native-biometrics
+#  react-native-blob-util
+#  react-native-credit-card
+#  react-native-credit-card-ui
+#  react-native-date-picker
+#  react-native-document-picker
+#  react-native-dotenv
+#  react-native-drawer-layout
+#  react-native-dropdown-picker
+#  react-native-encrypted-storage
+#  react-native-filereader
+#  react-native-loader-kit
+#  react-native-multiple-select
+#  react-native-multiple-select-list
+#  react-native-orientation-locker
+#  react-native-paper
+#  react-native-permissions
+#  react-native-phone-call
+#  react-native-phone-number-input
+#  react-native-picker-select
+#  react-native-push-notification
+#  react-native-screens
+#  react-native-side-drawer
+#  regjsparser
+# Unused
+# devDependencies
+# @babel/preset-env
+# @babel/runtime
+# @rnx-kit/align-deps
+# babel-jest
+# typescript

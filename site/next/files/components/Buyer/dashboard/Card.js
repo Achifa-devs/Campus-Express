@@ -259,9 +259,9 @@ const Card = ({item, index}) => {
                     <button style={BtnStyles} onClick={e => {
                         order_list.filter((data) => data?.product?.product_id === item?.product_id && data?.order?.user_id === buyer_info?.user_id)?.length > 0
                         ?
-                        window.location.href = `/checkout/${item?.product_id}`
+                        window.location.href = `/store/checkout/${item?.product_id}`
                         :
-                        window.location.href = `/new-order/${item?.product_id}`
+                        window.location.href = `/store/new-order/${item?.product_id}`
 
                     }}>
 

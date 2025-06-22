@@ -288,6 +288,32 @@ CAMPUSSPHERE_SERVER.post('/delete', async (req, res) => {
   }
 });
 
+
+app.get('/image-folder', (req,res) => {
+  let {folderName} = req.query
+  // Configure Cloudinary with your credentials
+  
+
+  async function fetchFolderAssets(folderName) {
+    try {
+      const result = await v2.search
+      .expression(`folder:${folderName}`)
+      .sort_by('public_id', 'desc') // Optional: Sort results by public_id
+      .max_results(100) // Adjust as needed; max is 500
+      .execute();
+      
+      console.log(result.resources);
+      res.send(result.resources);
+    } catch (error) {
+      console.error('Error fetching folder assets:', error);
+    }
+  }
+
+  // Call the function and pass the folder name you want to fetch assets from
+  fetchFolderAssets(folderName);
+})
+
+
 CAMPUSSPHERE_SERVER.get('/vendor/report', async (req, res) => {
   const { user_id } = req.query;
 
@@ -357,3 +383,4 @@ CAMPUSSPHERE_SERVER.get('/vendor/report', async (req, res) => {
     res.status(500).json({ error: 'Server Error' });
   }
 });
+

@@ -84,7 +84,7 @@ export default function NewOrderSummary({item,stock,deliveryOpt,order_id}) {
                 .then(async(result)=> {
                     let response = await result.json()
                     if(response.bool){
-                        // window.location.href=(`/checkout/${item?.product_id}`)
+                        window.location.href=(`/store/checkout/${item?.product_id}`)
                     }else{
                         open_notice(true, 'Error Occured, Please Try Again...')
                     }
