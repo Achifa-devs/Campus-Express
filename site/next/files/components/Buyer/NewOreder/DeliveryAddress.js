@@ -29,8 +29,8 @@ export default function DeliveryAddress({ item, order_id, order, updateDeliveryO
       if(!user_id){
           buyer_overlay_setup(false, '')
 
-          // window.location.href=(`/login?page=product&data=${item.product_id}`)
-          alert('Please Login')
+          window.location.href=(`/login?page=product&data=${item.product_id}`)
+          // alert('Please Login')
           
       }else{ 
           // document.querySelector('.shop-overlay').removeAttribute('id')
