@@ -162,12 +162,12 @@ const Aside = ({
                                 buyer_info?.fname + " " + buyer_info?.lname 
                                 : 
                                 <>
-                                <span onClick={e => window.location.href=('/store/login')} style={{cursor: 'pointer'}}>
+                                <span onClick={e => window.location.href=('/login')} style={{cursor: 'pointer'}}>
                                     <img src={loginw.src} style={{height: '20px', transform: 'rotate(180deg)', color: '#fff', width: '20px', marginBottom: '5px', }} alt="" />
                                 </span>
                                 &nbsp;
                                 {/* &nbsp; */}
-                                <span onClick={e => window.location.href=('/store/login')} style={{fontSize: 'small', cursor: 'pointer'}}>Login</span>
+                                <span onClick={e => window.location.href=('/login')} style={{fontSize: 'small', cursor: 'pointer'}}>Login</span>
                                 </>
                             }
                         </span>

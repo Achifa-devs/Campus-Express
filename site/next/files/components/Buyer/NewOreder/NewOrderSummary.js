@@ -37,7 +37,7 @@ export default function NewOrderSummary({item,stock,deliveryOpt,order_id}) {
                         buyer_overlay_setup(false, '')
 
                         // window.location.replace(`/store/checkout/${item?.product_id}`)
-                        // window.location.href=(`/checkout/${item?.product_id}`, {replace: true})
+                        window.location.href=(`/store/checkout/${item?.product_id}`, {replace: true})
                     }else{
                         open_notice(true, 'Error Occured, Please Try Again')
                         buyer_overlay_setup(false, '')

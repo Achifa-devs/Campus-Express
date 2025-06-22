@@ -48,7 +48,7 @@ export default function PasswordRecovery() {
             .then(async(result) => {
                 let response = await result.json();
                 if(response.success){
-                    window.location.href='/store/login'
+                    window.location.href='/login'
                     buyer_overlay_setup(false, '')
                 }else{
                     buyer_overlay_setup(false, '')
