@@ -190,7 +190,7 @@ export default function Page() {
                 color: '#666',
                 fontStyle: 'italic'
               }}>
-                Also available as <a href="#" style={{color: '#FF4500'}}>APK download</a>
+                Also available as <a href="https://github.com/Achifa-devs/Campus-Express/releases/tag/v1.0.2" style={{color: '#FF4500'}}>APK download</a>
               </p>
             </div>
 
