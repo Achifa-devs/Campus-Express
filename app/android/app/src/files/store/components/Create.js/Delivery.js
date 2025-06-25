@@ -30,7 +30,10 @@ const DeliveryRangeSelector = ({ shippingRange, updateShippingRangePrice, update
   return (
     <KeyboardAvoidingView 
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}
+      style={[styles.container, {
+        borderColor: 'red',
+        borderWidth: error ? 2 : 0,
+      }]}
     >
       <Text style={styles.title}>Delivery Options</Text>
       <Text style={styles.subtitle}>Select where you can deliver this item</Text>
@@ -77,9 +80,9 @@ const DeliveryRangeSelector = ({ shippingRange, updateShippingRangePrice, update
       {error && (
         <Text style={styles.errorText}>{error}</Text>
       )}
-      <Text style={styles.note}>
+      {/* <Text style={styles.note}>
         Note: On-campus delivery is required. You can add additional delivery options.
-      </Text>
+      </Text>  */}
       {/* <UploadGuidelines /> */}
     </KeyboardAvoidingView>
   );
@@ -91,11 +94,12 @@ const styles = StyleSheet.create({
     flex: 1,
     marginBottom: 10,
     padding: 10,
+    
     backgroundColor: '#FFF',
     },
     errorText: {
-    color: '#FF5722',
-    fontSize: 12,
+    color: 'red',
+    fontSize: 14,
     marginTop: 4,
     marginBottom: 8,
   },

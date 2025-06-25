@@ -15,7 +15,7 @@ import {
   View,
   FlatList,
   TouchableWithoutFeedback,
-  StatusBar,
+  
   Image,
   ScrollView,
   SafeAreaView,
@@ -285,7 +285,7 @@ import axios from 'axios';
   
     return (
       <SafeAreaView style={styles.safeArea}>
-        {/* <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" /> */}
+       
         
         <Animated.ScrollView
           style={{ opacity: fadeAnim }}

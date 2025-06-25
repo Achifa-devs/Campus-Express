@@ -4,7 +4,7 @@ import {
     Alert,
     Dimensions,
     Image,
-    StatusBar,
+    
     StyleSheet,
     Switch,
     Text,
@@ -51,7 +51,6 @@ export default function StoreTab({navigation}) {
 
   return (
     <>
-        <StatusBar backgroundColor={"#FF4500"} barStyle={"light-content"} />
     
         <Tab.Navigator 
          

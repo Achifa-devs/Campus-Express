@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import {
   Dimensions,
   Image,
-  StatusBar,
+  
   StyleSheet,
   Text,
   View,
@@ -45,35 +45,29 @@ const WelcomeScreen = () => {
 
   return (
     <SafeAreaView style={styles.safeContainer}>
-      {/* <StatusBar backgroundColor="#FFF" barStyle="dark-content" /> */}
-
+     
       <View style={styles.container}>
-        <Animated.View
+        <View
           style={[
-            styles.content,
-            {
-              opacity: opacityValue,
-              transform: [{ scale: scaleValue }],
-            },
-          ]}
+            styles.content]}
         >
           <View style={[styles.logoContainer, { width: screenWidth * 0.35, height: screenWidth * 0.35, borderRadius: (screenWidth * 0.35) / 2 }]}>
             <Image
               style={styles.logo}
               source={{
-                uri: 'https://res.cloudinary.com/daqbhghwq/image/upload/v1746402998/Untitled_design-removebg-preview_peqlme.png',
+                uri: 'https://res.cloudinary.com/daqbhghwq/image/upload/e_background_removal/f_png/v1750632165/20250622_233137_0000_lq4yjm.png',
               }}
             />
           </View>
 
           <Text style={styles.title}>Campus Sphere</Text>
-          <Text style={styles.subtitle}>Connecting campuses nationwide</Text>
-        </Animated.View>
+          <Text style={styles.subtitle}>Connecting 169 campuses nationwide</Text>
+        </View>
 
-        <View style={styles.sponsorContainer}>
+        {/* <View style={styles.sponsorContainer}>
           <Text style={styles.sponsorText}>Sponsored by</Text>
           <Text style={styles.sponsorName}>U-COMMERCE LIMITED</Text>
-        </View>
+        </View> */}
       </View>
 
      
@@ -86,12 +80,12 @@ const styles = StyleSheet.create({
 
   safeContainer: {
     flex: 1,
-    backgroundColor: '#FFF',
+    backgroundColor: '#FF4500',
   },
   container: {
     flex: 1,
-    backgroundColor: '#FFF',
-    justifyContent: 'space-between',
+    backgroundColor: '#FF4500',
+    justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 40,
   },
@@ -100,16 +94,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   logoContainer: {
-    borderWidth: 4,
-    borderColor: '#FF4500',
+    // borderWidth: 4,
+    // borderColor: '#FFF',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FFF',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-    elevation: 8,
+    backgroundColor: '#FF4500',
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 4 },
+    // shadowOpacity: 0.2,
+    // shadowRadius: 6,
+    // elevation: 8,
     marginBottom: 24,
   },
   logo: {
@@ -118,7 +112,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   title: {
-    color: '#FF4500',
+    color: '#FFF',
     fontSize: 28,
     fontWeight: 'bold',
     marginBottom: 8,
@@ -127,20 +121,21 @@ const styles = StyleSheet.create({
     textShadowRadius: 4,
   },
   subtitle: {
-    color: '#666',
+    color: '#FFF',
     fontSize: 16,
     fontWeight: '500',
   },
   sponsorContainer: {
     alignItems: 'center',
+    // marginVertical: 
   },
   sponsorText: {
-    color: '#888',
+    color: '#FFF',
     fontSize: 12,
     marginBottom: 4,
   },
   sponsorName: {
-    color: '#FF4500',
+    color: '#FFF',
     fontSize: 14,
     fontWeight: '600',
   },

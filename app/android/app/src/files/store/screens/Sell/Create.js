@@ -16,7 +16,7 @@ import UploadBtn from '../../components/Create.js/UploadBtn';
 import { generateId } from '../../utils/IdGen';
 import Address1 from '../../components/Create.js/Address1';
 import Address2 from '../../components/Create.js/Address2';
-import { err } from 'react-native-svg';
+import { Ellipse, err } from 'react-native-svg';
 import DeliveryRangeSelector from '../../components/Create.js/Delivery';
 import ShippingPolicy from '../../components/Create.js/ShippingPolicy';
 import ShippingDuration from '../../components/Create.js/ShippingDuration';
@@ -367,7 +367,7 @@ export default function Create({ route }) {
   }
 
   function updatePrice(data) {
-    Alert.alert(price)
+    // Alert.alert(price)
     set_price(data)
   }
 
@@ -451,91 +451,99 @@ export default function Create({ route }) {
   // Update the uploadData function to include shipping range in the request
   function uploadData() {
     let response = validation();
-    console.log(user)
-    if (!response) return;
+    // if (!response) return;
 
     // Prepare shipping data
-    const shippingData = {
-      in_campus: {
-        selected: true,
-        price: shippingRange.in_campus.price
-      },
-      in_state: shippingRange.in_state.selected ? {
-        selected: true,
-        price: shippingRange.in_state.price
-      } : null,
-      out_state: shippingRange.out_state.selected ? {
-        selected: true,
-        price: shippingRange.out_state.price
-      } : null
-    };
-
-    setUploading(true)
-    console.log(productId)
-    fetch('https://cs-server-olive.vercel.app/vendor/create-product', {
-      method: 'post',
-      headers: {
-        "Content-Type": "Application/json"
-      },
-      body: JSON.stringify({
-        constantData: { 
-          title: title,
-          description: description,
-          category: category,
-          price: price,
-          product_id: productId,
-          user_id: user?.user_id,
-          campus: user?.campus,
-          state: user?.state,
-          stock: stock,
-          thumbnail_id: thumbnail,
-          thumbnail_public_id: thumbnail_public_id
-        }, 
-        dynamicData: {
-          cType: type,
-          subCategory: sub_category,
-          gender: gender,
-          condition: condition,
-          size: size,
-          lodge_data: {
-              lodge_active: category === "Lodge & Apartments" ? true : false,
-              // lodge_name: lodge_name,
-              // flat_location: flat_location, 
-              address1: address1,
-              address2: address2,
-              // address3: address3,
-              // address4: address4,
-              // country: country,
-              // state: state,
-              // city: city
-          }
+    if (response) {
+      const shippingData = {
+        in_campus: {
+          selected: true,
+          price: shippingRange.in_campus.price
         },
-        shipping_data: {
-          shipping_range: shippingData,
-          shipping_policy,
-          shipping_duration: shipping_duration.split(' ')[0]
+        in_state: shippingRange.in_state.selected ? {
+          selected: true,
+          price: shippingRange.in_state.price
+        } : null,
+        out_state: shippingRange.out_state.selected ? {
+          selected: true,
+          price: shippingRange.out_state.price
+        } : null
+      };
+  
+      setUploading(true)
+      console.log(productId)
+      fetch('https://cs-server-olive.vercel.app/vendor/create-product', {
+        method: 'post',
+        headers: {
+          "Content-Type": "Application/json"
+        },
+        body: JSON.stringify({
+          constantData: { 
+            title: title,
+            description: description,
+            category: category,
+            price: price,
+            product_id: productId,
+            user_id: user?.user_id,
+            campus: user?.campus,
+            state: user?.state,
+            stock: stock,
+            thumbnail_id: thumbnail,
+            thumbnail_public_id: thumbnail_public_id
+          }, 
+          dynamicData: {
+            cType: type,
+            subCategory: sub_category,
+            gender: gender,
+            condition: condition,
+            size: size,
+            lodge_data: {
+                lodge_active: category === "Lodge & Apartments" ? true : false,
+                // lodge_name: lodge_name,
+                // flat_location: flat_location, 
+                address1: address1,
+                address2: address2,
+                // address3: address3,
+                // address4: address4,
+                // country: country,
+                // state: state,
+                // city: city
+            }
+          },
+          shipping_data: {
+            shipping_range: shippingData,
+            shipping_policy,
+            shipping_duration: shipping_duration.split(' ')[0]
+          }
+        })
+      })
+      .then(async(result) => {
+        let response = await result.json();
+        console.log(response);
+        if (response.success) {
+          // navigation.navigate('user-inventory')
+          navigation.goBack()
+          // Handle success
+        } else {
+          // Handle error
+          setUploading(false)
+  
+          Alert.alert('Error occured, please try again!')
         }
       })
-    })
-    .then(async(result) => {
-      let response = await result.json();
-      console.log(response);
-      if (response.success) {
-        navigation.navigate('user-listing')
-        // Handle success
-      } else {
+      .catch((error) => {
+        console.log('Error:', error);
         // Handle error
-      }
-    })
-    .catch((error) => {
-      console.log('Error:', error);
-      // Handle error
-    });  
+        setUploading(false)
+  
+        Alert.alert('Error occured, please try again!')
+  
+      });  
+    } else {
+      Alert.alert('Please ensure no field is empty!');
+    }
   }
 
-  useEffect(() => {
-    console.log(data.current)
-  }, [data])
 
   function updateAddress1(data) {
     set_address1(data)

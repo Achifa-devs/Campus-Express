@@ -33,7 +33,7 @@ import {
     Dimensions,
     Image,
    
-    StatusBar,
+    
    
     StyleSheet,
     Switch,

@@ -14,14 +14,16 @@ import {
   Platform,
   ScrollView,
   SafeAreaView,
-  StatusBar
+  PermissionsAndroid,
+  Alert
 } from 'react-native';
-import { PermissionsAndroid, Alert } from 'react-native';
+
+import {openSettings} from "react-native-permissions"
 
 import { useSelector } from "react-redux";
 import RNFS from 'react-native-fs';
 function StackNavigator () { 
-    const version = ('1.0.0');
+    const version = ('1.0.2');
 
     const checkAppVersion = async () => {
         try {
@@ -64,7 +66,7 @@ function StackNavigator () {
                         // Version matches, navigate to home after delay
                         getUser();
                     } else {
-                        setActiveJsx(<DownloadAppScreen url={data?.url} summary={data?.summary} />)
+                        setActiveJsx(<DownloadAppScreen url={data?.url} is_published={data?.is_published} summary={data?.summary} />)
                         // Show update modal
                         // setLatestVersion(data.latest_version);
                         // setDownloadUrl(data.download_url);
@@ -99,8 +101,8 @@ function StackNavigator () {
 
     return (
         <>
-            <StatusBar backgroundColor={'#FFF'} barStyle={"dark-content"} />
-            {activeJsx}
+         
+        {activeJsx}
         </>
     );
 }; 
@@ -108,153 +110,11 @@ function StackNavigator () {
   export default StackNavigator; 
 
 
-//   function Update() {
-    
-//     const [latestVersion, setLatestVersion] = useState('');
-//     const [downloadUrl, setDownloadUrl] = useState('');
-//     const screenWidth = Dimensions.get('window').width;
-//     const screenHeight = Dimensions.get('window').height;
-    
-    
-//     const handleUpdate = () => {
-//         if (downloadUrl) {
-//         Linking.openURL(downloadUrl);
-//         }
-//         // You might want to exit the app here or keep the modal open
-//         // until user successfully updates
-//     };
-    
-//     const installAPK = (filePath) => {
-//         const fileUrl = `file://${filePath}`;
-//     Linking.openURL(fileUrl)
-//         .catch(err => {
-//         console.error('Error opening APK:', err);
-//         Alert.alert('Error', 'Could not open the downloaded APK file.');
-//         });
-//     };
-      
-    
-
-//     const downloadAndInstallAPK = async () => {
-//         const apkUrl = 'https://yourwebsite.com/path-to-apk/your-app-release.apk';
-//         const fileName = 'update.apk';
-//         const destPath = `${RNFS.DownloadDirectoryPath}/${fileName}`;
-
-//         try {
-//             if (Platform.OS === 'android') {
-//                 const granted = await PermissionsAndroid.request(
-//                     PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
-//                 );
-
-//                 if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
-//                     Alert.alert('Permission Denied', 'Storage permission is required to download the update.');
-//                     return;
-//                 }
-//             }
-
-//             const download = RNFS.downloadFile({
-//                 fromUrl: apkUrl,
-//                 toFile: destPath,
-//             });
-
-//             const result = await download.promise;
-//             console.log('Download result:', result);
-
-//             if (result.statusCode === 200) {
-//                 installAPK(destPath);
-//             } else {
-//                 Alert.alert('Download Failed', 'Unable to download update.');
-//             }
-//         } catch (error) {
-//             console.error(error);
-//             Alert.alert('Error', 'Failed to download APK.');
-//         }
-//     };
-
-
-    
-//     return (
-//         <>
-        
-//         <View style={styles.modalOverlay}>
-//         <View style={styles.modalContainer}>
-//             <Text style={styles.modalTitle}>Update Available</Text>
-//             <Text style={styles.modalText}>
-//             A new version {latestVersion} is available. Please update to continue using the app.
-//             </Text>
-            
-//             <TouchableOpacity 
-//             style={styles.updateButton}
-//             onPress={handleUpdate}
-//             >
-//             <Text style={styles.updateButtonText}>Update Now</Text>
-//             </TouchableOpacity>
-            
-//             <Text style={styles.noteText}>
-//             You'll be redirected to the app store
-//             </Text>
-//         </View>
-//         </View>
-//         </>
-//     )
-//   }
-
-
-
-// const styles = StyleSheet.create({
-//       modalOverlay: {
-//           flex: 1,
-//           backgroundColor: 'rgba(0, 0, 0, 0.5)',
-//           justifyContent: 'center',
-//           alignItems: 'center',
-//           padding: 20,
-//         },
-//         modalContainer: {
-//           backgroundColor: '#FFF',
-//           borderRadius: 10,
-//           padding: 20,
-//           width: '90%',
-//           alignItems: 'center',
-//         },
-//         modalTitle: {
-//           fontSize: 20,
-//           fontWeight: 'bold',
-//           color: '#FF4500',
-//           marginBottom: 10,
-//         },
-//         modalText: {
-//           fontSize: 16,
-//           color: '#333',
-//           textAlign: 'center',
-//           marginBottom: 20,
-//         },
-//         updateButton: {
-//           backgroundColor: '#FF4500',
-//           padding: 12,
-//           borderRadius: 6,
-//           width: '100%',
-//           alignItems: 'center',
-//         },
-//         updateButtonText: {
-//           color: '#FFF',
-//           fontWeight: 'bold',
-//           fontSize: 16,
-//         },
-//         noteText: {
-//           fontSize: 12,
-//           color: '#888',
-//           marginTop: 10,
-//         }
-//   })
-  
-
-  // screens/DownloadAppScreen.js
-
-const DownloadAppScreen = ({ route, url, summary }) => {
+const DownloadAppScreen = ({ route, url, summary, is_published }) => {
     // Get dynamic data from navigation params or use defaults
     
     const installAPK = (filePath) => {
-        const fileUrl = `file://${filePath}`;
+        const fileUrl = `content://${filePath}`;
         Linking.openURL(fileUrl)
         .catch(err => {
         console.error('Error opening APK:', err);
@@ -264,44 +124,60 @@ const DownloadAppScreen = ({ route, url, summary }) => {
       
  
     const downloadAndInstallAPK = async () => {
-    const apkUrl = url;
-    const fileName = 'update.apk';
-    const destPath = `${RNFS.DownloadDirectoryPath}/${fileName}`;
+      try {
+        if (!is_published) {
+          const apkUrl = url;
+          const fileName = 'campus sphere.apk';
+          const destPath = `${RNFS.DocumentDirectoryPath}/${fileName}`;
 
-    try {
-        if (Platform.OS === 'android') {
-            const granted = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
-            );
-
-            if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
-                Alert.alert('Permission Denied', 'Storage permission is required to download the update.');
-                return;
+    
+          PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, {
+            title: 'External Storage',
+            message: 'This app would like to modify your storage.',
+            buttonPositive: 'OK',
+          }).then(async (res) => {
+            // console.log("res:", res)
+            if (res !== PermissionsAndroid.RESULTS.GRANTED) {
+              const download = RNFS.downloadFile({
+                fromUrl: apkUrl,
+                toFile: destPath,
+              });
+        
+              const result = await download.promise;
+              console.log('Download result:', result);
+        
+              if (result.statusCode === 200) {
+                installAPK(destPath);
+              } else {
+                Alert.alert('Download Failed', 'Unable to download update.');
+              }
+              console.error(error);
+              Alert.alert('Error', 'Failed to download APK.');
+            } else {
+              console.warn('Storage permission is required to download the update.');
+              Alert.alert('Permission Denied', 'Storage permission is required to download the update.');
+  
+              // openSettings()
             }
-        }
-
-        const download = RNFS.downloadFile({
-            fromUrl: apkUrl,
-            toFile: destPath,
-        });
-
-        const result = await download.promise;
-        console.log('Download result:', result);
-
-        if (result.statusCode === 200) {
-            installAPK(destPath);
+          }).catch(console.error);
+        
+          
         } else {
-            Alert.alert('Download Failed', 'Unable to download update.');
+          Linking.openURL(url)
+          .catch(err => {
+            console.error('Error opening APK:', err);
+            Alert.alert('Error', 'Could not open playstore.');
+          });
         }
-    } catch (error) {
-        console.error(error);
-        Alert.alert('Error', 'Failed to download APK.');
-    }
+      
+      } catch (error) {
+        console.log(error)
+      }
     };
 
   const { 
-    latestVersion = '2.0.0',
-    features = summary,
+    latestVersion = '1.0.2',
+    features = eval(summary),
     downloadUrls = {
       ios: 'https://apps.apple.com/app/campus-sphere/id123456789',
       android: 'https://play.google.com/store/apps/details?id=com.campus.sphere'
@@ -318,7 +194,7 @@ const DownloadAppScreen = ({ route, url, summary }) => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar backgroundColor="#FF4500" barStyle="light-content" />
+      
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.header}>
           <Image
@@ -363,21 +239,20 @@ const DownloadAppScreen = ({ route, url, summary }) => {
           </View> */}
         </View>
 
-        <TouchableOpacity 
+        {/* <TouchableOpacity 
           style={styles.downloadButton} 
           onPress={downloadAndInstallAPK}
           activeOpacity={0.8}
         >
           <Text style={styles.downloadButtonText}>
-            Download APK File
-            {/* Download for {Platform.OS === 'ios' ? 'App Store' : 'Google Play'} */}
+            Download for {Platform.OS === 'ios' ? 'App Store' : 'Google Play'}
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <View style={styles.footer}>
-          <Text style={styles.footerText}>Also available at:</Text>
-          <TouchableOpacity onPress={() => Linking.openURL('https://campussphere.com')}>
-            <Text style={styles.websiteLink}>campussphere.com</Text>
+          <Text style={styles.footerText}>Available at:</Text>
+          <TouchableOpacity onPress={() => Linking.openURL(url)}>
+            <Text style={styles.websiteLink}>campussphere.net</Text>
           </TouchableOpacity>
           <Text style={styles.copyright}>© {new Date().getFullYear()} U-COMMERCE LIMITED</Text>
         </View>

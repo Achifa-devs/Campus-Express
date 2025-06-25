@@ -11,7 +11,8 @@ import {
   TouchableOpacity,
   Text,
   StyleSheet,
-  RefreshControl
+  RefreshControl,
+  ActivityIndicator
 } from 'react-native'
 import {
   useSelector
@@ -64,6 +65,11 @@ export default function Listing() {
     }, [get_list_data, user?.user_id])
   )
 
+  let [deleting, set_deleting] = useState(false);
+  function updateDeleting(data) {
+    set_deleting(data)
+  }
+
   // Pull-to-refresh handler
   const onRefresh = useCallback(() => {
     get_list_data(user?.user_id)
@@ -71,6 +77,11 @@ export default function Listing() {
 
   return (
     <>
+      {deleting && (
+        <View style={styles.loadingOverlay}>
+          <ActivityIndicator size="small" color="#FF4500" />
+        </View>
+      )}
       <ScrollView 
         style={{
           height: '100%', 
@@ -88,7 +99,7 @@ export default function Listing() {
         {
           list.length > 0
           ?
-            list.map((item, index) => <Card data={item} index={index} key={index} />)
+            list.map((item, index) => <Card updateDeleting={updateDeleting} data={item} index={index} key={index} />)
           : 
           <TouchableOpacity
             style={styles.container}
@@ -127,5 +138,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#FF4500',
     textAlign: 'center',
+  },
+  loadingOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 100,
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
   },
 });

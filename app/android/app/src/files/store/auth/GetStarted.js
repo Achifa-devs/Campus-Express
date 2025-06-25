@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Image, StyleSheet, Text, View, Dimensions, TouchableOpacity, StatusBar } from 'react-native';
+import { Image, StyleSheet, Text, View, Dimensions, TouchableOpacity,  } from 'react-native';
 import * as Progress from 'react-native-progress';
 import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
@@ -75,47 +75,45 @@ export default function GetStarted() {
 
   return (
     <>
-      <StatusBar backgroundColor={'#FFF'} barStyle="dark-content" />
-      <View style={styles.container(screenHeight, screenWidth)}>
-        <View style={styles.svgContainer(screenWidth)}>
-          <View key={activeSvg} style={styles.svgWrapper}>
-            <View style={styles.svgContent}>{slides[activeSvg].svg}</View>
-
-            <TouchableOpacity onPress={handlePrev} style={styles.touchArea('left')} />
-            <TouchableOpacity onPress={handleNext} style={styles.touchArea('right')} />
+     
+      <SafeAreaView style={{flex: 1}}>
+        <View style={styles.container(screenHeight, screenWidth)}>
+          <View style={styles.svgContainer(screenWidth)}>
+            <View key={activeSvg} style={styles.svgWrapper}>
+              <View style={styles.svgContent}>{slides[activeSvg].svg}</View>
+              <TouchableOpacity onPress={handlePrev} style={styles.touchArea('left')} />
+              <TouchableOpacity onPress={handleNext} style={styles.touchArea('right')} />
+            </View>
+          </View>
+          <View style={styles.textSection(screenWidth)}>
+            <Text style={styles.title(screenWidth)}>{slides[activeSvg].title}</Text>
+            <Text style={styles.description(screenWidth)}>{slides[activeSvg].description}</Text>
+          </View>
+          <View style={styles.pagination}>
+            {slides.map((_, index) => (
+              <TouchableOpacity
+                key={index}
+                style={{
+                  height: 10,
+                  width: 10,
+                  borderRadius: 50,
+                  backgroundColor: activeSvg === index ? '#000' : '#EFEFEF',
+                  marginHorizontal: 5,
+                }}
+              />
+            ))}
+          </View>
+          <View style={styles.buttonSection}>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              style={styles.getStartedBtn}
+              onPress={() => navigation.navigate('user-signup')}
+            >
+              <Text style={{ color: '#fff' }}>Get started</Text>
+            </TouchableOpacity>
           </View>
         </View>
-
-        <View style={styles.textSection(screenWidth)}>
-          <Text style={styles.title(screenWidth)}>{slides[activeSvg].title}</Text>
-          <Text style={styles.description(screenWidth)}>{slides[activeSvg].description}</Text>
-        </View>
-
-        <View style={styles.pagination}>
-          {slides.map((_, index) => (
-            <TouchableOpacity
-              key={index}
-              style={{
-                height: 10,
-                width: 10,
-                borderRadius: 50,
-                backgroundColor: activeSvg === index ? '#000' : '#EFEFEF',
-                marginHorizontal: 5,
-              }}
-            />
-          ))}
-        </View>
-
-        <View style={styles.buttonSection}>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            style={styles.getStartedBtn}
-            onPress={() => navigation.navigate('user-signup')}
-          >
-            <Text style={{ color: '#fff' }}>Get started</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      </SafeAreaView>
     </>
   );
 }

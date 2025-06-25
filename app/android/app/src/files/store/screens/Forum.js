@@ -8,7 +8,7 @@ import {
   StyleSheet,
   Dimensions,
   SafeAreaView,
-  StatusBar,
+  
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -60,7 +60,7 @@ const ForumScreen = ({ navigation }) => {
   };
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      
 
       <FlatList
         data={threads}

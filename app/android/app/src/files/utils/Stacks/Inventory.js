@@ -42,7 +42,7 @@ export function InventoryStackScreen() {
 
                 </View>
             ),
-        }}   name="user-Inventory" component={Listing} />
+        }}   name="user-inventory" component={Listing} />
 
     </InventoryStack.Navigator>
   ); 

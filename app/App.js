@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, StatusBar } from 'react-native';
+import { View, Text, Image, StyleSheet, StatusBar,  } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import FlashMessage from 'react-native-flash-message';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import store from './redux/store';
 import { Shop } from './android/app/src/files/utils/Store.js';
 import { setToggleMessage } from './redux/toggleMssg.js';
@@ -89,11 +89,15 @@ function App() {
   }, []);
    
   return (
-    <Provider store={store}>
-      <NavigationContainer>
-        <NavCnt />
-      </NavigationContainer>
-    </Provider>
+    <SafeAreaView style={{ flex: 1 }}>
+      <Provider store={store}>
+        <StatusBar backgroundColor={"#FF4500"}  barStyle={"dark-content"} />
+        
+        <NavigationContainer>
+          <NavCnt />
+        </NavigationContainer> 
+      </Provider>
+    </SafeAreaView>
   );
 }
 

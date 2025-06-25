@@ -5,7 +5,7 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
-  StatusBar,
+  
   StyleSheet,
   Text,
   TextInput,
@@ -115,7 +115,6 @@ const Login = ({updateActiveJsx}) => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
     >
-      <StatusBar backgroundColor="#FFF" barStyle="dark-content" />
       
       {isLoading && (
         <View style={styles.loadingOverlay}>
