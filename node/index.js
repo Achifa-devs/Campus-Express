@@ -150,7 +150,7 @@ CAMPUSSPHERE_SERVER.post('/upload', upload.single('file'), async (req, res) => {
     // Upload to Cloudinary with additional options
     const uploadOptions = {
       resource_type: 'auto',
-      folder: productId.trim(), // Organize files in a folder
+      folder: productId ? productId.trim() : undefined, // Only create folder if productId is defined
       public_id: `${shortId.generate()}-${productId}`,
       use_filename: false, // Keep original filename
       unique_filename: false, // Allow duplicates
@@ -160,6 +160,7 @@ CAMPUSSPHERE_SERVER.post('/upload', upload.single('file'), async (req, res) => {
         { quality: 'auto' }, // Auto-optimize quality
       ],
     };
+
 
     // Use promise-based API instead of callback
     const result = await new Promise((resolve, reject) => {
