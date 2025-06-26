@@ -53,7 +53,7 @@ export default function Shop() {
                 }else{
                     // seller_overlay_setup(false, '')
                     // open_notice(true, 'Error occured, refresh. please check your network')
-                    window.location.href='/signup'
+                    window.location.href='/vendor/signup'
                     document.querySelector('.shop-overlay').setAttribute('id', 'shop-overlay')
                 }
 
