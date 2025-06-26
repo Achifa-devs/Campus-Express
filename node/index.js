@@ -103,7 +103,7 @@ CAMPUSSPHERE_SERVER.post('/version-check', parser, async (req, res) => {
     let response = result.rows[0];
     console.log("body: ", parseInt(current_version) === parseInt(response?.version))
 
-    if(parseInt(current_version) === parseInt(response?.version)){
+    if(!parseInt(current_version) === parseInt(response?.version)){
       res.status(201).json({success: true, is_latest: false, url: response?.file_url, summary: response?.summary});
       
     } else {
