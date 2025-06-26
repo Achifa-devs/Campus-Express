@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Image, StyleSheet, Text, View, Dimensions, TouchableOpacity,  } from 'react-native';
+import { Image, StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
 import * as Progress from 'react-native-progress';
 import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
@@ -9,6 +9,7 @@ import BusinessSvg from '../../media/assets/23186779_6737584.svg';
 import TrustSvg from '../../media/assets/7119383_3286554.svg';
 import ProfitSvg from '../../media/assets/18771520_6030257.svg';
 import BuySvg from '../../media/assets/10769657_4530193.svg';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 // Uncomment and import your helper functions & actions as needed
 // import CookieManager from '@react-native-cookies/cookies';
@@ -34,7 +35,7 @@ export default function GetStarted() {
         console.error('Error getting user:', error);
       }
     }
-    get_user();
+    // get_user();
   }, []);
 
   const slides = [
