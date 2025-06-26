@@ -289,7 +289,7 @@ CAMPUSSPHERE_SERVER.post('/delete', async (req, res) => {
 });
 
 
-app.get('/image-folder', (req,res) => {
+CAMPUSSPHERE_SERVER.get('/image-folder', (req,res) => {
   let {folderName} = req.query
   // Configure Cloudinary with your credentials
   
