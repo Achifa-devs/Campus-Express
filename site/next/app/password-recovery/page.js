@@ -29,7 +29,7 @@ export default function PasswordRecovery() {
            
             e.target.disabled = true;
             buyer_overlay_setup(true, 'Confirming Email')
-            fetch('http://192.168.24.146:9090/comfirm-email', {
+            fetch('https://cs-server-olive.vercel.app/comfirm-email', {
                 method: 'POST',
                 headers: {
                     "Content-Type": "Application/json"

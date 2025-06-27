@@ -106,7 +106,7 @@ export default function PasswordRecovery() {
            
             e.target.disabled = true;
             seller_overlay_setup(true, 'Veryfyng Token')
-            fetch('http://192.168.24.146:9090/seller.verify-token', {
+            fetch('https://cs-server-olive.vercel.app/seller.verify-token', {
                 method: 'post',
                 headers: {
                     "Content-Type": "Application/json"
@@ -188,7 +188,7 @@ export default function PasswordRecovery() {
           
             e.target.disabled = true;
             seller_overlay_setup(true, 'Resetting Password')
-            fetch('http://192.168.24.146:9090/seller.password-update', {
+            fetch('https://cs-server-olive.vercel.app/seller.password-update', {
                 method: 'post',
                 headers: {
                     "Content-Type": "Application/json"
