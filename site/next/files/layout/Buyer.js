@@ -343,6 +343,10 @@ const BuyerLayout = ({children}) => {
                     ?
                     ''
                     :
+                    pathname.split('/').splice(-1)[0] === 'delete-account'
+                    ?
+                    ''
+                    :
                     pathname.split('/').splice(-1)[0] === 'about-us'
                     ?
                     ''

@@ -87,6 +87,41 @@ CAMPUSSPHERE_SERVER.get('/notice', async (req, res) => {
   }
 });
 
+import bcrypt from "bcryptjs"
+import { findUserById } from "./src/repositories/shop/customer.js";
+CAMPUSSPHERE_SERVER.post('/account/delete', async (req, res) => {
+  const { user_id, password, reason} = req.body;
+
+  const user = await findUserById({user_id});
+
+  const auth = await bcrypt.compare(password, user?.password);
+  if (!user_id) {
+    return res.status(400).json({ error: 'user_id is required' });
+  }
+  if(!auth){
+    return res.status(400).json({ error: 'password is incorrect' });
+
+  }
+
+  try {
+    await pool.query('BEGIN');
+    await pool.query(`DELETE FROM products WHERE user_id = $1`, [user_id]);
+    await pool.query(`DELETE FROM shops WHERE user_id = $1`, [user_id]);
+    const result = await pool.query(`DELETE FROM users WHERE user_id = $1`, [user_id]);
+    await pool.query('COMMIT');
+
+    if (result.rowCount === 1) {
+      return res.status(200).json({ message: 'Account and related data deleted successfully' });
+    } else {
+      return res.status(404).json({ error: 'User not found' });
+    }
+  } catch (err) {
+    await pool.query('ROLLBACK');
+    console.error('Error deleting account:', err);
+    return res.status(500).json({ error: 'Server error' });
+  }
+});
+
 
 CAMPUSSPHERE_SERVER.post('/version-check', parser, async (req, res) => {
   try {
