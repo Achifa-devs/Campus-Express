@@ -42,7 +42,7 @@ export default function PasswordRecovery() {
                     
                 if(response.success){
                     // dispatch(setSellerTo(response.cookie))
-                    window.location.href=`/store/confirm-token?email=${email}`
+                    window.location.href=`/confirm-token?email=${email}`
                     buyer_overlay_setup(false, '')
                 }else{
                     buyer_overlay_setup(false, '')

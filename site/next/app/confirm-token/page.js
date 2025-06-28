@@ -59,7 +59,7 @@ export default function PasswordRecovery() {
                 console.log(response)
                 if(response.success){
                     // dispatch(setSellerTo(response.cookie))
-                    window.location.href=`/store/reset-pwd?email=${email}`
+                    window.location.href=`/reset-pwd?email=${email}`
                     buyer_overlay_setup(false, '')
                 }else{
                     buyer_overlay_setup(false, '')
