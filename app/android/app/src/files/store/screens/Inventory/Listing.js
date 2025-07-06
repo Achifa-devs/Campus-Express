@@ -14,7 +14,10 @@ import {
   RefreshControl,
   ActivityIndicator
 } from 'react-native'
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import {
+  useDispatch,
   useSelector
 } from 'react-redux'
 import Card from '../../components/Inventory/Card'
@@ -22,6 +25,7 @@ import UploadBtn from '../../components/Sell/UploadBtn'
 import { getData } from '../../../utils/AsyncStore.js'
 import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import Icon from 'react-native-vector-icons/Ionicons';
+import { setUserAuthTo } from '../../../../../../../redux/reducer/auth.js';
 
 export default function Listing() {
   let [server_err, set_server_err] = useState(false)
@@ -30,6 +34,7 @@ export default function Listing() {
   const navigation = useNavigation()
   const { user } = useSelector(s => s.user);
   let screenHeight = Dimensions.get('window').height;
+  const dispatch = useDispatch()
 
   // Fetch data function
   const get_list_data = useCallback((id) => {
@@ -82,7 +87,7 @@ export default function Listing() {
           <ActivityIndicator size="small" color="#FF4500" />
         </View>
       )}
-      <ScrollView 
+      {user && <ScrollView 
         style={{
           height: '100%', 
           width: '100%', 
@@ -104,7 +109,13 @@ export default function Listing() {
           <TouchableOpacity
             style={styles.container}
             activeOpacity={0.7}
-            onPress={() => {navigation.navigate('user-new-listing')}}
+            onPress={() => {
+                navigation.navigate('Sell', {
+                  screen: 'user-new-listing',
+                  params: {update: false}
+                })
+              }
+            }
           >
             <View style={styles.content}>
               <Icon name="folder-open" size={120} color="#FF4500" />
@@ -112,7 +123,27 @@ export default function Listing() {
             </View>
           </TouchableOpacity>
         }
-      </ScrollView>  
+      </ScrollView>  }
+
+      {!user && 
+        <View style={{
+          height: '100%',
+          width: '100%',
+          display: 'flex', 
+          alignItems: 'center',
+          justifyContent: 'center' 
+        }}>
+          <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#fff', marginRight: 15, borderRadius: 50, paddingVertical: 7, paddingHorizontal: 15}} onPress={e => {
+            dispatch(setUserAuthTo(true))
+          }}>
+            <Text style={{
+                color: '#FF4500',
+                paddingRight: 8
+            }}>Login</Text>
+            <Ionicons name={"enter-outline"} size={18} color={"#FF4500"} />
+          </TouchableOpacity>
+        </View>
+      }
     </>
   )
 }

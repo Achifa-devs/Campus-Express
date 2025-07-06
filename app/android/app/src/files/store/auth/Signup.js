@@ -218,7 +218,7 @@ const Signup = ({updateActiveJsx}) => {
        
     if (data.success) {
         await storeData('user', JSON.stringify(data.data.user));
-        dispatch(setUserAuthTo(true))
+        dispatch(setUserAuthTo(false))
         console.log(data)
     } else {
         // Handle specific errors

@@ -77,3 +77,24 @@ To learn more about React Native, take a look at the following resources:
 - [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
 - [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
 - [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ @notifee/react-native @react-native-async-storage/async-storage @react-native-firebase/app @react-native-firebase/messaging @react-navigation/bottom-tabs @react-navigation/native @react-navigation/native-stack @react-navigation/stack @reduxjs/toolkit axios js-ago numeral pluralize react-native-contacts react-native-device-info react-native-gesture-handler react-native-image-picker react-native-permissions react-native-picker-select react-native-progress react-native-ratings react-native-safe-area-context react-native-screens react-native-star-rating-widget react-native-svg react-native-svg-transformer react-native-vector-icons react-native-video react-native-webview react-redux redux redux-toolkit short-id socket.io-client

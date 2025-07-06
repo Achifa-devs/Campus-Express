@@ -69,12 +69,10 @@ export default function DeleteAccount() {
           {/* Header */}
           <div className="bg-red-600 text-white p-6 text-center">
             <h1 className="text-2xl font-bold mb-1">Delete Your Account</h1>
-            <p className="opacity-90">We're sorry to see you go</p>
+            <p className="opacity-90">We are sorry to see you go</p>
           </div>
 
-          {/* Content */}
           <div className="p-6">
-            {/* Warning Box */}
             <div className="bg-red-50 border-l-4 border-red-600 p-4 mb-6 rounded-r">
               <h3 className="text-red-600 font-semibold mb-2">Warning: This action is permanent</h3>
               <p className="text-red-800">Once you delete your account, there is no way to recover it. Please be certain before proceeding.</p>
@@ -88,9 +86,7 @@ export default function DeleteAccount() {
               <li>Your username will become available for others to use</li>
             </ul>
 
-            {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Reason for leaving */}
               <div>
                 <label htmlFor="reason" className="block text-sm font-medium text-gray-700 mb-1">
                   Why are you leaving us? (Optional)
@@ -111,7 +107,6 @@ export default function DeleteAccount() {
                 </select>
               </div>
 
-              {/* Other reason (conditionally shown) */}
               {reason === 'other' && (
                 <div>
                   <label htmlFor="otherReason" className="block text-sm font-medium text-gray-700 mb-1">
@@ -177,14 +172,12 @@ export default function DeleteAccount() {
                 />
               </div>
 
-              {/* Error message */}
               {error && (
                 <div className="text-red-600 text-sm py-2">
                   {error}
                 </div>
               )}
 
-              {/* Submit button */}
               <button
                 type="submit"
                 disabled={isSubmitting}

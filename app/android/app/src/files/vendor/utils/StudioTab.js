@@ -27,7 +27,7 @@ import {
 import Ionicons  from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, FontAwesome, etc.
 
 import { set_drawer } from '../../../../../../redux/vendor/drawer.js';
-import { set_user } from '../../../../../../redux/vendor/user.js';
+import { set_user } from '../../../../../../redux/user.js';
 import { getData } from './AppStorage.js';
 import Bank from '../screens/Drawer/Bank.js';
 import Invite from '../screens/Profile/Profiles/Invite.js';

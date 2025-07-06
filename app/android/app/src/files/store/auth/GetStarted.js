@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Image, StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
-import * as Progress from 'react-native-progress';
+import React, { useEffect, useRef, useState } from 'react';
+import { Image, StyleSheet, Text, View, Dimensions, TouchableOpacity, PanResponder } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 
@@ -22,7 +21,12 @@ export default function GetStarted() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
-  const [activeSvg, setActiveSvg] = useState(0);
+  const activeSvg= useRef(0);
+  let [values, setValues] = useState(activeSvg.current)
+
+
+ 
+
 
   useEffect(() => {
     async function get_user() {
@@ -67,28 +71,57 @@ export default function GetStarted() {
   ];
 
   const handlePrev = () => {
-    if (activeSvg > 0) setActiveSvg(prev => prev - 1);
+    let newValue = activeSvg.current - 1;
+    console.log('newValue: ', newValue)
+    if (activeSvg.current > 0){
+      activeSvg.current = newValue
+      setValues(newValue);
+    }
   };
 
   const handleNext = () => {
-    if (activeSvg < slides.length - 1) setActiveSvg(prev => prev + 1);
-  };
+    let newValue = activeSvg.current + 1;
+    console.log('newValue: ', newValue)
+    if (activeSvg.current < (slides.length - 1)){
+      activeSvg.current = newValue
+      setValues(newValue);
+    }
+  }; 
+
+
+  const panResponder = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: (_, gestureState) => {
+        return Math.abs(gestureState.dx) > 20; // respond only to horizontal gestures
+      },
+      onPanResponderRelease: (_, gestureState) => {
+        if (gestureState.dx < -50) {
+          console.log('Swiped Left', activeSvg);
+          handleNext();
+        } else if (gestureState.dx > 50) {
+          console.log('Swiped Right', activeSvg);
+          handlePrev();
+        }
+      },
+    })
+  ).current;
+
 
   return (
     <>
      
       <SafeAreaView style={{flex: 1}}>
-        <View style={styles.container(screenHeight, screenWidth)}>
+        <View style={styles.container(screenHeight, screenWidth)} {...panResponder.panHandlers}>
           <View style={styles.svgContainer(screenWidth)}>
             <View key={activeSvg} style={styles.svgWrapper}>
-              <View style={styles.svgContent}>{slides[activeSvg].svg}</View>
+              <View style={styles.svgContent}>{slides[values].svg}</View>
               <TouchableOpacity onPress={handlePrev} style={styles.touchArea('left')} />
               <TouchableOpacity onPress={handleNext} style={styles.touchArea('right')} />
             </View>
           </View>
           <View style={styles.textSection(screenWidth)}>
-            <Text style={styles.title(screenWidth)}>{slides[activeSvg].title}</Text>
-            <Text style={styles.description(screenWidth)}>{slides[activeSvg].description}</Text>
+            <Text style={styles.title(screenWidth)}>{slides[values].title}</Text>
+            <Text style={styles.description(screenWidth)}>{slides[values].description}</Text>
           </View>
           <View style={styles.pagination}>
             {slides.map((_, index) => (
@@ -98,9 +131,9 @@ export default function GetStarted() {
                   height: 10,
                   width: 10,
                   borderRadius: 50,
-                  backgroundColor: activeSvg === index ? '#000' : '#EFEFEF',
+                  backgroundColor: values === index ? '#000' : '#EFEFEF',
                   marginHorizontal: 5,
-                }}
+                }}  
               />
             ))}
           </View>
@@ -120,7 +153,7 @@ export default function GetStarted() {
 }
 
 const styles = StyleSheet.create({
-  container: (height, width) => ({
+  container: (height, width) => ({ 
     backgroundColor: '#FFF',
     height,
     width,
@@ -128,7 +161,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   }),
   svgContainer: (width) => ({
-    height: 350,
+    height: '35%',
     width: width * 0.9,
     alignItems: 'center',
     justifyContent: 'center',
@@ -159,7 +192,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 20,
     width: '100%',
-    height: 100,
+    height: '15%',
   }),
   title: (width) => ({
     width: width * 0.8,
@@ -178,13 +211,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    height: 15,
-    marginBottom: 20,
+    height: '5%',
+    // marginBottom: 20, 
   },
   buttonSection: {
-    height: 70,
+    height: '30%',
     width: '100%',
-    marginTop: 40,
+    // marginTop: 40,
     alignItems: 'center',
     justifyContent: 'center',
   },

@@ -1,1 +1,6 @@
-<color name="orange">#FF4500</color>
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="orange">#FFA500</color>
+    
+</resources>
+  

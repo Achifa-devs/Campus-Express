@@ -17,7 +17,7 @@ import { useNavigation } from '@react-navigation/native';
 import { setUserAuthTo } from '../../../../../../redux/reducer/auth';
 import { useDispatch } from 'react-redux';
 import { storeData } from '../../utils/AsyncStore.js';
-import { set_user } from '../../../../../../redux/vendor/user.js';
+import { set_user } from '../../../../../../redux/user.js';
 
 const Login = ({updateActiveJsx}) => {
   const [formData, setFormData] = useState({
@@ -85,7 +85,7 @@ const Login = ({updateActiveJsx}) => {
       if (data.success) {
         await storeData('user', JSON.stringify(data.data.user));
         dispatch(set_user(data.data.user))
-        dispatch(setUserAuthTo(true))
+        dispatch(setUserAuthTo(false))
       } else {
         // Handle specific errors
         setServerErr(data.message)
@@ -189,7 +189,15 @@ const Login = ({updateActiveJsx}) => {
           <Text style={styles.signupText}>Don't have an account? </Text>
           <Text style={[styles.signupText, styles.signupTextBold]}>Sign up here</Text>
         </TouchableOpacity>
+        <TouchableOpacity 
+          style={styles.signupLink}
+          onPress={() => navigation.navigate('user-pwd-recovery')}
+        >
+          <Text style={styles.signupText}>Forgot your password? </Text>
+          <Text style={[styles.signupText, styles.signupTextBold]}>Recover it here</Text>
+        </TouchableOpacity>
       </View>
+      
     </KeyboardAvoidingView>
   );
 };

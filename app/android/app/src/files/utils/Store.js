@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import StackNavigator from "../store/utils/Nav.js";
 import Aside from "../vendor/utils/Aside.js";
 import { getData } from "./AsyncStore.js.js";
-import { set_user } from "../../../../../redux/vendor/user.js";
+import { set_user } from "../../../../../redux/user.js";
 
 export function Shop() {
   let dispatch = useDispatch()

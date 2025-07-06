@@ -28,13 +28,11 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { useDispatch, useSelector } from "react-redux";
 import BellSvg from '../../media/assets/notification-svgrepo-com (1).svg'
 import BackSvg from '../../media/assets/back-svgrepo-com (1).svg'
-import React from "react";
+import React, { useEffect } from "react";
 import { 
     Dimensions,
     Image,
-   
-    
-   
+    StatusBar,
     StyleSheet,
     Switch,
     Text,
@@ -51,12 +49,15 @@ import CampusNewsScreen from "../../store/screens/News";
 // import InboxScreen from "../../store/screens/Inbox";
 import NotificationScreen from "../../store/screens/NotificationScreen";
 import Editor from "../../store/screens/HiddenScreens/Editor";
+import Productimages from "../../store/screens/Productimages";
+import { setUserAuthTo } from "../../../../../../redux/reducer/auth";
 const HomeStack = createNativeStackNavigator();
 export function HomeStackScreen() {
-    let dispatch = useDispatch()
-    let {drawer} = useSelector(s=> s.drawer)
-    const [isModalOpen, setModalOpen] = React.useState(false);
-    const {user} = useSelector(s => s.user)
+   
+    const {user} = useSelector(s => s.user);4
+    
+       const dispatch = useDispatch()
+     
 
     return ( 
       
@@ -82,8 +83,27 @@ export function HomeStackScreen() {
                                         </View>
                                     </View>    
                                 </TouchableOpacity> */}
-                                <Ionicons name={"location-outline"} size={18} color={"#FF4500"} />
-                                <Text style={{color: '#FF4500', fontWeight: '500'}}>{user?.campus}</Text>
+                                {user && 
+                                    <>
+                                        <Ionicons name={"location-outline"} size={18} color={"#FF4500"} />
+                                        <Text style={{color: '#FF4500', fontWeight: '500'}}>{user?.campus}</Text>
+                                    </>
+                                }
+                                {
+                                    !user 
+                                    &&
+                                    <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#FF4500', marginRight: 15, borderRadius: 50, paddingVertical: 7, paddingHorizontal: 15}} onPress={e => {
+                                        dispatch(setUserAuthTo(true))
+                                        
+                                    }}>
+                                        <Text style={{
+                                            color: '#fff',
+                                            paddingRight: 8
+                                        }}>Login</Text>
+                                        <Ionicons name={"enter-outline"} size={18} color={"#fff"} />
+
+                                    </TouchableOpacity>
+                                }
                             </View>
                         </View>
                         
@@ -284,6 +304,16 @@ export function HomeStackScreen() {
             ), 
             // headerShown: false,  
         }}  name="user-product" component={Product} />
+
+        <HomeStack.Screen  options={{
+            header: ({navigation}) =>
+            (
+                <View style={{ height: 45, display: 'none', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px'}}>
+
+                </View>
+            ), 
+            // headerShown: false,  
+        }}  name="user-product-images" component={Productimages} />
         <HomeStack.Screen  options={{
             header: ({navigation}) =>
             (
@@ -297,43 +327,9 @@ export function HomeStackScreen() {
          <HomeStack.Screen  options={{
             header: ({navigation}) =>
             (
-                <View style={{ height: 60, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FF4500', alignItems: 'center', padding: '10px'}}>  
+                <View style={{ height: 60, display: 'none', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px'}}>  
                     
-                    <View style={{
-                        height: '100%',
-                        //   width: '100%',
-                        paddingTop: 0,
-                        paddingBottom: 0,
-                        paddingLeft: 15,
-                        paddingRight: 15,
-                        backgroundColor: '#FFF',
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        // marginBottom: 5
-                    }}>
-                        <TouchableOpacity style={{
-                            height: 55,
-                            borderRadius: 15,
-                            display: 'flex',
-                            flexDirection: 'row',
-                            justifyContent: 'flex-start',
-                            alignItems: 'center',
-                            width: '10%',
-                        }} onPress={e => navigation.navigate('user-home')}> 
-                            <BackSvg height={25} width={25} />
-                        </TouchableOpacity>
-                        <TextInput onChangeText={txt => {updateSearchChar(txt)}} style={{
-                            height: 45,
-                            borderRadius: 5,
-                            padding: 10,
-                            width: '90%',
-                            backgroundColor: '#efefef',
-                            float: 'right'
-                        }} placeholder='Search anything here' />
-                    </View>
-                </View>
+                </View>  
             ), 
             // headerShown: false,  
         }}  name="user-type-product" component={TypeProducts} />

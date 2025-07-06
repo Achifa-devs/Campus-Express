@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, StatusBar,  } from 'react-native';
+import { View, Text, Image, StyleSheet, StatusBar, TextInput,  } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import FlashMessage from 'react-native-flash-message';
@@ -24,80 +24,76 @@ import {
 } from '@react-native-firebase/messaging';
 import { getData } from './android/app/src/files/utils/AsyncStore.js.js';
 import { setUserAuthTo } from './redux/reducer/auth.js';
+import { DownloadAppScreen } from './android/app/src/files/utils/Stacks/Update.js';
+import AuthStackScreen from './android/app/src/files/store/utils/Auth.js';
 
 const flashMessageRef = React.createRef();
 
 function App() {
-  useEffect(() => {
-    (async () => {
-      const settings = await notifee.requestPermission();
-      if (settings.authorizationStatus >= AuthorizationStatus.AUTHORIZED) {
-        console.log('Notification permissions granted.');
-      } else {
-        console.log('Notification permissions not granted.');
-      }
-    })();
-  }, []);
 
-  useEffect(() => {
-    const app = getApp();
-    const messaging = getMessaging(app);
+  Text.defaultProps = Text.defaultProps || {};
+  Text.defaultProps.allowFontScaling = false;
 
-    // Setup FCM token
-    requestPermission(messaging).then(() => {
-      getToken(messaging).then(token => {
-        console.log('FCM Token:', token);
-      });
+  TextInput.defaultProps = TextInput.defaultProps || {};
+  TextInput.defaultProps.allowFontScaling = false;
+
+  
+
+  const [version, setVersion] = useState('1.0.2');
+
+  const checkAppVersion = async () => {
+  try {
+    // Fetch latest version from your API
+    const response = await fetch('https://cs-server-olive.vercel.app/version-check', {
+      method: 'POST',
+      headers: {
+      'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        current_version: version,
+        platform: Platform.OS, // 'ios' or 'android'
+      }),
     });
+    const data = await response.json();
+    return data;
+    } catch (error) {
+      console.error('Version check failed:', error);
+      // If any error occurs, still navigate to home as fallback
+      throw Error('Error occured')
+    }
+  };
+  const [update, setUpdate] = useState(false);
+  const [data, setdata] = useState('');
 
-    // Create notification channels
-    (async () => {
-      await notifee.createChannel({
-        id: 'remoteMessage',
-        name: 'Remote Messages',
-        importance: AndroidImportance.HIGH,
-        sound: 'default', // Enables sound
-        visibility: AndroidVisibility.PUBLIC, // For lockscreen
-        vibration: true,
-      });
-    })();
-
-    // Foreground message handler
-    const unsubscribe = onMessage(messaging, async remoteMessage => {
-      console.log('Foreground FCM:', remoteMessage);
-      await notifee.displayNotification({
-        title: remoteMessage.data?.title,
-        body: remoteMessage.data?.body,
-        android: {
-          channelId: 'remoteMessage',
-          smallIcon: 'ic_notification', // White-only icon for status bar
-          largeIcon: 'ic_notification_large', // Your colored logo
-          style: {
-            type: AndroidStyle.BIGPICTURE,
-            picture: remoteMessage.data?.media,
-          },
-          pressAction: {
-            id: 'default',
-          },
-          importance: AndroidImportance.HIGH,
-          visibility: AndroidVisibility.PUBLIC,
-        },
-      });
-    });
-
-    return unsubscribe;
-  }, []);
+  useEffect(() => {
+    try {
+      checkAppVersion().then((data) => {
+        if (data.success) {
+          if (!data.is_latest) {
+            setdata(data)
+            setUpdate(true);
+          }
+        } 
+      })  
+    } catch (error) {
+      console.log(error)
+    }
+  }, [])
    
   return (
+
     <SafeAreaView style={{ flex: 1 }}>
-      <Provider store={store}>
-        <StatusBar backgroundColor={"#FF4500"}  barStyle={"dark-content"} />
+      <StatusBar backgroundColor={"rgba(255,0,0,1)"} barStyle={'dark-content'} />
+      {!update && <Provider store={store}>
         
         <NavigationContainer>
           <NavCnt />
         </NavigationContainer> 
-      </Provider>
-    </SafeAreaView>
+      </Provider>}
+      {
+        update && <DownloadAppScreen url={data?.url} summary={data?.summary} />
+      } 
+    </SafeAreaView> 
   );
 }
 
@@ -105,58 +101,20 @@ export default App;
 
 function NavCnt() {
   const [mode, setMode] = useState('shop');
-  const { toggleMessage } = useSelector(state => state.toggleMessage);
-  const dispatch = useDispatch();
 
-  function handleShowMessage() {
-    if (flashMessageRef.current) {
-      flashMessageRef.current.showMessage({
-        message: '',
-        position: 'bottom',
-        style: styles.flashMessage,
-        renderCustomContent: () => (
-          <View style={styles.customContent}>
-            <Image
-              source={{
-                uri: 'https://res.cloudinary.com/daqbhghwq/image/upload/t_logo%20resize/v1743769930/2024-06-27_dqlq3a.png',
-              }}
-              style={styles.logo}
-            />
-            <Text style={styles.messageText}>{toggleMessage}</Text>
-          </View>
-        ),
-      });
-    }
-  }
-
+  const {auth} = useSelector(s => s.auth);
   useEffect(() => {
-    if (toggleMessage !== null) {
-      handleShowMessage();
+    if(auth){
+      setMode('auth')
+    }else{
+      setMode('shop')
     }
-    dispatch(setToggleMessage(null));
-  }, [toggleMessage]);
-
-  // const {user} = useSelector(s => s?.user)
-
-  useEffect(() => {
-    (async function Auth() {
-      let response = await getData('user');
-      const user = (JSON.parse(response));
-      console.log("user auth:", user)
-      if (user.user_id) {
-        dispatch(setUserAuthTo(true))
-      } else {
-        dispatch(setUserAuthTo(true))
-      }
-    })();
-  }, [])
-
-  
+  }, [auth])
 
   return (
     <SafeAreaProvider style={{ flex: 1 }}>
       {mode === 'shop' && <Shop />}
-      <FlashMessage ref={flashMessageRef} position="bottom" />
+      {mode === 'auth' && <AuthStackScreen />}
     </SafeAreaProvider>
   );
 }

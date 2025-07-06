@@ -11,6 +11,7 @@
         <item name="android:editTextBackground">@drawable/rn_edit_text_material</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowFullscreen">true</item>
+        
     </style>
 
 </resources>

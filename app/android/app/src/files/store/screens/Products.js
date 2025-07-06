@@ -17,6 +17,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import BottomModal from '../utils/BtmModal';
 import { filterProducts } from '../../utils/Filter';
 import { Location } from '../utils/Location';
+import Ionicons from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, FontAwesome, etc.
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = width * 0.475;
@@ -130,6 +131,17 @@ export default function TypeProducts() {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
+        <TouchableOpacity style={{
+          height: 55,
+          borderRadius: 15,
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'flex-start',
+          alignItems: 'center',
+          width: 25,
+        }} onPress={e => navigation.goBack()}> 
+          <Ionicons name={'chevron-back'} size={25} color={'#000'} />
+        </TouchableOpacity>
         <Text style={styles.title}>{category} - {type}</Text>
         <TouchableOpacity 
           onPress={() => toggleModal('Sort')} 

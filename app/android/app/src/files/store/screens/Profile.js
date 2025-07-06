@@ -5,38 +5,47 @@ import {
 import {
   Dimensions,
   ScrollView,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
   View
 } from "react-native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUserModeTo } from "../../../../../../redux/reducer/mode";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const ProfileCnt = ({ navigation }) => {
   const dispatch = useDispatch();
   const screenHeight = Dimensions.get('window').height;
+    const {user} = useSelector(s => s.user)
 
   const items = [
     {
       section: "Campus Sphere",
-      links: [
+
+      links: user ? [
         { label: "History", icon: "time-outline", nav: "user-history" },
         { label: "Favourite", icon: "heart-outline", nav: "user-favourite" },
         { label: "Personal info", icon: "person-outline", nav: "user-data" },
+        { label: "Invite Friends", icon: "people-outline", nav: "user-invite" },
+
+      ]: [
+        { label: "History", icon: "time-outline", nav: "user-history" },
         { label: "Invite Friends", icon: "people-outline", nav: "user-invite" },
 
       ],
     },
     {
       section: "Settings",
-      links: [
+      links: user ? [
         { label: "Account", icon: "wallet-outline", nav: "user-account" },
         // { label: "Subscription & Billing", icon: "card-outline", nav: "use-sub" },
 
         // { label: "Preference", icon: "options-outline", nav: "user-preference" },
         // { label: "Notification", icon: "notifications-outline", nav: "user-notification" },
+      ]: [
+
       ],
     },
     {
@@ -51,28 +60,35 @@ const ProfileCnt = ({ navigation }) => {
     },
   ];
 
+  
+
   return (
     <ScrollView style={{ height: screenHeight - 50, backgroundColor: '#f9f9f9' }}>
       {items.map((section, index) => (
         <View key={index}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionHeaderText}>{section.section}</Text>
-          </View>
-          <View>
-            {section.links.map((item, idx) => (
-              <TouchableOpacity
-                key={idx}
-                style={styles.itemRow}
-                onPress={() => item.nav && navigation.navigate(item.nav)}
-              >
-                <View style={styles.iconTextContainer}>
-                  <Ionicons name={item.icon} size={20} color="#333" style={styles.leftIcon} />
-                  <Text style={styles.itemText}>{item.label}</Text>
-                </View>
-                <Ionicons name="chevron-forward-outline" size={20} color="#000" />
-              </TouchableOpacity>
-            ))}
-          </View>
+          {
+          section.section === 'Settings' && !user ? '' :
+          <>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionHeaderText}>{section.section}</Text>
+            </View>
+            <View>
+              {section.links.map((item, idx) => (
+                <TouchableOpacity
+                  key={idx}
+                  style={styles.itemRow}
+                  onPress={() => item.nav && navigation.navigate(item.nav)}
+                >
+                  <View style={styles.iconTextContainer}>
+                    <Ionicons name={item.icon} size={20} color="#333" style={styles.leftIcon} />
+                    <Text style={styles.itemText}>{item.label}</Text>
+                  </View>
+                  <Ionicons name="chevron-forward-outline" size={20} color="#000" />
+                </TouchableOpacity>
+              ))}
+            </View>
+          </>
+          }
         </View>
       ))}
 

@@ -1,8 +1,9 @@
 import js_ago from 'js-ago';
 import React, { useEffect, useState } from 'react'
-import { Alert, FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import StarRating from 'react-native-star-rating-widget';
 import VerifiedSvg from '../../../media/assets/verified-check-svgrepo-com.svg'
+import Ionicons from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, FontAwesome, etc.
 
 export default function Btm({ updateUser, user_id }) {
     let [data, setData] = useState('')
@@ -81,13 +82,26 @@ export default function Btm({ updateUser, user_id }) {
                         borderRadius: 50, 
                         height: 50,
                         width: 50,
+                        backgroundColor: '#FFF8F6',
                         display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'flex-start',
-                        justifyContent: 'flex-start',
-                        backgroundColor: '#000'
-
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'center',
                     }}> 
+                        {shop && <Image 
+                            style={{
+                                borderRadius: 50, 
+                                height: '100%',
+                                width: '100%',
+                            }}
+                            source={{uri: shop?.logo_url}} 
+                        />}
+                        {
+                            !shop && 
+                            <>
+                                <Ionicons name={'storefront'} color={'#FF4500'} size={24} />
+                            </>
+                        }
                     </View>
 
                     <View style={{

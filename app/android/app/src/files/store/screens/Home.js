@@ -63,10 +63,8 @@ export default function Home() {
   }, [user]);
   
   useEffect(() => {
-    if (user !== '' && user !== undefined && user !== null && user !== 'undefined' && user !== 'null') {
-      fetchData();
-     }
-   }, [user]);
+    fetchData();
+   }, []);
  
    const onRefresh = useCallback(() => {
     setRefreshing(true);

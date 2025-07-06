@@ -49,27 +49,45 @@ import axios from 'axios';
     const [imageIndex, setImageIndex] = useState(0);
     const {user} = useSelector(s => s?.user)
     const [data, setData] = useState(null); 
-    const [Favourites, seSa] = useState([]); 
     const [seller, setSeller] = useState('')
     const [loading, setLoading] = useState(true);
     const [saved, setSaved] = useState(false);
     const navigation = useNavigation();
     const { product_id } = useRoute()?.params;
     const fadeAnim = new Animated.Value(1);
-  
-    const handleImageTouch = (e) => {
-      const { locationX } = e.nativeEvent;
-      const isLeft = locationX < Dimensions.get('window').width / 2;
-  
-      let samples = data?.sample_images?.length ? data.sample_images : [data?.thumbnail_id];
-      if (!samples || samples.length === 0) return;
-  
-      let newIndex = imageIndex + (isLeft ? -1 : 1);
-      if (newIndex < 0) newIndex = samples.length - 1;
-      if (newIndex >= samples.length) newIndex = 0;
-  
-      setImageIndex(newIndex);
+    const { width } = Dimensions.get('window');
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    const onScroll = (event) => {
+      const slideIndex = Math.round(event.nativeEvent.contentOffset.x / width);
+      setCurrentIndex(slideIndex);
     };
+  
+    
+    const [files, set_files] = useState([])
+
+    useEffect(() => {
+      try {
+        fetch(`https://cs-server-olive.vercel.app/image-folder?folderName=${product_id}`, {
+          headers: { 
+            "Content-Type": "Application/json" 
+          } 
+        })   
+        .then(async(result) => {     
+          let response = await result.json()
+          set_files(response)
+          // console.log('images response: ', response[0])
+        })       
+        .catch((err) => {
+          // set_server_err(!true)
+          Alert.alert('Network error, please try again.')
+          // console.log(err)
+        })
+      } catch (error) {
+        // console.log(error)
+      }
+    }, [])
+
   
     useEffect(() => {
       fetchProductData();
@@ -84,7 +102,7 @@ import axios from 'axios';
               user_id: user?.user_id,
               product_id: data?.product_id
             })
-            console.log("result: ", result)
+            // console.log("result: ", result)
 
             if (result?.success) {
               setFavLoading(false);
@@ -100,7 +118,7 @@ import axios from 'axios';
           })()
         } catch (error) {
           setFavLoading(false);
-          console.log(error)
+          // console.log(error)
         }
       }
     }, [data])
@@ -115,7 +133,7 @@ import axios from 'axios';
             });
         
             const response = res.data;
-            console.log('response:', response);
+            // console.log('response:', response);
         
             if (response?.success) {
               const newHistory = { date: new Date(), data: data };
@@ -133,7 +151,7 @@ import axios from 'axios';
               // Handle unsuccessful case
             }
           } catch (error) {
-            console.error('Error in product view request:', error);
+            // console.error('Error in product view request:', error);
           }
         }, 3000);
       }
@@ -160,7 +178,7 @@ import axios from 'axios';
         
       } catch (err) {
         Alert.alert('Error', 'Failed to load product details. Please try again.');
-        console.error(err);
+        // console.error(err);
       } finally {
         setLoading(false);
       }
@@ -235,7 +253,7 @@ import axios from 'axios';
           }
         })
         .catch((err) => {
-          console.error("WhatsApp linking error:", err);
+          // console.error("WhatsApp linking error:", err);
           Alert.alert('Error', 'Unable to open WhatsApp.');
         });
     };
@@ -246,18 +264,7 @@ import axios from 'axios';
     
       const callURL = `tel:+234${seller.phone}`;
     
-      Linking.canOpenURL(callURL)
-      .then((supported) => {
-        if (supported) {
-          Linking.openURL(callURL);
-        } else {
-          Alert.alert('Error', 'Phone call not supported on this device.');
-        }
-      })
-      .catch((err) => {
-        console.error("Phone call linking error:", err);
-        Alert.alert('Error', 'Unable to initiate phone call.');
-      });
+      Linking.openURL(callURL);
     };
     
   
@@ -282,9 +289,13 @@ import axios from 'axios';
         </View>
       );
     }
+
+    const images = files && files.length > 0 ? files : [data.thumbnail_id];
+    
+
   
     return (
-      <SafeAreaView style={styles.safeArea}>
+      <SafeAreaView style={styles.safeArea}> 
        
         
         <Animated.ScrollView
@@ -293,32 +304,37 @@ import axios from 'axios';
         >
           {/* Image Gallery */}
           <View style={styles.imageContainer}>
-            <TouchableWithoutFeedback onPress={handleImageTouch}>
-              <View style={styles.imageWrapper}>
-                <Thumbnail 
-                  thumbnail_id={
-                    data?.sample_images?.length
-                      ? data.sample_images[imageIndex]
-                      : data?.thumbnail_id
-                  } 
-                  style={styles.productImage}
-                />
-                {data?.sample_images?.length > 1 && (
-                  <View style={styles.imagePagination}>
-                    {data.sample_images.map((_, index) => (
-                      <View 
-                        key={index} 
-                        style={[
-                          styles.paginationDot,
-                          index === imageIndex && styles.activeDot
-                        ]} 
-                      />
-                    ))}
-                  </View>
-                )}
-              </View>
-            </TouchableWithoutFeedback>
+            <ScrollView
+              horizontal 
+              pagingEnabled
+              showsHorizontalScrollIndicator={false}
+              style={{ width }}
+              onScroll={onScroll}
+              scrollEventThrottle={16}
+            >
+              {images.map((image, index) => (
+                <TouchableOpacity onPress={e => {
+                  navigation.navigate('user-product-images', {
+                    files: images,
+                    index: currentIndex,
+                  });
+
+                }} key={index} style={[styles.imgContainer, { width }]}>
+                  <Image
+                    source={{ uri: image?.secure_url }}
+                    style={styles.productImage}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
             
+            <View style={styles.carousel}>
+              <Text>
+                {currentIndex + 1}/{images.length}
+              </Text>
+            </View>
+
             <View style={styles.actionButtons}>
               <TouchableOpacity 
                 style={styles.actionButton}
@@ -420,12 +436,12 @@ import axios from 'axios';
 
               if (result.action === Share.sharedAction) {
                 if (result.activityType) {
-                    console.log('Shared with activity type:', result.activityType);
+                    // console.log('Shared with activity type:', result.activityType);
                 } else {
-                    console.log('Shared successfully');
+                    // console.log('Shared successfully');
                 }
               } else if (result.action === Share.dismissedAction) {
-                console.log('Share dismissed');
+                // console.log('Share dismissed');
               }
           }}
           >
@@ -472,12 +488,19 @@ import axios from 'axios';
       fontSize: 16,
     },
     imageContainer: {
-      position: 'relative',
+      width: '100%',
+      aspectRatio: 16/9, // or whatever ratio you prefer
     },
     imageWrapper: {
       width: '100%',
       height: 350,
       backgroundColor: '#f8f8f8',
+    },
+    imgContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#000', // in case images have transparency
     },
     productImage: {
       width: '100%',
@@ -518,6 +541,15 @@ import axios from 'axios';
       padding: 8,
       flexDirection: 'row',
     },
+    carousel: {
+      position: 'absolute',
+      bottom: 15,
+      right: 15,
+      backgroundColor: 'rgba(255,255,255,0.8)',
+      borderRadius: 20,
+      padding: 8,
+      flexDirection: 'row',
+    }, 
     actionButton: {
       marginHorizontal: 5,
     },

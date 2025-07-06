@@ -13,6 +13,7 @@ import {
   Image,
   Vibration
 } from 'react-native';
+
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { set_drawer } from '../../../../../../../redux/vendor/drawer';
@@ -25,6 +26,7 @@ import axios from 'axios';
 import { getData } from '../../../utils/AsyncStore.js';
 import SubscriptionModal from './SubModal.js';
 import Subscription from './Sub.js';
+import { setUserAuthTo } from '../../../../../../../redux/reducer/auth.js';
 // import  { Paystack }  from 'react-native-paystack-webview';
 export default function Sell() {
   const screenHeight = Dimensions.get('window').height;
@@ -216,6 +218,35 @@ export default function Sell() {
     await deleteFromServer(shopLogo)
     
   };
+
+  
+  const dispatch = useDispatch()
+
+  if(!user){
+    return(
+      <>
+      { !user && 
+        <View style={{
+          height: '100%',
+          width: '100%',
+          display: 'flex', 
+          alignItems: 'center',
+          justifyContent: 'center' 
+        }}>
+          <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#fff', marginRight: 15, borderRadius: 50, paddingVertical: 7, paddingHorizontal: 15}} onPress={e => {
+              dispatch(setUserAuthTo(true))
+          }}>
+            <Text style={{
+              color: '#FF4500',
+              paddingRight: 8
+            }}>Login</Text>
+            <Ionicons name={"enter-outline"} size={18} color={"#FF4500"} />
+          </TouchableOpacity>
+        </View>
+      }
+      </>
+    )
+  }
 
   if (isLoading) {
     return (

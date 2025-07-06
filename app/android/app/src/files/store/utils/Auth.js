@@ -26,12 +26,16 @@ import Login from '../auth/Login';
 import GetStarted from '../auth/GetStarted';
 import { useNavigation } from '@react-navigation/native';
 import { getDeviceId } from './IdGen';
+import { setUserAuthTo } from '../../../../../../redux/reducer/auth';
+import PasswordRecoveryScreen from '../auth/PwdRecovery';
 const Tab = createBottomTabNavigator();
 
 
 const AuthStack = createNativeStackNavigator();
 export default function AuthStackScreen({updateActiveJsx}) {
     const navigation = useNavigation();
+      const dispatch = useDispatch()
+    
     
     return (
         <AuthStack.Navigator>
@@ -80,11 +84,11 @@ export default function AuthStackScreen({updateActiveJsx}) {
                             <Text style={{color: '#FF4500', fontSize: 16, fontWeight: 'bold'}}>Campus Sphere</Text>
                         </View>
 
-                        {/* <TouchableOpacity onPress={async(e) => {
+                        <TouchableOpacity onPress={async(e) => {
                             let user = await getDeviceId();
-                            updateActiveJsx({
-                                user
-                            })
+                           
+                            dispatch(setUserAuthTo(false))
+
                         }} style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'center'}}>
                             <Text>&nbsp;</Text>
                             <Text>&nbsp;</Text>
@@ -96,7 +100,7 @@ export default function AuthStackScreen({updateActiveJsx}) {
                             <Text>&nbsp;</Text>
                             <Text>&nbsp;</Text>
                             
-                        </TouchableOpacity> */}
+                        </TouchableOpacity>
                     </View>
                 ),
             }}   name="user-signup" component={Signup} />
@@ -114,11 +118,11 @@ export default function AuthStackScreen({updateActiveJsx}) {
                             <Text style={{color: '#FF4500', fontSize: 16, fontWeight: 'bold'}}>Campus Sphere</Text>
                         </View>
 
-                        {/* <TouchableOpacity onPress={async(e)=> {
+                        <TouchableOpacity onPress={async(e)=> {
                             let user = await getDeviceId();
-                            updateActiveJsx({
-                                user
-                            })
+                           
+                            dispatch(setUserAuthTo(false))
+                            
                         }} style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'center'}}>
                             <Text>&nbsp;</Text>
                             <Text>&nbsp;</Text>
@@ -130,10 +134,44 @@ export default function AuthStackScreen({updateActiveJsx}) {
                             <Text>&nbsp;</Text>
                             <Text>&nbsp;</Text>
                             
-                        </TouchableOpacity> */}
+                        </TouchableOpacity>
                     </View>
                 ),
             }}  name="user-login" component={Login} />
+
+            <AuthStack.Screen  options={{
+                header: ({navigation}) =>
+                (
+                    <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', alignItems: 'center', padding: '10px'}}>
+                        
+                        <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'center'}}>
+                            <Text>&nbsp;</Text>
+                            <Text>&nbsp;</Text>
+                            <Text>&nbsp;</Text>
+                            {/* <Image height={45} width={45} source={{ uri: 'https://res.cloudinary.com/daqbhghwq/image/upload/v1746402998/Untitled_design-removebg-preview_peqlme.png' }} /> */}
+                            <Text style={{color: '#FF4500', fontSize: 16, fontWeight: 'bold'}}>Campus Sphere</Text>
+                        </View>
+
+                        <TouchableOpacity onPress={async(e)=> {
+                            let user = await getDeviceId();
+                           
+                            dispatch(setUserAuthTo(false))
+                            
+                        }} style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'center'}}>
+                            <Text>&nbsp;</Text>
+                            <Text>&nbsp;</Text>
+                            <Text style={{ color: '#FF4500', fontSize: 16, fontWeight: 'bold' }}>Skip</Text>
+                            <Text>&nbsp;</Text>
+                            <Text>&nbsp;</Text>
+
+                            <Ionicons name={'log-out'} size={24} color={'#FF4500'} />
+                            <Text>&nbsp;</Text>
+                            <Text>&nbsp;</Text>
+                            
+                        </TouchableOpacity>
+                    </View>
+                ),
+            }}  name="user-pwd-recovery" component={PasswordRecoveryScreen} />
         </AuthStack.Navigator>
     );
 }

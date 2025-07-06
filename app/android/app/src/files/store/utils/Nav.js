@@ -25,31 +25,7 @@ import RNFS from 'react-native-fs';
 function StackNavigator () { 
     const version = ('1.0.2');
 
-    const checkAppVersion = async () => {
-        try {
-        
-        
-            // Fetch latest version from your API
-            const response = await fetch('https://cs-server-olive.vercel.app/version-check', {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    current_version: version,
-                    platform: Platform.OS, // 'ios' or 'android'
-                }),
-            });
-            
-            const data = await response.json();
-            
-            return data;
-        } catch (error) {
-            console.error('Version check failed:', error);
-            // If any error occurs, still navigate to home as fallback
-            return null
-        }
-    };
+    
     const {
         auth
     }=useSelector(s=> s.auth);
@@ -59,44 +35,20 @@ function StackNavigator () {
 
     
     useEffect(() => {
-        try {
-            checkAppVersion().then((data) => {
-                if (data.success) {
-                    if (data.is_latest) {
-                        // Version matches, navigate to home after delay
-                        getUser();
-                    } else {
-                        setActiveJsx(<DownloadAppScreen url={data?.url} is_published={data?.is_published} summary={data?.summary} />)
-                        // Show update modal
-                        // setLatestVersion(data.latest_version);
-                        // setDownloadUrl(data.download_url);
-                        // setShowUpdateModal(true);
-                    }
-                } else {
-                    // If API fails, still navigate to home as fallback
-                    // setActiveJsx(<DownloadAppScreen />)
-                    getUser();
-    
-                }
-            })
-            async function getUser() {
-                if (auth) {
-                    let response = await getData('user');
-                    const user = (JSON.parse(response));
-                    console.log(user)
-                    if (user.user_id) {  
-                        setActiveJsx(<StoreTab />)
-                    } else {
-                        setActiveJsx(<AuthStackScreen />)
-                    }
-                }else {
-                    setActiveJsx(<AuthStackScreen />)
-                }
-            }
-            
-        } catch (error) {
-            console.log(error)
+      (async function getUser() {
+        if (auth) {
+          let response = await getData('user');
+          const user = (JSON.parse(response));
+          console.log(user)
+          if (user.user_id) {  
+            setActiveJsx(<StoreTab />)
+          } else {
+            setActiveJsx(<StoreTab />)
+          }
+        }else {
+          setActiveJsx(<StoreTab />)
         }
+      })()
     }, [auth])
 
     return (

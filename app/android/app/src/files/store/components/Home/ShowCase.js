@@ -26,17 +26,21 @@ export default function ShowCase() {
                 <Text style={styles.title}>Product Categories</Text>
             </View>
 
-            <View style={styles.showcase}>
+            <ScrollView horizontal style={styles.showcase} contentContainerStyle={{
+                flexDirection: 'row',
+                flexWrap: 'nowrap',
+                justifyContent: 'space-between',
+            }}>
                 {list.length > 0 ? (
                     list.map((item, index) => (
-                        <Card item={item} key={index.toString()} />
+                        <Card item={item} index={index} key={index.toString()} />
                     ))
                 ) : (
                     <View style={styles.noItems}>
                         <Text style={styles.noItemsText}>No Item to Display</Text>
                     </View>
                 )}
-            </View>
+            </ScrollView>
         </>
     );
 }
@@ -66,11 +70,10 @@ const styles = StyleSheet.create({
     },
 
     showcase: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'space-between',
+        
         paddingHorizontal: 10,
-        paddingBottom: 20,
+        paddingVertical: 20,
+        // marginVertical: 2,
         backgroundColor: '#FFF',
     },
     noItems: {

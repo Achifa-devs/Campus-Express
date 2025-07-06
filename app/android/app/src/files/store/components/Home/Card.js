@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 
 const size = 60; // Circle size
 
-export default function Card({ item }) {
+export default function Card({ item,index }) {
     const navigation = useNavigation();
 
     const categoryName = Object.keys(item).find(key => key !== 'img');
@@ -24,7 +24,7 @@ export default function Card({ item }) {
     };
 
     return (
-        <TouchableOpacity style={styles.cardContainer} onPress={handlePress}>
+        <TouchableOpacity style={styles.cardContainer(index)} onPress={handlePress}>
             <View style={[styles.circle, isMoreCard && styles.moreCircle]}>
                 {imgUrl && !isMoreCard ? (
                     <Image source={{ uri: imgUrl }} style={styles.image} resizeMode="cover" />
@@ -37,13 +37,16 @@ export default function Card({ item }) {
     );
 }
 
+const s = Dimensions.get('screen').width;
+
 const styles = StyleSheet.create({
-    cardContainer: {
-        width: size + 10,
+    cardContainer: (index) => ({
+        width: s*.15,
         // height: 100,
         margin: 8,
+        marginLeft: index === 0 ? 0 : 15,
         alignItems: 'center',
-    },
+    }),
     circle: {
         width: size,
         height: size,

@@ -15,6 +15,7 @@ import {
 } from "@react-navigation/bottom-tabs"
 import BackSvg from '../../media/assets/back-svgrepo-com (4).svg'
 import { useNavigation, useRoute } from '@react-navigation/native';
+import Ionicons from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, FontAwesome, etc.
 
 const Tab = createBottomTabNavigator();
 
@@ -28,8 +29,16 @@ export default function Type() {
   return (
     <>
         <View style={styles.searchCnt}>
-            <TouchableOpacity style={styles.back}> 
-                <BackSvg height={25} width={25} />
+            <TouchableOpacity style={{
+              height: 55,
+              borderRadius: 15,
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              alignItems: 'center',
+              width: 25,
+            }} onPress={e => navigation.goBack()}> 
+              <Ionicons name={'chevron-back'} size={25} color={'#000'} />
             </TouchableOpacity>
             <Text style={{ fontSize: 15, color: '#000', marginLeft: 20, fontWeight: 'bold'}}>{ category }</Text>
         </View>

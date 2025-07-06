@@ -35,10 +35,14 @@ import PrivacyPolicy from "../../store/screens/PrivacyPolicy";
 import ForumScreen from "../../store/screens/Forum";
 import CreateTopicScreen from "../../store/screens/NewTopic";
 import TopicDetailScreen from "../../store/screens/Replies";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import Ionicons from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, FontAwesome, etc.
+
 import Support from "../../store/screens/Profile/Profiles/Support";
+import { setUserAuthTo } from "../../../../../../redux/reducer/auth";
 const ProfileStack = createNativeStackNavigator();
 export function ProfileStackScreen() {
+  const dispatch = useDispatch()
 
     const {user} = useSelector(s => s.user)
   return (
@@ -63,28 +67,42 @@ export function ProfileStackScreen() {
                 >
                     {/* Left: User Avatar */}
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Image
-                        source={{ uri: 'https://res.cloudinary.com/daqbhghwq/image/upload/v1743769930/2024-06-27_dqlq3a.png' }} // Replace with user.profilePic
-                        style={{
-                        width: 60,
-                        height: 60,
-                        borderRadius: 30,
-                        marginRight: 10,
-                        borderWidth: 2,
-                        borderColor: '#fff',
-                        }}
-                    />
-                    <View>
-                        <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>
-                            {user?.fname}.{user?.lname[0]}
-                        </Text>
-                        {/* <TouchableOpacity onPress={() => navigation.navigate('user-shop')}>
-                        <Text style={{ color: '#fff', textDecorationLine: 'underline', fontSize: 13 }}>
-                            Visit Shop
-                        </Text>
-                        </TouchableOpacity> */}
+                        <Image
+                            source={{ uri: 'https://res.cloudinary.com/daqbhghwq/image/upload/v1743769930/2024-06-27_dqlq3a.png' }} // Replace with user.profilePic
+                            style={{
+                            width: 60,
+                            height: 60,
+                            borderRadius: 30,
+                            marginRight: 10,
+                            borderWidth: 2,
+                            borderColor: '#fff',
+                            }}
+                        />
+                        <View>
+                            <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>
+                                {user && user?.fname}{user && '.'}{user && user?.lname[0]}
+                            
+                            </Text>
+                            {/* <TouchableOpacity onPress={() => navigation.navigate('user-shop')}>
+                            <Text style={{ color: '#fff', textDecorationLine: 'underline', fontSize: 13 }}>
+                                Visit Shop
+                            </Text>
+                            </TouchableOpacity> */}
+                        </View>
                     </View>
-                    </View>
+
+                     {!user && 
+                        <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#fff', marginRight: 15, borderRadius: 50, paddingVertical: 7, paddingHorizontal: 15}} onPress={e => {
+                            dispatch(setUserAuthTo(true))
+                        }}>
+                            <Text style={{
+                                color: '#FF4500',
+                                paddingRight: 8
+                            }}>Login</Text>
+                            <Ionicons name={"enter-outline"} size={18} color={"#FF4500"} />
+
+                        </TouchableOpacity>
+                    }
 
                     {/* Right: Shop Balance */}
                     {/* <View style={{ alignItems: 'flex-end' }}>
@@ -106,8 +124,16 @@ export function ProfileStackScreen() {
             header: ({navigation}) =>
             (
                 <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
-                    <TouchableOpacity style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5 }}>
-                        <BackSvg width={22} height={22} />
+                    <TouchableOpacity style={{
+                        height: 55,
+                        borderRadius: 15,
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        width: 45,
+                    }} onPress={e => navigation.goBack()}> 
+                        <Ionicons name={'chevron-back'} size={25} color={'#000'} />
                     </TouchableOpacity>
                     <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
                         <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>History</Text>
@@ -121,8 +147,16 @@ export function ProfileStackScreen() {
             header: ({navigation}) =>
             (
                 <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
-                    <TouchableOpacity style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5 }}>
-                        <BackSvg width={22} height={22} />
+                    <TouchableOpacity style={{
+                        height: 55,
+                        borderRadius: 15,
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        width: 45,
+                    }} onPress={e => navigation.goBack()}> 
+                        <Ionicons name={'chevron-back'} size={25} color={'#000'} />
                     </TouchableOpacity>
                     <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
                         <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Favourite</Text>
@@ -136,8 +170,16 @@ export function ProfileStackScreen() {
             header: ({navigation}) =>
             (
                 <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', paddingLeft: 15, paddingRight: 25}}>
-                    <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 7}}>
-                        <BackSvg width={19} height={19} />
+                    <TouchableOpacity style={{
+                        height: 55,
+                        borderRadius: 15,
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        width: 45,
+                    }} onPress={e => navigation.goBack()}> 
+                        <Ionicons name={'chevron-back'} size={25} color={'#000'} />
                     </TouchableOpacity>
                     <View style={{backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10}}>
                         <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Tell us about yourself</Text>
@@ -153,8 +195,16 @@ export function ProfileStackScreen() {
             header: ({navigation}) =>
             (
                 <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
-                    <TouchableOpacity style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5 }}>
-                        <BackSvg width={22} height={22} />
+                    <TouchableOpacity style={{
+                        height: 55,
+                        borderRadius: 15,
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        width: 45,
+                    }} onPress={e => navigation.goBack()}> 
+                        <Ionicons name={'chevron-back'} size={25} color={'#000'} />
                     </TouchableOpacity>
                     <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
                         <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Preference</Text>
@@ -168,8 +218,16 @@ export function ProfileStackScreen() {
             header: ({navigation}) =>
             (
                 <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
-                    <TouchableOpacity style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5 }}>
-                        <BackSvg width={22} height={22} />
+                    <TouchableOpacity style={{
+                        height: 55,
+                        borderRadius: 15,
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        width: 45,
+                    }} onPress={e => navigation.goBack()}> 
+                        <Ionicons name={'chevron-back'} size={25} color={'#000'} />
                     </TouchableOpacity>
                     <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
                         <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Invite your friends</Text>
@@ -183,8 +241,16 @@ export function ProfileStackScreen() {
             header: ({navigation}) =>
             (
                 <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
-                    <TouchableOpacity style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5 }}>
-                        <BackSvg width={22} height={22} />
+                    <TouchableOpacity style={{
+                        height: 55,
+                        borderRadius: 15,
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        width: 45,
+                    }} onPress={e => navigation.goBack()}> 
+                        <Ionicons name={'chevron-back'} size={25} color={'#000'} />
                     </TouchableOpacity>
                     <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
                         <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Account setting</Text>
@@ -198,8 +264,16 @@ export function ProfileStackScreen() {
             header: ({navigation}) =>
             (
                 <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
-                    <TouchableOpacity style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5 }}>
-                        <BackSvg width={22} height={22} />
+                    <TouchableOpacity style={{
+                        height: 55,
+                        borderRadius: 15,
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        width: 45,
+                    }} onPress={e => navigation.goBack()}> 
+                        <Ionicons name={'chevron-back'} size={25} color={'#000'} />
                     </TouchableOpacity>
                     <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
                         <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Notification setting</Text>
@@ -213,8 +287,16 @@ export function ProfileStackScreen() {
             header: ({navigation}) =>
             (
                 <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
-                    <TouchableOpacity style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5 }}>
-                        <BackSvg width={22} height={22} />
+                    <TouchableOpacity style={{
+                        height: 55,
+                        borderRadius: 15,
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        width: 45,
+                    }} onPress={e => navigation.goBack()}> 
+                        <Ionicons name={'chevron-back'} size={25} color={'#000'} />
                     </TouchableOpacity>
                     <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
                         <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Shop</Text>
@@ -274,8 +356,16 @@ export function ProfileStackScreen() {
 
                   <>
                       <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
-                    <TouchableOpacity style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5 }}>
-                        <BackSvg width={22} height={22} />
+                    <TouchableOpacity style={{
+                        height: 55,
+                        borderRadius: 15,
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        width: 45,
+                    }} onPress={e => navigation.goBack()}> 
+                        <Ionicons name={'chevron-back'} size={25} color={'#000'} />
                     </TouchableOpacity>
                     <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
                         <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>New topic</Text>
@@ -291,8 +381,16 @@ export function ProfileStackScreen() {
 
                   <>
                       <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
-                    <TouchableOpacity style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5 }}>
-                        <BackSvg width={22} height={22} />
+                    <TouchableOpacity style={{
+                        height: 55,
+                        borderRadius: 15,
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        width: 45,
+                    }} onPress={e => navigation.goBack()}> 
+                        <Ionicons name={'chevron-back'} size={25} color={'#000'} />
                     </TouchableOpacity>
                     <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
                         <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Balance sheet</Text>
@@ -308,8 +406,16 @@ export function ProfileStackScreen() {
 
                   <>
                       <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
-                    <TouchableOpacity style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5 }}>
-                        <BackSvg width={22} height={22} />
+                    <TouchableOpacity style={{
+                        height: 55,
+                        borderRadius: 15,
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        width: 45,
+                    }} onPress={e => navigation.goBack()}> 
+                        <Ionicons name={'chevron-back'} size={25} color={'#000'} />
                     </TouchableOpacity>
                     <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
                         <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Balance sheet</Text>
@@ -322,8 +428,16 @@ export function ProfileStackScreen() {
             header: ({navigation}) =>
             (
                 <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
-                    <TouchableOpacity style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5 }}>
-                        <BackSvg width={22} height={22} />
+                    <TouchableOpacity style={{
+                        height: 55,
+                        borderRadius: 15,
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        width: 45,
+                    }} onPress={e => navigation.goBack()}> 
+                        <Ionicons name={'chevron-back'} size={25} color={'#000'} />
                     </TouchableOpacity>
                     <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
                         <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Logout</Text>
@@ -337,8 +451,16 @@ export function ProfileStackScreen() {
             header: ({navigation}) =>
             (
                 <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
-                    <TouchableOpacity style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5 }}>
-                        <BackSvg width={22} height={22} />
+                    <TouchableOpacity style={{
+                        height: 55,
+                        borderRadius: 15,
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        width: 45,
+                    }} onPress={e => navigation.goBack()}> 
+                        <Ionicons name={'chevron-back'} size={25} color={'#000'} />
                     </TouchableOpacity>
                     <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
                         <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}></Text>
@@ -352,8 +474,16 @@ export function ProfileStackScreen() {
             header: ({navigation}) =>
             (
                 <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
-                    <TouchableOpacity style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5 }}>
-                        <BackSvg width={22} height={22} />
+                    <TouchableOpacity style={{
+                        height: 55,
+                        borderRadius: 15,
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        width: 45,
+                    }} onPress={e => navigation.goBack()}> 
+                        <Ionicons name={'chevron-back'} size={25} color={'#000'} />
                     </TouchableOpacity>
                     <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
                         <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Change email</Text>
@@ -367,8 +497,16 @@ export function ProfileStackScreen() {
             header: ({navigation}) =>
             (
                 <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
-                    <TouchableOpacity style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5 }}>
-                        <BackSvg width={22} height={22} />
+                    <TouchableOpacity style={{
+                        height: 55,
+                        borderRadius: 15,
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        width: 45,
+                    }} onPress={e => navigation.goBack()}> 
+                        <Ionicons name={'chevron-back'} size={25} color={'#000'} />
                     </TouchableOpacity>
                     <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
                         <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Change phone</Text>
@@ -382,8 +520,16 @@ export function ProfileStackScreen() {
             header: ({navigation}) =>
             (
                 <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
-                    <TouchableOpacity style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5 }}>
-                        <BackSvg width={22} height={22} />
+                    <TouchableOpacity style={{
+                        height: 55,
+                        borderRadius: 15,
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        width: 45,
+                    }} onPress={e => navigation.goBack()}> 
+                        <Ionicons name={'chevron-back'} size={25} color={'#000'} />
                     </TouchableOpacity>
                     <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
                         <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Change password</Text>
@@ -398,8 +544,16 @@ export function ProfileStackScreen() {
             header: ({navigation}) =>
             (
                 <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
-                    <TouchableOpacity style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5 }}>
-                        <BackSvg width={22} height={22} />
+                    <TouchableOpacity style={{
+                        height: 55,
+                        borderRadius: 15,
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        width: 45,
+                    }} onPress={e => navigation.goBack()}> 
+                        <Ionicons name={'chevron-back'} size={25} color={'#000'} />
                     </TouchableOpacity>
                     <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
                         <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Blogs</Text>
@@ -414,8 +568,16 @@ export function ProfileStackScreen() {
             header: ({navigation}) =>
             (
                 <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
-                    <TouchableOpacity style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5 }}>
-                        <BackSvg width={22} height={22} />
+                    <TouchableOpacity style={{
+                        height: 55,
+                        borderRadius: 15,
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        width: 45,
+                    }} onPress={e => navigation.goBack()}> 
+                        <Ionicons name={'chevron-back'} size={25} color={'#000'} />
                     </TouchableOpacity>
                     <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
                         <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Terms of service</Text>
@@ -429,8 +591,16 @@ export function ProfileStackScreen() {
             header: ({navigation}) =>
             (
                 <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
-                    <TouchableOpacity style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5 }}>
-                        <BackSvg width={22} height={22} />
+                    <TouchableOpacity style={{
+                        height: 55,
+                        borderRadius: 15,
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        width: 45,
+                    }} onPress={e => navigation.goBack()}> 
+                        <Ionicons name={'chevron-back'} size={25} color={'#000'} />
                     </TouchableOpacity>
                     <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
                         <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Privacy policy</Text>
@@ -444,8 +614,16 @@ export function ProfileStackScreen() {
             header: ({navigation}) =>
             (
                 <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
-                    <TouchableOpacity style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5 }}>
-                        <BackSvg width={22} height={22} />
+                    <TouchableOpacity style={{
+                        height: 55,
+                        borderRadius: 15,
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        width: 45,
+                    }} onPress={e => navigation.goBack()}> 
+                        <Ionicons name={'chevron-back'} size={25} color={'#000'} />
                     </TouchableOpacity>
                     <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
                         <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Campus forum</Text>
@@ -459,8 +637,16 @@ export function ProfileStackScreen() {
             header: ({navigation}) =>
             (
                 <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
-                    <TouchableOpacity style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5 }}>
-                        <BackSvg width={22} height={22} />
+                    <TouchableOpacity style={{
+                        height: 55,
+                        borderRadius: 15,
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        width: 45,
+                    }} onPress={e => navigation.goBack()}> 
+                        <Ionicons name={'chevron-back'} size={25} color={'#000'} />
                     </TouchableOpacity>
                     <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
                         <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Campus forum</Text>
