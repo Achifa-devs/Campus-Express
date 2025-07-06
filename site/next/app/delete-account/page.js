@@ -46,7 +46,6 @@ export default function DeleteAccount() {
         
         // Redirect to confirmation page after successful deletion
         window.location.href('/');
-        navigation
       } catch (err) {
         setError(err.message || 'Something went wrong. Please try again.');
       } finally {

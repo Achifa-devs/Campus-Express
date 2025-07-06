@@ -4,6 +4,7 @@ import {
   findFavouriteById, 
   findFavourites
 } from "../../repositories/shop/favourite.js";
+import { findProductById } from "../../repositories/shop/product.js";
 
 export const getFavourite = async (payload) => {
   const { user_id, product_id } = payload;
@@ -17,10 +18,19 @@ export const getFavourite = async (payload) => {
 
 export const getFavourites = async (payload) => {
   const { user_id } = payload;
+
   // Business logic
   const response = await findFavourites({ user_id });
 
-  return response;
+  const books = await Promise.all(
+    response.map(async (item) => {
+      const product = await findProductById(item?.product_id);
+      return { product, order: item };
+    })
+  );
+
+  return books;
+
 };
 
 

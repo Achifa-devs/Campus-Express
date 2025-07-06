@@ -427,21 +427,25 @@ import axios from 'axios';
             style={styles.orderButton}
             // onPress={() => navigation.navigate('user-new-order', { data })}
             onPress={async(e) => {
-              const result = await Share.share({
-                message: `Check out this product on Campus Sphere! https://www.campussphere.net/store/product/${data?.product_id}`,
-                url: `https://www.campussphere.net/store/product/${data?.product_id}`, // works mostly on iOS
-                title: data?.title,
-                  
-              });
-
-              if (result.action === Share.sharedAction) {
-                if (result.activityType) {
-                    // console.log('Shared with activity type:', result.activityType);
-                } else {
-                    // console.log('Shared successfully');
+              try {
+                const result = await Share.share({
+                  message: `Check out this product on Campus Sphere! https://www.campussphere.net/store/product/${data?.product_id}`,
+                  url: `https://www.campussphere.net/store/product/${data?.product_id}`, // works mostly on iOS
+                  title: data?.title,
+                    
+                });
+  
+                if (result.action === Share.sharedAction) {
+                  if (result.activityType) {
+                      // console.log('Shared with activity type:', result.activityType);
+                  } else {
+                      // console.log('Shared successfully');
+                  }
+                } else if (result.action === Share.dismissedAction) {
+                  // console.log('Share dismissed');
                 }
-              } else if (result.action === Share.dismissedAction) {
-                // console.log('Share dismissed');
+              } catch (error) {
+                console.log(error)
               }
           }}
           >
