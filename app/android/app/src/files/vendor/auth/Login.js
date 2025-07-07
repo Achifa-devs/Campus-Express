@@ -78,7 +78,7 @@ const Login = ({}) => {
                 const { data, success } = response;
                 if (success) {
                     setUserId(data.user_id)
-                    CookieManager.set('https://campussphere.net', {
+                    CookieManager.set('https://www.campussphere.net', {
                         name: 'jwt_token',
                         value: data.cookie,
                         domain: 'campussphere.net',

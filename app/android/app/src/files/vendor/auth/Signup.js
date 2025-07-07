@@ -104,7 +104,7 @@ const Signup = ({}) => {
             set_server_err(true)
 
             
-            fetch('https://campussphere.net/api/registration/seller', {
+            fetch('https://www.campussphere.net/api/registration/seller', {
                 method: 'post',
                 headers: {
                     "Content-Type": "Application/json"
@@ -115,7 +115,7 @@ const Signup = ({}) => {
                 let response = await result.json();
                 console.log(response)
                 if(response.success){
-                    CookieManager.set('https://campussphere.net', {
+                    CookieManager.set('https://www.campussphere.net', {
                         name: 'jwt_token',
                         value: response.cookie,
                         domain: 'campussphere.net',

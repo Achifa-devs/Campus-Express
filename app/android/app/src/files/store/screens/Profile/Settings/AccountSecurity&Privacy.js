@@ -11,7 +11,8 @@ import {
     View,
     Text,
     TouchableOpacity,
-    Alert
+    Alert,
+    DevSettings
 } from 'react-native'
 import DailPadSvg from '../../../../media/assets/dialpad-svgrepo-com.svg'
 import PwdSvg from '../../../../media/assets/password-svgrepo-com (1).svg'
@@ -25,10 +26,12 @@ import LinkSvg from '../../../../media/assets/link-square-svgrepo-com (1).svg'
 import CloseSvg from '../../../../media/assets/close-circle-svgrepo-com.svg'
 import DialPadSvg from '../../../../media/assets/dialpad-svgrepo-com.svg'
 import BioSvg from '../../../../media/assets/fingerprint-svgrepo-com.svg'
+import RNRestart from 'react-native-restart';
 import {
     useSelector
 } from 'react-redux'
 import BottomModal from '../../../utils/BtmModal'
+import { binData, storeData } from '../../../utils/AppStorage'
 // import BottomModal from '../../../../utils/BtmModal'
 // import BottomModal from '../../../utils/BtmModal'
 // import BottomModal from '../utils/BtmModal'
@@ -224,22 +227,26 @@ export default function AccountSecurity({navigation}) {
                         
                     </TouchableOpacity> */}
 
-                    {/* <TouchableOpacity onPress={e => navigation.navigate('LogOut')} style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 10, marginBottom: 0, flexDirection: 'row', borderTopLeftRadius: 10, borderTopRightRadius: 10, height: 75, width: '100%', backgroundColor: '#fff'}}>
+                    <TouchableOpacity onPress={async(e) => {
+                        await binData();
+                        RNRestart.Restart();
+
+                    }} style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 10, marginBottom: 0, flexDirection: 'row', borderTopLeftRadius: 10, borderTopRightRadius: 10, height: 75, width: '100%', backgroundColor: '#fff'}}>
                         <View style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row'}}>
                             <View style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 10}}>
                                 <LogoutSvg width={25} height={25} />
                             </View>
                             
                             <View style={{width: '100%'}}>
-                                <Text style={{fontFamily: 'Roboto', fontWeight: 700, fontSize: 15, color: '#000'}}>Log out everywhere</Text>
-                                <Text style={{fontFamily: 'Roboto', fontWeight: 500, fontSize: 12, color: '#464646', width: '70%'}}>If you notice any suspicious activity, log out of your Campus Express across all device</Text>
+                                <Text style={{fontFamily: 'Roboto', fontWeight: 700, fontSize: 15, color: '#000'}}>Log out</Text>
+                                <Text style={{fontFamily: 'Roboto', fontWeight: 500, fontSize: 12, color: '#464646', width: '70%'}}>Securely log out of your account</Text>
                             </View>
                         </View>
                         <View style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#fff', borderRadius: 50, padding: 5}}>
                             <AngleSvg width={35} height={35} />
                         </View>
                         
-                    </TouchableOpacity> */}
+                    </TouchableOpacity>
 
                     
                     <Text style={[styles.label, {borderBottomColor: '#000', color: '#000', borderBottomWidth: .5, paddingBottom: 10, marginBottom: 10, marginTop: 25}]}>Privacy</Text>

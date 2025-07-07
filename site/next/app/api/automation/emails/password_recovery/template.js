@@ -101,7 +101,7 @@ export function PWD_RESET_TEMPLATE(name,token) {
             <p>Hello, ${name}</p>
             <p>You requested a password reset. Use the token below or click the button to reset your password.</p>
             <div class="token">${token}</div>
-            <a href="https://campussphere.net/new-password?token=123456" class="button">Reset Password</a>
+            <a href="https://www.campussphere.net/new-password?token=123456" class="button">Reset Password</a>
             <p>If you did not request this, please ignore this email.</p>
         </div>
         

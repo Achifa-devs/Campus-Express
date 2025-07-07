@@ -7,6 +7,7 @@ import './styles/large.css'
 import './styles/medium.css'
 import './styles/small.css'
 import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup'
+import { useSearchParams } from 'next/navigation'
 
 
 export default function PasswordRecovery() {
@@ -26,6 +27,22 @@ export default function PasswordRecovery() {
         setEmail(emailParam)
         }
     }, [])
+
+     const searchParams = useSearchParams();
+    const app = searchParams.get('app');
+
+    const [isApp, setIsApp] = useState(true);
+
+    useEffect(() => {
+        console.log('app param:', app);
+        if (app === 'true') { 
+            setIsApp(true)
+        // Do something special for app=true
+        }else{
+            setIsApp(false)
+        }
+    }, [app]);
+
     let ResetPassword = async(e, inputs, check) => {
         
 
@@ -48,17 +65,53 @@ export default function PasswordRecovery() {
             .then(async(result) => {
                 let response = await result.json();
                 if(response.success){
-                    window.location.href='/login'
-                    buyer_overlay_setup(false, '')
+                    if (!isApp) {
+                        window.location.href='/login'
+                        // buyer_overlay_setup(false, '')
+                    } else {
+                        const feedback = { success: true, message: "Password reset was successful" };
+                        window.ReactNativeWebView.postMessage(JSON.stringify(feedback));
+                    }
                 }else{
+                    if (!isApp) {
+                        buyer_overlay_setup(false, '')
+                        if(check){
+                            document.querySelector('.err-cnt').querySelector('.err-mssg').remove()
+                            let div = document.createElement('div');
+                            div.className = 'err-mssg';
+                            div.style.display = 'table'
+                            div.style.margin = '0 auto'
+                            div.innerHTML = response.message
+                            document.querySelector('.err-cnt').append(div)
+                            
+                        }else{
+                            let div = document.createElement('div');
+                            div.className = 'err-mssg';
+                            div.style.display = 'table'
+                            div.style.margin = '0 auto'
+                            div.innerHTML = response.message
+                            document.querySelector('.err-cnt').append(div)
+                        }
+                        e.target.disabled = false; 
+                    } else {
+                        const feedback = { success: false, message: "Password reset was not successful" };
+                        window.ReactNativeWebView.postMessage(JSON.stringify(feedback));
+                    }
+                }
+                e.target.disabled = false;
+            })
+            .catch((err) => {
+                console.log(err)
+                if (!isApp) {
                     buyer_overlay_setup(false, '')
+                    let check = document.querySelector('.err-cnt').querySelector('.err-mssg');
                     if(check){
                         document.querySelector('.err-cnt').querySelector('.err-mssg').remove()
                         let div = document.createElement('div');
                         div.className = 'err-mssg';
                         div.style.display = 'table'
                         div.style.margin = '0 auto'
-                        div.innerHTML = response.message
+                        div.innerHTML = err.message
                         document.querySelector('.err-cnt').append(div)
                         
                     }else{
@@ -66,35 +119,14 @@ export default function PasswordRecovery() {
                         div.className = 'err-mssg';
                         div.style.display = 'table'
                         div.style.margin = '0 auto'
-                        div.innerHTML = response.message
+                        div.innerHTML = err.message
                         document.querySelector('.err-cnt').append(div)
                     }
-                    e.target.disabled = false; 
+                    e.target.disabled = false;
+                } else {
+                    const feedback = { success: false, message: "Password reset was not successful" };
+                        window.ReactNativeWebView.postMessage(JSON.stringify(feedback));
                 }
-                e.target.disabled = false;
-            })
-            .catch((err) => {
-                console.log(err)
-                buyer_overlay_setup(false, '')
-                let check = document.querySelector('.err-cnt').querySelector('.err-mssg');
-                if(check){
-                    document.querySelector('.err-cnt').querySelector('.err-mssg').remove()
-                    let div = document.createElement('div');
-                    div.className = 'err-mssg';
-                    div.style.display = 'table'
-                    div.style.margin = '0 auto'
-                    div.innerHTML = err.message
-                    document.querySelector('.err-cnt').append(div)
-                    
-                }else{
-                    let div = document.createElement('div');
-                    div.className = 'err-mssg';
-                    div.style.display = 'table'
-                    div.style.margin = '0 auto'
-                    div.innerHTML = err.message
-                    document.querySelector('.err-cnt').append(div)
-                }
-                e.target.disabled = false;
             })
 
         }
@@ -215,9 +247,9 @@ export default function PasswordRecovery() {
                         </button>
                     </div>
                 </form>
-                <div style={{textAlign: 'center'}} onClick={e => window.location.href=('/login')}>
+                {isApp === true ? '' : <div style={{textAlign: 'center'}} onClick={e => window.location.href=('/login')}>
                     <small style={{cursor: 'pointer', color: 'orangered', fontWeight: '400'}}>Back To Login</small>
-                </div>
+                </div>}
             </section>
         </div>
     </>

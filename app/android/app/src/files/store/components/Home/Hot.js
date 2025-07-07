@@ -13,33 +13,59 @@ import FastImage from 'react-native-fast-image';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { debounce } from 'lodash';
-import { save_prod, unsave_prod } from '../../utils/Saver';
+import { get_saved_list, save_prod, unsave_prod } from '../../utils/Saver';
 import { useSelector } from 'react-redux';
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - 25) / 2; // 16px padding on each side + 16px gap between cards
 
-const ItemCard = React.memo(({ item, onPress, Fav }) => {
+const ItemCard = React.memo(({ item, onPress }) => {
   const [loading, setLoading] = useState(true);
   const [favLoading, setFavLoading] = useState(true);
   const [wishlisted, setWishlisted] = useState(false);
   const { user } = useSelector(s => s?.user)
+  const [Fav, setFav] = useState([])
+
   
-  console.log("Fav: ", Fav)
+  const fetchFavourites = async() => {
+      
+    try {
+      const result = await get_saved_list({
+        user_id: user?.user_id
+      })
+      if (result?.success) {
+        // console.log(result)
+        setFav(result?.data)
+      } else {
+        setFav([])
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    fetchFavourites()
+  }, [])
 
   useEffect(() => {
     setFavLoading(true);
 
-    let isSaved = Fav.filter(data => data?.product_id === item?.product_id).length > 0;
-
-    if (isSaved) {
-      setWishlisted(true)
-      setFavLoading(false);
-
+    if (Fav.length > 0) {  
+      let isSaved = Fav.filter(data => data?.order?.product_id === item?.product_id);
+  
+  
+      if (isSaved.length > 0) {  
+        setWishlisted(true) 
+        setFavLoading(false);
+  
+      } else { 
+        setWishlisted(false)
+        setFavLoading(false);
+  
+      }
     } else {
-      setWishlisted(false)
-      setFavLoading(false);
-
+      
     }
   }, [Fav])
 
@@ -147,8 +173,13 @@ const ItemCard = React.memo(({ item, onPress, Fav }) => {
             <Text style={styles.ratingText}>4.8</Text>
           </View> */}
           <View style={styles.locationContainer}>
-            <Icon name="location-outline" size={12} color="#919EAB" />
+            <Icon name="location-outline" size={12} color="#FF4500" />
             <Text style={styles.locationText}>{item?.campus}</Text>
+          </View>
+
+          <View style={styles.locationContainer}>
+            <Icon name="eye-outline" size={15} color="#FF4500" />
+            <Text style={styles.locationText}>{item?.views}</Text>
           </View>
         </View>
       </View>

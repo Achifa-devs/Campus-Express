@@ -12,7 +12,7 @@ import OrderCard from '../NewOrder/OrderCard';
 export default function OrderRoomTop({ order, product }) {
     let [buyer, set_buyer] = useState('')
     function get_buyer() {
-        fetch(`https://campussphere.net:3000/api/profile/buyer`, {
+        fetch(`https://www.campussphere.net:3000/api/profile/buyer`, {
             method: 'post',
             headers: {
             "Content-Type": "Application/json"

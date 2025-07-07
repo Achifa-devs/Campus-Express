@@ -6,6 +6,7 @@ import { errorHandler } from "../../utils/erroHandler.js";
 
 // Find product by ID
 export async function findProductById({ product_id }) {
+    // console.log('product_id: ', product_id)
     const result = await pool.query(
     `SELECT * FROM products WHERE product_id = $1`,
     [product_id]

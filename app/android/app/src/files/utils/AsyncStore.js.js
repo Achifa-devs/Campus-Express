@@ -25,5 +25,17 @@ export const getData = async (key) => {
   }
 };
 
+export const binData = async (key) => {
+  try {
+    const value = await AsyncStorage.clear();
+    if (value) {
+      console.log('Data binned:', value);
+      return value;
+    }
+  } catch (e) {
+    console.error('Failed to fetch data', e);
+  }
+};
+
 
 

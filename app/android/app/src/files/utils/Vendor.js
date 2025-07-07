@@ -22,7 +22,7 @@ export default function Vendor() {
 
   useEffect(() => {
    
-    CookieManager.get('https://campussphere.net')
+    CookieManager.get('https://www.campussphere.net')
     .then((result) => {
       if(result.jwt_token.value !== null && result.jwt_token.value !== '') {
         dispatch(set_cookie(true))

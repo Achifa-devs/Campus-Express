@@ -7,6 +7,7 @@ import './styles/large.css'
 import './styles/medium.css'
 import './styles/small.css'
 import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup'
+import { useSearchParams } from 'next/navigation'
 // import { useSearchParams } from 'react-router-dom'
 
 
@@ -31,6 +32,22 @@ export default function PasswordRecovery() {
         setToken(tokenParam)
         }
     }, [])
+
+
+    const searchParams = useSearchParams();
+    const app = searchParams.get('app');
+
+    const [isApp, setIsApp] = useState(true);
+
+    useEffect(() => {
+        console.log('app param:', app);
+        if (app === 'true') { 
+            setIsApp(true)
+        // Do something special for app=true
+        }else{
+            setIsApp(false)
+        }
+    }, [app]);
 
 
     let VerifyToken = async(e, inputs, check) => {
@@ -59,10 +76,12 @@ export default function PasswordRecovery() {
                 console.log(response)
                 if(response.success){
                     // dispatch(setSellerTo(response.cookie))
-                    window.location.href=`/reset-pwd?email=${email}`
-                    buyer_overlay_setup(false, '')
+                    isApp ? window.location.href=`/reset-pwd?email=${email}&app=true` : window.location.href=`/reset-pwd?email=${email}`
+                    // buyer_overlay_setup(false, '')
                 }else{
                     buyer_overlay_setup(false, '')
+                    alert('Please try again')
+                    
                     if(check){
                         document.querySelector('.err-cnt').querySelector('.err-mssg').remove()
                         let div = document.createElement('div');
@@ -88,6 +107,8 @@ export default function PasswordRecovery() {
             .catch((err) => {
                 console.log(err)
                 buyer_overlay_setup(false, '')
+                alert('Please try again')
+                
                 let check = document.querySelector('.err-cnt').querySelector('.err-mssg');
                 if(check){
                     document.querySelector('.err-cnt').querySelector('.err-mssg').remove()
@@ -228,9 +249,9 @@ export default function PasswordRecovery() {
         
                     </div>
                 </form>
-                <div style={{textAlign: 'center'}} onClick={e => window.location.href=('/login')}>
+                {isApp === true ? '' : <div style={{textAlign: 'center'}} onClick={e => window.location.href=('/login')}>
                     <small style={{cursor: 'pointer', color: 'orangered', fontWeight: '400'}}>Back To Login</small>
-                </div>
+                </div>}
             </section>
         </div>
     </>

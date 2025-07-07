@@ -134,8 +134,8 @@ import axios from 'axios';
         
             const response = res.data;
             // console.log('response:', response);
-        
-            if (response?.success) {
+         
+            if (response?.success) {  
               const newHistory = { date: new Date(), data: data };
               const prevHistory = await getData('history');
               if (prevHistory) {
@@ -148,6 +148,7 @@ import axios from 'axios';
                 }
               }
             } else {
+              await storeData('history', JSON.stringify([newHistory]));
               // Handle unsuccessful case
             }
           } catch (error) {
@@ -340,20 +341,10 @@ import axios from 'axios';
                 style={styles.actionButton}
                 onPress={handleSave}
               >
-                <Ionicons name={"heart"} size={20} color={"#FF4500"} />
-                {/* <HeartSvg 
-                  height={24} 
-                  width={24} 
-                  fill={saved ? '#FF4500' : 'none'} 
-                  stroke={saved ? '#FF4500' : '#000'} 
-                /> */}
+                <Ionicons name={saved ? "heart": 'heart-outline'} size={20} color={"#FF4500"} />
+                
               </TouchableOpacity>
-              <TouchableOpacity 
-                style={styles.actionButton}
-                onPress={handleShare}
-              >
-                {/* <ShareSvg height={24} width={24} /> */}
-              </TouchableOpacity>
+              
             </View>
           </View>
   

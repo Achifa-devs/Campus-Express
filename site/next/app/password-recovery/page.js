@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useRef, useState } from "react"
 import './styles/xx-large.css'
 import './styles/x-large.css'
@@ -7,16 +7,31 @@ import './styles/large.css'
 import './styles/medium.css'
 import './styles/small.css'
 import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup'
+import { useSearchParams } from 'next/navigation';
 
 
 export default function PasswordRecovery() {
 
     
-    let emailRef = useRef('')
+    
     let [email, setEmail] = useState('')
     let validation = useRef(false);
 
 
+    const searchParams = useSearchParams();
+    const app = searchParams.get('app');
+
+    const [isApp, setIsApp] = useState(true);
+
+    useEffect(() => {
+        console.log('app param:', app);
+        if (app === 'true') { 
+            setIsApp(true)
+        // Do something special for app=true
+        }else{
+            setIsApp(false)
+        }
+    }, [app]);
 
     let ConfirmEmail = async(e, inputs, check) => {
         
@@ -42,10 +57,12 @@ export default function PasswordRecovery() {
                     
                 if(response.success){
                     // dispatch(setSellerTo(response.cookie))
-                    window.location.href=`/confirm-token?email=${email}`
-                    buyer_overlay_setup(false, '')
+                    isApp ? window.location.href=`/confirm-token?email=${email}&app=true` : window.location.href=`/confirm-token?email=${email}`
+                    // buyer_overlay_setup(false, '')
                 }else{
                     buyer_overlay_setup(false, '')
+                    alert('Please try again')
+
                     if(check){
                         document.querySelector('.err-cnt')?.querySelector('.err-mssg')?.remove()
                         let div = document.createElement('div');
@@ -69,6 +86,8 @@ export default function PasswordRecovery() {
             })
             .catch((err) => {
                 buyer_overlay_setup(false, '')
+                alert('Please try again')
+
                 if(check){
                     // document.querySelector('.err-cnt').querySelector('.err-mssg').remove()
                     let div = document.createElement('div');
@@ -173,14 +192,6 @@ export default function PasswordRecovery() {
 
 
 
-    function updateEmail(data) {
-        setEmail(data)
-        emailRef.current=data
-    }
-
-
-
-
   return (
     <>
        <div className="seller-login-cnt" >
@@ -190,7 +201,7 @@ export default function PasswordRecovery() {
             <section className="shadow">
                 
                 <div className="err-cnt">
-
+                    
                 </div>
                 <br />
                 
@@ -221,9 +232,9 @@ export default function PasswordRecovery() {
                         
                     </div>
                 </form>
-                <div style={{textAlign: 'center'}} onClick={e => window.location.href=('/login')}>
+                {isApp === true ? '' : <div style={{textAlign: 'center'}} onClick={e => window.location.href=('/login')}>
                     <small style={{cursor: 'pointer', color: 'orangered', fontWeight: '400'}}>Back To Login</small>
-                </div>
+                </div>}
             </section>
         </div>
     </>

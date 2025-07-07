@@ -21,6 +21,7 @@ export default function History() {
     try {
       setRefreshing(true);
       const result = await getData('history');
+      console.log(result)
       if (result) {
         setData(JSON.parse(result));
       } else {

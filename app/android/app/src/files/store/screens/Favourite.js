@@ -85,14 +85,14 @@ const Card = ({ data }) => {
       onPress={() => navigation.navigate('user-product', { product_id: data?.product_id })} 
     >
       <Image 
-        source={{ uri: data?.thumbnail_id }} 
+        source={{ uri: data?.product?.thumbnail_id }} 
         style={styles.image} 
-        resizeMode="cover" 
+        resizeMode="cover"  
       />
       <View style={styles.details}>
-        <Text style={styles.title}>{data?.title}</Text>
-        <Text style={styles.stock}>Stock: {data?.stock}</Text>
-        <Text style={styles.price}>₦{data?.price}</Text>
+        <Text style={styles.title} numberOfLines={2}>{data?.product?.title}</Text>
+        <Text style={styles.stock}>Stock: {data?.product?.stock}</Text>
+        <Text style={styles.price}>₦{new Intl.NumberFormat('en-US').format(data?.product?.price)}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -100,10 +100,10 @@ const Card = ({ data }) => {
 
 const styles = StyleSheet.create({
   card: {
-    borderRadius: 8,
+    borderRadius: 4,
     overflow: 'hidden',
     backgroundColor: '#fff',
-    marginBottom: 12,
+    marginBottom: 6,
     elevation: 3,
     shadowColor: '#000',
     shadowOpacity: 0.1,

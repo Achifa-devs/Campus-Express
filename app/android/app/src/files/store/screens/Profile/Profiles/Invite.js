@@ -28,8 +28,8 @@ export default function Invite() {
     const onShare = async () => {
         try {
           const result = await Share.share({
-            message: 'Download the Campus Sphere app today and start shopping from the compfort of your lodge! https://campussphere.net',
-            url: 'https://campussphere.net', // Optional URL
+            message: 'Download the Campus Sphere app today and start shopping from the compfort of your lodge! https://www.campussphere.net',
+            url: 'https://www.campussphere.net', // Optional URL
           });
     
           if (result.action === Share.sharedAction) {

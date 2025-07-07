@@ -20,16 +20,26 @@ export const getFavourites = async (payload) => {
   const { user_id } = payload;
 
   // Business logic
-  const response = await findFavourites({ user_id });
-
-  const books = await Promise.all(
-    response.map(async (item) => {
-      const product = await findProductById(item?.product_id);
-      return { product, order: item };
-    })
-  );
-
-  return books;
+  try {
+    const response = await findFavourites({ user_id });
+    
+    const books = await Promise.all(
+      response.map(async (item) => {
+        const product = await findProductById({product_id: item?.product_id});
+        return { 
+          product: product[0],  
+          order: item 
+        };
+      })
+    );
+  
+    // console.log(books)
+    return books;
+  } catch (error) { 
+    console.log(error)
+    throw new Error(error);
+    
+  }
 
 };
 

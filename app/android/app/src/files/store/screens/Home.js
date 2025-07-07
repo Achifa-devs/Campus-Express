@@ -13,7 +13,6 @@ export default function Home() {
   const [data, setData] = useState([])
   const {user} = useSelector(s => s?.user)
   
-  const [Fav, setFav] = useState([])
   const fetchData = async () => {
      try {
        const res = await fetch(
@@ -33,34 +32,21 @@ export default function Home() {
      }
   };
 
-  const fetchFavourites = async() => {
-    try {
-      const result = await get_saved_list({
-        user_id: user?.user_id
-      })
-      if (result?.success) {
-        setFav(result?.data)
-      } else {
-        setFav([])
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  
   
   const sections = [
     // { key: 'flashads', component: <NavigationTabs /> },
     { key: 'flashads', component: <FlasAds /> },
     { key: 'showcase', component: <ShowCase category="trends" bg="rgb(255, 244, 224)" limit={30} /> },
-    { key: 'hot', component: <Hot data={data} Fav={Fav} /> },
+    { key: 'hot', component: <Hot data={data}  /> },
   ];
 
  
-  useEffect(() => {
-    if (user !== '' && user !== undefined && user !== null && user !== 'undefined' && user !== 'null') {
-      fetchFavourites();
-     }
-  }, [user]);
+  // useEffect(() => { 
+  //   if (user) {
+  //     fetchFavourites();
+  //    }
+  // }, [user]);
   
   useEffect(() => {
     fetchData();
@@ -68,7 +54,7 @@ export default function Home() {
  
    const onRefresh = useCallback(() => {
     setRefreshing(true);
-    fetchData().then(() => fetchFavourites()).finally(() => setRefreshing(false));
+    fetchData().finally(() => setRefreshing(false));
    }, [user]);
 
   return (
