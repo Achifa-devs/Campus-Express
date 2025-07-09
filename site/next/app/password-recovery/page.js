@@ -30,7 +30,7 @@ export default function PasswordRecovery() {
         }else{
             setIsApp(false)
         }
-    }, [app]);
+    }, []);
 
     let ConfirmEmail = async(e, inputs, check) => {
         

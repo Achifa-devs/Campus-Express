@@ -38,7 +38,7 @@ export default function ResetPwd() {
         }else{
             setIsApp(false)
         }
-    }, [app]);
+    }, []);
 
     let ResetPassword = async(e, inputs, check) => {
         

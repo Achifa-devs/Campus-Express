@@ -45,7 +45,7 @@ export default function ConfirmToken() {
         }else{
             setIsApp(false)
         }
-    }, [app]);
+    }, []);
 
 
     let VerifyToken = async(e, inputs, check) => {
