@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect } from 'react'
+import React, { Suspense, useEffect } from 'react'
 import { useRef, useState } from "react"
 import './styles/xx-large.css'
 import './styles/x-large.css'
@@ -10,7 +10,7 @@ import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup'
 import { useSearchParams } from 'next/navigation';
 
 
-export default function PasswordRecovery() {
+function PasswordRecoveryParams() {
 
     
     
@@ -241,4 +241,12 @@ export default function PasswordRecovery() {
   )
 }
 
+
+export default function PasswordRecovery() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PasswordRecoveryParams />
+    </Suspense>
+  );
+}
 
