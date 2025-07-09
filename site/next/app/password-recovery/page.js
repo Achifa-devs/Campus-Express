@@ -1,5 +1,5 @@
 "use client"
-import React, { Suspense, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useRef, useState } from "react"
 import './styles/xx-large.css'
 import './styles/x-large.css'
@@ -10,7 +10,7 @@ import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup'
 import { useSearchParams } from 'next/navigation';
 
 
-function PasswordRecoveryParams() {
+export default function PasswordRecovery() {
 
     
     
@@ -18,12 +18,11 @@ function PasswordRecoveryParams() {
     let validation = useRef(false);
 
 
-    const searchParams = useSearchParams();
-    const app = searchParams.get('app');
-
     const [isApp, setIsApp] = useState(true);
-
     useEffect(() => {
+        const searchParams = new URLSearchParams(window.location.search);
+        const app = searchParams.get('app');
+
         console.log('app param:', app);
         if (app === 'true') { 
             setIsApp(true)
@@ -241,12 +240,4 @@ function PasswordRecoveryParams() {
   )
 }
 
-
-export default function PasswordRecovery() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <PasswordRecoveryParams />
-    </Suspense>
-  );
-}
 
