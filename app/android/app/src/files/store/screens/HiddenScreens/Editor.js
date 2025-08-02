@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { View, Dimensions, Text, TouchableOpacity, TextInput, StyleSheet, KeyboardAvoidingView, Platform, Image, Alert, ScrollView } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
-import { RichEditor, RichToolbar, actions } from 'react-native-pell-rich-editor';
+// import { RichEditor, RichToolbar, actions } from 'react-native-pell-rich-editor';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -167,7 +167,7 @@ const EditorScreen = () => {
             <View style={styles.inputContainer}>
                 <Text style={styles.label}>Article Content</Text>
                 <View style={styles.editorContainer}>
-                    <RichToolbar
+                    {/* <RichToolbar
                         editor={richText}
                         actions={[
                             actions.setBold,
@@ -184,14 +184,14 @@ const EditorScreen = () => {
                         selectedIconTint="#FF4500"
                         onPressAddImage={() => handleImageSelection(false)}
                         style={styles.richToolbar}
-                    />
-                    <RichEditor
+                    /> */}
+                    {/* <RichEditor
                         ref={richText}
                         placeholder="Write your amazing content here..."
                         initialHeight={300}
                         style={styles.richEditor}
                         editorStyle={styles.editorStyle}
-                    />
+                    /> */}
                 </View>
             </View>
 

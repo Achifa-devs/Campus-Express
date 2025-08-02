@@ -1,33 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, StatusBar, TextInput,  } from 'react-native';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import { Provider, useDispatch, useSelector } from 'react-redux';
-import FlashMessage from 'react-native-flash-message';
+import { NavigationContainer } from '@react-navigation/native';
+import { Provider, useSelector } from 'react-redux';
+
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import store from './redux/store';
 import { Shop } from './android/app/src/files/utils/Store.js';
-import { setToggleMessage } from './redux/toggleMssg.js';
 
-import notifee, {
-  AndroidImportance,
-  AndroidStyle,
-  AndroidVisibility,
-  AuthorizationStatus
-} from '@notifee/react-native';
-
-import { getApp } from '@react-native-firebase/app';
-import {
-  getMessaging,
-  requestPermission,
-  getToken,
-  onMessage
-} from '@react-native-firebase/messaging';
-import { getData } from './android/app/src/files/utils/AsyncStore.js.js';
-import { setUserAuthTo } from './redux/reducer/auth.js';
 import { DownloadAppScreen } from './android/app/src/files/utils/Stacks/Update.js';
 import AuthStackScreen from './android/app/src/files/store/utils/Auth.js';
-
-const flashMessageRef = React.createRef();
 
 function App() {
 

@@ -1,5 +1,4 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import CookieManager from "@react-native-cookies/cookies";
 import { Alert } from "react-native";
 import { useDispatch } from "react-redux";
 import { set_cookie } from "../../../../redux/cookie";

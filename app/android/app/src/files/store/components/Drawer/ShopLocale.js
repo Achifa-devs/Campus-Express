@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { Dimensions, Image, Modal, ScrollView, StyleSheet, Switch, Text, TouchableOpacity, TouchableOpacityBase, View } from "react-native";
+import { Dimensions, TextInput, Image, Modal, ScrollView, StyleSheet, Switch, Text, TouchableOpacity, TouchableOpacityBase, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import Dropdown from "../../utils/Dropdown"; 
 import { school_choices,data } from "../../utils/location";
-import { TextInput } from "react-native-gesture-handler";
+// import { TextInput } from "react-native-gesture-handler";
 
 
 const ShopLocation = ({ navigation }) => {

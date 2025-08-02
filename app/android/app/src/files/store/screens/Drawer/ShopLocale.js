@@ -10,6 +10,7 @@ import {
     StyleSheet, 
     Switch, 
     Text, 
+    TextInput,
     TouchableOpacity, 
     TouchableOpacityBase, 
     View
@@ -21,7 +22,7 @@ import {
 // import {
 //     school_choices, data
 // } from "../../utils/location";
-import { TextInput } from "react-native-gesture-handler";
+// import { TextInput } from "react-native-gesture-handler";
 import DropdownExample from "../../../utils/DropDown";
 import { school_choices } from "../../utils/location copy";
 

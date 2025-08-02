@@ -14,7 +14,8 @@ import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { debounce } from 'lodash';
 import { get_saved_list, save_prod, unsave_prod } from '../../utils/Saver';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUserAuthTo } from '../../../../../../../redux/reducer/auth';
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - 25) / 2; // 16px padding on each side + 16px gap between cards
@@ -69,8 +70,30 @@ const ItemCard = React.memo(({ item, onPress }) => {
     }
   }, [Fav])
 
+  let dispatch = useDispatch()
+
   const handleSave = async() => {
     setFavLoading(true);
+    if(!user){
+      Alert.alert(
+        'You are not logged in',
+        'Please login to add this item to your wishlist.',
+        [
+          {
+            text: 'Login',
+            style: 'default',
+            onPress: () => {
+              dispatch(setUserAuthTo(true))
+            }
+          },
+          {
+            text: 'Cancel',
+            style: 'cancel'
+          }
+        ]
+      )
+      return;
+    }
     // dispatch(setToggleMessage(saved ? 'Removed from saved' : 'Product saved!'));
     // Alert.alert(item.product_id)
     if (!wishlisted) {
@@ -135,17 +158,29 @@ const ItemCard = React.memo(({ item, onPress }) => {
             handleSave()
           }}
         >
-          {favLoading && (
-            <View style={[styles.loadingOverlay, {backgroundColor: 'rgba(0, 0, 0, 0.3)'}]}>
+          {favLoading && user ?(
+            (<View style={[styles.loadingOverlay, {backgroundColor: 'rgba(0, 0, 0, 0.3)'}]}>
               <ActivityIndicator size="small" color="#FF4500" />
-            </View>
-          )}
+            </View>)
+          ): ''}
         
-          {!favLoading &&(<Icon 
-            name={wishlisted ? 'heart' : 'heart-outline'} 
-            size={20} 
-            color={wishlisted ? '#FF5A5F' : '#FFF'} 
-          />)}
+          {user && (
+            !favLoading ?(<Icon 
+              name={wishlisted ? 'heart' : 'heart-outline'} 
+              size={20} 
+              color={wishlisted ? '#FF5A5F' : '#FFF'} 
+            />) : ''
+          )}
+
+          {
+            !user && (
+              <Icon 
+                name={wishlisted ? 'heart' : 'heart-outline'} 
+                size={20} 
+                color={wishlisted ? '#FF5A5F' : '#FFF'} 
+              />
+            ) 
+          }
         </TouchableOpacity>
         
         {/* Condition Badge */}

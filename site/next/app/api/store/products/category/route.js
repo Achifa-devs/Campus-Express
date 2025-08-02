@@ -43,6 +43,7 @@ export async function GET(req) {
     }
 
     const result = await pool.query(query, queryParams);
+    console.log(result)
     return NextResponse.json({ bool: true, data: result.rows });
 
   } catch (error) {

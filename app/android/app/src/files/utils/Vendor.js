@@ -1,4 +1,3 @@
-import CookieManager from "@react-native-cookies/cookies";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";

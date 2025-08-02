@@ -9,7 +9,7 @@ import {
   RefreshControl,
   Alert
 } from 'react-native';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { useNavigation, useFocusEffect, CommonActions } from '@react-navigation/native';
 import { get_saved_list } from '../utils/Saver';
 import { useSelector } from 'react-redux';
 
@@ -82,7 +82,11 @@ const Card = ({ data }) => {
   return (
     <TouchableOpacity 
       style={styles.card} 
-      onPress={() => navigation.navigate('user-product', { product_id: data?.product_id })} 
+      onPress={() => {
+        navigation.navigate('user-product', { product_id: data?.product?.product_id })
+
+        
+      }} 
     >
       <Image 
         source={{ uri: data?.product?.thumbnail_id }} 

@@ -3,7 +3,7 @@ import { Dimensions, Image, KeyboardAvoidingView, Modal, ScrollView, StyleSheet,
 import { useDispatch, useSelector } from "react-redux";
 // import Dropdown from "../../utils/Dropdown";
 import { school_choices,data } from "../../utils/location";
-import { RichEditor, RichToolbar, actions } from 'react-native-pell-rich-editor';
+// import { RichEditor, RichToolbar, actions } from 'react-native-pell-rich-editor';
 import BottomModal from "../../utils/BtmModal";
 import DropdownExample from "../../../utils/DropDown";
 const Refund = ({ navigation }) => {
@@ -74,13 +74,13 @@ const Refund = ({ navigation }) => {
                         <View style={{ height: 'auto', display: 'flex', color: '#000', width: '100%', flexDirection: 'column', marginBottom: 10}}>
                             <Text style={{ width: '100%', color: '#000' }}>Refund conditions & terms</Text>
                         
-                            <RichToolbar
+                            {/* <RichToolbar
                                 editor={richText}
                                 actions={[actions.insertLink, actions.redo, actions.undo, actions.setBold, actions.setItalic, actions.keyboard, actions.setUnderline, actions.insertBulletsList, actions.insertOrderedList]}
                                 iconTint="#000"
-                            /> 
+                            />  */}
                             <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}	style={{ flex: 1 }}>
-                            <RichEditor
+                            {/* <RichEditor
                                     ref={richText}
                                     placeholder="Start writing here..."
                                     style={{
@@ -94,7 +94,7 @@ const Refund = ({ navigation }) => {
                                         backgroundColor: '#FFF', // For editor content background
                                         contentCSSText: 'background-color: #FFF; height: 250px;', // Force inner HTML background and height
                                     }}
-                                />
+                                /> */}
                             </KeyboardAvoidingView>
                             <Text style={{ color: '#000', marginBottom: 15, display: stateErr.length > 0 ? 'flex' : 'none', fontSize: 10, paddingLeft: 5, color: 'red' }}>{stateErr}</Text>
                             

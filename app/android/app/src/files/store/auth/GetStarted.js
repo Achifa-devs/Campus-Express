@@ -10,11 +10,6 @@ import ProfitSvg from '../../media/assets/18771520_6030257.svg';
 import BuySvg from '../../media/assets/10769657_4530193.svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-// Uncomment and import your helper functions & actions as needed
-// import CookieManager from '@react-native-cookies/cookies';
-// import { set_cookie, set_user } from '../../redux/actions';
-// import { getData } from '../../helpers/storage';
-
 export default function GetStarted() {
   const screenHeight = Dimensions.get('screen').height;
   const screenWidth = Dimensions.get('screen').width;
@@ -141,7 +136,7 @@ export default function GetStarted() {
             <TouchableOpacity
               activeOpacity={0.8}
               style={styles.getStartedBtn}
-              onPress={() => navigation.navigate('user-signup')}
+              onPress={() => navigation.navigate('user-login')}
             >
               <Text style={{ color: '#fff' }}>Get started</Text>
             </TouchableOpacity>
