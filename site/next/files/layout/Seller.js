@@ -25,7 +25,7 @@ const SellerLayout = ({children,setCookie}) => {
         const excludedPaths = ['login', 'signup', 'password-recovery'];
 
         if (!excludedPaths.includes(currentPath)) {
-            fetch('https://www.campussphere.net/api/store/auth', {
+            fetch('/api/store/auth', {
             method: 'GET'
             })
             .then(async (res) => {

@@ -28,7 +28,7 @@ const BuyerLayout = ({children}) => {
         const excludedPaths = ['login', 'signup', 'password-recovery', ''];
 
         if (!excludedPaths.includes(currentPath)) {
-            fetch('https://www.campussphere.net/api/store/auth', {
+            fetch('/api/store/auth', {
             method: 'GET'
             })
             .then(async (res) => {
@@ -77,7 +77,7 @@ const BuyerLayout = ({children}) => {
     useEffect(() => {
 
         if(user_id !== null){
-            fetch(`https://www.campussphere.net/api/store/customer?user_id=${user_id}`,
+            fetch(`/api/store/customer?user_id=${user_id}`,
             {
                 headers: {
                     'Content-Type': 'application/json'

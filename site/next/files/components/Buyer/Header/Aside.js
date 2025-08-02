@@ -7,7 +7,7 @@ import login from '@/public/login.svg'
 import loginw from '@/public/loginw.svg'
 
 import savedSvg from '@/public/bookmark-outlined-saved-svgrepo-com.svg'
-import sellSvg1 from '@/public/sell-svgrepo-com (1).svg'
+import cancelSvg from '@/public/cancel-svgrepo-com.svg' 
 // import inboxSvg from '@/public/inbox-in-svgrepo-com.svg'
 import logoutSvg from '@/public/logout-2-svgrepo-com.svg'
 
@@ -83,7 +83,7 @@ const Aside = ({
     
 
     let list1 = [
-        // {text: 'Orders', svg: orderSvg.src, uri: 'orders'},
+        {text: 'Orders', svg: orderSvg.src, uri: 'orders'},
         {text: 'Inbox', svg: inboxSvg.src, uri: 'inbox'},
         {text: 'Favourites', svg: savedSvg.src, uri: 'favourites'},
         // {text: 'Followed Sellers', svg: '', uri: 'following'},
@@ -94,7 +94,7 @@ const Aside = ({
         {uri: 'account-managements',text: 'My Account', img: userSvg.src},
         {uri: 'faq',text: 'Help Center', img: helpSvg.src}, 
         // {uri: '',text: 'Refund & Return', img: refundSvg.src}, 
-        // {uri: '',text: 'Cancel An Order', img: cancelSvg.src}, 
+        {uri: '',text: 'Cancel An Order', img: cancelSvg.src}, 
         // {uri: 'customer-service',text: 'Contact Us', img: contactSvg.src}, 
         {uri: 'policy',text: 'Privacy Policy', img: contactSvg.src}, 
         {uri: 'logout',text: buyer_info?.fname ? 'Logout' : 'Login', img: buyer_info?.fname ? logoutSvg.src : login.src}

@@ -14,7 +14,7 @@ const AsideMenu = ({}) => {
     useEffect(() => {let width = window.innerWidth;setScreenWidth(width)},[]);
     
     let list = [
-        // {name: 'Orders', svg: '', uri: 'orders'},
+        {name: 'Orders', svg: '', uri: 'orders'},
         {name: 'Inbox', svg: '', uri: 'inbox'},
         {name: 'Favourites', svg: '', uri: 'favourites'},
         // {name: 'Followed Sellers', svg: '', uri: 'following'},

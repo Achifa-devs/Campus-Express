@@ -1,7 +1,5 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 import pool from '../../db';
 
 export async function GET(req) {
@@ -18,6 +16,7 @@ export async function GET(req) {
     return NextResponse.json({data: result.rows[0], bool: true}, { status: 200 });
 
   } catch (error) {
+    console.log(error)
     return NextResponse.json({
       Mssg: "An error occurred ",
       bool: false
