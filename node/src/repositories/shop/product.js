@@ -18,17 +18,55 @@ export async function findProductById({ product_id }) {
 export async function findProducts({ limit, campus }) {
   if (limit !== null) {
     const result = await pool.query(
-      `SELECT * FROM products WHERE state->>'state' = 'active' AND campus = $1 LIMIT $2`,
+      `SELECT * 
+       FROM products 
+       WHERE state->>'state' = 'active' 
+       AND (campus = $1 OR $1 IS NULL)
+       LIMIT $2`,
       [campus, limit]
     );
     return result.rows;
   } else {
     const result = await pool.query(
-      `SELECT * FROM products WHERE state->>'state' = 'active'`
+      `SELECT * 
+       FROM products 
+       WHERE state->>'state' = 'active'
+       AND (campus = $1 OR $1 IS NULL)`,
+      [campus]
     );
     return result.rows;
   }
 };
+
+// Find products by category
+export async function findProductsByCategory({ category, limit, campus }) {
+  const result = await pool.query(
+    `SELECT * 
+     FROM products 
+     WHERE category = $1 
+     AND state->>'state' = 'active' 
+     AND (campus = $2 OR $2 IS NULL)
+     LIMIT $3`,
+    [category, campus, limit]
+  );
+  return result.rows;
+};
+
+// Find products by category and gender
+export async function findProductsByCategoryAndGender({ category, cap_gender, limit, campus }) {
+  const result = await pool.query(
+    `SELECT * 
+     FROM products 
+     WHERE category = $1 
+     AND state->>'state' = 'active' 
+     AND others->>'gender' = $2 
+     AND (campus = $3 OR $3 IS NULL)
+     LIMIT $4`,
+    [category, cap_gender, campus, limit]
+  );
+  return result.rows;
+};
+
 
 export async function findProductsType({ type, limit }) {
    const result = await pool.query(
@@ -37,26 +75,6 @@ export async function findProductsType({ type, limit }) {
     );
     return result.rows;
 };
-
-// Find products by category
-export async function findProductsByCategory({ category,limit,campus }) {
-  const result = await pool.query(
-    `SELECT * FROM products WHERE category = $1 AND state->>'state' = 'active' AND campus = $2 LIMIT $3`,
-    [category,campus,limit]
-  );
-  return result.rows;
-};
-
-// Find products by category
-export async function findProductsByCategoryAndGender({ category, cap_gender, limit, campus }) {
-  const result = await pool.query(
-    `SELECT * FROM products WHERE ategory = $1 AND state->>'state' = 'active' AND others->>'gender' = $2 AND campus = $3 LIMIT $4`,
-    [category,cap_gender, campus, limit]
-  );
-  return result.rows;
-};
-
-
 
 // Find product thumnail by ID
 export async function findProductsThumbnailById({ product_id }) {
