@@ -32,7 +32,7 @@ export const getSearch = async (payload) => {
 };
 
 export const getProducts = async (payload) => {
-  let { category, limit, gender } = payload;
+  let { category, limit, gender, campus } = payload;
  
   let trimmed = atob(category).trim();
     
@@ -50,19 +50,19 @@ export const getProducts = async (payload) => {
 
   // Business logic
   if (trimmed.toLowerCase() === 'fashion' || trimmed.toLowerCase() === 'lodge & apartments') {
-    const response = await findProductsByCategoryAndGender({ trimmed, cap_gender, limit });
+    const response = await findProductsByCategoryAndGender({ trimmed, cap_gender, limit, campus });
 
     return response;
 
   } else if (trimmed.toLowerCase() === 'trends') {
 
-    const response = await findProducts({ limit });
+    const response = await findProducts({ limit, campus });
     console.log("response: ", response)
     return response;
 
   }
 
-  const response = await findProductsByCategory({ category, limit });
+  const response = await findProductsByCategory({ category, limit, campus });
 
   return response;
 };
