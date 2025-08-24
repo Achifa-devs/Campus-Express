@@ -13,7 +13,7 @@ export async function findProductById({ product_id }) {
 
 // Find products
 export async function findProducts({ limit, campus }) {
-  if (campus === null) {
+  if (campus === 'null') {
     const result = await pool.query(
       `SELECT * 
        FROM products 
@@ -37,7 +37,7 @@ export async function findProducts({ limit, campus }) {
 
 // Find products by category
 export async function findProductsByCategory({ category, limit, campus }) {
-  if (campus === null) {
+  if (campus === 'null') {
     const result = await pool.query(
       `SELECT * 
        FROM products 
@@ -63,7 +63,7 @@ export async function findProductsByCategory({ category, limit, campus }) {
 
 // Find products by category and gender
 export async function findProductsByCategoryAndGender({ category, cap_gender, limit, campus }) {
-  if (campus === null) {
+  if (campus === 'null') {
     const result = await pool.query(
       `SELECT * 
        FROM products 
