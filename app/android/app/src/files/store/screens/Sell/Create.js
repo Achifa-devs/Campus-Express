@@ -5,6 +5,8 @@ import Price from '../../components/Create.js/Price';
 import Stock from '../../components/Create.js/Stock';
 import Condition from '../../components/Create.js/Condition';  
 import items from '../../../../../../../items.json';
+import lodge from '../../../../../../../lodge.json';
+import service from '../../../../../../../services.json';
 import Photo from '../../components/Create.js/Photo';
 import SubCategory from '../../components/Create.js/SubCategory';
 import Gender from '../../components/Create.js/Gender';
@@ -16,12 +18,14 @@ import UploadBtn from '../../components/Create.js/UploadBtn';
 import { generateId } from '../../utils/IdGen';
 import Address1 from '../../components/Create.js/Address1';
 import Address2 from '../../components/Create.js/Address2';
-import { Ellipse, err } from 'react-native-svg';
 import DeliveryRangeSelector from '../../components/Create.js/Delivery';
 import ShippingPolicy from '../../components/Create.js/ShippingPolicy';
 import ShippingDuration from '../../components/Create.js/ShippingDuration';
 import { getData } from '../../../utils/AsyncStore.js';
 import { useNavigation } from '@react-navigation/native';
+import Features from './Amenities.js';
+import Video from '../../components/Create.js/Video.js';
+
 export default function Create({ route }) {
   let screenWidth = Dimensions.get('window').width;
   let screenHeight = Dimensions.get('window').height;
@@ -53,8 +57,9 @@ export default function Create({ route }) {
   const [productId, setProductId] = useState('');
   const [uploading, setUploading] = useState(false);
 
+  const [purpose, setPurpose] = useState('')
+
   function updatePhotos(data) {
-    // console.log(data)
     setPhotos(data)
   }
   useEffect(() => {
@@ -68,12 +73,18 @@ export default function Create({ route }) {
     }
   }, [route])
 
+  useEffect(() => {
+    const { purpose } = route?.params;
+    setPurpose(purpose)
+  }, [route])
+
   let [address1, set_address1] = useState('')
   let [address2, set_address2] = useState('')
   let [title, set_title] = useState('')
   let [category, set_category] = useState('')
   let [type, set_type] = useState('')
   let [condition, set_condition] = useState('')
+  let [features, set_features] = useState([]);
   let [description, set_description] = useState('')
   let [price, set_price] = useState('')
   let [stock, set_stock] = useState('')
@@ -136,6 +147,7 @@ export default function Create({ route }) {
     stock,
     sub_category,
     gender,
+    features,
     condition,
     size,
     address1,
@@ -153,7 +165,7 @@ export default function Create({ route }) {
     shipping_policy,
     shipping_duration,
     stock,
-
+    features,
     sub_category,
     gender,
     condition,
@@ -168,105 +180,106 @@ export default function Create({ route }) {
   let [errList, setErrList] = useState({});
 
   useEffect(() => {
-    if (category === 'Fashion') {
-      if (type !== 'Clothing' && type !== 'Foot Wear') {
-        setErrList({
-          categoryErr: '',
-          titleErr: '',   
-          shippingRangeErr: '',          
-          genderErr: '',  
-          thumbnailErr: '',
-          priceErr: '', 
-          typeErr: '', 
-          conditionErr: '',
-          stockErr: '',
-          shipping_policyErr: '',
-          shipping_durationErr: ''
-        })
-      } else if (type === 'Accessories') {
-        setErrList({
-          categoryErr: '',
-          titleErr: '',      
-          shippingRangeErr: '',          
-          genderErr: '',  
-          thumbnailErr: '',
-          priceErr: '', 
-          typeErr: '', 
-          sub_categoryErr: '',
-          conditionErr: '',
-          stockErr: '',
-          shipping_policyErr: '',
-          shipping_durationErr: ''
-        })
-      } else {
+    if (purpose === 'product') {
+      if (category === 'Fashion') {
+        if (type !== 'Clothing' && type !== 'Foot Wear') {
+          setErrList({
+            categoryErr: '',
+            titleErr: '',   
+            shippingRangeErr: '',          
+            genderErr: '',  
+            thumbnailErr: '',
+            priceErr: '', 
+            typeErr: '', 
+            conditionErr: '',
+            stockErr: '',
+            shipping_policyErr: '',
+            shipping_durationErr: ''
+          })
+        } else if (type === 'Accessories') {
+          setErrList({
+            categoryErr: '',
+            titleErr: '',      
+            shippingRangeErr: '',          
+            genderErr: '',  
+            thumbnailErr: '',
+            priceErr: '', 
+            typeErr: '', 
+            sub_categoryErr: '',
+            conditionErr: '',
+            stockErr: '',
+            shipping_policyErr: '',
+            shipping_durationErr: ''
+          })
+        } else {
+          setErrList({
+            categoryErr: '',
+            titleErr: '',
+            shippingRangeErr: '',          
+            genderErr: '',  
+            thumbnailErr: '',
+            priceErr: '', 
+            typeErr: '', 
+            sub_categoryErr: '',
+            sizeErr: '',
+            conditionErr: '',
+            stockErr: '',
+            shipping_policyErr: '',
+            shipping_durationErr: ''
+          })
+        }
+  
+        
+      } else if(category === 'Pets'){
         setErrList({
           categoryErr: '',
           titleErr: '',
-          shippingRangeErr: '',          
-          genderErr: '',  
+          shippingRangeErr: '', 
           thumbnailErr: '',
           priceErr: '', 
           typeErr: '', 
-          sub_categoryErr: '',
-          sizeErr: '',
+          stockErr: '',
+          shipping_policyErr,
+          shipping_durationErr
+        })
+      }else {
+        setErrList({
+          categoryErr: '',
+          titleErr: '',
+          shippingRangeErr: '', 
+          thumbnailErr: '',
           conditionErr: '',
+          priceErr: '', 
+          typeErr: '', 
           stockErr: '',
           shipping_policyErr: '',
-          shipping_durationErr: ''
+            shipping_durationErr: ''
         })
       }
-
-      
-    } else if (category === 'Services') {
-      setErrList({
-        categoryErr: '',
-        titleErr: '',
-        // shippingRangeErr: '', 
-        thumbnailErr: '',
-        priceErr: '', 
-        typeErr: '', 
-        address1Err: '',
-        address2Err: ''
-      })
-    } else if (category === 'Lodge & Apartments') {
+    } else if (purpose === 'accomodation') {
       setErrList({
         categoryErr: '',
         genderErr: '',  
         titleErr: '',
-        // shippingRangeErr: '', 
+        featuresErr: '',
         thumbnailErr: '',
         priceErr: '', 
         typeErr: '', 
-        sub_categoryErr: '',
+        // sub_categoryErr: '',
         address1Err: '',
         address2Err: ''
       })
-    } else if(category === 'Pets'){
+    }else{
       setErrList({
         categoryErr: '',
         titleErr: '',
-        shippingRangeErr: '', 
         thumbnailErr: '',
         priceErr: '', 
         typeErr: '', 
-        stockErr: '',
-        shipping_policyErr,
-        shipping_durationErr
+        address1Err: '',
+        address2Err: ''
       })
-    }else {
-      setErrList({
-        categoryErr: '',
-        titleErr: '',
-        shippingRangeErr: '', 
-        thumbnailErr: '',
-        conditionErr: '',
-        priceErr: '', 
-        typeErr: '', 
-        stockErr: '',
-        shipping_policyErr: '',
-          shipping_durationErr: ''
-      })
-    }
+    } 
   }, [category,type])
 
 
@@ -296,10 +309,18 @@ export default function Create({ route }) {
   let data = useRef([title, category, price]);
 
   useEffect(() => {
-    const keys = items.items.category.map(item => Object.keys(item)[0]);
-    set_category_list([])
-    keys.map(item => set_category_list(data => [...data, { title: item }]));
-  }, [])
+    if (purpose === 'product') {
+      const keys = items.items.category.map(item => Object.keys(item)[0]);
+      set_category_list([])
+      keys.map(item => set_category_list(data => [...data, { title: item }]));
+    } else if(purpose === 'accomodation'){
+      const keys = lodge.items.category.map(item => Object.keys(item)[0]);
+      set_category_list([])
+      keys.map(item => set_category_list(data => [...data, { title: item }]));
+    }else{
+
+    }  
+  }, [purpose])
 
   function updateTitle(data) {
     set_title(data)
@@ -307,11 +328,22 @@ export default function Create({ route }) {
 
   function updateCategory(data) {
     set_category(data)
-    let x = items.items.category;
-    let result = x.filter(item => (Object.keys(item)[0] === data.trim()));
-    set_type_list([])
-    result[0][data.trim()].map(item => set_type_list(data=> [...data, {title: item}]))
-    
+    if (purpose === 'product') {
+      let x = items.items.category;
+      let result = x.filter(item => (Object.keys(item)[0] === data.trim()));
+      set_type_list([])
+      result[0][data.trim()].map(item => set_type_list(data=> [...data, {title: item}]))
+    }else if(purpose === 'accomodation'){
+      let x = lodge.items.category;
+      let result = x.filter(item => (Object.keys(item)[0] === data.trim()));
+      set_type_list([])
+      result[0][data.trim()].map(item => set_type_list(data=> [...data, {title: item}]))
+    }else{
+      let x = service.items.category;
+      let result = x.filter(item => (Object.keys(item)[0] === data.trim()));
+      set_type_list([])
+      result[0][data.trim()].map(item => set_type_list(data=> [...data, {title: item}]))
+    }
   }
 
   function updateType(data) {
@@ -355,6 +387,11 @@ export default function Create({ route }) {
       category === 'Fashion' ?result[0]['ClothingFemale'].map(item => set_sub_type_list(data => [...data, {title: item}])) : ''
       
     }
+  }
+
+
+  function updateFeatures(data){
+    set_features(data)
   }
 
   function updateSubCategory(data) {
@@ -421,7 +458,11 @@ export default function Create({ route }) {
       const value = fields[field];
       
       if (!value || (Array.isArray(value) && value.length === 0)) {
-        newErrors[key] = `${field} is required`;
+        if(purpose === 'product'){
+          newErrors[key] = `Image ${field} is required`;
+        }else{
+          newErrors[key] = `Video ${field} is required`;
+        }
       } else {
         if (field === 'price') {
           const digitsOnly = value.replace(/\D/g, '');
@@ -570,10 +611,15 @@ export default function Create({ route }) {
           }}
           contentContainerStyle={{display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'flex-start', flexWrap: 'wrap'}}
         >
-            <Category error={errList.categoryErr} category_list={category_list} updateCategory={updateCategory} />
+            <Category purpose={purpose} error={errList.categoryErr} category_list={category_list} updateCategory={updateCategory} />
 
             
-            <Photo error={errList.thumbnailErr} productId={productId} updateThumbnail={updateThumbnail} updatePhotos={updatePhotos} photos={photos} setUploading={setUploading} />
+            {
+              purpose === 'product'?
+              <Photo error={errList.thumbnailErr} productId={productId} updateThumbnail={updateThumbnail} updatePhotos={updatePhotos} photos={photos} setUploading={setUploading} />
+              : purpose === 'accomodation'? <Video error={errList.thumbnailErr} productId={productId} updateThumbnail={updateThumbnail} updatePhotos={updatePhotos} videos={photos} setUploading={setUploading} />
+              : ''
+            }
             
             <View style={{width: '100%', marginTop: 5, opacity: category !== '' ? 1 : .5, pointerEvents: category !== '' ? 'auto' : 'none', marginBottom: 5, padding: 0, backgroundColor: '#efefef'}}>
               {
@@ -629,14 +675,17 @@ export default function Create({ route }) {
               }
               
               {
-                category === 'Lodge & Apartments' || category === 'Pets' || category === 'Food' || category === 'Services'
-                ? 
-                ""
-                : 
-                <Condition error={errList.conditionErr} category={category} updateCondition={updateCondition} />
+                purpose === 'product' ?
+                 category === 'Pets' || category === 'Food' 
+                  ? 
+                  ""
+                  : 
+                  <Condition error={errList.conditionErr} category={category} updateCondition={updateCondition} />
+                :
+                ''
               } 
               {
-                category === 'Lodge & Apartments' || category === 'Services'
+                purpose === 'accomodation'
                 ? 
                 <>
                   <Address1 error={errList.address1Err} updateAddress1={updateAddress1} category={category} />
@@ -646,7 +695,7 @@ export default function Create({ route }) {
                 ""
             }
             {
-                category !== 'Lodge & Apartments' && category !== 'Services'
+                purpose === 'product'
                 ? 
                 <>
                   <ShippingPolicy updateShippingPolicy={updateShippingPolicy} error={errList.shipping_policyErr} />
@@ -656,25 +705,35 @@ export default function Create({ route }) {
               ''
             }
             </View>
-            <Title error={errList.titleErr} updateTitle={updateTitle} category={category} />
+            <Title error={errList.titleErr} updateTitle={updateTitle} category={category} purpose={purpose} />
 
             <Price error={errList.priceErr} updatePrice={updatePrice} />
           
             {
-              category !== 'Lodge & Apartments' && category !== 'Services'
+              purpose === 'product'
               ? 
               <Stock error={errList.stockErr} updateStock={updateStock} />
               :
               ""
             }
+
+            {
+              purpose === 'accomodation'?
+              <Features updateFeatures={updateFeatures} error={errList.featuresErr}  />
+              : '' 
+            }
             <Description updateDescription={updateDescription} /> 
             
-            <DeliveryRangeSelector 
-              shippingRange={shippingRange} 
-              updateShippingRangePrice={updateShippingRangePrice} 
-              updateShippingRange={updateShippingRange}
-              error={errList.shippingRangeErr}
-            />
+            {
+              purpose === 'product' ?
+                <DeliveryRangeSelector 
+                shippingRange={shippingRange} 
+                updateShippingRangePrice={updateShippingRangePrice} 
+                updateShippingRange={updateShippingRange}
+                error={errList.shippingRangeErr}
+              />
+              : ''
+            }
 
             
         </ScrollView>

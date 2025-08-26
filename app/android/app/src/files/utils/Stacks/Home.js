@@ -51,15 +51,22 @@ import NotificationScreen from "../../store/screens/NotificationScreen";
 import Editor from "../../store/screens/HiddenScreens/Editor";
 import Productimages from "../../store/screens/Productimages";
 import { setUserAuthTo } from "../../../../../../redux/reducer/auth";
+
+import { set_locale_modal } from "../../../../../../redux/locale";
+import NavigationTabs from "../../store/components/Home/Ads";
 const HomeStack = createNativeStackNavigator();
 export function HomeStackScreen() {
    
-    const {user} = useSelector(s => s.user);4
+    const {user} = useSelector(s => s.user);
+    const {campus} = useSelector(s => s.campus);
     
        const dispatch = useDispatch()
+       useEffect(() => {
+         console.log(campus)
+       }, [campus])
      
 
-    return ( 
+    return (  
       
     <HomeStack.Navigator>
         
@@ -68,46 +75,63 @@ export function HomeStackScreen() {
                 header: ({navigation}) =>
                 (
                     <>
-                        <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', alignItems: 'center', padding: 7}}>
+                        <View style={styles.headerContainer}>
+                            <StatusBar backgroundColor="#FFF" barStyle="dark-content" />
                             
-                            <Image height={60} width={60} source={{ uri: 'https://res.cloudinary.com/daqbhghwq/image/upload/v1746402998/Untitled_design-removebg-preview_peqlme.png' }} />
-                           
+                            {/* Logo */}
+                            <View style={styles.logoContainer}>
+                                <Image 
+                                source={{ uri: 'https://res.cloudinary.com/daqbhghwq/image/upload/v1746402998/Untitled_design-removebg-preview_peqlme.png' }} 
+                                style={styles.logo}
+                                resizeMode="contain"
+                                />
+                            </View>
 
-                            <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 0, alignItems: 'center'}}>
-                               
-                                {/* <TouchableOpacity onPress={e => navigation.navigate('user-notification')}>
-                                    <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 0, alignItems: 'flex-end'}}>
-                                        <View style={{backgroundColor: '#fff', height: '100%', width: 40, borderRadius: 10, padding: 4}}> 
-                                            <Text style={{backgroundColor: 'hsl(14.086956521739133, 100%, 54.90196078431373%);', height: 'auto', display: 'flex', flexDirection: 'row',width: 'fit-content', alignItems: 'center' ,justifyContent: 'center', position: 'absolute', color: '#fff', left: -8, top: -2.5, borderRadius: 15, borderRadius: 10, fontSize: 10, padding: 3.5}}>7</Text>
-                                            <Icon name="notifications-outline" size={24} color="#FF4500" />
-                                        </View>
-                                    </View>    
+                            {/* Right Section */}
+                            <View style={styles.rightSection}>
+                                {/* Location Selector */}
+                                <TouchableOpacity 
+                                style={styles.locationButton}
+                                onPress={() => dispatch(set_locale_modal(1))}
+                                activeOpacity={0.7}
+                                >
+                                <Icon name="location-outline" size={16} color="#FF4500" />
+                                <Text style={styles.locationText} numberOfLines={1}>
+                                    {campus || 'Select Campus'}
+                                </Text>
+                                <Icon name="chevron-down" size={14} color="#FF4500" />
+                                </TouchableOpacity>
+
+                                {/* Notification Bell (commented out but styled) */}
+                                {/* <TouchableOpacity 
+                                style={styles.notificationButton}
+                                onPress={() => navigation.navigate('user-notification')}
+                                activeOpacity={0.7}
+                                >
+                                <View style={styles.notificationContainer}>
+                                    <Icon name="notifications-outline" size={22} color="#FF4500" />
+                                    <View style={styles.notificationBadge}>
+                                    <Text style={styles.badgeText}>7</Text>
+                                    </View>
+                                </View>
                                 </TouchableOpacity> */}
-                                {user && 
-                                    <>
-                                        <Ionicons name={"location-outline"} size={18} color={"#FF4500"} />
-                                        <Text style={{color: '#FF4500', fontWeight: '500'}}>{user?.campus}</Text>
-                                    </>
-                                }
-                                {
-                                    !user 
-                                    &&
-                                    <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#FF4500', marginRight: 15, borderRadius: 50, paddingVertical: 7, paddingHorizontal: 15}} onPress={e => {
-                                        dispatch(setUserAuthTo(true))
-                                        
-                                    }}>
-                                        <Text style={{
-                                            color: '#fff',
-                                            paddingRight: 8
-                                        }}>Login</Text>
-                                        <Ionicons name={"enter-outline"} size={18} color={"#fff"} />
 
-                                    </TouchableOpacity>
-                                }
+                                {/* Login Button */}
+                                {!user && (
+                                <TouchableOpacity 
+                                    style={styles.loginButton}
+                                    onPress={() => dispatch(setUserAuthTo(true))}
+                                    activeOpacity={0.9}
+                                >
+                                    <Text style={styles.loginText}>Login</Text>
+                                    <Icon name="log-in-outline" size={16} color="#FFF" />
+                                </TouchableOpacity>
+                                )}
                             </View>
                         </View>
-                        
-                        {/* <SearchBtn /> */} 
+                                                
+                        <SearchBtn /> 
+                        <NavigationTabs />
                     </>
                 ),
             // headerShown: false, 
@@ -679,3 +703,120 @@ export function HomeStackScreen() {
   );
 }   
 
+const styles = StyleSheet.create({
+    headerContainer: { 
+    height: 60,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#FFF',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F0F0F0',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 3.84,
+    elevation: 5,
+    ...Platform.select({
+      ios: {
+        paddingTop: 10,
+      },
+    }),
+  },
+  logoContainer: {
+    flex: 1,
+  },
+  logo: {
+    width: 50,
+    height: 40,
+  },
+  rightSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  locationButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFF6F2',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#FFE5D9',
+    minWidth: 120,
+    maxWidth: 160,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+      },
+      android: {
+        elevation: 2,
+      },
+    }),
+  },
+  locationText: {
+    color: '#FF4500',
+    fontWeight: '600',
+    fontSize: 13,
+    marginHorizontal: 6,
+    flexShrink: 1,
+  },
+  notificationButton: {
+    padding: 8,
+  },
+  notificationContainer: {
+    position: 'relative',
+  },
+  notificationBadge: {
+    position: 'absolute',
+    top: -4,
+    right: -4,
+    backgroundColor: '#FF4500',
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1.5,
+    borderColor: '#FFF',
+  },
+  badgeText: {
+    color: '#FFF',
+    fontSize: 10,
+    fontWeight: 'bold',
+  },
+  loginButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FF4500',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    gap: 6,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#FF4500',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 3,
+      },
+    }),
+  },
+  loginText: {
+    color: '#FFF',
+    fontWeight: '600',
+    fontSize: 14,
+  },
+})

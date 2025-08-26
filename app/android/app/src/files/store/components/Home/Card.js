@@ -1,20 +1,22 @@
 import React from 'react';
-import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 const size = 60; // Circle size
+const screenWidth = Dimensions.get('screen').width;
 
-export default function Card({ item,index }) {
+export default function Card({ item, index }) {
     const navigation = useNavigation();
 
-    const categoryName = Object.keys(item).find(key => key !== 'img');
+    // get the category name (excluding "img")
+    const categoryName = (item).name ? item.name : Object.keys(item).find(key => key !== 'img');
     const imgUrl = item.img;
-
     const isMoreCard = categoryName === 'More';
 
     const handlePress = () => {
+        console.log(item)
         if (isMoreCard) {
-            navigation.navigate('all-category'); // Update route if needed
+            navigation.navigate('all-category'); // adjust route if needed
         } else {
             navigation.navigate('user-type', {
                 types: Object.values(item)[0],
@@ -24,7 +26,12 @@ export default function Card({ item,index }) {
     };
 
     return (
-        <TouchableOpacity style={styles.cardContainer(index)} onPress={handlePress}>
+        <TouchableOpacity 
+            style={styles.cardContainer(index)} 
+            onPress={handlePress} 
+            activeOpacity={0.7}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+        >
             <View style={[styles.circle, isMoreCard && styles.moreCircle]}>
                 {imgUrl && !isMoreCard ? (
                     <Image source={{ uri: imgUrl }} style={styles.image} resizeMode="cover" />
@@ -32,24 +39,23 @@ export default function Card({ item,index }) {
                     <Text style={styles.moreText}>+</Text>
                 )}
             </View>
-            <Text style={styles.label} numberOfLines={2}>{categoryName}</Text>
+            <Text style={styles.label} numberOfLines={2}>
+                {categoryName}
+            </Text>
         </TouchableOpacity>
     );
 }
 
-const s = Dimensions.get('screen').width;
-
 const styles = StyleSheet.create({
     cardContainer: (index) => ({
-        width: s*.15,
-        // height: 100,
+        width: screenWidth * 0.15,
         margin: 8,
         marginLeft: index === 0 ? 0 : 15,
         alignItems: 'center',
     }),
     circle: {
-        width: size,
-        height: size,
+        width: size * 0.8,
+        height: size * 0.8,
         borderRadius: size / 2,
         backgroundColor: '#eee',
         justifyContent: 'center',

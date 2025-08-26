@@ -3,7 +3,7 @@ import { Dimensions, Image, Modal, ScrollView, StyleSheet, Switch, Text, Touchab
 import { useDispatch, useSelector } from "react-redux";
 import Dropdown from "../../utils/Dropdown"; 
 import { school_choices,data } from "../../utils/location";
-import { TextInput } from "react-native-gesture-handler";
+import { TextInput } from "react-native";
 
 
 const ShopLocation = ({ navigation }) => {

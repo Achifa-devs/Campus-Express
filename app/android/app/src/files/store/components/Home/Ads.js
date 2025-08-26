@@ -3,14 +3,17 @@ import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-nati
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { debounce } from 'lodash';
+import { useDispatch } from 'react-redux';
+import { set_option } from '../../../../../../../redux/option';
 
 const { width } = Dimensions.get('window');
 const ITEM_WIDTH = (width - 40) / 3; // Account for padding
 
 const navItems = [
-  { name: 'bed-outline', activeName: 'bed', label: 'Lodges', route: 'user-lodge' },
-  { name: 'construct-outline', activeName: 'construct', label: 'Services', route: 'user-service' },
-  { name: 'newspaper-outline', activeName: 'newspaper', label: 'News', route: 'user-news' },
+  { name: 'cart-outline', activeName: 'cart', label: 'Products' },
+  { name: 'bed-outline', activeName: 'bed', label: 'Lodges' },
+  { name: 'construct-outline', activeName: 'construct', label: 'Services'},
+  // { name: 'newspaper-outline', activeName: 'newspaper', label: 'News'},
   
 ];
 
@@ -18,30 +21,28 @@ const navItems = [
 
 const NavigationTabs = React.memo(() => {
   const navigation = useNavigation();
-  const [activeTab, setActiveTab] = useState('user-lodge');
+  const [activeTab, setActiveTab] = useState('Products');
 
-  const handleNavigation = useCallback(
-    debounce((route) => {
-      setActiveTab(route);
-      navigation.navigate(route);
-    }, 300, { leading: true, trailing: false }),
-    [navigation]
-  );
+  const dispatch = useDispatch()
+  
 
   return (
     <View style={styles.container}>
       {navItems.map((item, index) => {
-        const isActive = activeTab === item.route;
+        const isActive = activeTab === item.label;
         return (
           <TouchableOpacity
             key={index}
-            onPress={() => handleNavigation(item.route)}
+            onPress={() => {
+              dispatch(set_option(item?.label))
+              setActiveTab(item?.label)
+            }}
             style={[styles.tab, isActive && styles.activeTab]}
             activeOpacity={0.7}
           >
             <Icon 
               name={isActive ? item.activeName : item.name} 
-              size={24} 
+              size={20} 
               color={isActive ? '#FF4500' : '#666'} 
               style={styles.icon}
             />
@@ -62,7 +63,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     justifyContent: 'space-around',
     alignItems: 'center',
-    paddingVertical: 12,
+    // paddingVertical: 12,
     // paddingHorizontal: 20,
     // borderBottomWidth: 1,
     // borderBottomColor: '#f0f0f0',
@@ -76,7 +77,7 @@ const styles = StyleSheet.create({
     width: ITEM_WIDTH,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 8,
+    paddingVertical: 5,
     position: 'relative',
   },
   activeTab: {

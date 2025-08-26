@@ -407,43 +407,43 @@ const Dashboard = () => {
   let campusRef = useRef('')
   let priceRef = useRef([])
 
-  // async function applyFilter(category_checked, price_checked, condition_checked, location_checked) {
-  //   let overlay = document.querySelector('.overlay');
-  //   overlay.setAttribute('id', 'overlay');
+  async function applyFilter(category_checked, price_checked, condition_checked, location_checked) {
+    let overlay = document.querySelector('.overlay');
+    overlay.setAttribute('id', 'overlay');
 
-  //   try {
-  //     let response = await Filter_Cards(
-  //       !category_checked ? '' : categoryRef.current,
-  //       !category_checked ? '' : subCategoryRef.current,
-  //       !condition_checked ? '' : conditionRef.current,
-  //       !price_checked ? '' : priceRef.current,
-  //       !location_checked ? '' : stateRef.current,
-  //       !location_checked ? '' : campusRef.current
-  //     )
-  //     .then((result) => {
-  //       setCards(
-  //         result?.map((item, index) => 
-  //           <Card index={index} key={index} item={item} />
-  //         )
-  //       )
-  //       document.querySelector('.filter-overlay').removeAttribute('id')
-  //       overlay.removeAttribute('id');
-  //     })
-  //     .catch((err )=> console.log(err))            
-  //   } catch (error) {
-  //     console.log(error)
-  //       overlay.removeAttribute('id');
+    try {
+      let response = await Filter_Cards(
+        !category_checked ? '' : categoryRef.current,
+        !category_checked ? '' : subCategoryRef.current,
+        !condition_checked ? '' : conditionRef.current,
+        !price_checked ? '' : priceRef.current,
+        !location_checked ? '' : stateRef.current,
+        !location_checked ? '' : campusRef.current
+      )
+      .then((result) => {
+        setCards(
+          result?.map((item, index) => 
+            <Card index={index} key={index} item={item} />
+          )
+        )
+        document.querySelector('.filter-overlay').removeAttribute('id')
+        overlay.removeAttribute('id');
+      })
+      .catch((err )=> console.log(err))            
+    } catch (error) {
+      console.log(error)
+        overlay.removeAttribute('id');
 
-  //   }
-  // }
+    }
+  }
 
 
   function ChangeCategory(data) {
     categoryRef.current = data;
     dispatch(setCategoryTo(data))
 
-      setcategory(data)
-      navigate(`/?category=${data.toLowerCase()}`)
+    setcategory(data)
+    // navigate(`/?category=${data.toLowerCase()}`)
   }
 
   function ChangeSubCategory(data) {
@@ -555,7 +555,7 @@ const Dashboard = () => {
             ''
             :
               <FilterAside
-                // applyFilter ={applyFilter}
+                applyFilter ={applyFilter}
                 ChangeCampus ={ChangeCampus}
                 ChangeCondition ={ChangeCondition}
                 ChangePrice ={ChangePrice}

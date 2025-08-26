@@ -3,7 +3,7 @@ import { Dimensions, Image, KeyboardAvoidingView, Modal, ScrollView, StyleSheet,
 import { useDispatch, useSelector } from "react-redux";
 // import Dropdown from "../../utils/Dropdown";
 import { school_choices,data } from "../../utils/location";
-import { RichEditor, RichToolbar, actions } from 'react-native-pell-rich-editor';
+// import { RichEditor, RichToolbar, actions } from 'react-native-pell-rich-editor';
 import BottomModal from "../../utils/BtmModal";
 import DropdownExample from "../../../utils/DropDown";
 const Refund = ({ navigation }) => {
@@ -48,7 +48,7 @@ const Refund = ({ navigation }) => {
         <>
 
             
-            <View style={styles.cnt}>
+            {/* <View style={styles.cnt}>
 
                 
 
@@ -128,7 +128,7 @@ const Refund = ({ navigation }) => {
                 <TouchableOpacity onPress={e=> toggleModal()} style={{display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 10, marginBottom: 0, flexDirection: 'row', borderRadius: 5, height: 45, width: '100%', backgroundColor: '#FF4500'}}>
                     <Text style={{color: '#FFF'}}>Update</Text>
                 </TouchableOpacity>
-            </View>
+            </View> */}
         </>
      );
 }

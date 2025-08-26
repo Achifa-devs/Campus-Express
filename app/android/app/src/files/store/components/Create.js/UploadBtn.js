@@ -40,7 +40,7 @@ export default function UploadBtn({ setUploadToTrue }) {
           style={styles.uploadButton}
           activeOpacity={0.8}
         >
-          <Text style={styles.uploadButtonText}>Upload Now</Text>
+          <Text style={styles.uploadButtonText}>Publish Now</Text>
         </TouchableOpacity>    
       </Animated.View>
       

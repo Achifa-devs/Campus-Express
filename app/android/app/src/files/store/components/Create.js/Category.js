@@ -3,11 +3,11 @@ import { StyleSheet, Text, View } from 'react-native';
 import DropdownExample from '../../../utils/DropDown';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-export default function Category({ updateCategory, category_list, error, onFocus }) {
+export default function Category({ updateCategory, category_list, error, onFocus, purpose }) {
   const [isFocused, setIsFocused] = useState(false);
 
   const handleCategoryChange = (name, value) => {
-    updateCategory(value);
+    updateCategory(value); 
   };
 
   const handleFocus = () => {
@@ -21,7 +21,7 @@ export default function Category({ updateCategory, category_list, error, onFocus
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Listing Category</Text>
+      <Text style={styles.label}>{purpose.charAt(0).toUpperCase() + purpose.slice(1)} Category</Text>
       
       <View style={[
         styles.dropdownWrapper,

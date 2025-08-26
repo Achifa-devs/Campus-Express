@@ -17,7 +17,7 @@ import { get_saved_list, save_prod, unsave_prod } from '../../utils/Saver';
 import { useSelector } from 'react-redux';
 
 const { width } = Dimensions.get('window');
-const CARD_WIDTH = (width - 25) / 2; // 16px padding on each side + 16px gap between cards
+const CARD_WIDTH = (width - 32) / 2; // Better spacing between cards
 
 const ItemCard = React.memo(({ item, onPress }) => {
   const [loading, setLoading] = useState(true);
@@ -26,15 +26,12 @@ const ItemCard = React.memo(({ item, onPress }) => {
   const { user } = useSelector(s => s?.user)
   const [Fav, setFav] = useState([])
 
-  
   const fetchFavourites = async() => {
-      
     try {
       const result = await get_saved_list({
         user_id: user?.user_id
       })
       if (result?.success) {
-        // console.log(result)
         setFav(result?.data)
       } else {
         setFav([])
@@ -50,29 +47,20 @@ const ItemCard = React.memo(({ item, onPress }) => {
 
   useEffect(() => {
     setFavLoading(true);
-
     if (Fav.length > 0) {  
       let isSaved = Fav.filter(data => data?.order?.product_id === item?.product_id);
-  
-  
       if (isSaved.length > 0) {  
         setWishlisted(true) 
         setFavLoading(false);
-  
       } else { 
         setWishlisted(false)
         setFavLoading(false);
-  
       }
-    } else {
-      
     }
   }, [Fav])
 
   const handleSave = async() => {
     setFavLoading(true);
-    // dispatch(setToggleMessage(saved ? 'Removed from saved' : 'Product saved!'));
-    // Alert.alert(item.product_id)
     if (!wishlisted) {
       const result = await save_prod({
         user_id: user?.user_id,
@@ -81,14 +69,10 @@ const ItemCard = React.memo(({ item, onPress }) => {
       if (result?.success) {
         setWishlisted(true)
         setFavLoading(false);
-
       } else {
         setFavLoading(false);
-
-        // 
       }
-    }
-      else {
+    } else {
       const result = await unsave_prod({
         user_id: user?.user_id,
         product_id: item?.product_id
@@ -96,13 +80,9 @@ const ItemCard = React.memo(({ item, onPress }) => {
       if (result?.success) {
         setWishlisted(false)
         setFavLoading(false);
-
       } else {
         setFavLoading(false);
-
-        // 
       }
-    
     }
   };
 
@@ -128,32 +108,31 @@ const ItemCard = React.memo(({ item, onPress }) => {
           </View>
         )}
         
-        {/* Wishlist Button */}
-        <TouchableOpacity 
-          style={styles.wishlistButton}
-          onPress={() => {
-            handleSave()
-          }}
-        >
-          {favLoading && (
-            <View style={[styles.loadingOverlay, {backgroundColor: 'rgba(0, 0, 0, 0.3)'}]}>
-              <ActivityIndicator size="small" color="#FF4500" />
+        {/* Top badges container */}
+        <View style={styles.topBadgesContainer}>
+          {/* Condition Badge */}
+          {item?.others?.condition && (
+            <View style={styles.conditionBadge}>
+              <Text style={styles.conditionText}>{item.others.condition}</Text>
             </View>
           )}
+        </View>
         
-          {!favLoading &&(<Icon 
-            name={wishlisted ? 'heart' : 'heart-outline'} 
-            size={20} 
-            color={wishlisted ? '#FF5A5F' : '#FFF'} 
-          />)}
+        {/* Wishlist Button */}
+        <TouchableOpacity 
+          style={[styles.wishlistButton, wishlisted && styles.wishlistButtonActive]}
+          onPress={handleSave}
+        >
+          {favLoading ? (
+            <ActivityIndicator size="small" color={wishlisted ? "#FFF" : "#FF4500"} />
+          ) : (
+            <Icon 
+              name={wishlisted ? 'heart' : 'heart-outline'} 
+              size={18} 
+              color={wishlisted ? '#FFF' : '#000'} 
+            />
+          )}
         </TouchableOpacity>
-        
-        {/* Condition Badge */}
-        {item?.others?.condition && (
-          <View style={styles.conditionBadge}>
-            <Text style={styles.conditionText}>{item.others.condition}</Text>
-          </View>
-        )}
       </View>
 
       {/* Product Details */}
@@ -162,24 +141,20 @@ const ItemCard = React.memo(({ item, onPress }) => {
         
         <View style={styles.priceContainer}>
           <Text style={styles.price}>₦{new Intl.NumberFormat('en-US').format(item?.price)}</Text>
-          {item.originalPrice && (
+          {item.originalPrice && item.originalPrice > item.price && (
             <Text style={styles.originalPrice}>₦{new Intl.NumberFormat('en-US').format(item.originalPrice)}</Text>
           )}
         </View>
         
         <View style={styles.metaContainer}>
-          {/* <View style={styles.ratingContainer}>
-            <Icon name="star" size={12} color="#FFC107" />
-            <Text style={styles.ratingText}>4.8</Text>
-          </View> */}
           <View style={styles.locationContainer}>
             <Icon name="location-outline" size={12} color="#FF4500" />
-            <Text style={styles.locationText}>{item?.campus}</Text>
+            <Text style={styles.locationText} numberOfLines={1}>{item?.campus}</Text>
           </View>
 
-          <View style={styles.locationContainer}>
-            <Icon name="eye-outline" size={15} color="#FF4500" />
-            <Text style={styles.locationText}>{item?.views}</Text>
+          <View style={styles.viewsContainer}>
+            <Icon name="eye-outline" size={12} color="#637381" />
+            <Text style={styles.viewsText}>{item?.views || 0}</Text>
           </View>
         </View>
       </View>
@@ -204,26 +179,29 @@ export default function Hot({ data, Fav }) {
 
   return (
     <View style={styles.container}>
-      {/* Section Header */}
-      <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>Trending Products</Text>
-        {/* <TouchableOpacity>
-          <Text style={styles.seeAll}>See all</Text>
-        </TouchableOpacity> */}
-      </View>
-
-      {/* Product Grid */}
       <FlatList
         data={data}
         renderItem={renderItem}
         keyExtractor={(item, index) => `${item.product_id}-${index}`}
         numColumns={2}
-        contentContainerStyle={styles.listContent}
+        contentContainerStyle={[
+          styles.listContent,
+          data?.length === 0 && { flex: 1, justifyContent: 'center' }
+        ]}
         columnWrapperStyle={styles.columnWrapper}
         showsVerticalScrollIndicator={false}
         initialNumToRender={6}
         maxToRenderPerBatch={8}
         windowSize={11}
+        ListEmptyComponent={() => (
+          <View style={styles.emptyContainer}>
+            <Icon name="search-outline" size={48} color="#DFE3E8" />
+            <Text style={styles.emptyTitle}>No products found</Text>
+            <Text style={styles.emptySubtitle}>
+              Try adjusting your filter or location
+            </Text>
+          </View>
+        )}
       />
     </View>
   );
@@ -233,28 +211,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF',
-    marginTop: -4,
-    paddingHorizontal: 6,
-    paddingTop: 8,
-  },
-  sectionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
-    // backgroundColor: '#FFF',
     paddingHorizontal: 8,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#212B36',
-    fontFamily: 'System', // Use your custom font if available
-  },
-  seeAll: {
-    fontSize: 14,
-    color: '#FF4500',
-    fontWeight: '500',
+    paddingTop: 10,
   },
   listContent: {
     paddingBottom: 24,
@@ -262,25 +220,28 @@ const styles = StyleSheet.create({
   columnWrapper: {
     justifyContent: 'space-between',
     marginBottom: 16,
+    gap: 12,
   },
   cardContainer: {
     width: CARD_WIDTH,
     backgroundColor: '#FFFFFF',
-    borderRadius: 8,
+    borderRadius: 6,
     overflow: 'hidden',
-    shadowColor: '#919EAB',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
     borderWidth: 1,
     borderColor: '#F4F6F8',
+    transform: [{ scale: 1 }],
   },
   imageContainer: {
     width: '100%',
-    height: CARD_WIDTH * 1.25, // 5:4 aspect ratio
-    backgroundColor: '#F4F6F8',
+    height: CARD_WIDTH * 1.2, // Better aspect ratio
+    backgroundColor: '#F8F9FA',
     position: 'relative',
+    overflow: 'hidden',
   },
   image: {
     width: '100%',
@@ -290,33 +251,53 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(244, 246, 248, 0.8)',
+    backgroundColor: 'rgba(248, 249, 250, 0.9)',
+  },
+  topBadgesContainer: {
+    position: 'absolute',
+    top: 8,
+    left: 8,
+    flexDirection: 'row',
+    gap: 4,
+  },
+  conditionBadge: {
+    backgroundColor: '#FF4500',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  conditionText: {
+    fontSize: 10,
+    color: '#FFFFFF',
+    fontWeight: '700',
+    textTransform: 'uppercase',
   },
   wishlistButton: {
     position: 'absolute',
     top: 8,
     right: 8,
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
     width: 32,
     height: 32,
     borderRadius: 16,
     justifyContent: 'center',
     alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 1,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.05)',
   },
-  conditionBadge: {
-    position: 'absolute',
-    bottom: 8,
-    left: 8,
+  wishlistButtonActive: {
     backgroundColor: '#FF4500',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 4,
-  },
-  conditionText: {
-    fontSize: 10,
-    color: '#FFFFFF',
-    fontWeight: '600',
-    textTransform: 'uppercase',
+    borderColor: '#FF4500',
   },
   detailsContainer: {
     padding: 12,
@@ -326,46 +307,71 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: '#212B36',
     lineHeight: 20,
-    height: 40, // Fixed height for 2 lines
     marginBottom: 8,
+    height: 40,
   },
   priceContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 6,
+    marginBottom: 8,
+    gap: 6,
   },
   price: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#000',
+    fontWeight: '700',
+    color: '#212B36',
   },
   originalPrice: {
     fontSize: 12,
     color: '#919EAB',
     textDecorationLine: 'line-through',
-    marginLeft: 8,
+    fontWeight: '500',
   },
   metaContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-  },
-  ratingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  ratingText: {
-    fontSize: 12,
-    color: '#212B36',
-    marginLeft: 4,
+    width: '100%',
   },
   locationContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    flex: 1,
+    marginRight: 8,
   },
   locationText: {
-    fontSize: 12,
-    color: '#919EAB',
+    fontSize: 11,
+    color: '#637381',
     marginLeft: 4,
+    flexShrink: 1,
+  },
+  viewsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  viewsText: {
+    fontSize: 11,
+    color: '#637381',
+    marginLeft: 4,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 60,
+    paddingHorizontal: 20,
+  },
+  emptyTitle: {
+    marginTop: 16,
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#212B36',
+    textAlign: 'center',
+  },
+  emptySubtitle: {
+    marginTop: 8,
+    fontSize: 14,
+    color: '#637381',
+    textAlign: 'center',
   },
 });

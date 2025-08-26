@@ -1,99 +1,84 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, StatusBar, TextInput,  } from 'react-native';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { 
+  View, 
+  Text, 
+  StyleSheet, 
+  StatusBar, 
+  TextInput, 
+  FlatList, 
+  TouchableOpacity,
+  Platform ,
+  BackHandler,
+  Alert
+} from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
 import { Provider, useDispatch, useSelector } from 'react-redux';
-import FlashMessage from 'react-native-flash-message';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import store from './redux/store';
 import { Shop } from './android/app/src/files/utils/Store.js';
-import { setToggleMessage } from './redux/toggleMssg.js';
-
-import notifee, {
-  AndroidImportance,
-  AndroidStyle,
-  AndroidVisibility,
-  AuthorizationStatus
-} from '@notifee/react-native';
-
-import { getApp } from '@react-native-firebase/app';
-import {
-  getMessaging,
-  requestPermission,
-  getToken,
-  onMessage
-} from '@react-native-firebase/messaging';
-import { getData } from './android/app/src/files/utils/AsyncStore.js.js';
+import { getData } from './android/app/src/files/utils/AsyncStore.js';
 import { setUserAuthTo } from './redux/reducer/auth.js';
 import { DownloadAppScreen } from './android/app/src/files/utils/Stacks/Update.js';
 import AuthStackScreen from './android/app/src/files/store/utils/Auth.js';
-
-const flashMessageRef = React.createRef();
+import { school_choices } from './android/app/src/files/store/utils/location copy.js';
+import { set_campus } from './redux/campus.js';
+import BottomModal from './android/app/src/files/store/utils/BtmModal.js';
+import { set_locale_modal } from './redux/locale.js';
+// import { set_campus } from './redux/reducer/location.js';   // ✅ add correct reducer
+// import { closeModal } from './redux/reducer/locale.js';      // ✅ add correct reducer
 
 function App() {
-
   Text.defaultProps = Text.defaultProps || {};
   Text.defaultProps.allowFontScaling = false;
 
   TextInput.defaultProps = TextInput.defaultProps || {};
   TextInput.defaultProps.allowFontScaling = false;
 
-  
-
-  const [version, setVersion] = useState('1.0.2');
+  const [version] = useState('1.0.2');
+  const [update, setUpdate] = useState(false);
+  const [data, setData] = useState('');
 
   const checkAppVersion = async () => {
-  try {
-    // Fetch latest version from your API
-    const response = await fetch('https://cs-server-olive.vercel.app/version-check', {
-      method: 'POST',
-      headers: {
-      'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        current_version: version,
-        platform: Platform.OS, // 'ios' or 'android'
-      }),
-    });
-    const data = await response.json();
-    return data;
+    try {
+      const response = await fetch('https://cs-server-olive.vercel.app/version-check', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          current_version: version,
+          platform: Platform.OS,
+        }),
+      });
+      return await response.json();
     } catch (error) {
       console.error('Version check failed:', error);
-      // If any error occurs, still navigate to home as fallback
-      throw Error('Error occured')
+      throw Error('Error occurred');
     }
   };
-  const [update, setUpdate] = useState(false);
-  const [data, setdata] = useState('');
 
   useEffect(() => {
-    try {
-      checkAppVersion().then((data) => {
-        if (data.success) {
-          if (!data.is_latest) {
-            setdata(data)
-            setUpdate(true);
-          }
-        } 
-      })  
-    } catch (error) {
-      console.log(error)
-    }
-  }, [])
-   
-  return (
+    checkAppVersion().then((data) => {
+      if (data.success && !data.is_latest) {
+        setData(data);
+        setUpdate(true);
+      }
+    }).catch(console.log);
+  }, []);
 
+  return (
     <SafeAreaView style={{ flex: 1 }}>
-      <StatusBar backgroundColor={"rgba(255,0,0,1)"} barStyle={'dark-content'} />
-      {!update && <Provider store={store}>
-        
-        <NavigationContainer>
-          <NavCnt />
-        </NavigationContainer> 
-      </Provider>}
-      {
-        update && <DownloadAppScreen url={data?.url} summary={data?.summary} />
-      } 
-    </SafeAreaView> 
+      <StatusBar backgroundColor="rgba(255,0,0,1)" barStyle="dark-content" />
+      {!update ? (
+        <Provider store={store}>
+          <NavigationContainer>
+            <NavCnt />
+          </NavigationContainer>
+        </Provider>
+      ) : (
+        <DownloadAppScreen url={data?.url} summary={data?.summary} />
+      )}
+    </SafeAreaView>
   );
 }
 
@@ -101,63 +86,179 @@ export default App;
 
 function NavCnt() {
   const [mode, setMode] = useState('shop');
+  const { auth } = useSelector(s => s.auth);
+  const { locale_modal } = useSelector(s => s.locale_modal);
+  const dispatch = useDispatch();
 
-  const {auth} = useSelector(s => s.auth);
   useEffect(() => {
-    if(auth){
-      setMode('auth')
-    }else{
-      setMode('shop')
-    }
-  }, [auth])
+    setMode(auth ? 'auth' : 'shop');
+  }, [auth]);
+
+  const handleCloseModal = () => {
+    // dispatch(closeModal());
+  };
+
+  const [modalVisible, setModalVisible] = useState(locale_modal === 1 ? true : false);
+
+ 
+
 
   return (
     <SafeAreaProvider style={{ flex: 1 }}>
       {mode === 'shop' && <Shop />}
       {mode === 'auth' && <AuthStackScreen />}
+      {
+        (
+          <BottomModal
+            visible={locale_modal === 1 ? true : false} 
+            
+            children={<CampusSelection onCloseModal={handleCloseModal} />}
+          />
+        )
+      }
+
     </SafeAreaProvider>
   );
 }
 
-const styles = StyleSheet.create({
-  flashMessage: {
-    borderRadius: 5,
-    height: 50,
-    width: '70%',
-    backgroundColor: 'transparent',
-    alignSelf: 'center',
-    marginBottom: '25%',
-    padding: 0,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+// --------------------
+// CampusSelection
+// --------------------
+const CampusSelection = ({ onCloseModal }) => {
+  const dispatch = useDispatch();
+  const [schools, setSchools] = useState([]);
+  const [filteredSchools, setFilteredSchools] = useState([]);
+  const [searchText, setSearchText] = useState('');
+
+  useEffect(() => {
+    // Flatten all the schools into one array
+    const allSchools = Object.values(school_choices).flat();
+
+    // Add "All campus" option at the top
+    const withAllCampus = [{ value: -1, title: "All campus" }, ...allSchools];
+
+    // Save into state
+    setSchools(withAllCampus);
+    setFilteredSchools(withAllCampus);
+  }, []);
+
+  useEffect(() => {
+    if (searchText) { 
+      setFilteredSchools(
+        schools.filter(school =>
+          school.title.toLowerCase().includes(searchText.toLowerCase().trim())
+        )
+      );
+    } else {
+      setFilteredSchools(schools);
+    }
+  }, [searchText, schools]);
+
+  const handleCampusSelect = (campus) => {
+    dispatch(set_campus(campus.title));
+    dispatch(set_locale_modal(0))
+  };
+
+  const renderItem = ({ item }) => (
+    <TouchableOpacity
+      style={campus_styles.itemContainer}
+      onPress={() => handleCampusSelect(item)}
+    >
+      <Text style={campus_styles.name}>{item.title}</Text>
+    </TouchableOpacity>
+  );
+
+  return (
+    <View style={campus_styles.container}>
+      <View style={{
+        display: 'flex', justifyContentL: 'space-between', marginTop: 10, marginBottom: 16 , flexDirection: 'row', alignItems: 'center',
+      }}>
+        <TouchableOpacity onPress={e=> {
+          dispatch(set_locale_modal(0))
+        }} >
+          <Ionicons name={'arrow-back'} size={25} />
+        </TouchableOpacity>
+        <Text style={campus_styles.title}>Select Your Campus</Text>
+      </View>
+      <View style={campus_styles.searchContainer}>
+        <Ionicons name="search" size={20} color="#999" style={campus_styles.searchIcon} />
+        <TextInput
+          style={campus_styles.searchInput}
+          placeholder="Search for your campus..."
+          value={searchText}
+          onChangeText={setSearchText}
+        />
+        {searchText ? (
+          <TouchableOpacity onPress={() => setSearchText('')}>
+            <Ionicons name="close-circle" size={20} color="#999" />
+          </TouchableOpacity>
+        ) : null}
+      </View>
+
+      <FlatList
+        data={filteredSchools}
+        renderItem={renderItem}
+        keyExtractor={item => item.value.toString()}
+        initialNumToRender={20}
+        maxToRenderPerBatch={20}
+        windowSize={10}
+        getItemLayout={(data, index) => (
+          { length: 60, offset: 60 * index, index }
+        )}
+        ListEmptyComponent={
+          <View style={campus_styles.emptyContainer}>
+            <Text style={campus_styles.emptyText}>No campuses found</Text>
+          </View>
+        }
+      />
+    </View>
+  );
+};
+
+const campus_styles = StyleSheet.create({
+  container: {
+    
+
+    height: '100%',
   },
-  customContent: {
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 4,
+    marginLeft: '15%',
+    // textAlign: 'center',
+  },
+  searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FF4500',
-    borderRadius: 5,
-    height: 50,
-    width: '100%',
-    paddingHorizontal: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 3,
-  },
-  logo: {
-    width: 35,
-    height: 35,
-    resizeMode: 'contain',
+    borderWidth: 1,
+    borderColor: '#ddd',
     borderRadius: 8,
+    paddingHorizontal: 10,
+    marginBottom: 16,
+    backgroundColor: '#f9f9f9',
+  },
+  searchIcon: {
     marginRight: 10,
   },
-  messageText: {
-    fontSize: 14,
-    color: '#FFF',
-    fontWeight: '500',
-    flexShrink: 1,
+  searchInput: {
+    flex: 1,
+    height: 40,
+  },
+  itemContainer: {
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  name: {
+    fontSize: 16,
+  },
+  emptyContainer: {
+    padding: 20,
+    alignItems: 'center',
+  },
+  emptyText: {
+    fontSize: 16,
+    color: '#999',
   },
 });

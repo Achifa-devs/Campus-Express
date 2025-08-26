@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { View, Dimensions, Text, TouchableOpacity, TextInput, StyleSheet, KeyboardAvoidingView, Platform, Image, Alert, ScrollView } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
-import { RichEditor, RichToolbar, actions } from 'react-native-pell-rich-editor';
+// import { RichEditor, RichToolbar, actions } from 'react-native-pell-rich-editor';
 import axios from 'axios';
-import Icon from 'react-native-vector-icons/Ionicons';
+// import Icon from 'react-native-vector-icons/Ionicons';
 
 const EditorScreen = () => {
     const richText = useRef();
@@ -89,123 +89,124 @@ const EditorScreen = () => {
     };
 
     return (
-        <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={{ flex: 1 }}
-            keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
-        >
-        <ScrollView 
-            contentContainerStyle={styles.container}
-            keyboardShouldPersistTaps="handled"
-            showsVerticalScrollIndicator={false}
-        >
-            {/* Header */}
-            <View style={styles.header}>
-                <Text style={styles.headerText}>Create New Article</Text>
-            </View>
+        <></>
+        // <KeyboardAvoidingView
+        //     behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        //     style={{ flex: 1 }}
+        //     keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
+        // >
+        // <ScrollView 
+        //     contentContainerStyle={styles.container}
+        //     keyboardShouldPersistTaps="handled"
+        //     showsVerticalScrollIndicator={false}
+        // >
+        //     {/* Header */}
+        //     <View style={styles.header}>
+        //         <Text style={styles.headerText}>Create New Article</Text>
+        //     </View>
 
-            {/* Title Input */}
-            <View style={styles.inputContainer}>
-                <Text style={styles.label}>Article Title</Text>
-                <TextInput
-                    value={title}
-                    onChangeText={setTitle}
-                    placeholder="Enter a compelling title..."
-                    placeholderTextColor="#999"
-                    style={styles.titleInput}
-                />
-            </View>
+        //     {/* Title Input */}
+        //     <View style={styles.inputContainer}>
+        //         <Text style={styles.label}>Article Title</Text>
+        //         <TextInput
+        //             value={title}
+        //             onChangeText={setTitle}
+        //             placeholder="Enter a compelling title..."
+        //             placeholderTextColor="#999"
+        //             style={styles.titleInput}
+        //         />
+        //     </View>
 
-            {/* Description Input */}
-            <View style={styles.inputContainer}>
-                <Text style={styles.label}>Short Description</Text>
-                <TextInput
-                    value={description}
-                    onChangeText={setDescription}
-                    placeholder="Enter a brief description (max 160 characters)..."
-                    placeholderTextColor="#999"
-                    style={styles.descriptionInput}
-                    multiline={true}
-                    numberOfLines={4}
-                    maxLength={160}
-                />
-                <Text style={styles.charCount}>
-                    {description.length}/160 characters
-                </Text>
-            </View>
+        //     {/* Description Input */}
+        //     <View style={styles.inputContainer}>
+        //         <Text style={styles.label}>Short Description</Text>
+        //         <TextInput
+        //             value={description}
+        //             onChangeText={setDescription}
+        //             placeholder="Enter a brief description (max 160 characters)..."
+        //             placeholderTextColor="#999"
+        //             style={styles.descriptionInput}
+        //             multiline={true}
+        //             numberOfLines={4}
+        //             maxLength={160}
+        //         />
+        //         <Text style={styles.charCount}>
+        //             {description.length}/160 characters
+        //         </Text>
+        //     </View>
 
-            {/* Thumbnail Section */}
-            <View style={styles.inputContainer}>
-                <Text style={styles.label}>Thumbnail Image</Text>
-                <TouchableOpacity 
-                    onPress={() => handleImageSelection(true)} 
-                    style={styles.thumbnailButton}
-                >
-                    <Icon name="image-outline" size={24} color="white" />
-                    <Text style={styles.buttonText}>Select Thumbnail</Text>
-                </TouchableOpacity>
+        //     {/* Thumbnail Section */}
+        //     <View style={styles.inputContainer}>
+        //         <Text style={styles.label}>Thumbnail Image</Text>
+        //         <TouchableOpacity 
+        //             onPress={() => handleImageSelection(true)} 
+        //             style={styles.thumbnailButton}
+        //         >
+        //             <Icon name="image-outline" size={24} color="white" />
+        //             <Text style={styles.buttonText}>Select Thumbnail</Text>
+        //         </TouchableOpacity>
 
-                {thumbnail && (
-                    <View style={styles.thumbnailContainer}>
-                        <Image 
-                            source={{ uri: thumbnail }} 
-                            style={styles.thumbnail} 
-                            resizeMode="cover"
-                        />
-                        <TouchableOpacity 
-                            style={styles.changeThumbnailButton}
-                            onPress={() => handleImageSelection(true)}
-                        >
-                            <Icon name="swap-horizontal-outline" size={16} color="#FF4500" />
-                            <Text style={styles.changeThumbnailText}>Change Thumbnail</Text>
-                        </TouchableOpacity>
-                    </View>
-                )}
-            </View>
+        //         {thumbnail && (
+        //             <View style={styles.thumbnailContainer}>
+        //                 <Image 
+        //                     source={{ uri: thumbnail }} 
+        //                     style={styles.thumbnail} 
+        //                     resizeMode="cover"
+        //                 />
+        //                 <TouchableOpacity 
+        //                     style={styles.changeThumbnailButton}
+        //                     onPress={() => handleImageSelection(true)}
+        //                 >
+        //                     <Icon name="swap-horizontal-outline" size={16} color="#FF4500" />
+        //                     <Text style={styles.changeThumbnailText}>Change Thumbnail</Text>
+        //                 </TouchableOpacity>
+        //             </View>
+        //         )}
+        //     </View>
 
-            {/* Editor Section */}
-            <View style={styles.inputContainer}>
-                <Text style={styles.label}>Article Content</Text>
-                <View style={styles.editorContainer}>
-                    <RichToolbar
-                        editor={richText}
-                        actions={[
-                            actions.setBold,
-                            actions.setItalic,
-                            actions.setUnderline,
-                            actions.insertBulletsList,
-                            actions.insertOrderedList,
-                            actions.insertLink,
-                            actions.insertImage,
-                            actions.undo,
-                            actions.redo,
-                        ]}
-                        iconTint="#333"
-                        selectedIconTint="#FF4500"
-                        onPressAddImage={() => handleImageSelection(false)}
-                        style={styles.richToolbar}
-                    />
-                    <RichEditor
-                        ref={richText}
-                        placeholder="Write your amazing content here..."
-                        initialHeight={300}
-                        style={styles.richEditor}
-                        editorStyle={styles.editorStyle}
-                    />
-                </View>
-            </View>
+        //     {/* Editor Section */}
+        //     <View style={styles.inputContainer}>
+        //         <Text style={styles.label}>Article Content</Text>
+        //         <View style={styles.editorContainer}>
+        //             <RichToolbar
+        //                 editor={richText}
+        //                 actions={[
+        //                     actions.setBold,
+        //                     actions.setItalic,
+        //                     actions.setUnderline,
+        //                     actions.insertBulletsList,
+        //                     actions.insertOrderedList,
+        //                     actions.insertLink,
+        //                     actions.insertImage,
+        //                     actions.undo,
+        //                     actions.redo,
+        //                 ]}
+        //                 iconTint="#333"
+        //                 selectedIconTint="#FF4500"
+        //                 onPressAddImage={() => handleImageSelection(false)}
+        //                 style={styles.richToolbar}
+        //             />
+        //             <RichEditor
+        //                 ref={richText}
+        //                 placeholder="Write your amazing content here..."
+        //                 initialHeight={300}
+        //                 style={styles.richEditor}
+        //                 editorStyle={styles.editorStyle}
+        //             />
+        //         </View>
+        //     </View>
 
-            {/* Save Button */}
-            <TouchableOpacity 
-                onPress={handleSaveArticle} 
-                style={styles.saveButton}
-                activeOpacity={0.8}
-            >
-                <Icon name="send-outline" size={20} color="white" style={styles.saveIcon} />
-                <Text style={styles.saveButtonText}>Publish Article</Text>
-            </TouchableOpacity>
-        </ScrollView>
-        </KeyboardAvoidingView>
+        //     {/* Save Button */}
+        //     <TouchableOpacity 
+        //         onPress={handleSaveArticle} 
+        //         style={styles.saveButton}
+        //         activeOpacity={0.8}
+        //     >
+        //         <Icon name="send-outline" size={20} color="white" style={styles.saveIcon} />
+        //         <Text style={styles.saveButtonText}>Publish Article</Text>
+        //     </TouchableOpacity>
+        // </ScrollView>
+        // </KeyboardAvoidingView>
     );
 };
 

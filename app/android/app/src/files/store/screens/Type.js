@@ -1,108 +1,98 @@
+import React from 'react';
 import { 
-    Dimensions,
-    Image,
-    ScrollView,
-    StyleSheet,
-    Switch,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View 
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View 
 } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
-import { 
-    createBottomTabNavigator 
-} from "@react-navigation/bottom-tabs"
-import BackSvg from '../../media/assets/back-svgrepo-com (4).svg'
 import { useNavigation, useRoute } from '@react-navigation/native';
-import Ionicons from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, FontAwesome, etc.
-
-const Tab = createBottomTabNavigator();
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import BackSvg from '../../media/assets/back-svgrepo-com (4).svg';
 
 export default function Type() {
-  let screenHeight = Dimensions.get('window').height;
-      let navigation = useNavigation();
-  
+  const navigation = useNavigation();
+  const { params } = useRoute();
 
-    let { types } = useRoute()?.params;
-    let { category } = useRoute()?.params;
+  let { types, category } = params;
+
+  // ✅ Ensure types is always an array
+  if (!Array.isArray(types)) {
+    types = [types];
+  }
+
   return (
     <>
-        <View style={styles.searchCnt}>
-            <TouchableOpacity style={{
-              height: 55,
-              borderRadius: 15,
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'flex-start',
-              alignItems: 'center',
-              width: 25,
-            }} onPress={e => navigation.goBack()}> 
-              <Ionicons name={'chevron-back'} size={25} color={'#000'} />
-            </TouchableOpacity>
-            <Text style={{ fontSize: 15, color: '#000', marginLeft: 20, fontWeight: 'bold'}}>{ category }</Text>
-        </View>
-      <ScrollView style={[styles.homeCnt,{
-            // height: '100%'
-      }]}>
-       
+      {/* Header */}
+      <View style={styles.searchCnt}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Ionicons name={'chevron-back'} size={25} color={'#000'} />
+        </TouchableOpacity>
+        <Text style={styles.categoryText}>{category}</Text>
+      </View>
 
-        
-        {
-            types.map((item, index) => {
-                return (
-                    <TouchableOpacity key={index} style={{
-                        backgroundColor: '#FFF',
-                        height: 65,
-                        display: 'flex',
-                        paddingTop: 10,
-                        paddingBottom: 10,
-                        paddingLeft: 9,
-                        marginBottom: 1.5,
-
-                        paddingRight: 9,
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                    }} onPress={e => navigation.navigate('user-type-product', {category, type: item})}>
-                        
-                        <View style={{padding: 2.5}}>
-                            <Text style={{ fontSize: 15, color: '#000' }}>{item}</Text>
-                        </View>
-                        <View style={{padding: 2.5, transform: [{ rotate: '180deg' }]}}>
-                            <BackSvg height={20} width={20} />
-                        </View>
-                    </TouchableOpacity>
-                )
-            })
-        }
-      </ScrollView> 
-    </> 
-  )
+      {/* Scrollable list of types */}
+      <ScrollView style={styles.homeCnt}>
+        {types.map((item, index) => (
+          <TouchableOpacity
+            key={index}
+            style={styles.typeRow}
+            onPress={() =>
+              navigation.navigate('user-type-product', { category, type: item })
+            }
+          >
+            <View style={{ padding: 2.5 }}>
+              <Text style={{ fontSize: 15, color: '#000' }}>{item}</Text>
+            </View>
+            <View style={{ padding: 2.5, transform: [{ rotate: '180deg' }] }}>
+              <BackSvg height={20} width={20} />
+            </View>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+    </>
+  );
 }
 
-
 const styles = StyleSheet.create({
-    searchCnt:{
-      height: 50,
-      //   width: '100%',
-      paddingTop: 0,
-      paddingBottom: 0,
-      paddingLeft: 15,
-      paddingRight: 15,
-      backgroundColor: '#fff',
-      display: 'flex',
-      flexDirection: 'row',
-    //   justifyContent: 'space-between',
-      alignItems: 'center',
-      marginBottom: 1.5
+  searchCnt: {
+    height: 50,
+    paddingHorizontal: 15,
+    backgroundColor: '#fff',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 1.5,
   },
-    homeCnt:{
-        height: 'auto',
-        width: '100%',
-        padding: 0,
-        marginTop: .5,
-        backgroundColor: '#f9f9f9'
-    }
-
-  });
+  backButton: {
+    height: 55,
+    borderRadius: 15,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    width: 25,
+  },
+  categoryText: {
+    fontSize: 15,
+    color: '#000',
+    marginLeft: 20,
+    fontWeight: 'bold',
+  },
+  homeCnt: {
+    width: '100%',
+    marginTop: 0.5,
+    backgroundColor: '#f9f9f9',
+  },
+  typeRow: {
+    backgroundColor: '#FFF',
+    height: 65,
+    paddingVertical: 10,
+    paddingHorizontal: 9,
+    marginBottom: 1.5,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+});

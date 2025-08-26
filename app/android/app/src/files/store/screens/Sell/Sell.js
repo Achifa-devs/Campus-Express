@@ -27,10 +27,16 @@ import { getData } from '../../../utils/AsyncStore.js';
 import SubscriptionModal from './SubModal.js';
 import Subscription from './Sub.js';
 import { setUserAuthTo } from '../../../../../../../redux/reducer/auth.js';
+import CustomModal from '../../utils/CustomModal.js';
 // import  { Paystack }  from 'react-native-paystack-webview';
 export default function Sell() {
   const screenHeight = Dimensions.get('window').height;
   const screenWidth = Dimensions.get('window').width;
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const toggleModal = () => {
+    setModalVisible(!modalVisible);
+  };
 
   const navigation = useNavigation();
   const {user} = useSelector(s => s.user)
@@ -386,8 +392,52 @@ export default function Sell() {
 
   return (
     <>
+      <CustomModal 
+        visible={modalVisible} 
+        onClose={toggleModal}
+        position="bottom"
+      >
+        <View style={{ width: '100%' }}>
+          <View style={{ padding: 5, width: '100%' }}>
+            {[
+              {
+                title: 'Sell My Products',
+                description: 'List your goods and items for buyers.',
+                purpose: 'product',
+              },
+              {
+                title: 'Advertise Accommodation',
+                description: 'Promote your lodge or rental space.',
+                purpose: 'accomodation',
+              },
+              {
+                title: 'Advertise My Service',
+                description: 'Showcase your skills and services.',
+                purpose: 'service',
+              },
+            ].map((item, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() => {
+                  toggleModal();
+                  navigation.navigate('user-new-listing', { update: false, purpose: item.purpose });
+                }}
+                style={styles.modalOption}
+              >
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.modalOptionText}>{item.title}</Text>
+                  <Text style={styles.modalOptionDescription}>{item.description}</Text>
+                </View>
+                <Ionicons name="chevron-forward" size={25} />
+              </TouchableOpacity>
+            ))}
+
+          </View>
+
+        </View> 
+      </CustomModal>
       <ScrollView style={[styles.homeCnt, { height: screenHeight - 55 }]}>
-        <UploadBtn navigation={navigation} />
+        <UploadBtn navigation={navigation} toggleModal={toggleModal}/>
         <View style={styles.contentContainer}> 
           <Performance user_id={shopForm.user_id} />
           {/* <Subscription onPress={() => setIsSubscriptionModalVisible(true)} />  */}
@@ -554,6 +604,27 @@ const styles = StyleSheet.create({
     height: 'auto',
     marginTop: 10,
   },
+  modalOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 12,
+    paddingHorizontal: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+    backgroundColor: '#fff',
+  },
+  modalOptionText: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#333',
+  },
+  modalOptionDescription: {
+    fontSize: 13,
+    color: '#555',
+    marginTop: 3,
+  },
+
 });
 
 // export default Sell;

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Dimensions, StyleSheet, Text, TextInput, View } from 'react-native';
 import pluralize from 'pluralize';
-export default function Title({ updateTitle, category, error }) {
+export default function Title({ updateTitle, category, error, purpose }) {
   const screenWidth = Dimensions.get('window').width;
   const [title, setTitle] = useState('');
   const [isFocused, setIsFocused] = useState(false);
@@ -28,7 +28,7 @@ export default function Title({ updateTitle, category, error }) {
   return (
     <View style={[styles.container, { width: screenWidth }]}>
       <View style={styles.labelContainer}>
-        <Text style={styles.label}>{pluralize.singular(category)} Title {category === 'Lodge & Apartments' ? '(Name)' : ''}</Text>
+        <Text style={styles.label}>{pluralize.singular(category)} Title</Text>
         <Text style={styles.wordCounter}>
           {wordCount}/{maxWords}
         </Text>
@@ -36,7 +36,7 @@ export default function Title({ updateTitle, category, error }) {
 
       <View style={[styles.inputContainer, isFocused && styles.inputContainerFocused]}>
         <TextInput
-          placeholder="Enter a descriptive title (e.g., 'Brand New iPhone 13 Pro Max 256GB')"
+          placeholder={purpose === 'product' ? "Enter a descriptive title (e.g., 'Brand New iPhone 13 Pro Max 256GB')": purpose === 'accomodation' ? "Enter a descriptive title (e.g., 'Roommate needed at Aso-rock lodge)" : "I offer cooking/baking services like fired chicken, cakes etc."}
           placeholderTextColor="#999"
           style={styles.input}
           multiline={true}
@@ -56,7 +56,7 @@ export default function Title({ updateTitle, category, error }) {
           <Text style={styles.errorText}>{error}</Text>
         ) : (
           <Text style={styles.hintText}>
-            Include brand, model, key features (3-{maxWords} words)
+            {/* Include brand, model, key features (3-{maxWords} words) */}
           </Text>
         )}
       </View>

@@ -6,7 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 // GoogleSignInSetup.js
 import axios from 'axios';
-import CookieManager from '@react-native-cookies/cookies';
+// import CookieManager from '@react-native-cookies/cookies';
 import { getData, storeData } from "../../utils/AsyncStore.js";
 import { set_cookie } from "../../../../../../redux/vendor/cookie.js";
 
@@ -78,25 +78,25 @@ const Login = ({}) => {
                 const { data, success } = response;
                 if (success) {
                     setUserId(data.user_id)
-                    CookieManager.set('https://www.campussphere.net', {
-                        name: 'jwt_token',
-                        value: data.cookie,
-                        domain: 'campussphere.net',
-                        path: '/',
-                        version: '1',
-                        secure: true,
-                        expires: `'${90 * 24 * 60 * 60}'`
-                    })
-                    .then((done) => {
-                        console.log('Cookie set!', done);
-                        storeData('user', JSON.stringify(data)) 
-                        dispatch(set_cookie(true))
-                        // openModal()
-                    })
-                    .catch(err => {
-                        Alert.alert('Network error, please try again.')
+                    // CookieManager.set('https://www.campussphere.net', {
+                    //     name: 'jwt_token',
+                    //     value: data.cookie,
+                    //     domain: 'campussphere.net',
+                    //     path: '/',
+                    //     version: '1',
+                    //     secure: true,
+                    //     expires: `'${90 * 24 * 60 * 60}'`
+                    // })
+                    // .then((done) => {
+                    //     console.log('Cookie set!', done);
+                    //     storeData('user', JSON.stringify(data)) 
+                    //     dispatch(set_cookie(true))
+                    //     // openModal()
+                    // })
+                    // .catch(err => {
+                    //     Alert.alert('Network error, please try again.')
 
-                    })
+                    // })
                     
                 } else {
                     set_server_err(!true)

@@ -3,22 +3,22 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import Svg, { Path } from 'react-native-svg';
 
-export default function UploadBtn({ navigation }) {
+export default function UploadBtn({ navigation, toggleModal }) {
   const { colors } = useTheme();
 
-  const handlePress = (type) => {
-    navigation.navigate(type, { type, update: false });
-  };
+  // const handlePress = (type) => {
+  //   navigation.navigate(type, { type, update: false });
+  // };
 
   return (
     <View style={styles.container}>
       {/* Product Upload Button */}
       <UploadOption 
-        title="Upload Product"
-        description="List physical goods for sale"
+        title="Upload Offerings"
+        description="Publish your accommodations, products, or services available for sale or rent."
         icon={<UploadIcon />}
         color="#FF4500"
-        onPress={() => handlePress('user-new-listing')}
+        onPress={() => toggleModal()}
       />
 
       
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   button: {
-    height: 140,
+    height: 160,
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',

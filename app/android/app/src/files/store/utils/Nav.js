@@ -21,7 +21,7 @@ import {
 import {openSettings} from "react-native-permissions"
 
 import { useSelector } from "react-redux";
-import RNFS from 'react-native-fs';
+// import RNFS from 'react-native-fs';
 function StackNavigator () { 
     const version = ('1.0.2');
 

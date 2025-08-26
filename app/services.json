@@ -1,0 +1,51 @@
+{
+  "items": {
+    "category": [
+      {
+        "Personal Grooming": [
+          "Haircut & Barbing",
+          "Hair Styling & Braiding",
+          "Makeup Services",
+          "Manicure & Pedicure"
+        ],
+        "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1756063363/images_1_olg76e.jpg"
+      },
+      {
+        "Fashion & Tailoring": [
+          "Clothes Sewing & Mending",
+          "Uniform Adjustments",
+          "Custom Designs",
+          "Laundry & Ironing"
+        ],
+        "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1756063362/download_3_h00vra.jpg"
+      },
+      {
+        "Academic Support": [
+          "Assignment Writing",
+          "Tutorials & Private Lessons",
+          "Project/Thesis Assistance",
+          "Proofreading & Editing"
+        ],
+        "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1756063490/download_5_z4szec.jpg"
+      },
+      {
+        "Logistics & Errands": [
+          "Food Delivery",
+          "Parcel & Package Delivery",
+          "Shopping Assistance",
+          "Campus Errand Services"
+        ],
+        "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1756063362/images_2_via0fq.jpg"
+      },
+      {
+        "Tech & Digital Services": [
+          "Graphic Design",
+          "Web/App Development",
+          "Typing & Printing",
+          "Photocopy & Scanning"
+        ],
+        "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1756063362/download_4_n0hsya.jpg"
+      }
+    ]
+  }
+}

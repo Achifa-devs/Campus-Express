@@ -21,7 +21,7 @@ export default function Description({ updateDescription }) {
   return (
     <View style={[styles.container, { width: screenWidth }]}>
       <View style={styles.header}>
-        <Text style={styles.label}>Description</Text>
+        <Text style={styles.label}>Description (optional)</Text>
         <Text style={styles.charCounter}>
           {remainingChars}/{maxLength}
         </Text>

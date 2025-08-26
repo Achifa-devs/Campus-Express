@@ -115,20 +115,20 @@ const Signup = ({}) => {
                 let response = await result.json();
                 console.log(response)
                 if(response.success){
-                    CookieManager.set('https://www.campussphere.net', {
-                        name: 'jwt_token',
-                        value: response.cookie,
-                        domain: 'campussphere.net',
-                        path: '/',
-                        version: '1',
-                        secure: true,
-                        expires: `'${90 * 24 * 60 * 60}'`
-                    })
-                    .then((done) => {
-                        console.log('Cookie set!', done);
-                        dispatch(set_cookie(true))
-                    })
-                    .catch(err => console.log(err))
+                    // CookieManager.set('https://www.campussphere.net', {
+                    //     name: 'jwt_token',
+                    //     value: response.cookie,
+                    //     domain: 'campussphere.net',
+                    //     path: '/',
+                    //     version: '1',
+                    //     secure: true,
+                    //     expires: `'${90 * 24 * 60 * 60}'`
+                    // })
+                    // .then((done) => {
+                    //     console.log('Cookie set!', done);
+                    //     dispatch(set_cookie(true))
+                    // })
+                    // .catch(err => console.log(err))
                 } else {
                     set_server_err(!true)
 
