@@ -32,7 +32,7 @@ export const getSearch = async (payload) => {
 };
 
 export const getProducts = async (payload) => {
-  let { category, limit, gender, campus } = payload;
+  let { category, limit, gender, campus, purpose } = payload;
  
   let trimmed = atob(category).trim();
     
@@ -49,22 +49,34 @@ export const getProducts = async (payload) => {
   let cap_gender = gender ? capitalizeFirstLetter(gender) : '';
 
   // Business logic
-  if (trimmed.toLowerCase() === 'fashion' || trimmed.toLowerCase() === 'lodge & apartments') {
-    const response = await findProductsByCategoryAndGender({ trimmed, cap_gender, limit, campus });
-
+  if (purpose === 'product') {
+    if (trimmed.toLowerCase() === 'fashion' ) {
+      const response = await findProductsByCategoryAndGender({ trimmed, cap_gender, limit, campus, purpose });
+  
+      return response;
+  
+    } else if (trimmed.toLowerCase() === 'trends') {
+  
+      const response = await findProducts({ limit, campus, purpose });
+      console.log("response: ", response)
+      return response;
+  
+    } else{
+      const response = await findProductsByCategory({ category, limit, campus, purpose });
+  
+      return response;
+    }
+  } else if(purpose === 'accomodation'){
+    const response = await findProductsByCategory({ category, limit, campus, purpose });
+  
     return response;
-
-  } else if (trimmed.toLowerCase() === 'trends') {
-
-    const response = await findProducts({ limit, campus });
-    console.log("response: ", response)
+  }else{
+    const response = await findProductsByCategory({ category, limit, campus, purpose });
+  
     return response;
-
   }
 
-  const response = await findProductsByCategory({ category, limit, campus });
-
-  return response;
+  
 };
 
 
@@ -79,11 +91,11 @@ export const getProductThumbnail = async (payload) => {
 
 
 export const getProductType = async (payload) => {
-  const { category, type } = payload;
+  const { category, type, purpose } = payload;
 
   // Business logic
   try {
-    const response = await findProductsType({ type, limit: 40 });
+    const response = await findProductsType({ type, limit: 40, purpose });
     return response;
 
   } catch (error) {

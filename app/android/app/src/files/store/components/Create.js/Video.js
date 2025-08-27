@@ -76,6 +76,10 @@ export default function VideoUpload({ videos, updatePhotos, setUploading, update
           publicId: response.data.data?.public_id,
         };
         updatePhotos(newVideos);
+
+        if (index === 0) {
+          updateThumbnail(response.data.data?.url, response.data.data?.public_id);
+        }
         
         // Pause all other videos when a new one is added
         setPausedVideos(prev => {
@@ -100,9 +104,10 @@ export default function VideoUpload({ videos, updatePhotos, setUploading, update
       setDeletingIndex(index);
       const videoToDelete = videos[index];
       
-      if (videoToDelete?.publicId) {
-        await axios.post('https://cs-server-olive.vercel.app/delete', {
-          publicId: videoToDelete.publicId 
+      if (videoToDelete?.uri) {
+        await axios.post('http://192.168.0.4:9090/delete', {
+          url: videoToDelete.uri,
+          type: 'video'
         });
       }
 
@@ -255,7 +260,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
     padding: 16,
-    height: 220,
+    height: 250,
     marginBottom: -6,
     borderRadius: 0,
     shadowColor: '#000',

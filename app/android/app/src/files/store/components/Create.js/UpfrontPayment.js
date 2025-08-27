@@ -1,40 +1,46 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dimensions, StyleSheet, Text, TextInput, View } from 'react-native';
 
-export default function Stock({ updateStock, error }) {
-  const [stock, setStock] = useState('');
-  // const [error, setError] = useState('');
+export default function UpfrontPay({ updateUpfrontPay, error, purpose }) {
+  const [price, setPrice] = useState('');
+  const [localError, setLocalError] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const screenWidth = Dimensions.get('window').width;
-  const maxStock = 9999; // Maximum allowed stock quantity
 
-  const handleStockChange = (text) => {
-    // Remove all non-digit characters
-    const cleanedText = text.replace(/[^0-9]/g, '');
+  const handlePriceChange = (text) => {
+    // Remove all non-digit characters except decimal point
+    const cleanedText = text.replace(/[^0-9.]/g, '');
     
-    // Limit to maxStock digits
-    const limitedText = cleanedText.slice(0, 4);
+    // Prevent multiple decimal points
+    const decimalCount = cleanedText.split('.').length - 1;
+    const sanitizedText = decimalCount > 1 
+      ? cleanedText.substring(0, cleanedText.lastIndexOf('.'))
+      : cleanedText;
+
+    updateUpfrontPay(sanitizedText)
     
-    setStock(limitedText);
-    
-    // Validate
-    // if (limitedText && parseInt(limitedText) <= 0) {
-    //   setError('Stock must be at least 1');
-    // } else if (limitedText && parseInt(limitedText) > maxStock) {
-    //   setError(`Maximum stock is ${maxStock}`);
-    // } else {
-    //   setError('');
-    // }
-    
-    // Pass numeric value to parent
-    if (updateStock) {
-      updateStock(limitedText ? parseInt(limitedText) : '');
+    // Format as currency while typing
+    let formattedValue = '';
+    if (sanitizedText) {
+      // Remove all commas for processing
+      const numericValue = parseFloat(sanitizedText.replace(/,/g, ''));
+      
+      // Format with commas and optional decimals
+      formattedValue = numericValue.toLocaleString('en-US', {
+        maximumFractionDigits: 2,
+        minimumFractionDigits: 0
+      });
+      
+      // Validate
+      
     }
+    setPrice(formattedValue);
   };
+
 
   return (
     <View style={[styles.container, { width: screenWidth }]}>
-      <Text style={styles.label}>Available Stock</Text>
+      <Text style={styles.label}>Upfront payment</Text>
 
       <View style={[
         styles.inputContainer,
@@ -43,26 +49,22 @@ export default function Stock({ updateStock, error }) {
       ]}>
         <TextInput
           keyboardType="numeric"
-          placeholder="Enter quantity (e.g. 50)"
+          placeholder="Enter amount (e.g. 25,000)"
           placeholderTextColor="#999"
           style={styles.input}
-          value={stock}
-          onChangeText={handleStockChange}
+          value={price ? `₦${price}` : ''}
+          onChangeText={handlePriceChange}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
-          maxLength={4}
+          maxLength={15}
         />
       </View>
 
-      <View style={styles.footer}>
-        {error ? (
-          <Text style={styles.errorText}>{error}</Text>
-        ) : (
-          <Text style={styles.hintText}>
-            {stock ? `${stock} available` : 'Enter the quantity in stock'}
-          </Text>
-        )}
-      </View>
+      {error ? (
+        <Text style={styles.errorText}>{error}</Text>
+      ) : (
+        <Text style={styles.hintText}>Enter the price in Nigerian Naira</Text>
+      )}
     </View>
   );
 }
@@ -103,9 +105,6 @@ const styles = StyleSheet.create({
     padding: 12,
     fontSize: 16,
     color: '#333',
-  },
-  footer: {
-    minHeight: 20,
   },
   errorText: {
     color: '#ff3333',

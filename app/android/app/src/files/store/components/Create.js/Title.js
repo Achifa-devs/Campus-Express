@@ -36,7 +36,7 @@ export default function Title({ updateTitle, category, error, purpose }) {
 
       <View style={[styles.inputContainer, isFocused && styles.inputContainerFocused]}>
         <TextInput
-          placeholder={purpose === 'product' ? "Enter a descriptive title (e.g., 'Brand New iPhone 13 Pro Max 256GB')": purpose === 'accomodation' ? "Enter a descriptive title (e.g., 'Roommate needed at Aso-rock lodge)" : "I offer cooking/baking services like fired chicken, cakes etc."}
+          placeholder={purpose === 'product' ? "Enter a descriptive title (e.g., 'Brand New iPhone 13 Pro Max 256GB')": purpose === 'accomodation' ? "Enter a descriptive title (e.g., 'Roommate needed at Aso-rock lodge)" : "I offer cooking/baking services or I offer laundry/makeup services etc."}
           placeholderTextColor="#999"
           style={styles.input}
           multiline={true}
@@ -93,9 +93,9 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   inputContainerFocused: {
-    borderColor: '#FF4500',
+    borderColor: '#32CD32',
     backgroundColor: '#fff',
-    shadowColor: '#FF4500',
+    shadowColor: '#32CD32',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.1,
     shadowRadius: 4,

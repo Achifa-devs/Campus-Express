@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Dimensions, StyleSheet, Text, TextInput, View } from 'react-native';
 
-export default function Price({ updatePrice, error }) {
+export default function Price({ updatePrice, error, purpose }) {
   const [price, setPrice] = useState('');
   const [localError, setLocalError] = useState('');
   const [isFocused, setIsFocused] = useState(false);
@@ -40,7 +40,7 @@ export default function Price({ updatePrice, error }) {
 
   return (
     <View style={[styles.container, { width: screenWidth }]}>
-      <Text style={styles.label}>Price (₦)</Text>
+      <Text style={styles.label}>{purpose === 'product' ? 'Price (₦)': purpose === 'accomodation' ? 'Accomodation Rent/Cost (₦)' : 'Price (₦)'}</Text>
 
       <View style={[
         styles.inputContainer,
@@ -89,9 +89,9 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   inputContainerFocused: {
-    borderColor: '#FF4500',
+    borderColor: '#32CD32',
     backgroundColor: '#fff',
-    shadowColor: '#FF4500',
+    shadowColor: '#32CD32',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.1,
     shadowRadius: 4,

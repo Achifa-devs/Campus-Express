@@ -93,9 +93,16 @@ export default function Photo({ photos, updatePhotos, setUploading, updateThumbn
       const photoToDelete = photos[index];
       console.error('Upload failed:', photoToDelete, index);
       
-      if (photoToDelete?.publicId) {
-        await axios.post('https://cs-server-olive.vercel.app/delete', {
-          publicId: photoToDelete.publicId 
+      // if (photoToDelete?.publicId) {
+      //   await axios.post('https://cs-server-olive.vercel.app/delete', {
+      //     publicId: photoToDelete.publicId 
+      //   });
+      // }
+
+      if (photoToDelete?.uri) {
+        await axios.post('http://192.168.0.4:9090/delete', {
+          url: photoToDelete.uri,
+          type: 'image'
         });
       }
 

@@ -95,9 +95,9 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   dropdownFocused: {
-    borderColor: '#FF4500',
+    borderColor: '#32CD32',
     backgroundColor: '#fff',
-    shadowColor: '#FF4500',
+    shadowColor: '#32CD32',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.1,
     shadowRadius: 4,

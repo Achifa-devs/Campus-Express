@@ -13,13 +13,14 @@ export default function Home() {
 
   const { user } = useSelector(s => s?.user);
   const { campus } = useSelector(s => s?.campus);
+  const { option } = useSelector(s => s?.option);
 
   const fetchData = async () => {
     try {
       const res = await fetch(
         `https://cs-server-olive.vercel.app/products?limit=20&category=${btoa(
           'trends'
-        )}&campus=${campus === 'All campus' ? null : campus}`,
+        )}&campus=${campus === 'All campus' ? null : campus}&purpose=${option === 'Products' ? 'product' : option === 'Lodges' ? 'accomodation' : 'service'}`,
         {
           headers: { 'Content-Type': 'application/json' },
         }
@@ -48,7 +49,6 @@ export default function Home() {
     fetchData().finally(() => setRefreshing(false));
   }, [campus]);
 
-  const {option} = useSelector(s => s?.option)
   
   const sections = [
     // {key: 'ads', component: <NavigationTabs />},

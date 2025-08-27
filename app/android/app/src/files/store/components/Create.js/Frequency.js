@@ -1,20 +1,28 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { Dropdown } from 'react-native-element-dropdown';
+import React, { 
+  useState 
+} from 'react';
+import { 
+  StyleSheet, 
+  Text, 
+  View 
+} from 'react-native';
+import { 
+  Dropdown 
+} from 'react-native-element-dropdown';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-export default function Size({ updateType, category, type_list, error, onFocus }) {
+export default function Freq({ updateFreq, error, onFocus }) {
   const [isFocused, setIsFocused] = useState(false);
   const [value, setValue] = useState(null);
 
   const handleChange = (item) => {
     setValue(item.title);
-    updateType(item.title);
+    updateFreq(item.title);
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Type</Text>
+      <Text style={styles.label}>Payment frequency (e.g: Monthly, Quarterly, Annually)</Text>
       
       <Dropdown
         style={[
@@ -25,12 +33,21 @@ export default function Size({ updateType, category, type_list, error, onFocus }
         placeholderStyle={styles.placeholderStyle}
         selectedTextStyle={styles.selectedTextStyle}
         iconStyle={styles.iconStyle}
-        data={type_list}
+        data={[
+            {title: 'Daily'},
+            {title: 'Nightly'},
+            {title: 'Weekly'},
+            {title: 'Bi-Weekly'},
+            {title: 'Monthly'},
+            {title: 'Quarterly'},
+            {title: 'Semiannual (or Half-yearly)'},
+            {title: 'Annually'}
+        ]}
         search={false}
         maxHeight={300}
         labelField="title"
         valueField="title"
-        placeholder={`Select ${category} type`}
+        placeholder="Select payment frequency"
         value={value}
         onFocus={() => {
           setIsFocused(true);
@@ -40,7 +57,7 @@ export default function Size({ updateType, category, type_list, error, onFocus }
         onChange={handleChange}
         renderLeftIcon={() => (
           <Ionicons 
-            name="options-outline" 
+            name="resize-outline" 
             size={20} 
             color={isFocused ? '#32CD32' : '#666'} 
             style={styles.icon}
@@ -50,7 +67,7 @@ export default function Size({ updateType, category, type_list, error, onFocus }
           <View style={styles.item}>
             <Text style={styles.textItem}>{item.title}</Text>
             {value === item.title && (
-              <Ionicons name="checkmark" size={20} color="#FF4500" />
+              <Ionicons name="checkmark" size={20} color="#32CD32" />
             )}
           </View>
         )}
@@ -60,7 +77,7 @@ export default function Size({ updateType, category, type_list, error, onFocus }
         <Text style={styles.errorText}>{error}</Text>
       ) : (
         <Text style={styles.hintText}>
-          Select the appropriate size for this product
+          Select the appropriate payment frequency for this rental space
         </Text>
       )}
     </View>
@@ -69,6 +86,7 @@ export default function Size({ updateType, category, type_list, error, onFocus }
 
 const styles = StyleSheet.create({
   container: {
+    width: '100%',
     padding: 16,
     backgroundColor: '#fff',
     marginBottom: 0,
@@ -83,6 +101,7 @@ const styles = StyleSheet.create({
     height: 55,
     borderWidth: 1,
     borderColor: '#ddd',
+    color: '#000',
     borderRadius: 8,
     paddingHorizontal: 16,
     backgroundColor: '#f9f9f9',

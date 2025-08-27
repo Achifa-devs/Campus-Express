@@ -43,13 +43,17 @@ export const getProductThumbnail = async (payload) => {
 
 
 export const postProduct = async (payload) => {
-    const { constantData, dynamicData, shipping_data } = payload;
-    // console.log(constantData, dynamicData, shipping_data )
-
-    // Business logic
-    let response = await createProduct({ constantData, dynamicData, shipping_data });
-
-    return response;
+    try {
+        const { constantData, dynamicData, shipping_data } = payload;
+        // console.log(constantData, dynamicData, shipping_data )
+    
+        // Business logic
+        let response = await createProduct({ constantData, dynamicData, shipping_data });
+    
+        return response;
+    } catch (error) {
+        console.log(error)
+    }
 };
 
 

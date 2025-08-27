@@ -25,6 +25,7 @@ export async function POST(req) {
       campus,
       state,
       thumbnail_public_id,
+      purpose
     }=constantData
 
     
@@ -72,13 +73,14 @@ export async function POST(req) {
         shipping_duration,
         campus,
         uni_state,
-        thumbnail_public_id
+        thumbnail_public_id,
+        purpose
       ) VALUES (
         DEFAULT,
         $1, $2, 'unsold', $3, $4,
         $5, $6, $7, $8, NOW(),
         $9, 0, 0, $10, $11,
-        $12, $13, $14, $15, $16, $17
+        $12, $13, $14, $15, $16, $17, $18
       )
       `,
       [
@@ -99,14 +101,15 @@ export async function POST(req) {
         campus,
         state,
         thumbnail_public_id,
+        purpose
       ]
     )
 
     if (result.rowCount > 0) {
-        return NextResponse.json({ success: result.rowCount > 0 ? true : false}, { status: result.rowCount > 0 ? 200 : 501 });
+      return NextResponse.json({ success: result.rowCount > 0 ? true : false}, { status: result.rowCount > 0 ? 200 : 501 });
         
     } else {
-          return NextResponse.json({ success: false, message: 'Something went wrong' }, { status: 500 });
+      return NextResponse.json({ success: false, message: 'Something went wrong' }, { status: 500 });
       
     }
   } catch (error) {

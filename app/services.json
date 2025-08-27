@@ -14,7 +14,6 @@
         "Fashion & Tailoring": [
           "Clothes Sewing & Mending",
           "Uniform Adjustments",
-          "Custom Designs",
           "Laundry & Ironing"
         ],
         "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1756063362/download_3_h00vra.jpg"
@@ -45,6 +44,15 @@
           "Photocopy & Scanning"
         ],
         "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1756063362/download_4_n0hsya.jpg"
+      },
+      {
+        "Cleaning Services": [
+          "Room Cleaning",
+          "Hostel/Lodge Cleaning",
+          "Laundry & Folding",
+          "Waste Disposal Assistance"
+        ],
+        "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1756260586/download_7_flrcl2.jpg"
       }
     ]
   }

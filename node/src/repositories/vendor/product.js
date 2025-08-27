@@ -52,7 +52,7 @@ export async function createProduct({ constantData, dynamicData, shipping_data }
     let replacedTitle = constantData.title.replace(/'/g, '"');
 
     let {
-        category, price, stock, product_id, user_id, thumbnail_id, campus, state, thumbnail_public_id
+        category, price, stock, product_id, user_id, thumbnail_id, campus, state, thumbnail_public_id, purpose
     }=constantData
 
     
@@ -83,11 +83,12 @@ export async function createProduct({ constantData, dynamicData, shipping_data }
             shipping_duration,
             campus,
             uni_state,
-            thumbnail_public_id
+            thumbnail_public_id, 
+            purpose
         ) 
         VALUES(
             DEFAULT,
-            $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21
+            $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22
         )`,
         [
             product_id,
@@ -104,14 +105,15 @@ export async function createProduct({ constantData, dynamicData, shipping_data }
                 "reason": "rent paid"}),
             0,
             0,
-            stock,
+            stock ? stock : 0,
             thumbnail_id,
             shipping_data?.shipping_policy,
             JSON.stringify(shipping_data?.shipping_range),
             shipping_data?.shipping_duration,
             campus,
             state,
-            thumbnail_public_id
+            thumbnail_public_id,
+            purpose
         ]
     );
     

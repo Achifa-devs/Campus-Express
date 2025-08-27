@@ -25,6 +25,8 @@ import { getData } from '../../../utils/AsyncStore.js';
 import { useNavigation } from '@react-navigation/native';
 import Features from './Amenities.js';
 import Video from '../../components/Create.js/Video.js';
+import Freq from '../../components/Create.js/Frequency.js';
+import UpfrontPay from '../../components/Create.js/UpfrontPayment.js';
 
 export default function Create({ route }) {
   let screenWidth = Dimensions.get('window').width;
@@ -88,6 +90,8 @@ export default function Create({ route }) {
   let [description, set_description] = useState('')
   let [price, set_price] = useState('')
   let [stock, set_stock] = useState('')
+  let [freq, set_freq] = useState('')
+  let [upfront_pay, set_upfront_pay] = useState('')
   let [thumbnail, set_thumbnail] = useState('');
   let [thumbnail_public_id, set_thumbnail_public_id] = useState('');
 
@@ -126,7 +130,6 @@ export default function Create({ route }) {
   let [gender, set_gender] = useState('')
   let [size, set_size] = useState([])
   let [sub_category, set_sub_category] = useState('')
-  
   let [category_list, set_category_list] = useState([])
   let [type_list, set_type_list] = useState([])
   let [size_list, set_size_list] = useState([])
@@ -145,6 +148,8 @@ export default function Create({ route }) {
     shipping_duration,
     description,
     stock,
+    upfront_pay,
+    freq,
     sub_category,
     gender,
     features,
@@ -170,8 +175,8 @@ export default function Create({ route }) {
     gender,
     condition,
     size,
-
-
+    freq,
+    upfront_pay,
     address1, 
     address2, 
   }
@@ -239,8 +244,8 @@ export default function Create({ route }) {
           priceErr: '', 
           typeErr: '', 
           stockErr: '',
-          shipping_policyErr,
-          shipping_durationErr
+          shipping_policyErr: '',
+          shipping_durationErr: ''
         })
       }else {
         setErrList({
@@ -265,11 +270,12 @@ export default function Create({ route }) {
         thumbnailErr: '',
         priceErr: '', 
         typeErr: '', 
-        // sub_categoryErr: '',
+        freqErr: '',
+        upfront_payErr: '',
         address1Err: '',
         address2Err: ''
       })
-    }else{
+    } else {
       setErrList({
         categoryErr: '',
         titleErr: '',
@@ -280,7 +286,7 @@ export default function Create({ route }) {
         address2Err: ''
       })
     } 
-  }, [category,type])
+  }, [category,type,purpose])
 
 
 
@@ -318,7 +324,9 @@ export default function Create({ route }) {
       set_category_list([])
       keys.map(item => set_category_list(data => [...data, { title: item }]));
     }else{
-
+      const keys = service.items.category.map(item => Object.keys(item)[0]);
+      set_category_list([])
+      keys.map(item => set_category_list(data => [...data, { title: item }]));
     }  
   }, [purpose])
 
@@ -394,6 +402,14 @@ export default function Create({ route }) {
     set_features(data)
   }
 
+  function updateFreq(data){
+    set_freq(data)
+  }
+
+  function updateUpfrontPay(data){
+    set_upfront_pay(data)
+  }
+
   function updateSubCategory(data) {
     set_sub_category(data)
   }
@@ -453,37 +469,72 @@ export default function Create({ route }) {
   // Update the validation function to include shipping range validation
   function validation() {
     const newErrors = {};
+    console.log("errList: ", errList)
     Object.entries(errList).forEach(([key, _]) => {
       const field = key.replace('Err', '');
       const value = fields[field];
+
       
-      if (!value || (Array.isArray(value) && value.length === 0)) {
-        if(purpose === 'product'){
-          newErrors[key] = `Image ${field} is required`;
-        }else{
-          newErrors[key] = `Video ${field} is required`;
-        }
-      } else {
-        if (field === 'price') {
-          const digitsOnly = value.replace(/\D/g, '');
-          if (digitsOnly <= 0) {
-            newErrors[key] = ('price must be greater than ₦500');
+      if (field !== 'price' && field !== 'upfront_pay') {
+        if (!value || (Array.isArray(value) && value.length === 0)) {
+          if(purpose === 'product'){
+            if (field === 'thumbnail') {
+              newErrors[key] = `Image ${field} is required`;
+            } else {
+              newErrors[key] = `${field} is required`;
+            }
+          }else{
+            if (field === 'thumbnail') {
+              newErrors[key] = `Video ${field} is required`;
+            } else {
+              newErrors[key] = `${field} is required`;
+            }
           }
         } else {
           newErrors[key] = ``;
+        }
+      } else {
+
+        if (field === 'price') {
+          const digitsOnly = value.replace(/\D/g, '');
+          if (!price) {
+            newErrors[key] = `${field} is required`;
+          } else {
+            if (digitsOnly <= 500) {
+              newErrors[key] = ('price must be greater than ₦500');
+            }else {
+              newErrors[key] = ``;
+            }
+          }
+        } else if(field === 'upfront_pay'){
+          const digitsOnly = value.replace(/\D/g, '');
+          console.log(field)
+          if (!freq) {
+            newErrors[key] = `${field} is required`;
+          } else {
+            if (digitsOnly <= 500) {
+              newErrors[key] = ('frequency must be greater than ₦500');
+            }else {
+              newErrors[key] = ``;
+            }
+          }
         }
       }
     }); 
 
     // Add shipping range validation
-    if (parseInt(shippingRange.in_campus.price) < 500) {
-      newErrors.shippingRangeErr = 'Campus delivery fee must be at least ₦500';
-    }
-
-    setErrs(Object.keys(newErrors).length ? 'Please fill all required fields.' : '');
-    // console.log(Object.values(newErrors))
+    if (purpose === 'product') {
+      if (parseInt(shippingRange.in_campus.price) < 500) {
+        newErrors.shippingRangeErr = 'Campus delivery fee must be at least ₦500';
+      }
+  
+      setErrs(Object.keys(newErrors).length ? 'Please fill all required fields.' : '');
+      // console.log(Object.values(newErrors))
+      setErrList(prev => ({ ...prev, ...newErrors }));
+  
+      return !Object.values(newErrors).filter((item) => item !== '').length > 0;
+    } 
     setErrList(prev => ({ ...prev, ...newErrors }));
-
     return !Object.values(newErrors).filter((item) => item !== '').length > 0;
   }
 
@@ -513,7 +564,7 @@ export default function Create({ route }) {
   
       setUploading(true)
       console.log(productId)
-      fetch('https://cs-server-olive.vercel.app/vendor/create-product', {
+      fetch('http://192.168.0.4:9090/vendor/create-product', {
         method: 'post',
         headers: {
           "Content-Type": "Application/json"
@@ -530,7 +581,8 @@ export default function Create({ route }) {
             state: user?.state,
             stock: stock,
             thumbnail_id: thumbnail,
-            thumbnail_public_id: thumbnail_public_id
+            thumbnail_public_id: thumbnail_public_id,
+            purpose: purpose
           }, 
           dynamicData: {
             cType: type,
@@ -539,11 +591,12 @@ export default function Create({ route }) {
             condition: condition,
             size: size,
             lodge_data: {
-                lodge_active: category === "Lodge & Apartments" ? true : false,
-                // lodge_name: lodge_name,
-                // flat_location: flat_location, 
+                lodge_active: purpose === "accomodation" ? true : false,
+                upfront_pay: upfront_pay,
+                freq: freq, 
                 address1: address1,
                 address2: address2,
+                amenities: JSON.stringify(features)
                 // address3: address3,
                 // address4: address4,
                 // country: country,
@@ -559,6 +612,7 @@ export default function Create({ route }) {
         })
       })
       .then(async(result) => {
+
         let response = await result.json();
         console.log(response);
         if (response.success) {
@@ -585,6 +639,9 @@ export default function Create({ route }) {
     }
   }
 
+  useEffect(() => {
+    console.log(features)
+  }, [features])
 
   function updateAddress1(data) {
     set_address1(data)
@@ -623,7 +680,14 @@ export default function Create({ route }) {
             
             <View style={{width: '100%', marginTop: 5, opacity: category !== '' ? 1 : .5, pointerEvents: category !== '' ? 'auto' : 'none', marginBottom: 5, padding: 0, backgroundColor: '#efefef'}}>
               {
-                category === 'Fashion' || category === 'Lodge & Apartments' 
+                category === 'Fashion'
+                ? 
+                <Gender error={errList.genderErr} updateGender={updateGender} />
+                :
+                ""
+              }
+              {
+                purpose === 'accomodation'
                 ? 
                 <Gender error={errList.genderErr} updateGender={updateGender} />
                 :
@@ -707,12 +771,16 @@ export default function Create({ route }) {
             </View>
             <Title error={errList.titleErr} updateTitle={updateTitle} category={category} purpose={purpose} />
 
-            <Price error={errList.priceErr} updatePrice={updatePrice} />
+            {purpose === 'accomodation'?<Freq updateFreq={updateFreq} error={errList?.freqErr} />:''}
+
+            {purpose !== 'services'?<Price error={errList.priceErr} updatePrice={updatePrice} purpose={purpose} />: ''}
+
+            {purpose === 'accomodation'?<UpfrontPay error={errList.upfront_payErr} updateUpfrontPay={updateUpfrontPay} purpose={purpose} />: ''}
           
             {
               purpose === 'product'
               ? 
-              <Stock error={errList.stockErr} updateStock={updateStock} />
+              <Stock error={errList.stockErr} updateStock={updateStock} />   
               :
               ""
             }
