@@ -21,61 +21,68 @@ export const getProduct = async (payload) => {
 };
 
 export const getSearch = async (payload) => {
-  let { word } = payload;
+  let { word, purpose, campus } = payload;
  
     
-  const response = await findProducts({ limit: null });
-  const filteredList = response.filter(item => item.title.toLowerCase().indexOf(word.toLowerCase()) > -1);
-  console.log("response: ", filteredList)
-  return filteredList;
-
+  try {
+    const response = await findProducts({ limit: null, purpose, campus });
+    const filteredList = response.filter(item => item.title.toLowerCase().indexOf(word.toLowerCase()) > -1);
+    return filteredList;
+  
+  } catch (error) {
+    console.log("error: ", error)
+    throw new Error("Error: ", error);
+  }
 };
 
 export const getProducts = async (payload) => {
   let { category, limit, gender, campus, purpose } = payload;
  
-  let trimmed = atob(category).trim();
+  try {
+    let trimmed = atob(category).trim();
+      
+    // Ensure limit is a valid number
+    limit = parseInt(limit);
+    if (isNaN(limit) || limit <= 0) {
+      limit = 10;  // Set a default limit if invalid
+    }
+  
+    function capitalizeFirstLetter(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+  
+    let cap_gender = gender ? capitalizeFirstLetter(gender) : '';
+  
+    // Business logic
+    if (purpose === 'product') {
+      if (trimmed.toLowerCase() === 'fashion' ) {
+        const response = await findProductsByCategoryAndGender({ trimmed, cap_gender, limit, campus, purpose });
     
-  // Ensure limit is a valid number
-  limit = parseInt(limit);
-  if (isNaN(limit) || limit <= 0) {
-    limit = 10;  // Set a default limit if invalid
-  }
-
-  function capitalizeFirstLetter(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
-
-  let cap_gender = gender ? capitalizeFirstLetter(gender) : '';
-
-  // Business logic
-  if (purpose === 'product') {
-    if (trimmed.toLowerCase() === 'fashion' ) {
-      const response = await findProductsByCategoryAndGender({ trimmed, cap_gender, limit, campus, purpose });
-  
-      return response;
-  
-    } else if (trimmed.toLowerCase() === 'trends') {
-  
+        return response;
+    
+      } else if (trimmed.toLowerCase() === 'trends') {
+    
+        const response = await findProducts({ limit, campus, purpose });
+        return response;
+    
+      } else{
+        const response = await findProductsByCategory({ category, limit, campus, purpose });
+    
+        return response;
+      }
+    } else if(purpose === 'accomodation'){
       const response = await findProducts({ limit, campus, purpose });
-      console.log("response: ", response)
+    
       return response;
-  
-    } else{
-      const response = await findProductsByCategory({ category, limit, campus, purpose });
-  
+    }else{
+      const response = await findProducts({ limit, campus, purpose });
+    
       return response;
     }
-  } else if(purpose === 'accomodation'){
-    const response = await findProductsByCategory({ category, limit, campus, purpose });
   
-    return response;
-  }else{
-    const response = await findProductsByCategory({ category, limit, campus, purpose });
-  
-    return response;
+  } catch (error) {
+    console.log(error)
   }
-
   
 };
 

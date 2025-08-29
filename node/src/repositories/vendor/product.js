@@ -42,6 +42,8 @@ export async function findProductsThumbnailById({ product_id }) {
 // Create product view
 export async function createProduct({ constantData, dynamicData, shipping_data }) {
 
+  
+  try {
     Object.keys(dynamicData).forEach(key => {
         if (dynamicData[key] === '') {
           delete dynamicData[key];
@@ -52,73 +54,79 @@ export async function createProduct({ constantData, dynamicData, shipping_data }
     let replacedTitle = constantData.title.replace(/'/g, '"');
 
     let {
-        category, price, stock, product_id, user_id, thumbnail_id, campus, state, thumbnail_public_id, purpose
-    }=constantData
+      category, price, stock, product_id, user_id, thumbnail_id, campus, state, thumbnail_public_id, purpose
+    }=constantData;
 
-    
     dynamicData.lodge_data.lodge_active ? '' : delete dynamicData.lodge_data
-
+    console.log(
+      constantData, dynamicData, shipping_data 
+    )
     let date = new Date();
     
     const result = await pool.query(
-        `INSERT INTO products(
-            id,
-            product_id,
-            user_id,
-            status,
-            title,
-            description,
-            price,
-            package,
-            category,
-            others,
-            date,
-            state,
-            views,
-            shares,
-            stock,
-            thumbnail_id,
-            accept_refund,
-            shipping_range,
-            shipping_duration,
-            campus,
-            uni_state,
-            thumbnail_public_id, 
-            purpose
-        ) 
-        VALUES(
-            DEFAULT,
-            $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22
-        )`,
-        [
-            product_id,
-            user_id,
-            'unsold',
-            replacedTitle,
-            replacedDescription,
-            price,
-            0,
-            category,
-            JSON.stringify(dynamicData),
-            date,
-            JSON.stringify({"state": "active",
-                "reason": "rent paid"}),
-            0,
-            0,
-            stock ? stock : 0,
-            thumbnail_id,
-            shipping_data?.shipping_policy,
-            JSON.stringify(shipping_data?.shipping_range),
-            shipping_data?.shipping_duration,
-            campus,
-            state,
-            thumbnail_public_id,
-            purpose
-        ]
+      `INSERT INTO products(
+        id,
+        product_id,
+        user_id,
+        status,
+        title,
+        description,
+        price,
+        package,
+        category,
+        others,
+        date,
+        state,
+        views,
+        shares,
+        stock,
+        thumbnail_id,
+        accept_refund,
+        shipping_range,
+        shipping_duration,
+        campus,
+        uni_state,
+        thumbnail_public_id, 
+        purpose
+      ) 
+      VALUES(
+        DEFAULT,
+        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11,
+        $12, $13, $14, $15, $16, $17, $18, $19, $20,
+        $21, $22
+      )`,
+      [
+        product_id,
+        user_id,
+        'unsold',
+        replacedTitle,
+        replacedDescription,
+        price ? price : 0,
+        0,
+        category,
+        JSON.stringify(dynamicData),
+        date,
+        JSON.stringify({ state: "active", reason: "rent paid" }),
+        0,
+        0,
+        stock ? stock : 0,
+        thumbnail_id,
+        shipping_data?.shipping_policy,
+        JSON.stringify(shipping_data?.shipping_range),
+        shipping_data?.shipping_duration,
+        campus,
+        state,
+        thumbnail_public_id,
+        purpose
+      ]
     );
+
     
-  let response = await errorHandler(result?.rowCount);
-  return response;
+    let response = await errorHandler(result?.rowCount);
+    return response;
+  } catch (error) {
+    console.log(error)
+  }
 };
 
 

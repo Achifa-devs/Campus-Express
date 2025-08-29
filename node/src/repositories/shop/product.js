@@ -12,33 +12,40 @@ export async function findProductById({ product_id }) {
 };
 
 // Find products
-export async function findProducts({ limit, campus }) {
+export async function findProducts({ limit, campus, purpose }) {
+  console.log(limit, campus, purpose)
   if (campus === 'null') {
     const result = await pool.query(
-      `SELECT * 
-       FROM products 
-       WHERE state->>'state' = 'active' 
-       AND purpose = $2
-       LIMIT $1`,
-      [limit, purpose]
+      `
+      SELECT * 
+      FROM products 
+      WHERE state->>'state' = 'active' 
+      AND purpose = $1
+      LIMIT ${limit};
+      `,
+      [purpose]
     );
     return result.rows;
   } else {
     const result = await pool.query(
-      `SELECT * 
-       FROM products 
-       WHERE state->>'state' = 'active'
-       AND campus = $1
-       AND purpose = $3
-       LIMIT $2`,
-      [campus, limit, purpose]
+      `
+      SELECT * 
+      FROM products 
+      WHERE state->>'state' = 'active'
+      AND campus = $1
+      AND purpose = $2
+      LIMIT ${limit};
+      `,
+      [campus, purpose]
     );
     return result.rows;
   }
 };
 
+
 // Find products by category
 export async function findProductsByCategory({ category, limit, campus, purpose }) {
+  console.log(purpose)
   if (campus === 'null') {
     const result = await pool.query(
       `SELECT * 
