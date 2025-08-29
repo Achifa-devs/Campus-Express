@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",
+    "@hurshore/react-native-paystack-webview": "^5.0.3",
     "@legendapp/motion": "^2.2.0",
     "@notifee/react-native": "^9.1.8",
     "@react-native-async-storage/async-storage": "1.21.0",
@@ -30,6 +31,7 @@
     "js-ago": "^2.1.1",
     "notifee": "^0.0.1",
     "numeral": "^2.0.6",
+    "paystack-react-native": "^0.2.1",
     "pluralize": "^8.0.0",
     "react": "18.2.0",
     "react-native": "0.74.3",
@@ -61,6 +63,7 @@
     "react-native-multiple-select-list": "^1.0.4",
     "react-native-orientation-locker": "^1.7.0",
     "react-native-paper": "^5.13.1",
+    "react-native-paystack-webview": "^5.0.1",
     "react-native-pell-rich-editor": "^1.9.0",
     "react-native-permissions": "^3.10.0",
     "react-native-phone-call": "^1.2.0",

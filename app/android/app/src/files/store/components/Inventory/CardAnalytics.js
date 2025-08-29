@@ -16,7 +16,7 @@ export default function CardAnalytics({data, updateDelete, updateDeleting}) {
   return (
     <>
         <View style={{display: 'flex', height: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-            <Text style={{fontSize: 10, fontWeight: '500', color: '#000'}}>{data?.stock} in stock | </Text>
+            {data?.purpose === 'product' ? <Text style={{fontSize: 10, fontWeight: '500', color: '#000'}}>{data?.stock} in stock | </Text>: ''}
             {/* <Text style={{fontSize: 10, fontWeight: '500', color: '#000'}}>{data?.orders} orders placed | </Text> */}
             <Text style={{fontSize: 10, fontWeight: '500', color: '#000'}}>{data?.views} views | </Text>
             <Text style={{fontSize: 10, fontWeight: '500', color: '#000'}}>{data?.reviews} 0 reviews</Text>

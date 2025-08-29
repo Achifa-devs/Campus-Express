@@ -66,7 +66,6 @@ export default function Create({ route }) {
   }
   useEffect(() => {
     const { update } = route?.params;
-
     if (update) {
       const { productId } = route?.productId;
       setProductId(productId)
@@ -279,11 +278,8 @@ export default function Create({ route }) {
       setErrList({
         categoryErr: '',
         titleErr: '',
-        thumbnailErr: '',
-        priceErr: '', 
-        typeErr: '', 
-        address1Err: '',
-        address2Err: ''
+        typeErr: '',
+        genderErr: ''
       })
     } 
   }, [category,type,purpose])
@@ -397,7 +393,6 @@ export default function Create({ route }) {
     }
   }
 
-
   function updateFeatures(data){
     set_features(data)
   }
@@ -414,20 +409,17 @@ export default function Create({ route }) {
     set_sub_category(data)
   }
 
-
   function updateDescription(data) {
     set_description(data)
   }
 
   function updatePrice(data) {
-    // Alert.alert(price)
     set_price(data)
   }
 
   function updateStock(data) {
     set_stock(data)
   }
-
 
   function updateSize(data) {
     set_size(data)
@@ -564,7 +556,7 @@ export default function Create({ route }) {
   
       setUploading(true)
       console.log(productId)
-      fetch('http://192.168.0.4:9090/vendor/create-product', {
+      fetch('https://cs-server-olive.vercel.app/vendor/create-product', {
         method: 'post',
         headers: {
           "Content-Type": "Application/json"
@@ -596,7 +588,7 @@ export default function Create({ route }) {
                 freq: freq, 
                 address1: address1,
                 address2: address2,
-                amenities: JSON.stringify(features)
+                amenities: (features)
                 // address3: address3,
                 // address4: address4,
                 // country: country,
@@ -612,10 +604,11 @@ export default function Create({ route }) {
         })
       })
       .then(async(result) => {
+        setUploading(false)
 
         let response = await result.json();
         console.log(response);
-        if (response.success) {
+        if (response.success) { 
           // navigation.navigate('user-inventory')
           navigation.goBack()
           // Handle success
@@ -687,7 +680,7 @@ export default function Create({ route }) {
                 ""
               }
               {
-                purpose === 'accomodation'
+                purpose === 'accomodation' || purpose === 'service'
                 ? 
                 <Gender error={errList.genderErr} updateGender={updateGender} />
                 :
@@ -722,18 +715,6 @@ export default function Create({ route }) {
                   </>
                   :
                   ""
-                : 
-                ""
-              }
-              {
-                category === 'Lodge & Apartments' 
-                ? 
-
-                  
-                  <>
-                    <SubCategory error={errList.sub_categoryErr} category={category} updateSubCategory={updateSubCategory} sub_type_list={sub_type_list} />
-
-                  </>
                 : 
                 ""
               }
@@ -773,7 +754,7 @@ export default function Create({ route }) {
 
             {purpose === 'accomodation'?<Freq updateFreq={updateFreq} error={errList?.freqErr} />:''}
 
-            {purpose !== 'services'?<Price error={errList.priceErr} updatePrice={updatePrice} purpose={purpose} />: ''}
+            {purpose !== 'service'?<Price error={errList.priceErr} updatePrice={updatePrice} purpose={purpose} />: ''}
 
             {purpose === 'accomodation'?<UpfrontPay error={errList.upfront_payErr} updateUpfrontPay={updateUpfrontPay} purpose={purpose} />: ''}
           

@@ -6,6 +6,8 @@ import {
     Dimensions,
     Image,
   
+    StatusBar,
+  
     StyleSheet,
     Switch,
     Text,
@@ -53,6 +55,7 @@ export function ProfileStackScreen() {
             component={ProfileCnt}
             options={{
                 header: ({ navigation }) => (
+
                 <View
                     style={{
                     width: '100%',
@@ -83,11 +86,11 @@ export function ProfileStackScreen() {
                                 {user && user?.fname}{user && '.'}{user && user?.lname[0]}
                             
                             </Text>
-                            {/* <TouchableOpacity onPress={() => navigation.navigate('user-shop')}>
+                            <TouchableOpacity onPress={() => navigation.navigate('user-shop')}>
                             <Text style={{ color: '#fff', textDecorationLine: 'underline', fontSize: 13 }}>
                                 Visit Shop
                             </Text>
-                            </TouchableOpacity> */}
+                            </TouchableOpacity>
                         </View>
                     </View>
 
@@ -105,7 +108,7 @@ export function ProfileStackScreen() {
                     }
 
                     {/* Right: Shop Balance */}
-                    {/* <View style={{ alignItems: 'flex-end' }}>
+                    <View style={{ alignItems: 'flex-end' }}>
                         <TouchableOpacity onPress={() => navigation.navigate('user-report')}>
                             <Text style={{ color: '#fff', textDecorationLine: 'underline', fontSize: 13 }}>
                                 Balance
@@ -114,7 +117,7 @@ export function ProfileStackScreen() {
                         <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 18 }}>
                             ₦3,500.00 
                         </Text>
-                    </View> */}
+                    </View>
                 </View>
                 ),
             }}

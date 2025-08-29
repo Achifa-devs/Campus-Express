@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { 
   Dimensions,
   StyleSheet, 
@@ -12,194 +12,195 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useDispatch, useSelector } from 'react-redux';
+import { set_locale_modal } from '../../../../../../../redux/locale';
 
 const { width } = Dimensions.get('window');
 
-export default function SearchBtn() {
+const AdvancedSearchBar = () => {
+  const [query, setQuery] = useState('');
+  const [result, setResult] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const { option } = useSelector(s => s?.option);
+  const { campus } = useSelector(s => s?.campus);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (query !== '' && query.trim() !== '') {
+      fetch(`https://cs-server-olive.vercel.app/search?word=${query}&campus=${campus==='All campus'? 'null':campus}&purpose=${option === 'Products' ? 'product' : option === 'Lodges' ? 'accomodation' : 'service'}`, {
+        headers: {
+          "Content-Type": "Application/json" 
+        }
+      })
+      .then(async (result) => {
+        let response = await result.json();
+        setResult(response.data);
+      })
+      .catch((err) => {
+        Alert.alert('Network error, please try again.');
+        console.log(err);
+      });
+    } else {
+      setIsSearching(false);
+    }
+  }, [query]);
+
+  useEffect(() => {
+    if (result?.length === 0) {
+      setIsSearching(false);
+    } else {
+      setIsSearching(true);
+    }
+  }, [result]);
+  
   const navigation = useNavigation();
-  const [isFocused, setIsFocused] = useState(false);
-  const [searchText, setSearchText] = useState('');
-  const scaleAnim = useRef(new Animated.Value(1)).current;
-  const opacityAnim = useRef(new Animated.Value(0.8)).current;
-
-  const handlePressIn = () => {
-    Animated.parallel([
-      Animated.timing(scaleAnim, {
-        toValue: 0.98,
-        duration: 100,
-        easing: Easing.ease,
-        useNativeDriver: true,
-      }),
-      Animated.timing(opacityAnim, {
-        toValue: 1,
-        duration: 100,
-        easing: Easing.ease,
-        useNativeDriver: true,
-      })
-    ]).start();
-  };
-
-  const handlePressOut = () => {
-    Animated.parallel([
-      Animated.timing(scaleAnim, {
-        toValue: 1,
-        duration: 150,
-        easing: Easing.ease,
-        useNativeDriver: true,
-      }),
-      Animated.timing(opacityAnim, {
-        toValue: 0.8,
-        duration: 150,
-        easing: Easing.ease,
-        useNativeDriver: true,
-      })
-    ]).start();
-  };
-
-  const handleFocus = () => {
-    setIsFocused(true);
-    navigation.navigate('user-search');
-  };
-
-  const handleBlur = () => {
-    setIsFocused(false);
-  };
-
+  
   return (
-    <View style={styles.searchContainer}>
-      <Animated.View 
-        style={[
-          styles.searchContent,
-          {
-            transform: [{ scale: scaleAnim }],
-            opacity: opacityAnim,
-            shadowOpacity: isFocused ? 0.2 : 0.1,
-            elevation: isFocused ? 4 : 2,
-            borderColor: isFocused ? '#FF4500' : '#f9f9f9',
-          }
-        ]}
-      >
-        <TouchableOpacity 
-          style={styles.searchInputContainer}
-          onPressIn={handlePressIn}
-          onPressOut={handlePressOut}
-          onPress={handleFocus}
-          activeOpacity={0.9}
-        >
-          <Icon 
-            name="search" 
-            size={20} 
-            color={isFocused ? '#FF4500' : '#000'} 
-            style={styles.searchIcon}
-          />
-          
-          <View style={styles.searchTextContainer}>
-            <Text style={styles.placeholderText}>
-              What are you looking for?
-            </Text>
-          </View>
-
-          {searchText.length > 0 && (
-            <TouchableOpacity 
-              style={styles.clearButton}
-              onPress={() => setSearchText('')}
-            >
-              <Icon name="close-circle" size={18} color="#888" />
-            </TouchableOpacity>
-          )}
-          
-          <View style={styles.divider} />
-          
+    <View style={advancedStyles.container}>
+      <View style={advancedStyles.searchBar}>
+        {/* Search Icon */}
+        <Icon name="search" size={22} color="#FF4500" style={advancedStyles.icon} />
+        
+        {/* Search Input */}
+        <TextInput
+          style={advancedStyles.input}
+          placeholder="Search for services, products, or businesses..."
+          placeholderTextColor="#999"
+          value={query}
+          onChangeText={setQuery}
+          onFocus={() => setIsSearching(true)}
+          onBlur={() => setIsSearching(false)}
+          returnKeyType="search"
+          clearButtonMode="while-editing"
+        />
+        
+        {/* Clear Button */}
+        {query.length > 0 && (
           <TouchableOpacity 
-            style={styles.filterButton}
-            onPress={() => console.log('Open filters')}
+            onPress={() => setQuery('')}
+            style={advancedStyles.clearButton}
           >
-            <Icon name="options-outline" size={20} color="#FF4500" />
+            <Icon name="close-circle" size={20} color="#999" />
           </TouchableOpacity>
+        )}
+        
+        {/* Divider between search and location */}
+        <View style={advancedStyles.divider} />
+        
+        {/* Location Button - Now perfectly fitted */}
+        <TouchableOpacity 
+          style={advancedStyles.locationButton}
+          onPress={() => dispatch(set_locale_modal(1))}
+          activeOpacity={0.7}
+        >
+          <Icon name="location-outline" size={16} color="#FF4500" />
+          <Text style={advancedStyles.locationText} numberOfLines={1}>
+            {campus || 'Select Campus'}
+          </Text>
+          <Icon name="chevron-down" size={14} color="#FF4500" />
         </TouchableOpacity>
-      </Animated.View>
-
-      {/* Recent searches suggestions (appears when focused) */}
-      {/* {isFocused && (
+      </View>
+      
+      {isSearching && (
         <Animated.View style={styles.suggestionsContainer}>
-          <View style={styles.suggestionHeader}>
-            <Text style={styles.suggestionTitle}>Recent Searches</Text>
-            <TouchableOpacity>
-              <Text style={styles.clearAllText}>Clear all</Text>
-            </TouchableOpacity>
-          </View>
-          
           <View style={styles.suggestionList}>
-            <TouchableOpacity style={styles.suggestionItem}>
-              <Icon name="time-outline" size={16} color="#666" />
-              <Text style={styles.suggestionText}>Restaurants nearby</Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity style={styles.suggestionItem}>
-              <Icon name="time-outline" size={16} color="#666" />
-              <Text style={styles.suggestionText}>Coffee shops</Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity style={styles.suggestionItem}>
-              <Icon name="time-outline" size={16} color="#666" />
-              <Text style={styles.suggestionText}>Hair salon</Text>
-            </TouchableOpacity>
+            {result?.map((item, index) => 
+              <TouchableOpacity 
+                onPress={e => navigation.navigate('user-product', {data: item})} 
+                key={index} 
+                style={styles.suggestionItem}
+              >
+                <Icon 
+                  name={option === 'Products' ? "cart" : option === 'Lodges' ? "bed" : "construct"} 
+                  size={16} 
+                  color="#FF4500" 
+                />
+                <Text style={styles.suggestionText}>{item?.title}</Text>
+              </TouchableOpacity>
+            )}
           </View>
         </Animated.View>
-      )} */}
+      )}
     </View>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  searchContainer: {
-    paddingHorizontal: 8,
-    paddingVertical: 6,
+const advancedStyles = StyleSheet.create({
+  container: {
+    padding: 8,
     backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#f5f5f5',
   },
-  searchContent: {
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    borderWidth: 1.5,
-    shadowColor: '#000',
-    // shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 6,
-    elevation: 3,
-  },
-  searchInputContainer: {
+  searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    height: 52,
+    backgroundColor: '#f8f8f8',
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    height: 50,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    borderWidth: 1,
+    borderColor: '#e8e8e8',
   },
-  searchIcon: {
-    marginRight: 12,
+  icon: {
+    marginRight: 8,
   },
-  searchTextContainer: {
+  input: {
     flex: 1,
-    justifyContent: 'center',
-  },
-  placeholderText: {
-    fontSize: 16,
-    color: '#888',
-    fontWeight: '400',
+    fontSize: 15,
+    color: '#333',
+    paddingVertical: 0,
+    paddingRight: 8,
+    height: '100%',
   },
   clearButton: {
     padding: 4,
-    marginRight: 8,
+    marginRight: 4,
   },
   divider: {
     width: 1,
     height: 24,
     backgroundColor: '#e0e0e0',
-    marginHorizontal: 12,
+    marginHorizontal: 8,
   },
-  filterButton: {
-    padding: 4,
+  locationButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFF6F2',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#FFE5D9',
+    minWidth: 100,
+    maxWidth: 140,
+    height: 36,
+    justifyContent: 'center',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+      },
+      android: {
+        elevation: 2,
+      },
+    }),
   },
+  locationText: {
+    color: '#FF4500',
+    fontWeight: '600',
+    fontSize: 12,
+    marginHorizontal: 4,
+    flexShrink: 1,
+  },
+});
+
+const styles = StyleSheet.create({
   suggestionsContainer: {
     backgroundColor: '#fff',
     borderRadius: 12,
@@ -210,22 +211,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
-  },
-  suggestionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  suggestionTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#333',
-  },
-  clearAllText: {
-    fontSize: 14,
-    color: '#FF4500',
-    fontWeight: '500',
+    borderWidth: 1,
+    borderColor: '#f0f0f0',
   },
   suggestionList: {
     // Suggestions list styling
@@ -239,91 +226,11 @@ const styles = StyleSheet.create({
     borderBottomColor: '#f5f5f5',
   },
   suggestionText: {
-    fontSize: 15,
+    fontSize: 14,
     color: '#333',
     marginLeft: 10,
-  },
-});
-
-// For a more advanced version with actual search functionality:
-const AdvancedSearchBar = () => {
-  const [query, setQuery] = useState('');
-  const [isSearching, setIsSearching] = useState(false);
-  
-  return (
-    <View style={advancedStyles.container}>
-      <View style={advancedStyles.searchBar}>
-        <Icon name="search" size={22} color="#FF4500" style={advancedStyles.icon} />
-        <TextInput
-          style={advancedStyles.input}
-          placeholder="Search for services, products, or businesses..."
-          placeholderTextColor="#999"
-          value={query}
-          onChangeText={setQuery}
-          onFocus={() => setIsSearching(true)}
-          onBlur={() => setIsSearching(false)}
-          returnKeyType="search"
-          clearButtonMode="while-editing"
-        />
-        {query.length > 0 && (
-          <TouchableOpacity onPress={() => setQuery('')}>
-            <Icon name="close-circle" size={20} color="#999" />
-          </TouchableOpacity>
-        )}
-      </View>
-      
-      {isSearching && (
-        <View style={advancedStyles.suggestionsPanel}>
-          <Text style={advancedStyles.suggestionTitle}>Trending Searches</Text>
-          {/* Render trending searches here */}
-        </View>
-      )}
-    </View>
-  );
-};
-
-const advancedStyles = StyleSheet.create({
-  container: {
-    padding: 16,
-    backgroundColor: '#fff',
-  },
-  searchBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#f8f8f8',
-    borderRadius: 25,
-    paddingHorizontal: 16,
-    height: 50,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  icon: {
-    marginRight: 12,
-  },
-  input: {
     flex: 1,
-    fontSize: 16,
-    color: '#333',
-    paddingVertical: 0,
-  },
-  suggestionsPanel: {
-    marginTop: 10,
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  suggestionTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 12,
   },
 });
+
+export default AdvancedSearchBar;

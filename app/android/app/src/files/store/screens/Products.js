@@ -13,16 +13,129 @@ import {
   FlatList
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-// import { <Icon } from '@expo/vector-icons';
 import BottomModal from '../utils/BtmModal';
-import { filterProducts } from '../../utils/Filter';
-import { Location } from '../utils/Location';
-import Ionicons from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, FontAwesome, etc.
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useDispatch, useSelector } from 'react-redux';
+import { set_locale_modal } from '../../../../../../redux/locale';
+import { get_saved_list, save_prod, unsave_prod } from '../utils/Saver';
+import Lodges from '../components/Home/Lodge';
+import categoriesData from '../../../../../../services.json'
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = width * 0.475;
-const CARD_MARGIN = width * 0.02;
 
+/**
+ * Single Product Card Component
+ */
+const ProductCard = ({ item, navigation, user, Fav }) => {
+  const [wishlisted, setWishlisted] = useState(false);
+  const [favLoading, setFavLoading] = useState(false);
+
+  useEffect(() => {
+    setFavLoading(true);
+    if (Fav.length > 0) {
+      const isSaved = Fav.some(f => f?.order?.product_id === item?.product_id);
+      setWishlisted(isSaved);
+    } else {
+      setWishlisted(false);
+    }
+    setFavLoading(false);
+  }, [Fav, item?.product_id]);
+
+  const handleSave = async () => {
+    setFavLoading(true);
+    if (!wishlisted) {
+      const result = await save_prod({
+        user_id: user?.user_id,
+        product_id: item?.product_id
+      });
+      if (result?.success) setWishlisted(true);
+    } else {
+      const result = await unsave_prod({
+        user_id: user?.user_id,
+        product_id: item?.product_id
+      });
+      if (result?.success) setWishlisted(false);
+    }
+    setFavLoading(false);
+  };
+
+  const getCategoryImage = (categoryName) => {
+    for (let cat of categoriesData.items.category) {
+      const keys = Object.keys(cat).filter(k => k !== "img");
+      for (let key of keys) {
+        if (key === categoryName) {
+          return cat.img;
+        }
+      }
+    }
+    return null; // fallback
+  };
+
+  return (
+    <TouchableOpacity
+      activeOpacity={0.8}
+      onPress={() => navigation.navigate('user-product', { data: item })}
+      style={styles.productCard}
+    >
+      <View style={styles.productInner}>
+        {
+          item?.purpose === 'product'
+          ?
+          <Image
+            source={{ uri: item.thumbnail_id }}
+            style={styles.productImage}
+            resizeMode="cover"
+          />
+          :
+          <Image 
+            source={{ uri: getCategoryImage(item.category) || item.image }} 
+            style={styles.productImage} />
+        }
+
+        {/* Wishlist Button */}
+        <TouchableOpacity
+          style={[styles.wishlistButton, wishlisted && styles.wishlistButtonActive]}
+          onPress={handleSave}
+        >
+          {favLoading ? (
+            <ActivityIndicator size="small" color={wishlisted ? "#FFF" : "#FF4500"} />
+          ) : (
+            <Icon
+              name={wishlisted ? 'heart' : 'heart-outline'}
+              size={18}
+              color={wishlisted ? '#FFF' : '#000'}
+            />
+          )}
+        </TouchableOpacity>
+
+        {/* Top badges container */}
+        <View style={styles.topBadgesContainer}>
+          {item?.others?.condition && (
+            <View style={styles.conditionBadge}>
+              <Text style={styles.conditionText}>{item.others.condition}</Text>
+            </View>
+          )}
+        </View>
+
+        <View style={styles.productDetails}>
+          {item?.purpose === 'product' ?<Text style={styles.price}>
+            ₦{new Intl.NumberFormat('en-us').format(item?.price)}
+          </Text> : ''}
+          <Text style={styles.titleText} numberOfLines={2}>{item.title}</Text>
+          <View style={styles.metaContainer}>
+            <Icon name="location-outline" size={12} color="#666" />
+            <Text style={styles.subText}>{item.campus}</Text>
+          </View>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+};
+
+/**
+ * Main Screen
+ */
 export default function TypeProducts() {
   const navigation = useNavigation();
   const route = useRoute();
@@ -31,35 +144,103 @@ export default function TypeProducts() {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState('Location');
+  const [activeFilter, setActiveFilter] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [filterWord, setFilterWord] = useState({});
   const [refreshing, setRefreshing] = useState(false);
+  const { option } = useSelector(s => s?.option);
+  const { campus } = useSelector(s => s?.campus);
+  const { user } = useSelector(s => s?.user);
+  const [Fav, setFav] = useState([]);
+  const dispatch = useDispatch();
 
-  const toggleModal = useCallback((filter) => {
-    setModalVisible(v => !v);
-    setFilter(filter);
+  useEffect(() => {
+    for (let x in filterWord) {
+      if (x === 'condition') conditionFilter(filterWord[x]);
+      else if (x === 'priceSort') priceFilter(filterWord[x]);
+      else if (x === 'dateSort') dateFilter(filterWord[x]);
+    }
+  }, [filterWord]);
+
+  useEffect(() => {
+    locationFilter();
+  }, [campus]);
+
+  const toggleModal = useCallback((filterType) => {
+    if (filterType === 'Location') {
+      dispatch(set_locale_modal(1));
+      return;
+    }
+    
+    setActiveFilter(filterType);
+    setModalVisible(true);
   }, []);
 
-  const updateFilterWord = useCallback((data) => {
-    setFilterWord(data);
+  const handleFilterChange = useCallback((key, value) => {
+    setFilterWord(prev => {
+      // If value is null, remove the filter
+      if (value === null) {
+        const newFilter = { ...prev };
+        delete newFilter[key];
+        return newFilter;
+      }
+      
+      // If value is the same as current, remove the filter (toggle off)
+      if (prev[key] === value) {
+        const newFilter = { ...prev };
+        delete newFilter[key];
+        return newFilter;
+      }
+      
+      // Otherwise set the filter
+      return { ...prev, [key]: value };
+    });
+    setModalVisible(false);
+    setActiveFilter(null);
   }, []);
 
+  const clearAllFilters = useCallback(() => {
+    setFilterWord({});
+    setModalVisible(false);
+    setActiveFilter(null);
+  }, []);
+
+  // === FILTERS ===
+  function conditionFilter(condition) {
+    let copy = Object.values(filterWord).length === 0 ? [...data] : [...filteredData];
+    setFilteredData(copy.filter(item => item?.others?.condition?.toLowerCase() === condition?.toLowerCase()));
+  }
+
+  function priceFilter(dimension) {
+    let copy = Object.values(filterWord).length === 0 ? [...data] : [...filteredData];
+    let sorted = [...copy].sort((a, b) => a.price - b.price);
+    setFilteredData(dimension === 'Highest to Lowest' ? sorted.reverse() : sorted);
+  }
+
+  function dateFilter(dimension) {
+    let copy = Object.values(filterWord).length === 0 ? [...data] : [...filteredData];
+    let sorted = [...copy].sort((a, b) => new Date(b.date) - new Date(a.date));
+    setFilteredData(dimension === 'Newest First' ? sorted : sorted.reverse());
+  }
+
+  function locationFilter() {
+    let copy = [...data];
+    if (campus === 'All campus') setFilteredData(copy);
+    else setFilteredData(copy.filter(item => item?.campus.toLowerCase() === campus?.toLowerCase()));
+  }
+
+  // === FETCH PRODUCTS ===
   const fetchProducts = useCallback(async () => {
     try {
       setRefreshing(true);
       const result = await fetch(
-        `https://cs-server-olive.vercel.app/products-type?category=${category}&type=${type}`,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
+        `https://cs-server-olive.vercel.app/products-type?category=${category}&type=${type}&purpose=${option === 'Products' ? 'product' : option === 'Lodges' ? 'accomodation' : 'service'}`,
+        { headers: { 'Content-Type': 'application/json' } }
       );
 
       const response = await result.json();
       const products = response.data || [];
-      
+
       setData(products);
       setFilteredData(products);
       setLoading(false);
@@ -70,201 +251,327 @@ export default function TypeProducts() {
       setRefreshing(false);
       console.error(err);
     }
-  }, [category, type]);
+  }, [category, type, option]);
 
-  useEffect(() => {
-    fetchProducts();
-  }, [fetchProducts]);
+  useEffect(() => { fetchProducts(); }, [fetchProducts]);
 
-  useEffect(() => {
-    if (data.length > 0) {
-      const filtered = filterProducts(data, filterWord);
-      setFilteredData(filtered);
+  // === FETCH FAVOURITES ===
+  const fetchFavourites = async () => {
+    try {
+      const result = await get_saved_list({ user_id: user?.user_id });
+      setFav(result?.success ? result?.data : []);
+    } catch (error) {
+      console.log(error);
     }
-  }, [filterWord, data]);
+  };
+  useEffect(() => { fetchFavourites(); }, []);
 
-  const handleFilterChange = useCallback((key, value) => {
-    setFilterWord(prev => ({ ...prev, [key]: value }));
-    setModalVisible(false);
-  }, []);
+  // === RENDER ===
+  const renderProductItem = useCallback(
+    ({ item }) => (
+      <ProductCard item={item} navigation={navigation} user={user} Fav={Fav} />
+    ),
+    [navigation, user, Fav]
+  ); 
 
-  const renderProductItem = useCallback(({ item }) => (
-    <TouchableOpacity
-      activeOpacity={0.8}
-      onPress={() => navigation.navigate('user-product', { product_id: item.product_id })}
-      style={styles.productCard}
-    >
-      <View style={styles.productInner}>
-        <Image
-          source={{ uri: item.thumbnail_id }}
-          style={styles.productImage}
-          resizeMode="cover"
-          // defaultSource={require('../../media/placeholder-image.png')}
-        />
-        <View style={styles.productDetails}>
-          <Text style={styles.price}>₦{new Intl.NumberFormat('en-us').format(item?.price)}</Text>
-          <Text style={styles.titleText} numberOfLines={2}>{item.title}</Text>
-          <View style={styles.metaContainer}>
-            <Icon name="location-outline" size={12} color="#666" />
-            <Text style={styles.subText}>{item.campus}</Text>
-            {item?.others?.condition && (
-              <>
-                <Text style={styles.divider}>•</Text>
-                <Text style={styles.subText}>{item.others.condition}</Text>
-              </>
-            )}
-          </View>
-        </View>
-      </View>
-    </TouchableOpacity>
-  ), [navigation]);
+  const renderLodgeItem = useCallback(
+    ({ item }) => (
+      <Lodges data={[item]} /> 
+    ),
+    [navigation, user, Fav]
+  ); 
 
+  const renderModalContent = () => {
+    switch (activeFilter) {
+      case 'Condition':
+        return (
+          <>
+            <Text style={styles.modalTitle}>Select Condition</Text>
+            {['Brand New', 'Fairly Used', 'Refurbished', 'In Good Condition', 'Any Condition'].map((condition) => (
+              <TouchableOpacity 
+                key={condition} 
+                onPress={() => handleFilterChange('condition', condition === 'Any Condition' ? null : condition)} 
+                style={styles.modalOption}
+              >
+                <Text style={styles.modalOptionText}>{condition}</Text>
+                {filterWord.condition === condition && (
+                  <Icon name="checkmark" size={18} color="#FF4500" />
+                )}
+                {!filterWord.condition && condition === 'Any Condition' && (
+                  <Icon name="checkmark" size={18} color="#FF4500" />
+                )}
+              </TouchableOpacity>
+            ))}
+          </>
+        );
+
+      case 'Gender':
+        return (
+          <>
+            <Text style={styles.modalTitle}>Select Gender</Text>
+            {['Male', 'Female', 'Any Gender'].map((gender) => (
+              <TouchableOpacity 
+                key={gender} 
+                onPress={() => handleFilterChange('gender', gender === 'Any Gender' ? null : gender)} 
+                style={styles.modalOption}
+              >
+                <Text style={styles.modalOptionText}>{gender}</Text>
+                {filterWord.gender === gender && (
+                  <Icon name="checkmark" size={18} color="#FF4500" />
+                )}
+                {!filterWord.gender && gender === 'Any Gender' && (
+                  <Icon name="checkmark" size={18} color="#FF4500" />
+                )}
+              </TouchableOpacity>
+            ))}
+          </>
+        );
+
+      case 'Price':
+        return (
+          <>
+            <Text style={styles.modalTitle}>Sort by Price</Text>
+            {['Lowest to Highest', 'Highest to Lowest', 'Default'].map((sort) => (
+              <TouchableOpacity 
+                key={sort} 
+                onPress={() => handleFilterChange('priceSort', sort === 'Default' ? null : sort)} 
+                style={styles.modalOption}
+              >
+                <Text style={styles.modalOptionText}>{sort}</Text>
+                {filterWord.priceSort === sort && (
+                  <Icon name="checkmark" size={18} color="#FF4500" />
+                )}
+                {!filterWord.priceSort && sort === 'Default' && (
+                  <Icon name="checkmark" size={18} color="#FF4500" />
+                )}
+              </TouchableOpacity>
+            ))}
+          </>
+        );
+
+      case 'Sort':
+        return (
+          <>
+            <Text style={styles.modalTitle}>Sort by Date</Text>
+            {['Newest First', 'Oldest First', 'Default'].map((sort) => (
+              <TouchableOpacity 
+                key={sort} 
+                onPress={() => handleFilterChange('dateSort', sort === 'Default' ? null : sort)} 
+                style={styles.modalOption}
+              >
+                <Text style={styles.modalOptionText}>{sort}</Text>
+                {filterWord.dateSort === sort && (
+                  <Icon name="checkmark" size={18} color="#FF4500" />
+                )}
+                {!filterWord.dateSort && sort === 'Default' && (
+                  <Icon name="checkmark" size={18} color="#FF4500" />
+                )}
+              </TouchableOpacity>
+            ))}
+          </>
+        );
+
+      default:
+        return null;
+    }
+  };
+  
   if (loading) {
-    return (
+      return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#FF4500" />
+          <ActivityIndicator size="large" color="#FF4500" />
       </View>
-    );
+      );
   }
 
+  const getFilterButtonText = (label) => {
+      switch (label) {
+      case 'Location':
+          return campus || 'Location';
+      case 'Condition':
+          return filterWord.condition ? filterWord.condition : 'Condition';
+      case 'Gender':
+          return filterWord.gender ? filterWord.gender : 'Gender';
+      case 'Price':
+          return filterWord.priceSort ? filterWord.priceSort : 'Price';
+      case 'Sort':
+          return filterWord.dateSort ? filterWord.dateSort : 'Sort';
+      default:
+          return label;
+      }
+  };
+
   return (
-    <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity style={{
-          height: 55,
-          borderRadius: 15,
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'flex-start',
-          alignItems: 'center',
-          width: 25,
-        }} onPress={e => navigation.goBack()}> 
-          <Ionicons name={'chevron-back'} size={25} color={'#000'} />
-        </TouchableOpacity>
-        <Text style={styles.title}>{category} - {type}</Text>
-        <TouchableOpacity 
-          onPress={() => toggleModal('Sort')} 
-          style={styles.sortBtn}
-        >
-          <Icon name="filter" size={18} color="#FF4500" />
-          <Text style={styles.sortText}> Sort</Text>
-        </TouchableOpacity>
-      </View>
+      <View style={styles.container}>
+          {/* Header */}
+          <View style={styles.header}>
+              <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+              <Ionicons name="chevron-back" size={25} color="#000" />
+              </TouchableOpacity>
+              <Text style={styles.title}>{category} - {type}</Text>
+          </View>
 
-      {/* Filters */}
-      <ScrollView 
-        horizontal 
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.filterContainer}
-      >
-        {['Location', 'Condition', 'Price'].map((label) => (
-          <TouchableOpacity 
-            key={label} 
-            style={[
-              styles.filterBtn,
-              filterWord[label.toLowerCase()] && styles.activeFilterBtn
-            ]} 
-            onPress={() => toggleModal(label)}
+          {/* Filters */}
+          <ScrollView 
+            horizontal 
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.filterContainer}
           >
-            <Text style={[
-              styles.filterBtnText,
-              filterWord[label.toLowerCase()] && styles.activeFilterBtnText
-            ]}>
-              {label === 'Price' ? '₦ Price' : label}
+            {['Location', 'Condition', 'Gender', 'Price', 'Sort']
+            .filter(label => {
+              if (option === 'Lodges') return label !== 'Condition';
+              if (option === 'Products') return label !== 'Gender';
+              if (option === 'Services') return label !== 'Condition' && label !== 'Price';
+              return true;
+            })
+            .map(label => {
+              const isActive =
+                filterWord[label.toLowerCase()] ||
+                (label === 'Location' && campus) ||
+                (label === 'Condition' && filterWord.condition) ||
+                (label === 'Gender' && filterWord.gender) ||
+                (label === 'Price' && filterWord.priceSort) ||
+                (label === 'Sort' && filterWord.dateSort);
+
+              return (
+                <TouchableOpacity
+                  key={label}
+                  style={[styles.filterBtn, isActive && styles.activeFilterBtn]}
+                  onPress={() => toggleModal(label)}
+                >
+                  <Text
+                    style={[styles.filterBtnText, isActive && styles.activeFilterBtnText]}
+                  >
+                    {getFilterButtonText(label)}
+                  </Text>
+                  {isActive && (
+                    <Icon
+                      name="close-circle"
+                      size={14}
+                      color="#FFF"
+                      style={styles.filterCloseIcon}
+                    />
+                  )}
+                </TouchableOpacity>
+              );
+            })}
+
+          </ScrollView>
+
+          {/* Active Filters Bar */}
+          {Object.keys(filterWord).length > 0 && (
+            <View style={styles.activeFiltersContainer}>
+            <Text style={styles.activeFiltersText}>Active filters: </Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                {Object.entries(filterWord).map(([key, value]) => (
+                <View key={key} style={styles.activeFilterTag}>
+                    <Text style={styles.activeFilterText}>{value}</Text>
+                    <TouchableOpacity onPress={() => handleFilterChange(key, null)}>
+                    <Icon name="close" size={14} color="#FFF" />
+                    </TouchableOpacity>
+                </View>
+                ))}
+            </ScrollView>
+            <TouchableOpacity onPress={clearAllFilters}>
+                <Text style={styles.clearAllText}>Clear all</Text>
+            </TouchableOpacity>
+            </View>
+          )}
+
+          {/* Results Count */}
+          <View style={styles.resultsContainer}>
+            <Text style={styles.resultsText}>
+            {filteredData.length} {filteredData.length === 1 ? 'result' : 'results'} found
             </Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
+          </View>
+      
+          {/* Products Grid */}
+          {filteredData.length > 0 ? (
+            <FlatList
+            data={filteredData}
+            renderItem={option === 'Lodges' ? renderLodgeItem : renderProductItem}
+            keyExtractor={(item) => item.product_id}
+            numColumns={option === 'Lodges' ? 1 : 2} 
+            columnWrapperStyle={option !== 'Lodges' ? styles.columnWrapper : null}
+            contentContainerStyle={styles.listContent}
+            refreshing={refreshing}
+            onRefresh={fetchProducts}
+            showsVerticalScrollIndicator={false}
+            />
+          ) : (
+            <View style={styles.emptyContainer}>
+            <Icon name="search-outline" size={50} color="#ccc" />
+            <Text style={styles.emptyText}>No products match your filters</Text>
+            <TouchableOpacity 
+                style={styles.resetFiltersBtn}
+                onPress={clearAllFilters}
+            >
+                <Text style={styles.resetFiltersText}>Reset Filters</Text>
+            </TouchableOpacity>
+            </View>
+          )}
 
-      {/* Results Count */}
-      <View style={styles.resultsContainer}>
-        <Text style={styles.resultsText}>
-          {filteredData.length} {filteredData.length === 1 ? 'result' : 'results'} found
-        </Text>
-      </View>
-
-      {/* Products Grid */}
-      {filteredData.length > 0 ? (
-        <FlatList
-          data={filteredData}
-          renderItem={renderProductItem}
-          keyExtractor={(item) => item.product_id}
-          numColumns={2}
-          columnWrapperStyle={styles.columnWrapper}
-          contentContainerStyle={styles.listContent}
-          refreshing={refreshing}
-          onRefresh={fetchProducts}
-          showsVerticalScrollIndicator={false}
-        />
-      ) : (
-        <View style={styles.emptyContainer}>
-          <Icon name="search-outline" size={50} color="#ccc" />
-          <Text style={styles.emptyText}>No products match your filters</Text>
-          <TouchableOpacity 
-            style={styles.resetFiltersBtn}
-            onPress={() => setFilterWord({})}
+          {/* Filter Modal */}
+          <BottomModal 
+            visible={modalVisible} 
+            onClose={() => {
+              setModalVisible(false);
+              setActiveFilter(null);
+            }}
           >
-            <Text style={styles.resetFiltersText}>Reset Filters</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-
-      {/* Filter Modal */}
-      <BottomModal visible={modalVisible} onClose={toggleModal}>
-        <Text style={styles.modalTitle}>
-          Select {filter}
-        </Text>
-
-        {filter === 'Location' && <Location toggleModal={toggleModal} updateFilterWord={updateFilterWord} onSelect={handleFilterChange} />}
-
-        {filter === 'Condition' &&
-          ['Brand New', 'Fairly Used', 'Refurbished', 'Used'].map((condition) => (
-            <TouchableOpacity 
-              key={condition} 
-              onPress={() => handleFilterChange('condition', condition)} 
-              style={styles.modalOption}
-            >
-              <Text style={styles.modalOptionText}>{condition}</Text>
-              {filterWord.condition === condition && (
-                <Icon name="checkmark" size={18} color="#FF4500" />
-              )}
-            </TouchableOpacity>
-          ))}
-
-        {filter === 'Price' &&
-          ['Lowest to Highest', 'Highest to Lowest'].map((sort) => (
-            <TouchableOpacity 
-              key={sort} 
-              onPress={() => handleFilterChange('priceSort', sort)} 
-              style={styles.modalOption}
-            >
-              <Text style={styles.modalOptionText}>{sort}</Text>
-              {filterWord.priceSort === sort && (
-                <Icon name="checkmark" size={18} color="#FF4500" />
-              )}
-            </TouchableOpacity>
-          ))}
-        
-        {filter === 'Sort' &&
-          ['Sort From Newest To Oldest', 'Sort From Oldest To Newest'].map((sort) => (
-            <TouchableOpacity 
-              key={sort} 
-              onPress={() => handleFilterChange('priceSort', sort)} 
-              style={styles.modalOption}
-            >
-              <Text style={styles.modalOptionText}>{sort}</Text>
-              {filterWord.priceSort === sort && (
-                <Icon name="checkmark" size={18} color="#FF4500" />
-              )}
-            </TouchableOpacity>
-          ))}
-      </BottomModal>
-    </View>
+              {renderModalContent()}
+          </BottomModal>
+      </View>
   );
 }
 
 const styles = StyleSheet.create({
+  wishlistButton: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 1,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.05)',
+  },
+  wishlistButtonActive: {
+    backgroundColor: '#FF4500',
+    borderColor: '#FF4500',
+  },
+  topBadgesContainer: {
+    position: 'absolute',
+    top: 8,
+    left: 8,
+    flexDirection: 'row',
+    gap: 4,
+  },
+  conditionBadge: {
+    backgroundColor: '#FF4500',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  conditionText: {
+    fontSize: 10,
+    color: '#FFFFFF',
+    fontWeight: '700',
+    textTransform: 'uppercase',
+  },
   container: {
     flex: 1,
     backgroundColor: '#FFF',
@@ -279,16 +586,26 @@ const styles = StyleSheet.create({
     height: 60,
     paddingHorizontal: 16,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: '#FFF',
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
   },
+  backButton: {
+    height: 40,
+    width: 40,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   title: {
     fontSize: 18,
     fontWeight: '600',
     color: '#212B36',
+    flex: 1,
+    textAlign: 'center',
+    marginHorizontal: 10,
   },
   sortBtn: {
     flexDirection: 'row',
@@ -296,7 +613,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#FFF6F2',
+    borderWidth: 1,
+    borderColor: '#FFE4D9',
   },
   sortText: {
     fontSize: 14,
@@ -306,21 +625,22 @@ const styles = StyleSheet.create({
   },
   filterContainer: {
     paddingHorizontal: 16,
-    height: 60,
-    paddingVertical: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: '#fafafa',
   },
   filterBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingHorizontal: 16,
-    height: 30,
-    borderRadius: 16,
-
-    // flex: 1,
-    alignItems: 'center', justifyContent: 'center',
+    height: 36,
+    borderRadius: 18,
     backgroundColor: '#FFF',
     borderWidth: 1,
     borderColor: '#e0e0e0',
+    marginTop: 8,
     marginRight: 8,
+    marginBottom: 8,
   },
   activeFilterBtn: {
     backgroundColor: '#FF4500',
@@ -334,6 +654,43 @@ const styles = StyleSheet.create({
   activeFilterBtnText: {
     color: '#FFF',
   },
+  filterCloseIcon: {
+    marginLeft: 4,
+  },
+  activeFiltersContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    backgroundColor: '#F8F9FA',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e9ecef',
+  },
+  activeFiltersText: {
+    fontSize: 12,
+    color: '#666',
+    marginRight: 8,
+  },
+  activeFilterTag: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FF4500',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+    marginRight: 6,
+  },
+  activeFilterText: {
+    fontSize: 12,
+    color: '#FFF',
+    marginRight: 4,
+  },
+  clearAllText: {
+    fontSize: 12,
+    color: '#FF4500',
+    fontWeight: '500',
+    marginLeft: 8,
+  },
   resultsContainer: {
     paddingHorizontal: 16,
     paddingVertical: 12,
@@ -344,7 +701,7 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   listContent: {
-    paddingHorizontal: 4,
+    paddingHorizontal: 8,
     paddingBottom: 80,
   },
   columnWrapper: {
@@ -352,7 +709,6 @@ const styles = StyleSheet.create({
   },
   productCard: {
     width: CARD_WIDTH,
-    margin: 0,
     marginBottom: 16,
   },
   productInner: {
@@ -371,14 +727,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
   },
   productDetails: {
-    backgroundColor: '#FFF',
-    paddingHorizontal: 5,
-    paddingVertical: 8,
+    padding: 12,
   },
   price: {
     fontWeight: 'bold',
     fontSize: 16,
-    color: '#4CAF50',
+    color: '#FF4500',
     marginBottom: 4,
   },
   titleText: {
@@ -390,6 +744,7 @@ const styles = StyleSheet.create({
   metaContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    flexWrap: 'wrap',
   },
   subText: {
     fontSize: 12,
@@ -428,6 +783,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#212B36',
     marginBottom: 20,
+    textAlign: 'center',
   },
   modalOption: {
     flexDirection: 'row',

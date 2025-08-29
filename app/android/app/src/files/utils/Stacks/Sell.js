@@ -17,7 +17,6 @@ import React from "react";
 import Ionicons  from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, FontAwesome, etc.
 import BackSvg from '../../media/assets/back-svgrepo-com (1).svg'
 import Create from "../../store/screens/Sell/Create";
-import PaystackPayment from "../../store/screens/Sell/Paystack";
 
 const SellStack = createNativeStackNavigator();
 export function SellStackScreen() {
@@ -41,34 +40,7 @@ export function SellStackScreen() {
             ),
         }}  name="user-sell" component={Sell} />
         
-        <SellStack.Screen  options={{
-            header: ({navigation}) =>
-            (
-              <View style={{ height: 55, display: 'none', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', elevation: 2, alignItems: 'center', padding: '10px' }}>
-                  
-                     
-                    <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}} onPress={() => dispatch(set_drawer(!drawer))}>
-                        <View style={{backgroundColor: '#fff', elevation: 0, height: '100%', width: 40, borderRadius: 5, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                            <Ionicons  name={'storefront'} size={25} color={'#FF4500'} />
-                            
-                        </View>
-                        <Text>&nbsp;</Text>
-                        {/* <Text style={{color: '#000'}}>Hue</Text> */}
-                    </TouchableOpacity>
-
-                    <TouchableOpacity onPress={e => navigation.navigate('user-notification')}>
-                    <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                        <View style={{backgroundColor: '#fff', elevation: 0, height: '100%', width: 40, borderRadius: 5, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                            <Ionicons  name={'notifications'} size={25} color={'#FF4500'} />
-                        </View>
-                    </View>
-                    </TouchableOpacity>
-
-
-                    
-                </View>
-            ),
-        }}  name="PaystackPayment" component={PaystackPayment} />
+       
 
         <SellStack.Screen  options={{
             header: ({navigation}) =>

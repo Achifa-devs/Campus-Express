@@ -199,6 +199,10 @@ function HomeRoute(navigationState, updateTabBarStyle) {
 
     if (currentRouteName === 'user-home') {
         updateTabBarStyle('flex');
+    }else if(currentRouteName === 'user-lodge-room'){
+        updateTabBarStyle('none');
+    }else if(currentRouteName === 'user-service-room'){
+        updateTabBarStyle('none');
     }else if (currentRouteName === 'user-search') {
         updateTabBarStyle('none');
     }else if(currentRouteName === 'user-shops') {
@@ -219,6 +223,8 @@ function HomeRoute(navigationState, updateTabBarStyle) {
     }else if(currentRouteName === 'user-shops') {
         updateTabBarStyle('none'); 
     }else if(currentRouteName === 'user-type-product') {
+        updateTabBarStyle('none'); 
+    }else if(currentRouteName === 'user-subscription'){
         updateTabBarStyle('none'); 
     }
 }

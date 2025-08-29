@@ -16,6 +16,7 @@ export default function Home() {
   const { option } = useSelector(s => s?.option);
 
   const fetchData = async () => {
+    setData([]);
     try {
       const res = await fetch(
         `https://cs-server-olive.vercel.app/products?limit=20&category=${btoa(
@@ -41,13 +42,13 @@ export default function Home() {
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     fetchData().finally(() => setRefreshing(false));
-  }, [user, campus]); // refresh logic depends on user + campus
+  }, [user, campus, option]); // refresh logic depends on user + campus
 
   // Initial load + auto refresh when campus changes
   useEffect(() => {
     setRefreshing(true); // trigger spinner
     fetchData().finally(() => setRefreshing(false));
-  }, [campus]);
+  }, [campus, option]);
 
   
   const sections = [
@@ -61,7 +62,7 @@ export default function Home() {
       </View>
 
     },
-    { key: 'hot', component: option === 'Products' ? <Hot data={data} /> : option === 'Lodges' ? <Lodges /> : option === 'Services' ? <ServicesScreen /> : ''},
+    { key: 'hot', component: option === 'Products' ? <Hot data={data} /> : option === 'Lodges' ? <Lodges data={data} /> : option === 'Services' ? <ServicesScreen data={data} /> : ''},
   ];
 
   return (

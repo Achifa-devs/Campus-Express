@@ -10,10 +10,11 @@ import {
   Animated,
   Dimensions
 } from 'react-native';
+import Video from 'react-native-video';
 
 export default function ProductImages() {
   const route = useRoute();
-  const { files = [], index = 0 } = route.params || {};
+  const { files = [], index = 0, type } = route.params || {};
   const [currentIndex, setCurrentIndex] = useState(index);
   const { width, height } = Dimensions.get('window');
 
@@ -43,11 +44,22 @@ export default function ProductImages() {
         >
           {files.map((image, idx) => (
             <View key={idx} style={[styles.imgContainer, { width }]}>
-              <Image
-                source={{ uri: image?.secure_url }}
-                style={styles.productImage}
-                onError={(e) => console.log('Image error:', e.nativeEvent.error)}
-              />
+              {
+                type === 'video'
+                ?
+                <Video
+                  source={{ uri: image?.secure_url }}
+                  style={styles.productImage}
+                  controls
+                  resizeMode="cover"
+                />
+                :
+                <Image
+                  source={{ uri: image?.secure_url }}
+                  style={styles.productImage}
+                  onError={(e) => console.log('Image error:', e.nativeEvent.error)}
+                />
+              }
             </View>
           ))}
         </ScrollView>

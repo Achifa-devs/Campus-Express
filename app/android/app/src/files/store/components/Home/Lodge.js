@@ -1,4 +1,6 @@
-import React from 'react';
+import { useNavigation } from '@react-navigation/native';
+import js_ago from 'js-ago';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -7,122 +9,289 @@ import {
   TouchableOpacity,
   StyleSheet,
   Dimensions,
-  SafeAreaView
+  SafeAreaView,
+  ActivityIndicator
 } from 'react-native';
+import Video from 'react-native-video';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { useSelector } from 'react-redux';
+import { get_saved_list, save_prod, unsave_prod } from '../../utils/Saver';
 
 const { width } = Dimensions.get('window');
-const CARD_WIDTH = width; // Full width
+const CARD_WIDTH = width;
 
-// Sample data with tags added
-const videoData = [
-  {
-    id: '1',
-    title: 'How to Build a React Native App',
-    channel: 'Code Master',
-    views: '125K views',
-    timeAgo: '2 days ago',
-    thumbnail: 'https://i.ytimg.com/vi/0-S5a0eXPoc/hqdefault.jpg',
-    duration: '12:45',
-    tag: 'Searching for roommate'
-  },
-  {
-    id: '2',
-    title: 'Learn JavaScript in 30 Minutes',
-    channel: 'Web Dev Simplified',
-    views: '1.2M views',
-    timeAgo: '3 weeks ago',
-    thumbnail: 'https://i.ytimg.com/vi/DHvZLI7Db8E/hqdefault.jpg',
-    duration: '28:15',
-    tag: 'Single Room occupant'
-  },
-  {
-    id: '3',
-    title: 'React Native Animation Tutorial',
-    channel: 'React Native School',
-    views: '450K views',
-    timeAgo: '1 month ago',
-    thumbnail: 'https://i.ytimg.com/vi/rihkQjWj5dE/hqdefault.jpg',
-    duration: '15:30',
-    tag: 'Hostel roommate'
-  },
-  {
-    id: '4',
-    title: 'Building a YouTube Clone with React Native',
-    channel: 'Dev Tutorials',
-    views: '89K views',
-    timeAgo: '5 days ago',
-    thumbnail: 'https://i.ytimg.com/vi/VPLPjVWJQhA/hqdefault.jpg',
-    duration: '22:10',
-    tag: 'Lodge rommate'
-  },
-  {
-    id: '5',
-    title: 'CSS Grid vs Flexbox - When to Use What',
-    channel: 'Web Design Masters',
-    views: '2.1M views',
-    timeAgo: '2 months ago',
-    thumbnail: 'https://i.ytimg.com/vi/9zBsdzdE4sM/hqdefault.jpg',
-    duration: '18:45',
-    tag: 'Temporal stay'
-  },
-  {
-    id: '6',
-    title: 'Node.js Crash Course for Beginners',
-    channel: 'The Net Ninja',
-    views: '3.4M views',
-    timeAgo: '1 year ago',
-    thumbnail: 'https://i.ytimg.com/vi/TlB_eWDSMt4/hqdefault.jpg',
-    duration: '45:22',
-    tag: 'Single occupant'
-  },
-];
+const Lodges = ({ data }) => {
+  const [loading, setLoading] = useState(true);
+  const [favLoading, setFavLoading] = useState({});
+  const [wishlistedItems, setWishlistedItems] = useState({});
+  const { user } = useSelector(s => s?.user);
+  const [favList, setFavList] = useState([]);
 
-const Lodges = () => {
+  useEffect(() => {
+    console.log("data from lodges: ", data)
+  }, [data])
 
-  const renderVideoItem = ({ item }) => (
-    <TouchableOpacity 
-      style={styles.videoCard}
-      onPress={() => console.log('Video pressed:', item.id)}
-    >
-      <View style={styles.thumbnailContainer}>
-        <Image 
-          source={{ uri: item.thumbnail }} 
-          style={styles.thumbnail}
-          resizeMode="cover"
-        />
-        <View style={styles.durationBadge}>
-          <Text style={styles.durationText}>{item.duration}</Text>
+  const fetchFavourites = async () => {
+    try {
+      const result = await get_saved_list({
+        user_id: user?.user_id
+      });
+      if (result?.success) {
+        setFavList(result?.data || []);
+        // Create a map of wishlisted product IDs for quick lookup
+        const wishlistMap = {};
+        result?.data?.forEach(item => {
+          if (item?.order?.product_id) {
+            wishlistMap[item.order.product_id] = true;
+          }
+        });
+        setWishlistedItems(wishlistMap);
+      } else {
+        setFavList([]);
+        setWishlistedItems({});
+      }
+    } catch (error) {
+      console.log('Fetch favorites error:', error);
+      setFavList([]);
+      setWishlistedItems({});
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (user?.user_id) {
+      fetchFavourites();
+    }
+  }, [user?.user_id]);
+
+  const handleSave = async (productId) => {
+    setFavLoading(prev => ({ ...prev, [productId]: true }));
+    
+    try {
+      if (!wishlistedItems[productId]) {
+        const result = await save_prod({
+          user_id: user?.user_id,
+          product_id: productId
+        });
+        if (result?.success) {
+          setWishlistedItems(prev => ({ ...prev, [productId]: true }));
+        }
+      } else {
+        const result = await unsave_prod({
+          user_id: user?.user_id,
+          product_id: productId
+        });
+        if (result?.success) {
+          setWishlistedItems(prev => {
+            const newState = { ...prev };
+            delete newState[productId];
+            return newState;
+          });
+        }
+      }
+    } catch (error) {
+      console.log('Save/unsave error:', error);
+    } finally {
+      setFavLoading(prev => ({ ...prev, [productId]: false }));
+    }
+  };
+
+  const navigation = useNavigation();
+
+  const renderVideoItem = ({ item }) => {
+    const isWishlisted = wishlistedItems[item?.product_id];
+    const isLoading = favLoading[item?.product_id];
+
+    return (
+      <TouchableOpacity 
+        style={styles.videoCard}
+        onPress={() => navigation.navigate('user-lodge-room', { data: item })}
+      >
+        <View style={styles.thumbnailContainer}>
+          <View style={styles.video_container}> 
+            <Video
+              source={{ uri: item?.thumbnail_id }}
+              style={styles.video}
+              resizeMode="cover"
+              muted={true}
+            />
+          </View>
+          
+          {/* Top badges container */}
+          <View style={styles.topBadgesContainer}>
+            {/* Condition Badge */}
+            {item?.others?.cType && (
+              <View style={styles.tagBadge}>
+                <Text style={styles.tagText}>{item.others.cType} - {item?.others?.gender} Preferred</Text>
+              </View>
+            )}
+          </View>
+
+          {/* Wishlist Button */}
+          <TouchableOpacity 
+            style={[styles.wishlistButton, isWishlisted && styles.wishlistButtonActive]}
+            onPress={() => handleSave(item?.product_id)}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <ActivityIndicator size="small" color={isWishlisted ? "#FFF" : "#FF4500"} />
+            ) : (
+              <Icon 
+                name={isWishlisted ? 'heart' : 'heart-outline'} 
+                size={18} 
+                color={isWishlisted ? '#FFF' : '#000'} 
+              />
+            )}
+          </TouchableOpacity>
         </View>
-      </View>
-      
-      <View style={styles.videoInfo}>
-        <Text style={styles.videoTitle} numberOfLines={2}>{item.title}</Text>
         
-        {/* Tag added here */}
-        <View style={styles.tagContainer}>
-          <Text style={styles.tagText}>{item.tag}</Text>
+        <View style={styles.videoInfo}>
+          <Text style={styles.videoTitle} numberOfLines={2}>{item?.title}</Text>
+          
+          {/* Price added here */}
+          <View style={styles.priceContainer}>
+            <Text style={styles.price}>₦{new Intl.NumberFormat('en-US').format(item.price)} to pay ₦{new Intl.NumberFormat('en-US').format(item?.others?.lodge_data?.upfront_pay)}</Text>
+          </View>
+
+          <View style={styles.locationContainer}>
+            <Icon name="location" size={16} color="#FF4500" />
+            <Text style={styles.location}>{item.campus} - {item?.others?.lodge_data?.address1}, {item?.others?.lodge_data?.address2}</Text>
+          </View>
+
+          <Text style={styles.videoStats}>{item?.views} {parseInt(item?.views) > 1 ? 'views' : 'view'} • {js_ago(new Date(item?.date))}</Text>
         </View>
-        
-        <Text style={styles.channelName}>{item.channel}</Text>
-        <Text style={styles.videoStats}>{item.views} • {item.timeAgo}</Text>
+      </TouchableOpacity>
+    );
+  };
+
+  if (loading) {
+    return (
+      <View style={styles.emptyContainer}>
+        <Icon name="search-outline" size={48} color="#DFE3E8" />
+        <Text style={styles.emptyTitle}>Loading Accomodation</Text>
+        <Text style={styles.emptySubtitle}>
+          Try adjusting your filter or location
+        </Text>
       </View>
-    </TouchableOpacity>
-  );
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
-        data={videoData}
+        data={data}
         renderItem={renderVideoItem}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item.id || item.product_id || Math.random().toString()}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContent}
+        ListEmptyComponent={
+          <View style={styles.emptyContainer}>
+            <Icon name="search-outline" size={48} color="#DFE3E8" />
+            <Text style={styles.emptyTitle}>No Accomodation found</Text>
+            <Text style={styles.emptySubtitle}>
+              Try refreshing and also adjust your filter or location
+            </Text>
+          </View>
+        }
       />
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 60,
+    paddingHorizontal: 20,
+  },
+  emptyTitle: {
+    marginTop: 16,
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#212B36',
+    textAlign: 'center',
+  },
+  emptySubtitle: {
+    marginTop: 8,
+    fontSize: 14,
+    color: '#637381',
+    textAlign: 'center',
+  },
+  wishlistButton: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 1,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.05)',
+  },
+  wishlistButtonActive: {
+    backgroundColor: '#FF4500',
+    borderColor: '#FF4500',
+  },
+  topBadgesContainer: {
+    position: 'absolute',
+    top: 8,
+    left: 8,
+    flexDirection: 'row',
+    gap: 4,
+  },
+  tagBadge: {
+    backgroundColor: '#FF4500',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  tagText: {
+    fontSize: 10,
+    color: '#FFFFFF',
+    fontWeight: '700',
+    textTransform: 'uppercase',
+  },
+  video_container: {
+    height: 230,
+    width: '100%',
+    backgroundColor: '#000',
+    borderRadius: 5,
+    overflow: 'hidden',
+  },
+  locationContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  location: {
+    fontSize: 16,
+    color: '#666',
+    marginLeft: 4,
+  },
+  video: {
+    height: '100%',
+    width: '100%',
+  },
   container: {
     flex: 1,
     paddingHorizontal: 4,
@@ -139,26 +308,6 @@ const styles = StyleSheet.create({
     position: 'relative',
     marginBottom: 8,
   },
-  thumbnail: {
-    width: '100%',
-    height: CARD_WIDTH * 0.5, // 4:3 aspect ratio
-    borderRadius: 4,
-    backgroundColor: '#f0f0f0',
-  },
-  durationBadge: {
-    position: 'absolute',
-    bottom: 8,
-    right: 8,
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-    borderRadius: 4,
-    paddingHorizontal: 4,
-    paddingVertical: 2,
-  },
-  durationText: {
-    color: '#fff',
-    fontSize: 12,
-    fontWeight: '500',
-  },
   videoInfo: {
     paddingHorizontal: 4,
   },
@@ -168,24 +317,17 @@ const styles = StyleSheet.create({
     marginBottom: 4,
     color: '#0f0f0f',
   },
-  // New styles for the tag
-  tagContainer: {
-    alignSelf: 'flex-start',
-    backgroundColor: '#FFF6F2',
-    borderRadius: 4,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    marginBottom: 6,
+  priceContainer: {
+    paddingVertical: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+    gap: 6,
   },
-  tagText: {
-    fontSize: 11,
-    fontWeight: '500',
-    color: '#FF4500',
-  },
-  channelName: {
-    fontSize: 12,
-    color: '#606060',
-    marginBottom: 2,
+  price: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#212B36',
   },
   videoStats: {
     fontSize: 12,

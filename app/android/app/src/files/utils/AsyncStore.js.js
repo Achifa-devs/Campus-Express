@@ -19,6 +19,8 @@ export const getData = async (key) => {
     if (value !== null) {
       console.log('Data retrieved:', value);
       return value;
+    }else{
+      return null
     }
   } catch (e) {
     console.error('Failed to fetch data', e);

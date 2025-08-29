@@ -11,7 +11,8 @@ import {
   BackHandler,
   Alert
 } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { PaystackProvider } from 'react-native-paystack-webview';
+import { NavigationContainer, useRoute } from '@react-navigation/native';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -26,10 +27,33 @@ import { school_choices } from './android/app/src/files/store/utils/location cop
 import { set_campus } from './redux/campus.js';
 import BottomModal from './android/app/src/files/store/utils/BtmModal.js';
 import { set_locale_modal } from './redux/locale.js';
+import SubscriptionModal from './android/app/src/files/utils/Sub.js';
+import { set_sub_modal } from './redux/sub.js';
 // import { set_campus } from './redux/reducer/location.js';   // ✅ add correct reducer
 // import { closeModal } from './redux/reducer/locale.js';      // ✅ add correct reducer
 
 function App() {
+  
+
+
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <StatusBar backgroundColor="rgba(255,0,0,1)" barStyle="dark-content" />
+      <Provider store={store}>
+        <AppFinale />
+      </Provider>
+
+    </SafeAreaView>
+  );
+}
+
+export default App;
+
+// --------------------
+// AppFinale
+// --------------------
+function AppFinale() {
+  const { payment_method } = useSelector(s=>s?.payment_method)
   Text.defaultProps = Text.defaultProps || {};
   Text.defaultProps.allowFontScaling = false;
 
@@ -65,29 +89,31 @@ function App() {
       }
     }).catch(console.log);
   }, []);
-
-  return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <StatusBar backgroundColor="rgba(255,0,0,1)" barStyle="dark-content" />
+  return(
+    <>
       {!update ? (
-        <Provider store={store}>
+        <PaystackProvider publicKey={'pk_live_13343a7bd4deeebc644070871efcdf8fdcf280f7'} defaultChannels={[payment_method]} debug={true}>
+          
           <NavigationContainer>
-            <NavCnt />
+            <NavCnt /> 
           </NavigationContainer>
-        </Provider>
-      ) : (
+          
+        </PaystackProvider>
+        ) : (
         <DownloadAppScreen url={data?.url} summary={data?.summary} />
       )}
-    </SafeAreaView>
-  );
+    </>
+  )
 }
 
-export default App;
-
+// --------------------
+// NavCnt
+// --------------------
 function NavCnt() {
   const [mode, setMode] = useState('shop');
   const { auth } = useSelector(s => s.auth);
   const { locale_modal } = useSelector(s => s.locale_modal);
+  const { sub_modal } = useSelector(s => s.sub_modal);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -95,13 +121,8 @@ function NavCnt() {
   }, [auth]);
 
   const handleCloseModal = () => {
-    // dispatch(closeModal());
+    dispatch(set_sub_modal(0));
   };
-
-  const [modalVisible, setModalVisible] = useState(locale_modal === 1 ? true : false);
-
- 
-
 
   return (
     <SafeAreaProvider style={{ flex: 1 }}>
@@ -116,6 +137,13 @@ function NavCnt() {
           />
         )
       }
+      {
+        (
+            sub_modal === 1 ? 
+            
+            <SubscriptionModal  onSelectPackage={''} onClose={handleCloseModal} />: ''
+        )
+      } 
 
     </SafeAreaProvider>
   );

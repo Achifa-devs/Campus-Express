@@ -23,7 +23,8 @@ import {
   Easing,
   ActivityIndicator,
   Share,
-  Linking
+  Linking,
+  Platform
 } from 'react-native';
 
 // import Top from '../components/Product/Top';
@@ -45,12 +46,12 @@ import { get_saved, save_prod, unsave_prod } from '../utils/Saver.js';
 import axios from 'axios';
 
   export default function Product() {
-    const dispatch = useDispatch();
-    const [imageIndex, setImageIndex] = useState(0);
+    const route = useRoute();
+    const { data } = route.params;
     const {user} = useSelector(s => s?.user)
-    const [data, setData] = useState(null); 
+    // const [data, setData] = useState(null); 
     const [seller, setSeller] = useState('')
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [saved, setSaved] = useState(false);
     const navigation = useNavigation();
     const { product_id } = useRoute()?.params;
@@ -68,7 +69,7 @@ import axios from 'axios';
 
     useEffect(() => {
       try {
-        fetch(`https://cs-server-olive.vercel.app/image-folder?folderName=${product_id}`, {
+        fetch(`https://cs-server-olive.vercel.app/image-folder?folderName=${data?.product_id}`, {
           headers: { 
             "Content-Type": "Application/json" 
           } 
@@ -88,10 +89,6 @@ import axios from 'axios';
       }
     }, [])
 
-  
-    useEffect(() => {
-      fetchProductData();
-    }, []);
 
     useEffect(() => {
       setFavLoading(true);
@@ -161,30 +158,6 @@ import axios from 'axios';
     const [favLoading, setFavLoading] = useState(true);
     
   
-    const fetchProductData = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch(`https://cs-server-olive.vercel.app/product?product_id=${product_id}`, {
-          headers: { "Content-Type": "Application/json" }
-        });
-        const result = await response.json();
-        setData(result.data[0]);
-        
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 300,
-          easing: Easing.ease,
-          useNativeDriver: true
-        }).start();
-        
-      } catch (err) {
-        Alert.alert('Error', 'Failed to load product details. Please try again.');
-        // console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     function updateUser(data) {
       setSeller(data)
     }
@@ -222,11 +195,6 @@ import axios from 'axios';
       }
     };
   
-    const handleShare = () => {
-      // Implement share functionality
-      dispatch(setToggleMessage('Share link copied to clipboard'));
-    };
-
     const handleWhatsAppChat = () => {
       if (!seller?.phone) {
         return Alert.alert('Error', 'Seller phone number is missing.');
@@ -268,36 +236,20 @@ import axios from 'axios';
       Linking.openURL(callURL);
     };
     
-  
-    if (loading) {
-      return (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#FF4500" />
-        </View>
-      );
-    }
-  
-    if (!data) {
-      return (
-        <View style={styles.errorContainer}>
-          <Text style={styles.errorText}>Product not found</Text>
-          <TouchableOpacity 
-            style={styles.retryButton}
-            onPress={fetchProductData}
-          >
-            <Text style={styles.retryText}>Retry</Text>
-          </TouchableOpacity>
-        </View>
-      );
-    }
-
     const images = files && files.length > 0 ? files : [data.thumbnail_id];
     
 
   
     return (
       <SafeAreaView style={styles.safeArea}> 
-       
+        <View style={styles.header}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+          >
+            <Ionicons name="arrow-back" size={24} color="#000" />
+          </TouchableOpacity>
+        </View>
         
         <Animated.ScrollView
           style={{ opacity: fadeAnim }}
@@ -452,6 +404,22 @@ import axios from 'axios';
     safeArea: {
       flex: 1,
       backgroundColor: '#FFF',
+    },
+    header: {
+      position: 'absolute',
+      top: Platform.OS === 'ios' ? 50 : 30,
+      left: 20,
+      zIndex: 10,
+    },
+    backButton: {
+      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+      borderRadius: 20,
+      padding: 8,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 3,
     },
     scrollContainer: {
       paddingBottom: 80,

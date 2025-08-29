@@ -26,9 +26,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, 
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import { useDispatch, useSelector } from "react-redux";
-import BellSvg from '../../media/assets/notification-svgrepo-com (1).svg'
 import BackSvg from '../../media/assets/back-svgrepo-com (1).svg'
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { 
     Dimensions,
     Image,
@@ -40,30 +39,35 @@ import {
     TouchableOpacity,
     View 
 } from 'react-native';
-import { set_drawer } from "../../../../../../redux/vendor/drawer";
-import SearchBtn from "../../store/components/Home/Search";
 import LodgeListScreen from "../../store/screens/Lodge";
-import ProductDetailScreen from "../../store/screens/LodgeRoom";
-import ServicesScreen from "../../store/screens/Service";
+import AccommodationDetailScreen from "../../store/screens/LodgeRoom";
 import CampusNewsScreen from "../../store/screens/News";
-// import InboxScreen from "../../store/screens/Inbox";
 import NotificationScreen from "../../store/screens/NotificationScreen";
 import Editor from "../../store/screens/HiddenScreens/Editor";
 import Productimages from "../../store/screens/Productimages";
-import { setUserAuthTo } from "../../../../../../redux/reducer/auth";
-
-import { set_locale_modal } from "../../../../../../redux/locale";
 import NavigationTabs from "../../store/components/Home/Ads";
+import AdvancedSearchBar from "../../store/components/Home/Search";
+import { set_sub_modal } from "../../../../../../redux/sub";
+import ServiceDetailScreen from "../../store/screens/ServiceRoom";
+import PaymentScreen from "../../store/utils/Paystack";
 const HomeStack = createNativeStackNavigator();
 export function HomeStackScreen() {
    
     const {user} = useSelector(s => s.user);
+    const {subscribed} = useSelector(s => s.subscribed);
     const {campus} = useSelector(s => s.campus);
     
-       const dispatch = useDispatch()
-       useEffect(() => {
-         console.log(campus)
-       }, [campus])
+    const dispatch = useDispatch()
+    useEffect(() => {
+        console.log(campus)
+    }, [campus])
+
+    function handleSub(params) {
+        dispatch(set_sub_modal(1))
+
+        // if(!subscribed){
+        // }
+    }
      
 
     return (  
@@ -90,52 +94,51 @@ export function HomeStackScreen() {
                             {/* Right Section */}
                             <View style={styles.rightSection}>
                                 {/* Location Selector */}
-                                <TouchableOpacity 
-                                style={styles.locationButton}
-                                onPress={() => dispatch(set_locale_modal(1))}
-                                activeOpacity={0.7}
-                                >
-                                <Icon name="location-outline" size={16} color="#FF4500" />
-                                <Text style={styles.locationText} numberOfLines={1}>
-                                    {campus || 'Select Campus'}
-                                </Text>
-                                <Icon name="chevron-down" size={14} color="#FF4500" />
-                                </TouchableOpacity>
+                                
 
-                                {/* Notification Bell (commented out but styled) */}
-                                {/* <TouchableOpacity 
-                                style={styles.notificationButton}
-                                onPress={() => navigation.navigate('user-notification')}
-                                activeOpacity={0.7}
-                                >
-                                <View style={styles.notificationContainer}>
-                                    <Icon name="notifications-outline" size={22} color="#FF4500" />
-                                    <View style={styles.notificationBadge}>
-                                    <Text style={styles.badgeText}>7</Text>
+                                {/* Subscribe Button */}
+                                {user && (
+                                // <TouchableOpacity 
+                                //     style={styles.loginButton}
+                                //     onPress={() => dispatch(setUserAuthTo(true))}
+                                //     activeOpacity={0.9}
+                                // >
+                                //     <Text style={styles.loginText}>Login</Text>
+                                //     <Icon name="log-in-outline" size={16} color="#FFF" />
+                                // </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={[styles.button, subscribed && styles.subscribedButton]}
+                                    onPress={e=> handleSub()}
+                                    activeOpacity={0.8}
+                                    >
+                                    <View style={styles.buttonContent}>
+                                        <Icon 
+                                        name={subscribed ? "diamond" : "diamond-outline"} 
+                                        size={16} 
+                                        color={subscribed ? "#FFF" : "#FF4500"} 
+                                        style={styles.icon}
+                                        />
+                                        <Text style={[styles.buttonText, subscribed && styles.subscribedText]}>
+                                        {subscribed ? 'Subscribed' : 'Subscribe'}
+                                        </Text>
                                     </View>
-                                </View>
-                                </TouchableOpacity> */}
-
-                                {/* Login Button */}
-                                {!user && (
-                                <TouchableOpacity 
-                                    style={styles.loginButton}
-                                    onPress={() => dispatch(setUserAuthTo(true))}
-                                    activeOpacity={0.9}
-                                >
-                                    <Text style={styles.loginText}>Login</Text>
-                                    <Icon name="log-in-outline" size={16} color="#FFF" />
                                 </TouchableOpacity>
                                 )}
                             </View>
                         </View>
                                                 
-                        <SearchBtn /> 
+                        <AdvancedSearchBar />
                         <NavigationTabs />
                     </>
                 ),
             // headerShown: false, 
           }} name="user-home" component={Home} /> 
+
+          <HomeStack.Screen 
+            name="user-subscription" 
+            component={PaymentScreen}
+            options={{ headerShown: false }}
+        />
 
         <HomeStack.Screen  options={{
                 header: ({navigation}) =>
@@ -214,32 +217,14 @@ export function HomeStackScreen() {
             }}  name="user-lodge" component={LodgeListScreen} />
 
         <HomeStack.Screen  options={{
-                header: ({navigation}) =>
-                (
-                    <>
-                    <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', paddingHorizontal: 10, width: '100%', backgroundColor: '#FFF', alignItems: 'center', padding: '10px' }}>
-                        <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5}}>
-                            <BackSvg width={22} height={22} />
-                        </TouchableOpacity>
-                        <View>
-                            <Text style={{
-                                fontSize: 20,
-                                fontWeight: 'bold', 
-                                color: '#111',
-                            }}>Campus Services</Text>
-                            <Text style={{
-                                fontSize: 13,
-                                color: '#777',
-                                marginTop: .4,
-                            }}>Find reliable help around your campus</Text>
-                        </View>
-                    </View>
-                    
-                        
-                    </>
-                ),
+            header: ({navigation}) =>
+            (
+                <View style={{ height: 55, display: 'none', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px'}}>
+
+                </View>
+            ), 
             // headerShown: false, 
-          }} name="user-service" component={ServicesScreen} />
+          }} name="user-service-room" component={ServiceDetailScreen} />
           
         <HomeStack.Screen  options={{
                 header: ({navigation}) =>
@@ -341,12 +326,12 @@ export function HomeStackScreen() {
         <HomeStack.Screen  options={{
             header: ({navigation}) =>
             (
-                <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px'}}>
+                <View style={{ height: 55, display: 'none', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px'}}>
 
                 </View>
             ), 
             // headerShown: false,  
-        }}  name="user-lodge-room" component={ProductDetailScreen} />
+        }}  name="user-lodge-room" component={AccommodationDetailScreen} />
         
          <HomeStack.Screen  options={{
             header: ({navigation}) =>
@@ -776,6 +761,46 @@ const styles = StyleSheet.create({
   notificationContainer: {
     position: 'relative',
   },
+  button: {
+    backgroundColor: '#FFF6F2',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 4,
+    borderWidth: 1.5,
+    borderColor: '#FF4500',
+    minWidth: 100,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
+  },
+  subscribedButton: {
+    backgroundColor: '#FF4500',
+    borderColor: '#FF4500',
+  },
+  buttonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  icon: {
+    marginRight: 6,
+  },
+  buttonText: {
+    color: '#FF4500',
+    fontSize: 14,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+  subscribedText: {
+    color: '#FFF',
+  },
   notificationBadge: {
     position: 'absolute',
     top: -4,
@@ -800,7 +825,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FF4500',
     paddingHorizontal: 16,
     paddingVertical: 8,
-    borderRadius: 20,
+    borderRadius: 4,
     gap: 6,
     ...Platform.select({
       ios: {

@@ -166,18 +166,18 @@ export default function Hot({ data, Fav }) {
   const navigation = useNavigation();
 
   const handleNavigation = useCallback(
-    debounce((productId) => {
-      navigation.navigate('user-product', { product_id: productId });
+    debounce((item) => {
+      navigation.navigate('user-product', { data: item });
     }, 300, { leading: true, trailing: false }),
     [navigation]
   );
 
   const renderItem = useCallback(
-    ({ item }) => <ItemCard item={item} Fav={Fav} onPress={handleNavigation} />,
+    ({ item }) => <ItemCard item={item} Fav={Fav} onPress={e=>handleNavigation(item)} />,
     [handleNavigation]
   );
 
-  return (
+  return ( 
     <View style={styles.container}>
       <FlatList
         data={data}
@@ -196,9 +196,9 @@ export default function Hot({ data, Fav }) {
         ListEmptyComponent={() => (
           <View style={styles.emptyContainer}>
             <Icon name="search-outline" size={48} color="#DFE3E8" />
-            <Text style={styles.emptyTitle}>No products found</Text>
+            <Text style={styles.emptyTitle}>No Products found</Text>
             <Text style={styles.emptySubtitle}>
-              Try adjusting your filter or location
+              Try refreshing and also adjust your filter or location
             </Text>
           </View>
         )}

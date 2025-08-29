@@ -12,26 +12,15 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
-
+import categoriesData from '../../../../../../../services.json'
+import js_ago from 'js-ago';
 const { width } = Dimensions.get('window');
 
-const ServicesScreen = () => {
+const ServicesScreen = ({data}) => {
   const navigation = useNavigation();
-  const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('All');
 
-  // Sample data - replace with your actual data
-  const categories = [
-    { id: '1', name: 'All', icon: 'apps' },
-    { id: '2', name: 'Food', icon: 'restaurant' },
-    { id: '3', name: 'Retail', icon: 'cart' },
-    { id: '4', name: 'Home Services', icon: 'home' },
-    { id: '5', name: 'Automotive', icon: 'car' },
-    { id: '6', name: 'Health & Medical', icon: 'medical' },
-    { id: '7', name: 'Beauty', icon: 'cut' },
-    { id: '8', name: 'Education', icon: 'school' },
-  ];
-
+ 
   const featuredServices = [
     {
       id: '1',
@@ -94,6 +83,19 @@ const ServicesScreen = () => {
     },
   ];
 
+  const getCategoryImage = (categoryName) => {
+    for (let cat of categoriesData.items.category) {
+      const keys = Object.keys(cat).filter(k => k !== "img");
+      for (let key of keys) {
+        if (key === categoryName) {
+          return cat.img;
+        }
+      }
+    }
+    return null; // fallback
+  };
+
+
   const renderCategoryItem = ({ item }) => (
     <TouchableOpacity
       style={[
@@ -121,23 +123,24 @@ const ServicesScreen = () => {
   const renderServiceItem = ({ item }) => (
     <TouchableOpacity
       style={styles.serviceCard}
-      onPress={() => navigation.navigate('ServiceDetail', { service: item })}
+      onPress={() => navigation.navigate('user-service-room', { data: item })}
     >
-      <Image source={{ uri: item.image }} style={styles.serviceImage} />
+      <Image 
+        source={{ uri: getCategoryImage(item.category) || item.image }} 
+        style={styles.serviceImage} 
+      />
       <View style={styles.serviceInfo}>
-        <Text style={styles.serviceName} numberOfLines={1}>{item.name}</Text>
+        <Text style={styles.serviceName} numberOfLines={1}>{item.title}</Text>
         <View style={styles.serviceMeta}>
-          <View style={styles.ratingContainer}>
-            <Icon name="star" size={14} color="#FFD700" />
-            <Text style={styles.ratingText}>{item.rating}</Text>
-            <Text style={styles.reviewsText}>({item.reviews})</Text>
-          </View>
-          <Text style={styles.serviceCategory}>{item.category}</Text>
-          <Text style={styles.priceText}>{item.price}</Text>
+          {/* <View style={styles.ratingContainer}></View> */}
+          <Text style={styles.serviceCategory}>{item.category} - <Text style={{fontWeight: 'bold'}}>{item?.others?.gender}</Text></Text>
+          <Text style={styles.serviceStats}>{item?.views} {parseInt(item?.views)>1?'views':'view'} • {js_ago(new Date(item?.date))}</Text>
+          
         </View>
       </View>
     </TouchableOpacity>
   );
+
 
   const renderFeaturedService = ({ item }) => (
     <TouchableOpacity
@@ -189,11 +192,20 @@ const ServicesScreen = () => {
         </View> */}
 
         <FlatList
-          data={services}
+          data={data}
           renderItem={renderServiceItem}
           keyExtractor={item => item.id}
           scrollEnabled={false}
           contentContainerStyle={styles.servicesList}
+          ListEmptyComponent={
+            <View style={styles.emptyContainer}>
+              <Icon name="search-outline" size={48} color="#DFE3E8" />
+              <Text style={styles.emptyTitle}>No Service found</Text>
+              <Text style={styles.emptySubtitle}>
+                Try refreshing and also adjust your filter or location
+              </Text>
+            </View>
+          }
         />
       </ScrollView>
     </View>
@@ -201,6 +213,26 @@ const ServicesScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 60,
+    paddingHorizontal: 20,
+  },
+  emptyTitle: {
+    marginTop: 16,
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#212B36',
+    textAlign: 'center',
+  },
+  emptySubtitle: {
+    marginTop: 8,
+    fontSize: 14,
+    color: '#637381',
+    textAlign: 'center',
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -214,6 +246,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
+  },
+  serviceStats: {
+    fontSize: 12,
+    paddingVertical: 6,
+    color: '#606060',
   },
   headerTitle: {
     fontSize: 20,
@@ -396,8 +433,8 @@ const styles = StyleSheet.create({
     marginLeft: 4,
   },
   serviceCategory: {
-    fontSize: 12,
-    color: '#666',
+    fontSize: 14,
+    color: '#000',
     marginBottom: 4,
   },
   priceText: {

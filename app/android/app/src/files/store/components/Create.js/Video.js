@@ -105,7 +105,7 @@ export default function VideoUpload({ videos, updatePhotos, setUploading, update
       const videoToDelete = videos[index];
       
       if (videoToDelete?.uri) {
-        await axios.post('http://192.168.0.4:9090/delete', {
+        await axios.post('https://cs-server-olive.vercel.app/delete', {
           url: videoToDelete.uri,
           type: 'video'
         });

@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-nati
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { debounce } from 'lodash';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { set_option } from '../../../../../../../redux/option';
 
 const { width } = Dimensions.get('window');
@@ -21,21 +21,21 @@ const navItems = [
 
 const NavigationTabs = React.memo(() => {
   const navigation = useNavigation();
-  const [activeTab, setActiveTab] = useState('Products');
+  // const [activeTab, setActiveTab] = useState('Products');
 
   const dispatch = useDispatch()
   
 
+  const {option} = useSelector(s => s?.option);
   return (
     <View style={styles.container}>
       {navItems.map((item, index) => {
-        const isActive = activeTab === item.label;
+        const isActive = option === item.label; // <-- FIX: match against Redux state
         return (
           <TouchableOpacity
             key={index}
             onPress={() => {
-              dispatch(set_option(item?.label))
-              setActiveTab(item?.label)
+              dispatch(set_option(item?.label));
             }}
             style={[styles.tab, isActive && styles.activeTab]}
             activeOpacity={0.7}
@@ -53,6 +53,7 @@ const NavigationTabs = React.memo(() => {
           </TouchableOpacity>
         );
       })}
+
     </View>
   );
 });
