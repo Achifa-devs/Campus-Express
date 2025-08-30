@@ -192,8 +192,12 @@ export default function Product() {
     const callURL = `tel:+234${seller.phone}`;
     Linking.openURL(callURL);
   };
+
   let [reviews, setReviews] = useState(null)
   let [shop, setShop] = useState(null)
+
+  const { reviewed } = useRoute()?.params;
+  
   
   function updateReview(data) {
     setReviews(data)
@@ -205,27 +209,43 @@ export default function Product() {
 
   const handleWriteReview = () => {
     if (user) {
-      
+        
       if (reviews) {
-        let isReviewedByUser = reviews.filter(item=> (user?.user_id === item?.buyer_id)).length === 0;
-        if (isReviewedByUser) {
+        // Check if the user has reviewed anything at all
+        const hasUserReview = reviews.some(item => item?.buyer_id === user?.user_id);
+
+        // Check if the user has already reviewed this specific product
+        const hasReviewedThisProduct = reviews.some(
+          item => item?.buyer_id === user?.user_id && item?.product_id === data?.product_id
+        );
+
+        if (hasReviewedThisProduct) {
+          Alert.alert('You already published a review for this product');
+        } else if (hasUserReview) {
+          // User has a review for another product in the shop, but not this one
           navigation.navigate('user-review-submission', { 
             product: data,
-            seller: seller,
-            shop: shop
+            seller,
+            shop
           });
         } else {
-          Alert.alert('You already published a review for this product')
+          // User has no reviews at all, allow review
+          navigation.navigate('user-review-submission', { 
+            product: data,
+            seller,
+            shop
+          });
         }
-      } else{
-        Alert.alert('Loading reviews...')
+      } else {
+        Alert.alert('Loading reviews...');
       }
+
     } else {
       Alert.alert('Please Login to continue')
     }
   };
-  
-  const images = files && files.length > 0 ? files : [data.thumbnail_id];
+
+  const images = files && files.length > 0 ? files : [data?.thumbnail_id];
 
   return (
     <SafeAreaView style={styles.safeArea}> 

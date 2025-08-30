@@ -93,13 +93,23 @@ export async function createShop({
 
 
 // Update shop 
-export async function UpdateShop({ user_id, newShopname, description }) {
-  const result = await pool.query(
-    `UPDATE shops set title = $2, description = $3 WHERE user_id = $1'`,
-    [user_id, newShopname, description]
-  );
-  let response = await errorHandler(result?.rowCount); 
-   return response;
+export async function UpdateShop({ user_id, title, description }) {
+  try {
+    const result = await pool.query(
+      `UPDATE shops 
+      SET title = $2, description = $3 
+      WHERE user_id = $1 
+      RETURNING *`,
+      [user_id, title, description]
+    );
+  
+    console.log(user_id, title, description)
+    return result.rows[0]; // this gives you the updated item
+  } catch (error) {
+    console.log(error)
+    
+  }
+
 };
 
 export async function UpdateShopCategory({ user_id }) {

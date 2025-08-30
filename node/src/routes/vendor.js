@@ -28,6 +28,7 @@ import {
     CREATE_SHOP,
     GET_SHOP_DETAILS,
     GET_SHOP_REVIEWS,
+    UPDATE_SHOP,
     // UPDATE_SHOP
 } from "../controllers/vendor/shop.js";
 import { SEND_TOKEN, SEND_TOKEN_PWD } from "../controllers/vendor/send_token.js";
@@ -59,7 +60,7 @@ VENDOR_ROUTE.get('/vendor/delete-product', DELETE_PRODUCT)
 VENDOR_ROUTE.get('/vendor/shop', GET_SHOP_DETAILS)
 VENDOR_ROUTE.get('/vendor/shop-reviews', GET_SHOP_REVIEWS)
 VENDOR_ROUTE.post('/vendor/create-shop', parser, CREATE_SHOP)
-// VENDOR_ROUTE.post('/vendor/update-shop', parser, UPDATE_SHOP)
+VENDOR_ROUTE.post('/vendor/update-shop', parser, UPDATE_SHOP)
 // VENDOR_ROUTE.post('/vendor/delete-shop',)
 
 

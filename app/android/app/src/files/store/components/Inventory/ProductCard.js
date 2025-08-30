@@ -15,15 +15,15 @@ import { useNavigation } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 
-const ProductCard = ({ item, onShare, onDelete, onStatusChange }) => {
+const ProductCard = ({ item, onShare, state='private', onDelete, onStatusChange }) => {
   const navigation = useNavigation();
   
-  const handleNavigation = useCallback(
-    debounce((item) => {
-      navigation.navigate('user-product', { data: item });
-    }, 300, { leading: true, trailing: false }),
-    [navigation]
-  );
+  // const handleNavigation = useCallback(
+  //   debounce((item) => {
+  //     navigation.navigate('user-product', { data: item });
+  //   }, 300, { leading: true, trailing: false }),
+  //   [navigation]
+  // );
 
   const handleViewPress = useCallback(
     debounce((item) => {
@@ -35,7 +35,7 @@ const ProductCard = ({ item, onShare, onDelete, onStatusChange }) => {
   return (
     <View style={styles.container}>
       {/* Thumbnail - Clickable for navigation */}
-      <TouchableOpacity onPress={e => handleNavigation(item)}>
+      <TouchableOpacity>
         <Image source={{ uri: item.thumbnail_id }} style={styles.thumbnail} />
       </TouchableOpacity>
       
@@ -69,7 +69,7 @@ const ProductCard = ({ item, onShare, onDelete, onStatusChange }) => {
           </View>
           
           {/* Action Buttons - Now with View button */}
-          <View style={styles.actions}>
+          {state === 'public'? '' :<View style={styles.actions}>
             <TouchableOpacity 
               onPress={() => handleViewPress(item)} 
               style={[styles.actionButton, styles.viewButton]}
@@ -85,7 +85,7 @@ const ProductCard = ({ item, onShare, onDelete, onStatusChange }) => {
             <TouchableOpacity onPress={onDelete} style={[styles.actionButton, styles.deleteButton]}>
               <Icon name="trash" size={16} color="#FF3B30" />
             </TouchableOpacity>
-          </View>
+          </View>}
         </View>
       </View>
     </View>

@@ -51,6 +51,7 @@ import { set_sub_modal } from "../../../../../../redux/sub";
 import ServiceDetailScreen from "../../store/screens/ServiceRoom";
 import PaymentScreen from "../../store/utils/Paystack";
 import ReviewSubmissionScreen from "../../store/screens/Review";
+import Shop from "../../store/screens/Shop";
 const HomeStack = createNativeStackNavigator();
 export function HomeStackScreen() {
    
@@ -140,6 +141,38 @@ export function HomeStackScreen() {
             component={PaymentScreen}
             options={{ headerShown: false }}
         />
+
+        <HomeStack.Screen  options={{
+            header: ({navigation}) =>
+            (
+            <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
+                <TouchableOpacity style={{
+                height: 55,
+                borderRadius: 15,
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+                width: 45,
+                }} onPress={e => navigation.goBack()}> 
+                    <Ionicons name={'chevron-back'} size={25} color={'#000'} />
+                </TouchableOpacity>
+                <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
+                <Text style={{
+                    fontSize: 16,
+                    fontWeight: 'bold',
+                    color: '#000',
+                    marginLeft: 0,
+                    // flexShrink: 1,
+                    marginBottom: 5
+                }}>
+                    Explore Campus Vendors
+                </Text>
+                </View>
+            </View>
+            ),
+            
+        }}   name="user-explore-shop" component={Shop} />
         <HomeStack.Screen  options={{
                 header: ({navigation}) =>
                 (

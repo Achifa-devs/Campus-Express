@@ -11,9 +11,28 @@ export default function Btm({ updateUser, user_id, navigation, updateReview, upd
     let [data, setData] = useState('')
     let [reviews, setReviews] = useState(null)
     let [shop, setShop] = useState('')
+    let [user, set_user] = useState('')
     let [activeFilter, setActiveFilter] = useState('all')
     const screenHeight = Dimensions.get('window').height;
     const screenWidth = Dimensions.get('window').width;
+
+    function fetchReviews() {
+        fetch(`https://cs-server-olive.vercel.app/reviews?shop_id=${shop?.shop_id}`, {
+            headers: {
+            "Content-Type": "Application/json" 
+            }
+        })
+        .then(async (result) => {
+            let response = await result.json();
+            console.log("response: ", response)
+            setReviews(response?.data);
+        })
+        .catch((err) => {
+            Alert.alert('Network error, please try again.');
+            console.log(err);
+        });
+    }
+   
     
     useEffect(() => {
         if (user_id) {
@@ -25,8 +44,10 @@ export default function Btm({ updateUser, user_id, navigation, updateReview, upd
             .then(async (result) => {
                 let response = await result.json();
                 console.log(response)
-                setData(response.data[0]);
-                updateUser(response?.data[0])
+                const res = response.data[0];
+                setData(res);
+                set_user(res)
+                updateUser(res)
                 
             })
             .catch((err) => {
@@ -55,21 +76,7 @@ export default function Btm({ updateUser, user_id, navigation, updateReview, upd
 
     useEffect(() => {
         if (shop) {
-            fetch(`https://cs-server-olive.vercel.app/reviews?shop_id=${shop?.shop_id}`, {
-                headers: {
-                "Content-Type": "Application/json" 
-                }
-            })
-            .then(async (result) => {
-                let response = await result.json();
-                console.log("response: ", response)
-                setReviews(response?.data);
-                
-            })
-            .catch((err) => {
-                Alert.alert('Network error, please try again.');
-                console.log(err);
-            });
+            fetchReviews()
         }
     }, [shop])
 
@@ -133,7 +140,7 @@ export default function Btm({ updateUser, user_id, navigation, updateReview, upd
                   </View>
 
                   <TouchableOpacity 
-                      onPress={e => navigation.navigate('user-review-submission', {data: data})} 
+                      onPress={e => navigation.navigate('user-explore-shop', {user_id, reviews, shop, user})} 
                       style={styles.exploreButton}
                   >
                       <Text style={styles.exploreButtonText}>Explore Shop</Text>

@@ -2,7 +2,8 @@ import {
     createShop,
   // createShopView, 
   findShopDetailsById, 
-  findShopReviewsById, 
+  findShopReviewsById,
+  UpdateShop, 
   // findShopViewById, 
   // UpdateShopView
 } from "../../repositories/vendor/shop.js";
@@ -56,24 +57,14 @@ export const postNewShop = async (payload) => {
 };
 
 
-// export const postUpdateShop = async (payload) => {
-//     const { data, user_id } = payload;
+export const postUpdateShop = async (payload) => {
+    const { title, description, user_id } = payload;
 
-//     let {
-//         customerCareName, 
-//         customerCarePhone, 
-//         customerCareEmail, 
-//         customerCareAddress1, 
-//         customerCareAddress2, 
-//         customerCareAddress3, 
-//         customerCareAddress4, 
-//         City, 
-//         State, 
-//         Country,
-//     } = data
-    
-//     // Business logic
-//     const response = await UpdateShopView({ data, user_id });
-
-//     return response;
-// };
+    try {
+      // Business logic
+      const response = await UpdateShop({ title, description, user_id });
+      return response;
+    } catch (error) {
+      console.log(error)
+    }
+};

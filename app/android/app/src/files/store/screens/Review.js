@@ -52,22 +52,6 @@ const ReviewSubmissionScreen = ({ navigation }) => {
 
     setIsSubmitting(true);
     
-    // // Simulate API call
-    // setTimeout(() => {
-    //   setIsSubmitting(false);
-    //   Alert.alert(
-    //     'Review Submitted', 
-    //     'Thank you for your feedback!',
-    //     [
-    //       {
-    //         text: 'OK',
-    //         onPress: () => navigation.goBack()
-    //       }
-    //     ]
-    //   );
-    // }, 1500);
-//   const { shop_id, user_id, order_id, buyer_id, review, date, comment, rating } = payload;
-
     fetch(`https://cs-server-olive.vercel.app/review`, {
         method: 'post',
 
@@ -88,8 +72,8 @@ const ReviewSubmissionScreen = ({ navigation }) => {
         'Thank you for your feedback!',
         [
             {
-            text: 'OK',
-            // onPress: () => navigation.goBack()
+                text: 'OK',
+                onPress: () => navigation.navigate('user-product', {data: product, reviewed: true})
             }
         ]
         );

@@ -15,7 +15,7 @@ import { useNavigation } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 
-const LodgeCard = ({ item, onShare, onDelete, onStatusChange }) => {
+const LodgeCard = ({ item, onShare, state='private', onDelete, onStatusChange }) => {
     const navigation = useNavigation();
     
     const handleNavigation = useCallback(
@@ -87,7 +87,7 @@ const LodgeCard = ({ item, onShare, onDelete, onStatusChange }) => {
         </View>
 
         {/* Action Buttons - Now with View button */}
-        <View style={styles.actions}>
+        {state === 'public'?'':<View style={styles.actions}>
           <TouchableOpacity 
              onPress={e => handleNavigation(item)}
             style={[styles.actionButton, styles.viewButton]}
@@ -105,7 +105,7 @@ const LodgeCard = ({ item, onShare, onDelete, onStatusChange }) => {
             <Icon name="trash" size={20} color="#FF3B30" />
             <Text style={[styles.actionText, styles.deleteText]}>Delete</Text>
           </TouchableOpacity>
-        </View>
+        </View>}
       </View>
     </View>
   );
