@@ -34,6 +34,7 @@ import { useSelector } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { get_saved, save_prod, unsave_prod } from '../utils/Saver.js';
 import axios from 'axios';
+import Upload from 'react-native-background-upload';
 
 export default function Product() {
   const route = useRoute();
@@ -54,6 +55,19 @@ export default function Product() {
     const slideIndex = Math.round(event.nativeEvent.contentOffset.x / width);
     setCurrentIndex(slideIndex);
   };
+
+
+  async function AddContactClick(params) {
+    try {
+      let request = await axios.post('http://192.168.0.4:9090/contact-click', {product_id: data?.product_id, user_id: user?.user_id})
+      let res = request?.data;
+      
+      return res;
+    } catch (error) {
+      console.log('error: ', error)
+      Alert.alert('Error', 'Please ensure you have stable network.');
+    }
+  }
 
   useEffect(() => {
     try {
@@ -156,7 +170,11 @@ export default function Product() {
     setFavLoading(false);
   };
 
-  const handleWhatsAppChat = () => {
+  const handleWhatsAppChat = async() => {
+    let Analytics = await AddContactClick();
+    if(!Analytics){
+      return Alert.alert('Error', 'Please ensure you have stable network.');
+    }
     if (!seller?.phone) {
       return Alert.alert('Error', 'Seller phone number is missing.');
     }
@@ -186,7 +204,12 @@ export default function Product() {
       });
   };
 
-  const handlePhoneCall = () => {
+  const handlePhoneCall = async() => {
+    let Analytics = await AddContactClick();
+    console.log('Analytics:', Analytics)
+    if(!Analytics){
+      return Alert.alert('Error', 'Please ensure you have stable network.');
+    }
     if (!seller?.phone) return Alert.alert('Error', 'Seller phone number is missing.');
   
     const callURL = `tel:+234${seller.phone}`;
@@ -325,6 +348,7 @@ export default function Product() {
           {/* Price and Actions */}
           <View style={styles.priceContainer}>
             <View style={styles.actionRow}>
+
               <TouchableOpacity style={styles.wpButton} onPress={handleWhatsAppChat}>
                 <WpSvg height={20} width={20} fill="#FFF" />
                 <Text style={styles.wpText}>Chat</Text>
@@ -333,6 +357,7 @@ export default function Product() {
                 <CallSvg height={18} width={18} fill="#FFF" />
                 <Text style={styles.callText}>Call</Text>
               </TouchableOpacity>
+
             </View>
           </View>
 

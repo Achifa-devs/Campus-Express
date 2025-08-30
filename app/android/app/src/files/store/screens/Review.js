@@ -53,35 +53,34 @@ const ReviewSubmissionScreen = ({ navigation }) => {
     setIsSubmitting(true);
     
     fetch(`https://cs-server-olive.vercel.app/review`, {
-        method: 'post',
+      method: 'post',
 
-        headers: {
-        "Content-Type": "Application/json" 
-        },
-        body: JSON.stringify({
-            shop_id: shop?.shop_id, product_id: product?.product_id, buyer_id: user?.user_id, review: reviewType, date: new Date(), comment, rating
-        })
+      headers: {
+      "Content-Type": "Application/json" 
+      },
+      body: JSON.stringify({
+          shop_id: shop?.shop_id, product_id: product?.product_id, buyer_id: user?.user_id, review: reviewType, date: new Date(), comment, rating
+      })
     })
     .then(async (result) => {
-        let response = await result.json(); 
-        console.log("response: ", response)
-        setIsSubmitting(false);
+      let response = await result.json(); 
+      setIsSubmitting(false);
 
-        Alert.alert(
+      Alert.alert(
         'Review Submitted', 
         'Thank you for your feedback!',
         [
-            {
-                text: 'OK',
-                onPress: () => navigation.navigate('user-product', {data: product, reviewed: true})
-            }
+          {
+            text: 'OK',
+            onPress: () => navigation.navigate('user-product', {data: product, reviewed: true})
+          }
         ]
-        );
+      );
     })
     .catch((err) => {
-        Alert.alert('Network error, please try again.');
-        setIsSubmitting(false);
-        console.log(err);
+      Alert.alert('Network error, please try again.');
+      setIsSubmitting(false);
+      console.log(err);
     });
   };
 

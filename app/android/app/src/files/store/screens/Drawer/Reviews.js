@@ -33,7 +33,7 @@ export default function Reviews() {
                         (
                             <View style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', marginTop: 5, width: '100%', flexDirection: 'column', flexWrap: 'wrap'}}>
                                     {
-                                    review.map((item, index) => 
+                                    data.map((item, index) => 
                                     <View key={index} style={{display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-start', marginTop: 15, height: 'auto', width: '100%', flexDirection: 'column', flexWrap: 'wrap', borderStyle: 'solid', borderBottomWidth: 1, borderBottomColor: '#E9ECEF'}}>
                                         <StarRating
                                             rating={item.rating}

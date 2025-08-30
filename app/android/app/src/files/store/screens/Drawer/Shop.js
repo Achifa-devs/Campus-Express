@@ -16,13 +16,14 @@ import { launchImageLibrary } from 'react-native-image-picker';
 
 export default function Shopile() {
     let [review, set_review] = useState([])
+    const {shop} = useSelector(s => s.shop);
+
     let { user } = useSelector(s => s.user)
     let [list, set_list] = useState([])
-    let [logo, set_logo] = useState('')
-    let [title, set_title] = useState('')
-    let [description, set_description] = useState('')
+    let [logo, set_logo] = useState(shop?.logo_url)
+    let [title, set_title] = useState(shop?.title)
+    let [description, set_description] = useState(shop?.description)
     let navigation = useNavigation()
-    const {shop} = useSelector(s => s.shop);
     const { width } = Dimensions.get('window');
     const [isLoading, setIsLoading] = useState(false);
 
@@ -42,6 +43,7 @@ export default function Shopile() {
     const dispatch = useDispatch()
 
     function updateShop() {
+        setIsLoading(true)
         axios.post(`https://cs-server-olive.vercel.app/vendor/update-shop`, {
             title,
             description,
@@ -51,12 +53,14 @@ export default function Shopile() {
         .then((response) => {
             console.log('response: ', response?.data)
             dispatch(set_shop(response?.data?.data))
+            setIsLoading(false)
+            setModalVisible(false)
         }).catch(err=>console.log(err))
     }
 
 
    
-    const [modalVisible, setModalVisible] = useState(true);
+    const [modalVisible, setModalVisible] = useState(false);
     const [isCategory, setIsCategory] = useState(false);
        
     const toggleModal = (data) => {
@@ -104,6 +108,8 @@ export default function Shopile() {
 
         if (result.success && result.data.url) {
             set_logo(result.data.url);
+            setIsLoading(false); // Correct loading state
+
         }
     } catch (err) {
         console.error('Upload failed:', err.message);
@@ -214,34 +220,7 @@ export default function Shopile() {
                                 {shop?.logo_url ? 'Change Logo' : 'Upload Logo'}
                             </Text>
                         </TouchableOpacity>
-                        
-                        {shop?.logo_url && (
-                            <TouchableOpacity 
-                                style={{
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    backgroundColor: '#DC3545',
-                                    paddingHorizontal: 12,
-                                    paddingVertical: 8,
-                                    borderRadius: 6,
-                                    marginTop: 8,
-                                }}
-                                onPress={() => {
-                                    // Add your remove image logic here
-                                    console.log('Remove image');
-                                }}
-                            >
-                                <Ionicons name="trash" size={14} color="#FFF" />
-                                <Text style={{
-                                    color: '#FFF',
-                                    fontWeight: '500',
-                                    marginLeft: 6,
-                                    fontSize: 12,
-                                }}>
-                                    Remove Logo
-                                </Text>
-                            </TouchableOpacity>
-                        )}
+                      
                         
                         {/* <Text style={{
                             fontSize: 12,
@@ -379,7 +358,7 @@ export default function Shopile() {
                         <Text style={styles.shopTitle}>{user?.fname} {user?.lname}</Text>
                         <TouchableOpacity style={styles.verificationBadge}>
                             <Ionicons name={eval(shop.is_verified) ? "shield-checkmark" : "close-circle"} size={16} color="#FF4500" />
-                            <Text style={styles.verificationText}>{eval(shop.is_verified) ? 'Verified': 'Get Verified Now'}</Text>
+                            <Text style={styles.verificationText}>{eval(shop?.is_verified) ? 'Verified': 'Get Verified Now'}</Text>
                         </TouchableOpacity>
                     </View>   
                     

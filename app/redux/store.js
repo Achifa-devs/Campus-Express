@@ -12,11 +12,13 @@ import locale_modal from './locale'
 import option from './option';
 import sub_modal from './sub'
 import subscribed from './subscribed'
+import products from './products'
 let store = configureStore({
   reducer: {
     mode: userMode,
     auth: userAuth,
     cookie: cookie,
+    products: products,
     sub_modal: sub_modal,
     subscribed: subscribed,
     user: user,

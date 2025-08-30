@@ -87,13 +87,14 @@ export async function createProduct({ constantData, dynamicData, shipping_data }
         campus,
         uni_state,
         thumbnail_public_id, 
-        purpose
+        purpose,
+        contact_click
       ) 
       VALUES(
         DEFAULT,
         $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11,
         $12, $13, $14, $15, $16, $17, $18, $19, $20,
-        $21, $22
+        $21, $22, $23
       )`,
       [
         product_id,
@@ -117,7 +118,8 @@ export async function createProduct({ constantData, dynamicData, shipping_data }
         campus,
         state,
         thumbnail_public_id,
-        purpose
+        purpose,
+        0
       ]
     );
 

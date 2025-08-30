@@ -55,6 +55,7 @@ import express from "express";
 import {
     parser
 } from "../utils/parser.js"
+import { POST_CONTACT_CLICK } from "../controllers/shop/analytics.js"
 export const CUSTOMER_ROUTE = express.Router()
 
 // HANDLES SHOP REQ --- ##NOT IMPLEMENTED##
@@ -117,3 +118,5 @@ CUSTOMER_ROUTE.post('/favourite', POST_FAVOURITE);
 CUSTOMER_ROUTE.delete('/favourite', DELETE_FAVOURITE);
 
 
+// HANDLES CUSTOMER REACTIONS
+CUSTOMER_ROUTE.post('/contact-click', parser, POST_CONTACT_CLICK);

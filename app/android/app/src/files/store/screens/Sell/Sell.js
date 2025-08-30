@@ -25,6 +25,7 @@ import Video from 'react-native-video';
 import categoriesData from '../../../../../../../services.json'
 import { launchImageLibrary } from 'react-native-image-picker';
 import LoginButton from '../../utils/LogAlert';
+import { set_products } from '../../../../../../../redux/products';
 
 const { width } = Dimensions.get('window');
 
@@ -35,7 +36,7 @@ const ShopScreen = () => {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [formError, setFormError] = useState('');
-  
+  const dispatch = useDispatch()
   const [shopExists, setShopExists] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [shopLogo, setShopLogo] = useState(null);
@@ -60,6 +61,7 @@ const ShopScreen = () => {
     .then(async(result) => {
       let response = await result.json()
       setUserAds(response?.data)
+      dispatch(set_products(response?.data))
       setLoading(false)
       setRefreshing(false)
     })       
