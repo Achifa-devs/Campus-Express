@@ -19,8 +19,7 @@ export default function Shopile() {
     useEffect(() => {
       axios.get(`https://cs-server-olive.vercel.app/vendor/shop-reviews?shop_id=${shop?.shop_id}`)
       .then((res) => {
-        console.log('reviews: ', res)
-        set_review(res?.data)
+        set_review(res?.data?.data)
       }).catch(err=>console.log(err))
     }, [])
 
@@ -279,7 +278,7 @@ export default function Shopile() {
                        
                     </View>
                     
-                    <TouchableOpacity onPress={e=> navigation.navigate('user-reviews')} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: 0, backgroundColor: '#fff', flexDirection: 'row', borderStyle: 'solid', opacity: .7 , borderTopColor: '#efefef', borderTopWidth: 1}}>
+                    <TouchableOpacity onPress={e=> navigation.navigate('user-reviews', {data: review})} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: 0, backgroundColor: '#fff', flexDirection: 'row', borderStyle: 'solid', opacity: .7 , borderTopColor: '#efefef', borderTopWidth: 1}}>
                     
                         <Text style={{ fontWeight: '500',  padding: 8, fontSize: 17, color: '#000', marginLeft: 4, marginBottom: 5, textAlign: 'center' }}>Show all reviews</Text> 
                         <Ionicons  name={'arrow-forward'} size={18} color={'#000'} />

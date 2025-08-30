@@ -28,6 +28,7 @@
     "@reduxjs/toolkit": "^1.9.7",
     "axios": "^1.5.1",
     "countrycitystatejson": "^21.3.2703",
+    "expo-linear-gradient": "^14.1.5",
     "js-ago": "^2.1.1",
     "notifee": "^0.0.1",
     "numeral": "^2.0.6",

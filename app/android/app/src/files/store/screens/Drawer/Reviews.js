@@ -3,39 +3,20 @@ import { Alert, Dimensions, Image, StyleSheet, TouchableOpacity, View } from 're
 import { ScrollView, Text, TextInput } from 'react-native'
 import ReviewSvg from '../../../media/assets/review-svgrepo-com.svg'
 import StarRating from 'react-native-star-rating-widget';
+import { useRoute } from '@react-navigation/native';
 export default function Reviews() {
-    const [rating, setRating] = useState(0);
+    const { data } = useRoute()?.params
     const screenHeight = Dimensions.get('window').height;
     const screenWidth = Dimensions.get('window').width;
-    let r = [
-        {
-            review: 'Fast delivery',
-            comment: 'Experienceed great vendor of all time',
-            rating: 3.5,
-            date: new Date().toLocaleString(),
-            buyer: ''
-        },
-        {
-            review: 'Broken item',
-            comment: 'I had to reject my item and ask for refund',
-            rating: .5,
-            date: new Date().toLocaleString(),
-            buyer: ''
-        },
-        {
-            review: 'Good vend',
-            comment: 'Was good shaa, at least i got what i wanted',
-            rating: 2,
-            date: new Date().toLocaleString(),
-            buyer: ''
-        }
-    ]
+
+
+    
   return (
     <>
       <View style={styles.cnt}>
           <ScrollView >
             {
-                r.length === 0
+                data.length === 0
                 ?
                 <View style={{display: 'flex', backgroundColor: '#fff', alignItems: 'center', height: screenHeight, justifyContent: 'center', width: '100%', flexDirection: 'column', flex: 1}}>
                     <ReviewSvg width={90} height={90} />
@@ -47,7 +28,7 @@ export default function Reviews() {
           
                 <View style={{display: 'flex', backgroundColor: '#fff', alignItems: 'center', justifyContent: 'flex-start', marginTop: 5, width: '100%', flexDirection: 'column', padding: .5, flexWrap: 'wrap'}}>
                     {
-                        review.length>0
+                        data.length>0
                         ?
                         (
                             <View style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', marginTop: 5, width: '100%', flexDirection: 'column', flexWrap: 'wrap'}}>
@@ -56,7 +37,7 @@ export default function Reviews() {
                                     <View key={index} style={{display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-start', marginTop: 15, height: 'auto', width: '100%', flexDirection: 'column', flexWrap: 'wrap', borderStyle: 'solid', borderBottomWidth: 1, borderBottomColor: '#E9ECEF'}}>
                                         <StarRating
                                             rating={item.rating}
-                                            onChange={setRating}
+                                            // onChange={setRating}
                                             starSize={30}
                                             color="#FF4500"
                                         />

@@ -43,15 +43,15 @@ export async function findShopContentById({ user_id }) {
 
 
 // Create new shop review
-export async function createShopReview({ shop_id, user_id, order_id, buyer_id, review, date, comment, rating }) {
+export async function createShopReview({ shop_id, order_id, buyer_id, review, date, comment, rating }) {
   const result = await pool.query(
     `INSERT INTO reviews (
-        id, shop_id, user_id, order_id, buyer_id, review, date, comment, rating
+        id, shop_id, order_id, buyer_id, review, date, comment, rating
     ) VALUES (
-        DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8
+        DEFAULT, $1, $2, $3, $4, $5, $6, $7
     )`,
     [
-      shop_id, user_id, order_id, buyer_id, review, date, comment, rating
+      shop_id, order_id, buyer_id, review, date, comment, rating
     ]
   );
   let response = await errorHandler(result?.rowCount);

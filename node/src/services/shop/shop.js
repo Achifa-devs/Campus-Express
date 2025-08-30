@@ -49,10 +49,10 @@ export const getShopContent = async (payload) => {
 
 
 export const postShopReview = async (payload) => {
-  const { shop_id, user_id, order_id, buyer_id, review, date, comment, rating } = payload;
+  const { shop_id, order_id, buyer_id, review, date, comment, rating } = payload;
 
   // Business logic
-  const response = await createShopReview({ shop_id, user_id, order_id, buyer_id, review, date, comment, rating });
+  const response = await createShopReview({ shop_id, order_id, buyer_id, review, date, comment, rating });
 
   return response;
 };

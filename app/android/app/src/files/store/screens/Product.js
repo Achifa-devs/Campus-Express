@@ -14,631 +14,672 @@ import {
   TouchableOpacity,
   View,
   FlatList,
-  TouchableWithoutFeedback,
-  
   Image,
   ScrollView,
   SafeAreaView,
   Animated,
-  Easing,
   ActivityIndicator,
-  Share,
   Linking,
-  Platform
+  Platform,
+  Share
 } from 'react-native';
-
-// import Top from '../components/Product/Top';
+import LinearGradient from 'react-native-linear-gradient';
+import Top from '../components/Product/Top';
 import Mid from '../components/Product/Mid';
 import Btm from '../components/Product/Btm';
-import Thumbnail from '../utils/Thumbnail';
 import CallSvg from '../../media/assets/call-svgrepo-com.svg';
 import WpSvg from '../../media/assets/whatsapp-svgrepo-com.svg';
-import ReportSvg from '../../media/assets/report-svgrepo-com.svg';
-//   import HeartSvg from '../../media/assets/heart-svgrepo-com.svg';
-//   import ShareSvg from '../../media/assets/share-svgrepo-com.svg';
-
 import { getData, storeData } from '../../utils/AsyncStore.js';
-import { useDispatch, useSelector } from 'react-redux';
-import { setToggleMessage } from '../../../../../../redux/toggleMssg.js';
-import Ionicons from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, FontAwesome, etc.
-import Top from '../components/Product/Top';
+import { useSelector } from 'react-redux';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { get_saved, save_prod, unsave_prod } from '../utils/Saver.js';
 import axios from 'axios';
 
-  export default function Product() {
-    const route = useRoute();
-    const { data } = route.params;
-    const {user} = useSelector(s => s?.user)
-    // const [data, setData] = useState(null); 
-    const [seller, setSeller] = useState('')
-    const [loading, setLoading] = useState(false);
-    const [saved, setSaved] = useState(false);
-    const navigation = useNavigation();
-    const { product_id } = useRoute()?.params;
-    const fadeAnim = new Animated.Value(1);
-    const { width } = Dimensions.get('window');
-    const [currentIndex, setCurrentIndex] = useState(0);
+export default function Product() {
+  const route = useRoute();
+  const { data } = route.params;
+  const { user } = useSelector(s => s?.user);
+  const [seller, setSeller] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const navigation = useNavigation();
+  const { product_id } = useRoute()?.params;
+  const fadeAnim = new Animated.Value(1);
+  const { width } = Dimensions.get('window');
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [files, set_files] = useState([]);
+  const [favLoading, setFavLoading] = useState(true);
 
-    const onScroll = (event) => {
-      const slideIndex = Math.round(event.nativeEvent.contentOffset.x / width);
-      setCurrentIndex(slideIndex);
-    };
-  
-    
-    const [files, set_files] = useState([])
+  const onScroll = (event) => {
+    const slideIndex = Math.round(event.nativeEvent.contentOffset.x / width);
+    setCurrentIndex(slideIndex);
+  };
 
-    useEffect(() => {
-      try {
-        fetch(`https://cs-server-olive.vercel.app/image-folder?folderName=${data?.product_id}`, {
-          headers: { 
-            "Content-Type": "Application/json" 
-          } 
-        })   
-        .then(async(result) => {     
-          let response = await result.json()
-          set_files(response)
-          // console.log('images response: ', response[0])
-        })       
-        .catch((err) => {
-          // set_server_err(!true)
-          Alert.alert('Network error, please try again.')
-          // console.log(err)
-        })
-      } catch (error) {
-        // console.log(error)
-      }
-    }, [])
+  useEffect(() => {
+    try {
+      fetch(`https://cs-server-olive.vercel.app/image-folder?folderName=${data?.product_id}`, {
+        headers: { 
+          "Content-Type": "Application/json" 
+        } 
+      })   
+      .then(async(result) => {     
+        let response = await result.json();
+        set_files(response);
+      })       
+      .catch((err) => {
+        Alert.alert('Network error, please try again.');
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
 
-
-    useEffect(() => {
-      setFavLoading(true);
-      if (data !== '' && data !== undefined && data !== null && data !== 'undefined' && data !== 'null') {
+  useEffect(() => {
+    setFavLoading(true);
+    if (data && data.product_id) {
+      (async function getFavourite() {
         try {
-          (async function getFavourite() {
-            const result = await get_saved({
-              user_id: user?.user_id,
-              product_id: data?.product_id
-            })
-            // console.log("result: ", result)
+          const result = await get_saved({
+            user_id: user?.user_id,
+            product_id: data?.product_id
+          });
 
-            if (result?.success) {
-              setFavLoading(false);
-              if (result.data.length > 0) {
-                setSaved(true)
-              } else {
-                setSaved(false)
-              }
-            } else {
-              setFavLoading(false);
-              setSaved(false)
-            }
-          })()
+          if (result?.success) {
+            setFavLoading(false);
+            setSaved(result.data.length > 0);
+          } else {
+            setFavLoading(false);
+            setSaved(false);
+          }
         } catch (error) {
           setFavLoading(false);
-          // console.log(error)
+          setSaved(false);
+          console.error(error);
         }
-      }
-    }, [data])
+      })();
+    }
+  }, [data, user]);
 
-    useEffect(() => {
-      if (data !== '' && data !== undefined && data !== null && data !== 'undefined' && data !== 'null') {
-        setTimeout(async () => {
-          try {
-            const res = await axios.post('https://cs-server-olive.vercel.app/product-view', {
-              user_id: user?.user_id,
-              product_id: data?.product_id
-            });
+  useEffect(() => {
+    if (data && data.product_id && user?.user_id) {
+      setTimeout(async () => {
+        try {
+          const res = await axios.post('https://cs-server-olive.vercel.app/product-view', {
+            user_id: user?.user_id,
+            product_id: data?.product_id
+          });
+      
+          const response = res.data;
+          if (response?.success) {  
+            const newHistory = { date: new Date(), data: data };
+            const prevHistory = await getData('history');
+            if (prevHistory) {
+              const arr = JSON.parse(prevHistory);
         
-            const response = res.data;
-            // console.log('response:', response);
-         
-            if (response?.success) {  
-              const newHistory = { date: new Date(), data: data };
-              const prevHistory = await getData('history');
-              if (prevHistory) {
-                const arr = JSON.parse(prevHistory);
-          
-                if (Array.isArray(arr) && arr.length > 0) {
-                  storeData('history', JSON.stringify([...arr, newHistory]));
-                } else {
-                  storeData('history', JSON.stringify([newHistory]));
-                }
+              if (Array.isArray(arr) && arr.length > 0) {
+                storeData('history', JSON.stringify([...arr, newHistory]));
+              } else {
+                storeData('history', JSON.stringify([newHistory]));
               }
-            } else {
-              await storeData('history', JSON.stringify([newHistory]));
-              // Handle unsuccessful case
             }
-          } catch (error) {
-            // console.error('Error in product view request:', error);
           }
-        }, 3000);
-      }
-    }, [data])
+        } catch (error) {
+          console.error('Error in product view request:', error);
+        }
+      }, 3000);
+    }
+  }, [data, user]);
 
-    const [favLoading, setFavLoading] = useState(true);
-    
-  
-    function updateUser(data) {
-      setSeller(data)
+  function updateUser(data) {
+    setSeller(data);
+  }
+
+  const handleSave = async () => {
+    setFavLoading(true);
+    if (!saved) {
+      const result = await save_prod({
+        user_id: user?.user_id,
+        product_id: data?.product_id
+      });
+      if (result?.success && result?.data?.length > 0) {
+        setSaved(true);
+      }
+    } else {
+      const result = await unsave_prod({
+        user_id: user?.user_id,
+        product_id: data?.product_id
+      });
+      if (result?.success && result?.data?.length > 0) {
+        setSaved(false);
+      }
+    }
+    setFavLoading(false);
+  };
+
+  const handleWhatsAppChat = () => {
+    if (!seller?.phone) {
+      return Alert.alert('Error', 'Seller phone number is missing.');
     }
   
-    const handleSave = async () => {
-      setFavLoading(true);
-      // setSaved(!saved);
-      // dispatch(setToggleMessage(saved ? 'Removed from saved' : 'Product saved!'));
-      if (!saved) {
-        const result = await save_prod({
-          user_id: user?.user_id,
-          product_id: data?.product_id
-        })
-        if (result?.success && result?.data?.length > 0) {
-          setSaved(true);
-          setFavLoading(false);
+    let phoneNumber = seller.phone.replace(/\s+/g, '');
+    if (phoneNumber.startsWith('0')) {
+      phoneNumber = phoneNumber.substring(1);
+    }
+  
+    const fullPhoneNumber = `234${phoneNumber}`;
+    const productLink = `https://www.campussphere.net/store/product/${data?.product_id}`;
+    const message = `Hello, I am interested in your product on Campus Sphere. ${productLink}`;
+  
+    const whatsappURL = `whatsapp://send?phone=${fullPhoneNumber}&text=${encodeURIComponent(message)}`;
+    const fallbackURL = `https://wa.me/${fullPhoneNumber}?text=${encodeURIComponent(message)}`;
+  
+    Linking.canOpenURL(whatsappURL)
+      .then((supported) => {
+        if (supported) {
+          Linking.openURL(whatsappURL);
         } else {
-          // 
-          setFavLoading(false);
+          Linking.openURL(fallbackURL);
         }
-      }
-       else {
-        const result = await unsave_prod({
-          user_id: user?.user_id,
-          product_id: data?.product_id
-        })
-        if (result?.success && result?.data?.length > 0) {
-          setSaved(false);
-          setFavLoading(false);
-        } else {
-          // 
-          setFavLoading(false);
-        }
+      })
+      .catch((err) => {
+        Alert.alert('Error', 'Unable to open WhatsApp.');
+      });
+  };
+
+  const handlePhoneCall = () => {
+    if (!seller?.phone) return Alert.alert('Error', 'Seller phone number is missing.');
+  
+    const callURL = `tel:+234${seller.phone}`;
+    Linking.openURL(callURL);
+  };
+  let [reviews, setReviews] = useState(null)
+  
+  function updateReview(data) {
+    setReviews(data)
+  }
+
+
+  const handleWriteReview = () => {
+    if (user) {
       
+      if (reviews) {
+        let isReviewedByUser = reviews.filter(item=> (user?.user_id === item?.buyer_id)).length === 0;
+        if (isReviewedByUser) {
+          navigation.navigate('user-review-submission', { 
+            product: data,
+            seller: seller  
+          });
+        } else {
+          Alert.alert('You already published a review for this product')
+        }
+      } else{
+        Alert.alert('Loading reviews...')
       }
-    };
+    } else {
+      Alert.alert('Please Login to continue')
+    }
+  };
   
-    const handleWhatsAppChat = () => {
-      if (!seller?.phone) {
-        return Alert.alert('Error', 'Seller phone number is missing.');
-      }
-    
-      // Ensure Nigerian number format, remove leading 0 if present
-      let phoneNumber = seller.phone.replace(/\s+/g, ''); // remove spaces
-      if (phoneNumber.startsWith('0')) {
-        phoneNumber = phoneNumber.substring(1);
-      }
-    
-      const fullPhoneNumber = `234${phoneNumber}`;
-      const productLink = `https://www.campussphere.net/store/product/${data?.product_id}`;
-      const message = `Hello, I am interested in your product on Campus Sphere. ${productLink}`;
-    
-      const whatsappURL = `whatsapp://send?phone=${fullPhoneNumber}&text=${encodeURIComponent(message)}`;
-      const fallbackURL = `https://wa.me/${fullPhoneNumber}?text=${encodeURIComponent(message)}`;
-    
-      Linking.canOpenURL(whatsappURL)
-        .then((supported) => {
-          if (supported) {
-            Linking.openURL(whatsappURL);
-          } else {
-            Linking.openURL(fallbackURL);
-          }
-        })
-        .catch((err) => {
-          // console.error("WhatsApp linking error:", err);
-          Alert.alert('Error', 'Unable to open WhatsApp.');
-        });
-    };
-    
+  const images = files && files.length > 0 ? files : [data.thumbnail_id];
 
-    const handlePhoneCall = () => {
-      if (!seller?.phone) return Alert.alert('Error', 'Seller phone number is missing.');
-    
-      const callURL = `tel:+234${seller.phone}`;
-    
-      Linking.openURL(callURL);
-    };
-    
-    const images = files && files.length > 0 ? files : [data.thumbnail_id];
-    
-
-  
-    return (
-      <SafeAreaView style={styles.safeArea}> 
-        <View style={styles.header}>
-          <TouchableOpacity 
-            style={styles.backButton}
-            onPress={() => navigation.goBack()}
-          >
-            <Ionicons name="arrow-back" size={24} color="#000" />
-          </TouchableOpacity>
-        </View>
-        
-        <Animated.ScrollView
-          style={{ opacity: fadeAnim }}
-          contentContainerStyle={styles.scrollContainer}
+  return (
+    <SafeAreaView style={styles.safeArea}> 
+      <View style={styles.header}>
+        <TouchableOpacity 
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
         >
-          {/* Image Gallery */}
-          <View style={styles.imageContainer}>
-            <ScrollView
-              horizontal 
-              pagingEnabled
-              showsHorizontalScrollIndicator={false}
-              style={{ width }}
-              onScroll={onScroll}
-              scrollEventThrottle={16}
-            >
-              {images.map((image, index) => (
-                <TouchableOpacity onPress={e => {
+          <Ionicons name="arrow-back" size={24} color="#FFF" />
+        </TouchableOpacity>
+      </View>
+      
+      <Animated.ScrollView
+        style={{ opacity: fadeAnim }}
+        contentContainerStyle={styles.scrollContainer}
+      >
+        {/* Image Gallery */}
+        <View style={styles.imageContainer}>
+          <ScrollView
+            horizontal 
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            style={{ width }}
+            onScroll={onScroll}
+            scrollEventThrottle={16}
+          >
+            {images.map((image, index) => (
+              <TouchableOpacity 
+                onPress={() => {
                   navigation.navigate('user-product-images', {
                     files: images,
                     index: currentIndex,
                   });
-
-                }} key={index} style={[styles.imgContainer, { width }]}>
-                  <Image
-                    source={{ uri: image?.secure_url }}
-                    style={styles.productImage}
-                    resizeMode="contain"
-                  />
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-            
-            <View style={styles.carousel}>
-              <Text>
+                }} 
+                key={index} 
+                style={[styles.imgContainer, { width }]}
+              >
+                <Image
+                  source={{ uri: image?.secure_url || image }}
+                  style={styles.productImage}
+                  resizeMode="cover"
+                />
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+          
+          <View style={styles.carouselIndicator}>
+            <View style={styles.carouselPill}>
+              <Text style={styles.carouselText}>
                 {currentIndex + 1}/{images.length}
               </Text>
             </View>
+          </View>
 
-            <View style={styles.actionButtons}>
-              <TouchableOpacity 
-                style={styles.actionButton}
-                onPress={handleSave}
-              >
-                <Ionicons name={saved ? "heart": 'heart-outline'} size={20} color={"#FF4500"} />
-                
+          <View style={styles.actionButtons}>
+            <TouchableOpacity 
+              style={styles.actionButton}
+              onPress={handleSave}
+            >
+              {favLoading ? (
+                <ActivityIndicator size="small" color="#FF4500" />
+              ) : (
+                <Ionicons 
+                  name={saved ? "heart" : "heart-outline"} 
+                  size={24} 
+                  color={saved ? "#FF4500" : "#FFF"} 
+                />
+              )}
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* Product Info */}
+        <View style={styles.contentContainer}>
+          <Top data={data} />
+          
+          {/* Price and Actions */}
+          <View style={styles.priceContainer}>
+            <View style={styles.actionRow}>
+              <TouchableOpacity style={styles.wpButton} onPress={handleWhatsAppChat}>
+                <WpSvg height={20} width={20} fill="#FFF" />
+                <Text style={styles.wpText}>Chat</Text>
               </TouchableOpacity>
-              
+              <TouchableOpacity style={styles.callButton} onPress={handlePhoneCall}>
+                <CallSvg height={18} width={18} fill="#FFF" />
+                <Text style={styles.callText}>Call</Text>
+              </TouchableOpacity>
             </View>
           </View>
-  
-          {/* Product Info */}
-          <View style={styles.contentContainer}>
-            <Top data={data} />
-            
-            {/* Price and Actions */}
-            <View style={styles.priceContainer}>
-              <Text style={styles.priceText}></Text>
-              <View style={styles.actionRow}>
-                <TouchableOpacity style={styles.wpButton} onPress={handleWhatsAppChat}>
-                  <WpSvg height={20} width={20} />
-                  <Text style={styles.wpText}>Chat</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.callButton} onPress={handlePhoneCall}>
-                  <CallSvg height={18} width={18} />
-                  <Text style={styles.callText}>Call</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-  
-            {/* Description */}
-            {data.description === '' ? '' :<View style={styles.section}>
+
+          {/* Description */}
+          {data.description && (
+            <View style={styles.section}>
               <Text style={styles.sectionTitle}>Description</Text>
               <Mid description={data?.description} />
-            </View>}
-  
-            {/* Seller Info */}
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Seller Information</Text>
-              <Btm user_id={data?.user_id} updateUser={updateUser} />
             </View>
-  
-            {/* Safety Tips */} 
-            <View style={styles.safetyTips}>
+          )}
+
+          {/* Seller Info */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Seller Information</Text>
+            <Btm user_id={data?.user_id} updateUser={updateUser} updateReview={updateReview} navigation={navigation} />
+          </View>
+
+          {/* Safety Tips */} 
+          <View style={styles.safetyTips}>
+            <View style={styles.safetyHeader}>
+              <Ionicons name="shield-checkmark" size={20} color="#FF4500" />
               <Text style={styles.safetyTitle}>Safety Tips</Text>
-              <Text style={styles.safetyText}>
-                • Meet seller in public places{'\n'}
-                • Check the item before you buy{'\n'}
-                • Pay only after collecting the item
-              </Text>
+            </View>
+            <View style={styles.safetyList}>
+              <View style={styles.safetyItem}>
+                <Ionicons name="location" size={16} color="#666" />
+                <Text style={styles.safetyText}>Meet seller in public places</Text>
+              </View>
+              <View style={styles.safetyItem}>
+                <Ionicons name="search" size={16} color="#666" />
+                <Text style={styles.safetyText}>Check the item before you buy</Text>
+              </View>
+              <View style={styles.safetyItem}>
+                <Ionicons name="card" size={16} color="#666" />
+                <Text style={styles.safetyText}>Pay only after collecting the item</Text>
+              </View>
             </View>
           </View>
-        </Animated.ScrollView>
-  
-        {/* Fixed Bottom Bar */}
-        <View style={styles.bottomBar}>
+
+          {/* Write Review Button - Added inside scroll view for visibility */}
           <TouchableOpacity 
-            style={styles.saveButton}
-            onPress={handleSave}
+            style={styles.writeReviewButton}
+            onPress={handleWriteReview}
           >
-            {favLoading && (
-              <View style={[styles.loadingOverlay, {backgroundColor: 'rgba(0, 0, 0, 0.3)'}]}>
-                <ActivityIndicator size="small" color="#FF4500" />
-              </View>
-            )}
-            {!favLoading &&(<Ionicons name={saved ? "heart" : "heart-outline"} size={20} color={"#FF4500"} />)}
-            {/* <HeartSvg 
-              height={20} 
-              width={20} 
-              fill={saved ? '#FF4500' : 'none'} 
-              stroke={saved ? '#FF4500' : '#000'} 
-            /> */}
-            <Text style={[styles.bottomButtonText, saved && styles.savedText]}>
-              {saved ? 'Saved' : 'Save'}
-            </Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity
-            style={styles.orderButton}
-            // onPress={() => navigation.navigate('user-new-order', { data })}
-            onPress={async(e) => {
-              try {
-                const result = await Share.share({
-                  message: `Check out this product on Campus Sphere! https://www.campussphere.net/store/product/${data?.product_id}`,
-                  url: `https://www.campussphere.net/store/product/${data?.product_id}`, // works mostly on iOS
-                  title: data?.title,
-                    
-                });
-  
-                if (result.action === Share.sharedAction) {
-                  if (result.activityType) {
-                      // console.log('Shared with activity type:', result.activityType);
-                  } else {
-                      // console.log('Shared successfully');
-                  }
-                } else if (result.action === Share.dismissedAction) {
-                  // console.log('Share dismissed');
-                }
-              } catch (error) {
-                console.log(error)
-              }
-          }}
-          >
-            <Ionicons  name={'share-outline'} size={15} color={'#fff'} />
-            <Text style={styles.orderButtonText}>Share Now</Text>
+            <Ionicons name="star" size={20} color="#FFF" />
+            <Text style={styles.writeReviewText}>Write a Review</Text>
           </TouchableOpacity>
         </View>
-      </SafeAreaView>
-    );
-  }
-  
-  const styles = StyleSheet.create({
-    safeArea: {
-      flex: 1,
-      backgroundColor: '#FFF',
-    },
-    header: {
-      position: 'absolute',
-      top: Platform.OS === 'ios' ? 50 : 30,
-      left: 20,
-      zIndex: 10,
-    },
-    backButton: {
-      backgroundColor: 'rgba(255, 255, 255, 0.9)',
-      borderRadius: 20,
-      padding: 8,
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.1,
-      shadowRadius: 4,
-      elevation: 3,
-    },
-    scrollContainer: {
-      paddingBottom: 80,
-    },
-    loadingContainer: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    errorContainer: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: 20,
-    },
-    errorText: {
-      fontSize: 18,
-      color: '#333',
-      marginBottom: 20,
-    },
-    retryButton: {
-      backgroundColor: '#FF4500',
-      paddingHorizontal: 20,
-      paddingVertical: 10,
-      borderRadius: 5,
-    },
-    retryText: {
-      color: '#FFF',
-      fontSize: 16,
-    },
-    imageContainer: {
-      width: '100%',
-      aspectRatio: 16/9, // or whatever ratio you prefer
-    },
-    imageWrapper: {
-      width: '100%',
-      height: 350,
-      backgroundColor: '#f8f8f8',
-    },
-    imgContainer: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: '#000', // in case images have transparency
-    },
-    productImage: {
-      width: '100%',
-      height: '100%',
-      resizeMode: 'contain',
-    },
-    imagePagination: {
-      position: 'absolute',
-      bottom: 15,
-      left: 0,
-      right: 0,
-      flexDirection: 'row',
-      justifyContent: 'center',
-    },
-    loadingOverlay: {
-      ...StyleSheet.absoluteFillObject,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: 'rgba(244, 246, 248, 0.8)',
-    },
-    paginationDot: {
-      width: 8,
-      height: 8,
-      borderRadius: 4,
-      backgroundColor: 'rgba(255,255,255,0.5)',
-      marginHorizontal: 4,
-    },
-    activeDot: {
-      backgroundColor: '#FF4500',
-      width: 12,
-    },
-    actionButtons: {
-      position: 'absolute',
-      top: 15,
-      right: 15,
-      backgroundColor: 'rgba(255,255,255,0.8)',
-      borderRadius: 20,
-      padding: 8,
-      flexDirection: 'row',
-    },
-    carousel: {
-      position: 'absolute',
-      bottom: 15,
-      right: 15,
-      backgroundColor: 'rgba(255,255,255,0.8)',
-      borderRadius: 20,
-      padding: 8,
-      flexDirection: 'row',
-    }, 
-    actionButton: {
-      marginHorizontal: 5,
-    },
-    contentContainer: {
-      padding: 16,
-    },
-    priceContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      marginVertical: 16,
-      paddingBottom: 16,
-      borderBottomWidth: 1,
-      borderBottomColor: '#eee',
-    },
-    priceText: {
-      fontSize: 24,
-      fontWeight: 'bold',
-      color: '#FF4500',
-    },
-    actionRow: {
-      flexDirection: 'row',
-      gap: 10,
-    },
-    wpButton: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      paddingHorizontal: 16,
-      paddingVertical: 10,
-      backgroundColor: '#25D366',
-      borderRadius: 6,
-    },
-    wpText: {
-      color: '#FFF',
-      fontWeight: '600',
-      marginLeft: 8,
-    },
-    callButton: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      paddingHorizontal: 16,
-      paddingVertical: 10,
-      backgroundColor: '#FF4500',
-      borderRadius: 6,
-    },
-    callText: {
-      color: '#FFF',
-      fontWeight: '600',
-      marginLeft: 8,
-    },
-    section: {
-      marginBottom: 24,
-    },
-    sectionTitle: {
-      fontSize: 18,
-      fontWeight: '600',
-      marginBottom: 12,
-      color: '#333',
-    },
-    safetyTips: {
-      backgroundColor: '#FFF8F6',
-      padding: 16,
-      borderRadius: 8,
-      borderWidth: 1,
-      borderColor: '#FFE5DE',
-      marginTop: 16,
-    },
-    safetyTitle: {
-      fontSize: 16,
-      fontWeight: '600',
-      color: '#FF4500',
-      marginBottom: 8,
-    },
-    safetyText: {
-      fontSize: 14,
-      color: '#666',
-      lineHeight: 20,
-    },
-    bottomBar: {
-      position: 'absolute',
-      bottom: 0,
-      left: 0,
-      right: 0,
-      flexDirection: 'row',
-      backgroundColor: '#FFF',
-      paddingVertical: 12,
-      paddingHorizontal: 16,
-      borderTopWidth: 1,
-      borderTopColor: '#eee',
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: -2 },
-      shadowOpacity: 0.1,
-      shadowRadius: 4,
-      elevation: 5,
-    },
-    saveButton: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      paddingHorizontal: 16,
-      paddingVertical: 12,
-      borderWidth: 1,
-      borderColor: '#ddd',
-      borderRadius: 6,
-      marginRight: 12,
-      flex: 1,
-    },
-    bottomButtonText: {
-      marginLeft: 8,
-      fontWeight: '600',
-    },
-    savedText: {
-      color: '#FF4500',
-    },
-    orderButton: {
-      flex: 3,
-      backgroundColor: '#FF4500',
-      borderRadius: 6,
-      flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    orderButtonText: {
-      color: '#FFF',
-      paddingHorizontal: 10,
-      fontWeight: '600',
-      fontSize: 16,
-    },
-  });
+      </Animated.ScrollView>
+
+      {/* Fixed Bottom Bar */}
+      <LinearGradient
+        colors={['#FFF', '#FFF']}
+        style={styles.bottomBar}
+        start={{x: 0, y: 0}}
+        end={{x: 0, y: 1}}
+      >
+        <TouchableOpacity 
+          style={[styles.saveButton, saved && styles.saveButtonActive]}
+          onPress={handleSave}
+          disabled={favLoading}
+        >
+          {favLoading ? (
+            <ActivityIndicator size="small" color="#FF4500" />
+          ) : (
+            <>
+              <Ionicons 
+                name={saved ? "heart" : "heart-outline"} 
+                size={20} 
+                color={saved ? "#FF4500" : "#666"} 
+              />
+              <Text style={[styles.bottomButtonText, saved && styles.savedText]}>
+                {saved ? 'Saved' : 'Save'}
+              </Text>
+            </>
+          )}
+        </TouchableOpacity>
+        
+        <TouchableOpacity
+          style={styles.reviewButton}
+          onPress={handleWriteReview}
+        >
+          <Ionicons name="star" size={18} color="#FFF" />
+          <Text style={styles.reviewButtonText}>Review</Text>
+        </TouchableOpacity>
+        
+        <TouchableOpacity
+          style={styles.shareButton}
+          onPress={async() => {
+            try {
+              await Share.share({
+                message: `Check out this product on Campus Sphere! https://www.campussphere.net/store/product/${data?.product_id}`,
+                title: data?.title,
+              });
+            } catch (error) {
+              console.error(error);
+            }
+          }}
+        >
+          <Ionicons name={'share-outline'} size={18} color={'#FFF'} />
+          <Text style={styles.shareButtonText}>Share</Text>
+        </TouchableOpacity>
+      </LinearGradient>
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#FFF',
+  },
+  header: {
+    position: 'absolute',
+    top: Platform.OS === 'ios' ? 50 : 30,
+    left: 20,
+    zIndex: 10,
+  },
+  backButton: {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    borderRadius: 20,
+    padding: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  scrollContainer: {
+    paddingBottom: 100,
+  },
+  imageContainer: {
+    width: '100%',
+    height: 350,
+    position: 'relative',
+  },
+  imgContainer: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#000',
+  },
+  productImage: {
+    width: '100%',
+    height: '100%',
+  },
+  carouselIndicator: {
+    position: 'absolute',
+    bottom: 15,
+    right: 15,
+    zIndex: 2,
+  },
+  carouselPill: {
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    borderRadius: 15,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+  },
+  carouselText: {
+    color: '#FFF',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  actionButtons: {
+    position: 'absolute',
+    top: 15,
+    right: 15,
+    zIndex: 2,
+  },
+  actionButton: {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    borderRadius: 20,
+    padding: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 40,
+    height: 40,
+  },
+  contentContainer: {
+    padding: 12,
+  },
+  priceContainer: {
+    marginVertical: 20,
+    paddingBottom: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#EEE',
+  },
+  actionRow: {
+    flexDirection: 'row',
+    gap: 12,
+    justifyContent: 'center',
+  },
+  wpButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    backgroundColor: '#25D366',
+    borderRadius: 10,
+    flex: 1,
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  wpText: {
+    color: '#FFF',
+    fontWeight: '600',
+    marginLeft: 8,
+    fontSize: 14,
+  },
+  callButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    backgroundColor: '#FF4500',
+    borderRadius: 10,
+    flex: 1,
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  callText: {
+    color: '#FFF',
+    fontWeight: '600',
+    marginLeft: 8,
+    fontSize: 14,
+  },
+  section: {
+    marginBottom: 24,
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    marginBottom: 16,
+    color: '#2D3436',
+  },
+  safetyTips: {
+    backgroundColor: '#FFF8F6',
+    padding: 20,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#FFE5DE',
+    marginTop: 16,
+  },
+  safetyHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  safetyTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#FF4500',
+    marginLeft: 8,
+  },
+  safetyList: {
+    gap: 12,
+  },
+  safetyItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  safetyText: {
+    fontSize: 14,
+    color: '#666',
+    marginLeft: 8,
+  },
+  writeReviewButton: {
+    backgroundColor: '#FFA500',
+    borderRadius: 10,
+    padding: 16,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  writeReviewText: {
+    color: '#FFF',
+    fontWeight: '700',
+    fontSize: 16,
+    marginLeft: 8,
+  },
+  bottomBar: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    padding: 12,
+    borderTopWidth: 1,
+    borderTopColor: '#EEE',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 10,
+    gap: 8,
+  },
+  saveButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    borderWidth: 1,
+    borderColor: '#DDD',
+    borderRadius: 10,
+    flex: 1,
+    backgroundColor: '#FFF',
+  },
+  saveButtonActive: {
+    borderColor: '#FF4500',
+    backgroundColor: '#FFF8F6',
+  },
+  bottomButtonText: {
+    marginLeft: 6,
+    fontWeight: '600',
+    color: '#666',
+    fontSize: 12,
+  },
+  savedText: {
+    color: '#FF4500',
+  },
+  reviewButton: {
+    flex: 1,
+    backgroundColor: '#FFA500',
+    borderRadius: 10,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  reviewButtonText: {
+    color: '#FFF',
+    marginLeft: 6,
+    fontWeight: '700',
+    fontSize: 12,
+  },
+  shareButton: {
+    flex: 1,
+    backgroundColor: '#FF4500',
+    borderRadius: 10,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  shareButtonText: {
+    color: '#FFF',
+    marginLeft: 6,
+    fontWeight: '700',
+    fontSize: 12,
+  },
+});

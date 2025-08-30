@@ -50,6 +50,7 @@ import AdvancedSearchBar from "../../store/components/Home/Search";
 import { set_sub_modal } from "../../../../../../redux/sub";
 import ServiceDetailScreen from "../../store/screens/ServiceRoom";
 import PaymentScreen from "../../store/utils/Paystack";
+import ReviewSubmissionScreen from "../../store/screens/Review";
 const HomeStack = createNativeStackNavigator();
 export function HomeStackScreen() {
    
@@ -139,6 +140,29 @@ export function HomeStackScreen() {
             component={PaymentScreen}
             options={{ headerShown: false }}
         />
+        <HomeStack.Screen  options={{
+                header: ({navigation}) =>
+                (
+                    <>
+                        <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', paddingHorizontal: 10, width: '100%', backgroundColor: '#FFF', alignItems: 'center', padding: '10px' }}>
+                            <TouchableOpacity onPress={e=> navigation.goBack()} style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 2.5}}>
+                                <Ionicons name={"chevron-back"} size={25} /> 
+                            </TouchableOpacity>
+                            <View>
+                                <Text style={{
+                                    fontSize: 20,
+                                    fontWeight: 'bold', 
+                                    color: '#111',
+                                }}>Publish your review</Text>
+                                
+                            </View>
+                        </View>
+                    
+                        
+                    </> 
+                ),
+            // headerShown: false, 
+        }}  name="user-review-submission" component={ReviewSubmissionScreen} />
 
         <HomeStack.Screen  options={{
                 header: ({navigation}) =>
