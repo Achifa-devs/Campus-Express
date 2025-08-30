@@ -57,7 +57,8 @@ export default function Product() {
   };
 
 
-  async function AddContactClick(params) {
+  async function AddContactClick() {
+    setLoading(true)
     try {
       let request = await axios.post('http://192.168.0.4:9090/contact-click', {product_id: data?.product_id, user_id: user?.user_id})
       let res = request?.data;
@@ -173,8 +174,11 @@ export default function Product() {
   const handleWhatsAppChat = async() => {
     let Analytics = await AddContactClick();
     if(!Analytics){
-      return Alert.alert('Error', 'Please ensure you have stable network.');
+      setLoading(false)
+
+      return Alert.alert('Error', 'Please ensure you have stable network and try again.');
     }
+    setLoading(false)
     if (!seller?.phone) {
       return Alert.alert('Error', 'Seller phone number is missing.');
     }
@@ -206,10 +210,12 @@ export default function Product() {
 
   const handlePhoneCall = async() => {
     let Analytics = await AddContactClick();
-    console.log('Analytics:', Analytics)
     if(!Analytics){
-      return Alert.alert('Error', 'Please ensure you have stable network.');
+      setLoading(false)
+
+      return Alert.alert('Error', 'Please ensure you have stable network and try again.');
     }
+    setLoading(false)
     if (!seller?.phone) return Alert.alert('Error', 'Seller phone number is missing.');
   
     const callURL = `tel:+234${seller.phone}`;
@@ -271,197 +277,217 @@ export default function Product() {
   const images = files && files.length > 0 ? files : [data?.thumbnail_id];
 
   return (
-    <SafeAreaView style={styles.safeArea}> 
-      <View style={styles.header}>
-        <TouchableOpacity 
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Ionicons name="arrow-back" size={24} color="#FFF" />
-        </TouchableOpacity>
-      </View>
+    <>
       
-      <Animated.ScrollView
-        style={{ opacity: fadeAnim }}
-        contentContainerStyle={styles.scrollContainer}
-      >
-        {/* Image Gallery */}
-        <View style={styles.imageContainer}>
-          <ScrollView
-            horizontal 
-            pagingEnabled
-            showsHorizontalScrollIndicator={false}
-            style={{ width }}
-            onScroll={onScroll}
-            scrollEventThrottle={16}
-          >
-            {images.map((image, index) => (
-              <TouchableOpacity 
-                onPress={() => {
-                  navigation.navigate('user-product-images', {
-                    files: images,
-                    index: currentIndex,
-                  });
-                }} 
-                key={index} 
-                style={[styles.imgContainer, { width }]}
-              >
-                <Image
-                  source={{ uri: image?.secure_url || image }}
-                  style={styles.productImage}
-                  resizeMode="cover"
-                />
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-          
-          <View style={styles.carouselIndicator}>
-            <View style={styles.carouselPill}>
-              <Text style={styles.carouselText}>
-                {currentIndex + 1}/{images.length}
-              </Text>
-            </View>
+      <SafeAreaView style={styles.safeArea}> 
+        {loading&&
+          <View style={{
+            height: '100%', 
+            width: '100%',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            zIndex: 1000,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#FFF8F6',
+            opacity: .5
+          }}>
+            <ActivityIndicator size={'large'} color={'#FF4500'}></ActivityIndicator>
           </View>
-
-          <View style={styles.actionButtons}>
-            <TouchableOpacity 
-              style={styles.actionButton}
-              onPress={handleSave}
-            >
-              {favLoading ? (
-                <ActivityIndicator size="small" color="#FF4500" />
-              ) : (
-                <Ionicons 
-                  name={saved ? "heart" : "heart-outline"} 
-                  size={24} 
-                  color={saved ? "#FF4500" : "#FFF"} 
-                />
-              )}
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        {/* Product Info */}
-        <View style={styles.contentContainer}>
-          <Top data={data} />
-          
-          {/* Price and Actions */}
-          <View style={styles.priceContainer}>
-            <View style={styles.actionRow}>
-
-              <TouchableOpacity style={styles.wpButton} onPress={handleWhatsAppChat}>
-                <WpSvg height={20} width={20} fill="#FFF" />
-                <Text style={styles.wpText}>Chat</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.callButton} onPress={handlePhoneCall}>
-                <CallSvg height={18} width={18} fill="#FFF" />
-                <Text style={styles.callText}>Call</Text>
-              </TouchableOpacity>
-
-            </View>
-          </View>
-
-          {/* Description */}
-          {data.description && (
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Description</Text>
-              <Mid description={data?.description} />
-            </View>
-          )}
-
-          {/* Seller Info */}
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Seller Information</Text>
-            <Btm user_id={data?.user_id} updateUser={updateUser} updateShop={updateShop} updateReview={updateReview} navigation={navigation} />
-          </View>
-
-          {/* Safety Tips */} 
-          <View style={styles.safetyTips}>
-            <View style={styles.safetyHeader}>
-              <Ionicons name="shield-checkmark" size={20} color="#FF4500" />
-              <Text style={styles.safetyTitle}>Safety Tips</Text>
-            </View>
-            <View style={styles.safetyList}>
-              <View style={styles.safetyItem}>
-                <Ionicons name="location" size={16} color="#666" />
-                <Text style={styles.safetyText}>Meet seller in public places</Text>
-              </View>
-              <View style={styles.safetyItem}>
-                <Ionicons name="search" size={16} color="#666" />
-                <Text style={styles.safetyText}>Check the item before you buy</Text>
-              </View>
-              <View style={styles.safetyItem}>
-                <Ionicons name="card" size={16} color="#666" />
-                <Text style={styles.safetyText}>Pay only after collecting the item</Text>
-              </View>
-            </View>
-          </View>
-
-          {/* Write Review Button - Added inside scroll view for visibility */}
+        }
+        <View style={styles.header}>
           <TouchableOpacity 
-            style={styles.writeReviewButton}
-            onPress={handleWriteReview}
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
           >
-            <Ionicons name="star" size={20} color="#FFF" />
-            <Text style={styles.writeReviewText}>Write a Review</Text>
+            <Ionicons name="arrow-back" size={24} color="#FFF" />
           </TouchableOpacity>
         </View>
-      </Animated.ScrollView>
+        
+        <Animated.ScrollView
+          style={{ opacity: fadeAnim }}
+          contentContainerStyle={styles.scrollContainer}
+        >
+          {/* Image Gallery */}
+          <View style={styles.imageContainer}>
+            <ScrollView
+              horizontal 
+              pagingEnabled
+              showsHorizontalScrollIndicator={false}
+              style={{ width }}
+              onScroll={onScroll}
+              scrollEventThrottle={16}
+            >
+              {images.map((image, index) => (
+                <TouchableOpacity 
+                  onPress={() => {
+                    navigation.navigate('user-product-images', {
+                      files: images,
+                      index: currentIndex,
+                    });
+                  }} 
+                  key={index} 
+                  style={[styles.imgContainer, { width }]}
+                >
+                  <Image
+                    source={{ uri: image?.secure_url || image }}
+                    style={styles.productImage}
+                    resizeMode="cover"
+                  />
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+            
+            <View style={styles.carouselIndicator}>
+              <View style={styles.carouselPill}>
+                <Text style={styles.carouselText}>
+                  {currentIndex + 1}/{images.length}
+                </Text>
+              </View>
+            </View>
 
-      {/* Fixed Bottom Bar */}
-      <LinearGradient
-        colors={['#FFF', '#FFF']}
-        style={styles.bottomBar}
-        start={{x: 0, y: 0}}
-        end={{x: 0, y: 1}}
-      >
-        <TouchableOpacity 
-          style={[styles.saveButton, saved && styles.saveButtonActive]}
-          onPress={handleSave}
-          disabled={favLoading}
+            <View style={styles.actionButtons}>
+              <TouchableOpacity 
+                style={styles.actionButton}
+                onPress={handleSave}
+              >
+                {favLoading ? (
+                  <ActivityIndicator size="small" color="#FF4500" />
+                ) : (
+                  <Ionicons 
+                    name={saved ? "heart" : "heart-outline"} 
+                    size={24} 
+                    color={saved ? "#FF4500" : "#FFF"} 
+                  />
+                )}
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {/* Product Info */}
+          <View style={styles.contentContainer}>
+            <Top data={data} />
+            
+            {/* Price and Actions */}
+            <View style={styles.priceContainer}>
+              <View style={styles.actionRow}>
+
+                <TouchableOpacity style={styles.wpButton} onPress={handleWhatsAppChat}>
+                  <WpSvg height={20} width={20} fill="#FFF" />
+                  <Text style={styles.wpText}>Chat</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.callButton} onPress={handlePhoneCall}>
+                  <CallSvg height={18} width={18} fill="#FFF" />
+                  <Text style={styles.callText}>Call</Text>
+                </TouchableOpacity>
+
+              </View>
+            </View>
+
+            {/* Description */}
+            {data.description && (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Description</Text>
+                <Mid description={data?.description} />
+              </View>
+            )}
+
+            {/* Seller Info */}
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Seller Information</Text>
+              <Btm user_id={data?.user_id} updateUser={updateUser} updateShop={updateShop} updateReview={updateReview} navigation={navigation} />
+            </View>
+
+            {/* Safety Tips */} 
+            <View style={styles.safetyTips}>
+              <View style={styles.safetyHeader}>
+                <Ionicons name="shield-checkmark" size={20} color="#FF4500" />
+                <Text style={styles.safetyTitle}>Safety Tips</Text>
+              </View>
+              <View style={styles.safetyList}>
+                <View style={styles.safetyItem}>
+                  <Ionicons name="location" size={16} color="#666" />
+                  <Text style={styles.safetyText}>Meet seller in public places</Text>
+                </View>
+                <View style={styles.safetyItem}>
+                  <Ionicons name="search" size={16} color="#666" />
+                  <Text style={styles.safetyText}>Check the item before you buy</Text>
+                </View>
+                <View style={styles.safetyItem}>
+                  <Ionicons name="card" size={16} color="#666" />
+                  <Text style={styles.safetyText}>Pay only after collecting the item</Text>
+                </View>
+              </View>
+            </View>
+
+            {/* Write Review Button - Added inside scroll view for visibility */}
+            <TouchableOpacity 
+              style={styles.writeReviewButton}
+              onPress={handleWriteReview}
+            >
+              <Ionicons name="star" size={20} color="#FFF" />
+              <Text style={styles.writeReviewText}>Write a Review</Text>
+            </TouchableOpacity>
+          </View>
+        </Animated.ScrollView>
+
+        {/* Fixed Bottom Bar */}
+        <LinearGradient
+          colors={['#FFF', '#FFF']}
+          style={styles.bottomBar}
+          start={{x: 0, y: 0}}
+          end={{x: 0, y: 1}}
         >
-          {favLoading ? (
-            <ActivityIndicator size="small" color="#FF4500" />
-          ) : (
-            <>
-              <Ionicons 
-                name={saved ? "heart" : "heart-outline"} 
-                size={20} 
-                color={saved ? "#FF4500" : "#666"} 
-              />
-              <Text style={[styles.bottomButtonText, saved && styles.savedText]}>
-                {saved ? 'Saved' : 'Save'}
-              </Text>
-            </>
-          )}
-        </TouchableOpacity>
-        
-        <TouchableOpacity
-          style={styles.reviewButton}
-          onPress={handleWriteReview}
-        >
-          <Ionicons name="star" size={18} color="#FFF" />
-          <Text style={styles.reviewButtonText}>Review</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity
-          style={styles.shareButton}
-          onPress={async() => {
-            try {
-              await Share.share({
-                message: `Check out this product on Campus Sphere! https://www.campussphere.net/store/product/${data?.product_id}`,
-                title: data?.title,
-              });
-            } catch (error) {
-              console.error(error);
-            }
-          }}
-        >
-          <Ionicons name={'share-outline'} size={18} color={'#FFF'} />
-          <Text style={styles.shareButtonText}>Share</Text>
-        </TouchableOpacity>
-      </LinearGradient>
-    </SafeAreaView>
+          <TouchableOpacity 
+            style={[styles.saveButton, saved && styles.saveButtonActive]}
+            onPress={handleSave}
+            disabled={favLoading}
+          >
+            {favLoading ? (
+              <ActivityIndicator size="small" color="#FF4500" />
+            ) : (
+              <>
+                <Ionicons 
+                  name={saved ? "heart" : "heart-outline"} 
+                  size={20} 
+                  color={saved ? "#FF4500" : "#666"} 
+                />
+                <Text style={[styles.bottomButtonText, saved && styles.savedText]}>
+                  {saved ? 'Saved' : 'Save'}
+                </Text>
+              </>
+            )}
+          </TouchableOpacity>
+          
+          <TouchableOpacity
+            style={styles.reviewButton}
+            onPress={handleWriteReview}
+          >
+            <Ionicons name="star" size={18} color="#FFF" />
+            <Text style={styles.reviewButtonText}>Review</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity
+            style={styles.shareButton}
+            onPress={async() => {
+              try {
+                await Share.share({
+                  message: `Check out this product on Campus Sphere! https://www.campussphere.net/store/product/${data?.product_id}`,
+                  title: data?.title,
+                });
+              } catch (error) {
+                console.error(error);
+              }
+            }}
+          >
+            <Ionicons name={'share-outline'} size={18} color={'#FFF'} />
+            <Text style={styles.shareButtonText}>Share</Text>
+          </TouchableOpacity>
+        </LinearGradient>
+      </SafeAreaView>
+    </>
   );
 }
 

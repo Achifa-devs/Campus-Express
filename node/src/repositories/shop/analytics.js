@@ -130,8 +130,7 @@ export async function createContactClick({ product_id, user_id }) {
     [shortId.generate(), product_id, user_id, date]
   );
     
-  let response = (result?.rowCount);
-  return response;
+  return (result?.rowCount);
 };
 
 // Find product view by ID

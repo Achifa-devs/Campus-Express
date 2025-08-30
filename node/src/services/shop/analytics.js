@@ -118,6 +118,8 @@ export const getProductType = async (payload) => {
 // 
 export const postContactClick = async (payload) => {
   const { product_id, user_id } = payload;
+
+  console.log('data: ', product_id, user_id)
   try {
     // Business logic
     let existingView = await findContactClickId({ product_id, user_id }); 
