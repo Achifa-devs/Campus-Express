@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import { Alert, Image, StyleSheet, TouchableOpacity, View, Dimensions } from 'react-native'
+import { Alert, Image, StyleSheet, TouchableOpacity, View, Dimensions, ActivityIndicator } from 'react-native'
 import { ScrollView, Text, TextInput } from 'react-native'
 import Ionicons  from 'react-native-vector-icons/Ionicons';
 import ReviewSvg from '../../../media/assets/review-svgrepo-com.svg'
@@ -11,16 +11,20 @@ import StarRating from 'react-native-star-rating-widget';
 import axios from 'axios';
 import LinearGradient from 'react-native-linear-gradient';
 import { set_shop } from '../../../../../../../redux/shop';
+import js_ago from 'js-ago';
+import { launchImageLibrary } from 'react-native-image-picker';
 
 export default function Shopile() {
     let [review, set_review] = useState([])
     let { user } = useSelector(s => s.user)
     let [list, set_list] = useState([])
+    let [logo, set_logo] = useState('')
     let [title, set_title] = useState('')
     let [description, set_description] = useState('')
     let navigation = useNavigation()
     const {shop} = useSelector(s => s.shop);
     const { width } = Dimensions.get('window');
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
       axios.get(`https://cs-server-olive.vercel.app/vendor/shop-reviews?shop_id=${shop?.shop_id}`)
@@ -29,30 +33,109 @@ export default function Shopile() {
       }).catch(err=>console.log(err))
     }, [])
 
+    useEffect(() => {
+      const newShop = {...shop};
+      newShop.logo_url = logo;
+      dispatch(set_shop(newShop))
+    }, [logo])
+
     const dispatch = useDispatch()
 
     function updateShop() {
-        axios.post(`http://192.168.0.4:9090/vendor/update-shop`, {
+        axios.post(`https://cs-server-olive.vercel.app/vendor/update-shop`, {
             title,
             description,
-            user_id: user?.user_id
+            user_id: user?.user_id,
+            logo
         })
         .then((response) => {
             console.log('response: ', response?.data)
-            dispatch(set_shop(response?.data))
+            dispatch(set_shop(response?.data?.data))
         }).catch(err=>console.log(err))
     }
 
 
    
-    const [modalVisible, setModalVisible] = useState(false);
-    const [isCategory, setIsCategory] = useState(true);
+    const [modalVisible, setModalVisible] = useState(true);
+    const [isCategory, setIsCategory] = useState(false);
        
     const toggleModal = (data) => {
         setIsCategory(data)
         setModalVisible(!modalVisible);
     };
 
+
+    const selectShopLogo = () => {
+        const options = {
+          mediaType: 'photo',
+          quality: 0.8,
+          maxWidth: 500,
+          maxHeight: 500,
+        };
+    
+        launchImageLibrary(options, async (response) => {
+          if (response.didCancel) {
+            console.log('User cancelled image picker');
+          } else if (response.errorCode) {
+            console.log('ImagePicker Error: ', response.errorMessage);
+          } else if (response.assets && response.assets.length > 0) {
+            const image = response.assets[0];
+            await uploadToServer(image);
+          }
+        });
+    };
+    
+    const uploadToServer = async (image) => {
+    try {
+        setIsLoading(true); // Correct loading state
+        const formData = new FormData();
+        formData.append('file', {
+            uri: image.uri,
+            name: image.fileName || `photo_${Date.now()}.jpg`,
+            type: image.type || 'image/jpeg',
+        });
+
+        const response = await axios.post('https://cs-server-olive.vercel.app/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        });
+
+        const result = response.data;
+        console.log(result.data.url);
+
+        if (result.success && result.data.url) {
+            set_logo(result.data.url);
+        }
+    } catch (err) {
+        console.error('Upload failed:', err.message);
+    } finally {
+        setIsLoading(false); // Correct loading state
+    }
+    };
+
+    const deleteFromServer = async (url) => {
+        try {
+            setIsLoading(true);
+            const response = await axios.post('https://cs-server-olive.vercel.app/delete', {
+                url
+            });
+
+            if (response.data && response.data.data.result === "ok") {
+                selectShopLogo()
+            }
+        } catch (err) {
+            console.error('Upload failed:', err.message);
+
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    if (isLoading) {
+        return (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#FF4500" />
+          </View>
+        );
+    }
   return (
     <> 
         <BottomModal visible={modalVisible} onClose={toggleModal}>
@@ -66,10 +149,113 @@ export default function Shopile() {
                     <Text style={styles.infoText}>You are trying to update your shop name and description.</Text>
                     <Text style={styles.learnMoreText}>Learn more in our help articles.</Text>
                 </View>
-               
+            
+                {/* Image Upload Section */}
+                <View style={styles.inputGroup}>
+                    <Text style={styles.inputLabel}>Shop Logo</Text>
+                    <View style={{
+                        alignItems: 'center',
+                        marginBottom: 20,
+                    }}>
+                        <TouchableOpacity 
+                            style={{
+                                width: 100,
+                                height: 100,
+                                borderRadius: 50,
+                                backgroundColor: '#F8F9FA',
+                                borderWidth: 2,
+                                borderColor: '#E9ECEF',
+                                borderStyle: 'dashed',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                marginBottom: 12,
+                            }}
+                            onPress={() => {
+                                selectShopLogo()
+                                console.log('Open image picker');
+                            }}
+                        >
+                            {shop?.logo_url ? (
+                                <Image 
+                                    source={{ uri: shop.logo_url }} 
+                                    style={{
+                                        width: 96,
+                                        height: 96,
+                                        borderRadius: 48,
+                                    }}
+                                />
+                            ) : (
+                                <Ionicons name="camera" size={32} color="#6C757D" />
+                            )}
+                        </TouchableOpacity>
+                        
+                        <TouchableOpacity 
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                backgroundColor: '#FF4500',
+                                paddingHorizontal: 16,
+                                paddingVertical: 10,
+                                borderRadius: 8,
+                            }}
+                            onPress={async() => {
+                                // Add your image upload logic here
+                                console.log('Upload image');
+                                const result = await deleteFromServer(shop?.logo_url)
+                            }}
+                        >
+                            <Ionicons name="cloud-upload" size={18} color="#FFF" />
+                            <Text style={{
+                                color: '#FFF',
+                                fontWeight: '600',
+                                marginLeft: 8,
+                                fontSize: 14,
+                            }}>
+                                {shop?.logo_url ? 'Change Logo' : 'Upload Logo'}
+                            </Text>
+                        </TouchableOpacity>
+                        
+                        {shop?.logo_url && (
+                            <TouchableOpacity 
+                                style={{
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    backgroundColor: '#DC3545',
+                                    paddingHorizontal: 12,
+                                    paddingVertical: 8,
+                                    borderRadius: 6,
+                                    marginTop: 8,
+                                }}
+                                onPress={() => {
+                                    // Add your remove image logic here
+                                    console.log('Remove image');
+                                }}
+                            >
+                                <Ionicons name="trash" size={14} color="#FFF" />
+                                <Text style={{
+                                    color: '#FFF',
+                                    fontWeight: '500',
+                                    marginLeft: 6,
+                                    fontSize: 12,
+                                }}>
+                                    Remove Logo
+                                </Text>
+                            </TouchableOpacity>
+                        )}
+                        
+                        {/* <Text style={{
+                            fontSize: 12,
+                            color: '#6C757D',
+                            textAlign: 'center',
+                            marginTop: 8,
+                        }}>
+                            Recommended: 300×300 pixels, JPG or PNG
+                        </Text> */}
+                    </View>
+                </View>
+
                 {!isCategory ? (
                     <>
-                        
                         <View style={styles.inputGroup}>
                             <Text style={styles.inputLabel}>Shop name</Text>
                             <TextInput 
@@ -154,7 +340,7 @@ export default function Shopile() {
                     <Text style={styles.setupButtonText}>Set up</Text>
                 </TouchableOpacity>
             </ScrollView>
-        </BottomModal> 
+        </BottomModal>
         
         <View style={styles.container}>
             <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
@@ -170,6 +356,7 @@ export default function Shopile() {
                         <Ionicons name="storefront" size={40} color="#FFF" />
                         
                         <Text style={styles.bannerText}>{shop?.title}</Text>
+                        <Text style={[styles.verificationText, {color: '#fff'}]}>{user?.campus}</Text>
                     </View>
                 </LinearGradient>
 
@@ -595,6 +782,17 @@ const styles = StyleSheet.create({
         lineHeight: 22,
         marginTop: 8,
         marginBottom: 12,
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#F8F9FA',
+    },
+    loadingText: {
+        marginTop: 16,
+        fontSize: 16,
+        color: '#666',
     },
     learnMoreText: {
         fontSize: 16,

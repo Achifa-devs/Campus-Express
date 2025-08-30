@@ -58,11 +58,11 @@ export const postNewShop = async (payload) => {
 
 
 export const postUpdateShop = async (payload) => {
-    const { title, description, user_id } = payload;
+    const { title, description, user_id, logo } = payload;
 
     try {
       // Business logic
-      const response = await UpdateShop({ title, description, user_id });
+      const response = await UpdateShop({ title, description, user_id, logo });
       return response;
     } catch (error) {
       console.log(error)

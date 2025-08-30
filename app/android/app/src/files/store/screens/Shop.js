@@ -31,6 +31,8 @@ export default function Shop() {
                     <Ionicons name="storefront" size={40} color="#FFF" />
 
                     <Text style={styles.bannerText}>{shop?.title}</Text>
+                    <Text style={[styles.verificationText, {color: '#fff'}]}>{user?.campus}</Text>
+                    
                 </View>
             </LinearGradient>
 

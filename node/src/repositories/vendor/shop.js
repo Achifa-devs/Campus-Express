@@ -93,17 +93,15 @@ export async function createShop({
 
 
 // Update shop 
-export async function UpdateShop({ user_id, title, description }) {
+export async function UpdateShop({ user_id, title, description, logo }) {
   try {
     const result = await pool.query(
       `UPDATE shops 
-      SET title = $2, description = $3 
+      SET title = $2, description = $3, logo_url = $4
       WHERE user_id = $1 
       RETURNING *`,
-      [user_id, title, description]
+      [user_id, title, description, logo]
     );
-  
-    console.log(user_id, title, description)
     return result.rows[0]; // this gives you the updated item
   } catch (error) {
     console.log(error)
