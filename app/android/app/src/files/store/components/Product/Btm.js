@@ -7,7 +7,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import ReviewSvg from '../../../media/assets/review-svgrepo-com.svg'
 import LinearGradient from 'react-native-linear-gradient';
 
-export default function Btm({ updateUser, user_id, navigation, updateReview }) {
+export default function Btm({ updateUser, user_id, navigation, updateReview, updateShop }) {
     let [data, setData] = useState('')
     let [reviews, setReviews] = useState(null)
     let [shop, setShop] = useState('')
@@ -76,6 +76,9 @@ export default function Btm({ updateUser, user_id, navigation, updateReview }) {
     useEffect(() => {
       updateReview(reviews?[...reviews]: null)
     }, [reviews])
+    useEffect(() => {
+      updateShop(shop?shop: null)
+    }, [shop])
     
     // Filter reviews based on active filter
     const filteredReviews = activeFilter === 'all' 

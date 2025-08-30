@@ -10,16 +10,22 @@ import {
   Alert,
   KeyboardAvoidingView, 
   Platform,
-  Image
+  Image,
+  ActivityIndicator,
+  Dimensions
 } from 'react-native';
 import StarRating from 'react-native-star-rating-widget';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useSelector } from 'react-redux';
 
 const ReviewSubmissionScreen = ({ navigation }) => {
   const [rating, setRating] = useState(0);
   const [reviewType, setReviewType] = useState('');
   const [comment, setComment] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const {product, seller, shop} = useRoute()?.params;
+  const { user } = useSelector(s => s?.user);
+  
 
   const reviewOptions = [
     { id: 'poor', label: 'Poor', icon: 'sad-outline', color: '#e84118' },
@@ -46,47 +52,57 @@ const ReviewSubmissionScreen = ({ navigation }) => {
 
     setIsSubmitting(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
-      Alert.alert(
-        'Review Submitted', 
-        'Thank you for your feedback!',
-        [
-          {
-            text: 'OK',
-            onPress: () => navigation.goBack()
-          }
-        ]
-      );
-    }, 1500);
+    // // Simulate API call
+    // setTimeout(() => {
+    //   setIsSubmitting(false);
+    //   Alert.alert(
+    //     'Review Submitted', 
+    //     'Thank you for your feedback!',
+    //     [
+    //       {
+    //         text: 'OK',
+    //         onPress: () => navigation.goBack()
+    //       }
+    //     ]
+    //   );
+    // }, 1500);
 //   const { shop_id, user_id, order_id, buyer_id, review, date, comment, rating } = payload;
 
-    fetch(`https://cs-server-olive.vercel.app/reviews`, {
+    fetch(`https://cs-server-olive.vercel.app/review`, {
         method: 'post',
 
         headers: {
         "Content-Type": "Application/json" 
         },
         body: JSON.stringify({
-            shop_id: shop?.shop_id, order_id: '0000', buyer_id: user?.user_id, review: reviewType, date: new Date(), comment, rating
+            shop_id: shop?.shop_id, product_id: product?.product_id, buyer_id: user?.user_id, review: reviewType, date: new Date(), comment, rating
         })
     })
     .then(async (result) => {
-        let response = await result.json();
+        let response = await result.json(); 
         console.log("response: ", response)
-        setReviews(response?.data);
-        
+        setIsSubmitting(false);
+
+        Alert.alert(
+        'Review Submitted', 
+        'Thank you for your feedback!',
+        [
+            {
+            text: 'OK',
+            // onPress: () => navigation.goBack()
+            }
+        ]
+        );
     })
     .catch((err) => {
         Alert.alert('Network error, please try again.');
+        setIsSubmitting(false);
         console.log(err);
     });
   };
 
   const selectedReviewOption = reviewOptions.find(option => option.id === reviewType);
 
-  const {product, seller} = useRoute()?.params
 
   return (
     <KeyboardAvoidingView 
@@ -94,100 +110,116 @@ const ReviewSubmissionScreen = ({ navigation }) => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
     >
-      <View style={styles.contentContainer}>
-        <ScrollView 
-          contentContainerStyle={styles.scrollContainer}
-          showsVerticalScrollIndicator={false}
-        >
-          <View style={styles.productCard}>
-            <Image 
-              source={{ uri: product?.thumbnail_id }} 
-              style={styles.productImage}
-            />
-            <View style={styles.productInfo}>
-              <Text style={styles.productName}>{product?.title}</Text>
-              <Text style={styles.productPrice}>₦{new Intl.NumberFormat('en-US').format(product?.price)}</Text>
+        {
+
+            isSubmitting&&
+            <View style={{
+                flex: 1,
+                width: Dimensions.get('window').width,
+                height: Dimensions.get('window').height,
+                justifyContent: 'center',
+                alignItems: 'center',
+                position: 'absolute', top: 0, left: 0, zIndex: 100,
+                backgroundColor: 'rgba(255, 251, 246, 0.2)', // Fully transparent
+            }}>
+                <ActivityIndicator size="large" color="#FF4500" />
             </View>
-          </View>
-
-          <View style={styles.ratingSection}>
-            <Text style={styles.sectionTitle}>Overall Rating</Text>
-            <View style={styles.starContainer}>
-              <StarRating
-                rating={rating}
-                onChange={setRating}
-                starSize={40}
-                color="#FFD700"
-                starStyle={styles.starStyle}
-              />
-              <Text style={styles.ratingText}>
-                {rating === 0 ? 'Tap stars to rate' : `${rating.toFixed(1)} / 5.0`}
-              </Text>
+        }
+        <View style={styles.contentContainer}>
+            <ScrollView 
+            contentContainerStyle={styles.scrollContainer}
+            showsVerticalScrollIndicator={false}
+            >
+            <View style={styles.productCard}>
+                <Image 
+                source={{ uri: product?.thumbnail_id }} 
+                style={styles.productImage}
+                />
+                <View style={styles.productInfo}>
+                <Text style={styles.productName}>{product?.title}</Text>
+                <Text style={styles.productPrice}>₦{new Intl.NumberFormat('en-US').format(product?.price)}</Text>
+                </View>
             </View>
-          </View>
 
-          <View style={styles.reviewTypeSection}>
-            <Text style={styles.sectionTitle}>How was your experience?</Text>
-            <View style={styles.reviewOptions}>
-              {reviewOptions.map(option => (
-                <TouchableOpacity
-                  key={option.id}
-                  style={[
-                    styles.reviewOption,
-                    reviewType === option.id && styles.selectedReviewOption,
-                    reviewType === option.id && { backgroundColor: option.color }
-                  ]}
-                  onPress={() => setReviewType(option.id)}
-                >
-                  <Ionicons 
-                    name={option.icon} 
-                    size={20} 
-                    color={reviewType === option.id ? '#fff' : option.color} 
-                  />
-                  <Text style={[
-                    styles.reviewOptionText,
-                    reviewType === option.id && styles.selectedReviewOptionText
-                  ]}>
-                    {option.label}
-                  </Text>
-                </TouchableOpacity>
-              ))}
+            <View style={styles.ratingSection}>
+                <Text style={styles.sectionTitle}>Overall Rating</Text>
+                <View style={styles.starContainer}>
+                <StarRating
+                    rating={rating}
+                    onChange={setRating}
+                    starSize={40}
+                    color="#FFD700"
+                    starStyle={styles.starStyle}
+                />
+                <Text style={styles.ratingText}>
+                    {rating === 0 ? 'Tap stars to rate' : `${rating.toFixed(1)} / 5.0`}
+                </Text>
+                </View>
             </View>
-          </View>
 
-          <View style={styles.commentSection}>
-            <Text style={styles.sectionTitle}>Share your experience</Text>
-            <TextInput
-              style={styles.commentInput}
-              multiline
-              numberOfLines={6}
-              placeholder="What did you like or dislike? How was the product quality, delivery experience, etc.?"
-              value={comment}
-              onChangeText={setComment}
-              textAlignVertical="top"
-            />
-            <Text style={styles.charCount}>{comment.length}/500 characters</Text>
-          </View>
-        </ScrollView>
+            <View style={styles.reviewTypeSection}>
+                <Text style={styles.sectionTitle}>How was your experience?</Text>
+                <View style={styles.reviewOptions}>
+                {reviewOptions.map(option => (
+                    <TouchableOpacity
+                    key={option.id}
+                    style={[
+                        styles.reviewOption,
+                        reviewType === option.id && styles.selectedReviewOption,
+                        reviewType === option.id && { backgroundColor: option.color }
+                    ]}
+                    onPress={() => setReviewType(option.id)}
+                    >
+                    <Ionicons 
+                        name={option.icon} 
+                        size={20} 
+                        color={reviewType === option.id ? '#fff' : option.color} 
+                    />
+                    <Text style={[
+                        styles.reviewOptionText,
+                        reviewType === option.id && styles.selectedReviewOptionText
+                    ]}>
+                        {option.label}
+                    </Text>
+                    </TouchableOpacity>
+                ))}
+                </View>
+            </View>
 
-        {/* Fixed Submit Button at Bottom */}
-        <View style={styles.fixedButtonContainer}>
-          <TouchableOpacity
-            style={[
-              styles.submitButton,
-              isSubmitting && styles.submitButtonDisabled
-            ]}
-            onPress={handleSubmit}
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? (
-              <Text style={styles.submitButtonText}>Submitting...</Text>
-            ) : (
-              <Text style={styles.submitButtonText}>Submit Review</Text>
-            )}
-          </TouchableOpacity>
+            <View style={styles.commentSection}>
+                <Text style={styles.sectionTitle}>Share your experience</Text>
+                <TextInput
+                style={styles.commentInput}
+                multiline
+                numberOfLines={6}
+                placeholder="What did you like or dislike? How was the product quality, delivery experience, etc.?"
+                value={comment}
+                onChangeText={setComment}
+                textAlignVertical="top"
+                />
+                <Text style={styles.charCount}>{comment.length}/500 characters</Text>
+            </View>
+            </ScrollView>
+
+            {/* Fixed Submit Button at Bottom */}
+            <View style={styles.fixedButtonContainer}>
+            <TouchableOpacity
+                style={[
+                styles.submitButton,
+                isSubmitting && styles.submitButtonDisabled
+                ]}
+                onPress={handleSubmit}
+                disabled={isSubmitting}
+            >
+                {isSubmitting ? (
+                <Text style={styles.submitButtonText}>Submitting...</Text>
+                ) : (
+                <Text style={styles.submitButtonText}>Submit Review</Text>
+                )}
+            </TouchableOpacity>
+            </View>
         </View>
-      </View>
+      
     </KeyboardAvoidingView>
   );
 }; 

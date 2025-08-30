@@ -193,11 +193,15 @@ export default function Product() {
     Linking.openURL(callURL);
   };
   let [reviews, setReviews] = useState(null)
+  let [shop, setShop] = useState(null)
   
   function updateReview(data) {
     setReviews(data)
   }
 
+  function updateShop(data) {
+    setShop(data)
+  }
 
   const handleWriteReview = () => {
     if (user) {
@@ -207,7 +211,8 @@ export default function Product() {
         if (isReviewedByUser) {
           navigation.navigate('user-review-submission', { 
             product: data,
-            seller: seller  
+            seller: seller,
+            shop: shop
           });
         } else {
           Alert.alert('You already published a review for this product')
@@ -322,7 +327,7 @@ export default function Product() {
           {/* Seller Info */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Seller Information</Text>
-            <Btm user_id={data?.user_id} updateUser={updateUser} updateReview={updateReview} navigation={navigation} />
+            <Btm user_id={data?.user_id} updateUser={updateUser} updateShop={updateShop} updateReview={updateReview} navigation={navigation} />
           </View>
 
           {/* Safety Tips */} 
