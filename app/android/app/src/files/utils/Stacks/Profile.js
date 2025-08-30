@@ -5,9 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { 
     Dimensions,
     Image,
-  
     StatusBar,
-  
     StyleSheet,
     Switch,
     Text,
@@ -15,7 +13,6 @@ import {
     TouchableOpacity,
     View 
 } from 'react-native';
-import BackSvg from '../../media/assets/back-svgrepo-com (1).svg'
 import Notification from "../../store/screens/Profile/Settings/Notification";
 import AccountSecurity from "../../store/screens/Profile/Settings/AccountSecurity&Privacy";
 import History from "../../store/screens/History";
@@ -26,10 +23,7 @@ import ChangeEmail from "../../store/screens/Profile/Settings/AccountSecurity/Ch
 import ChangePhone from "../../store/screens/Profile/Settings/AccountSecurity/ChangePhone";
 import ChangePwd from "../../store/screens/Profile/Settings/AccountSecurity/ChangePwd";
 import Logout from "../../store/screens/Profile/Settings/AccountSecurity/Logout";
-import ShopDetails from "../../store/screens/Drawer/Shop/Details";
-import Shops from "../../store/screens/Shops";
-import { Shop } from "../Store";
-import Shopile from "../../store/screens/Drawer/Shop";
+
 import Report from "../../store/screens/Drawer/Report";
 import Blog from "../../store/screens/Blog";
 import TermsOfService from "../../store/screens/TermsOfUse";
@@ -286,122 +280,55 @@ export function ProfileStackScreen() {
             
         }}   name="user-notification" component={Notification} />
         
-        <ProfileStack.Screen  options={{
-            header: ({navigation}) =>
+        <ProfileStack.Screen options={{
+            header: ({ navigation }) =>
             (
-                <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
-                    <TouchableOpacity style={{
-                        height: 55,
-                        borderRadius: 15,
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'flex-start',
-                        alignItems: 'center',
-                        width: 45,
-                    }} onPress={e => navigation.goBack()}> 
-                        <Ionicons name={'chevron-back'} size={25} color={'#000'} />
-                    </TouchableOpacity>
-                    <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
-                        <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Shop</Text>
-                    </View>
+
+                <>
+                    <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
+                <TouchableOpacity style={{
+                    height: 55,
+                    borderRadius: 15,
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                    width: 45,
+                }} onPress={e => navigation.goBack()}> 
+                    <Ionicons name={'chevron-back'} size={25} color={'#000'} />
+                </TouchableOpacity>
+                <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
+                    <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>New topic</Text>
                 </View>
+            </View>
+                </>
             ),
-            
-        }}   name="user-shop" component={Shopile} />
-
-        {/* <ProfileStack.Screen  options={{
-            header: ({navigation}) =>
-            (
-                <View style={{ height: 55, display: 'none', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', alignItems: 'center', padding: '10px'}}>
-                    
-                    <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                    <View style={{backgroundColor: '#FF4500', height: '100%', width: 40, borderRadius: 10}}></View>
-                    <Text>&nbsp;</Text>
-                    <Text>Akpulu.F</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity onPress={e => navigation.navigate('user-notification')}>
-                    <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                        <View style={{backgroundColor: '#FF4500', height: '100%', width: 40, borderRadius: 10}}>
-
-                        </View>
-                    </View>
-                    </TouchableOpacity>
-                </View>
-            ),
-        }}  name="user-signup" component={Signup} />
-
-        <ProfileStack.Screen  options={{
-            header: ({navigation}) =>
-            (
-                <View style={{ height: 55, display: 'none', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', alignItems: 'center', padding: '10px'}}>
-                    
-                    <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                    <View style={{backgroundColor: '#FF4500', height: '100%', width: 40, borderRadius: 10}}></View>
-                    <Text>&nbsp;</Text>
-                    <Text>Akpulu.F</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity onPress={e => navigation.navigate('user-notification')}>
-                    <View style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
-                        <View style={{backgroundColor: '#FF4500', height: '100%', width: 40, borderRadius: 10}}>
-
-                        </View>
-                    </View>
-                    </TouchableOpacity>
-                </View>
-            ),
-        }}  name="user-login" component={Login} /> */}
+        }}   name="user-thread" component={CreateTopicScreen} />
           
-          <ProfileStack.Screen options={{
-              header: ({ navigation }) =>
-              (
+        <ProfileStack.Screen options={{
+            header: ({ navigation }) =>
+            (
 
-                  <>
-                      <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
-                    <TouchableOpacity style={{
-                        height: 55,
-                        borderRadius: 15,
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'flex-start',
-                        alignItems: 'center',
-                        width: 45,
-                    }} onPress={e => navigation.goBack()}> 
-                        <Ionicons name={'chevron-back'} size={25} color={'#000'} />
-                    </TouchableOpacity>
-                    <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
-                        <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>New topic</Text>
-                    </View>
+                <>
+                    <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
+                <TouchableOpacity style={{
+                    height: 55,
+                    borderRadius: 15,
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                    width: 45,
+                }} onPress={e => navigation.goBack()}> 
+                    <Ionicons name={'chevron-back'} size={25} color={'#000'} />
+                </TouchableOpacity>
+                <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
+                    <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Balance sheet</Text>
                 </View>
-                  </>
-              ),
-          }}   name="user-thread" component={CreateTopicScreen} />
-          
-          <ProfileStack.Screen options={{
-              header: ({ navigation }) =>
-              (
-
-                  <>
-                      <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
-                    <TouchableOpacity style={{
-                        height: 55,
-                        borderRadius: 15,
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'flex-start',
-                        alignItems: 'center',
-                        width: 45,
-                    }} onPress={e => navigation.goBack()}> 
-                        <Ionicons name={'chevron-back'} size={25} color={'#000'} />
-                    </TouchableOpacity>
-                    <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
-                        <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Balance sheet</Text>
-                    </View>
-                </View>
-                  </>
-              ),
-          }}   name="user-topic-replies" component={TopicDetailScreen} />
+            </View>
+                </>
+            ),
+        }}   name="user-topic-replies" component={TopicDetailScreen} />
 
           <ProfileStack.Screen options={{
               header: ({ navigation }) =>

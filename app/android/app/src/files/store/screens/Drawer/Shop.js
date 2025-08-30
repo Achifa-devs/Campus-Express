@@ -8,50 +8,23 @@ import { useNavigation } from '@react-navigation/native';
 import BottomModal from '../../utils/BtmModal';
 import { items } from '../../../../../../../items.json'
 import StarRating from 'react-native-star-rating-widget';
+import axios from 'axios';
 export default function Shopile() {
-    let [review, set_review] = useState('')
+    let [review, set_review] = useState([])
     let { user } = useSelector(s => s.user)
-    let [server_err, set_server_err] = useState(false)
     let [list, set_list] = useState([])
-    let [shop, set_shop] = useState('')
-    const [rating, setRating] = useState(0);
     let navigation = useNavigation()
+    const {shop} = useSelector(s => s.shop);
 
     useEffect(() => {
-        if (user) {
-            console.log(user)
-            get_shop_data()
-        }
-    },[user])
+      axios.get(`https://cs-server-olive.vercel.app/vendor/shop-reviews?shop_id=${shop?.shop_id}`)
+      .then((res) => {
+        console.log('reviews: ', res)
+        set_review(res?.data)
+      }).catch(err=>console.log(err))
+    }, [])
 
-    function get_shop_data() {
-        fetch('https://cs-server-olive.vercel.app:3000/api/vendor/shop', {
-            method: 'post',
-            headers: {
-                "Content-Type": "Application/json"
-            },
-            body: JSON.stringify({user_id: user?.user_id})
-        })
-        .then(async(result) => {
-            
-            let response = await result.json()
-            console.log(result)
-            console.log(response)
-            if (response.bool) {
-                console.log(response)
-                set_shop(response.shop)
-            } else {
-                set_server_err(!true)
-                Alert.alert('Error occured, please try again later')
-            }
-
-        })
-        .catch((err) => {
-            set_server_err(!true)
-            Alert.alert('Network error, please try again.')
-            console.log(err)
-        })
-    }
+   
     const [modalVisible, setModalVisible] = useState(false);
     const [isCategory, setIsCategory] = useState(true);
        
@@ -60,29 +33,6 @@ export default function Shopile() {
         setModalVisible(!modalVisible);
     };
 
-    let r = [
-        {
-            review: 'Fast delivery',
-            comment: 'Experienceed great vendor of all time',
-            rating: 3.5,
-            date: new Date().toLocaleString(),
-            buyer: ''
-        },
-        {
-            review: 'Broken item',
-            comment: 'I had to reject my item and ask for refund',
-            rating: .5,
-            date: new Date().toLocaleString(),
-            buyer: ''
-        },
-        {
-            review: 'Good vend',
-            comment: 'Was good shaa, at least i got what i wanted',
-            rating: 2,
-            date: new Date().toLocaleString(),
-            buyer: ''
-        }
-    ]
   return (
     <> 
         <BottomModal visible={modalVisible} onClose={toggleModal}>
@@ -295,45 +245,38 @@ export default function Shopile() {
                       
                     <View style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', marginTop: 8, marginBottom: 0, marginLeft: 7, marginRight: 7, flexDirection: 'row', flexWrap: 'wrap'}}>
                         {
-                            !review
+                            review.length>0
                             ?
-                            <View>
-                                
-                            </View> 
+                            (
+                                <View style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', marginTop: 5, width: '100%', flexDirection: 'column', flexWrap: 'wrap'}}>
+                                      {
+                                        review.map((item, index) => 
+                                        <View key={index} style={{display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-start', marginTop: 15, height: 'auto', width: '100%', flexDirection: 'column', flexWrap: 'wrap', borderStyle: 'solid', borderBottomWidth: 1, borderBottomColor: '#E9ECEF'}}>
+                                            <StarRating
+                                                rating={item.rating}
+                                                // onChange={setRating}
+                                                starSize={30}
+                                                color="#FF4500"
+                                            />
+                                            <View style={{paddingLeft: 10}}>
+                                                <Text style={{ fontWeight: '400',  padding: 3, width: '100%', fontSize: 20, color: '#000', marginBottom: .5, textAlign: 'left' }}>{item.review}</Text>
+                                                
+                                                <Text style={{ fontWeight: '400',  padding: 3, width: '100%', fontSize: 14, color: '#000', marginBottom: .5, textAlign: 'left' }}>{item.comment}</Text>
+                                                
+                                                <Text style={{ fontWeight: '400',  padding: 3, width: '100%', fontSize: 14, color: '#000', marginBottom: .5, textAlign: 'left' }}>{item?.date}</Text>
+                                            </View>
+                                        </View>
+                                        ) 
+                                    } 
+                                </View>    
+                            )
                             :
                             <View style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', marginTop: 15, width: '100%', flexDirection: 'column', flexWrap: 'wrap'}}>
                                 <ReviewSvg width={90} height={90} />
                                 <Text style={{textAlign: 'center', marginTop: 25, marginBottom: 10, fontWeight: '500', width: '100%',  padding: 0, fontSize: 16, color: '#000', opacity: .5}}>Your reviews from clients will be shown here.</Text>
                             </View>    
                         }
-                        {
-                            (
-                                
-                                
-                                <View style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', marginTop: 5, width: '100%', flexDirection: 'column', flexWrap: 'wrap'}}>
-                                      {
-                                          r.map((item, index) => 
-                                            <View key={index} style={{display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-start', marginTop: 15, height: 'auto', width: '100%', flexDirection: 'column', flexWrap: 'wrap', borderStyle: 'solid', borderBottomWidth: 1, borderBottomColor: '#E9ECEF'}}>
-                                                <StarRating
-                                                    rating={item.rating}
-                                                    onChange={setRating}
-                                                    starSize={30}
-                                                    color="#FF4500"
-                                                />
-                                                <View style={{paddingLeft: 10}}>
-                                                    <Text style={{ fontWeight: '400',  padding: 3, width: '100%', fontSize: 20, color: '#000', marginBottom: .5, textAlign: 'left' }}>{item.review}</Text>
-                                                    
-                                                    <Text style={{ fontWeight: '400',  padding: 3, width: '100%', fontSize: 14, color: '#000', marginBottom: .5, textAlign: 'left' }}>{item.comment}</Text>
-                                                    
-                                                    <Text style={{ fontWeight: '400',  padding: 3, width: '100%', fontSize: 14, color: '#000', marginBottom: .5, textAlign: 'left' }}>{item?.date}</Text>
-                                                </View>
-                                            </View>
-                                          ) 
-                                    } 
-                                </View>    
-                            )
-                        }
-                        
+                       
                     </View>
                     
                     <TouchableOpacity onPress={e=> navigation.navigate('user-reviews')} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: 0, backgroundColor: '#fff', flexDirection: 'row', borderStyle: 'solid', opacity: .7 , borderTopColor: '#efefef', borderTopWidth: 1}}>
@@ -344,7 +287,7 @@ export default function Shopile() {
                     </TouchableOpacity>
                 </View>  
                 
-                {/* <View style={{
+                <View style={{
                     height: 'auto',
                     width: '100%',
                     marginTop: 5,
@@ -384,7 +327,7 @@ export default function Shopile() {
                         <Ionicons  name={'arrow-forward'} size={18} color={'#000'} />
                         
                     </TouchableOpacity>
-                </View>  */}
+                </View> 
             </ScrollView>
         </View>
     </>

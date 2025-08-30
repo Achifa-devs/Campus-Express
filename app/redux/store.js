@@ -4,6 +4,7 @@ import { userAuth } from './reducer/auth';
 import cookie from './vendor/cookie';
 import drawer from './vendor/drawer';
 import user from './vendor/user';
+import shop from './shop';
 import payment_method from './paystack';
 import toggleMessage from './toggleMssg';
 import campus from './campus';
@@ -19,6 +20,7 @@ let store = configureStore({
     sub_modal: sub_modal,
     subscribed: subscribed,
     user: user,
+    shop: shop,
     payment_method: payment_method,
     drawer: drawer,
     campus: campus,

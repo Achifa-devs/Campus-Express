@@ -1,41 +1,47 @@
-
-import React, { useState, useEffect, useCallback } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-  FlatList,
-  Image,
-  ActivityIndicator,
+import React, { useState, useEffect } from 'react';
+import { 
   Dimensions,
-  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ActivityIndicator,
   KeyboardAvoidingView,
+  Platform,
   TextInput,
+  Image,
+  Vibration
 } from 'react-native';
-import { debounce } from 'lodash';
-import Icon from 'react-native-vector-icons/Ionicons';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+
+import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
+import { set_drawer } from '../../../../../../../redux/vendor/drawer';
+// import Subscription from '../../components/Sell/Subscription';
 import UploadBtn from '../../components/Sell/UploadBtn';
-import CustomModal from '../../utils/CustomModal';
-import Video from 'react-native-video';
-import categoriesData from '../../../../../../../services.json'
+import Performance from '../../components/Sell/Performance';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { launchImageLibrary } from 'react-native-image-picker';
-import LoginButton from '../../utils/LogAlert';
+import axios from 'axios';
+import { getData } from '../../../utils/AsyncStore.js';
+import SubscriptionModal from './SubModal.js';
+import Subscription from './Sub.js';
+import { setUserAuthTo } from '../../../../../../../redux/reducer/auth.js';
+import CustomModal from '../../utils/CustomModal.js';
+// import  { Paystack }  from 'react-native-paystack-webview';
+export default function Sell() {
+  const screenHeight = Dimensions.get('window').height;
+  const screenWidth = Dimensions.get('window').width;
 
-const { width } = Dimensions.get('window');
+  const [modalVisible, setModalVisible] = useState(false);
+  const toggleModal = () => {
+    setModalVisible(!modalVisible);
+  };
 
-const ShopScreen = () => {
   const navigation = useNavigation();
-  const { user } = useSelector(s => s?.user);
-  const [userAds, setUserAds] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
+  const {user} = useSelector(s => s.user)
   const [formError, setFormError] = useState('');
-  
+
   const [shopExists, setShopExists] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [shopLogo, setShopLogo] = useState(null);
@@ -50,50 +56,16 @@ const ShopScreen = () => {
     user_id: ''
   });
 
-  const get_list_data = useCallback((id) => {
-    setRefreshing(true)
-    fetch(`https://cs-server-olive.vercel.app/vendor/products?user_id=${id}`, {
-      headers: {
-        "Content-Type": "Application/json"
-      }
-    })   
-    .then(async(result) => {
-      let response = await result.json()
-      setUserAds(response?.data)
-      setLoading(false)
-      setRefreshing(false)
-    })       
-    .catch((err) => {
-      set_server_err(!true)
-      Alert.alert('Network error, please try again.')
-      console.log(err)
-      setLoading(false)
-      setRefreshing(false)
-    })
-  }, [])
-
-  // Initial load
-  useEffect(() => {
-    get_list_data(user?.user_id)
-  }, [get_list_data, user?.user_id]);
-
-  // Refresh when screen comes into focus
-  useFocusEffect(
-    useCallback(() => {
-      get_list_data(user?.user_id)
-    }, [get_list_data, user?.user_id])
-  )
-  
-  const onRefresh = () => {
-    setRefreshing(true);
-  };
-  
   // Simulate checking if shop exists in DB
   useEffect(() => {
+    
     (async function getUser(params) {
-      let res = await fetch(`https://cs-server-olive.vercel.app/vendor/shop?user_id=${user?.user_id}`)
-      handleInputChange('user_id', user?.user_id)
+      let user = await getData('user');
+      const id = JSON.parse(user).user_id
+      let res = await fetch(`https://cs-server-olive.vercel.app/vendor/shop?user_id=${id}`)
+      handleInputChange('user_id', id)
       let response = await res.json()
+      console.log("response: ", response)
       if (response?.success) {
         setIsLoading(false);
         if (!response.data.length > 0) {
@@ -105,6 +77,7 @@ const ShopScreen = () => {
       }
     })()
   }, []);
+
 
   const handleInputChange = (field, value) => {
     setShopForm(prev => ({ ...prev, [field]: value }));
@@ -197,7 +170,8 @@ const ShopScreen = () => {
     setFormError(''); // Clear any previous errors
     return true;
   };
-  
+
+
   const handleSubmit = () => {
     console.log(shopForm)
 
@@ -218,7 +192,7 @@ const ShopScreen = () => {
       console.log(response)
       if (response?.success) {
         setShopExists(true);
-        
+       
       }
     })
     .catch((error) => {
@@ -233,123 +207,29 @@ const ShopScreen = () => {
   const removePhoto = async () => {
     await deleteFromServer(shopLogo)
   };
-
-  // Mock data - replace with actual API calls
-  const mockPerformanceData = {
-    totalViews: 1247,
-    totalReviews: 23,
-    totalShopViews: 456,
-    totalAds: 8
-  };
-
-  const [modalVisible, setModalVisible] = useState(false);
-  const toggleModal = () => {
-    setModalVisible(!modalVisible);
-  };
-
-
-  const handleNavigation = useCallback(
-    debounce((item) => {
-      navigation.navigate('user-product', { data: item });
-    }, 300, { leading: true, trailing: false }),
-    [navigation]
-  );
-
-  const getCategoryImage = (categoryName) => {
-    console.log(categoriesData)
-    for (let cat of categoriesData.items.category) {
-      const keys = Object.keys(cat).filter(k => k !== "img"); // exclude "img"
-      for (let key of keys) {
-        if (key === categoryName) {
-          return cat.img; // return the image if category matches
-        }
-      }
-    }
-    return null; // fallback if not found
-  };
-
-  const renderPerformanceMetric = (icon, value, label) => (
-    <View style={styles.metricCard}>
-      <View style={styles.metricIconContainer}>
-        <Icon name={icon} size={24} color="#FF4500" />
-      </View>
-      <Text style={styles.metricValue}>{value}</Text>
-      <Text style={styles.metricLabel}>{label}</Text>
-    </View>
-  );
-
-  const renderAdItem = ({ item }) => (
-    <TouchableOpacity 
-      style={styles.adCard}
-      onPress={() => handleNavigation(item)}
-    >
-      {item?.purpose !== 'accomodation' ? (
-        <Image 
-          style={styles.adImage}
-          source={{ uri: getCategoryImage(item?.category) || item?.thumbnail_id }} 
-        />
-      ) : (
-        <View style={{
-          height: 100,          // ✅ explicit height (same as Image for consistency)
-          width: 100,
-          backgroundColor: '#000',
-          // borderRadius: 5,
-          overflow: 'hidden', 
-        
-        }}>
-          <Video
-            source={{ uri: item?.thumbnail_id }}
-            style={styles.adImage}
-            resizeMode="cover"
-            muted={true}
-            paused
-          />
-        </View>
-      )}
-      <View style={styles.adContent}>
-        <Text style={styles.adTitle} numberOfLines={2}>{item.title}</Text>
-        <Text style={styles.adPrice}>
-          {
-            item?.purpose === 'product'
-            ?
-            '₦' + new Intl.NumberFormat('en-us').format(item?.price)
-            :
-            item?.purpose === 'accomodation'
-            ?
-            '₦' + new Intl.NumberFormat('en-us').format(item?.price) + ' to pay ₦' + new Intl.NumberFormat('en-us').format(item?.others?.lodge_data?.upfront_pay) 
-            : 
-            '' 
-          }
-        </Text>
-        <View style={styles.adStats}>
-          <View style={styles.statItem}>
-            <Icon name="eye" size={14} color="#666" />
-            <Text style={styles.statText}>{item.views} views</Text>
-          </View>
-          <View style={[styles.statusBadge, item.status === 'sold' && styles.soldBadge]}>
-            <Text style={styles.statusText}>
-              {item?.state?.state === 'active' ? 'Active' : 'Inactive'}
-            </Text>
-          </View>
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
-
-  if (loading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#FF4500" />
-        <Text style={styles.loadingText}>Loading your shop...</Text>
-      </View>
-    );
-  }
+  const dispatch = useDispatch()
 
   if(!user){
     return(
       <>
       { !user && 
-        <LoginButton text="Sign in to access your personalized dashboard" style={{ backgroundColor: '#2196F3' }} />
+        <View style={{
+          height: '100%',
+          width: '100%',
+          display: 'flex', 
+          alignItems: 'center',
+          justifyContent: 'center' 
+        }}>
+          <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#fff', marginRight: 15, borderRadius: 50, paddingVertical: 7, paddingHorizontal: 15}} onPress={e => {
+              dispatch(setUserAuthTo(true))
+          }}>
+            <Text style={{
+              color: '#FF4500',
+              paddingRight: 8
+            }}>Login</Text>
+            <Ionicons name={"enter-outline"} size={18} color={"#FF4500"} />
+          </TouchableOpacity>
+        </View>
       }
       </>
     )
@@ -362,7 +242,7 @@ const ShopScreen = () => {
       </View>
     );
   }
-  
+
   if (!shopExists) {
     return (
       <KeyboardAvoidingView
@@ -490,11 +370,9 @@ const ShopScreen = () => {
       </KeyboardAvoidingView>
     );
   }
-  
 
   return (
-    <View style={styles.container}>
-
+    <>
       <CustomModal 
         visible={modalVisible} 
         onClose={toggleModal}
@@ -531,7 +409,7 @@ const ShopScreen = () => {
                   <Text style={styles.modalOptionText}>{item.title}</Text>
                   <Text style={styles.modalOptionDescription}>{item.description}</Text>
                 </View>
-                <Icon name="chevron-forward" size={25} />
+                <Ionicons name="chevron-forward" size={25} />
               </TouchableOpacity>
             ))}
 
@@ -540,63 +418,173 @@ const ShopScreen = () => {
         </View> 
       </CustomModal>
 
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      >
-        
-        {/* Publish Ad Button */}
+      <ScrollView style={[styles.homeCnt, { height: screenHeight - 55 }]}>
         <UploadBtn navigation={navigation} toggleModal={toggleModal}/>
-
-        {/* Performance Metrics */}
-        {/* <View style={styles.performanceSection}>
-          <Text style={styles.sectionTitle}>Performance Overview</Text>
-          <View style={styles.metricsGrid}>
-            {renderPerformanceMetric('eye', userAds.reduce((sum, item) => sum + parseInt(item.views), 0), 'Total Views')}
-            {renderPerformanceMetric('star', performanceData.totalReviews, 'Reviews')}
-            {renderPerformanceMetric('storefront', performanceData.totalShopViews, 'Shop Views')}
-            {renderPerformanceMetric('document-text', userAds.length, 'Total Ads')}
-          </View>
-        </View> */}
- 
-        {/* Your Ads Section */}
-        <View style={styles.adsSection}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Your Ads (4)</Text>
-            <TouchableOpacity onPress={e => navigation.navigate('user-inventory', {data: userAds})}>
-              <Text style={styles.seeAllText}>See All</Text>
-            </TouchableOpacity>
-          </View>
-
-          {userAds.length > 0 ? (
-            <FlatList
-              data={[...userAds].splice(0,4)}
-              renderItem={renderAdItem}
-              keyExtractor={item => item.id}
-              scrollEnabled={false}
-              contentContainerStyle={styles.adsList}
-            />
-          ) : (
-            <View style={styles.emptyState}>
-              <Icon name="images" size={50} color="#CCC" />
-              <Text style={styles.emptyStateText}>No ads published yet</Text>
-              <Text style={styles.emptyStateSubtext}>
-                Start by publishing your first ad to get noticed!
-              </Text>
-            </View>
-          )}
+        <View style={styles.contentContainer}> 
+          <Performance user_id={shopForm.user_id} />
+          {/* <Subscription onPress={() => setIsSubscriptionModalVisible(true)} />  */}
         </View>
       </ScrollView>
-    </View>
+      {/* <Subscription  />  */}
+      {/* <SubscriptionModal
+        visible={isSubscriptionModalVisible}
+        onClose={() => setIsSubscriptionModalVisible(false)}
+        onSelect={(tier) => {
+          setIsSubscriptionModalVisible(false);
+          setIsPaying(true)
+          setPaymentData(tier)
+          navigation.navigate('PaystackPayment', {
+            amount: parseFloat(tier.price.replace('₦', '')),
+            subscriptionPlan: tier.name
+          });
+        }}
+      /> */}
+
+      {/*
+        isPaying && (
+        <View style={{ flex: 1 }}>
+          <Paystack  
+            paystackKey="pk_live_13343a7bd4deeebc644070871efcdf8fdcf280f7"
+            amount={PaymentData?.price}
+            billingEmail={user?.email}
+            activityIndicatorColor="green"
+            onCancel={(e) => {
+              // handle response here
+            }}
+            onSuccess={(res) => {
+              // handle response here
+            }}
+            autoStart={true}
+          />
+        </View>
+        )
+      */}
+    </> 
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: '#fff',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+  removeButton: {
+    position: 'absolute',
+    top: 14,
+    right: 14,
+    height: 30,
+    width: 30,
+    backgroundColor: 'red',
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  formContainer: {
+    padding: 20,
+    paddingBottom: 40,
+  },
+  formTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#FF4500',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  logoUploadContainer: {
+    alignItems: 'center',
+    marginBottom: 25,
+  },
+  logoUploadButton: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    backgroundColor: '#f9f9f9',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#FF4500',
+    overflow: 'hidden',
+  },
+  logoPlaceholder: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  logoPlaceholderText: {
+    color: '#FF4500',
+    marginTop: 8,
+    fontSize: 12,
+  },
+  logoPreview: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
+  uploadOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  changeLogoButton: {
+    marginTop: 10,
+  },
+  changeLogoText: {
+    color: '#FF4500',
+    textDecorationLine: 'underline',
+  },
+  inputContainer: {
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: 14,
+    color: '#333',
+    marginBottom: 8,
+    fontWeight: '500',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    padding: 15,
+    fontSize: 16,
+    backgroundColor: '#fff',
+  },
+  multilineInput: {
+    height: 100,
+    textAlignVertical: 'top',
+  },
+  submitButton: {
+    backgroundColor: '#FF4500',
+    padding: 15,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  submitButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  homeCnt: {
+    height: 'auto',
+    position: 'relative',
+    width: '100%',
+    padding: 0,
+    backgroundColor: '#fff',
+    flex: 1,
+  },
+  contentContainer: {
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    padding: 10,
+    height: 'auto',
+    marginTop: 10,
   },
   modalOption: {
     flexDirection: 'row',
@@ -618,195 +606,6 @@ const styles = StyleSheet.create({
     color: '#555',
     marginTop: 3,
   },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F8F9FA',
-  },
-  loadingText: {
-    marginTop: 16,
-    fontSize: 16,
-    color: '#666',
-  },
-  scrollContent: {
-    padding: 16,
-    paddingBottom: 40,
-  },
-  header: {
-    marginBottom: 24,
-  },
-  headerTitle: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: '#1A1A1A',
-    marginBottom: 4,
-  },
-  headerSubtitle: {
-    fontSize: 16,
-    color: '#666',
-  },
-  publishButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#FF4500',
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 24,
-    gap: 8,
-  },
-  publishButtonText: {
-    color: '#FFF',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  performanceSection: {
-    marginBottom: 24,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#1A1A1A',
-    marginBottom: 16,
-  },
-  metricsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 6,
-    justifyContent: 'space-between',
-  },
-  metricCard: {
-    width: (width - 48) / 2,
-    backgroundColor: '#FFF',
-    padding: 16,
-    borderRadius: 4,
-    alignItems: 'center',
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 1,
-  },
-  metricIconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: '#FFF6F2',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 5,
-  },
-  metricValue: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#1A1A1A',
-    marginBottom: 4,
-  },
-  metricLabel: {
-    fontSize: 12,
-    color: '#666',
-    textAlign: 'center',
-  },
-  adsSection: {
-    marginBottom: 0,
-  },
-  sectionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  seeAllText: {
-    color: '#FF4500',
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  adsList: {
-    gap: 6,
-  },
-  adCard: {
-    backgroundColor: '#FFF',
-    borderRadius: 4,
-    overflow: 'hidden',
-    flexDirection: 'row',
-    marginBottom: 4,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 1,
-  },
-  adImage: {
-    width: 100,
-    height: 100,
-    backgroundColor: '#F0F0F0',
-  },
-  adContent: {
-    flex: 1,
-    padding: 12,
-    justifyContent: 'space-between',
-  },
-  adTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#1A1A1A',
-    marginBottom: 4,
-  },
-  adPrice: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#FF4500',
-    marginBottom: 8,
-  },
-  adStats: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  statItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
-  statText: {
-    fontSize: 12,
-    color: '#666',
-  },
-  statusBadge: {
-    backgroundColor: '#4CAF50',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 6,
-  },
-  soldBadge: {
-    backgroundColor: '#666',
-  },
-  statusText: {
-    color: '#FFF',
-    fontSize: 10,
-    fontWeight: '600',
-  },
-  emptyState: {
-    backgroundColor: '#FFF',
-    padding: 40,
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  emptyStateText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#666',
-    marginTop: 16,
-    marginBottom: 8,
-  },
-  emptyStateSubtext: {
-    fontSize: 14,
-    color: '#999',
-    textAlign: 'center',
-  },
-});
 
-export default ShopScreen;
+});
+// screens/ShopScreen.js

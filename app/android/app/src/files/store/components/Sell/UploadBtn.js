@@ -64,14 +64,15 @@ function UploadIcon() {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    padding: 0,
     gap: 16,
   },
   button: {
     height: 160,
-    borderRadius: 12,
+    borderRadius: 6,
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 20,
     padding: 24,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },

@@ -138,9 +138,6 @@ export default function StoreTab({navigation}) {
                 name="Sell"  
                 component={SellStackScreen} />
                 
-            <Tab.Screen 
-                name="Inventory" 
-                component={InventoryStackScreen} />
             {/* <Tab.Screen 
                 options={{
                     header: ({navigation}) => 
@@ -238,6 +235,14 @@ function CreateRoute(navigationState, updateTabBarStyle) {
         updateTabBarStyle('flex');
     }else if (currentRouteName === 'user-new-listing') {
         updateTabBarStyle('none');
+    }else if(currentRouteName === 'user-inventory'){
+        updateTabBarStyle('none'); 
+    }else if(currentRouteName === 'user-shop'){
+        updateTabBarStyle('none'); 
+    }else if(currentRouteName === 'user-metrics'){
+        updateTabBarStyle('none'); 
+    }else if(currentRouteName === 'user-reviews'){
+        updateTabBarStyle('none'); 
     }
 }
 
@@ -270,10 +275,6 @@ function ProfileRoute(navigationState, updateTabBarStyle) {
     }else if(currentRouteName === 'user-pwd-update'){
         updateTabBarStyle('none'); 
     }else if(currentRouteName === 'user-notification'){
-        updateTabBarStyle('none'); 
-    }else if(currentRouteName === 'user-shop'){
-        updateTabBarStyle('none'); 
-    }else if(currentRouteName === 'user-reviews'){
         updateTabBarStyle('none'); 
     }else if(currentRouteName === 'user-report'){
         updateTabBarStyle('none'); 
