@@ -20,10 +20,10 @@ export const getShopOwner = async (payload) => {
 
 
 export const getShopReviews = async (payload) => {
-  const { user_id } = payload;
+  const { shop_id } = payload;
 
   // Business logic
-  const response = await findShopReviewsById({ user_id });
+  const response = await findShopReviewsById({ shop_id });
   return response;
 };
 

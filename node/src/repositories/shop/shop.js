@@ -14,10 +14,10 @@ export async function findShopOwnerById({ user_id }) {
 };
 
 // Find shop reviews by ID
-export async function findShopReviewsById({ user_id }) {
+export async function findShopReviewsById({ shop_id }) {
   const result = await pool.query(
-    `SELECT * FROM reviews WHERE user_id = $1`,
-    [user_id]
+    `SELECT * FROM reviews WHERE shop_id = $1`,
+    [shop_id]
   );
   return result.rows;
 };
