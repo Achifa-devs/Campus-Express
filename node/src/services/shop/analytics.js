@@ -1,125 +1,30 @@
-import { createContactClick, findContactClickId, updateContactClick, updateContactClickForUnkownBuyer } from "../../repositories/shop/analytics.js";
-import {
-  createProductView, 
-  findProductById, 
-  findProducts, 
-  findProductsByCategory, 
-  findProductsByCategoryAndGender, 
-  findProductsThumbnailById, 
-  findProductsType, 
-  findProductViewById, 
-  updateProductView, 
-  updateProductViewForUnkownBuyer
-} from "../../repositories/shop/product.js";
+import { createContactClick, createShopView, findContactClickId, findShopViewId, updateContactClick, updateContactClickForUnkownBuyer, updateShopView } from "../../repositories/shop/analytics.js";
 
-export const getProduct = async (payload) => {
-  const { product_id } = payload;
 
-  // Business logic
-  const response = await findProductById({ product_id });
+export const postShopView = async (payload) => {
+  const { shop_id, user_id } = payload;
 
-  return response;
-};
-
-export const getSearch = async (payload) => {
-  let { word, purpose, campus } = payload;
- 
-    
   try {
-    const response = await findProducts({ limit: null, purpose, campus });
-    const filteredList = response.filter(item => item.title.toLowerCase().indexOf(word.toLowerCase()) > -1);
-    return filteredList;
-  
-  } catch (error) {
-    console.log("error: ", error)
-    throw new Error("Error: ", error);
-  }
-};
-
-export const getProducts = async (payload) => {
-  let { category, limit, gender, campus, purpose } = payload;
- 
-  try {
-    let trimmed = atob(category).trim();
-      
-    // Ensure limit is a valid number
-    limit = parseInt(limit);
-    if (isNaN(limit) || limit <= 0) {
-      limit = 10;  // Set a default limit if invalid
-    }
-  
-    function capitalizeFirstLetter(str) {
-      return str.charAt(0).toUpperCase() + str.slice(1);
-    }
-  
-    let cap_gender = gender ? capitalizeFirstLetter(gender) : '';
-  
     // Business logic
-    if (purpose === 'product') {
-      if (trimmed.toLowerCase() === 'fashion' ) {
-        const response = await findProductsByCategoryAndGender({ trimmed, cap_gender, limit, campus, purpose });
-    
-        return response;
-    
-      } else if (trimmed.toLowerCase() === 'trends') {
-    
-        const response = await findProducts({ limit, campus, purpose });
-        return response;
-    
-      } else{
-        const response = await findProductsByCategory({ category, limit, campus, purpose });
-    
-        return response;
-      }
-    } else if(purpose === 'accomodation'){
-      const response = await findProducts({ limit, campus, purpose });
-    
-      return response;
-    }else{
-      const response = await findProducts({ limit, campus, purpose });
-    
-      return response;
+    let existingView = await findShopViewId({ shop_id, user_id }); 
+    if (existingView.length > 0) {
+      return;
+    } 
+    let newView = await createShopView({ user_id, shop_id });
+    if(newView < 1){
+      throw new Error("Error occured while updating view");
     }
-  
+    let response = await updateShopView({ shop_id });
+    return response;
   } catch (error) {
     console.log(error)
+    throw new Error("Error occured while updating view");
   }
-  
 };
 
-
-export const getProductThumbnail = async (payload) => {
-  const { product_id } = payload;
-
-  // Business logic
-  const response = await findProductsThumbnailById({ product_id });
-
-  return response;
-};
-
-
-export const getProductType = async (payload) => {
-  const { category, type, purpose } = payload;
-
-  // Business logic
-  try {
-    const response = await findProductsType({ type, limit: 40, purpose });
-    return response;
-
-  } catch (error) {
-    console.log('error: ', error)
-    
-  }
-
-};
-
-// 
-// 
-// 
 export const postContactClick = async (payload) => {
   const { product_id, user_id } = payload;
 
-  console.log('data: ', product_id, user_id)
   try {
     // Business logic
     let existingView = await findContactClickId({ product_id, user_id }); 
@@ -137,7 +42,6 @@ export const postContactClick = async (payload) => {
     throw new Error("Error occured while updating view");
   }
 };
-
 
 export const postUpdateContactClickForUnknownCustomer = async (payload) => {
   const { unknown_user_id, registered_id } = payload;
