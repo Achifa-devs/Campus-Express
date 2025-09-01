@@ -78,3 +78,73 @@ export async function updateContactClickForUnkownBuyer({ unknown_user_id, regist
   let response = await errorHandler(result?.rowCount);
   return response;
 };
+
+
+
+// Find Share by ID
+export async function findShareId({ product_id, user_id }) {
+  const result = await pool.query(
+    `SELECT * FROM shares WHERE product_id = $1 AND user_id = $2`,
+    [product_id, user_id]
+  );
+  return result.rows;
+};
+
+export async function createShare({ product_id, user_id }) {
+  let date = new Date();
+  const result = await pool.query(
+    `INSERT INTO shares (
+        id, share_id, product_id, user_id, date
+    ) VALUES (
+        DEFAULT, $1, $2, $3, $4
+    )`,
+    [shortId.generate(), product_id, user_id, date]
+  );
+    
+  return (result?.rowCount);
+};
+
+export async function updateShare({ product_id }) {
+  const result = await pool.query(
+    `UPDATE products set shares = shares+1 WHERE product_id = $1`,
+    [product_id]
+  );
+  let response = await errorHandler(result?.rowCount);
+  return response;
+};
+
+
+// Find Share by ID
+export async function findImpressionId({ product_id, user_id }) {
+  const result = await pool.query(
+    `SELECT * FROM impression WHERE product_id = $1 AND user_id = $2`,
+    [product_id, user_id]
+  );
+  return result.rows;
+};
+
+export async function createImpression({ product_id, user_id }) {
+  let date = new Date();
+  const result = await pool.query(
+    `INSERT INTO impression (
+        id, impression_id, product_id, user_id, date
+    ) VALUES (
+        DEFAULT, $1, $2, $3, $4
+    )`,
+    [shortId.generate(), product_id, user_id, date]
+  );
+    
+  return (result?.rowCount);
+};
+
+export async function updateImpression({ product_id }) {
+  const result = await pool.query(
+    `UPDATE products set impression = impression+1 WHERE product_id = $1`,
+    [product_id]
+  );
+  let response = await errorHandler(result?.rowCount);
+  return response;
+};
+
+
+

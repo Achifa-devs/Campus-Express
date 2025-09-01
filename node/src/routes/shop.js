@@ -55,7 +55,7 @@ import express from "express";
 import {
     parser
 } from "../utils/parser.js"
-import { POST_CONTACT_CLICK, POST_SHOP_VIEW } from "../controllers/shop/analytics.js"
+import { POST_CONTACT_CLICK, POST_IMPRESSION, POST_SHARE, POST_SHOP_VIEW } from "../controllers/shop/analytics.js"
 export const CUSTOMER_ROUTE = express.Router()
 
 // HANDLES SHOP REQ --- ##NOT IMPLEMENTED##
@@ -103,7 +103,8 @@ CUSTOMER_ROUTE.post('/confirm-refund', parser, CONFIRM_REFUND);
 
 // HANDLES REQ ON HOW CUSTOMER VIEW PRODUCTS ---
 CUSTOMER_ROUTE.get('/product', GET_PRODUCT);
-CUSTOMER_ROUTE.get('/products', GET_PRODUCTS);
+// CUSTOMER_ROUTE.get('/products', GET_PRODUCTS);
+CUSTOMER_ROUTE.get('/trends', GET_PRODUCTS);
 CUSTOMER_ROUTE.get('/products-type', GET_PRODUCTS_TYPE);
 CUSTOMER_ROUTE.get('/search', GET_SEARCH);
 CUSTOMER_ROUTE.get('/product-thumbnail', parser, GET_PRODUCT_THUMBNAIL);
@@ -121,3 +122,5 @@ CUSTOMER_ROUTE.delete('/favourite', DELETE_FAVOURITE);
 // HANDLES CUSTOMER REACTIONS
 CUSTOMER_ROUTE.post('/contact-click', parser, POST_CONTACT_CLICK);
 CUSTOMER_ROUTE.post('/shop-view', parser, POST_SHOP_VIEW);
+CUSTOMER_ROUTE.post('/share', parser, POST_SHARE);
+CUSTOMER_ROUTE.post('/impression', parser, POST_IMPRESSION);

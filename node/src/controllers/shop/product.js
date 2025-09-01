@@ -1,13 +1,15 @@
 
+import { getProductsByCategory } from "../../services/shop/categorized.js";
 import {
     getProduct, 
     getProducts, 
     getProductThumbnail, 
     getProductType, 
-    getSearch, 
     postProductView, 
     postUpdateProductViewForUnknownCustomer
 } from "../../services/shop/product.js";
+import { searchProducts } from "../../services/shop/search.js";
+import { getDashboardProducts } from "../../services/shop/trends.js";
 
 export async function GET_PRODUCT(req, res) {
     
@@ -21,7 +23,7 @@ export async function GET_PRODUCT(req, res) {
 
 export async function GET_PRODUCTS(req, res) {
     try {
-        const products = await getProducts({...req.query, gender: req.headers.gender});
+        const products = await getDashboardProducts({...req.query, gender: req.headers.gender});
         res.status(201).json({ success: true, data: products });
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });
@@ -30,7 +32,7 @@ export async function GET_PRODUCTS(req, res) {
 
 export async function GET_PRODUCTS_TYPE(req, res) {
     try {
-        const products = await getProductType(req.query);
+        const products = await getProductsByCategory(req.query);
         res.status(201).json({ success: true, data: products });
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });
@@ -39,7 +41,7 @@ export async function GET_PRODUCTS_TYPE(req, res) {
 
 export async function GET_SEARCH(req, res) {
     try {
-        const search_response = await getSearch(req.query);
+        const search_response = await searchProducts(req.query);
         res.status(201).json({ success: true, data: search_response });
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });

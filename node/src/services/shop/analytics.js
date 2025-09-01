@@ -1,4 +1,4 @@
-import { createContactClick, createShopView, findContactClickId, findShopViewId, updateContactClick, updateContactClickForUnkownBuyer, updateShopView } from "../../repositories/shop/analytics.js";
+import { createContactClick, createImpression, createShare, createShopView, findContactClickId, findImpressionId, findShareId, findShopViewId, updateContactClick, updateContactClickForUnkownBuyer, updateImpression, updateShare, updateShopView } from "../../repositories/shop/analytics.js";
 
 
 export const postShopView = async (payload) => {
@@ -40,6 +40,48 @@ export const postContactClick = async (payload) => {
   } catch (error) {
     console.log(error)
     throw new Error("Error occured while updating view");
+  }
+};
+
+export const postShare = async (payload) => {
+  const { product_id, user_id } = payload;
+
+  try {
+    // Business logic
+    let existingView = await findShareId({ product_id, user_id }); 
+    if (existingView.length > 0) {
+      return;
+    } 
+    let newView = await createShare({ user_id, product_id });
+    if(newView < 1){
+      throw new Error("Error occured while creating share");
+    }
+    let response = await updateShare({ product_id });
+    return response;
+  } catch (error) {
+    console.log(error)
+    throw new Error("Error occured while updating share");
+  }
+};
+
+export const postImpression = async (payload) => {
+  const { product_id, user_id } = payload;
+
+  try {
+    // Business logic
+    let existingView = await findImpressionId({ product_id, user_id }); 
+    if (existingView.length > 0) {
+      return;
+    } 
+    let newView = await createImpression({ user_id, product_id });
+    if(newView < 1){
+      throw new Error("Error occured while creating impression");
+    }
+    let response = await updateImpression({ product_id });
+    return response;
+  } catch (error) {
+    console.log(error)
+    throw new Error("Error occured while updating impression");
   }
 };
 
