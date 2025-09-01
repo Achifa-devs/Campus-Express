@@ -234,7 +234,7 @@ export default function TypeProducts() {
     try {
       setRefreshing(true);
       const result = await fetch(
-        `https://cs-server-olive.vercel.app/products-type?category=${category}&type=${type}&purpose=${option === 'Products' ? 'product' : option === 'Lodges' ? 'accomodation' : 'service'}`,
+        `http://172.18.191.146:9090/products-type?category=${category}&type=${type}&purpose=${option === 'Products' ? 'product' : option === 'Lodges' ? 'accomodation' : 'service'}`,
         { headers: { 'Content-Type': 'application/json' } }
       );
 

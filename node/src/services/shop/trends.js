@@ -1,18 +1,28 @@
-
 import pool from "../../config/db.js";
 
 /**
- * Helper to take items with fallback
+ * Helper: take with fallback chain (Premium → Standard → Basic → Free)
  */
-function takeWithFallback(resultsByTier, tier, count, alreadyPicked) {
-  const picked = [];
-  const source = resultsByTier[tier] || [];
+function takeWithFallbackChain(resultsByTier, preferredTier, count, alreadyPicked) {
+  const order = {
+    premium: ["premium", "standard", "basic", "free"],
+    standard: ["standard", "basic", "free"],
+    basic: ["basic", "free"],
+    free: ["free"]
+  };
 
-  for (const product of source) {
+  const picked = [];
+
+  for (const tier of order[preferredTier]) {
     if (picked.length >= count) break;
-    if (!alreadyPicked.has(product.id)) {
-      picked.push(product);
-      alreadyPicked.add(product.id);
+
+    const source = resultsByTier[tier] || [];
+    for (const product of source) {
+      if (picked.length >= count) break;
+      if (!alreadyPicked.has(product.id)) {
+        picked.push(product);
+        alreadyPicked.add(product.id);
+      }
     }
   }
 
@@ -47,7 +57,7 @@ export async function getDashboardProducts({ purpose, campus = null, limit = 50 
         AND ($2::text IS NULL OR p.campus = $2)
       ORDER BY p.date DESC
       `,
-      [purpose, campus, 'active']
+      [purpose, eval(campus), 'active']
     );
 
     // Group products by subscription tier
@@ -67,16 +77,16 @@ export async function getDashboardProducts({ purpose, campus = null, limit = 50 
       }
     });
 
-    // Pick products with fallback
+    // Pick products with proper fallback
     const picked = [];
     const alreadyPicked = new Set();
 
-    picked.push(...takeWithFallback(resultsByTier, "premium", distribution.premium, alreadyPicked));
-    picked.push(...takeWithFallback(resultsByTier, "standard", distribution.standard, alreadyPicked));
-    picked.push(...takeWithFallback(resultsByTier, "basic", distribution.basic, alreadyPicked));
-    picked.push(...takeWithFallback(resultsByTier, "free", distribution.free, alreadyPicked));
+    picked.push(...takeWithFallbackChain(resultsByTier, "premium", distribution.premium, alreadyPicked));
+    picked.push(...takeWithFallbackChain(resultsByTier, "standard", distribution.standard, alreadyPicked));
+    picked.push(...takeWithFallbackChain(resultsByTier, "basic", distribution.basic, alreadyPicked));
+    picked.push(...takeWithFallbackChain(resultsByTier, "free", distribution.free, alreadyPicked));
 
-    // If not enough products picked, fill remaining from all tiers
+    // Final safeguard: if still not enough, fill remaining from any available
     if (picked.length < limit) {
       for (const tier of ["premium", "standard", "basic", "free"]) {
         for (const product of resultsByTier[tier]) {

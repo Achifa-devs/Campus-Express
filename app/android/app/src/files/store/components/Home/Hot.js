@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Text,
   View,
@@ -15,6 +15,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { debounce } from 'lodash';
 import { get_saved_list, save_prod, unsave_prod } from '../../utils/Saver';
 import { useSelector } from 'react-redux';
+import axios from 'axios';
+import { getDeviceId } from '../../utils/IdGen';
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - 32) / 2; // Better spacing between cards
@@ -164,6 +166,14 @@ const ItemCard = React.memo(({ item, onPress }) => {
 
 export default function Hot({ data, Fav }) {
   const navigation = useNavigation();
+  const { user } = useSelector(s => s?.user);
+  let [id, setId] = useState('')
+
+  useEffect(() => {
+    if(!user?.user_id){
+      getDeviceId().then(res => setId(res)).catch(err => console.log(err));
+    }
+  }, [user])
 
   const handleNavigation = useCallback(
     debounce((item) => {
@@ -176,7 +186,29 @@ export default function Hot({ data, Fav }) {
     ({ item }) => <ItemCard item={item} Fav={Fav} onPress={e=>handleNavigation(item)} />,
     [handleNavigation]
   );
+  const viewabilityConfig = { viewAreaCoveragePercentThreshold: 50 };
 
+  const onViewableItemsChanged = useRef(({ viewableItems }) => { 
+    viewableItems.forEach((item) => {
+      // console.log(`Card ${JSON.stringify(item.item)} is visible`);
+      AddImpression(item.item)
+      // e.g., fire impression tracking here
+    });
+  }).current;
+
+  async function AddImpression(data) {
+    try {
+      let request = await axios.post('http://172.18.191.146:9090/impression', {product_id: data?.product_id, user_id: user.user_id ? user?.user_id: id})
+      let res = request?.data;
+      console.log('impresion result: ',res)
+      
+      return res;
+    } catch (error) {
+      console.log('error: ', error)
+      Alert.alert('Error', 'Please ensure you have stable network.');
+    }
+  }
+  
   return ( 
     <View style={styles.container}>
       <FlatList
@@ -192,6 +224,8 @@ export default function Hot({ data, Fav }) {
         showsVerticalScrollIndicator={false}
         initialNumToRender={6}
         maxToRenderPerBatch={8}
+        onViewableItemsChanged={onViewableItemsChanged}
+        viewabilityConfig={viewabilityConfig}
         windowSize={11}
         ListEmptyComponent={() => (
           <View style={styles.emptyContainer}>

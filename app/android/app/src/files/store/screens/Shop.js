@@ -6,6 +6,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import ProductCard from '../components/Inventory/ProductCard';
 import LodgeCard from '../components/Inventory/LodgeCard';
+import axios from 'axios';
 
 export default function Shop() {
     let navigation = useNavigation()
@@ -14,7 +15,26 @@ export default function Shop() {
     } = useRoute()?.params
     const { width } = Dimensions.get('window');
 
-    console.log(shop)
+    useEffect(() => {
+        if (shop && shop.shop_id && user?.user_id) {
+        setTimeout(async () => {
+            try {
+                const res = await axios.post('https://cs-server-olive.vercel.app/shop-view', {
+                    user_id: user?.user_id,
+                    shop_id: shop?.shop_id
+                });
+            
+                const response = res.data;
+                if (response?.success) {  
+                    console.log('Done...');
+                    
+                }
+            } catch (error) {
+                console.error('Error in shop view request:', error);
+            }
+        }, 3000);
+        }
+    }, [shop, user]);
    
    
   return (

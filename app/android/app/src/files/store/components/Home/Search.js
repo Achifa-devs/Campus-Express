@@ -14,6 +14,8 @@ import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useDispatch, useSelector } from 'react-redux';
 import { set_locale_modal } from '../../../../../../../redux/locale';
+import { getData } from '../../utils/AppStorage';
+import { getDeviceId } from '../../utils/IdGen';
 
 const { width } = Dimensions.get('window');
 
@@ -23,20 +25,32 @@ const AdvancedSearchBar = () => {
   const [isSearching, setIsSearching] = useState(false);
   const { option } = useSelector(s => s?.option);
   const { campus } = useSelector(s => s?.campus);
+  const { user } = useSelector(s => s?.user);
+  let [id, setId] = useState('')
+
+  useEffect(() => {
+    if(!user?.user_id){
+      getDeviceId().then(res => setId(res)).catch(err => console.log(err));
+    }
+  }, [user])
   const dispatch = useDispatch();
 
   useEffect(() => {
+    setIsSearching(false);
+
     if (query !== '' && query.trim() !== '') {
-      fetch(`https://cs-server-olive.vercel.app/search?word=${query}&campus=${campus==='All campus'? 'null':campus}&purpose=${option === 'Products' ? 'product' : option === 'Lodges' ? 'accomodation' : 'service'}`, {
+      fetch(`http://172.18.191.146:9090/search?word=${query}&campus=${campus==='All campus'? 'null':campus}&purpose=${option === 'Products' ? 'product' : option === 'Lodges' ? 'accomodation' : 'service'}&user_id=${user.user_id ? user?.user_id: id}`, {
         headers: {
           "Content-Type": "Application/json" 
         }
       })
       .then(async (result) => {
+        setIsSearching(true);
         let response = await result.json();
         setResult(response.data);
       })
       .catch((err) => {
+        setIsSearching(false);
         Alert.alert('Network error, please try again.');
         console.log(err);
       });
@@ -68,7 +82,7 @@ const AdvancedSearchBar = () => {
           placeholderTextColor="#999"
           value={query}
           onChangeText={setQuery}
-          onFocus={() => setIsSearching(true)}
+          // onFocus={() => setIsSearching(true)}
           onBlur={() => setIsSearching(false)}
           returnKeyType="search"
           clearButtonMode="while-editing"

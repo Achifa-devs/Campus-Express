@@ -34,7 +34,7 @@ import { useSelector } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { get_saved, save_prod, unsave_prod } from '../utils/Saver.js';
 import axios from 'axios';
-import Upload from 'react-native-background-upload';
+// import Upload from 'react-native-background-upload';
 
 export default function Product() {
   const route = useRoute();
@@ -60,7 +60,20 @@ export default function Product() {
   async function AddContactClick() {
     setLoading(true)
     try {
-      let request = await axios.post('http://192.168.0.4:9090/contact-click', {product_id: data?.product_id, user_id: user?.user_id})
+      let request = await axios.post('https://cs-server-olive.vercel.app/contact-click', {product_id: data?.product_id, user_id: user?.user_id})
+      let res = request?.data;
+      
+      return res;
+    } catch (error) {
+      console.log('error: ', error)
+      Alert.alert('Error', 'Please ensure you have stable network.');
+    }
+  }
+
+  async function AddShare() {
+    setLoading(true)
+    try {
+      let request = await axios.post('https://cs-server-olive.vercel.app/share', {product_id: data?.product_id, user_id: user?.user_id})
       let res = request?.data;
       
       return res;
@@ -472,14 +485,27 @@ export default function Product() {
           <TouchableOpacity
             style={styles.shareButton}
             onPress={async() => {
+
+              const isShareSaved = await AddShare()
+              if(!isShareSaved){
+                setLoading(false)
+
+                return Alert.alert('Error', 'Please ensure you have stable network and try again.');
+              }
+
               try {
+                setLoading(false)
                 await Share.share({
                   message: `Check out this product on Campus Sphere! https://www.campussphere.net/store/product/${data?.product_id}`,
                   title: data?.title,
                 });
               } catch (error) {
                 console.error(error);
+                return Alert.alert('Error', 'Please ensure you have stable network and try again.');
+
               }
+
+
             }}
           >
             <Ionicons name={'share-outline'} size={18} color={'#FFF'} />

@@ -3,33 +3,32 @@ import pool from "../../config/db.js";
 // helper to take N items with fallback from other arrays
 function takeWithFallback(sourceBuckets, counts) {
   const results = [];
-  const shortages = [];
 
-  // First, try to take requested count from each bucket
   counts.forEach((count, i) => {
-    const items = sourceBuckets[i].splice(0, count);
-    results.push(...items);
-    const shortage = count - items.length;
-    if (shortage > 0) {
-      shortages.push({ shortage, index: i });
-    }
-  });
+    let needed = count;
 
-  // Fill shortages from lower-tier buckets
-  shortages.forEach(({ shortage }) => {
-    for (let i = 0; i < sourceBuckets.length && shortage > 0; i++) {
-      const items = sourceBuckets[i].splice(0, shortage);
-      results.push(...items);
-      shortage -= items.length;
+    // Try to fill from this bucket first
+    let taken = sourceBuckets[i].splice(0, needed);
+    results.push(...taken);
+    needed -= taken.length;
+
+    // If shortage, fall back to lower buckets one by one
+    let j = i + 1;
+    while (needed > 0 && j < sourceBuckets.length) {
+      let fallback = sourceBuckets[j].splice(0, needed);
+      results.push(...fallback);
+      needed -= fallback.length;
+      j++;
     }
   });
 
   return results;
 }
 
+
+
 // fetch products by category type (cType inside others JSON)
-export async function getProductsByCategory(cType) {
-//   const client = await pool.connect();
+export async function getProductsByCategory({ type }) {
 
   try {
     // Distribution: 60% premium, 20% standard, 15% basic, 5% free
@@ -41,14 +40,16 @@ export async function getProductsByCategory(cType) {
 
     // query all products grouped by vendor subscription
     const query = `
-      SELECT p.*, s.plan
+      SELECT p.*, COALESCE(s.plan, 'free') AS plan
       FROM products p
-      JOIN subscriptions s ON s.user_id = p.user_id
+      LEFT JOIN subscriptions s ON p.user_id = s.user_id AND s.is_active = true
       WHERE (p.others->>'cType') = $1
-      ORDER BY p.created_at DESC
+      ORDER BY p.date DESC
     `;
 
-    const { rows } = await pool.query(query, [cType]);
+    const { rows } = await pool.query(query, [type]);
+    console.log('rows: ', rows.length)
+
 
     // bucket products by subscription plan
     const premium = rows.filter(r => r.plan === "premium");
@@ -60,9 +61,11 @@ export async function getProductsByCategory(cType) {
       [premium, standard, basic, free],
       [premiumCount, standardCount, basicCount, freeCount]
     );
+    console.log('result: ', result.length)
 
     return result;
-  } finally {
-    client.release();
+  } catch (error) {
+    console.error("Error fetching dashboard products:", error);
+    throw error;
   }
 }
