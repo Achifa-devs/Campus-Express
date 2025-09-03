@@ -5,6 +5,7 @@ import StackNavigator from "../store/utils/Nav.js";
 import Aside from "../vendor/utils/Aside.js";
 import { getData } from "./AsyncStore.js.js";
 import { set_user } from "../../../../../redux/user.js";
+import { StatusBar } from "react-native";
 
 export function Shop() {
   let dispatch = useDispatch()
@@ -28,6 +29,7 @@ export function Shop() {
   return (
     <> 
       {/* <Aside /> */}
+      
       <StackNavigator />
     </>     
   )

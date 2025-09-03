@@ -198,14 +198,14 @@ export default function Hot({ data, Fav }) {
 
   async function AddImpression(data) {
     try {
-      let request = await axios.post('http://172.18.191.146:9090/impression', {product_id: data?.product_id, user_id: user.user_id ? user?.user_id: id})
+      let request = await axios.post('https://cs-server-olive.vercel.app/impression', {product_id: data?.product_id, user_id: user.user_id ? user?.user_id: id})
       let res = request?.data;
       console.log('impresion result: ',res)
       
       return res;
     } catch (error) {
       console.log('error: ', error)
-      Alert.alert('Error', 'Please ensure you have stable network.');
+      // Alert.alert('Error', 'Please ensure you have stable network.');
     }
   }
   

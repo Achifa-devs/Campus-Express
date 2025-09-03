@@ -148,11 +148,17 @@ export const postResetCustomerPhone = async (payload) => {
 };
 
 export const postUpdateCustomerProfile = async (payload) => {
-  const { user_id, fname, lname, gender } = payload;
-  // Business logic
-  const response = await updateCustomerProfileById ({ user_id, fname, lname, gender:  gender.toLowerCase() === 'male' ? 1 : 0 });
-
-  return response;
+  const { user_id, fname, lname, gender, campus, state } = payload;
+  try {
+    // Business logic
+    const response = await updateCustomerProfileById({ user_id, fname, lname, campus, state , gender:  gender.toLowerCase() === 'male' ? 1 : 0 });
+  
+    return response;
+  } catch (error) {
+    console.log(error)
+    throw new Error("internal server error");
+    
+  }
 };
 
 export const postResetCustomerPwd = async (payload) => {

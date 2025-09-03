@@ -12,14 +12,14 @@ export async function createVendor({ fname, lname, user_id, email, phone, hashed
     `INSERT INTO users (
     id, fname, lname, user_id, email, phone, password, state,
     campus, isActive, isVerified, isEmailVerified, isPhoneVerified,
-    date, lastseen, gender, deviceid
+    date, lastseen, gender, deviceid, photo
     ) VALUES (
     DEFAULT, $1, $2, $3, $4, $5, $6, $7,
-    $8, $9, $10, $11, $12, $13, $14, $15, $16
+    $8, $9, $10, $11, $12, $13, $14, $15, $16, $17
     )`,
     [
       fname, lname, user_id, email, phone, hashedPwd, state, campus,
-      false, false, false, false, `${new Date()}`, `${new Date()}`, null, deviceId
+      false, false, false, false, `${new Date()}`, `${new Date()}`, null, deviceId, null
     ]
   );
   let response = await errorHandler(result?.rowCount);

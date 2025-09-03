@@ -11,6 +11,8 @@ import {
 } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { getData } from '../../utils/AsyncStore.js';
+import categoriesData from '../../../../../../services.json'
+import Video from 'react-native-video';
 
 export default function History() {
   const [data, setData] = useState([]);
@@ -81,21 +83,63 @@ export default function History() {
 
 const Card = ({ data }) => {
   let navigation = useNavigation();
+  const getCategoryImage = (categoryName) => {
+    console.log(categoriesData)
+    for (let cat of categoriesData.items.category) {
+      const keys = Object.keys(cat).filter(k => k !== "img"); // exclude "img"
+      for (let key of keys) {
+        if (key === categoryName) {
+          return cat.img; // return the image if category matches
+        }
+      }
+    }
+    return null; // fallback if not found
+  };
   
   return (
     <TouchableOpacity 
       style={styles.card} 
-      onPress={() => navigation.navigate('user-product', { product_id: data?.product_id })} 
+      onPress={() => navigation.navigate('user-product', { product_id: data?.data?.product_id })} 
     >
-      <Image 
-        source={{ uri: data?.thumbnail_id }} 
-        style={styles.image} 
-        resizeMode="cover" 
-      />
+       {data?.data?.purpose !== 'accomodation' ? (
+          <Image 
+            style={styles.adImage}
+            source={{ uri: getCategoryImage(data?.data?.category) || data?.data?.thumbnail_id }} 
+          />
+        ) : (
+          <View style={{
+            height: 100,          // ✅ explicit height (same as Image for consistency)
+            width: 100,
+            backgroundColor: '#000',
+            // borderRadius: 5,
+            overflow: 'hidden', 
+          
+          }}>
+            <Video
+              source={{ uri: data?.data?.thumbnail_id }}
+              style={styles.adImage}
+              resizeMode="cover"
+              muted={true}
+              paused
+            />
+          </View>
+        )}
       <View style={styles.details}>
-        <Text style={styles.title}>{data?.title}</Text>
-        <Text style={styles.stock}>Stock: {data?.stock}</Text>
-        <Text style={styles.price}>₦{data?.price}</Text>
+        <Text style={styles.title}>{data?.data?.title}</Text>
+        <Text style={styles.stock}>{data?.data?.others?.cType}</Text>
+        <Text style={styles.price}>
+          {
+            data?.data?.purpose === 'product'
+            ?
+            '₦' + new Intl.NumberFormat('en-us').format(data?.data?.price)
+            :
+            data?.data?.purpose === 'accomodation'
+            ?
+            '₦' + new Intl.NumberFormat('en-us').format(data?.data?.price) + ' to pay ₦' + new Intl.NumberFormat('en-us').format(data?.data?.others?.lodge_data?.upfront_pay) 
+            : 
+            '' 
+          }  
+        </Text> 
       </View>
     </TouchableOpacity>
   );
@@ -103,10 +147,10 @@ const Card = ({ data }) => {
 
 const styles = StyleSheet.create({
   card: {
-    borderRadius: 8,
+    borderRadius: 4,
     overflow: 'hidden',
     backgroundColor: '#fff',
-    marginBottom: 12,
+    marginBottom: 4,
     elevation: 3,
     shadowColor: '#000',
     shadowOpacity: 0.1,
@@ -137,6 +181,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#FF4500',
     fontWeight: '600',
+  },
+  adImage: {
+    width: 100,
+    height: 100,
+    backgroundColor: '#F0F0F0',
   },
   emptyContainer: {
     flex: 1,

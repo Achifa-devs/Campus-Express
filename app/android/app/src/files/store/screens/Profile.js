@@ -5,7 +5,6 @@ import {
 import {
   Dimensions,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,

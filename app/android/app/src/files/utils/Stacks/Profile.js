@@ -36,11 +36,16 @@ import Ionicons from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, 
 
 import Support from "../../store/screens/Profile/Profiles/Support";
 import { setUserAuthTo } from "../../../../../../redux/reducer/auth";
+import { useFocusEffect } from "@react-navigation/native";
+import React, { useCallback } from "react";
+import UserProfileScreen from "../../store/screens/PersonalInfo";
+import UserIcons from "../../media/icons/UserIcons";
 const ProfileStack = createNativeStackNavigator();
 export function ProfileStackScreen() {
   const dispatch = useDispatch()
 
-    const {user} = useSelector(s => s.user)
+    const {user} = useSelector(s => s.user);
+    
   return (
     <ProfileStack.Navigator>
 
@@ -62,19 +67,18 @@ export function ProfileStackScreen() {
                     justifyContent: 'space-between',
                     }}
                 >
+                     
                     {/* Left: User Avatar */}
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Image
-                            source={{ uri: 'https://res.cloudinary.com/daqbhghwq/image/upload/v1743769930/2024-06-27_dqlq3a.png' }} // Replace with user.profilePic
-                            style={{
-                            width: 60,
-                            height: 60,
-                            borderRadius: 30,
-                            marginRight: 10,
-                            borderWidth: 2,
-                            borderColor: '#fff',
-                            }}
-                        />
+                        {
+                            user?.photo
+                            ?
+                            ''
+                            :
+                            <View style={{height: 60, width: 60}}>
+                                <UserIcons size={60} />
+                            </View> 
+                        }
                         <View>
                             <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>
                                 {user && user?.fname}{user && '.'}{user && user?.lname[0]}
@@ -102,7 +106,7 @@ export function ProfileStackScreen() {
                     }
 
                     {/* Right: Shop Balance */}
-                    <View style={{ alignItems: 'flex-end' }}>
+                    {/* <View style={{ alignItems: 'flex-end' }}>
                         <TouchableOpacity onPress={() => navigation.navigate('user-report')}>
                             <Text style={{ color: '#fff', textDecorationLine: 'underline', fontSize: 13 }}>
                                 Balance
@@ -111,11 +115,34 @@ export function ProfileStackScreen() {
                         <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 18 }}>
                             ₦3,500.00 
                         </Text>
-                    </View>
+                    </View> */}
                 </View>
                 ),
             }}
         />
+
+        <ProfileStack.Screen  options={{
+            header: ({navigation}) =>
+            (
+                <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
+                    <TouchableOpacity style={{
+                        height: 55,
+                        borderRadius: 15,
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        width: 45,
+                    }} onPress={e => navigation.goBack()}> 
+                        <Ionicons name={'chevron-back'} size={25} color={'#000'} />
+                    </TouchableOpacity>
+                    <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
+                        <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Edit Your Campus Identity</Text>
+                    </View>
+                </View>
+            ),
+            
+        }}   name="user-edit-profile" component={PersonalData} />
         
         <ProfileStack.Screen  options={{
             header: ({navigation}) =>
@@ -179,12 +206,12 @@ export function ProfileStackScreen() {
                         <Ionicons name={'chevron-back'} size={25} color={'#000'} />
                     </TouchableOpacity>
                     <View style={{backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10}}>
-                        <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Tell us about yourself</Text>
+                        <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>My Campus Identity</Text>
                     </View>
                 </View>
             ),
             
-        }} name="user-data" component={PersonalData} />
+        }} name="user-data" component={UserProfileScreen} />
           
           
 

@@ -103,6 +103,7 @@ function FilterForsearch(res, user_id, word) {
       let isNotDuplicate = await checkDuplicates(item, user_id);
       if(isNotDuplicate){
         insertSearchAppearance(item, user_id, word);
+        updateSearchAppearances(item)
       }
     })
   }
@@ -135,4 +136,14 @@ async function insertSearchAppearance(item, user_id, word) {
     return true
   }
   return false;
+}
+
+async function updateSearchAppearances(item) {
+  const { rows } = await pool.query(`UPDATE products set search_appearances = search_appearances+1 WHERE product_id = $1`, [item?.product_id]);
+
+  if(rows.rowCount> 0){
+    return true
+  }
+  return false;
+
 }

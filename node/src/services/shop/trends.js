@@ -57,7 +57,7 @@ export async function getDashboardProducts({ purpose, campus = null, limit = 50 
         AND ($2::text IS NULL OR p.campus = $2)
       ORDER BY p.date DESC
       `,
-      [purpose, eval(campus), 'active']
+      [purpose, campus === 'null' ? null :  campus === null ? null : campus, 'active']
     );
 
     // Group products by subscription tier

@@ -3,24 +3,20 @@ import {
   View, 
   Text, 
   StyleSheet, 
-  StatusBar, 
   TextInput, 
   FlatList, 
   TouchableOpacity,
-  Platform ,
-  BackHandler,
-  Alert
+  Platform, 
+  StatusBar,
 } from 'react-native';
 import { PaystackProvider } from 'react-native-paystack-webview';
-import { NavigationContainer, useRoute } from '@react-navigation/native';
+import { NavigationContainer, useFocusEffect, useNavigationState, useRoute } from '@react-navigation/native';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import store from './redux/store';
 import { Shop } from './android/app/src/files/utils/Store.js';
-import { getData } from './android/app/src/files/utils/AsyncStore.js';
-import { setUserAuthTo } from './redux/reducer/auth.js';
 import { DownloadAppScreen } from './android/app/src/files/utils/Stacks/Update.js';
 import AuthStackScreen from './android/app/src/files/store/utils/Auth.js';
 import { school_choices } from './android/app/src/files/store/utils/location copy.js';
@@ -29,16 +25,18 @@ import BottomModal from './android/app/src/files/store/utils/BtmModal.js';
 import { set_locale_modal } from './redux/locale.js';
 import SubscriptionModal from './android/app/src/files/utils/Sub.js';
 import { set_sub_modal } from './redux/sub.js';
+import { Header } from 'react-native/Libraries/NewAppScreen';
 // import { set_campus } from './redux/reducer/location.js';   // ✅ add correct reducer
 // import { closeModal } from './redux/reducer/locale.js';      // ✅ add correct reducer
 
 function App() {
   
-
+  
+ 
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <StatusBar backgroundColor="rgba(255,0,0,1)" barStyle="dark-content" />
+
       <Provider store={store}>
         <AppFinale />
       </Provider>
@@ -89,12 +87,32 @@ function AppFinale() {
       }
     }).catch(console.log);
   }, []);
+  
   return(
     <>
       {!update ? (
         <PaystackProvider publicKey={'pk_live_13343a7bd4deeebc644070871efcdf8fdcf280f7'} defaultChannels={[payment_method]} debug={true}>
           
-          <NavigationContainer>
+          <NavigationContainer
+            onStateChange={(state) => {
+              // recursive function to get the deepest active route
+              const getActiveRoute = (state) => {
+                const route = state.routes[state.index];
+                if (route.state) {
+                  return getActiveRoute(route.state); // go deeper
+                }
+                return route;
+              };
+              const currentRoute = getActiveRoute(state);
+              if(currentRoute.name==='user-profile'){
+                StatusBar.setBarStyle("light-content");
+                StatusBar.setBackgroundColor("#FF4500"); // Android only
+              }else{
+                StatusBar.setBarStyle("dark-content");
+                StatusBar.setBackgroundColor("#fff"); // Android only
+              }
+            }}
+          >
             <NavCnt /> 
           </NavigationContainer>
           
@@ -124,8 +142,10 @@ function NavCnt() {
     dispatch(set_sub_modal(0));
   };
 
+  
   return (
     <SafeAreaProvider style={{ flex: 1 }}>
+
       {mode === 'shop' && <Shop />}
       {mode === 'auth' && <AuthStackScreen />}
       {

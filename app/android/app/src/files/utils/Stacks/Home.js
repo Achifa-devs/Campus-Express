@@ -31,7 +31,6 @@ import React, { useEffect, useState } from "react";
 import { 
     Dimensions,
     Image,
-    StatusBar,
     StyleSheet,
     Switch,
     Text,
@@ -82,7 +81,6 @@ export function HomeStackScreen() {
                 (
                     <>
                         <View style={styles.headerContainer}>
-                            <StatusBar backgroundColor="#FFF" barStyle="dark-content" />
                             
                             {/* Logo */}
                             <View style={styles.logoContainer}>

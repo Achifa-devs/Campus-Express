@@ -141,15 +141,18 @@ export default function Product() {
           if (response?.success) {  
             const newHistory = { date: new Date(), data: data };
             const prevHistory = await getData('history');
-            if (prevHistory) {
+            console.log(prevHistory)
+            if(prevHistory !== null && prevHistory !== 'null'){
               const arr = JSON.parse(prevHistory);
-        
-              if (Array.isArray(arr) && arr.length > 0) {
+              let duplicate = arr.filter(item => item.data.product_id === data?.product_id).length>0;
+              if(!duplicate){
                 storeData('history', JSON.stringify([...arr, newHistory]));
-              } else {
-                storeData('history', JSON.stringify([newHistory]));
               }
+            }else{
+              storeData('history', JSON.stringify([newHistory]));
             }
+
+           
           }
         } catch (error) {
           console.error('Error in product view request:', error);

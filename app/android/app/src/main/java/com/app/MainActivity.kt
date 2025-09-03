@@ -20,15 +20,8 @@ class MainActivity : ReactActivity() {
         
         // Add these lines for status bar customization
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        WindowInsetsControllerCompat(window, window.decorView).apply {
-            // Set light status bar content (dark icons) or not (light icons)
-            isAppearanceLightStatusBars = false
-            
-            // Optional: Hide system bars behavior if needed
-            // systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        }
+        
         
         // Set status bar color (works best with setDecorFitsSystemWindows)
-        window.statusBarColor = android.graphics.Color.parseColor("#FF4500")
     }
 }

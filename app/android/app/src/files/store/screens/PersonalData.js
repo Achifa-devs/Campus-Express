@@ -4,6 +4,8 @@ import { useSelector, useStore } from 'react-redux';
 import locations from '../utils/location.json'
 import { data, school_choices } from '../utils/location copy';
 import DropdownExample from '../../utils/DropDown';
+import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
 export default function PersonalData() {
     let {
         user
@@ -11,12 +13,22 @@ export default function PersonalData() {
     // console.log(user)
  
     
+    let [fname, set_fname] =  useState('')
+    let [lname, set_lname] =  useState('')
     let [states, set_states] =  useState('')
     let [cities, set_cities] =  useState('')
-    let [home_address, set_home_address] = useState('')
     let [gender, setGender] = useState('')
     let [state, setState] = useState('')
     let [campus, setCampus] = useState('')
+
+    useEffect(() => {
+        set_fname(user?.fname)
+        set_lname(user?.lname)
+        setState(user?.state)
+        setCampus(user?.campus)
+        setGender(user?.gender)
+
+    }, [user])
     const [campusLocaleList, setCampusLocaleList] = useState([]);
 
     useEffect(() => {
@@ -30,7 +42,7 @@ export default function PersonalData() {
 
     
     function updateData(data, name) {
-        console.log('updateData',data)
+        console.log('updateData',data, name)
         if (name === 'gender') {
             setGender(data)
         } else if (name === 'state') {
@@ -60,7 +72,28 @@ export default function PersonalData() {
         }
 
     },[state])
+
+    const nav = useNavigation()
     
+    async function update_user(){
+        try {
+            const req = await axios.post('http://172.18.191.146:9090/profile-update', {
+                fname, lname, campus, state, gender, user_id: user?.user_id
+            })
+            let response = req.data;
+            console.log('response: ', response)
+            if(response?.success){
+                nav.goBack()
+            }else{
+                Alert.alert("Error", "Internal server error please try again.");
+            }
+        } catch (error) {
+            console.log('error: ', error)
+            Alert.alert("Error", "Internal server error please try again.");
+        
+        }
+        
+    }
   return (
     <>
         <View style={styles.cnt} >
@@ -78,14 +111,14 @@ export default function PersonalData() {
 
                     <View style={{display: 'flex', height: 60, color: '#000', width: '48%', flexDirection: 'column'}}>
                         <Text style={{width: '100%', color: '#000', marginLeft: 4}}>Firstname</Text>
-                        <TextInput style={{height: 50, fontFamily: 'Roboto', padding: 10, borderRadius: 10, marginBottom: 2, width: '100%',  backgroundColor: '#fff', borderColor: '#000',borderWidth: .7,borderRadius: 7}}   placeholder="FirstName" value={user?.fname} />
+                        <TextInput style={{height: 50, fontFamily: 'Roboto', padding: 10, borderRadius: 10, marginBottom: 2, width: '100%',  backgroundColor: '#fff', borderColor: '#000',borderWidth: .7,borderRadius: 7}}   placeholder="FirstName" defaultValue={user?.fname} onChangeText={e => set_fname(e)} />
                         {/* <Text style={{color: '#000', marginBottom: 15, display: fnameErr.length > 0 ? 'flex' : 'none', fontSize: 10, paddingLeft: 5, color: 'red'}}>{fnameErr}</Text> */}
                     </View>
         
 
                     <View style={{display: 'flex', height: 60, color: '#000', width: '48%', flexDirection: 'column'}}>
                         <Text style={{width: '100%', color: '#000', marginLeft: 4}}>Lastname</Text>
-                        <TextInput style={{height: 50, fontFamily: 'Roboto', padding: 10, borderRadius: 10, marginBottom: 2, width: '100%',  backgroundColor: '#fff', borderColor: '#000',borderWidth: .7,borderRadius: 7}} placeholder="LastName" value={user?.lname} />
+                        <TextInput style={{height: 50, fontFamily: 'Roboto', padding: 10, borderRadius: 10, marginBottom: 2, width: '100%',  backgroundColor: '#fff', borderColor: '#000',borderWidth: .7,borderRadius: 7}} placeholder="LastName" defaultValue={user?.lname} onChangeText={e => set_lname(e)} />
                         {/* <Text style={{color: '#000', marginBottom: 15, display: lnameErr.length > 0 ? 'flex' : 'none', fontSize: 10, paddingLeft: 5, color: 'red'}}>{lnameErr}</Text> */}
                     </View>
 
@@ -93,7 +126,7 @@ export default function PersonalData() {
                 
                  <View style={styles.inputCnt}>
                     <Text style={styles.label}>Gender</Text>
-                     <DropdownExample updateData={updateData} default_value={{title: user?.gender}} dropdownData={[{ title: 'Male' }, { title: 'Female' }]} input_name={'gender'} placeholder={'Select your gender'} />
+                     <DropdownExample updateData={updateData} default_value={gender} dropdownData={[{ title: 'Male' }, { title: 'Female' }]} input_name={'gender'} placeholder={'Select your gender'} />
                 </View>
 
                 
@@ -147,7 +180,7 @@ export default function PersonalData() {
                         save="value"
                         placeholder='Select state'
                     /> */}
-                    <DropdownExample updateData={updateData} default_value={{title: user?.state}} dropdownData={data} dropdownPosition={"top"}  input_name={'state'} placeholder={'Select your state'} />
+                    <DropdownExample updateData={updateData} default_value={state} dropdownData={data} dropdownPosition={"top"}  input_name={'state'} placeholder={'Select your state'} />
                     
                 </View>
                 
@@ -161,7 +194,7 @@ export default function PersonalData() {
                         placeholder='Select city'
                         
                     /> */}
-                    <DropdownExample updateData={updateData} default_value={{title: user?.campus}}  dropdownData={campusLocaleList} dropdownPosition={"top"} input_name={'campus'} placeholder={'Select your campus'} />
+                    <DropdownExample updateData={updateData} default_value={campus}  dropdownData={campusLocaleList} dropdownPosition={"top"} input_name={'campus'} placeholder={'Select your campus'} />
                     
                 </View>
                 
@@ -170,15 +203,22 @@ export default function PersonalData() {
                 
             </ScrollView>
 
-            {/* <View style={{height: 80, padding: 10, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                <TouchableOpacity onPress={e=> update_user()} style={{height: 60, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: 'green', borderRadius: 8}}>
-                    <Text>Save</Text>
+            <View style={{height: 80, padding: 10, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                <TouchableOpacity onPress={e=> {
+                    let validation = ([fname , lname , gender , campus , state]).filter(item => item !== null && item !== '' && item !== 'null');
+                    if(validation.length === 5){
+                        update_user()
+                    }else{
+                        Alert.alert("Field missing", 'Please ensure no field is empty!')
+                    }
+                }} style={{height: 60, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#FF4500', borderRadius: 8}}>
+                    <Text style={{color: '#FFF'}}>Save</Text>
                 </TouchableOpacity>
-            </View> */}
+            </View>
         </View>
     </>
   )
-}
+} 
 
 
 const styles = StyleSheet.create({

@@ -15,7 +15,8 @@ import {
   ScrollView,
   SafeAreaView,
   PermissionsAndroid,
-  Alert
+  Alert,
+  StatusBar
 } from 'react-native';
 
 import {openSettings} from "react-native-permissions"
@@ -51,6 +52,8 @@ function StackNavigator () {
       })()
     }, [auth])
 
+    
+
     return (
         <>
          
@@ -61,157 +64,6 @@ function StackNavigator () {
   
   export default StackNavigator; 
 
-
-const DownloadAppScreen = ({ route, url, summary, is_published }) => {
-    // Get dynamic data from navigation params or use defaults
-    
-    const installAPK = (filePath) => {
-        const fileUrl = `content://${filePath}`;
-        Linking.openURL(fileUrl)
-        .catch(err => {
-        console.error('Error opening APK:', err);
-        Alert.alert('Error', 'Could not open the downloaded APK file.');
-        });
-    };
-      
- 
-    const downloadAndInstallAPK = async () => {
-      try {
-        if (!is_published) {
-          const apkUrl = url;
-          const fileName = 'campus sphere.apk';
-          const destPath = `${RNFS.DocumentDirectoryPath}/${fileName}`;
-
-    
-          PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, {
-            title: 'External Storage',
-            message: 'This app would like to modify your storage.',
-            buttonPositive: 'OK',
-          }).then(async (res) => {
-            // console.log("res:", res)
-            if (res !== PermissionsAndroid.RESULTS.GRANTED) {
-              const download = RNFS.downloadFile({
-                fromUrl: apkUrl,
-                toFile: destPath,
-              });
-        
-              const result = await download.promise;
-              console.log('Download result:', result);
-        
-              if (result.statusCode === 200) {
-                installAPK(destPath);
-              } else {
-                Alert.alert('Download Failed', 'Unable to download update.');
-              }
-              console.error(error);
-              Alert.alert('Error', 'Failed to download APK.');
-            } else {
-              console.warn('Storage permission is required to download the update.');
-              Alert.alert('Permission Denied', 'Storage permission is required to download the update.');
-  
-              // openSettings()
-            }
-          }).catch(console.error);
-        
-          
-        } else {
-          Linking.openURL(url)
-          .catch(err => {
-            console.error('Error opening APK:', err);
-            Alert.alert('Error', 'Could not open playstore.');
-          });
-        }
-      
-      } catch (error) {
-        console.log(error)
-      }
-    };
-
-  const { 
-    latestVersion = '1.0.2',
-    features = eval(summary),
-    downloadUrls = {
-      ios: 'https://apps.apple.com/app/campus-sphere/id123456789',
-      android: 'https://play.google.com/store/apps/details?id=com.campus.sphere'
-    }
-  } = route?.params || {};
-
-//   const handleDownload = () => {
-//     const url = Platform.OS === 'ios' ? downloadUrls.ios : downloadUrls.android;
-//     Linking.openURL(url).catch(() => {
-//       // Fallback to website if app store fails
-//       Linking.openURL('https://campussphere.com/download');
-//     });
-//   };
-
-  return (
-    <SafeAreaView style={styles.safeArea}>
-      
-      <ScrollView contentContainerStyle={styles.container}>
-        <View style={styles.header}>
-          <Image
-            source={{uri: 'https://res.cloudinary.com/daqbhghwq/image/upload/v1746402998/Untitled_design-removebg-preview_peqlme.png'}}
-            style={styles.logo}
-          />
-          <Text style={styles.title}>Campus Sphere</Text>
-          <Text style={styles.subtitle}>Connect. Discover. Belong.</Text>
-        </View>
-
-        <View style={styles.content}>
-          <Text style={styles.versionBadge}>Version {latestVersion}</Text>
-          
-          <View style={styles.featureCard}>
-            <Text style={styles.sectionTitle}>What's New:</Text>
-            {features.map((feature, index) => (
-              <View key={index} style={styles.featureItem}>
-                <Text style={styles.bullet}>•</Text>
-                <Text style={styles.featureText}>{feature}</Text>
-              </View>
-            ))}
-          </View>
-
-          {/* <View style={styles.platformCards}>
-            <View style={styles.platformCard}>
-              <Image 
-                source={{uri: 'https://res.cloudinary.com/daqbhghwq/image/upload/v1746402998/Untitled_design-removebg-preview_peqlme.png'}} 
-                style={styles.platformIcon}
-              />
-              <Text style={styles.platformText}>iOS</Text>
-              <Text style={styles.platformSize}>45.6 MB</Text>
-            </View>
-            
-            <View style={styles.platformCard}>
-              <Image 
-                source={{uri: 'https://res.cloudinary.com/daqbhghwq/image/upload/v1746402998/Untitled_design-removebg-preview_peqlme.png'}} 
-                style={styles.platformIcon}
-              />
-              <Text style={styles.platformText}>Android</Text>
-              <Text style={styles.platformSize}>32.4 MB</Text>
-            </View>
-          </View> */}
-        </View>
-
-        {/* <TouchableOpacity 
-          style={styles.downloadButton} 
-          onPress={downloadAndInstallAPK}
-          activeOpacity={0.8}
-        >
-          <Text style={styles.downloadButtonText}>
-            Download for {Platform.OS === 'ios' ? 'App Store' : 'Google Play'}
-          </Text>
-        </TouchableOpacity> */}
-
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>Available at:</Text>
-          <TouchableOpacity onPress={() => Linking.openURL(url)}>
-            <Text style={styles.websiteLink}>campussphere.net</Text>
-          </TouchableOpacity>
-          <Text style={styles.copyright}>© {new Date().getFullYear()} U-COMMERCE LIMITED</Text>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
 
 const styles = StyleSheet.create({
   safeArea: {

@@ -35,7 +35,7 @@ export default function Shop() {
         }, 3000);
         }
     }, [shop, user]);
-   
+    const { products } = useSelector(s => s.products);
    
   return (
     <> 

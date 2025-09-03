@@ -32,6 +32,8 @@ const { width } = Dimensions.get('window');
 const ShopScreen = () => {
   const navigation = useNavigation();
   const { user } = useSelector(s => s?.user);
+  const { shop } = useSelector(s => s.shop);
+  const { products } = useSelector(s => s.products);
   const [userAds, setUserAds] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);

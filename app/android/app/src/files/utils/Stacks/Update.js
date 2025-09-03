@@ -12,7 +12,6 @@ import {
   SafeAreaView,
   PermissionsAndroid,
   Alert,
-  StatusBar
 } from 'react-native';
 
 export const DownloadAppScreen = ({ url, summary=[] }) => {
@@ -35,7 +34,6 @@ export const DownloadAppScreen = ({ url, summary=[] }) => {
   return (
     
     <SafeAreaView style={styles.safeArea}>
-        <StatusBar backgroundColor={"#FF4500"}  barStyle={"light-content"} />
       
         <ScrollView contentContainerStyle={styles.container}>
             <View style={styles.header}>

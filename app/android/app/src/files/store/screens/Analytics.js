@@ -19,16 +19,19 @@ const AnalyticsScreen = () => {
   const [selectedTimeframe, setSelectedTimeframe] = useState('7d'); // 7d, 30d, 90d
   const { shop } = useSelector(s => s.shop);
   const { products } = useSelector(s => s.products);
+
+  let conversion = ((products.reduce((sum, item) => sum + parseInt(item.contact_click), 0))/(products.reduce((sum, item) => sum + parseInt(item.views), 0)))*100;
   
   // Mock data - replace with actual API calls
   const [analyticsData, setAnalyticsData] = useState({
     overview: {
-      shopViews: 1245,
-      postImpressions: 5678,
-      searchAppearances: 892,
+      shopViews: shop?.views,
+      postImpressions: products.reduce((sum, item) => sum + parseInt(item.impression), 0),
+      searchAppearances: products.reduce((sum, item) => sum + parseInt(item.search_appearances), 0),
       productViews: products.reduce((sum, item) => sum + parseInt(item.views), 0),
-      conversionRate: 4.2,
-      totalRevenue: 12560,
+      conversionRate: conversion,
+      Shares: products.reduce((sum, item) => sum + parseInt(item.shares), 0),
+      // totalRevenue: 12560, 
     //   orders: 128,
     //   averageOrderValue: 98.13,
     },
@@ -107,14 +110,14 @@ const AnalyticsScreen = () => {
       }
     >
       {/* Header */}
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <Text style={styles.headerTitle}>Shop Analytics</Text>
         <View style={styles.timeframeContainer}>
           <TimeframeButton label="7D" value="7d" />
           <TimeframeButton label="30D" value="30d" />
           <TimeframeButton label="90D" value="90d" />
         </View>
-      </View>
+      </View> */}
 
       {/* Overview Metrics */}
       <View style={styles.section}>
@@ -124,48 +127,48 @@ const AnalyticsScreen = () => {
             <Ionicons name="eye" size={24} color="#FF4500" />
             <Text style={styles.metricValue}>{analyticsData.overview.shopViews}</Text>
             <Text style={styles.metricLabel}>Shop Views</Text>
-            <Text style={styles.metricChange}>+12%</Text>
+            {/* <Text style={styles.metricChange}></Text> */}
           </View>
 
           <View style={styles.metricCard}>
             <Ionicons name="trending-up" size={24} color="#FF4500" />
             <Text style={styles.metricValue}>{analyticsData.overview.postImpressions}</Text>
             <Text style={styles.metricLabel}>Post Impressions</Text>
-            <Text style={styles.metricChange}>+8%</Text>
+            {/* <Text style={styles.metricChange}></Text> */}
           </View>
 
           <View style={styles.metricCard}>
             <Ionicons name="search" size={24} color="#FF4500" />
             <Text style={styles.metricValue}>{analyticsData.overview.searchAppearances}</Text>
             <Text style={styles.metricLabel}>Search Appearances</Text>
-            <Text style={styles.metricChange}>+15%</Text>
+            {/* <Text style={styles.metricChange}></Text> */}
           </View>
 
           <View style={styles.metricCard}>
             <Ionicons name="cart" size={24} color="#FF4500" />
             <Text style={styles.metricValue}>{analyticsData.overview.productViews}</Text>
             <Text style={styles.metricLabel}>Product Views</Text>
-            <Text style={styles.metricChange}>+10%</Text>
+            {/* <Text style={styles.metricChange}></Text> */}
           </View>
 
           <View style={styles.metricCard}>
             <Ionicons name="stats-chart" size={24} color="#FF4500" />
             <Text style={styles.metricValue}>{analyticsData.overview.conversionRate}%</Text>
             <Text style={styles.metricLabel}>Conversion Rate</Text>
-            <Text style={styles.metricChange}>+2%</Text>
+            {/* <Text style={styles.metricChange}></Text> */}
           </View>
 
           <View style={styles.metricCard}>
-            <Ionicons name="cash" size={24} color="#FF4500" />
-            <Text style={styles.metricValue}>${analyticsData.overview.totalRevenue}</Text>
-            <Text style={styles.metricLabel}>Total Revenue</Text>
-            <Text style={styles.metricChange}>+18%</Text>
+            <Ionicons name="share" size={24} color="#FF4500" />
+            <Text style={styles.metricValue}>{analyticsData.overview.Shares}</Text>
+            <Text style={styles.metricLabel}>Total Shares</Text>
+            {/* <Text style={styles.metricChange}></Text> */}
           </View>
         </View>
       </View>
 
       {/* Shop Views Chart */}
-      <View style={styles.section}>
+      {/* <View style={styles.section}>
         <Text style={styles.sectionTitle}>Shop Views Trend</Text>
         <LineChart
           data={{
@@ -197,10 +200,10 @@ const AnalyticsScreen = () => {
           bezier
           style={styles.chart}
         />
-      </View>
+      </View> */}
 
       {/* Revenue Chart */}
-      <View style={styles.section}>
+      {/* <View style={styles.section}>
         <Text style={styles.sectionTitle}>Revenue Trend</Text>
         <BarChart
           data={{
@@ -223,10 +226,10 @@ const AnalyticsScreen = () => {
           }}
           style={styles.chart}
         />
-      </View>
+      </View> */}
 
       {/* Traffic Sources */}
-      <View style={styles.section}>
+      {/* <View style={styles.section}>
         <Text style={styles.sectionTitle}>Traffic Sources</Text>
         <PieChart
           data={analyticsData.trafficSources.map((source, index) => ({
@@ -246,22 +249,23 @@ const AnalyticsScreen = () => {
           paddingLeft="15"
           style={styles.chart}
         />
-      </View>
+      </View> */}
 
       {/* Top Performing Products */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Top Performing Products</Text>
-        {analyticsData.topProducts.map((product, index) => (
+        {/* <Text style={styles.sectionTitle}>Top Performing Products</Text> */}
+        <Text style={styles.sectionTitle}>Product Performance Metrics</Text>
+        {products.map((product, index) => (
           <View key={index} style={styles.productItem}>
             <View style={styles.productInfo}>
-              <Text style={styles.productName}>{product.name}</Text>
+              <Text style={styles.productName}>{product.title}</Text>
               <Text style={styles.productStats}>
-                {product.views} views • {product.conversions} conversions
+                {product.views} views • {(product?.contact_click/product?.views)*100} conversions
               </Text>
             </View>
             <View style={styles.conversionRate}>
               <Text style={styles.conversionText}>
-                {((product.conversions / product.views) * 100).toFixed(1)}%
+                {(((product?.contact_click/product?.views)*100 / (product.views * 100))).toFixed(1)}%
               </Text>
             </View>
           </View>

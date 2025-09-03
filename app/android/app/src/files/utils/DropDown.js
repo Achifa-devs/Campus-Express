@@ -3,13 +3,14 @@ import { View, StyleSheet, Alert } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { useSelector } from 'react-redux';
 
-export default function DropdownExample({ dropdownData, defaultValue, fieldName, name, placeholder, updateData, dropdownPosition }) {
+export default function DropdownExample({ dropdownData, default_value, fieldName, input_name, placeholder, updateData, dropdownPosition }) {
   const [value, setValue] = useState('');
 
 
   useEffect(() => {
-    setValue({title: defaultValue});
-  }, [defaultValue]);
+    console.log('default_value: ', default_value)
+    setValue({title: default_value});
+  }, [default_value]);
 
   return (
     <View style={styles.container}>
@@ -31,7 +32,8 @@ export default function DropdownExample({ dropdownData, defaultValue, fieldName,
         onChange={item => {
           setValue(item);
           let key = fieldName || "title";
-          updateData(name,item[key]);
+          console.log(input_name,item[key])
+          updateData(item[key], input_name);
         }}
       />
     </View>

@@ -18,6 +18,8 @@ export default function Shopile() {
     let [review, set_review] = useState([])
     const {shop} = useSelector(s => s.shop);
 
+    const { products } = useSelector(s => s.products);
+
     let { user } = useSelector(s => s.user)
     let [list, set_list] = useState([])
     let [logo, set_logo] = useState(shop?.logo_url)
@@ -463,9 +465,9 @@ export default function Shopile() {
                     
                     <View style={styles.analyticsContainer}>
                         {[
-                            {title: '18 shop views', summary: 'Discover who viewed your shop', icon: 'people'},
-                            {title: '84 post impressions', summary: 'Checkout who\'s engaging with your product', icon: 'stats-chart'},
-                            {title: '7 search appearances', summary: 'See how often your product appear in searches', icon: 'compass'}
+                            {title: `${shop?.views} shop views`, summary: 'Discover who viewed your shop', icon: 'people'},
+                            {title: `${products.reduce((sum, item) => sum + parseInt(item.impression), 0)} post impression`, summary: 'Checkout who\'s engaging with your product', icon: 'stats-chart'},
+                            {title: `${products.reduce((sum, item) => sum + parseInt(item.search_appearances), 0)} search appearances`, summary: 'See how often your product appear in searches', icon: 'compass'}
                         ].map((item, index) => (
                             <TouchableOpacity 
                                 key={index} 

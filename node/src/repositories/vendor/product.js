@@ -89,7 +89,8 @@ export async function createProduct({ constantData, dynamicData, shipping_data }
         thumbnail_public_id, 
         purpose,
         contact_click,
-        impression
+        impression,
+        search_appearances
       ) 
       VALUES(
         DEFAULT,
@@ -120,6 +121,7 @@ export async function createProduct({ constantData, dynamicData, shipping_data }
         state,
         thumbnail_public_id,
         purpose,
+        0,
         0,
         0
       ]
