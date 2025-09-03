@@ -421,3 +421,26 @@ CAMPUSSPHERE_SERVER.get('/vendor/report', async (req, res) => {
   }
 });
 
+CAMPUSSPHERE_SERVER.post('/update-photo', parser, async (req, res) => {
+  const { photo, user_id } = req.body;
+  try {
+    const result = await pool.query(
+      `UPDATE users SET photo = $1 WHERE user_id = $2 RETURNING *`,
+      [photo, user_id]
+    );
+
+    const updatedUser = result.rows[0]; // no need for await here
+
+    res.status(200).json({
+      success: true,
+      data: updatedUser,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      success: false,
+      message: "Something went wrong",
+    });
+  }
+
+});

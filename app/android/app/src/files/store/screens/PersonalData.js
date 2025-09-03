@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { ScrollView, StyleSheet, TextInput, View, Text, TouchableOpacity, Button, Alert } from 'react-native'
-import { useSelector, useStore } from 'react-redux';
+import { ScrollView, StyleSheet, TextInput, View, Text, TouchableOpacity, Button, Alert, ActivityIndicator, Image } from 'react-native'
+import { useDispatch, useSelector, useStore } from 'react-redux';
 import locations from '../utils/location.json'
 import { data, school_choices } from '../utils/location copy';
 import DropdownExample from '../../utils/DropDown';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
+import { launchImageLibrary } from 'react-native-image-picker';
+import { set_user } from '../../../../../../redux/user';
+import Ionicons  from 'react-native-vector-icons/Ionicons';
+import BottomModal from '../utils/BtmModal';
+import UserIcons from '../../media/icons/UserIcons';
 export default function PersonalData() {
     let {
         user
@@ -77,7 +82,7 @@ export default function PersonalData() {
     
     async function update_user(){
         try {
-            const req = await axios.post('http://172.18.191.146:9090/profile-update', {
+            const req = await axios.post('https://cs-server-olive.vercel.app/profile-update', {
                 fname, lname, campus, state, gender, user_id: user?.user_id
             })
             let response = req.data;
@@ -94,15 +99,241 @@ export default function PersonalData() {
         }
         
     }
+
+    let [photo, set_photo] = useState(user?.photo)
+     useEffect(() => {
+        const newUser = {...user};
+        newUser.photo = photo;
+        dispatch(set_user(newUser))
+    }, [photo])
+    const [isLoading, setIsLoading] = useState(false);
+    const dispatch = useDispatch()
+
+    function updatePhoto() {
+        setIsLoading(true)
+        axios.post(`https://cs-server-olive.vercel.app/update-photo`, {
+            user_id: user?.user_id,
+            photo
+        })
+        .then((response) => {
+            setIsLoading(false)
+            setModalVisible(false)
+            if(response.data.success){
+                dispatch(set_user(response?.data?.data))
+            }else{
+                Alert.alert("Error", "Internal server error please try again.");
+            }
+        }).catch(err=>{
+            console.log(err); 
+            setIsLoading(false)
+
+            Alert.alert("Error", "Internal server error please try again.");
+        })
+    }
+
+    const [modalVisible, setModalVisible] = useState(false);
+
+    const toggleModal = (data) => {
+        setModalVisible(!modalVisible);
+    };
+    
+    
+    const selectUserPhoto = () => {
+        const options = {
+            mediaType: 'photo',
+            quality: 0.8,
+            maxWidth: 500,
+            maxHeight: 500,
+        };
+    
+        launchImageLibrary(options, async (response) => {
+            if (response.didCancel) {
+            console.log('User cancelled image picker');
+            } else if (response.errorCode) {
+            console.log('ImagePicker Error: ', response.errorMessage);
+            } else if (response.assets && response.assets.length > 0) {
+            const image = response.assets[0];
+            await uploadToServer(image);
+            }
+        });
+    };
+    
+    const uploadToServer = async (image) => {
+        try {
+            setIsLoading(true); // Correct loading state
+            const formData = new FormData();
+            formData.append('file', {
+                uri: image.uri,
+                name: image.fileName || `photo_${Date.now()}.jpg`,
+                type: image.type || 'image/jpeg',
+            });
+    
+            const response = await axios.post('https://cs-server-olive.vercel.app/upload', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+            });
+    
+            const result = response.data;
+            console.log(result.data.url);
+    
+            if (result.success && result.data.url) {
+                set_photo(result.data.url);
+                setIsLoading(false); // Correct loading state
+    
+            }
+        } catch (err) {
+            console.error('Upload failed:', err.message);
+        } finally {
+            setIsLoading(false); // Correct loading state
+        }
+    };
+
+    const deleteFromServer = async (url) => {
+        try {
+            setIsLoading(true);
+            const response = await axios.post('https://cs-server-olive.vercel.app/delete', {
+                url
+            });
+
+            if (response.data && response.data.data.result === "ok") {
+                selectUserPhoto()
+            }
+        } catch (err) {
+            console.error('Upload failed:', err.message);
+
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    if (isLoading) {
+        return (
+            <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color="#FF4500" />
+            </View>
+        );
+    }
   return (
     <>
+        <BottomModal visible={modalVisible} onClose={toggleModal}>
+            <ScrollView style={{padding: 8}} showsVerticalScrollIndicator={false}>
+                <View style={styles.modalHeader}>
+                    <Text style={styles.modalTitle}>Profile Settings</Text>
+                </View>
+                
+                <View style={styles.infoCard}>
+                    <Ionicons name="information-circle" size={24} color="#FF4500" />
+                    <Text style={styles.infoText}>You are trying to update your coverphoto.</Text>
+                    <Text style={styles.learnMoreText}>Learn more in our help articles.</Text>
+                </View>
+            
+                {/* Image Upload Section */}
+                <View style={styles.inputGroup}>
+                    <Text style={styles.inputLabel}>My Photo</Text>
+                    <View style={{
+                        alignItems: 'center',
+                        marginBottom: 20,
+                    }}>
+                        <TouchableOpacity 
+                            style={{
+                                width: 100,
+                                height: 100,
+                                borderRadius: 50,
+                                backgroundColor: '#F8F9FA',
+                                borderWidth: 2,
+                                borderColor: '#E9ECEF',
+                                borderStyle: 'dashed',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                marginBottom: 12,
+                            }}
+                            onPress={() => {
+                                selectUserPhoto()
+                                console.log('Open image picker');
+                            }}
+                        >
+                            {user?.photo ? (
+                                <Image 
+                                    source={{ uri: photo}} 
+                                    style={{
+                                        width: 96,
+                                        height: 96,
+                                        borderRadius: 48,
+                                    }}
+                                />
+                            ) : (
+                                <Ionicons name="camera" size={32} color="#6C757D" />
+                            )}
+                        </TouchableOpacity>
+                        
+                        <TouchableOpacity 
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                backgroundColor: '#FF4500',
+                                paddingHorizontal: 16,
+                                paddingVertical: 10,
+                                borderRadius: 8,
+                            }}
+                            onPress={async() => {
+                                // Add your image upload logic here
+                                console.log('Upload image');
+                                const result = await deleteFromServer(user?.photo)
+                            }}
+                        >
+                            <Ionicons name="cloud-upload" size={18} color="#FFF" />
+                            <Text style={{
+                                color: '#FFF',
+                                fontWeight: '600',
+                                marginLeft: 8,
+                                fontSize: 14,
+                            }}>
+                                {user?.photo ? 'Change Photo' : 'Upload Photo'}
+                            </Text>
+                        </TouchableOpacity>
+                        
+                        
+                        {/* <Text style={{
+                            fontSize: 12,
+                            color: '#6C757D',
+                            textAlign: 'center',
+                            marginTop: 8,
+                        }}>
+                            Recommended: 300×300 pixels, JPG or PNG
+                        </Text> */}
+                    </View>
+                </View>
+
+                <TouchableOpacity 
+                    onPress={() => updatePhoto()} 
+                    style={styles.setupButton}
+                >
+                    <Text style={styles.setupButtonText}>Set up</Text>
+                </TouchableOpacity>
+            </ScrollView>
+        </BottomModal>
         <View style={styles.cnt} >
             {/* <Text style={{fontSize: 25, color: '#000', fontWeight: '600', height: 40, backgroundColor: '#fff'}}>Tell us about yourself</Text> */}
 
             <ScrollView >
-                <View style={styles.inputCnt}>
-                    <Text style={styles.label}>Country of residence</Text>
-                    <TextInput style={styles.input} defaultValue='Nigeria' />
+                <View style={{height: 60, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                    {
+                        user?.photo
+                        ?
+                            <TouchableOpacity style={{height: 60, width: 60}} onPress={e => {
+                                toggleModal()
+                            }}>
+                                <Image
+                                    source={{ uri: user.photo }}
+                                    style={styles.profileImage}
+                                    onError={() => console.log('Error loading image')}
+                                />
+                            </TouchableOpacity>  
+                        :
+                            <TouchableOpacity style={{height: 60, width: 60}} onPress={e => {
+                                toggleModal()
+                            }}>
+                                <UserIcons color='#FF4500' size={60} />
+                            </TouchableOpacity>  
+                    }  
                 </View>
 
 
@@ -231,6 +462,25 @@ const styles = StyleSheet.create({
             
 
       },
+      loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#F8F9FA',
+    },
+     profileImage: {
+        width: 80,
+        height: 80,
+        borderRadius: 50,
+        marginBottom: 16,
+        borderWidth: 3,
+        borderColor: '#FF4500',
+    },
+    loadingText: {
+        marginTop: 16,
+        fontSize: 16,
+        color: '#666',
+    },
       dateInputCnt: {
         width: '100%',
         marginTop: 10, 
@@ -281,5 +531,144 @@ const styles = StyleSheet.create({
         fontSize: 12,
         marginLeft: 5,
         fontWeight: '800'
-      }
+      },
+      modalHeader: {
+        marginBottom: 20,
+    },
+    modalTitle: {
+        fontSize: 24,
+        fontWeight: '700',
+        color: '#2D3436',
+        textAlign: 'center',
+    },
+    infoCard: {
+        backgroundColor: '#FFF8F6',
+        padding: 20,
+        borderRadius: 12,
+        borderWidth: 1,
+        borderColor: '#FFE5DE',
+        marginBottom: 24,
+    },
+    infoText: {
+        fontSize: 16,
+        color: '#2D3436',
+        lineHeight: 22,
+        marginTop: 8,
+        marginBottom: 12,
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#F8F9FA',
+    },
+    loadingText: {
+        marginTop: 16,
+        fontSize: 16,
+        color: '#666',
+    },
+    learnMoreText: {
+        fontSize: 16,
+        color: '#FF4500',
+        fontWeight: '600',
+    },
+    inputGroup: {
+        marginBottom: 24,
+    },
+    inputLabel: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#2D3436',
+        marginBottom: 8,
+    },
+    textInput: {
+        backgroundColor: '#F8F9FA',
+        borderWidth: 1,
+        borderColor: '#E9ECEF',
+        borderRadius: 8,
+        padding: 16,
+        fontSize: 16,
+        color: '#2D3436',
+    },
+    multilineInput: {
+        height: 120,
+        textAlignVertical: 'top',
+    },
+    sectionTitleModal: {
+        fontSize: 18,
+        fontWeight: '600',
+        color: '#2D3436',
+        marginBottom: 16,
+    },
+    categoryScroll: {
+        maxHeight: 200,
+        marginBottom: 24,
+    },
+    categoryContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        gap: 8,
+    },
+    categoryPill: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#F8F9FA',
+        paddingHorizontal: 16,
+        paddingVertical: 12,
+        borderRadius: 20,
+        borderWidth: 1,
+        borderColor: '#E9ECEF',
+        gap: 8,
+    },
+    categoryPillSelected: {
+        backgroundColor: '#E7F5FF',
+        borderColor: '#339AF0',
+    },
+    categoryText: {
+        color: '#2D3436',
+        fontSize: 14,
+        fontWeight: '500',
+    },
+    categoryTextSelected: {
+        color: '#339AF0',
+    },
+    selectedCategories: {
+        marginBottom: 24,
+    },
+    selectedScroll: {
+        maxHeight: 120,
+    },
+    selectedContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        gap: 8,
+    },
+    selectedPill: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#E7F5FF',
+        paddingHorizontal: 16,
+        paddingVertical: 12,
+        borderRadius: 20,
+        borderWidth: 1,
+        borderColor: '#339AF0',
+        gap: 8,
+    },
+    selectedText: {
+        color: '#339AF0',
+        fontSize: 14,
+        fontWeight: '500',
+    },
+    setupButton: {
+        backgroundColor: '#FF4500',
+        borderRadius: 12,
+        padding: 18,
+        alignItems: 'center',
+        marginBottom: 20,
+    },
+    setupButtonText: {
+        color: '#FFF',
+        fontSize: 18,
+        fontWeight: '700',
+    }
   });
