@@ -14,9 +14,10 @@ import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { debounce } from 'lodash';
 import { get_saved_list, save_prod, unsave_prod } from '../../utils/Saver';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { getDeviceId } from '../../utils/IdGen';
+import { setUserAuthTo } from '../../../../../../../redux/reducer/auth';
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - 32) / 2; // Better spacing between cards
@@ -61,30 +62,56 @@ const ItemCard = React.memo(({ item, onPress }) => {
     }
   }, [Fav])
 
+  const dispatch = useDispatch()
+
   const handleSave = async() => {
     setFavLoading(true);
-    if (!wishlisted) {
-      const result = await save_prod({
-        user_id: user?.user_id,
-        product_id: item?.product_id
-      })
-      if (result?.success) {
-        setWishlisted(true)
-        setFavLoading(false);
+    if (user) {
+      if (!wishlisted) {
+        const result = await save_prod({
+          user_id: user?.user_id,
+          product_id: item?.product_id
+        })
+        if (result?.success) {
+          setWishlisted(true)
+          setFavLoading(false);
+        } else {
+          setFavLoading(false);
+        }
       } else {
-        setFavLoading(false);
+        const result = await unsave_prod({
+          user_id: user?.user_id,
+          product_id: item?.product_id
+        })
+        if (result?.success) {
+          setWishlisted(false)
+          setFavLoading(false);
+        } else {
+          setFavLoading(false);
+        }
       }
     } else {
-      const result = await unsave_prod({
-        user_id: user?.user_id,
-        product_id: item?.product_id
-      })
-      if (result?.success) {
-        setWishlisted(false)
-        setFavLoading(false);
-      } else {
-        setFavLoading(false);
-      }
+      Alert.alert(
+        "Login Required",
+        "You need to login first to continue.",
+        [
+          {
+            text: "Cancel",
+            style: "cancel", // makes it look like cancel
+            onPress: () => console.log("User canceled"),
+          },
+          {
+            text: "Login",
+            onPress: () => {
+              // navigate to login screen
+              console.log("Redirecting to login...");
+              dispatch(setUserAuthTo(true))
+              // e.g. navigation.navigate("Login");
+            },
+          },
+        ],
+        { cancelable: false } // user must choose one option
+      );
     }
   };
 
@@ -125,7 +152,7 @@ const ItemCard = React.memo(({ item, onPress }) => {
           style={[styles.wishlistButton, wishlisted && styles.wishlistButtonActive]}
           onPress={handleSave}
         >
-          {favLoading ? (
+          {user && favLoading ? (
             <ActivityIndicator size="small" color={wishlisted ? "#FFF" : "#FF4500"} />
           ) : (
             <Icon 

@@ -10,7 +10,8 @@ import {
   StyleSheet,
   Dimensions,
   SafeAreaView,
-  ActivityIndicator
+  ActivityIndicator,
+  Alert
 } from 'react-native';
 import Video from 'react-native-video';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -28,7 +29,8 @@ const Lodges = ({ data }) => {
   const [favList, setFavList] = useState([]);
 
   useEffect(() => {
-    console.log("data from lodges: ", data)
+    console.log(data.length)
+    setLoading(false)
   }, [data])
 
   const fetchFavourites = async () => {
@@ -60,35 +62,59 @@ const Lodges = ({ data }) => {
   };
 
   useEffect(() => {
-    if (user?.user_id) {
+    if (user) {
       fetchFavourites();
     }
-  }, [user?.user_id]);
+  }, [user]);
 
   const handleSave = async (productId) => {
     setFavLoading(prev => ({ ...prev, [productId]: true }));
     
     try {
-      if (!wishlistedItems[productId]) {
-        const result = await save_prod({
-          user_id: user?.user_id,
-          product_id: productId
-        });
-        if (result?.success) {
-          setWishlistedItems(prev => ({ ...prev, [productId]: true }));
+      if (user) {
+        if (!wishlistedItems[productId]) {
+          const result = await save_prod({
+            user_id: user?.user_id,
+            product_id: productId
+          });
+          if (result?.success) {
+            setWishlistedItems(prev => ({ ...prev, [productId]: true }));
+          }
+        } else {
+          const result = await unsave_prod({
+            user_id: user?.user_id,
+            product_id: productId
+          });
+          if (result?.success) {
+            setWishlistedItems(prev => {
+              const newState = { ...prev };
+              delete newState[productId];
+              return newState;
+            });
+          }
         }
       } else {
-        const result = await unsave_prod({
-          user_id: user?.user_id,
-          product_id: productId
-        });
-        if (result?.success) {
-          setWishlistedItems(prev => {
-            const newState = { ...prev };
-            delete newState[productId];
-            return newState;
-          });
-        }
+        Alert.alert(
+          "Login Required",
+          "You need to login first to continue.",
+          [
+            {
+              text: "Cancel",
+              style: "cancel", // makes it look like cancel
+              onPress: () => console.log("User canceled"),
+            },
+            {
+              text: "Login",
+              onPress: () => {
+                // navigate to login screen
+                console.log("Redirecting to login...");
+                dispatch(setUserAuthTo(true))
+                // e.g. navigation.navigate("Login");
+              },
+            },
+          ],
+          { cancelable: false } // user must choose one option
+        );
       }
     } catch (error) {
       console.log('Save/unsave error:', error);

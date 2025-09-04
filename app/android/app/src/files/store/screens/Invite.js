@@ -1,4 +1,4 @@
-import { FlatList, Text, TouchableOpacity, View, PermissionsAndroid, Image, Share } from "react-native";
+import { FlatList, Text, TouchableOpacity, View, PermissionsAndroid, Image, Share, Linking } from "react-native";
 import Contacts from 'react-native-contacts';
 import { useCallback, useEffect, useState } from "react";
 
@@ -25,25 +25,20 @@ const Invite = () => {
     if (!name) return '';
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
   };
-  const handleShare = async (url) => {
-    try {
-      const result = await Share.share({
-        message: `Download the Campus Sphere app now ${url}.`,
-        title: 'Campus Sphere mobile app',
-      });
+  const handleInvite = (phoneNumber, url) => {
+    const message = `Download the Campus Sphere app now ${url}.`;
 
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          console.log('Shared with activity type: ', result.activityType);
-        } else {
-          console.log('Shared successfully');
-        }
-      } else if (result.action === Share.dismissedAction) {
-        console.log('Share dismissed');
-      }
-    } catch (error) {
-      console.error('Error sharing:', error);
+    let smsURL = "";
+
+    if (Platform.OS === "ios") {
+      smsURL = `sms:${phoneNumber}&body=${encodeURIComponent(message)}`;
+    } else {
+      smsURL = `sms:${phoneNumber}?body=${encodeURIComponent(message)}`;
     }
+
+    Linking.openURL(smsURL).catch(err =>
+      console.error("Failed to open SMS app:", err)
+    );
   };
 
   const renderItem = useCallback(({ item }) => {
@@ -90,7 +85,7 @@ const Invite = () => {
           onPress={() => {
             // Add your invite logic here
             console.log(`Invited ${fullName}`);
-            handleShare('');
+            handleInvite(phoneNumber, '');
           }}
         >
           <Text style={{ color: '#fff', fontWeight: 'bold' }}>Invite</Text>

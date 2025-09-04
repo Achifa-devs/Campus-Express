@@ -12,6 +12,11 @@ export default function DropdownExample({ dropdownData, default_value, fieldName
     setValue({title: default_value});
   }, [default_value]);
 
+  useEffect(() => {
+    console.log('dropdownData: ', dropdownData)
+    setValue({title: dropdownData});
+  }, [dropdownData]);
+
   return (
     <View style={styles.container}>
       <Dropdown

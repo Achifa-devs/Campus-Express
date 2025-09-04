@@ -45,19 +45,30 @@ export default function Shopile() {
     const dispatch = useDispatch()
 
     function updateShop() {
-        setIsLoading(true)
-        axios.post(`https://cs-server-olive.vercel.app/vendor/update-shop`, {
+        let list = [
             title,
             description,
-            user_id: user?.user_id,
+            user.user_id,
             logo
-        })
-        .then((response) => {
-            console.log('response: ', response?.data)
-            dispatch(set_shop(response?.data?.data))
-            setIsLoading(false)
-            setModalVisible(false)
-        }).catch(err=>console.log(err))
+        ]
+
+        if (list.filter(item => item !== '' && item !== undefined).length === list.length) {
+            setIsLoading(true)
+            axios.post(`https://cs-server-olive.vercel.app/vendor/update-shop`, {
+                title,
+                description,
+                user_id: user?.user_id,
+                logo
+            })
+            .then((response) => {
+                console.log('response: ', response?.data)
+                dispatch(set_shop(response?.data?.data))
+                setIsLoading(false)
+                setModalVisible(false)
+            }).catch(err=>console.log(err))
+        } else {
+            Alert.alert("Validation error", "Please ensure no field is empty.");
+        }
     }
 
 

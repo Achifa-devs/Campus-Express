@@ -123,29 +123,53 @@ const ServiceDetailScreen = ({ route }) => {
     }
     
     const handleSave = async () => {
-        setFavLoading(true);
-        if (!saved) {
-            const result = await save_prod({
-                user_id: user?.user_id,
-                product_id: data?.product_id
-            });
-            if (result?.success && result?.data?.length > 0) {
-                setSaved(true);
-                setFavLoading(false);
+        if (user) {
+            setFavLoading(true);
+            if (!saved) {
+                const result = await save_prod({
+                    user_id: user?.user_id,
+                    product_id: data?.product_id
+                });
+                if (result?.success && result?.data?.length > 0) {
+                    setSaved(true);
+                    setFavLoading(false);
+                } else {
+                    setFavLoading(false);
+                }
             } else {
-                setFavLoading(false);
+                const result = await unsave_prod({
+                    user_id: user?.user_id,
+                    product_id: data?.product_id
+                });
+                if (result?.success && result?.data?.length > 0) {
+                    setSaved(false);
+                    setFavLoading(false);
+                } else {
+                    setFavLoading(false);
+                }
             }
         } else {
-            const result = await unsave_prod({
-                user_id: user?.user_id,
-                product_id: data?.product_id
-            });
-            if (result?.success && result?.data?.length > 0) {
-                setSaved(false);
-                setFavLoading(false);
-            } else {
-                setFavLoading(false);
-            }
+            Alert.alert(
+                "Login Required",
+                "You need to login first to continue.",
+                [
+                    {
+                    text: "Cancel",
+                    style: "cancel", // makes it look like cancel
+                    onPress: () => console.log("User canceled"),
+                    },
+                    {
+                    text: "Login",
+                    onPress: () => {
+                        // navigate to login screen
+                        console.log("Redirecting to login...");
+                        dispatch(setUserAuthTo(true))
+                        // e.g. navigation.navigate("Login");
+                    },
+                    },
+                ],
+                { cancelable: false } // user must choose one option
+            );
         }
     };
     

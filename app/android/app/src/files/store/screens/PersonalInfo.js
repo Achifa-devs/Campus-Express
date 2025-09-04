@@ -171,8 +171,8 @@ const styles = StyleSheet.create({
     borderBottomColor: '#e0e0e0',
   },
   profileImage: {
-    width: 100,
-    height: 100,
+    width: 60,
+    height: 60,
     borderRadius: 50,
     marginBottom: 16,
     borderWidth: 3,

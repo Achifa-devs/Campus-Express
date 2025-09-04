@@ -73,7 +73,18 @@ export function ProfileStackScreen() {
                         {
                             user?.photo
                             ?
-                            ''
+                            <Image
+                                source={{ uri: user.photo }}
+                                style={{
+                                    width: 80,
+                                    height: 80,
+                                    borderRadius: 50,
+                                    marginBottom: 16,
+                                    borderWidth: 3,
+                                    borderColor: '#FF4500',
+                                }}
+                                onError={() => console.log('Error loading image')}
+                            />
                             :
                             <View style={{height: 60, width: 60}}>
                                 <UserIcons size={60} />
@@ -84,11 +95,7 @@ export function ProfileStackScreen() {
                                 {user && user?.fname}{user && '.'}{user && user?.lname[0]}
                             
                             </Text>
-                            <TouchableOpacity onPress={() => navigation.navigate('user-shop')}>
-                            <Text style={{ color: '#fff', textDecorationLine: 'underline', fontSize: 13 }}>
-                                Visit Shop
-                            </Text>
-                            </TouchableOpacity>
+                           
                         </View>
                     </View>
 

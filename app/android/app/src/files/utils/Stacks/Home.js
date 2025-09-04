@@ -51,6 +51,7 @@ import ServiceDetailScreen from "../../store/screens/ServiceRoom";
 import PaymentScreen from "../../store/utils/Paystack";
 import ReviewSubmissionScreen from "../../store/screens/Review";
 import Shop from "../../store/screens/Shop";
+import { setUserAuthTo } from "../../../../../../redux/reducer/auth";
 const HomeStack = createNativeStackNavigator();
 export function HomeStackScreen() {
    
@@ -98,14 +99,7 @@ export function HomeStackScreen() {
 
                                 {/* Subscribe Button */}
                                 {user && (
-                                // <TouchableOpacity 
-                                //     style={styles.loginButton}
-                                //     onPress={() => dispatch(setUserAuthTo(true))}
-                                //     activeOpacity={0.9}
-                                // >
-                                //     <Text style={styles.loginText}>Login</Text>
-                                //     <Icon name="log-in-outline" size={16} color="#FFF" />
-                                // </TouchableOpacity>
+                                
                                 <TouchableOpacity
                                     style={[styles.button, subscribed && styles.subscribedButton]}
                                     onPress={e=> handleSub()}
@@ -124,6 +118,19 @@ export function HomeStackScreen() {
                                     </View>
                                 </TouchableOpacity>
                                 )}
+
+                                {
+                                    !user && (
+                                        <TouchableOpacity 
+                                            style={styles.loginButton}
+                                            onPress={() => dispatch(setUserAuthTo(true))}
+                                            activeOpacity={0.9}
+                                        >
+                                            <Text style={styles.loginText}>Login</Text>
+                                            <Icon name="log-in-outline" size={16} color="#FFF" />
+                                        </TouchableOpacity>
+                                    )
+                                }
                             </View>
                         </View>
                                                 

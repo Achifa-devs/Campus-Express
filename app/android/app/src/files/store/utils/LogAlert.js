@@ -17,27 +17,36 @@ const LoginButton = ({ text = "Sign in to continue" }) => {
   const dispatch = useDispatch()
  
   return (
-    <TouchableOpacity 
-      style={[styles.button]}
-      onPress={e=> dispatch(setUserAuthTo(true))}
-      activeOpacity={0.8}
-    >
-      <View style={styles.buttonContent}>
-        <Icon name="log-in" size={20} color="#FFF" style={styles.icon} />
-        <View style={styles.textContainer}>
-          <Text style={styles.buttonText}>Sign In Required</Text>
-          <Text style={styles.descriptionText}>{text}</Text>
+    <View style={{
+      flex: 1, // makes container take 100% height & width
+      justifyContent: "center", // centers vertically
+      alignItems: "center", // centers horizontally
+      backgroundColor: "#f5f5f5", // optional
+    }}>
+      <TouchableOpacity
+        style={[styles.button]}
+        onPress={e=> dispatch(setUserAuthTo(true))}
+        activeOpacity={0.8}
+      >
+        <View style={styles.buttonContent}>
+          <Icon name="log-in" size={30} color="#FF4500" style={styles.icon} />
+          <View style={styles.textContainer}>
+            <Text style={styles.buttonText}>Sign In Required</Text>
+            <Text style={styles.descriptionText}>{text}</Text>
+          </View>
+            <Text style={styles.buttonText}>Click Me</Text>
+
+          {/* <Icon name="chevron-forward" size={20} color="#FFF" /> */}
         </View>
-        <Icon name="chevron-forward" size={20} color="#FFF" />
-      </View>
-    </TouchableOpacity>
+      </TouchableOpacity>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#FF4500',
-    borderRadius: 12,
+    backgroundColor: '#fff',
+    borderRadius: 4,
     padding: 16,
     marginVertical: 8,
     width: width - 32,
@@ -52,7 +61,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   buttonContent: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
@@ -60,16 +69,19 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   textContainer: {
-    flex: 1,
+    // flex: 1,
+    textAlign: 'center'
   },
   buttonText: {
-    color: '#FFF',
+    color: '#FF4500',
     fontSize: 16,
     fontWeight: '600',
     marginBottom: 2,
+    textAlign: 'center'
+
   },
   descriptionText: {
-    color: 'rgba(255, 255, 255, 0.9)',
+    color: '#FF4500',
     fontSize: 14,
     fontWeight: '400',
   },

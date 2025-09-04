@@ -26,10 +26,12 @@ import categoriesData from '../../../../../../../services.json'
 import { launchImageLibrary } from 'react-native-image-picker';
 import LoginButton from '../../utils/LogAlert';
 import { set_products } from '../../../../../../../redux/products';
-
+import axios from 'axios';
 const { width } = Dimensions.get('window');
 
 const ShopScreen = () => {
+  const screenHeight = Dimensions.get('window').height;
+  const screenWidth = Dimensions.get('window').width;
   const navigation = useNavigation();
   const { user } = useSelector(s => s?.user);
   const { shop } = useSelector(s => s.shop);
@@ -568,7 +570,7 @@ const ShopScreen = () => {
         {/* Your Ads Section */}
         <View style={styles.adsSection}>
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Your Ads (4)</Text>
+            <Text style={styles.sectionTitle}>Your Ads ({userAds.length})</Text>
             <TouchableOpacity onPress={e => navigation.navigate('user-inventory', {data: userAds})}>
               <Text style={styles.seeAllText}>See All</Text>
             </TouchableOpacity>
@@ -810,6 +812,128 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#999',
     textAlign: 'center',
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+  removeButton: {
+    position: 'absolute',
+    top: 14,
+    right: 14,
+    height: 30,
+    width: 30,
+    backgroundColor: 'red',
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  formContainer: {
+    padding: 20,
+    paddingBottom: 40,
+  },
+  formTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#FF4500',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  logoUploadContainer: {
+    alignItems: 'center',
+    marginBottom: 25,
+  },
+  logoUploadButton: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    backgroundColor: '#f9f9f9',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#FF4500',
+    overflow: 'hidden',
+  },
+  logoPlaceholder: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  logoPlaceholderText: {
+    color: '#FF4500',
+    marginTop: 8,
+    fontSize: 12,
+  },
+  logoPreview: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
+  uploadOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  changeLogoButton: {
+    marginTop: 10,
+  },
+  changeLogoText: {
+    color: '#FF4500',
+    textDecorationLine: 'underline',
+  },
+  inputContainer: {
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: 14,
+    color: '#333',
+    marginBottom: 8,
+    fontWeight: '500',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    padding: 15,
+    fontSize: 16,
+    backgroundColor: '#fff',
+  },
+  multilineInput: {
+    height: 100,
+    textAlignVertical: 'top',
+  },
+  submitButton: {
+    backgroundColor: '#FF4500',
+    padding: 15,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  submitButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  homeCnt: {
+    height: 'auto',
+    position: 'relative',
+    width: '100%',
+    padding: 0,
+    backgroundColor: '#fff',
+    flex: 1,
+  },
+  contentContainer: {
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    padding: 10,
+    height: 'auto',
+    marginTop: 10,
   },
 });
 

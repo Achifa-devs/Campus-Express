@@ -140,9 +140,9 @@ const Signup = ({updateActiveJsx}) => {
       const campuses = Object.values(school_choices).reverse();
       setCampusLocaleList(stateIndex >= 0 ? campuses[stateIndex] : []);
     }
-  }, [formData.state]);
+  }, [formData]);
 
-  const updateData = useCallback((name, value) => {
+  const updateData = useCallback((value, name) => {
     setFormData(prev => ({ ...prev, [name]: value }));
     // Clear error when field is updated
     setErrors(prev => ({ ...prev, [name]: '' }));
@@ -260,22 +260,22 @@ const Signup = ({updateActiveJsx}) => {
   };
 
     const renderItem = useCallback(({ item }) => {
-        if (item.type === 'dropdown') {
-            return (
-                <View style={[styles.inputContainer, item.halfWidth && styles.halfWidthContainer]}>
-                    <Text style={styles.label}>{item.label}</Text>
-                    <DropdownExample
-                        dropdownPosition="top"
-                        fieldName={item.fieldName}
-                        updateData={updateData}
-                        dropdownData={item.data}
-                        name={item.id}
-                        placeholder={item.placeholder}
-                    />
-                    {item.error ? <Text style={styles.errorText}>{item.error}</Text> : null}
-                </View>
-            );
-        }
+      if (item.type === 'dropdown') {
+        return (
+          <View style={[styles.inputContainer, item.halfWidth && styles.halfWidthContainer]}>
+            <Text style={styles.label}>{item.label}</Text>
+            <DropdownExample
+              dropdownPosition="top"
+              fieldName={item.fieldName}
+              updateData={updateData}
+              dropdownData={item.data}
+              input_name={item.id}
+              placeholder={item.placeholder}
+            />
+            {item.error ? <Text style={styles.errorText}>{item.error}</Text> : null}
+          </View>
+        );
+      }
 
         return (
             <View style={[styles.inputContainer, item.halfWidth && styles.halfWidthContainer]}>
@@ -286,7 +286,7 @@ const Signup = ({updateActiveJsx}) => {
                         style={styles.input}
                         placeholder={item.placeholder}
                         value={formData[item.id]}
-                        onChangeText={(text) => updateData(item.id, text)}
+                        onChangeText={(text) => updateData(text, item.id)}
                         secureTextEntry={item.type === 'password' && !isPwdVisible}
                         keyboardType={item.keyboardType || 'default'}
                         onFocus={(event) => handleInputFocus(event, item.id)}

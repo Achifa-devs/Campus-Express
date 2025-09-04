@@ -130,6 +130,7 @@ function AppFinale() {
 function NavCnt() {
   const [mode, setMode] = useState('shop');
   const { auth } = useSelector(s => s.auth);
+  const { user } = useSelector(s => s.user);
   const { locale_modal } = useSelector(s => s.locale_modal);
   const { sub_modal } = useSelector(s => s.sub_modal);
   const dispatch = useDispatch();
@@ -141,6 +142,12 @@ function NavCnt() {
   const handleCloseModal = () => {
     dispatch(set_sub_modal(0));
   };
+
+  useEffect(() => {
+    if (user) {
+      dispatch(set_campus(user?.campus));
+    } 
+  }, [user]); 
 
   
   return (
