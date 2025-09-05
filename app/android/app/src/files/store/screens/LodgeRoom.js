@@ -27,6 +27,7 @@ import { get_saved, save_prod, unsave_prod } from '../utils/Saver';
 import { getData, storeData } from '../../utils/AsyncStore.js';
 import axios from 'axios';
 import { useRoute } from '@react-navigation/native';
+import useLogInAlert from '../utils/LogInAlert.js';
 
 const AccommodationDetailScreen = ({ route, navigation }) => {
   const { data } = useRoute().params;
@@ -38,6 +39,9 @@ const AccommodationDetailScreen = ({ route, navigation }) => {
   const [seller, setSeller] = useState('')
   const { width } = Dimensions.get('window');
   const fadeAnim = new Animated.Value(1);
+
+  let showLogInAlert = useLogInAlert()
+  
 
   const handleSave = async () => {
     if (user) {
@@ -67,27 +71,7 @@ const AccommodationDetailScreen = ({ route, navigation }) => {
         }
       }
     } else {
-      Alert.alert(
-        "Login Required",
-        "You need to login first to continue.",
-        [
-          {
-            text: "Cancel",
-            style: "cancel", // makes it look like cancel
-            onPress: () => console.log("User canceled"),
-          },
-          {
-            text: "Login",
-            onPress: () => {
-              // navigate to login screen
-              console.log("Redirecting to login...");
-              dispatch(setUserAuthTo(true))
-              // e.g. navigation.navigate("Login");
-            },
-          },
-        ],
-        { cancelable: false } // user must choose one option
-      );
+      showLogInAlert()
     }
   };
 
@@ -168,39 +152,47 @@ const AccommodationDetailScreen = ({ route, navigation }) => {
   }, [data, user]);
 
   const handleWhatsAppChat = () => {
-    if (!seller?.phone) {
-      return Alert.alert('Error', 'Seller phone number is missing.');
-    }
-
-    let phoneNumber = seller.phone.replace(/\s+/g, '');
-    if (phoneNumber.startsWith('0')) {
-      phoneNumber = phoneNumber.substring(1);
-    }
-  
-    const fullPhoneNumber = `234${phoneNumber}`;
-    const productLink = `https://www.campussphere.net/store/product/${data?.product_id}`;
-    const message = `Hello, I am interested in your accommodation on Campus Sphere. ${productLink}`;
-  
-    const whatsappURL = `whatsapp://send?phone=${fullPhoneNumber}&text=${encodeURIComponent(message)}`;
-    const fallbackURL = `https://wa.me/${fullPhoneNumber}?text=${encodeURIComponent(message)}`;
-
-    Linking.canOpenURL(whatsappURL)
-    .then((supported) => {
-      if (supported) {
-        Linking.openURL(whatsappURL);
-      } else {
-        Linking.openURL(fallbackURL);
+    if (user) {
+      if (!seller?.phone) {
+        return Alert.alert('Error', 'Seller phone number is missing.');
       }
-    })
-    .catch((err) => {
-      Alert.alert('Error', 'Unable to open WhatsApp.');
-    });
+  
+      let phoneNumber = seller.phone.replace(/\s+/g, '');
+      if (phoneNumber.startsWith('0')) {
+        phoneNumber = phoneNumber.substring(1);
+      }
+    
+      const fullPhoneNumber = `234${phoneNumber}`;
+      const productLink = `https://www.campussphere.net/store/product/${data?.product_id}`;
+      const message = `Hello, I am interested in your accommodation on Campus Sphere. ${productLink}`;
+    
+      const whatsappURL = `whatsapp://send?phone=${fullPhoneNumber}&text=${encodeURIComponent(message)}`;
+      const fallbackURL = `https://wa.me/${fullPhoneNumber}?text=${encodeURIComponent(message)}`;
+  
+      Linking.canOpenURL(whatsappURL)
+      .then((supported) => {
+        if (supported) {
+          Linking.openURL(whatsappURL);
+        } else {
+          Linking.openURL(fallbackURL);
+        }
+      })
+      .catch((err) => {
+        Alert.alert('Error', 'Unable to open WhatsApp.');
+      });
+    } else {
+      showLogInAlert()
+    }
   };
 
   const handlePhoneCall = () => {
-    if (!seller?.phone) return Alert.alert('Error', 'Seller phone number is missing.');
-    const callURL = `tel:+234${seller.phone}`;
-    Linking.openURL(callURL);
+    if (user) {
+      if (!seller?.phone) return Alert.alert('Error', 'Seller phone number is missing.');
+      const callURL = `tel:+234${seller.phone}`;
+      Linking.openURL(callURL);
+    } else {
+      showLogInAlert()
+    }
   };
 
   const amenities = data?.others?.lodge_data?.amenities 
@@ -265,7 +257,7 @@ const AccommodationDetailScreen = ({ route, navigation }) => {
       }
 
     } else {
-      Alert.alert('Please Login to continue')
+      showLogInAlert()
     }
   };
 

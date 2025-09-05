@@ -20,8 +20,8 @@ const PACKAGES = {
     "price": "₦0",
     "discount_price": "₦0",
     "features": [
-      "Publish only 1 ads",
-      "3 vendor connections",
+      "3 vendor connections (Monthly)",
+      "Publish unlimited ads",
       "Unlimited filters",
       "Access to all tools",
       "Regular product visibility"
@@ -34,8 +34,9 @@ const PACKAGES = {
     "price": "₦1,500",
     "discount_price": "₦749.99",
     "features": [
-      "Publish up to 9 ads",
-      "12 vendor connections",
+      
+      "12 vendor connections (Monthly)",
+      "Publish unlimited ads",
       "Unlimited filters",
       "Access to all tools",
       "Essential performance metrics",
@@ -49,8 +50,9 @@ const PACKAGES = {
     "price": "₦3,000",
     "discount_price": "₦1,649.99",
     "features": [
-      "Publish up to 19 ads",
-      "25 vendor connections",
+      
+      "22 vendor connections (Monthly)",
+      "Publish unlimited ads",
       "Unlimited filters",
       "Access to all tools",
       "Advanced performance metrics",
@@ -65,8 +67,8 @@ const PACKAGES = {
     "price": "₦6,000",
     "discount_price": "₦3,249.99",
     "features": [
-      "Unlimited ad publications",
       "Unlimited vendor connections",
+      "Publish unlimited ads",
       "Unlimited filters",
       "Access to all tools",
       "Comprehensive performance metrics",

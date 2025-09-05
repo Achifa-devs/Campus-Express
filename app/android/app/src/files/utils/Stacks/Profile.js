@@ -100,7 +100,7 @@ export function ProfileStackScreen() {
                     </View>
 
                      {!user && 
-                        <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#fff', marginRight: 15, borderRadius: 50, paddingVertical: 7, paddingHorizontal: 15}} onPress={e => {
+                        <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#fff', marginRight: 15, borderRadius: 4, paddingVertical: 7, paddingHorizontal: 15}} onPress={e => {
                             dispatch(setUserAuthTo(true))
                         }}>
                             <Text style={{

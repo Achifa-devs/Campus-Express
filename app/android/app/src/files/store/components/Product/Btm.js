@@ -6,15 +6,20 @@ import VerifiedSvg from '../../../media/assets/verified-check-svgrepo-com.svg'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ReviewSvg from '../../../media/assets/review-svgrepo-com.svg'
 import LinearGradient from 'react-native-linear-gradient';
+import useLogInAlert from '../../utils/LogInAlert';
+import { useSelector } from 'react-redux';
 
 export default function Btm({ updateUser, user_id, navigation, updateReview, updateShop }) {
     let [data, setData] = useState('')
     let [reviews, setReviews] = useState(null)
     let [shop, setShop] = useState('')
-    let [user, set_user] = useState('')
+    const { user } = useSelector(s => s?.user);
+    
+    let [vendor, set_vendor] = useState('')
     let [activeFilter, setActiveFilter] = useState('all')
     const screenHeight = Dimensions.get('window').height;
     const screenWidth = Dimensions.get('window').width;
+    let showLogInAlert = useLogInAlert()
 
     function fetchReviews() {
         fetch(`https://cs-server-olive.vercel.app/reviews?shop_id=${shop?.shop_id}`, {
@@ -46,7 +51,7 @@ export default function Btm({ updateUser, user_id, navigation, updateReview, upd
                 console.log(response)
                 const res = response.data[0];
                 setData(res);
-                set_user(res)
+                set_vendor(res)
                 updateUser(res)
                 
             })
@@ -98,6 +103,7 @@ export default function Btm({ updateUser, user_id, navigation, updateReview, upd
     const bestCount = reviews?.filter(item => item?.review?.split(' ')[0].toLowerCase() === 'best')?.length;
     const allCount = reviews?.length;
 
+
     return (
         <ScrollView style={styles.container}>
             {/* Profile Section */}
@@ -140,7 +146,13 @@ export default function Btm({ updateUser, user_id, navigation, updateReview, upd
                   </View>
 
                   <TouchableOpacity 
-                      onPress={e => navigation.navigate('user-explore-shop', {user_id, reviews, shop, user})} 
+                      onPress={e => {
+                        if (user && user !== '') {
+                            navigation.navigate('user-explore-shop', {user_id, reviews, shop, user: vendor})
+                        } else {
+                            showLogInAlert()
+                        }
+                      }} 
                       style={styles.exploreButton}
                   >
                       <Text style={styles.exploreButtonText}>Explore Shop</Text>

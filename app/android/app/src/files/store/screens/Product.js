@@ -30,10 +30,11 @@ import Btm from '../components/Product/Btm';
 import CallSvg from '../../media/assets/call-svgrepo-com.svg';
 import WpSvg from '../../media/assets/whatsapp-svgrepo-com.svg';
 import { getData, storeData } from '../../utils/AsyncStore.js';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { get_saved, save_prod, unsave_prod } from '../utils/Saver.js';
 import axios from 'axios';
+import useLogInAlert from '../utils/LogInAlert.js';
 // import Upload from 'react-native-background-upload';
 
 export default function Product() {
@@ -50,7 +51,7 @@ export default function Product() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [files, set_files] = useState([]);
   const [favLoading, setFavLoading] = useState(true);
-
+  const dispatch = useDispatch()
   const onScroll = (event) => {
     const slideIndex = Math.round(event.nativeEvent.contentOffset.x / width);
     setCurrentIndex(slideIndex);
@@ -165,6 +166,8 @@ export default function Product() {
     setSeller(data);
   }
 
+  const showLogInAlert = useLogInAlert();
+
   const handleSave = async () => {
     if (user) {
       setFavLoading(true);
@@ -187,55 +190,36 @@ export default function Product() {
       }
       setFavLoading(false);
     } else {
-      Alert.alert(
-        "Login Required",
-        "You need to login first to continue.",
-        [
-          {
-            text: "Cancel",
-            style: "cancel", // makes it look like cancel
-            onPress: () => console.log("User canceled"),
-          },
-          {
-            text: "Login",
-            onPress: () => {
-              // navigate to login screen
-              console.log("Redirecting to login...");
-              dispatch(setUserAuthTo(true))
-              // e.g. navigation.navigate("Login");
-            },
-          },
-        ],
-        { cancelable: false } // user must choose one option
-      );
+      showLogInAlert()
     }
   };
 
   const handleWhatsAppChat = async() => {
-    let Analytics = await AddContactClick();
-    if(!Analytics){
+    if (user) {
+      let Analytics = await AddContactClick();
+      if(!Analytics){
+        setLoading(false)
+  
+        return Alert.alert('Error', 'Please ensure you have stable network and try again.');
+      }
       setLoading(false)
-
-      return Alert.alert('Error', 'Please ensure you have stable network and try again.');
-    }
-    setLoading(false)
-    if (!seller?.phone) {
-      return Alert.alert('Error', 'Seller phone number is missing.');
-    }
-  
-    let phoneNumber = seller.phone.replace(/\s+/g, '');
-    if (phoneNumber.startsWith('0')) {
-      phoneNumber = phoneNumber.substring(1);
-    }
-  
-    const fullPhoneNumber = `234${phoneNumber}`;
-    const productLink = `https://www.campussphere.net/store/product/${data?.product_id}`;
-    const message = `Hello, I am interested in your product on Campus Sphere. ${productLink}`;
-  
-    const whatsappURL = `whatsapp://send?phone=${fullPhoneNumber}&text=${encodeURIComponent(message)}`;
-    const fallbackURL = `https://wa.me/${fullPhoneNumber}?text=${encodeURIComponent(message)}`;
-  
-    Linking.canOpenURL(whatsappURL)
+      if (!seller?.phone) {
+        return Alert.alert('Error', 'Seller phone number is missing.');
+      }
+    
+      let phoneNumber = seller.phone.replace(/\s+/g, '');
+      if (phoneNumber.startsWith('0')) {
+        phoneNumber = phoneNumber.substring(1);
+      }
+    
+      const fullPhoneNumber = `234${phoneNumber}`;
+      const productLink = `https://www.campussphere.net/store/product/${data?.product_id}`;
+      const message = `Hello, I am interested in your product on Campus Sphere. ${productLink}`;
+    
+      const whatsappURL = `whatsapp://send?phone=${fullPhoneNumber}&text=${encodeURIComponent(message)}`;
+      const fallbackURL = `https://wa.me/${fullPhoneNumber}?text=${encodeURIComponent(message)}`;
+    
+      Linking.canOpenURL(whatsappURL)
       .then((supported) => {
         if (supported) {
           Linking.openURL(whatsappURL);
@@ -246,20 +230,27 @@ export default function Product() {
       .catch((err) => {
         Alert.alert('Error', 'Unable to open WhatsApp.');
       });
+    } else {
+      showLogInAlert()
+    }
   };
 
   const handlePhoneCall = async() => {
-    let Analytics = await AddContactClick();
-    if(!Analytics){
-      setLoading(false)
-
-      return Alert.alert('Error', 'Please ensure you have stable network and try again.');
-    }
-    setLoading(false)
-    if (!seller?.phone) return Alert.alert('Error', 'Seller phone number is missing.');
+    if (user) {
+      let Analytics = await AddContactClick();
+      if(!Analytics){
+        setLoading(false)
   
-    const callURL = `tel:+234${seller.phone}`;
-    Linking.openURL(callURL);
+        return Alert.alert('Error', 'Please ensure you have stable network and try again.');
+      }
+      setLoading(false)
+      if (!seller?.phone) return Alert.alert('Error', 'Seller phone number is missing.');
+    
+      const callURL = `tel:+234${seller.phone}`;
+      Linking.openURL(callURL);
+    } else {
+      showLogInAlert()
+    }
   };
 
   let [reviews, setReviews] = useState(null)
@@ -310,7 +301,7 @@ export default function Product() {
       }
 
     } else {
-      Alert.alert('Please Login to continue')
+      showLogInAlert()
     }
   };
 

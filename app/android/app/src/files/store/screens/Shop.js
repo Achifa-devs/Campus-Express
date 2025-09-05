@@ -7,6 +7,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import ProductCard from '../components/Inventory/ProductCard';
 import LodgeCard from '../components/Inventory/LodgeCard';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 export default function Shop() {
     let navigation = useNavigation()

@@ -26,6 +26,7 @@ import { set_locale_modal } from './redux/locale.js';
 import SubscriptionModal from './android/app/src/files/utils/Sub.js';
 import { set_sub_modal } from './redux/sub.js';
 import { Header } from 'react-native/Libraries/NewAppScreen';
+import { setUserAuthTo } from './redux/reducer/auth.js';
 // import { set_campus } from './redux/reducer/location.js';   // ✅ add correct reducer
 // import { closeModal } from './redux/reducer/locale.js';      // ✅ add correct reducer
 
@@ -146,7 +147,9 @@ function NavCnt() {
   useEffect(() => {
     if (user) {
       dispatch(set_campus(user?.campus));
-    } 
+    }else{
+      setUserAuthTo(true)
+    }
   }, [user]); 
 
   
