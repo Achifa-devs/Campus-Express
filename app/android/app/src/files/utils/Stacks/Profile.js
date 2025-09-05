@@ -36,15 +36,35 @@ import Ionicons from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, 
 
 import Support from "../../store/screens/Profile/Profiles/Support";
 import { setUserAuthTo } from "../../../../../../redux/reducer/auth";
-import { useFocusEffect } from "@react-navigation/native";
-import React, { useCallback } from "react";
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
+import React, { useCallback, useEffect } from "react";
 import UserProfileScreen from "../../store/screens/PersonalInfo";
 import UserIcons from "../../media/icons/UserIcons";
+import SubscriptionScreen from "../../store/screens/Subscription";
 const ProfileStack = createNativeStackNavigator();
 export function ProfileStackScreen() {
   const dispatch = useDispatch()
 
     const {user} = useSelector(s => s.user);
+
+    const { sub } = useRoute.params || {};
+    const navigation = useNavigation();
+    
+
+    useFocusEffect(
+      useCallback(() => {
+        console.log('Screen focused, sub:', sub);
+        if (sub === true) {
+          navigation.navigate('user-subscription');
+        }
+      }, [sub, navigation])
+    );
+
+    useEffect(() => {
+        if (sub === true) {
+            navigation.navigate('user-subscription');
+        }
+    }, [sub, navigation])
     
   return (
     <ProfileStack.Navigator>
@@ -220,7 +240,28 @@ export function ProfileStackScreen() {
             
         }} name="user-data" component={UserProfileScreen} />
           
-          
+        <ProfileStack.Screen  options={{
+            header: ({navigation}) =>
+            (
+                <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
+                    <TouchableOpacity style={{
+                        height: 55,
+                        borderRadius: 15,
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        width: 45,
+                    }} onPress={e => navigation.goBack()}> 
+                        <Ionicons name={'chevron-back'} size={25} color={'#000'} />
+                    </TouchableOpacity>
+                    <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
+                        <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Subscription</Text>
+                    </View>
+                </View>
+            ),
+            
+        }} name="user-subscription" component={SubscriptionScreen} />
 
         <ProfileStack.Screen  options={{
             header: ({navigation}) =>

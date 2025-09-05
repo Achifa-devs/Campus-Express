@@ -5,7 +5,7 @@ import {
 import { 
     useLocation,
     useNavigate, useRoutes 
-} from "react-router-dom";
+} from "next/link";
 import '../../styles/Buyer/login.css'
 import { LogBuyerIn } from "@/app/api/buyer/post";
 

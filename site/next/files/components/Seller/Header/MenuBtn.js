@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'next/link'
 import menuSvg from '../../../assets/menu-alt-01-svgrepo-com.svg'
 import { useEffect, useState } from 'react'
 

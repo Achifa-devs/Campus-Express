@@ -7,7 +7,7 @@ import subSvg from '../../../assets/subscriptions-svgrepo-com.svg'
 import walletSvg from '../../../assets/wallet-2-svgrepo-com.svg'
 import sellSvg from '../../../assets/sell-svgrepo-com (1).svg'
 import logoutSvg from '../../../assets/logout-2-svgrepo-com.svg'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'next/link'
 
 const BuyerMenu = () => {
   let navigate = useNavigate();

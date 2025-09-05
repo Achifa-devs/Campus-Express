@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "next/link";
 import Product from "../../components/Buyer/Product/Product";
 import BuyerLayout from "../../layout/Buyer";
 import { useEffect, useRef, useState } from "react";

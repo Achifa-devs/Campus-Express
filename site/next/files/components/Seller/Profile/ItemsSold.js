@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Thumbnail from '../Thumbnail'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'next/link'
 
 export default function ItemsSold({soldItems}) {
   let navigate = useNavigate()

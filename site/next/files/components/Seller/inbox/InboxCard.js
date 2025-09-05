@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'next/link';
 import img from '../../../assets/download (3).jpeg'
 import { useState } from 'react';
 

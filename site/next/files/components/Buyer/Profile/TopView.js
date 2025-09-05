@@ -4,7 +4,7 @@ import editSvg from '../../../assets/edit-svgrepo-com.svg'
 
 import userPhoto from '../../../assets/user-svgrepo-com (2).svg'
 
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'next/link'
 import { GetSellerPhoto } from '../../../api/seller/get'
 export default function TopView({userData}) {
     

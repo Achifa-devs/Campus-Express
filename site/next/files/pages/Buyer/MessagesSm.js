@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 // import MessageHead from '../../components/Buyer/Message/SmallScreen/MessageList/MessageHead'
 import BuyerLayout from '../../layout/Buyer'
 import MessageHead from '../../components/Buyer/Message/SmallScreen/MessageList/MessageHead'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'next/link'
 import { GetChatRooms } from '../../api/buyer/get'
 
 export default function MessagesSm() {

@@ -153,7 +153,7 @@ export default function StoreTab({navigation}) {
             <Tab.Screen 
                  
                 name="Profile" 
-                component={ProfileStackScreen} />
+                component={ProfileStackScreen} sub={false} />
 
         </Tab.Navigator> 
     </>
@@ -221,8 +221,10 @@ function HomeRoute(navigationState, updateTabBarStyle) {
         updateTabBarStyle('none'); 
     }else if(currentRouteName === 'user-type-product') {
         updateTabBarStyle('none'); 
-    }else if(currentRouteName === 'user-subscription'){
+    }else if(currentRouteName === 'user-payment'){
         updateTabBarStyle('none'); 
+    }else{
+        updateTabBarStyle('flex');
     }
 }
 
@@ -243,6 +245,8 @@ function CreateRoute(navigationState, updateTabBarStyle) {
         updateTabBarStyle('none'); 
     }else if(currentRouteName === 'user-reviews'){
         updateTabBarStyle('none'); 
+    }else{
+        updateTabBarStyle('flex');
     }
 }
 
@@ -253,6 +257,8 @@ function ProfileRoute(navigationState, updateTabBarStyle) {
     if (currentRouteName === 'user-profile') {
         updateTabBarStyle('flex');
     }else if (currentRouteName === 'user-history') {
+        updateTabBarStyle('none');
+    }else if (currentRouteName === 'user-subscription') {
         updateTabBarStyle('none');
     }else if(currentRouteName === 'user-favourite') {
         updateTabBarStyle('none'); 
@@ -286,6 +292,8 @@ function ProfileRoute(navigationState, updateTabBarStyle) {
         updateTabBarStyle('none'); 
     }else if(currentRouteName === 'user-support'){
         updateTabBarStyle('none'); 
+    }else{
+        updateTabBarStyle('flex');
     }
 }
 

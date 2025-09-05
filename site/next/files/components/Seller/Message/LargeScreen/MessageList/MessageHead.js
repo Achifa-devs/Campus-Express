@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'next/link'
 import js_ago from 'js-ago'
 
 export default function MessageHead({index, data, setRoomId}) {

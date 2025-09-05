@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import vSvg from '../../assets/verification-svgrepo-com.svg'
 import sSvg from '../../assets/status-notfound-svgrepo-com.svg'
 import { SendEmail, ValidateEmail } from '../../api/buyer';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'next/link';
 
 
 const BuyerVerification = () => {

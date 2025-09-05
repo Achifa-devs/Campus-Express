@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 // import '@/files/styles'
 // import '@/styles/Seller/overlay.css' 
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "next/link";
 import Thumbnail from "../Thumbnail";
 import { useDispatch, useSelector } from "react-redux";
 

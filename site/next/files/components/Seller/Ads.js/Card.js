@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import '../../../styles/adsCard.css'
 import '../../../styles/Seller/listing.css'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'next/link'
 import Thumbnail from '../Thumbnail';
 import locationSvg from '../../../assets/location-svgrepo-com-1.svg'
 

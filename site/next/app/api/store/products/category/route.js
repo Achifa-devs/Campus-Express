@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { headers } from 'next/headers';
 import pool from '@/app/api/db';
+import { queryWithRetry, createApiResponse, createErrorResponse, validateRequiredFields } from '@/app/utils/api-helpers';
 
 export async function GET(req) {
   try {
@@ -16,6 +17,11 @@ export async function GET(req) {
       limit = 10; // Default limit
     }
 
+    // Validate required parameters
+    if (!category) {
+      return createErrorResponse('Category parameter is required', 400);
+    }
+
     // Get headers
     const headerList = headers();
     let gender = headerList.get('gender');
@@ -23,8 +29,6 @@ export async function GET(req) {
     // Capitalize gender if provided
     const capitalizeFirstLetter = (str) => str.charAt(0).toUpperCase() + str.slice(1);
     let capGender = gender ? capitalizeFirstLetter(gender) : '';
-
-    // Establish DB connection
 
     let query = '';
     let queryParams = [];
@@ -39,14 +43,15 @@ export async function GET(req) {
       query = `SELECT * FROM products WHERE category = $1 AND state->>'state' = 'active' LIMIT $2`;
       queryParams = [category, limit];
     } else {
-      return NextResponse.json({ bool: false, data: '' }, { status: 400 });
+      return createErrorResponse('Invalid category parameter', 400);
     }
 
-    const result = await pool.query(query, queryParams);
-    return NextResponse.json({ bool: true, data: result.rows });
+    // Use retry logic for database query
+    const result = await queryWithRetry(pool, query, queryParams);
+    return createApiResponse(true, result.rows, 'Products fetched successfully');
 
   } catch (error) {
     console.error('Error fetching products:', error);
-    return NextResponse.json({ bool: false, data: '' }, { status: 500 });
+    return createErrorResponse('Failed to fetch products', 500, error);
   }
 }

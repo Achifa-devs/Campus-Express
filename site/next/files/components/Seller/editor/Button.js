@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "next/link";
 
 const UploadBtn = ({update,handleForm}) => {
     let [screenWidth, setScreenWidth] = useState(0)

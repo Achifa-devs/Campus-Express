@@ -9,7 +9,7 @@ import editSvg from '../../assets/edit-svgrepo-com.svg'
 import userPhoto from '../../assets/user-rounded-svgrepo-com.svg'
 
 import bankList from '../../bank.json' 
-import { useLocation } from 'react-router-dom'
+import { useLocation } from 'next/link'
 import { GetSellerPhoto } from '../../api/seller/get'
 import { data, school_choices } from '../../location'
 import { UpdateSellerProfile } from '../../api/seller/update'

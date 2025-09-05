@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "next/link";
 import '../../styles/Seller/overlay.css' 
 import InboxCard from "../../components/Seller/inbox/InboxCard";
 

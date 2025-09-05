@@ -15,7 +15,6 @@ import conditionSvg from '@/public/condition-point-svgrepo-com.svg'
 import timsSvg from '@/public/date-2-svgrepo-com.svg'
 import SaveButton from './SaveButton'
 import js_ago from 'js-ago'
-import { useLocation } from 'react-router-dom'
 import Video from '../Video'
 
 const ShowcaseCard = ({item, index}) => {

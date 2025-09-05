@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Card from "./Card";
 import emptySvg from '../../../assets/empty-white-box-svgrepo-com.svg'
-import { Link } from "react-router-dom";
+import { Link } from "next/link";
 
 const Body = ({cards}) => {
     return ( 

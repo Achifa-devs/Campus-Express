@@ -4,7 +4,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { open_notice } from '@/files/reusable.js/notice';
 import { useSelector } from 'react-redux';
-// import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'next/link';
 // import { useRouter } from 'next/router';
 
 export default function DeleteAccount() {

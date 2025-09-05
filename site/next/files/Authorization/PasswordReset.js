@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import '../styles/settings.css';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'next/link';
 import { ValidateToken } from '../api/seller/get';
 import brokenLinkSvg from '../assets/link-broken-svgrepo-com.svg'
 import { UpdatePwd } from '../api/seller/update';

@@ -21,7 +21,7 @@ import {
 } from '../../../api/seller/update'
 import { 
   useNavigate 
-} from 'react-router-dom'
+} from 'next/link'
 import { 
   SendEmail, 
   SendSMS 

@@ -1,5 +1,5 @@
-// import { Link } from 'react-router-dom';
-// import { useNavigate } from 'react-router-dom';
+// import { Link } from 'next/link';
+// import { useNavigate } from 'next/link';
 // import { usePaystackPayment } from 'react-paystack';
 // import { useEffect, useState } from 'react';
 // import { AuthorizeWalletAccess, WalletData, createBill } from '../../../api/seller';

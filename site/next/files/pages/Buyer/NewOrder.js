@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import BuyerLayout from '../../layout/Buyer'
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'next/link';
 import { useSelector } from 'react-redux';
 import CheckoutSummary from '../../components/Buyer/Checkout/CheckoutSummary';
 import { GetItem } from '../../api/buyer/get';

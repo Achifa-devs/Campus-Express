@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import RoomHead from '../../components/Buyer/Message/SmallScreen/MessageRoom/RoomHead'
 import RoomBody from '../../components/Buyer/Message/SmallScreen/MessageRoom/RoomBody'
 import RoomPanel from '../../components/Buyer/Message/SmallScreen/MessageRoom/RoomPanel'
-import { useLocation } from 'react-router-dom'
+import { useLocation } from 'next/link'
 import { GetChat } from '../../api/buyer/get'
 
 export default function MessageRoom({}) {

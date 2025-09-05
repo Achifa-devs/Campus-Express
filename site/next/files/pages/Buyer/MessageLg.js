@@ -6,7 +6,7 @@ import ListHead from '../../components/Buyer/Message/LargeScreen/MessageList/Lis
 import RoomHead from '../../components/Buyer/Message/LargeScreen/MessageRoom/RoomHead'
 import RoomPanel from '../../components/Buyer/Message/LargeScreen/MessageRoom/RoomPanel'
 import { socket } from '../../socket'
-import { useLocation, useNavigate, useParams, useRoutes } from 'react-router-dom'
+import { useLocation, useNavigate, useParams, useRoutes } from 'next/link'
 import { GetChat, GetChatRooms } from '../../api/buyer/get'
 
 export default function MessageLg() {

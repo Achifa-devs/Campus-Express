@@ -23,6 +23,7 @@ import { set_shop } from "../../../../../../redux/shop";
 import Shopile from "../../store/screens/Drawer/Shop";
 import Reviews from "../../store/screens/Drawer/Reviews";
 import AnalyticsScreen from "../../store/screens/Analytics";
+import { useNavigation } from "@react-navigation/native";
 
 const SellStack = createNativeStackNavigator();
 export function SellStackScreen() {
@@ -30,6 +31,24 @@ export function SellStackScreen() {
     const {shop} = useSelector(s => s.shop);
     const {subscribed} = useSelector(s => s.subscribed);
     const {campus} = useSelector(s => s.campus);
+    const {tier} = useSelector(s => s.tier);
+        
+        let navigation = useNavigation()
+        useEffect(() => {
+            console.log(campus)
+        }, [campus])
+    
+        function handleSub(params) {
+            if(!subscribed){
+                dispatch(set_sub_modal(1))
+            }else{
+                navigation.navigate('Profile', {
+                    screen: 'user-subscription',   // 👈 nested screen name
+                    params: { sub: true },         // 👈 params go here
+                });
+    
+            }
+        }
     
     const dispatch = useDispatch()
     useEffect(() => {
@@ -50,10 +69,6 @@ export function SellStackScreen() {
         }
     }, [user])
 
-    function handleSub() {
-        dispatch(set_sub_modal(1))
-    }
-         
   return (
     <SellStack.Navigator>
         <SellStack.Screen  options={{
@@ -89,15 +104,15 @@ export function SellStackScreen() {
                             activeOpacity={0.8}
                             >
                             <View style={styles.buttonContent}>
-                                <Icon 
-                                name={subscribed ? "diamond" : "diamond-outline"} 
-                                size={16} 
-                                color={subscribed ? "#FFF" : "#FF4500"} 
-                                style={styles.icon}
-                                />
-                                <Text style={[styles.buttonText, subscribed && styles.subscribedText]}>
-                                {subscribed ? 'Subscribed' : 'Subscribe'}
-                                </Text>
+                              <Icon 
+                              name={subscribed ? "diamond" : "diamond-outline"} 
+                              size={16} 
+                              color={subscribed ? "#FFF" : "#FF4500"} 
+                              style={styles.icon}
+                              />
+                              <Text style={[styles.buttonText, subscribed && styles.subscribedText]}>
+                              {subscribed ? `${tier.plan} Plan` : 'Subscribe Now'}
+                              </Text>
                             </View>
                         </TouchableOpacity>
                         )}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'next/link';
 import { GetChatRooms } from '../../../../../api/buyer/get';
 
 export default function RoomHead() {

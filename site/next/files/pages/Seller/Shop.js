@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import jsAgo from 'js-ago'
 import imgSvg from '../../assets/image-svgrepo-com (4).svg'; 
 import Thumbnail from '../../components/Seller/Thumbnail'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'next/link'
 import '../../styles/Seller/overlay.css' 
 import Body from '../../components/Seller/Ads.js/Body'
 import SellerLayout from '../../layout/Seller'

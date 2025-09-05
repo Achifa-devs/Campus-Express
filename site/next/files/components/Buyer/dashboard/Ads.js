@@ -15,7 +15,7 @@ import phoneassSvg from '../../../assets/phone-repair-symbol-svgrepo-com.svg'
 import laptopassSvg from '../../../assets/laptop-fix-svgrepo-com.svg'
 import cosmeticsSvg from '../../../assets/medical-medicine-health-23-svgrepo-com.svg'
 import tabletsSvg from '../../../assets/tablet-svgrepo-com.svg'
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "next/link";
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { setCategoryTo } from '@/redux/buyer_store/Category'

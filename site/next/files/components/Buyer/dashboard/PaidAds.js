@@ -4,9 +4,7 @@ import {
   useState
 } from 'react'
 import Thumbnail from '../Thumbnail'
-import { 
-  useNavigate 
-} from 'react-router-dom'
+
 // import { GetFilteredAds } from '@/app/api/buyer/get'
 // import { 
 //   GetFilteredAds

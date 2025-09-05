@@ -6,7 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf .next out",
+    "export": "next build && next export",
+    "analyze": "ANALYZE=true next build"
   },
   "dependencies": {
     "@cloudinary/react": "^1.13.0",
@@ -24,16 +29,17 @@
     "bcryptjs": "^3.0.2",
     "cloudinary": "^2.4.0",
     "dayjs-greet": "^1.1.2",
+    "dotenv": "^17.2.2",
     "draft-js": "^0.11.7",
     "flutterwave-node-v3": "^1.3.0",
     "flutterwave-react-v3": "^1.3.2",
     "formidable": "^3.5.2",
     "framer-motion": "^11.3.21",
     "froala-editor": "^4.4.0",
-    "fs": "^0.0.1-security",
-    "js-ago": "^2.1.1",
+    "js-ago": "^3.0.1",
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.2",
+    "nanoid": "^5.0.7",
     "next": "14.2.5",
     "next-cloudinary": "^6.16.0",
     "next-seo": "^6.6.0",
@@ -51,22 +57,17 @@
     "react-phone-number-input": "^3.4.5",
     "react-quill": "^2.0.0",
     "react-redux": "^9.1.2",
-    "react-router-dom": "^6.26.0",
+    "react-router-dom": "^7.8.2",
     "react-select": "^5.8.0",
     "react-star-ratings": "^2.3.0",
     "redux": "^5.0.1",
-    "redux-toolkit": "^1.1.2",
     "sharp": "^0.33.4",
-    "shortid": "^2.2.17",
+    "short-id": "^0.1.0-1",
     "socket.io-client": "^4.7.5",
-    "stream-browserify": "^3.0.0",
-    "stream-http": "^3.2.0",
     "streamifier": "^0.1.1",
     "swr": "^2.2.5",
     "twilio": "^5.5.1",
-    "url": "^0.11.4",
-    "uuid": "^10.0.0",
-    "uuidv4": "^6.2.13"
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.20",
@@ -75,8 +76,7 @@
     "postcss": "^8.4.41",
     "tailwindcss": "^3.4.10"
   },
-    "engines": {
+  "engines": {
     "node": ">=22.0.0"
   }
-
 }

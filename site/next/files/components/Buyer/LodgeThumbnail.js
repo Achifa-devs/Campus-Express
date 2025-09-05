@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import imgSvg from '../../assets/image-svgrepo-com (4).svg'; 
 import { GET_PRODUCT_THUMBNAIL } from '../../api/buyer';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'next/link';
  
 const LodgeThumbnail = ({product_id}) => {
 

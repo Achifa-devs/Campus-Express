@@ -5,7 +5,7 @@
 // import saveSvg from '../../assets/save-svgrepo-com.svg'
 // import orderSvg from '../../assets/order-svgrepo-com (1).svg'
 // import conditionSvg from '../../assets/condition-point-svgrepo-com.svg'
-// import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "next/link";
 // import cartSvg from '../../assets/cart-shopping-fast-svgrepo-com.svg'
 // import filterSvg from '../../assets/filter-edit-svgrepo-com.svg'
 // import { AddItemToCart, DeleteItemFromCart, GetItems, SaveItem, UnSaveItem } from "../../../api/buyer";

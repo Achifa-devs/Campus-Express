@@ -12,7 +12,7 @@ import {
 } from "../LoggedIn"; 
 import { 
     useNavigate 
-} from "react-router-dom";
+} from "next/link";
 import Thumbnail from "./Thumbnail";
 // import { 
 //     GetProductThumbnail 

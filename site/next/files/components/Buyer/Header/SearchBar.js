@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 // import { setBuyerJsxTo } from '../redux/buyer/BuyerOverlayJsx';
 import { useDispatch } from 'react-redux';
 import '../../../styles/search.css'
-import { useNavigate } from 'react-router-dom';
 import { setSearchListTo } from '@/redux/buyer_store/SearchList';
 import { usePathname } from 'next/navigation';
 

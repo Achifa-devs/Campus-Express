@@ -1,9 +1,10 @@
 "use server"
 
-import App from "./App";
-import './globals.css'; 
+import './globals.css';
 import { cookies } from "next/headers";
 import StructuredData from './StructuredData'
+import ReduxProvider from './components/ReduxProvider'
+import ClientLayout from './components/ClientLayout'
 
 export async function generateMetadata() {
   const imageUrl = 'https://www.campussphere.net/api/logo';
@@ -147,9 +148,11 @@ export default async function RootLayout({ children }) {
         <div className="overlay">
           <div className="loader"></div>
         </div>
-        <App>
-          {children}
-        </App>
+        <ReduxProvider>
+          <ClientLayout>
+            {children}
+          </ClientLayout>
+        </ReduxProvider>
       </body>
     </html>
   );

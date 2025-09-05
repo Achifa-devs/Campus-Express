@@ -5,7 +5,7 @@ import '../../styles/notice.css'
 import '../../styles/Seller/overlay.css'    
 import deleteSvg from '../../assets/delete-svgrepo-com (2).svg';
 
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'next/link';
 import items from '../../items.json'
 import TypeSelect from '../../components/Seller/editor/TypeSelect';
 import PriceSelect from '../../components/Seller/editor/PriceSelect';

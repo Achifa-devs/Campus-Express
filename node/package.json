@@ -5,10 +5,18 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
+    "test:watch": "jest --watch",
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "build": "babel src --out-dir lib"
+    "build": "babel src --out-dir lib",
+    "prod": "npm run build && node index.js",
+    "lint": "eslint src/**/*.js",
+    "lint:fix": "eslint src/**/*.js --fix",
+    "clean": "rm -rf lib",
+    "prebuild": "npm run clean",
+    "audit": "npm audit",
+    "audit:fix": "npm audit fix"
   },
   "author": "Akpulu Fabian Chinedu",
   "license": "ISC",
@@ -27,14 +35,15 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.19.2",
+    "express-rate-limit": "^7.1.5",
     "firebase-admin": "^13.3.0",
     "flutterwave-node-v3": "^1.1.6",
     "formidable": "^3.5.1",
-    "fs": "^0.0.1-security",
     "fs-extra": "^11.2.0",
     "google-auth-library": "^9.4.1",
     "googleapis": "^105.0.0",
     "greeting-time": "^1.0.0",
+    "helmet": "^7.1.0",
     "http-proxy-middleware": "^2.0.6",
     "jsonwebtoken": "^9.0.0",
     "mailtrap": "^3.2.0",
@@ -42,14 +51,13 @@
     "mocha": "^10.2.0",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
+    "nanoid": "^5.0.7",
     "node-cron": "^3.0.3",
     "nodemailer": "^6.9.14",
     "nodemon": "^2.0.22",
     "opay": "^1.0.94",
-    "path": "^0.12.7",
     "pg": "^8.10.0",
     "redis": "^4.6.10",
-    "request-promise": "^4.2.6",
     "serialport": "^12.0.0",
     "short-id": "^0.1.0-1",
     "sms-service": "^1.1.7",
@@ -58,12 +66,14 @@
     "universal-cookie": "^4.0.4",
     "uuid": "^9.0.1",
     "uuidv4": "^6.2.13",
-    "whatsapp": "^0.0.5-Alpha",
-    "youtube-all-in-one-uploader": "^1.0.5"
+    "whatsapp": "^0.0.5-Alpha"
   },
   "devDependencies": {
     "@babel/cli": "^7.24.8",
     "@babel/core": "^7.25.2",
-    "@babel/preset-env": "^7.25.3"
+    "@babel/preset-env": "^7.25.3",
+    "eslint": "^8.57.0",
+    "jest": "^29.7.0",
+    "supertest": "^6.3.4"
   }
 }

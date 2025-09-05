@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation } from "next/link";
 import '../../../styles/Buyer/cancelOrderOverlay.css'
 import { usePathname } from "next/navigation";
 import '../../../styles/Buyer/Alert.css'

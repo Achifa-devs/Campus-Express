@@ -1,9 +1,33 @@
-FROM node:alpine
+# Use specific Node.js version
+FROM node:18-alpine
+
+# Create app directory and set correct permissions
 WORKDIR /app
-COPY package.json ./
-COPY package-lock.json ./
-COPY ./ ./
-RUN npm i
-CMD ["npm", "run", "start"]
-EXPOSE 1234/tcp
-EXPOSE 1234/udp
+
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nextjs -u 1001
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci --only=production && npm cache clean --force
+
+# Copy source code
+COPY --chown=nextjs:nodejs ./src ./src
+COPY --chown=nextjs:nodejs ./index.js ./
+COPY --chown=nextjs:nodejs ./.env ./
+
+# Switch to non-root user
+USER nextjs
+
+# Expose port
+EXPOSE 9090
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:9090/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"
+
+# Start the application
+CMD ["npm", "start"]

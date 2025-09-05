@@ -13,7 +13,7 @@ import {
 // } from '../../../redux/buyer_store/Cart';
 // import { 
 //     useNavigate 
-// } from 'react-router-dom';
+// } from 'next/link';
 import Card from './CartCard';
 import Btn from './Btn';
 import { GetCartItems } from '@/app/api/buyer/get';

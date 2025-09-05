@@ -1,4 +1,5 @@
 import {
+  useCallback,
   useEffect,
   useState
 } from "react";
@@ -11,13 +12,16 @@ import {
   View
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { setUserModeTo } from "../../../../../../redux/reducer/mode";
+import { setUserModeTo } from "../../../redux/reducer/mode";
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useFocusEffect, useRoute } from "@react-navigation/native";
 
 const ProfileCnt = ({ navigation }) => {
   const dispatch = useDispatch();
   const screenHeight = Dimensions.get('window').height;
     const {user} = useSelector(s => s.user)
+
+    
 
   const items = [
     {
@@ -39,7 +43,7 @@ const ProfileCnt = ({ navigation }) => {
       section: "Settings",
       links: user ? [
         { label: "Account", icon: "wallet-outline", nav: "user-account" },
-        // { label: "Subscription & Billing", icon: "card-outline", nav: "use-sub" },
+        { label: "Subscription & Billing", icon: "card-outline", nav: "user-subscription" },
 
         // { label: "Preference", icon: "options-outline", nav: "user-preference" },
         // { label: "Notification", icon: "notifications-outline", nav: "user-notification" },

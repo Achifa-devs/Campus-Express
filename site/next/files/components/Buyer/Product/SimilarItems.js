@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useLocation } from "react-router-dom"
+import { useLocation } from "next/link"
 import CardCnt from "./CardCnt"
 import { GetItems } from "@/app/api/buyer/get"
 import { usePathname } from "next/navigation"

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import '../../styles/Seller/signup.css'
-import { Await, useNavigate } from 'react-router-dom';
+import { Await, useNavigate } from 'next/link';
 import { data, school_choices } from '../../location';
 import { socket } from '../../socket';
 import PhoneInput from 'react-phone-input-2'

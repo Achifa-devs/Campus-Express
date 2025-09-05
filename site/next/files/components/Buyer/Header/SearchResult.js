@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
 import searchSvg from '../../../assets/search-svgrepo-com.svg'
 
 const SearchResult = ({searchTop,searchLeft,searchDisplay,searchWidth}) => {

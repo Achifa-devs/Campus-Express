@@ -52,25 +52,32 @@ import PaymentScreen from "../../store/utils/Paystack";
 import ReviewSubmissionScreen from "../../store/screens/Review";
 import Shop from "../../store/screens/Shop";
 import { setUserAuthTo } from "../../../../../../redux/reducer/auth";
+import { useNavigation } from "@react-navigation/native";
 const HomeStack = createNativeStackNavigator();
 export function HomeStackScreen() {
    
     const {user} = useSelector(s => s.user);
     const {subscribed} = useSelector(s => s.subscribed);
+    const {tier} = useSelector(s => s.tier);
     const {campus} = useSelector(s => s.campus);
     
     const dispatch = useDispatch()
+    let navigation = useNavigation()
     useEffect(() => {
         console.log(campus)
     }, [campus])
 
     function handleSub(params) {
-        dispatch(set_sub_modal(1))
+        if(!subscribed){
+            dispatch(set_sub_modal(1))
+        }else{
+            navigation.navigate('Profile', {
+                screen: 'user-subscription',   // 👈 nested screen name
+                params: { sub: true },         // 👈 params go here
+            });
 
-        // if(!subscribed){
-        // }
+        }
     }
-     
 
     return (  
       
@@ -113,7 +120,7 @@ export function HomeStackScreen() {
                                         style={styles.icon}
                                         />
                                         <Text style={[styles.buttonText, subscribed && styles.subscribedText]}>
-                                        {subscribed ? 'Subscribed' : 'Subscribe'}
+                                        {subscribed ? `${tier.plan} Plan` : 'Subscribe Now'}
                                         </Text>
                                     </View>
                                 </TouchableOpacity>
@@ -139,10 +146,10 @@ export function HomeStackScreen() {
                     </>
                 ),
             // headerShown: false, 
-          }} name="user-home" component={Home} /> 
+          }} name="user-home" component={Home} />
 
           <HomeStack.Screen 
-            name="user-subscription" 
+            name="user-payment" 
             component={PaymentScreen}
             options={{ headerShown: false }}
         />

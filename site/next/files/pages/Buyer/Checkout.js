@@ -1,6 +1,6 @@
 import { 
     useLocation 
-} from "react-router-dom";
+} from "next/link";
 import CheckoutSummary from "../../components/Buyer/Checkout/CheckoutSummary";
 import CustomerAddress from "../../components/Buyer/Checkout/CustomerAddress";
 import DeliveryData from "../../components/Buyer/Checkout/DeliveryData";

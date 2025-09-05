@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'next/link'
 
 export default function MessageHead({data, index, setRoomId}) {
     let [screenWidth, setScreenWidth] = useState(0)

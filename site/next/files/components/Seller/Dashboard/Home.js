@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "next/link";
 import '../../../styles/Seller/overlay.css' 
 import Card from "./Card";
 import items from '../../../items.json'

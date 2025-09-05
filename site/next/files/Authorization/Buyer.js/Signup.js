@@ -3,7 +3,7 @@ import '../../styles/Buyer/signup.css'
 import { 
     useLocation, 
     useNavigate 
-} from 'react-router-dom';
+} from 'next/link';
 import { 
     data, 
     school_choices 

@@ -5,7 +5,7 @@ import SellerLayout from '../../layout/Seller'
 import RoomHead from '../../components/Seller/Message/LargeScreen/MessageRoom/RoomHead'
 import RoomPanel from '../../components/Seller/Message/LargeScreen/MessageRoom/RoomPanel'
 import { GetChatRooms } from '../../api/seller/get'
-import { useLocation } from 'react-router-dom'
+import { useLocation } from 'next/link'
 
 export default function MessageLg() {
     let [room, setRoom] = useState([])

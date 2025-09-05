@@ -27,10 +27,44 @@ import SubscriptionModal from './android/app/src/files/utils/Sub.js';
 import { set_sub_modal } from './redux/sub.js';
 import { Header } from 'react-native/Libraries/NewAppScreen';
 import { setUserAuthTo } from './redux/reducer/auth.js';
+import axios from 'axios';
+import { set_subscribed } from './redux/subscribed.js';
+import { set_tier } from './redux/tier.js';
+import { storeData } from './android/app/src/files/utils/AsyncStore.js.js';
 // import { set_campus } from './redux/reducer/location.js';   // ✅ add correct reducer
 // import { closeModal } from './redux/reducer/locale.js';      // ✅ add correct reducer
 
 function App() {
+  
+  useEffect(() => {
+    axios.get('https://cs-server-olive.vercel.app/packages')
+    .then((res) => {
+      const packageArray = res.data.packageData;
+      const formatPackages = (packagesArray) => {
+        const formatPrice = (price) => {
+          let num = parseFloat(price);
+          if (isNaN(num)) return "₦0";
+          return "₦" + num.toLocaleString("en-NG");
+        };
+
+        return packagesArray.reduce((acc, pkg) => {
+          acc[pkg.name] = {
+            price: formatPrice(pkg.price),
+            discount_price: formatPrice(pkg.discount_price),
+            features: pkg.features,
+            tier: pkg.tier,
+            hint: pkg.hint,
+            themeColor: pkg.theme_color
+          };
+          return acc;
+        }, {});
+      };
+      const PACKAGES = formatPackages(packageArray);
+      storeData('PACKAGES', JSON.stringify(PACKAGES))
+
+    }).catch(err => console.log(err))
+  }, [])
+
   
   
  
@@ -152,6 +186,43 @@ function NavCnt() {
     }
   }, [user]); 
 
+  useEffect(() => {
+    let isMounted = true;
+
+    async function SubWithRetry(retryDelay = 2000) {
+      try {
+        const resp = await axios.get('https://cs-server-olive.vercel.app/subscription', {
+          params: { user_id: user.user_id },
+        });
+
+        if (!isMounted) return;
+
+        const data = resp?.data;
+        dispatch(set_subscribed(data.subscribed));
+        dispatch(set_tier(data.data));
+
+      } catch (error) {
+        console.log("Request failed, retrying in", retryDelay / 1000, "seconds:", error.message);
+
+        // Retry after delay
+        setTimeout(() => {
+          if (isMounted) {
+            SubWithRetry(retryDelay); // keeps retrying with same delay
+            // OR use exponential backoff:
+            // SubWithRetry(Math.min(retryDelay * 2, 30000));
+          }
+        }, retryDelay);
+      }
+    }
+
+    SubWithRetry();
+
+    return () => {
+      isMounted = false; // stop retries if component unmounts
+    };
+  }, [user, dispatch]);
+
+
   
   return (
     <SafeAreaProvider style={{ flex: 1 }}>
@@ -178,7 +249,6 @@ function NavCnt() {
     </SafeAreaProvider>
   );
 }
-
 // --------------------
 // CampusSelection
 // --------------------

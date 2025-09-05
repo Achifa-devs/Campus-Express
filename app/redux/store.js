@@ -5,9 +5,10 @@ import cookie from './vendor/cookie';
 import drawer from './vendor/drawer';
 import user from './vendor/user';
 import shop from './shop';
+import tier from './tier';
 import payment_method from './paystack';
 import toggleMessage from './toggleMssg';
-import campus from './campus';
+import campus from './campus'; 
 import locale_modal from './locale'
 import option from './option';
 import sub_modal from './sub'
@@ -23,6 +24,7 @@ let store = configureStore({
     subscribed: subscribed,
     user: user,
     shop: shop,
+    tier: tier,
     payment_method: payment_method,
     drawer: drawer,
     campus: campus,

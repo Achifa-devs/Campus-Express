@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "next/link";
 import home from '../../../assets/home-svgrepo-com (6).svg'
 import me from '../../../assets/profile-circle-svgrepo-com (3).svg'
 import mssg from '../../../assets/message-circle-lines-alt-svgrepo-com.svg'

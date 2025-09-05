@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import imgSvg from '../../../assets/image-svgrepo-com (4).svg'; 
 import { 
     useNavigate 
-} from 'react-router-dom';
+} from 'next/link';
 import { 
     GetProductThumbnail 
 } from '@/app/api/buyer/get';

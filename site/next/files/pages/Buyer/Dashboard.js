@@ -15,7 +15,7 @@ import BuyerLayout from '../../layout/Buyer'
 import { 
     useLocation, 
     useNavigate 
-} from "react-router-dom";
+} from "next/link";
 import SearchOutput from "../../components/Buyer/Header/SearchOutput";
 import { 
     Helmet 
