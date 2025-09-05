@@ -444,3 +444,132 @@ CAMPUSSPHERE_SERVER.post('/update-photo', parser, async (req, res) => {
   }
 
 });
+
+
+CAMPUSSPHERE_SERVER.get('/packages', async (req, res) => {
+
+  try {
+    // Get seller's products
+    const packages = await pool.query(
+      'SELECT * FROM packages'
+    );
+    const packageData = packages.rows;
+
+    // Return combined data 
+    res.status(200).json({packageData});
+
+  } catch (err) {
+    console.error('DB Error:', err);
+    res.status(500).json({ error: 'Server Error' });
+  }
+});
+
+CAMPUSSPHERE_SERVER.get('/subscription', async (req, res) => {
+
+  const {user_id} = req?.query;
+
+  try {
+    // Get seller's products
+    const result = await pool.query(
+      'SELECT * FROM subscriptions WHERE user_id = $1',
+      [user_id]
+    );
+    // Return combined data 
+    res.status(200).send({subscribed: result.rows[0].plan !== 'Free' ? true: false, data: result.rows[0]});
+
+  } catch (err) {
+    console.error('DB Error:', err);
+    res.status(500).send({ error: 'Server Error' });
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

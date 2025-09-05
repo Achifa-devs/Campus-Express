@@ -1,3 +1,4 @@
+import pool from "../../config/db.js";
 import {
   countEmail,
   countPhone,
@@ -24,28 +25,55 @@ export const getVendor = async (payload) => {
 };
 
 export const postNewVendor = async (payload) => {
-  const { fname,lname,email,phone,pwd,state,campus,deviceId } = payload;
+  const { fname, lname, email, phone, pwd, state, campus, deviceId } = payload;
 
-  console.log(deviceId._j)
-  // return true
-  // Business logic
+  console.log(deviceId._j);
+
+  // Hash password
   let hashedPwd = await bcrypt.hash(pwd, 10);
-  console.log(hashedPwd)
   let user_id = `CE-${shortId.generate(10)}`;
 
+  // Check email and phone
   let existingEmail = await countEmail({ email });
   let existingPhone = await countPhone({ phone });
 
   if (existingEmail > 0) {
-    throw new Error("Email exist");
-    
+    throw new Error("Email exists");
   } else if (existingPhone > 0) {
-    throw new Error("Phone number exist");
+    throw new Error("Phone number exists");
   }
 
-  const response = await createVendor({ fname,lname,user_id,email,phone,hashedPwd,state,campus,gender: null, deviceId: deviceId._j });
+  // Create vendor
+  const response = await createVendor({
+    fname,
+    lname,
+    user_id,
+    email,
+    phone,
+    hashedPwd,
+    state,
+    campus,
+    gender: null,
+    deviceId: deviceId._j
+  });
 
-  return {...response, user: {fname,lname,user_id,email,phone,state,campus}};
+  // Insert subscription for this new user
+  const plan = "Free"; // default starting plan
+  const start_date = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+  const end_date = null; // you can calculate trial end or leave null
+  const created_at = new Date().toISOString();
+
+  await pool.query(
+    `INSERT INTO subscriptions (user_id, plan, start_date, end_date, is_active, created_at)
+    VALUES ($1, $2, $3, $4, $5, $6)`,
+    [user_id, plan, start_date, end_date, true, created_at]
+  );
+
+  return {
+    ...response,
+    user: { fname, lname, user_id, email, phone, state, campus }
+  };
+
 };
 
 export const postLoginVendor = async (payload) => {
