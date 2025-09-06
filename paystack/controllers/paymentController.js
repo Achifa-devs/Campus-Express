@@ -25,7 +25,7 @@ const handleWebhook = async (req, res) => {
       const existingPayment = await Payment.findByReference(reference);
       if (!existingPayment) {
         console.log(`Creating new payment for reference: ${reference}`);
-        const paymentRecord = await Payment.create({ amount, currency, status, reference });
+        const paymentRecord = await Payment.create({ amount, currency, status, reference, user_id });
 
         if (paymentRecord) {
           console.log(`Payment created successfully: ${paymentRecord.id}`);
