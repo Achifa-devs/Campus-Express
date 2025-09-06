@@ -10,7 +10,7 @@ const handleWebhook = async (req, res) => {
 
     // Assuming event is from Paystack
     if (event.event === 'charge.success') {
-      const { amount, currency, reference, status, metadata } = event.data;
+      const { amount, reference, status, metadata } = event.data;
       const { plan, start_date, end_date, user_id } = metadata;
 
       console.log(metadata)
@@ -25,7 +25,7 @@ const handleWebhook = async (req, res) => {
       const existingPayment = await Payment.findByReference(reference);
       if (!existingPayment) {
         console.log(`Creating new payment for reference: ${reference}`);
-        const paymentRecord = await Payment.create({ amount, currency, status, reference, user_id });
+        const paymentRecord = await Payment.create({ amount, status, reference, user_id });
 
         if (paymentRecord) {
           console.log(`Payment created successfully: ${paymentRecord.id}`);

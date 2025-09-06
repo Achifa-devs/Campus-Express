@@ -15,6 +15,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { usePaystack } from 'react-native-paystack-webview';
 import { useDispatch, useSelector } from 'react-redux';
 import { set_payment_method } from '../../../../../../redux/paystack';
+import { set_tier } from '../../../../../../redux/tier';
 
 const { width, height } = Dimensions.get('window');
 
@@ -28,16 +29,6 @@ const PaymentScreen = () => {
   const [loading, setLoading] = useState(false);
   const { payment_method } = useSelector(s=>s?.payment_method)
 
-  useEffect(() => {
-    const start_date = new Date();
-    const end_date = new Date();
-    end_date.setMonth(end_date.getMonth() + 1);
-
-    console.log("Start Date:", start_date);
-    console.log("End Date:", end_date);
-  }, [])
-
-  const actualAmount = parseFloat(selectedPackage?.discount_price.replace('₦', '').replace(',', '')) * 100;
 
   const paymentMethods = [
     {
@@ -62,21 +53,25 @@ const PaymentScreen = () => {
  
   const { popup } = usePaystack();
 
+  const {tier} = useSelector(s => s.tier)
+
   const payNow = () => {
+    
     const start_date = new Date();
     const end_date = new Date();
     end_date.setMonth(end_date.getMonth() + 1);
 
-
+    const reference = `REF-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
     // setLoading(true);
     popup.newTransaction({
       email: user?.email,
-      amount: 200,
+      amount: parseFloat(selectedPackage?.discount_price.replace('₦', '').replace(',', '')),
+      reference: reference,
       metadata: {
         plan: selectedPackage.tier, 
         start_date, 
         end_date, 
-        user: user.user_id
+        user_id: user.user_id
       },
      
       onSuccess: (res) => {
@@ -86,6 +81,12 @@ const PaymentScreen = () => {
           `Your ${selectedPackage?.tier} subscription has been activated.`,
           [{ text: 'OK', onPress: () => navigation.navigate('Home') }]
         );
+        let newTier = { ...tier };
+        newTier.start_date = start_date.toISOString();
+        newTier.end_date = end_date.toISOString();
+        newTier.plan = selectedPackage?.tier;
+        dispatch(set_tier(newTier));
+        navigation.goBack();
       },
       onCancel: () => {
         // setLoading(false);
