@@ -10,10 +10,10 @@ const handleWebhook = async (req, res) => {
 
     // Assuming event is from Paystack
     if (event.event === 'charge.success') {
-      const { amount, currency, reference, status, customer } = event.data;
-      const { plan, start_date, end_date, user_id } = customer.metadata;
+      const { amount, currency, reference, status, metadata } = event.data;
+      const { plan, start_date, end_date, user_id } = metadata;
 
-      console.log(customer)
+      console.log(metadata)
 
       // Validate required data
       if (!reference || !amount || !status) {
@@ -30,7 +30,7 @@ const handleWebhook = async (req, res) => {
         if (paymentRecord) {
           console.log(`Payment created successfully: ${paymentRecord.id}`);
           // Update subscriptions only if payment creation was successful
-          const subscriptionUpdate = await Payment.updateSubscriptions(plan, start_date, end_date, user_id);
+          const subscriptionUpdate = await Payment.updateSubscriptions({ plan, start_date, end_date, user_id });
           if (subscriptionUpdate) {
             console.log(`Subscription updated for user: ${user_id}`);
           } else {

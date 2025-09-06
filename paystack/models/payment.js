@@ -1,14 +1,14 @@
-const { default: pool } = require("../config/database");
+const pool = require('../config/database');
 
 class Payment {
   static async create(paymentData) {
     const { amount, currency, status, reference } = paymentData;
     const query = `
-      INSERT INTO subscription_transactions (id, subscription_id, amount, status, created_at)
-      VALUES (DEFAULT, $1, $2, $3, $4, NOW())
+      INSERT INTO subscription_transactions (subscription_id, amount, status, created_at)
+      VALUES ($1, $2, $3, NOW())
       RETURNING *
     `;
-    const values = [reference, amount, status, new Date()];
+    const values = [reference, amount, status];
     const result = await pool.query(query, values);
     return result.rows[0];
   }
