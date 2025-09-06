@@ -3,8 +3,8 @@ import { ActivityIndicator, Alert, Dimensions, ScrollView, StyleSheet, Text, Tex
 import { useSelector } from 'react-redux';
 // import { send_token } from '../../utils/sms_token';
 import axios from 'axios';
-import { send_token } from '../../../../../vendor/utils/sms_token';
-// import { send_token } from '../../../../../vendor/utils/sms_token';
+// https://cs-server-olive.vercel.app
+// https://cs-server-olive.vercel.app
 
 
 export default function ChangeEmail({ route, navigation }) {

@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import { ActivityIndicator, Alert, Dimensions, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, Vibration, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { send_token } from '../../../../../vendor/utils/sms_token';
-// import { send_token } from '../../../../../vendor/utils/sms_token';
+// https://cs-server-olive.vercel.app
+// https://cs-server-olive.vercel.app
 
 
 export default function ChangePwd({ route, navigation }) {

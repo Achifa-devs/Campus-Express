@@ -2,7 +2,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import StackNavigator from "../store/utils/Nav.js";
-import Aside from "../vendor/utils/Aside.js";
 import { getData } from "./AsyncStore.js.js";
 import { set_user } from "../../../../../redux/user.js";
 import { StatusBar } from "react-native";

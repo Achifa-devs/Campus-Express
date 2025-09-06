@@ -28,6 +28,15 @@ const PaymentScreen = () => {
   const [loading, setLoading] = useState(false);
   const { payment_method } = useSelector(s=>s?.payment_method)
 
+  useEffect(() => {
+    const start_date = new Date();
+    const end_date = new Date();
+    end_date.setMonth(end_date.getMonth() + 1);
+
+    console.log("Start Date:", start_date);
+    console.log("End Date:", end_date);
+  }, [])
+
   const actualAmount = parseFloat(selectedPackage?.discount_price.replace('₦', '').replace(',', '')) * 100;
 
   const paymentMethods = [
@@ -54,10 +63,21 @@ const PaymentScreen = () => {
   const { popup } = usePaystack();
 
   const payNow = () => {
+    const start_date = new Date();
+    const end_date = new Date();
+    end_date.setMonth(end_date.getMonth() + 1);
+
+
     // setLoading(true);
     popup.newTransaction({
       email: user?.email,
-      amount: 5000,
+      amount: 200,
+      metadata: {
+        plan: selectedPackage.tier, 
+        start_date, 
+        end_date, 
+        user: user.user_id
+      },
      
       onSuccess: (res) => {
         // setLoading(false);
