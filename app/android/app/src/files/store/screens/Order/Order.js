@@ -42,7 +42,7 @@ export default function Order() {
   
 
   function get_list_data() {
-    fetch(`http://192.168.0.4:9090:3000/api/vendor/orders?user_id=${user?.user_id}`, {
+    fetch(`https://cs-server-olive.vercel.app:3000/api/vendor/orders?user_id=${user?.user_id}`, {
       headers: {
         "Content-Type": "Application/json"
       }

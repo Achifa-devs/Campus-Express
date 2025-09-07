@@ -53,7 +53,7 @@ export function SellStackScreen() {
     const dispatch = useDispatch()
     useEffect(() => {
         if (!shop) {
-            fetch(`http://192.168.0.4:9090/details?user_id=${user?.user_id}`, {
+            fetch(`https://cs-server-olive.vercel.app/details?user_id=${user?.user_id}`, {
                 headers: {
                 "Content-Type": "Application/json" 
                 }

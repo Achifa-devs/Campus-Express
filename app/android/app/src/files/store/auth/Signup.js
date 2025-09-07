@@ -208,7 +208,7 @@ const Signup = ({updateActiveJsx}) => {
       
       // Replace with actual API call
       
-      const response = await fetch('http://192.168.0.4:9090/vendor/registration', {
+      const response = await fetch('https://cs-server-olive.vercel.app/vendor/registration', {
         method: 'POST',
         headers: { "Content-Type": "Application/json" },
         body: JSON.stringify(formData)

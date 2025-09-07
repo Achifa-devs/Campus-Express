@@ -66,7 +66,7 @@ export default function File({
                             // alert(imgids.current[index])
                             seller_overlay_setup(true, `Deleting file...`)
                                 
-                            axios.post('http://192.168.0.4:9090/seller.file-delete', {
+                            axios.post('https://cs-server-olive.vercel.app/seller.file-delete', {
                                 // id:imgids.current[index],product_id
                                 url: src,
                                 type: 'null'

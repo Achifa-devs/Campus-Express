@@ -52,7 +52,7 @@ export default function ResetPwd() {
           
             e.target.disabled = true;
             buyer_overlay_setup(true, 'Resetting Password')
-            fetch('http://192.168.0.4:9090/reset-password', {
+            fetch('https://cs-server-olive.vercel.app/reset-password', {
                 method: 'post',
                 headers: {
                     "Content-Type": "Application/json"

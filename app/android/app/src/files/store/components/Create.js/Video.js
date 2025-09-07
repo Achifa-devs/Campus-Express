@@ -61,7 +61,7 @@ export default function VideoUpload({ videos, updatePhotos, setUploading, update
       formData.append('productId', productId);
       formData.append('isThumbnail', index === 0);
 
-      const response = await axios.post('http://192.168.0.4:9090/upload', formData, {
+      const response = await axios.post('https://cs-server-olive.vercel.app/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         onUploadProgress: (progressEvent) => {
           const progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
@@ -105,7 +105,7 @@ export default function VideoUpload({ videos, updatePhotos, setUploading, update
       const videoToDelete = videos[index];
       
       if (videoToDelete?.uri) {
-        await axios.post('http://192.168.0.4:9090/delete', {
+        await axios.post('https://cs-server-olive.vercel.app/delete', {
           url: videoToDelete.uri,
           type: 'video'
         });

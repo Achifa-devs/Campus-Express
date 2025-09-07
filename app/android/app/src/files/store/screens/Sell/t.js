@@ -62,7 +62,7 @@ export default function Sell() {
     (async function getUser(params) {
       let user = await getData('user');
       const id = JSON.parse(user).user_id
-      let res = await fetch(`http://192.168.0.4:9090/vendor/shop?user_id=${id}`)
+      let res = await fetch(`https://cs-server-olive.vercel.app/vendor/shop?user_id=${id}`)
       handleInputChange('user_id', id)
       let response = await res.json()
       console.log("response: ", response)
@@ -113,7 +113,7 @@ export default function Sell() {
         type: image.type || 'image/jpeg',
       });
 
-      const response = await axios.post('http://192.168.0.4:9090/upload', formData, {
+      const response = await axios.post('https://cs-server-olive.vercel.app/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
@@ -134,7 +134,7 @@ export default function Sell() {
   const deleteFromServer = async (url) => {
     try {
       setIsLoading(true);
-      const response = await axios.post('http://192.168.0.4:9090/delete', {
+      const response = await axios.post('https://cs-server-olive.vercel.app/delete', {
         url
       });
 
@@ -178,7 +178,7 @@ export default function Sell() {
     if (!validateForm()) return;
 
     setIsLoading(true)
-    fetch(`http://192.168.0.4:9090/vendor/create-shop`, {
+    fetch(`https://cs-server-olive.vercel.app/vendor/create-shop`, {
       method: 'post',
       headers: {
         "Content-Type": "Application/json"

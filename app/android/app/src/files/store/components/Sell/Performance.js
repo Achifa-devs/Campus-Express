@@ -13,7 +13,7 @@ const STAT_CARDS = [
   { id: 'reviews', name: 'Total Reviews', value: 0 }
 ];
 
-const API_URL = 'http://192.168.0.4:9090/vendor/report';
+const API_URL = 'https://cs-server-olive.vercel.app/vendor/report';
 
 export default function Performance({ user_id }) {
   const { colors } = useTheme();

@@ -27,7 +27,7 @@ export default function DeleteAccount() {
       setError('');
       try {
         // In a real app, you would call your API here
-        const response = await fetch('http://192.168.0.4:9090/account/delete', {
+        const response = await fetch('https://cs-server-olive.vercel.app/account/delete', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

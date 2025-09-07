@@ -37,7 +37,7 @@ import { storeData } from './android/app/src/files/utils/AsyncStore.js.js';
 function App() {
   
   useEffect(() => {
-    axios.get('http://192.168.0.4:9090/packages')
+    axios.get('https://cs-server-olive.vercel.app/packages')
     .then((res) => {
       const packageArray = res.data.packageData;
       const formatPackages = (packagesArray) => {
@@ -99,7 +99,7 @@ function AppFinale() {
 
   const checkAppVersion = async () => {
     try {
-      const response = await fetch('http://192.168.0.4:9090/version-check', {
+      const response = await fetch('https://cs-server-olive.vercel.app/version-check', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -191,7 +191,7 @@ function NavCnt() {
 
     async function SubWithRetry(retryDelay = 2000) {
       try {
-        const resp = await axios.get('http://192.168.0.4:9090/subscription', {
+        const resp = await axios.get('https://cs-server-olive.vercel.app/subscription', {
           params: { user_id: user.user_id },
         });
 

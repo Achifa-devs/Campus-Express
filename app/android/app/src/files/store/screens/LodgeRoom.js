@@ -83,7 +83,7 @@ const AccommodationDetailScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     try {
-      fetch(`http://192.168.0.4:9090/image-folder?folderName=${data?.product_id}`, {
+      fetch(`https://cs-server-olive.vercel.app/image-folder?folderName=${data?.product_id}`, {
         headers: { 
           "Content-Type": "Application/json" 
         } 
@@ -128,7 +128,7 @@ const AccommodationDetailScreen = ({ route, navigation }) => {
     if (data && data.product_id && user?.user_id) {
       setTimeout(async () => {
         try {
-          const res = await axios.post('http://192.168.0.4:9090/product-view', {
+          const res = await axios.post('https://cs-server-olive.vercel.app/product-view', {
             user_id: user?.user_id,
             product_id: data?.product_id
           });
@@ -267,7 +267,7 @@ const AccommodationDetailScreen = ({ route, navigation }) => {
     let id = await getDeviceId()
     setLoading(true)
     try {
-      let request = await axios.post('http://192.168.0.4:9090/share', {product_id: data?.product_id, user_id: user ? user.user_id : id})
+      let request = await axios.post('https://cs-server-olive.vercel.app/share', {product_id: data?.product_id, user_id: user ? user.user_id : id})
       let res = request?.data;
       
       return res;

@@ -432,7 +432,7 @@ function Payments() {
                                 let Bank = BankCode.current
                                 // alert(Bank)
                             
-                            fetch('http://192.168.0.4:9090/bank-verification', {
+                            fetch('https://cs-server-olive.vercel.app/bank-verification', {
                                 method: 'post',
                                 headers: {
                                     'Content-Type': 'application/json',

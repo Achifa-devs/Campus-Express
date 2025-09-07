@@ -3,8 +3,8 @@ import { ActivityIndicator, Alert, Dimensions, ScrollView, StyleSheet, Text, Tex
 import { useSelector } from 'react-redux';
 // import { send_token } from '../../utils/sms_token';
 import axios from 'axios';
-// http://192.168.0.4:9090
-// http://192.168.0.4:9090
+// https://cs-server-olive.vercel.app
+// https://cs-server-olive.vercel.app
 
 
 export default function ChangePhone({ route, navigation }) {

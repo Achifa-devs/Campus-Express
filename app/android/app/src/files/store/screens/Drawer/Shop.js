@@ -30,7 +30,7 @@ export default function Shopile() {
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-      axios.get(`http://192.168.0.4:9090/vendor/shop-reviews?shop_id=${shop?.shop_id}`)
+      axios.get(`https://cs-server-olive.vercel.app/vendor/shop-reviews?shop_id=${shop?.shop_id}`)
       .then((res) => {
         set_review(res?.data?.data)
       }).catch(err=>console.log(err))
@@ -54,7 +54,7 @@ export default function Shopile() {
 
         if (list.filter(item => item !== '' && item !== undefined).length === list.length) {
             setIsLoading(true)
-            axios.post(`http://192.168.0.4:9090/vendor/update-shop`, {
+            axios.post(`https://cs-server-olive.vercel.app/vendor/update-shop`, {
                 title,
                 description,
                 user_id: user?.user_id,
@@ -112,7 +112,7 @@ export default function Shopile() {
             type: image.type || 'image/jpeg',
         });
 
-        const response = await axios.post('http://192.168.0.4:9090/upload', formData, {
+        const response = await axios.post('https://cs-server-olive.vercel.app/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         });
 
@@ -134,7 +134,7 @@ export default function Shopile() {
     const deleteFromServer = async (url) => {
         try {
             setIsLoading(true);
-            const response = await axios.post('http://192.168.0.4:9090/delete', {
+            const response = await axios.post('https://cs-server-olive.vercel.app/delete', {
                 url
             });
 

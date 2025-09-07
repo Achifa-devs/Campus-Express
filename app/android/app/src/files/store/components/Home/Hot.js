@@ -225,7 +225,7 @@ export default function Hot({ data, Fav }) {
 
   async function AddImpression(data) {
     try {
-      let request = await axios.post('http://192.168.0.4:9090/impression', {product_id: data?.product_id, user_id: user?.user_id ? user?.user_id: id})
+      let request = await axios.post('https://cs-server-olive.vercel.app/impression', {product_id: data?.product_id, user_id: user?.user_id ? user?.user_id: id})
       let res = request?.data;
       console.log('impresion result: ',res)
       
