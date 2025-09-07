@@ -202,7 +202,7 @@ function EditProfile({ data, Validation }) {
     if (fname !== '' && lname !== '' && gender !== '' && fname.length > 3 && lname.length > 3) {
       buyer_overlay_setup(true, 'Updating profile')
 
-      axios.post('https://cs-server-olive.vercel.app/profile-update', {fname,lname,gender,user_id})
+      axios.post('http://192.168.0.4:9090/profile-update', {fname,lname,gender,user_id})
       .then(({data})=>{
         window.location.reload()
         buyer_overlay_setup(false, '')
@@ -280,7 +280,7 @@ function Edit({ edit, data }) {
       
       body[edit.toLowerCase().split(' ')[0]] = value_state;
 
-      axios.post(`https://cs-server-olive.vercel.app/${(edit.toLowerCase().split(' ')[0])}-update`, body)
+      axios.post(`http://192.168.0.4:9090/${(edit.toLowerCase().split(' ')[0])}-update`, body)
       .then(({data})=>{
         if (data.success) {
           window.location.reload()
@@ -365,7 +365,7 @@ function Password() {
         if (pwd === cpwd) {
           // alert(user_id)
           buyer_overlay_setup(true, `Updating password`)
-          axios.post(`https://cs-server-olive.vercel.app/alter-password`, {pwd,user_id,oldpwd})
+          axios.post(`http://192.168.0.4:9090/alter-password`, {pwd,user_id,oldpwd})
           .then(({data})=>{
             console.log(data)
             

@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import { ActivityIndicator, Alert, Dimensions, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, Vibration, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-// https://cs-server-olive.vercel.app
-// https://cs-server-olive.vercel.app
+// http://192.168.0.4:9090
+// http://192.168.0.4:9090
 
 
 export default function ChangePwd({ route, navigation }) {

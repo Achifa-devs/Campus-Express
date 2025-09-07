@@ -14,6 +14,6 @@ export async function createToken(type, token, recipient) {
       type, token, `${new Date()}`, recipient
     ]
   );
-  const response = await errorHandler(result?.rowCount);
+  let response = await errorHandler(result?.rowCount);
   return response;
-}
+};

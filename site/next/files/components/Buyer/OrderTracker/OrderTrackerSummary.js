@@ -84,7 +84,7 @@ const OrderTrackerSummary = ({order, Method, updateJsx, activeJsx}) => {
                                 <button class="button is-primary" onClick={e => {
                                     buyer_overlay_setup(true, 'Cancelling Order')
 
-                                    axios.post('https://cs-server-olive.vercel.app/cancel-order', {user_id: user_id, order_id: order?.order_id, amount:order?.price, reason: 'cancelled', product_id: order?.product_id})
+                                    axios.post('http://192.168.0.4:9090/cancel-order', {user_id: user_id, order_id: order?.order_id, amount:order?.price, reason: 'cancelled', product_id: order?.product_id})
                                     .then(({data})=>{
                                         console.log(data)
                                         if(data){

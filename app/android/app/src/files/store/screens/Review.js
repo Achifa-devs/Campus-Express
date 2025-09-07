@@ -52,7 +52,7 @@ const ReviewSubmissionScreen = ({ navigation }) => {
 
     setIsSubmitting(true);
     
-    fetch(`https://cs-server-olive.vercel.app/review`, {
+    fetch(`http://192.168.0.4:9090/review`, {
       method: 'post',
 
       headers: {

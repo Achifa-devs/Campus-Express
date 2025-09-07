@@ -62,7 +62,7 @@ export default function NewOrder() {
         buyer_overlay_setup(true, 'Loading...')
         
         try {
-            axios.get('https://cs-server-olive.vercel.app/product', {params: {id: pathname.split('/').splice(-1)}})
+            axios.get('http://192.168.0.4:9090/product', {params: {id: pathname.split('/').splice(-1)}})
             .then(({data})=>{
                 setItem(data[0])
                 buyer_overlay_setup(false, '')
@@ -87,7 +87,7 @@ export default function NewOrder() {
         if (user_id !== '' && user_id !== null && user_id !== 'null') {
 
             
-            axios.get('https://cs-server-olive.vercel.app/order', {params: {user_id: user_id, product_id: pathname.split('/').splice(-1)[0]}})
+            axios.get('http://192.168.0.4:9090/order', {params: {user_id: user_id, product_id: pathname.split('/').splice(-1)[0]}})
             .then(({data})=>{
                 set_order(data)
                 set_order_id(data[0]?.order?.order_id)
@@ -108,7 +108,7 @@ export default function NewOrder() {
         if (user_id !== '' && user_id !== null && user_id !== 'null') {
 
             
-            axios.get('https://cs-server-olive.vercel.app/refund', {params: {user_id: user_id, product_id: pathname.split('/').splice(-1)[0]}})
+            axios.get('http://192.168.0.4:9090/refund', {params: {user_id: user_id, product_id: pathname.split('/').splice(-1)[0]}})
             .then(({data})=>{
                 if (data.length > 0) {
                     set_refund(data)

@@ -19,7 +19,7 @@ export const getProduct = async (payload) => {
 
 
 export const getProducts = async (payload) => {
-    const { user_id } = payload;
+    let { user_id } = payload;
     // Business logic
     try {
         const response = await findProducts({ user_id });
@@ -68,6 +68,8 @@ export const postProduct = async (payload) => {
     return false; // return false on failure so caller can handle it
   }
 };
+
+
 
 
 export const postUpdateProduct = async (payload) => {

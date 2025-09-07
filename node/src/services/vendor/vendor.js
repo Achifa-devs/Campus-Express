@@ -30,12 +30,12 @@ export const postNewVendor = async (payload) => {
   console.log(deviceId._j);
 
   // Hash password
-  const hashedPwd = await bcrypt.hash(pwd, 10);
-  const user_id = `CE-${shortId.generate(10)}`;
+  let hashedPwd = await bcrypt.hash(pwd, 10);
+  let user_id = `CE-${shortId.generate(10)}`;
 
   // Check email and phone
-  const existingEmail = await countEmail({ email });
-  const existingPhone = await countPhone({ phone });
+  let existingEmail = await countEmail({ email });
+  let existingPhone = await countPhone({ phone });
 
   if (existingEmail > 0) {
     throw new Error("Email exists");
@@ -64,9 +64,9 @@ export const postNewVendor = async (payload) => {
   const created_at = new Date().toISOString();
 
   await pool.query(
-    `INSERT INTO subscriptions (user_id, plan, start_date, end_date, is_active, created_at, connections_remaining, ad_quota)
+    `INSERT INTO subscriptions (user_id, plan, start_date, end_date, is_active, created_at)
     VALUES ($1, $2, $3, $4, $5, $6)`,
-    [user_id, plan, start_date, end_date, true, created_at, 2, 1]
+    [user_id, plan, start_date, end_date, true, created_at]
   );
 
   return {
@@ -126,9 +126,9 @@ export const postResetVendorPwd = async (payload) => {
   const { user_id, pwd } = payload;
 
   // Business logic
-  const Vendor = await findUserById({ user_id });
-  const oldPwd = Vendor.password;
-  const comparison = await bcrypt.compare(pwd, oldPwd);
+  let Vendor = await findUserById({ user_id });
+  let oldPwd = Vendor.password;
+  let comparison = await bcrypt.compare(pwd, oldPwd);
   if (comparison) {
     throw new Error("New password cannot be the same as old password");
   } 

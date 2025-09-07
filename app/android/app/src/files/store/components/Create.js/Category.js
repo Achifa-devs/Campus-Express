@@ -6,7 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 export default function Category({ updateCategory, category_list, error, onFocus, purpose }) {
   const [isFocused, setIsFocused] = useState(false);
 
-  const handleCategoryChange = (name, value) => {
+  const handleCategoryChange = (value) => {
     updateCategory(value); 
   };
 

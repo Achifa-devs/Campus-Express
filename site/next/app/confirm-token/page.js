@@ -59,7 +59,7 @@ export default function ConfirmToken() {
            
             e.target.disabled = true;
             buyer_overlay_setup(true, 'Veryfyng Token')
-            fetch('https://cs-server-olive.vercel.app/verify-token', {
+            fetch('http://192.168.0.4:9090/verify-token', {
                 method: 'post',
                 headers: {
                     "Content-Type": "Application/json"

@@ -25,7 +25,7 @@ export default function Shopile() {
     },[user])
 
     function get_shop_data() {
-        fetch('https://cs-server-olive.vercel.app:3000/api/vendor/shop', {
+        fetch('http://192.168.0.4:9090:3000/api/vendor/shop', {
             method: 'post',
             headers: {
                 "Content-Type": "Application/json"

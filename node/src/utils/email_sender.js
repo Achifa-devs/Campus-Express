@@ -37,7 +37,7 @@ export async function send_email(subject, template, email) {
 
 
 export async function send_mail_via_brevo(subject,html,email) {
-    const transporter = nodemailer.createTransport({
+    let transporter = nodemailer.createTransport({
          host: 'smtp-relay.brevo.com', // Zoho SMTP server     
         port: 587, // SSL Port
         secure: true, // Use SSL
@@ -48,7 +48,7 @@ export async function send_mail_via_brevo(subject,html,email) {
     });
 
     // Setup email data
-    const mailOptions = {
+    let mailOptions = {
         from: '"Campus Sphere" <campus-sphere@campussphere.net>', // sender address
         to: email, // list of receivers
         subject: subject, // Subject line

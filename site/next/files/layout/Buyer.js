@@ -108,7 +108,7 @@ const BuyerLayout = ({children}) => {
     }, [user_id])
 
     function update_db_id_for_unknown_buyer_to_registered_id() {
-        fetch(`https://cs-server-olive.vercel.app/product-view-unknown-buyer-update`,{
+        fetch(`http://192.168.0.4:9090/product-view-unknown-buyer-update`,{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

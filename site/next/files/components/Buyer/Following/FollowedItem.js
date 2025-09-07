@@ -5,7 +5,7 @@ import axios from 'axios';
 export default function FollowedItem(item) {
     
     useEffect(() => {
-        axios.get('https://cs-server-olive.vercel.app/seller.listing', {params: {id: item?.user_id}})
+        axios.get('http://192.168.0.4:9090/seller.listing', {params: {id: item?.user_id}})
         .then(({data})=>{
             setItems(data)
         })

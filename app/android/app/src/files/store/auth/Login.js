@@ -73,7 +73,7 @@ const Login = ({updateActiveJsx}) => {
       await new Promise(resolve => setTimeout(resolve, 1500));
       
       // Replace with actual API call
-      const response = await fetch('https://cs-server-olive.vercel.app/vendor/login', {
+      const response = await fetch('http://192.168.0.4:9090/vendor/login', {
         method: 'POST',
         headers: { "Content-Type": "Application/json" },
         body: JSON.stringify(formData)

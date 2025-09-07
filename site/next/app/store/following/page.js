@@ -15,7 +15,7 @@ export default function Following() {
     } = useSelector(s => s.user_id);
    
     useEffect(() => {
-        axios.get('https://cs-server-olive.vercel.app/following', {params: {id: user_id}})
+        axios.get('http://192.168.0.4:9090/following', {params: {id: user_id}})
         .then(({data})=>{
             setItems(data)
         })

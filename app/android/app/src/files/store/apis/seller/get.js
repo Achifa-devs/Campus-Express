@@ -2,8 +2,8 @@ import axios from 'axios'
 // import {IP} from '@env'
 
 
-let uri_1 = 'https://cs-server-olive.vercel.app'
-let uri_2 = 'https://cs-server-olive.vercel.app' 
+let uri_1 = 'http://192.168.0.4:9090'
+let uri_2 = 'http://192.168.0.4:9090' 
 let IP = uri_1
 
 
