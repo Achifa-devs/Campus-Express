@@ -27,8 +27,11 @@ class Payment {
 
   static async updateSubscriptions(subscriptionData) {
     const { plan, start_date, end_date, user_id } = subscriptionData;
-    const query = 'UPDATE subscriptions SET plan = $1, start_date = $2, end_date = $3 WHERE user_id = $4 RETURNING *';
-    const result = await pool.query(query, [plan, start_date, end_date, user_id]);
+
+    const connections_remaining = plan === 'Premium' ? 1000000 : plan === 'Standard' ? 22 : plan === 'Basic' ? 11 : 0
+    const ad_quota = plan === 'Premium' ? 1000000 : plan === 'Standard' ? 11 : plan === 'Basic' ? 4 : 1
+    const query = 'UPDATE subscriptions SET plan = $1, start_date = $2, end_date = $3, connections_remaining = $5, ad_quota = $6 WHERE user_id = $4 RETURNING *';
+    const result = await pool.query(query, [plan, start_date, end_date, user_id, connections_remaining, ad_quota]);
     return result.rows[0];
   }
 

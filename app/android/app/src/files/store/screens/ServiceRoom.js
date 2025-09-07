@@ -29,6 +29,7 @@ import { getData, storeData } from '../../utils/AsyncStore.js';
 import { get_saved, save_prod, unsave_prod } from '../utils/Saver';
 import categoriesData from '../../../../../../services.json';
 import useLogInAlert from '../utils/LogInAlert.js';
+import { getDeviceId } from '../utils/IdGen.js';
 
 const ServiceDetailScreen = ({ route }) => {
     const { data } = route?.params;
@@ -249,7 +250,21 @@ const ServiceDetailScreen = ({ route }) => {
         } else {
           showLogInAlert()
         }
-      };
+    };
+
+    async function AddShare() {
+        let id = await getDeviceId()
+        setLoading(true)
+        try {
+          let request = await axios.post('https://cs-server-olive.vercel.app/share', {product_id: data?.product_id, user_id: user ? user.user_id : id})
+          let res = request?.data;
+          
+          return res;
+        } catch (error) {
+          console.log('error: ', error)
+          Alert.alert('Error', 'Please ensure you have stable network.');
+        }
+    }
     
 
     if (loading) {
@@ -428,14 +443,22 @@ const ServiceDetailScreen = ({ route }) => {
                 <TouchableOpacity
                     style={styles.shareButton}
                     onPress={async() => {
-                    try {
-                        await Share.share({
-                        message: `Check out this product on Campus Sphere! https://www.campussphere.net/store/product/${data?.product_id}`,
-                        title: data?.title,
-                        });
-                    } catch (error) {
-                        console.error(error);
-                    }
+                        const isShareSaved = await AddShare()
+                        if(!isShareSaved){
+                        setLoading(false)
+                            return Alert.alert('Error', 'Please ensure you have stable network and try again.');
+                        }
+                        try {
+                            setLoading(false)
+                            await Share.share({
+                                message: `Check out this product on Campus Sphere! https://www.campussphere.net/store/product/${data?.product_id}`,
+                                title: data?.title,
+                            });
+                        } catch (error) {
+                            console.error(error);
+                            return Alert.alert('Error', 'Please ensure you have stable network and try again.');
+        
+                        }
                     }}
                 >
                     <Ionicons name={'share-outline'} size={18} color={'#FFF'} />

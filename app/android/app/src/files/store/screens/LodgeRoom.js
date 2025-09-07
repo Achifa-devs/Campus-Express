@@ -28,6 +28,7 @@ import { getData, storeData } from '../../utils/AsyncStore.js';
 import axios from 'axios';
 import { useRoute } from '@react-navigation/native';
 import useLogInAlert from '../utils/LogInAlert.js';
+import { getDeviceId } from '../utils/IdGen.js';
 
 const AccommodationDetailScreen = ({ route, navigation }) => {
   const { data } = useRoute().params;
@@ -39,6 +40,7 @@ const AccommodationDetailScreen = ({ route, navigation }) => {
   const [seller, setSeller] = useState('')
   const { width } = Dimensions.get('window');
   const fadeAnim = new Animated.Value(1);
+  const [loading, setLoading] = useState(true);
 
   let showLogInAlert = useLogInAlert()
   
@@ -261,6 +263,30 @@ const AccommodationDetailScreen = ({ route, navigation }) => {
     }
   };
 
+  async function AddShare() {
+    let id = await getDeviceId()
+    setLoading(true)
+    try {
+      let request = await axios.post('https://cs-server-olive.vercel.app/share', {product_id: data?.product_id, user_id: user ? user.user_id : id})
+      let res = request?.data;
+      
+      return res;
+    } catch (error) {
+      console.log('error: ', error)
+      Alert.alert('Error', 'Please ensure you have stable network.');
+    }
+  }
+
+
+    if (loading) {
+      return (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#FF4500" />
+          <Text style={styles.loadingText}>Loading service details...</Text>
+        </View>
+      );
+    }
+      
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.header}>
@@ -476,13 +502,21 @@ const AccommodationDetailScreen = ({ route, navigation }) => {
         <TouchableOpacity
           style={styles.shareButton}
           onPress={async() => {
+            const isShareSaved = await AddShare()
+            if(!isShareSaved){
+            setLoading(false)
+              return Alert.alert('Error', 'Please ensure you have stable network and try again.');
+            }
             try {
+              setLoading(false)
               await Share.share({
                 message: `Check out this product on Campus Sphere! https://www.campussphere.net/store/product/${data?.product_id}`,
                 title: data?.title,
               });
             } catch (error) {
               console.error(error);
+              return Alert.alert('Error', 'Please ensure you have stable network and try again.');
+
             }
           }}
         >
@@ -504,6 +538,12 @@ const styles = StyleSheet.create({
     top: Platform.OS === 'ios' ? 50 : 30,
     left: 20,
     zIndex: 10,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FFF',
   },
   backButton: {
     backgroundColor: 'rgba(0, 0, 0, 0.5)',

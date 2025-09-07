@@ -4,6 +4,7 @@ import {
   findProductById, 
   findProducts, 
   findProductsThumbnailById, 
+  updateAdQuota, 
   updateProduct
 } from "../../repositories/vendor/product.js";
 
@@ -18,7 +19,7 @@ export const getProduct = async (payload) => {
 
 
 export const getProducts = async (payload) => {
-    let { user_id } = payload;
+    const { user_id } = payload;
     // Business logic
     try {
         const response = await findProducts({ user_id });
@@ -43,17 +44,29 @@ export const getProductThumbnail = async (payload) => {
 
 
 export const postProduct = async (payload) => {
-    try {
-        const { constantData, dynamicData, shipping_data } = payload;
-        // console.log(constantData, dynamicData, shipping_data )
-    
-        // Business logic
-        let response = await createProduct({ constantData, dynamicData, shipping_data });
-    
-        return response;
-    } catch (error) {
-        console.log(error)
+  try {
+    const { constantData, dynamicData, shipping_data } = payload;
+    const { user_id } = constantData;
+
+    // Create the product
+    const response = await createProduct({ constantData, dynamicData, shipping_data });
+
+    if (!response) {
+      throw new Error("Failed to create product");
     }
+
+    // Update ad quota
+    const info = await updateAdQuota({ user_id });
+
+    if (!info) {
+      throw new Error("Failed to update ad quota");
+    }
+
+    return info;
+  } catch (error) {
+    console.error(error.message || error);
+    return false; // return false on failure so caller can handle it
+  }
 };
 
 

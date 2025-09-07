@@ -35,6 +35,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { get_saved, save_prod, unsave_prod } from '../utils/Saver.js';
 import axios from 'axios';
 import useLogInAlert from '../utils/LogInAlert.js';
+import { getDeviceId } from '../utils/IdGen.js';
 // import Upload from 'react-native-background-upload';
 
 export default function Product() {
@@ -72,9 +73,10 @@ export default function Product() {
   }
 
   async function AddShare() {
+    let id = await getDeviceId()
     setLoading(true)
     try {
-      let request = await axios.post('https://cs-server-olive.vercel.app/share', {product_id: data?.product_id, user_id: user?.user_id})
+      let request = await axios.post('https://cs-server-olive.vercel.app/share', {product_id: data?.product_id, user_id: user ? user.user_id : id})
       let res = request?.data;
       
       return res;

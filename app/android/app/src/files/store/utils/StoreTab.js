@@ -209,7 +209,6 @@ function HomeRoute(navigationState, updateTabBarStyle) {
     }else if(currentRouteName === 'user-category') {
         updateTabBarStyle('none'); 
     }else if(currentRouteName === 'user-product') {
-        // console.log('Current MessageStack Route:', currentRouteName);
         updateTabBarStyle('none'); 
     }else if(currentRouteName === 'user-new-order') {
         updateTabBarStyle('none'); 
@@ -223,8 +222,6 @@ function HomeRoute(navigationState, updateTabBarStyle) {
         updateTabBarStyle('none'); 
     }else if(currentRouteName === 'user-payment'){
         updateTabBarStyle('none'); 
-    }else{
-        updateTabBarStyle('flex');
     }
 }
 
@@ -245,8 +242,6 @@ function CreateRoute(navigationState, updateTabBarStyle) {
         updateTabBarStyle('none'); 
     }else if(currentRouteName === 'user-reviews'){
         updateTabBarStyle('none'); 
-    }else{
-        updateTabBarStyle('flex');
     }
 }
 
@@ -292,8 +287,6 @@ function ProfileRoute(navigationState, updateTabBarStyle) {
         updateTabBarStyle('none'); 
     }else if(currentRouteName === 'user-support'){
         updateTabBarStyle('none'); 
-    }else{
-        updateTabBarStyle('flex');
     }
 }
 
