@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -9,35 +9,21 @@ import {
   Modal,
   Pressable,
   Image,
+  Alert,
 } from 'react-native';
+import { usePaystack } from 'react-native-paystack-webview';
+import { useSelector } from 'react-redux';
+import categoriesData from '../../../../../../services.json';
+import Icon from 'react-native-vector-icons/Ionicons';
+import Video from 'react-native-video';
 
 const { width } = Dimensions.get('window');
 
 const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
   const [selectedPackage, setSelectedPackage] = useState(null);
-  const [selectedAd, setSelectedAd] = useState(0); // For ad carousel
-
-  // Sample ads data
-  const sampleAds = [
-    {
-      id: 1,
-      title: "Summer Collection",
-      image: "https://via.placeholder.com/300x200/4A90E2/FFFFFF?text=Summer+Collection",
-      description: "Promote your summer products with vibrant visuals"
-    },
-    {
-      id: 2,
-      title: "Flash Sale",
-      image: "https://via.placeholder.com/300x200/FF6B6B/FFFFFF?text=Flash+Sale",
-      description: "Create urgency with limited-time offers"
-    },
-    {
-      id: 3,
-      title: "New Arrivals",
-      image: "https://via.placeholder.com/300x200/50C878/FFFFFF?text=New+Arrivals",
-      description: "Showcase your latest products to eager customers"
-    }
-  ];
+  const { user } = useSelector(s => s.user);
+  const { boost_modal } = useSelector(s => s.boost_modal);
+  const [adImageUri, setAdImageUri] = useState(null);
 
   const promotionPackages = [
     {
@@ -112,12 +98,31 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
     }
   ];
 
-  const handleSubscribe = (pkg) => {
-    setSelectedPackage(pkg.id);
-    if (onSubscribe) {
-      onSubscribe(pkg);
+  useEffect(() => {
+    // console.log('boost_modal: ', boost_modal)
+    // Set the ad image URI when component mounts or boost_modal changes
+    if (boost_modal?.data) {
+      const uri = getCategoryImage(boost_modal.data?.category) || boost_modal.data?.thumbnail_id;
+      setAdImageUri(uri);
     }
-    onClose();
+  }, [boost_modal]);
+
+  const getCategoryImage = (categoryName) => {
+    if (!categoryName || !categoriesData?.items?.category) return null;
+    
+    for (let cat of categoriesData.items.category) {
+      const keys = Object.keys(cat).filter(k => k !== "img");
+      for (let key of keys) {
+        if (key === categoryName) {
+          return cat.img;
+        }
+      }
+    }
+    return null;
+  };
+
+  const handleSubscribe = (pkg) => {
+    payNow(pkg);
   };
 
   const calculateDiscountPercentage = (price, discountPrice) => {
@@ -127,12 +132,45 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
     return discountPercent;
   };
 
-  const nextAd = () => {
-    setSelectedAd((prev) => (prev + 1) % sampleAds.length);
-  };
+  const { popup } = usePaystack();
+  const payNow = (selectedPackage) => {
+    const start_date = new Date();
+    const end_date = new Date();
+    end_date.setMonth(end_date.getMonth() + 1);
 
-  const prevAd = () => {
-    setSelectedAd((prev) => (prev - 1 + sampleAds.length) % sampleAds.length);
+    const reference = `REF-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+    
+    popup.newTransaction({
+      email: user?.email,
+      amount: parseFloat(selectedPackage?.discountPrice.replace('₦', '').replace(',', '')),
+      reference: reference,
+      metadata: {
+        user_id: user.user_id,
+        type: 'promotion',
+        plan: selectedPackage.title,
+        start_date,
+        end_date
+      },
+      
+      onSuccess: (res) => {
+        Alert.alert(
+          'Payment Successful!',
+          `Your subscription was successful.`,
+          [{ text: 'OK' }]
+        );
+        if (onSubscribe) {
+          onSubscribe(selectedPackage);
+        }
+        onClose();
+      },
+      onCancel: () => {
+        Alert.alert('Payment Cancelled', 'Your payment was cancelled.');
+      },
+      onError: (err) => {
+        Alert.alert('Payment Error', 'There was an error processing your payment.');
+        console.log('Payment Error:', err);
+      }
+    });
   };
 
   return (
@@ -151,8 +189,6 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
         </View>
 
         <ScrollView contentContainerStyle={styles.scrollContent}>
-          
-
           {/* Performance Stats */}
           <View style={styles.statsSection}>
             <Text style={styles.sectionTitle}>Expected Results</Text>
@@ -170,6 +206,72 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
                 <Text style={styles.statLabel}>Higher Conversion</Text>
               </View>
             </View>
+          </View>
+
+          {/* Ad Preview Section - FIXED */}
+          <View style={styles.adPreviewSection}>
+            <Text style={styles.sectionTitle}>Your Ad Preview</Text>
+            <Text style={styles.sectionSubtitle}>See how your promotion will appear to customers</Text>
+            
+            {boost_modal?.data ? (
+              <View style={styles.adCard}>
+                {boost_modal.data?.purpose !== 'accomodation' ? (
+                  <Image
+                    style={styles.adImage}
+                    source={{ uri: adImageUri }}
+                    resizeMode="cover"
+                    onError={() => setAdImageUri(null)}
+                  />
+                ) : (
+                  <View style={styles.videoContainer}>
+                    <Video
+                      source={{ uri: boost_modal.data?.thumbnail_id }}
+                      style={styles.adImage}
+                      resizeMode="cover"
+                      muted={true}
+                      paused={true}
+                    />
+                  </View>
+                )}
+
+                <View style={styles.adContent}>
+                  <Text style={styles.adTitle} numberOfLines={2}>
+                    {boost_modal.data?.title || 'No title available'}
+                  </Text>
+                  <Text style={styles.adPrice}>
+                    {boost_modal.data?.purpose === 'product' ?
+                      '₦' + new Intl.NumberFormat('en-us').format(boost_modal.data?.price || 0)
+                      : boost_modal.data?.purpose === 'accomodation' ?
+                      '₦' + new Intl.NumberFormat('en-us').format(boost_modal.data?.price || 0) + 
+                      ' to pay ₦' + new Intl.NumberFormat('en-us').format(
+                        boost_modal.data?.others?.lodge_data?.upfront_pay || 0
+                      )
+                      : 'Price not available'}
+                  </Text>
+                  <View style={styles.adStats}>
+                    <View style={styles.statItem}>
+                      <Icon name="eye" size={14} color="#666" />
+                      <Text style={styles.statText}>
+                        {boost_modal.data?.views || 0} views
+                      </Text>
+                    </View>
+                    <View style={[
+                      styles.statusBadge, 
+                      boost_modal.data?.state?.state !== 'active' && styles.inactiveBadge
+                    ]}>
+                      <Text style={styles.statusText}>
+                        {boost_modal.data?.state?.state === 'active' ? 'Active' : 'Inactive'}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            ) : (
+              <View style={styles.noDataContainer}>
+                <Icon name="image-outline" size={40} color="#ccc" />
+                <Text style={styles.noDataText}>No product data available for preview</Text>
+              </View>
+            )}
           </View>
 
           {/* Promotion Packages - Horizontal Scroll */}
@@ -195,7 +297,7 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
                       styles.packageCard,
                       isSelected && styles.selectedPackage,
                       index === 2 && styles.featuredPackage,
-                      { width: width * 0.85 } // Set width for horizontal scrolling
+                      { width: width * 0.85 }
                     ]}
                   >
                     {index === 2 && (
@@ -252,17 +354,6 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
                 );
               })}
             </ScrollView>
-          </View>
-
-
-          {/* Ad Preview Section */}
-          <View style={styles.adPreviewSection}>
-            <Text style={styles.sectionTitle}>Your Ad Preview</Text>
-            <Text style={styles.sectionSubtitle}>See how your promotion will appear to customers</Text>
-            
-            <View style={styles.adCarousel}>
-                
-            </View>
           </View>
 
           {/* Additional Information */}
@@ -372,11 +463,11 @@ const styles = StyleSheet.create({
     color: '#2d3436',
   },
   scrollContent: {
-    padding: 8,
+    padding: 16,
     paddingBottom: 40,
   },
   sectionTitle: {
-    fontSize: 22,
+    fontSize: 18,
     fontWeight: 'bold',
     color: '#2d3436',
     marginBottom: 8,
@@ -384,93 +475,15 @@ const styles = StyleSheet.create({
   sectionSubtitle: {
     fontSize: 14,
     color: '#636e72',
-    marginBottom: 20,
-  },
-  // Ad Preview Styles
-  adPreviewSection: {
-    backgroundColor: 'white',
-    borderRadius: 4,
-    padding: 20,
-    marginBottom: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  adCarousel: {
-    alignItems: 'center',
-  },
-  adContainer: {
-    width: width - 72,
-    height: 200,
-    borderRadius: 4,
-    overflow: 'hidden',
     marginBottom: 16,
-    position: 'relative',
-  },
-  adImage: {
-    width: '100%',
-    height: '100%',
-  },
-  adOverlay: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    padding: 16,
-  },
-  adTitle: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 4,
-  },
-  adDescription: {
-    color: 'white',
-    fontSize: 14,
-  },
-  carouselControls: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  carouselButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 4,
-    backgroundColor: '#0984e3',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  carouselButtonText: {
-    color: 'white',
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  carouselDots: {
-    flexDirection: 'row',
-    marginHorizontal: 16,
-  },
-  carouselDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#ddd',
-    marginHorizontal: 4,
-  },
-  carouselDotActive: {
-    backgroundColor: '#0984e3',
-    width: 16,
   },
   // Stats Section
   statsSection: {
     backgroundColor: 'white',
-    borderRadius: 4,
-    padding: 20,
-    marginBottom: 8,
-    shadowColor: '##000',
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 16,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -487,27 +500,118 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#0984e3',
+    color: '#FF4500',
     marginBottom: 4,
   },
   statLabel: {
     fontSize: 12,
-    color: '#636e72',
+    color: '#666',
     textAlign: 'center',
   },
-  // Packages Section - Horizontal Scroll
-  packagesSection: {
-    marginBottom: 8,
+  // Ad Preview Section
+  adPreviewSection: {
     backgroundColor: 'white',
-    borderRadius: 4,
-    padding: 10,
-    // marginBottom: 20,
-    shadowColor: '##000',
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 16,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
-
+  },
+  adCard: {
+    height: 120,
+    backgroundColor: '#FFF',
+    borderRadius: 8,
+    overflow: 'hidden',
+    flexDirection: 'row',
+    marginBottom: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+  },
+  adImage: {
+    width: 120,
+    height: '100%',
+    backgroundColor: '#F0F0F0',
+  },
+  videoContainer: {
+    width: 120,
+    height: '100%',
+    backgroundColor: '#000',
+  },
+  adContent: {
+    flex: 1,
+    padding: 12,
+    justifyContent: 'space-between',
+  },
+  adTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1A1A1A',
+    marginBottom: 4,
+  },
+  adPrice: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#FF4500',
+    marginBottom: 8,
+  },
+  adStats: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  statText: {
+    fontSize: 12,
+    color: '#666',
+  },
+  statusBadge: {
+    backgroundColor: '#4CAF50',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
+  },
+  inactiveBadge: {
+    backgroundColor: '#666',
+  },
+  statusText: {
+    color: '#FFF',
+    fontSize: 10,
+    fontWeight: '600',
+  },
+  noDataContainer: {
+    height: 120,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f8f9fa',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+    borderStyle: 'dashed',
+  },
+  noDataText: {
+    marginTop: 8,
+    fontSize: 14,
+    color: '#999',
+    textAlign: 'center',
+  },
+  // Packages Section
+  packagesSection: {
+    backgroundColor: 'white',
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   horizontalScrollContainer: {
     paddingHorizontal: 5,
@@ -515,9 +619,9 @@ const styles = StyleSheet.create({
   },
   packageCard: {
     backgroundColor: 'white',
-    borderRadius: 4,
-    padding: 20,
-    marginRight: 15,
+    borderRadius: 8,
+    padding: 16,
+    marginRight: 12,
     borderWidth: 2,
     borderColor: 'transparent',
     shadowColor: '#000',
@@ -528,18 +632,18 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   featuredPackage: {
-    borderColor: '#0984e3',
+    borderColor: '#FF4500',
     transform: [{ scale: 1.02 }],
   },
   selectedPackage: {
     borderColor: '#00b894',
-    backgroundColor: '#f0fdfa',
+    backgroundColor: '#fff4e0',
   },
   popularBadge: {
     position: 'absolute',
     top: -10,
     alignSelf: 'center',
-    backgroundColor: '#0984e3',
+    backgroundColor: '#FF4500',
     paddingHorizontal: 12,
     paddingVertical: 4,
     borderRadius: 20,
@@ -556,12 +660,12 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   packageTitle: {
-    fontSize: 22,
+    fontSize: 18,
     fontWeight: 'bold',
     color: '#2d3436',
   },
   packageDuration: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#636e72',
     marginTop: 4,
   },
@@ -569,18 +673,18 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   originalPrice: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#636e72',
     textDecorationLine: 'line-through',
   },
   discountPrice: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
     color: '#2d3436',
     marginTop: 2,
   },
   discountBadge: {
-    backgroundColor: '#00b894',
+    backgroundColor: '#FFA500',
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 4,
@@ -594,31 +698,31 @@ const styles = StyleSheet.create({
   packageDescription: {
     fontSize: 14,
     color: '#636e72',
-    marginBottom: 16,
+    marginBottom: 12,
     lineHeight: 20,
   },
   featuresContainer: {
-    marginBottom: 20,
+    marginBottom: 16,
   },
   featuresTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: '#2d3436',
-    marginBottom: 12,
+    marginBottom: 8,
   },
   featureItem: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    marginBottom: 10,
+    marginBottom: 8,
   },
   checkIcon: {
     width: 20,
     height: 20,
     borderRadius: 4,
-    backgroundColor: '#00b894',
+    backgroundColor: '#FF4500',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 10,
+    marginRight: 8,
     marginTop: 2,
   },
   checkIconText: {
@@ -633,13 +737,13 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   subscribeButton: {
-    backgroundColor: '#0984e3',
+    backgroundColor: '#FF4500',
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',
   },
   selectedButton: {
-    backgroundColor: '#00b894',
+    backgroundColor: '#FF4500',
   },
   subscribeButtonText: {
     color: 'white',
@@ -649,12 +753,12 @@ const styles = StyleSheet.create({
   selectedButtonText: {
     fontWeight: 'bold',
   },
-  // Process Steps
+  // Info Section
   infoSection: {
     backgroundColor: 'white',
-    borderRadius: 4,
-    padding: 20,
-    marginBottom: 8,
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 16,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -662,18 +766,18 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   processSteps: {
-    marginTop: 16,
+    marginTop: 12,
   },
   processStep: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    marginBottom: 20,
+    marginBottom: 16,
   },
   stepNumber: {
     width: 30,
     height: 30,
     borderRadius: 4,
-    backgroundColor: '#0984e3',
+    backgroundColor: '#FF4500',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -701,8 +805,8 @@ const styles = StyleSheet.create({
   // FAQ Section
   faqSection: {
     backgroundColor: 'white',
-    borderRadius: 4,
-    padding: 20,
+    borderRadius: 8,
+    padding: 16,
     marginBottom: 20,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },

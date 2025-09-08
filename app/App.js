@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
   Platform, 
   StatusBar,
+  AppState,
+  Linking,
 } from 'react-native';
 import { PaystackProvider } from 'react-native-paystack-webview';
 import { NavigationContainer, useFocusEffect, useNavigationState, useRoute } from '@react-navigation/native';
@@ -168,6 +170,7 @@ function AppFinale() {
 // --------------------
 function NavCnt() {
   const [mode, setMode] = useState('shop');
+  const [resumeTick, setResumeTick] = useState(0);
   const { auth } = useSelector(s => s.auth);
   const { user } = useSelector(s => s.user);
   const { locale_modal } = useSelector(s => s.locale_modal);
@@ -178,6 +181,36 @@ function NavCnt() {
   useEffect(() => {
     setMode(auth ? 'auth' : 'shop');
   }, [auth]);
+
+  // Listen for app returning from background and deep link events
+  useEffect(() => {
+    const handleAppStateChange = (nextAppState) => {
+      if (nextAppState === 'active') {
+        setResumeTick(t => t + 1);
+      }
+    };
+
+    const appStateSubscription = AppState.addEventListener('change', handleAppStateChange);
+
+    const onUrl = ({ url }) => {
+      // Treat deep links or return from external share as a resume trigger
+      setResumeTick(t => t + 1);
+    };
+
+    const linkingSubscription = Linking.addEventListener('url', onUrl);
+
+    // Check if app was opened via a link
+    Linking.getInitialURL()
+      .then((url) => {
+        if (url) onUrl({ url });
+      })
+      .catch(() => {});
+
+    return () => {
+      appStateSubscription.remove();
+      linkingSubscription.remove();
+    };
+  }, []);
 
   const handleCloseModal = () => {
     dispatch(set_sub_modal(0));
@@ -225,7 +258,7 @@ function NavCnt() {
     return () => {
       isMounted = false; // stop retries if component unmounts
     };
-  }, [user, dispatch]);
+  }, [user, dispatch, resumeTick]);
 
 
   

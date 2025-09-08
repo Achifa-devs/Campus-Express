@@ -12,6 +12,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Video from 'react-native-video';
 import { debounce } from 'lodash';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { set_boost_modal } from '../../../../../../../redux/boost_modal';
 
 const { width } = Dimensions.get('window');
 
@@ -27,26 +29,18 @@ const LodgeCard = ({ item, onShare, state='private', onDelete, onPromote }) => {
         [navigation]
     );
 
-    const handleViewPress = useCallback(
-        debounce((item) => {
-          navigation.navigate('user-lodge-room', { data: item });
-        }, 300, { leading: true, trailing: false }),
-        [navigation]
-    );
+    const dispatch = useDispatch()
 
-    const handlePromotePress = useCallback(
-        debounce(() => {
-          if (onPromote) {
-            onPromote(item);
-          }
-        }, 300, { leading: true, trailing: false }),
-        [onPromote, item]
-    );
+    const handlePromotePress = (data) => {
+      if(!isPromoted){
+        dispatch(set_boost_modal({data: data, visible: 1}))
+      }
+    };
 
   return (
     <View style={styles.container}>
       {/* Video Thumbnail - Takes 70% of card */}
-      <TouchableOpacity>
+      <TouchableOpacity onPress={e => handlePromotePress(item)}>
         <View style={styles.videoContainer}>
           <Video
             source={{ uri: item.thumbnail_id }}
@@ -72,7 +66,7 @@ const LodgeCard = ({ item, onShare, state='private', onDelete, onPromote }) => {
           ) : (
             <TouchableOpacity 
               style={styles.promoteButton} 
-              onPress={handlePromotePress}
+              onPress={e => handlePromotePress(item)}
               activeOpacity={0.7}
             >
               <Icon name="rocket-outline" size={12} color="#FFF" />

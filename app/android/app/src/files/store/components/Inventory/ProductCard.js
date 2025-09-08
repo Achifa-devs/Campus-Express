@@ -8,10 +8,13 @@ import {
   TouchableOpacity,
   Image,
   Dimensions,
+  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { debounce } from 'lodash';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { set_boost_modal } from '../../../../../../../redux/boost_modal';
 
 const { width } = Dimensions.get('window');
 
@@ -27,6 +30,8 @@ const ProductCard = ({ item, onShare, state='private', onDelete, onStatusChange,
   //   [navigation]
   // );
 
+  const dispatch = useDispatch()
+  
   const handleViewPress = useCallback(
     debounce((item) => {
       navigation.navigate('user-product', { data: item });
@@ -34,19 +39,17 @@ const ProductCard = ({ item, onShare, state='private', onDelete, onStatusChange,
     [navigation]
   );
 
-  const handlePromotePress = useCallback(
-    debounce(() => {
-      if (onPromote) {
-        onPromote(item);
-      }
-    }, 300, { leading: true, trailing: false }),
-    [onPromote, item]
-  );
+  const handlePromotePress = (data) => {
+    if(!isPromoted){
+      console.log("data: ", data)
+      dispatch(set_boost_modal({data: data, visible: 1}))
+    }
+  };
 
   return (
     <View style={styles.container}>
       {/* Thumbnail - Clickable for navigation */}
-      <TouchableOpacity onPress={handlePromotePress}>
+      <TouchableOpacity onPress={e => handlePromotePress(item)}>
         <Image source={{ uri: item.thumbnail_id }} style={styles.thumbnail} />
         
         {/* Boost Badge - Overlay on thumbnail */}
@@ -58,7 +61,7 @@ const ProductCard = ({ item, onShare, state='private', onDelete, onStatusChange,
         ) : (
           <TouchableOpacity 
             style={styles.promoteButton} 
-            onPress={handlePromotePress}
+            onPress={e => handlePromotePress(item)}
             activeOpacity={0.7}
           >
             <Icon name="rocket-outline" size={12} color="#FFF" />

@@ -33,15 +33,17 @@ const Listing = () => {
   const isPromoted = eval(item.promotion);
   
   const handlePromotePress = (data) => {
-    if(!eval(data.promotion)){
+    if(!isPromoted){
+      console.log("data: ", data)
       dispatch(set_boost_modal({data: data, visible: 1}))
     }
-  };  
+  };
+  
 
   return (
     <TouchableOpacity
       style={styles.serviceCard}
-      onPress={() => navigation.navigate('user-service-room', { data: item })}
+      
     >
       <TouchableOpacity style={styles.imageContainer} onPress={e => handlePromotePress(item)}>
         <Image 
