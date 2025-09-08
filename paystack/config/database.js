@@ -15,15 +15,15 @@ const config = {
   // Keep pool small for serverless to avoid connection storms
   max: 3,
   // Increase connection timeout to reduce ECONN timeout on cold starts/network jitter
-  connectionTimeoutMillis: 15000,
+  connectionTimeoutMillis: 1500000,
   // Keep idle connections around a bit longer to improve reuse between invocations
-  idleTimeoutMillis: 30000,
+  idleTimeoutMillis: 3000000,
   // Improve reliability on some platforms
   keepAlive: true,
   keepAliveInitialDelayMillis: 0,
   application_name: 'paystack-server',
   // Add a client-side query timeout as a safety net
-  query_timeout: 10000
+  query_timeout: 1000000
 };
 
 const pool = new Pool(config);

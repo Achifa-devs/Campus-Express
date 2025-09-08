@@ -132,7 +132,7 @@ const VendorConnectionsModal = ({ visible, onClose }) => {
         // setLoading(false);
         Alert.alert(
           'Payment Successful!',
-          `Your ${selectedPackage?.tier} subscription has been activated.`,
+          `Your purchase was successful.`,
           [{ text: 'OK', onPress: () => navigation.navigate('Home') }]
         );
         let newTier = { ...tier };
