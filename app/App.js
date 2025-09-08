@@ -33,6 +33,8 @@ import { set_tier } from './redux/tier.js';
 import { storeData } from './android/app/src/files/utils/AsyncStore.js.js';
 import VendorConnectionsModal from './android/app/src/files/store/screens/ConnectPurchase.js';
 import VendorSubscriptionsModal from './android/app/src/files/store/utils/ToolsModal.js';
+import PromotionSubscriptionsModal from './android/app/src/files/store/utils/PromotionModal.js';
+import { set_boost_modal } from './redux/boost_modal.js';
 // import { set_campus } from './redux/reducer/location.js';   // ✅ add correct reducer
 // import { closeModal } from './redux/reducer/locale.js';      // ✅ add correct reducer
 
@@ -170,6 +172,7 @@ function NavCnt() {
   const { user } = useSelector(s => s.user);
   const { locale_modal } = useSelector(s => s.locale_modal);
   const { sub_modal } = useSelector(s => s.sub_modal);
+  const { boost_modal } = useSelector(s => s.boost_modal);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -246,6 +249,14 @@ function NavCnt() {
             
             <VendorSubscriptionsModal  onSelectPackage={''} onClose={handleCloseModal} />: ''
             // <VendorConnectionsModal  onSelectPackage={''} onClose={handleCloseModal} />: ''
+        )
+      } 
+
+      {
+        (
+          boost_modal.visible === 1 ? 
+          
+          <PromotionSubscriptionsModal  onSelectPackage={''} onClose={e=> dispatch(set_boost_modal(0))} />: ''
         )
       } 
 

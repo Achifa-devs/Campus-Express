@@ -7,10 +7,12 @@ import { useRoute } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import categoriesData from '../../../../../../../services.json'
 import js_ago from 'js-ago';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { set_boost_modal } from '../../../../../../../redux/boost_modal';
 
 const Listing = () => {
 
+  const dispatch = useDispatch()
   const route = useRoute();
   const { data } = route?.params;
   const { option } = useSelector(s => s?.option);
@@ -30,19 +32,18 @@ const Listing = () => {
   const renderServiceItem = ({ item }) => {
   const isPromoted = eval(item.promotion);
   
-  const handlePromotePress = () => {
-    // Handle promote action here
-    if (onPromote) {
-      // onPromote(item);
+  const handlePromotePress = (data) => {
+    if(!eval(data.promotion)){
+      dispatch(set_boost_modal({data: data, visible: 1}))
     }
-  };
+  };  
 
   return (
     <TouchableOpacity
       style={styles.serviceCard}
       onPress={() => navigation.navigate('user-service-room', { data: item })}
     >
-      <TouchableOpacity style={styles.imageContainer} onPress={e => handlePromotePress()}>
+      <TouchableOpacity style={styles.imageContainer} onPress={e => handlePromotePress(item)}>
         <Image 
           source={{ uri: getCategoryImage(item.category) || item.image }} 
           style={styles.serviceImage} 
@@ -57,7 +58,7 @@ const Listing = () => {
         ) : (
           <TouchableOpacity 
             style={styles.promoteButton} 
-            onPress={handlePromotePress}
+            onPress={e => handlePromotePress(item)}
             activeOpacity={0.7}
           >
             <Icon name="rocket-outline" size={12} color="#FFF" />

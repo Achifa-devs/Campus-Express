@@ -12,6 +12,7 @@ import campus from './campus';
 import locale_modal from './locale'
 import option from './option';
 import sub_modal from './sub'
+import boost_modal from './boost_modal'
 import subscribed from './subscribed'
 import products from './products'
 let store = configureStore({
@@ -21,6 +22,7 @@ let store = configureStore({
     cookie: cookie,
     products: products,
     sub_modal: sub_modal,
+    boost_modal: boost_modal,
     subscribed: subscribed,
     user: user,
     shop: shop,

@@ -27,6 +27,7 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import LoginButton from '../../utils/LogAlert';
 import { set_products } from '../../../../../../../redux/products';
 import axios from 'axios';
+import { set_boost_modal } from '../../../../../../../redux/boost_modal';
 const { width } = Dimensions.get('window');
 
 const ShopScreen = () => {
@@ -275,17 +276,28 @@ const ShopScreen = () => {
       <Text style={styles.metricLabel}>{label}</Text>
     </View>
   );
+  
+  const handlePromotePress = (data) => {
+    if(!eval(data.promotion)){
+      dispatch(set_boost_modal({data: data, visible: 1}))
+    }
+  };
+
+
 
   const renderAdItem = ({ item }) => (
+    
     <TouchableOpacity 
       style={styles.adCard}
-      onPress={() => handleNavigation(item)}
+      onPress={() => {e=>handlePromotePress(item)}}
     >
       {item?.purpose !== 'accomodation' ? (
-        <Image 
-          style={styles.adImage}
-          source={{ uri: getCategoryImage(item?.category) || item?.thumbnail_id }} 
-        />
+        <TouchableOpacity onPress={e=>handlePromotePress(item)}>
+          <Image
+            style={styles.adImage}
+            source={{ uri: getCategoryImage(item?.category) || item?.thumbnail_id }}
+          />
+        </TouchableOpacity>
       ) : (
         <View style={{
           height: 100,          // ✅ explicit height (same as Image for consistency)
@@ -303,6 +315,23 @@ const ShopScreen = () => {
             paused
           />
         </View>
+      )}
+
+      {/* Boost Badge/Promote Button - Overlay on image */}
+      {eval(item.promotion) ? (
+        <View style={styles.boostBadge}>
+          <Icon name="rocket" size={12} color="#FFF" />
+          <Text style={styles.boostBadgeText}>Promoted</Text>
+        </View>
+      ) : (
+        <TouchableOpacity 
+          style={styles.promoteButton} 
+          onPress={e=>handlePromotePress(item)}
+          activeOpacity={0.7}
+        >
+          <Icon name="rocket-outline" size={12} color="#FFF" />
+          <Text style={styles.promoteButtonText}>Promote now</Text>
+        </TouchableOpacity>
       )}
       <View style={styles.adContent}>
         <Text style={styles.adTitle} numberOfLines={2}>{item.title}</Text>
@@ -592,6 +621,89 @@ const ShopScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  serviceCard: {
+    backgroundColor: '#FFF',
+    borderRadius: 8,
+    marginBottom: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    overflow: 'hidden',
+    position: 'relative',
+  },
+  imageContainer: {
+    position: 'relative',
+    height: 120,
+  },
+  serviceImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
+  // Boost/Promote elements
+  boostBadge: {
+    position: 'absolute',
+    top: 8,
+    left: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 69, 0, 0.9)',
+    paddingHorizontal: 6,
+    paddingVertical: 3,
+    borderRadius: 4,
+    gap: 4,
+    zIndex: 10,
+  },
+  boostBadgeText: {
+    color: '#FFF',
+    fontSize: 10,
+    fontWeight: '600',
+  },
+  promoteButton: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    height: 25,
+    width: 100,
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFA500',
+    paddingHorizontal: 6,
+    paddingVertical: 3,
+    borderRadius: 0,
+    gap: 4,
+    zIndex: 10,
+  },
+  promoteButtonText: {
+    color: '#FFF',
+    fontSize: 10,
+    fontWeight: '600',
+  },
+  serviceInfo: {
+    padding: 12,
+  },
+  serviceName: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1A1A1A',
+    marginBottom: 4,
+  },
+  serviceMeta: {
+    // Your existing styles
+  },
+  serviceCategory: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 4,
+  },
+  serviceStats: {
+    fontSize: 12,
+    color: '#999',
+  },
   container: {
     flex: 1,
     backgroundColor: '#F8F9FA',
