@@ -12,10 +12,11 @@ import {
   Alert,
 } from 'react-native';
 import { usePaystack } from 'react-native-paystack-webview';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import categoriesData from '../../../../../../services.json';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Video from 'react-native-video';
+import { set_boost_modal } from '../../../../../../redux/boost_modal';
 
 const { width } = Dimensions.get('window');
 
@@ -161,6 +162,7 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
     };
   }
 
+  const dispatch = useDispatch()
 
   const { popup } = usePaystack();
   const payNow = (selectedPackage) => {
@@ -187,7 +189,7 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
           `Your subscription was successful.`,
           [{ text: 'OK' }]
         );
-        
+        dispatch(set_boost_modal({data: null, visible: 0}))
       },
       onCancel: () => {
         Alert.alert('Payment Cancelled', 'Your payment was cancelled.');
