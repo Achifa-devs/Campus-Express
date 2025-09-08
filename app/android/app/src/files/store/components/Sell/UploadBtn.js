@@ -2,9 +2,13 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import Svg, { Path } from 'react-native-svg';
+import { useDispatch, useSelector } from 'react-redux';
+import { set_sub_modal } from '../../../../../../../redux/sub';
 
 export default function UploadBtn({ navigation, toggleModal }) {
   const { colors } = useTheme();
+  const { tier } = useSelector(s=>s.tier)
+  const dispatch = useDispatch()
 
   // const handlePress = (type) => {
   //   navigation.navigate(type, { type, update: false });
@@ -18,7 +22,13 @@ export default function UploadBtn({ navigation, toggleModal }) {
         description="Publish your accommodations, products, or services available for sale or rent."
         icon={<UploadIcon />}
         color="#FF4500"
-        onPress={() => toggleModal()}
+        onPress={() => {
+          if(tier.ad_quota > 0){
+            toggleModal()
+          }else{
+            dispatch(set_sub_modal(1))
+          }
+        }}
       />
 
       

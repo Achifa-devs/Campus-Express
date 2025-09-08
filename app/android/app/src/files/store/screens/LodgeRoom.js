@@ -40,7 +40,7 @@ const AccommodationDetailScreen = ({ route, navigation }) => {
   const [seller, setSeller] = useState('')
   const { width } = Dimensions.get('window');
   const fadeAnim = new Animated.Value(1);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   let showLogInAlert = useLogInAlert()
   

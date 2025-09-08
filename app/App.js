@@ -31,6 +31,8 @@ import axios from 'axios';
 import { set_subscribed } from './redux/subscribed.js';
 import { set_tier } from './redux/tier.js';
 import { storeData } from './android/app/src/files/utils/AsyncStore.js.js';
+import VendorConnectionsModal from './android/app/src/files/store/screens/ConnectPurchase.js';
+import VendorSubscriptionsModal from './android/app/src/files/store/utils/ToolsModal.js';
 // import { set_campus } from './redux/reducer/location.js';   // ✅ add correct reducer
 // import { closeModal } from './redux/reducer/locale.js';      // ✅ add correct reducer
 
@@ -126,7 +128,7 @@ function AppFinale() {
   return(
     <>
       {!update ? (
-        <PaystackProvider publicKey={'pk_live_13343a7bd4deeebc644070871efcdf8fdcf280f7'} defaultChannels={[payment_method]} debug={true}>
+        <PaystackProvider publicKey={'pk_live_13343a7bd4deeebc644070871efcdf8fdcf280f7'} defaultChannels={["card", "bank", "ussd"]} debug={true}>
           
           <NavigationContainer
             onStateChange={(state) => {
@@ -242,7 +244,8 @@ function NavCnt() {
         (
             sub_modal === 1 ? 
             
-            <SubscriptionModal  onSelectPackage={''} onClose={handleCloseModal} />: ''
+            // <VendorSubscriptionsModal  onSelectPackage={''} onClose={handleCloseModal} />: ''
+            <VendorConnectionsModal  onSelectPackage={''} onClose={handleCloseModal} />: ''
         )
       } 
 

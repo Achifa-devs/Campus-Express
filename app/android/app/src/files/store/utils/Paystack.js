@@ -23,7 +23,9 @@ const PaymentScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const { user } = useSelector(s => s?.user);
-  const { selectedPackage, packageName } = route.params;
+  const { selectedPackage, connectionPricing } = route?.params;
+
+  // console.log(selectedPackage)
 
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(false);
@@ -101,12 +103,12 @@ const PaymentScreen = () => {
   };
 
   // Render feature items with checkmarks
-  const renderFeature = (feature, index) => (
-    <View key={index} style={styles.featureItem}>
-      <Icon name="checkmark-circle" size={16} color="#4CAF50" />
-      <Text style={styles.featureText}>{feature}</Text>
-    </View>
-  );
+  // const renderFeature = (feature, index) => (
+  //   <View key={index} style={styles.featureItem}>
+  //     <Icon name="checkmark-circle" size={16} color="#4CAF50" />
+  //     <Text style={styles.featureText}>{selectedPackage.connections} connections</Text>
+  //   </View>
+  // );
 
   return (
     <View style={styles.container}>
@@ -128,9 +130,9 @@ const PaymentScreen = () => {
           <Text style={styles.summaryTitle}>Order Summary</Text>
           
           <View style={styles.packageInfo}>
-            <Text style={styles.packageName}>{selectedPackage?.tier} Plan</Text>
-            {selectedPackage?.hint && (
-              <Text style={styles.packageHint}>{selectedPackage.hint}</Text>
+            <Text style={styles.packageName}>{selectedPackage?.name} Plan</Text>
+            {selectedPackage?.description && (
+              <Text style={styles.packageHint}>{selectedPackage?.description}</Text>
             )}
             <View style={styles.priceContainer}>
               {selectedPackage?.discount_price && selectedPackage.discount_price !== selectedPackage.price && (
@@ -143,10 +145,13 @@ const PaymentScreen = () => {
           </View>
 
           {/* Package Features */}
-          {selectedPackage?.features && selectedPackage.features.length > 0 && (
+          {(
             <View style={styles.featuresContainer}>
               <Text style={styles.featuresTitle}>What's included:</Text>
-              {selectedPackage.features.map(renderFeature)}
+              <View style={styles.featureItem}>
+                <Icon name="checkmark-circle" size={16} color="#4CAF50" />
+                <Text style={styles.featureText}>{selectedPackage.connections} connections</Text>
+              </View>
             </View>
           )}
 
@@ -198,13 +203,13 @@ const PaymentScreen = () => {
            
           <View style={styles.detailRow}>
             <Text style={styles.detailLabel}>Package</Text>
-            <Text style={styles.detailValue}>{selectedPackage?.tier}</Text>
+            <Text style={styles.detailValue}>{selectedPackage?.name}</Text>
           </View>
           
-          <View style={styles.detailRow}>
+          {/* <View style={styles.detailRow}>
             <Text style={styles.detailLabel}>Billing Cycle</Text>
             <Text style={styles.detailValue}>Monthly</Text>
-          </View>
+          </View> */}
           
           <View style={styles.detailRow}>
             <Text style={styles.detailLabel}>Email</Text>
@@ -324,7 +329,7 @@ const styles = StyleSheet.create({
     color: '#FF4500',
   },
   featuresContainer: {
-    marginBottom: 16,
+    marginBottom: -4,
   },
   featuresTitle: {
     fontSize: 14,

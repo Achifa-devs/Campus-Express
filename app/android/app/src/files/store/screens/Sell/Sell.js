@@ -240,14 +240,6 @@ const ShopScreen = () => {
     await deleteFromServer(shopLogo)
   };
 
-  // Mock data - replace with actual API calls
-  const mockPerformanceData = {
-    totalViews: 1247,
-    totalReviews: 23,
-    totalShopViews: 456,
-    totalAds: 8
-  };
-
   const [modalVisible, setModalVisible] = useState(false);
   const toggleModal = () => {
     setModalVisible(!modalVisible);
@@ -576,7 +568,7 @@ const ShopScreen = () => {
             </TouchableOpacity>
           </View>
 
-          {userAds.length > 0 ? (
+          {userAds?.length > 0 ? (
             <FlatList
               data={[...userAds].splice(0,4)}
               renderItem={renderAdItem}
