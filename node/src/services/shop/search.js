@@ -22,11 +22,13 @@ export async function searchProducts({ word, user_id, purpose = null, campus = n
       COALESCE(p.date, '1970-01-01')::timestamptz DESC
     LIMIT $4
     `,
-    [searchTerm, purpose, campus, limit]
+    [searchTerm, purpose, campus === 'null' ? null : campus, limit]
   );
 
   // 2. Track promoted searches
   FilterForsearch(products, user_id, word);
+
+  console.log(products)
 
   return products;
 }
