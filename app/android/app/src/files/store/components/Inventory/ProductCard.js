@@ -15,9 +15,11 @@ import { useNavigation } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 
-const ProductCard = ({ item, onShare, state='private', onDelete, onStatusChange }) => {
+const ProductCard = ({ item, onShare, state='private', onDelete, onStatusChange, onPromote }) => {
   const navigation = useNavigation();
   
+  const isPromoted = eval(item.promotion) ;
+
   // const handleNavigation = useCallback(
   //   debounce((item) => {
   //     navigation.navigate('user-product', { data: item });
@@ -32,11 +34,37 @@ const ProductCard = ({ item, onShare, state='private', onDelete, onStatusChange 
     [navigation]
   );
 
+  const handlePromotePress = useCallback(
+    debounce(() => {
+      if (onPromote) {
+        onPromote(item);
+      }
+    }, 300, { leading: true, trailing: false }),
+    [onPromote, item]
+  );
+
   return (
     <View style={styles.container}>
       {/* Thumbnail - Clickable for navigation */}
-      <TouchableOpacity>
+      <TouchableOpacity onPress={handlePromotePress}>
         <Image source={{ uri: item.thumbnail_id }} style={styles.thumbnail} />
+        
+        {/* Boost Badge - Overlay on thumbnail */}
+        {isPromoted ? (
+          <View style={styles.boostBadge}>
+            <Icon name="rocket" size={12} color="#FFF" />
+            <Text style={styles.boostBadgeText}>Promoted</Text>
+          </View>
+        ) : (
+          <TouchableOpacity 
+            style={styles.promoteButton} 
+            onPress={handlePromotePress}
+            activeOpacity={0.7}
+          >
+            <Icon name="rocket-outline" size={12} color="#FFF" />
+            <Text style={styles.promoteButtonText}>Promote now</Text>
+          </TouchableOpacity>
+        )}
       </TouchableOpacity>
       
       {/* Content */}
@@ -104,11 +132,49 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
     overflow: 'hidden',
+    position: 'relative',
   },
   thumbnail: {
     width: 100,
     height: 145,
     backgroundColor: '#F0F0F0',
+  },
+  // Boost/Promote elements
+  boostBadge: {
+    position: 'absolute',
+    top: 8,
+    left: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 69, 0, 0.9)',
+    paddingHorizontal: 6,
+    paddingVertical: 3,
+    borderRadius: 4,
+    gap: 4,
+  },
+  boostBadgeText: {
+    color: '#FFF',
+    fontSize: 10,
+    fontWeight: '600',
+  },
+  promoteButton: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    height: 30,
+    width: 100,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFA500',
+    paddingHorizontal: 6,
+    paddingVertical: 3,
+    borderRadius: 0,
+    gap: 4,
+  },
+  promoteButtonText: {
+    color: '#FFF',
+    fontSize: 10,
+    fontWeight: '600',
   },
   content: {
     flex: 1,

@@ -60,7 +60,7 @@ export async function createProduct({ constantData, dynamicData, shipping_data }
 
     const result = await pool.query(
       `INSERT INTO products(
-        id, product_id, user_id, status, title, description, price, package,
+        id, product_id, user_id, status, title, description, price, promotion,
         category, others, date, state, views, shares, stock, thumbnail_id,
         accept_refund, shipping_range, shipping_duration, campus, uni_state,
         thumbnail_public_id, purpose, contact_click, impression, search_appearances
@@ -76,7 +76,7 @@ export async function createProduct({ constantData, dynamicData, shipping_data }
         replacedTitle,
         replacedDescription,
         price || 0,
-        0,
+        false,
         category,
         JSON.stringify(dynamicData),
         date,

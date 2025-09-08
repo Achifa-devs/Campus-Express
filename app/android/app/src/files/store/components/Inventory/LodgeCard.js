@@ -15,9 +15,11 @@ import { useNavigation } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 
-const LodgeCard = ({ item, onShare, state='private', onDelete, onStatusChange }) => {
+const LodgeCard = ({ item, onShare, state='private', onDelete, onPromote }) => {
     const navigation = useNavigation();
     
+    const isPromoted = eval(item.promotion);
+
     const handleNavigation = useCallback(
         debounce((item) => {
           navigation.navigate('user-product', { data: item });
@@ -30,6 +32,15 @@ const LodgeCard = ({ item, onShare, state='private', onDelete, onStatusChange })
           navigation.navigate('user-lodge-room', { data: item });
         }, 300, { leading: true, trailing: false }),
         [navigation]
+    );
+
+    const handlePromotePress = useCallback(
+        debounce(() => {
+          if (onPromote) {
+            onPromote(item);
+          }
+        }, 300, { leading: true, trailing: false }),
+        [onPromote, item]
     );
 
   return (
@@ -51,6 +62,23 @@ const LodgeCard = ({ item, onShare, state='private', onDelete, onStatusChange })
               <Icon name="play-circle" size={36} color="#FFF" />
             </TouchableOpacity>
           </View>
+
+          {/* Boost Badge/Promote Button - Overlay on video */}
+          {isPromoted ? (
+            <View style={styles.boostBadge}>
+              <Icon name="rocket" size={12} color="#FFF" />
+              <Text style={styles.boostBadgeText}>Promoted</Text>
+            </View>
+          ) : (
+            <TouchableOpacity 
+              style={styles.promoteButton} 
+              onPress={handlePromotePress}
+              activeOpacity={0.7}
+            >
+              <Icon name="rocket-outline" size={12} color="#FFF" />
+              <Text style={styles.promoteButtonText}>Promote now</Text>
+            </TouchableOpacity>
+          )}
         </View>
       </TouchableOpacity>
 
@@ -122,10 +150,12 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 1,
     overflow: 'hidden',
+    position: 'relative',
   },
   videoContainer: {
     height: 200,
     backgroundColor: '#000',
+    position: 'relative',
   },
   video: {
     width: '100%',
@@ -139,6 +169,43 @@ const styles = StyleSheet.create({
   },
   playButton: {
     padding: 8,
+  },
+  // Boost/Promote elements
+  boostBadge: {
+    position: 'absolute',
+    top: 12,
+    left: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 69, 0, 0.9)',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
+    gap: 4,
+    zIndex: 10,
+  },
+  boostBadgeText: {
+    color: '#FFF',
+    fontSize: 10,
+    fontWeight: '600',
+  },
+  promoteButton: {
+    position: 'absolute',
+    top: 5,
+    left: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFA500',
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    borderRadius: 0,
+    gap: 4,
+    zIndex: 10,
+  },
+  promoteButtonText: {
+    color: '#FFF',
+    fontSize: 10,
+    fontWeight: '600',
   },
   content: {
     padding: 16,

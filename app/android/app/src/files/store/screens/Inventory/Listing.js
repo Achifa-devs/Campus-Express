@@ -1,6 +1,6 @@
 // screens/MyAdsScreen.js
 import React, { useEffect } from 'react';
-import { View, FlatList, Text, StyleSheet, Image } from 'react-native';
+import { View, FlatList, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import ProductCard from '../../components/Inventory/ProductCard';
 import LodgeCard from '../../components/Inventory/LodgeCard';
 import { useRoute } from '@react-navigation/native';
@@ -27,26 +27,55 @@ const Listing = () => {
     console.log('Change status:', item);
   };
 
-  const renderServiceItem = ({ item }) => (
-    <View
+  const renderServiceItem = ({ item }) => {
+  const isPromoted = eval(item.promotion);
+  
+  const handlePromotePress = () => {
+    // Handle promote action here
+    if (onPromote) {
+      // onPromote(item);
+    }
+  };
+
+  return (
+    <TouchableOpacity
       style={styles.serviceCard}
       onPress={() => navigation.navigate('user-service-room', { data: item })}
     >
-      <Image 
-        source={{ uri: getCategoryImage(item.category) || item.image }} 
-        style={styles.serviceImage} 
-      />
+      <TouchableOpacity style={styles.imageContainer} onPress={e => handlePromotePress()}>
+        <Image 
+          source={{ uri: getCategoryImage(item.category) || item.image }} 
+          style={styles.serviceImage} 
+        />
+        
+        {/* Boost Badge/Promote Button - Overlay on image */}
+        {isPromoted ? (
+          <View style={styles.boostBadge}>
+            <Icon name="rocket" size={12} color="#FFF" />
+            <Text style={styles.boostBadgeText}>Promoted</Text>
+          </View>
+        ) : (
+          <TouchableOpacity 
+            style={styles.promoteButton} 
+            onPress={handlePromotePress}
+            activeOpacity={0.7}
+          >
+            <Icon name="rocket-outline" size={12} color="#FFF" />
+            <Text style={styles.promoteButtonText}>Promote now</Text>
+          </TouchableOpacity>
+        )}
+      </TouchableOpacity>
+      
       <View style={styles.serviceInfo}>
         <Text style={styles.serviceName} numberOfLines={1}>{item.title}</Text>
         <View style={styles.serviceMeta}>
-          {/* <View style={styles.ratingContainer}></View> */}
           <Text style={styles.serviceCategory}>{item.category} - <Text style={{fontWeight: 'bold'}}>{item?.others?.gender}</Text></Text>
           <Text style={styles.serviceStats}>{item?.views} {parseInt(item?.views)>1?'views':'view'} • {js_ago(new Date(item?.date))}</Text>
-          
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
+};
 
   const renderItem = ({ item }) => {
     if (item.purpose === 'product') {
@@ -78,7 +107,7 @@ const Listing = () => {
       {  
         data.length > 0
         ?
-        <View style={{ flex: 1, padding: 10 }}>
+        <View style={{ flex: 1, padding: 10, backgroundColor: '#fff' }}>
           
           <FlatList
             data={
@@ -122,8 +151,92 @@ const Listing = () => {
   };
  
 const styles = StyleSheet.create({
-  emptyState: {
+  serviceCard: {
     backgroundColor: '#FFF',
+    borderRadius: 8,
+    marginBottom: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    overflow: 'hidden',
+    position: 'relative',
+  },
+  imageContainer: {
+    position: 'relative',
+    height: 120,
+  },
+  serviceImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
+  // Boost/Promote elements
+  boostBadge: {
+    position: 'absolute',
+    top: 8,
+    left: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 69, 0, 0.9)',
+    paddingHorizontal: 6,
+    paddingVertical: 3,
+    borderRadius: 4,
+    gap: 4,
+    zIndex: 10,
+  },
+  boostBadgeText: {
+    color: '#FFF',
+    fontSize: 10,
+    fontWeight: '600',
+  },
+  promoteButton: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    height: 25,
+    width: 100,
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFA500',
+    paddingHorizontal: 6,
+    paddingVertical: 3,
+    borderRadius: 0,
+    gap: 4,
+    zIndex: 10,
+  },
+  promoteButtonText: {
+    color: '#FFF',
+    fontSize: 10,
+    fontWeight: '600',
+  },
+  serviceInfo: {
+    padding: 12,
+  },
+  serviceName: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1A1A1A',
+    marginBottom: 4,
+  },
+  serviceMeta: {
+    // Your existing styles
+  },
+  serviceCategory: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 4,
+  },
+  serviceStats: {
+    fontSize: 12,
+    color: '#999',
+  },
+  emptyState: {
+    backgroundColor: '#FFF', 
+    height: '100%',
     padding: 40,
     borderRadius: 12,
     alignItems: 'center',
