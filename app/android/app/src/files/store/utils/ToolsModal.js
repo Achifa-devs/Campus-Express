@@ -8,9 +8,11 @@ import {
   Dimensions,
   Modal,
   Pressable,
+  Alert,
 } from 'react-native';
 import { usePaystack } from 'react-native-paystack-webview';
 import { useSelector } from 'react-redux';
+import { set_shop } from '../../../../../../redux/shop';
 
 const { width } = Dimensions.get('window');
 
@@ -76,12 +78,14 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
   };
 
   const handleSubscribe = (plan) => {
+    const res = Object.entries(subscriptionPlans).find(item => item[0] === plan)
+    console.log(res)
     if (plan === "Free") {
       setSelectedPlan("Free");
       return;
     }
     setPlanToSubscribe(plan);
-    payNow(selectedPlan)
+    payNow(res[1])
     // setConfirmModalVisible(true);
   };
 
@@ -114,8 +118,8 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
           [{ text: 'OK', onPress: () => navigation.navigate('Home') }]
         );
         let newShop = { ...shop };
-        newShop.tools = {"plan": selectedPackage.name, "start_date": start_date, "end_date": end_date};
-        dispatch(set_user(newShop));
+        newShop.tools = selectedPackage.name;
+        dispatch(set_shop(newShop));
         navigation.goBack();
       },
       onCancel: () => {

@@ -9,6 +9,7 @@ import {
   Dimensions,
   Alert,
 } from 'react-native';
+import { usePaystack } from 'react-native-paystack-webview';
 
 const { width } = Dimensions.get('window');
 
@@ -18,6 +19,7 @@ const VendorSubscriptionsScreen = () => {
 
   const subscriptionPlans = {
     "Free": {
+      "name": "free",
       "description": "Perfect for getting started with basic selling capabilities.",
       "price": "₦0.00",
       "discountPrice": "₦0.00",
@@ -26,9 +28,11 @@ const VendorSubscriptionsScreen = () => {
         "Up to 10 products",
         "Standard search visibility",
         "Basic seller profile"
-      ]
+      ],
+      "current": true
     },
     "Basic": {
+      "name": "basic",
       "description": "Ideal for new vendors who want to start selling with essential tools and visibility.",
       "price": "₦500.00",
       "discountPrice": "₦450.00",
@@ -40,6 +44,7 @@ const VendorSubscriptionsScreen = () => {
       ]
     },
     "Standard": {
+      "name": "standard",
       "description": "Best for growing vendors seeking deeper insights and improved visibility.",
       "price": "₦1,200.00",
       "discountPrice": "₦960.00",
@@ -51,6 +56,7 @@ const VendorSubscriptionsScreen = () => {
       ]
     },
     "Pro": {
+      "name": "pro",
       "description": "Designed for professional vendors who want maximum reach, trust, and advanced tools.",
       "price": "₦2,500.00",
       "discountPrice": "₦1,750.00",
@@ -65,25 +71,61 @@ const VendorSubscriptionsScreen = () => {
   };
 
   const handleSubscribe = (plan) => {
-    if (plan === "Free") {
-      setSelectedPlan("Free");
-      Alert.alert('Plan Selected', 'You have selected the Free plan.');
-      return;
-    }
-    
-    Alert.alert(
-      'Confirm Subscription',
-      `Are you sure you want to subscribe to the ${plan} plan for ${subscriptionPlans[plan].discountPrice}/month?`,
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { 
-          text: 'Subscribe', 
-          onPress: () => completeSubscription(plan),
-          style: 'default'
+      const res = Object.entries(subscriptionPlans).find(item => item[0] === plan)
+      console.log(res)
+      if (plan === "Free") {
+        setSelectedPlan("Free");
+        return;
+      }
+      setPlanToSubscribe(plan);
+      payNow(res[1])
+      // setConfirmModalVisible(true);
+    };
+  
+    const { popup } = usePaystack();
+    const payNow = (selectedPackage) => {
+          
+      const start_date = new Date();
+      const end_date = new Date();
+      end_date.setMonth(end_date.getMonth() + 1);
+  
+      const reference = `REF-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+      // setLoading(true);
+      popup.newTransaction({
+        email: user?.email,
+        amount: parseFloat(selectedPackage?.discountPrice.replace('₦', '').replace(',', '')),
+        reference: reference,
+        metadata: {
+          user_id: user.user_id,
+          type: 'tools',
+          plan: selectedPackage.name,
+          start_date,
+          end_date
         },
-      ]
-    );
-  };
+        
+        onSuccess: (res) => {
+          // setLoading(false);
+          Alert.alert(
+            'Payment Successful!',
+            `Your subscription was successful.`,
+            [{ text: 'OK', onPress: () => navigation.navigate('Home') }]
+          );
+          let newShop = { ...shop };
+          newShop.tools = selectedPackage.name;
+          dispatch(set_shop(newShop));
+          navigation.goBack();
+        },
+        onCancel: () => {
+          // setLoading(false);
+          Alert.alert('Payment Cancelled', 'Your payment was cancelled.');
+        },
+        onError: (err) => {
+          // setLoading(false);
+          Alert.alert('Payment Error', 'There was an error processing your payment.');
+          console.log('Payment Error:', err);
+        }
+      });
+    };
 
   const completeSubscription = (plan) => {
     // In a real app, this would integrate with your payment processing

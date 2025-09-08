@@ -7,11 +7,13 @@ import { useRoute } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import categoriesData from '../../../../../../../services.json'
 import js_ago from 'js-ago';
+import { useSelector } from 'react-redux';
 
 const Listing = () => {
 
   const route = useRoute();
   const { data } = route?.params;
+  const { option } = useSelector(s => s?.option);
   
   const handleShare = (item) => {
     console.log('Share:', item);
@@ -79,7 +81,13 @@ const Listing = () => {
         <View style={{ flex: 1, padding: 10 }}>
           
           <FlatList
-            data={data}
+            data={
+              option === 'Products'
+              ?data.filter(item => item.purpose === 'product')
+              :option === 'Lodges'
+              ?data.filter(item => item.purpose === 'accomodation')
+              :data.filter(item => item.purpose === 'service')
+            }
             renderItem={renderItem}
             keyExtractor={(item, index) => index.toString()}
             showsVerticalScrollIndicator={true}

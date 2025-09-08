@@ -566,7 +566,7 @@ const ShopScreen = () => {
             <TouchableOpacity onPress={e => navigation.navigate('user-inventory', {data: userAds})}>
               <Text style={styles.seeAllText}>See All</Text>
             </TouchableOpacity>
-          </View>
+          </View> 
 
           {userAds?.length > 0 ? (
             <FlatList
