@@ -16,7 +16,7 @@ const handleWebhook = async (req, res) => {
         await connectHandler(event);
         res.status(200).send('Webhook processed successfully');
       }else if(type === 'tools'){
-
+        await toolHandler(event)
       }else if(type === 'promotion'){
 
       }
@@ -70,6 +70,47 @@ async function connectHandler(event) {
   } else {
     console.log(`Updating existing payment status for reference: ${reference}`);
     await Payment.updateConnects(no_of_connects, user_id);
+  }
+
+  return;
+
+}
+
+
+
+async function toolHandler(event) {
+  const { amount, reference, status, metadata } = event.data;
+  const { user_id, plan, start_date, end_date } = metadata;
+
+  // Validate required data
+  if (!reference || !amount || !status) {
+    console.error('Missing required payment data');
+    throw new Error("Invalid payment data");
+  }
+
+  // Check if payment already exists
+  const existingPayment = await Payment.findToolsByReference(reference);
+  if (!existingPayment) {
+    console.log(`Creating new payment for reference: ${reference}`);
+    const paymentRecord = await Payment.createTool({ amount, plan, reference, user_id, start_date, end_date });
+
+    if (paymentRecord) {
+      console.log(`Payment created successfully: ${paymentRecord.id}`);
+      // Update subscriptions only if payment creation was successful
+      const toolUpdate = await Payment.updateTool({ plan, user_id });
+      if (toolUpdate) {
+        console.log(`Tool updated for user: ${user_id}`);
+      } else {
+        console.error(`Failed to update tool for user: ${user_id}`);
+        throw new Error("Failed to update tool for user");
+      }
+    } else {
+      console.error(`Failed to create payment record for reference: ${reference}`);
+      throw new Error("Failed to process payment");
+    }
+  } else {
+    console.log(`Updating existing payment status for reference: ${reference}`);
+    await Payment.updateTool(plan, user_id);
   }
 
   return;

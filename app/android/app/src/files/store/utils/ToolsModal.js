@@ -9,6 +9,8 @@ import {
   Modal,
   Pressable,
 } from 'react-native';
+import { usePaystack } from 'react-native-paystack-webview';
+import { useSelector } from 'react-redux';
 
 const { width } = Dimensions.get('window');
 
@@ -17,9 +19,12 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
   const [confirmModalVisible, setConfirmModalVisible] = useState(false);
   const [planToSubscribe, setPlanToSubscribe] = useState(null);
   const [subscriptionExpiry, setSubscriptionExpiry] = useState(new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)); // 30 days from now
+  const { user } = useSelector(s => s?.user);
+  const { shop } = useSelector(s => s?.shop);
 
   const subscriptionPlans = {
     "Free": {
+      "name": "free",
       "description": "Perfect for getting started with basic selling capabilities.",
       "price": "₦0.00",
       "discountPrice": "₦0.00",
@@ -32,6 +37,7 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
       "current": true
     },
     "Basic": {
+      "name": "basic",
       "description": "Ideal for new vendors who want to start selling with essential tools and visibility.",
       "price": "₦500.00",
       "discountPrice": "₦450.00",
@@ -43,6 +49,7 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
       ]
     },
     "Standard": {
+      "name": "standard",
       "description": "Best for growing vendors seeking deeper insights and improved visibility.",
       "price": "₦1,200.00",
       "discountPrice": "₦960.00",
@@ -54,6 +61,7 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
       ]
     },
     "Pro": {
+      "name": "pro",
       "description": "Designed for professional vendors who want maximum reach, trust, and advanced tools.",
       "price": "₦2,500.00",
       "discountPrice": "₦1,750.00",
@@ -73,7 +81,53 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
       return;
     }
     setPlanToSubscribe(plan);
-    setConfirmModalVisible(true);
+    payNow(selectedPlan)
+    // setConfirmModalVisible(true);
+  };
+
+  const { popup } = usePaystack();
+  const payNow = (selectedPackage) => {
+        
+    const start_date = new Date();
+    const end_date = new Date();
+    end_date.setMonth(end_date.getMonth() + 1);
+
+    const reference = `REF-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+    // setLoading(true);
+    popup.newTransaction({
+      email: user?.email,
+      amount: parseFloat(selectedPackage?.discountPrice.replace('₦', '').replace(',', '')),
+      reference: reference,
+      metadata: {
+        user_id: user.user_id,
+        type: 'tools',
+        plan: selectedPackage.name,
+        start_date,
+        end_date
+      },
+      
+      onSuccess: (res) => {
+        // setLoading(false);
+        Alert.alert(
+          'Payment Successful!',
+          `Your subscription was successful.`,
+          [{ text: 'OK', onPress: () => navigation.navigate('Home') }]
+        );
+        let newShop = { ...shop };
+        newShop.tools = {"plan": selectedPackage.name, "start_date": start_date, "end_date": end_date};
+        dispatch(set_user(newShop));
+        navigation.goBack();
+      },
+      onCancel: () => {
+        // setLoading(false);
+        Alert.alert('Payment Cancelled', 'Your payment was cancelled.');
+      },
+      onError: (err) => {
+        // setLoading(false);
+        Alert.alert('Payment Error', 'There was an error processing your payment.');
+        console.log('Payment Error:', err);
+      }
+    });
   };
 
   const completeSubscription = () => {
@@ -376,7 +430,7 @@ const styles = StyleSheet.create({
   currentPlanName: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#0984e3',
+    color: '#FF4500',
     marginBottom: 5,
   },
   currentPlanPrice: {
@@ -395,10 +449,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   expirySoon: {
-    backgroundColor: '#ff7675',
+    backgroundColor: '#FF4500',
   },
   expiryOk: {
-    backgroundColor: '#00b894',
+    backgroundColor: '#FF4500',
   },
   expiryBadgeText: {
     color: 'white',
@@ -433,18 +487,18 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   currentPlanCard: {
-    borderColor: '#00b894',
-    backgroundColor: '#f0fdfa',
+    borderColor: '#FF4500',
+    backgroundColor: '#fff4e0',
   },
   featuredPlan: {
-    borderColor: '#0984e3',
+    borderColor: '#FF4500',
     transform: [{ scale: 1.02 }],
   },
   popularBadge: {
     position: 'absolute',
     top: -10,
     alignSelf: 'center',
-    backgroundColor: '#0984e3',
+    backgroundColor: '#FF4500',
     paddingHorizontal: 12,
     paddingVertical: 4,
     borderRadius: 20,
@@ -453,7 +507,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -10,
     right: 10,
-    backgroundColor: '#00b894',
+    backgroundColor: '#FF4500',
     paddingHorizontal: 12,
     paddingVertical: 4,
     borderRadius: 20,
@@ -494,7 +548,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   discountBadge: {
-    backgroundColor: '#00b894',
+    backgroundColor: '#FFA500',
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 12,
@@ -529,7 +583,7 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderRadius: 10,
-    backgroundColor: '#00b894',
+    backgroundColor: '#FF4500',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 10,
@@ -547,13 +601,13 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   subscribeButton: {
-    backgroundColor: '#0984e3',
+    backgroundColor: '#FF4500',
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',
   },
   currentButton: {
-    backgroundColor: '#00b894',
+    backgroundColor: '#FF4500',
   },
   subscribeButtonText: {
     color: 'white',
@@ -584,7 +638,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#f0f3ff',
+    backgroundColor: '#fff4e0',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -616,7 +670,7 @@ const styles = StyleSheet.create({
   confirmModalView: {
     margin: 20,
     backgroundColor: 'white',
-    borderRadius: 20,
+    borderRadius: 4,
     padding: 25,
     alignItems: 'center',
     shadowColor: '#000',
@@ -642,7 +696,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   button: {
-    borderRadius: 10,
+    borderRadius: 4,
     padding: 12,
     elevation: 2,
     minWidth: 100,
@@ -653,7 +707,7 @@ const styles = StyleSheet.create({
     borderColor: '#ddd',
   },
   buttonSubscribe: {
-    backgroundColor: '#0984e3',
+    backgroundColor: '#FF4500',
   },
   buttonCancelText: {
     color: '#2d3436',

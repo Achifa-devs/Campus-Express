@@ -19,6 +19,7 @@ const {
   height 
 } = Dimensions.get('window');
 import { usePaystack } from 'react-native-paystack-webview';
+import { set_user } from '../../../../../../redux/user';
 
 const VendorConnectionsModal = ({ visible, onClose }) => {
   const [selectedPackage, setSelectedPackage] = useState(null);
@@ -135,11 +136,9 @@ const VendorConnectionsModal = ({ visible, onClose }) => {
           `Your purchase was successful.`,
           [{ text: 'OK', onPress: () => navigation.navigate('Home') }]
         );
-        let newTier = { ...tier };
-        newTier.start_date = start_date.toISOString();
-        newTier.end_date = end_date.toISOString();
-        newTier.plan = selectedPackage?.tier;
-        dispatch(set_tier(newTier));
+        let newUser = { ...user };
+        newUser.connects = user.connects + selectedPackage.connections;
+        dispatch(set_user(newUser));
         navigation.goBack();
       },
       onCancel: () => {

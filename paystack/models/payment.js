@@ -27,6 +27,35 @@ class Payment {
     return result.rows[0];
   }
 
+
+
+
+
+  static async createTool(paymentData) {
+    const { amount, plan, reference, user_id, start_date, end_date } = paymentData;
+    const query = `
+      INSERT INTO vendor_tools_subscription (id, tool_id, amount_paid, plan, user_id, start_date, end_date, created_at)
+      VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, NOW())
+      RETURNING *
+    `;
+    const values = [reference, amount, plan, user_id, start_date, end_date];
+    const result = await pool.query(query, values);
+    return result.rows[0];
+  }
+
+  static async updateTool(toolData) {
+    const { plan, user_id } = toolData;
+    const query = 'UPDATE shops SET tools = $1 WHERE user_id = $2 RETURNING *';
+    const result = await pool.query(query, [plan, user_id]);
+    return result.rows[0];
+  }
+
+  static async findToolsByReference(reference) {
+    const query = 'SELECT * FROM vendor_tools_subscription WHERE tool_id = $1';
+    const result = await pool.query(query, [reference]);
+    return result.rows[0];
+  }
+
 }
 
 module.exports = Payment;

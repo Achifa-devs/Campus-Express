@@ -244,8 +244,8 @@ function NavCnt() {
         (
             sub_modal === 1 ? 
             
-            // <VendorSubscriptionsModal  onSelectPackage={''} onClose={handleCloseModal} />: ''
-            <VendorConnectionsModal  onSelectPackage={''} onClose={handleCloseModal} />: ''
+            <VendorSubscriptionsModal  onSelectPackage={''} onClose={handleCloseModal} />: ''
+            // <VendorConnectionsModal  onSelectPackage={''} onClose={handleCloseModal} />: ''
         )
       } 
 

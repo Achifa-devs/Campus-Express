@@ -307,7 +307,7 @@ const styles = StyleSheet.create({
   currentPlanName: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#0984e3',
+    color: '#FF4500',
     marginBottom: 5,
   },
   currentPlanPrice: {
@@ -326,10 +326,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   expirySoon: {
-    backgroundColor: '#ff7675',
+    backgroundColor: '#FFA500',
   },
   expiryOk: {
-    backgroundColor: '#00b894',
+    backgroundColor: '#FF4500',
   },
   expiryBadgeText: {
     color: 'white',
@@ -371,18 +371,18 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   currentPlanCard: {
-    borderColor: '#00b894',
-    backgroundColor: '#f0fdfa',
+    borderColor: '#FF4500',
+    backgroundColor: '#fff4e0',
   },
   featuredPlan: {
-    borderColor: '#0984e3',
+    borderColor: '#FF4500',
     transform: [{ scale: 1.02 }],
   },
   popularBadge: {
     position: 'absolute',
     top: -10,
     alignSelf: 'center',
-    backgroundColor: '#0984e3',
+    backgroundColor: '#FF4500',
     paddingHorizontal: 12,
     paddingVertical: 4,
     borderRadius: 20,
@@ -391,7 +391,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -10,
     right: 10,
-    backgroundColor: '#00b894',
+    backgroundColor: '#FF4500',
     paddingHorizontal: 12,
     paddingVertical: 4,
     borderRadius: 20,
@@ -432,7 +432,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   discountBadge: {
-    backgroundColor: '#00b894',
+    backgroundColor: '#FFA500',
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 12,
@@ -467,7 +467,7 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderRadius: 10,
-    backgroundColor: '#00b894',
+    backgroundColor: '#FF4500',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 10,
@@ -485,13 +485,13 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   subscribeButton: {
-    backgroundColor: '#0984e3',
+    backgroundColor: '#FF4500',
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',
   },
   currentButton: {
-    backgroundColor: '#00b894',
+    backgroundColor: '#FF4500',
   },
   subscribeButtonText: {
     color: 'white',
@@ -522,7 +522,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#f0f3ff',
+    backgroundColor: '#fff4e0',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
