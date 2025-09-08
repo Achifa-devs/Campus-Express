@@ -83,9 +83,9 @@ class Payment {
   }
 
   static async updatePromotion(promotionData) {
-    const { user_id } = promotionData;
-    const query = 'UPDATE products SET promotion = $1 WHERE user_id = $2 RETURNING *';
-    const result = await pool.query(query, [true, user_id]);
+    const { product_id } = promotionData;
+    const query = 'UPDATE products SET promotion = $1 WHERE product_id = $2 RETURNING *';
+    const result = await pool.query(query, [true, product_id]);
     return result.rows[0];
   }
 

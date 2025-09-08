@@ -134,7 +134,7 @@ async function promotionHandler(event) {
     if (paymentRecord) {
       console.log(`Payment created successfully: ${paymentRecord.id}`);
       // Update subscriptions only if payment creation was successful
-      const promotionUpdate = await Payment.updatePromotion({ user_id });
+      const promotionUpdate = await Payment.updatePromotion({ product_id });
       if (promotionUpdate) {
         console.log(`Promotion updated for user: ${user_id}`);
       } else {
