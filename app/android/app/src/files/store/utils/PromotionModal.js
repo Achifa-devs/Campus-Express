@@ -57,7 +57,7 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
     {
       "id": 3,
       "title": "Weekly Exposure",
-      "duration": "7 Days (1 Week)",
+      "duration": "1 Week",
       "price": "₦5000.00",
       "discountPrice": "₦3500.00",
       "description": "A balanced plan designed to maximize visibility and sales over the course of one week.",
@@ -71,7 +71,7 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
     {
       "id": 4,
       "title": "Extended Reach",
-      "duration": "14 Days (2 Weeks)",
+      "duration": "2 Weeks",
       "price": "₦9500.00",
       "discountPrice": "₦6600.00",
       "description": "Two weeks of consistent exposure to help strengthen your brand and boost product recognition.",
@@ -85,7 +85,7 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
     {
       "id": 5,
       "title": "Monthly Campaign",
-      "duration": "30 Days (1 Month)",
+      "duration": "1 Month",
       "price": "₦18000.00",
       "discountPrice": "₦11400.00",
       "description": "The ultimate package for vendors who want to dominate visibility with a full month of promotion.",
@@ -99,8 +99,6 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
   ];
 
   useEffect(() => {
-    // console.log('boost_modal: ', boost_modal)
-    // Set the ad image URI when component mounts or boost_modal changes
     if (boost_modal?.data) {
       const uri = getCategoryImage(boost_modal.data?.category) || boost_modal.data?.thumbnail_id;
       setAdImageUri(uri);
@@ -132,12 +130,41 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
     return discountPercent;
   };
 
+  function getAdDuration(duration) {
+    const startDate = new Date();
+    let endDate = new Date(startDate); // clone start date
+
+    switch (duration.toLowerCase()) {
+      case "1 day":
+        endDate.setDate(startDate.getDate() + 1);
+        break;
+      case "3 days":
+        endDate.setDate(startDate.getDate() + 3);
+        break;
+      case "7 days":
+      case "1 week":
+        endDate.setDate(startDate.getDate() + 7);
+        break;
+      case "2 weeks":
+        endDate.setDate(startDate.getDate() + 14);
+        break;
+      case "1 month":
+        endDate.setMonth(startDate.getMonth() + 1);
+        break;
+      default:
+        throw new Error(`Invalid duration: ${duration}`);
+    }
+
+    return {
+      start_date: startDate,
+      end_date: endDate
+    };
+  }
+
+
   const { popup } = usePaystack();
   const payNow = (selectedPackage) => {
-    const start_date = new Date();
-    const end_date = new Date();
-    end_date.setMonth(end_date.getMonth() + 1);
-
+    const {end_date, start_date} = getAdDuration(selectedPackage.duration)
     const reference = `REF-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
     
     popup.newTransaction({
@@ -149,7 +176,9 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
         type: 'promotion',
         plan: selectedPackage.title,
         start_date,
-        end_date
+        end_date,
+        product_id: boost_modal.data.product_id,
+        duration: selectedPackage.duration
       },
       
       onSuccess: (res) => {
@@ -158,10 +187,7 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
           `Your subscription was successful.`,
           [{ text: 'OK' }]
         );
-        if (onSubscribe) {
-          onSubscribe(selectedPackage);
-        }
-        onClose();
+        
       },
       onCancel: () => {
         Alert.alert('Payment Cancelled', 'Your payment was cancelled.');
@@ -189,24 +215,7 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
         </View>
 
         <ScrollView contentContainerStyle={styles.scrollContent}>
-          {/* Performance Stats */}
-          <View style={styles.statsSection}>
-            <Text style={styles.sectionTitle}>Expected Results</Text>
-            <View style={styles.statsGrid}>
-              <View style={styles.statItem}>
-                <Text style={styles.statValue}>3-5x</Text>
-                <Text style={styles.statLabel}>More Views</Text>
-              </View>
-              <View style={styles.statItem}>
-                <Text style={styles.statValue}>2-4x</Text>
-                <Text style={styles.statLabel}>More Clicks</Text>
-              </View>
-              <View style={styles.statItem}>
-                <Text style={styles.statValue}>40-60%</Text>
-                <Text style={styles.statLabel}>Higher Conversion</Text>
-              </View>
-            </View>
-          </View>
+          
 
           {/* Ad Preview Section - FIXED */}
           <View style={styles.adPreviewSection}>
@@ -356,6 +365,25 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
             </ScrollView>
           </View>
 
+          {/* Performance Stats */}
+          <View style={styles.statsSection}>
+            <Text style={styles.sectionTitle}>Expected Results</Text>
+            <View style={styles.statsGrid}>
+              <View style={styles.statItem}>
+                <Text style={styles.statValue}>3-5x</Text>
+                <Text style={styles.statLabel}>More Views</Text>
+              </View>
+              <View style={styles.statItem}>
+                <Text style={styles.statValue}>2-4x</Text>
+                <Text style={styles.statLabel}>More Clicks</Text>
+              </View>
+              <View style={styles.statItem}>
+                <Text style={styles.statValue}>40-60%</Text>
+                <Text style={styles.statLabel}>Higher Conversion</Text>
+              </View>
+            </View>
+          </View>
+
           {/* Additional Information */}
           <View style={styles.infoSection}>
             <Text style={styles.sectionTitle}>How Promotion Works</Text>
@@ -463,8 +491,8 @@ const styles = StyleSheet.create({
     color: '#2d3436',
   },
   scrollContent: {
-    padding: 16,
-    paddingBottom: 40,
+    padding: 8,
+    paddingBottom: 30,
   },
   sectionTitle: {
     fontSize: 18,
@@ -513,7 +541,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 8,
     padding: 16,
-    marginBottom: 16,
+    marginBottom: 8,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,

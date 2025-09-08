@@ -18,7 +18,7 @@ const handleWebhook = async (req, res) => {
       }else if(type === 'tools'){
         await toolHandler(event)
       }else if(type === 'promotion'){
-
+        await promotionHandler(event)
       }
       
     } else {
@@ -76,8 +76,6 @@ async function connectHandler(event) {
 
 }
 
-
-
 async function toolHandler(event) {
   const { amount, reference, status, metadata } = event.data;
   const { user_id, plan, start_date, end_date } = metadata;
@@ -111,6 +109,45 @@ async function toolHandler(event) {
   } else {
     console.log(`Updating existing payment status for reference: ${reference}`);
     await Payment.updateTool(plan, user_id);
+  }
+
+  return;
+
+}
+
+async function promotionHandler(event) {
+  const { amount, reference, status, metadata } = event.data;
+  const { user_id, plan, start_date, end_date, product_id, duration } = metadata;
+
+  // Validate required data
+  if (!reference || !amount || !status) {
+    console.error('Missing required payment data');
+    throw new Error("Invalid payment data");
+  }
+
+  // Check if payment already exists
+  const existingPayment = await Payment.findPromotionByReference(reference);
+  if (!existingPayment) {
+    console.log(`Creating new promotion for reference: ${reference}`);
+    const paymentRecord = await Payment.createPromotion({ reference, product_id, duration, plan, amount, user_id, start_date, end_date });
+
+    if (paymentRecord) {
+      console.log(`Payment created successfully: ${paymentRecord.id}`);
+      // Update subscriptions only if payment creation was successful
+      const promotionUpdate = await Payment.updatePromotion({ user_id });
+      if (promotionUpdate) {
+        console.log(`Promotion updated for user: ${user_id}`);
+      } else {
+        console.error(`Failed to update promotion for user: ${user_id}`);
+        throw new Error("Failed to update promotion for user");
+      }
+    } else {
+      console.error(`Failed to create payment record for reference: ${reference}`);
+      throw new Error("Failed to process payment");
+    }
+  } else {
+    console.log(`Updating existing payment status for reference: ${reference}`);
+    await Payment.updatePromotion(user_id);
   }
 
   return;

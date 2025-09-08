@@ -56,6 +56,45 @@ class Payment {
     return result.rows[0];
   }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  static async createPromotion(paymentData) {
+    const { reference, product_id, duration, plan, amount, user_id, start_date, end_date } = paymentData;
+    const query = `
+      INSERT INTO promotions (id, promotion_id, product_id, duration, plan, amount_paid, user_id, start_date, end_date, created_at)
+      VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, NOW())
+      RETURNING *
+    `;
+    const values = [reference, product_id, duration, plan, amount, user_id, start_date, end_date];
+    const result = await pool.query(query, values);
+    return result.rows[0];
+  }
+
+  static async updatePromotion(promotionData) {
+    const { user_id } = promotionData;
+    const query = 'UPDATE products SET promotion = $1 WHERE user_id = $2 RETURNING *';
+    const result = await pool.query(query, [true, user_id]);
+    return result.rows[0];
+  }
+
+  static async findPromotionByReference(reference) {
+    const query = 'SELECT * FROM promotions WHERE promotion_id = $1';
+    const result = await pool.query(query, [reference]);
+    return result.rows[0];
+  }
+
 }
 
 module.exports = Payment;
