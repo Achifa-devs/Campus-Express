@@ -7,22 +7,26 @@ export async function searchProducts({ word, user_id, purpose = null, campus = n
   // 1. Fetch all matching products, promoted first
   const { rows: products } = await pool.query(
     `
-    SELECT p.*
+    SELECT p.*,
+      (CASE 
+        WHEN LOWER(COALESCE(p.promotion::text, 'false')) IN ('true','t','1','yes') 
+        THEN true ELSE false 
+      END) AS is_promoted
     FROM products p
     WHERE (p.title ILIKE $1 OR p.description ILIKE $1)
       AND ($2::text IS NULL OR p.purpose = $2)
       AND ($3::text IS NULL OR p.campus = $3)
       AND (p.state->>'state') = 'active'
     ORDER BY 
-      (CASE WHEN p.promotion = 'true' THEN 1 ELSE 0 END) DESC,
-      p.date DESC
+      is_promoted DESC,
+      COALESCE(p.date, '1970-01-01')::timestamptz DESC
     LIMIT $4
     `,
     [searchTerm, purpose, campus, limit]
   );
 
-  // 2. Track premium/standard searches (if still needed)
-  FilterForsearch([...products], user_id, word);
+  // 2. Track promoted searches
+  FilterForsearch(products, user_id, word);
 
   return products;
 }
@@ -30,14 +34,14 @@ export async function searchProducts({ word, user_id, purpose = null, campus = n
 /**
  * Track search appearances only for promoted products
  */
-function FilterForsearch(res, user_id, word) {
-  let data = res.filter(item => item.promotion === 'true'); // only promoted
-  if (data.length > 0) {
-    data.forEach(async (item) => {
-      let isNotDuplicate = await checkDuplicates(item, user_id);
+function FilterForsearch(products, user_id, word) {
+  const promoted = products.filter(item => item.is_promoted === true);
+  if (promoted.length > 0) {
+    promoted.forEach(async (item) => {
+      const isNotDuplicate = await checkDuplicates(item, user_id);
       if (isNotDuplicate) {
-        insertSearchAppearance(item, user_id, word);
-        updateSearchAppearances(item);
+        await insertSearchAppearance(item, user_id, word);
+        await updateSearchAppearances(item);
       }
     });
   }

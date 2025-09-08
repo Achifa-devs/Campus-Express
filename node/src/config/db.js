@@ -38,8 +38,8 @@ const config = {
     require: true,
     rejectUnauthorized: false, // needed for Neon
   },
-  connectionTimeoutMillis: 10000,
-  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 100000,
+  idleTimeoutMillis: 300000,
   max: 20,
 };
 

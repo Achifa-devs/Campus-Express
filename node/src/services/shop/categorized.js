@@ -11,8 +11,12 @@ export async function getProductsByCategory({ type }) {
       WHERE (p.others->>'cType') = $1
         AND (p.state->>'state') = 'active'
       ORDER BY 
-        (CASE WHEN p.promotion = 'true' THEN 1 ELSE 0 END) DESC,
-        p.date DESC
+        -- normalize promotion values so truthy ones come first
+        (CASE 
+          WHEN LOWER(COALESCE(p.promotion::text, 'false')) IN ('true','t','1','yes') 
+          THEN 1 ELSE 0 
+        END) DESC,
+        COALESCE(p.date, '1970-01-01')::timestamptz DESC
       LIMIT $2
     `;
 
