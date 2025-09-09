@@ -71,6 +71,7 @@ const ProductCard = ({ item, navigation, user, Fav }) => {
     }
     return null; // fallback
   };
+  const isPromoted = eval(item.promotion) ;
 
   return (
     <TouchableOpacity
@@ -79,35 +80,42 @@ const ProductCard = ({ item, navigation, user, Fav }) => {
       style={styles.productCard}
     >
       <View style={styles.productInner}>
-        {
-          item?.purpose === 'product'
-          ?
-          <Image
-            source={{ uri: item.thumbnail_id }}
-            style={styles.productImage}
-            resizeMode="cover"
-          />
-          :
-          <Image 
-            source={{ uri: getCategoryImage(item.category) || item.image }} 
-            style={styles.productImage} />
-        }
-
-        {/* Wishlist Button */}
-        <TouchableOpacity
-          style={[styles.wishlistButton, wishlisted && styles.wishlistButtonActive]}
-          onPress={handleSave}
-        >
-          {favLoading ? (
-            <ActivityIndicator size="small" color={wishlisted ? "#FFF" : "#FF4500"} />
-          ) : (
-            <Icon
-              name={wishlisted ? 'heart' : 'heart-outline'}
-              size={18}
-              color={wishlisted ? '#FFF' : '#000'}
+        <View>
+          {
+            item?.purpose === 'product'
+            ?
+            <Image
+              source={{ uri: item.thumbnail_id }}
+              style={styles.productImage}
+              resizeMode="cover"
             />
+            :
+            <Image
+              source={{ uri: getCategoryImage(item.category) || item.image }}
+              style={styles.productImage} />
+          }
+          {isPromoted && (
+            <View style={styles.boostBadge}>
+              <Icon name="rocket" size={12} color="#FFF" />
+              <Text style={styles.boostBadgeText}>Sponsored</Text>
+            </View>
           )}
-        </TouchableOpacity>
+          {/* Wishlist Button */}
+          <TouchableOpacity
+            style={[styles.wishlistButton, wishlisted && styles.wishlistButtonActive]}
+            onPress={handleSave}
+          >
+            {favLoading ? (
+              <ActivityIndicator size="small" color={wishlisted ? "#FFF" : "#FF4500"} />
+            ) : (
+              <Icon
+                name={wishlisted ? 'heart' : 'heart-outline'}
+                size={18}
+                color={wishlisted ? '#FFF' : '#000'}
+              />
+            )}
+          </TouchableOpacity>
+        </View>
 
         {/* Top badges container */}
         <View style={styles.topBadgesContainer}>
@@ -122,7 +130,7 @@ const ProductCard = ({ item, navigation, user, Fav }) => {
           {item?.purpose === 'product' ?<Text style={styles.price}>
             ₦{new Intl.NumberFormat('en-us').format(item?.price)}
           </Text> : ''}
-          <Text style={styles.titleText} numberOfLines={2}>{item.title}</Text>
+          <Text style={styles.titleText} numberOfLines={1}>{item.title}</Text>
           <View style={styles.metaContainer}>
             <Icon name="location-outline" size={12} color="#666" />
             <Text style={styles.subText}>{item.campus}</Text>
@@ -526,6 +534,25 @@ export default function TypeProducts() {
 }
 
 const styles = StyleSheet.create({
+  boostBadge: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    width: '100%',
+    height: 25,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#2196F3',
+    paddingHorizontal: 6,
+    paddingVertical: 3,
+    borderRadius: 0,
+    gap: 4,
+  },
+  boostBadgeText: {
+    color: '#FFF',
+    fontSize: 12,
+    fontWeight: '600',
+  },
   wishlistButton: {
     position: 'absolute',
     top: 8,

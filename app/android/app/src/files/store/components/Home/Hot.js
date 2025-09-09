@@ -115,6 +115,8 @@ const ItemCard = React.memo(({ item, onPress }) => {
     }
   };
 
+  const isPromoted = eval(item.promotion) ;
+
   return (
     <TouchableOpacity
       activeOpacity={0.9}
@@ -130,6 +132,13 @@ const ItemCard = React.memo(({ item, onPress }) => {
           onLoadStart={() => setLoading(true)}
           onLoadEnd={() => setLoading(false)}
         />
+
+        {isPromoted && (
+          <View style={styles.boostBadge}>
+            <Icon name="rocket" size={12} color="#FFF" />
+            <Text style={styles.boostBadgeText}>Sponsored</Text>
+          </View>
+        )} 
         
         {loading && (
           <View style={styles.loadingOverlay}>
@@ -269,6 +278,44 @@ export default function Hot({ data, Fav }) {
 }
 
 const styles = StyleSheet.create({
+  boostBadge: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    width: '100%',
+    height: 25,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#2196F3',
+    paddingHorizontal: 6,
+    paddingVertical: 3,
+    borderRadius: 4,
+    gap: 4,
+  },
+  boostBadgeText: {
+    color: '#FFF',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  promoteButton: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    height: 30,
+    width: 100,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFA500',
+    paddingHorizontal: 6,
+    paddingVertical: 3,
+    borderRadius: 0,
+    gap: 4,
+  },
+  promoteButtonText: {
+    color: '#FFF',
+    fontSize: 10,
+    fontWeight: '600',
+  },
   container: {
     flex: 1,
     backgroundColor: '#FFF',

@@ -21,68 +21,6 @@ const ServicesScreen = ({data}) => {
   const [activeCategory, setActiveCategory] = useState('All');
 
  
-  const featuredServices = [
-    {
-      id: '1',
-      name: 'Premium Car Detailing',
-      category: 'Automotive',
-      rating: 4.8,
-      reviews: 124,
-      price: '$$',
-      image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8Y2FyJTIwZGV0YWlsaW5nfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
-      isFeatured: true
-    },
-    {
-      id: '2',
-      name: 'Gourmet Catering Service',
-      category: 'Food',
-      rating: 4.9,
-      reviews: 208,
-      price: '$$$',
-      image: 'https://images.unsplash.com/photo-1555244162-803834f70033?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8Y2F0ZXJpbmd8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
-      isFeatured: true
-    },
-  ];
-
-  const services = [
-    {
-      id: '3',
-      name: 'Home Cleaning Experts',
-      category: 'Home Services',
-      rating: 4.7,
-      reviews: 89,
-      price: '$$',
-      image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fGNsZWFuaW5nJTIwc2VydmljZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60'
-    },
-    {
-      id: '4',
-      name: 'Hair Salon & Spa',
-      category: 'Beauty',
-      rating: 4.6,
-      reviews: 156,
-      price: '$$',
-      image: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fGhhaXIlMjBzYWxvbnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60'
-    },
-    {
-      id: '5',
-      name: 'Mobile Phone Repair',
-      category: 'Retail',
-      rating: 4.5,
-      reviews: 72,
-      price: '$',
-      image: 'https://images.unsplash.com/photo-1605789538467-fb6e242c1002?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fHBob25lJTIwcmVwYWlyfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60'
-    },
-    {
-      id: '6',
-      name: 'Yoga & Meditation Classes',
-      category: 'Health & Medical',
-      rating: 4.9,
-      reviews: 132,
-      price: '$$',
-      image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8eW9nYXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60'
-    },
-  ];
-
   const getCategoryImage = (categoryName) => {
     for (let cat of categoriesData.items.category) {
       const keys = Object.keys(cat).filter(k => k !== "img");
@@ -121,6 +59,7 @@ const ServicesScreen = ({data}) => {
   );
 
   const renderServiceItem = ({ item }) => (
+
     <TouchableOpacity
       style={styles.serviceCard}
       onPress={() => navigation.navigate('user-service-room', { data: item })}
@@ -129,6 +68,12 @@ const ServicesScreen = ({data}) => {
         source={{ uri: getCategoryImage(item.category) || item.image }} 
         style={styles.serviceImage} 
       />
+      {item.promotion && (
+        <View style={styles.boostBadge}>
+          <Icon name="rocket" size={12} color="#FFF" />
+          <Text style={styles.boostBadgeText}>Sponsored</Text>
+        </View>
+      )} 
       <View style={styles.serviceInfo}>
         <Text style={styles.serviceName} numberOfLines={1}>{item.title}</Text>
         <View style={styles.serviceMeta}>
@@ -213,6 +158,25 @@ const ServicesScreen = ({data}) => {
 };
 
 const styles = StyleSheet.create({
+   boostBadge: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    width: 100,
+    height: 25,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#2196F3',
+    paddingHorizontal: 6,
+    paddingVertical: 3,
+    borderRadius: 4,
+    gap: 4,
+  },
+  boostBadgeText: {
+    color: '#FFF',
+    fontSize: 12,
+    fontWeight: '600',
+  },
   emptyContainer: {
     flex: 1,
     justifyContent: 'center',

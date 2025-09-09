@@ -128,6 +128,7 @@ const Lodges = ({ data }) => {
   const renderVideoItem = ({ item }) => {
     const isWishlisted = wishlistedItems[item?.product_id];
     const isLoading = favLoading[item?.product_id];
+    const isPromoted = eval(item.promotion) ;
 
     return (
       <TouchableOpacity 
@@ -141,6 +142,7 @@ const Lodges = ({ data }) => {
               style={styles.video}
               resizeMode="cover"
               muted={true}
+              paused
             />
           </View>
           
@@ -170,6 +172,12 @@ const Lodges = ({ data }) => {
               />
             )}
           </TouchableOpacity>
+          {isPromoted && (
+            <View style={styles.boostBadge}>
+              <Icon name="rocket" size={12} color="#FFF" />
+              <Text style={styles.boostBadgeText}>Sponsored</Text>
+            </View>
+          )} 
         </View>
         
         <View style={styles.videoInfo}>
@@ -226,6 +234,25 @@ const Lodges = ({ data }) => {
 };
 
 const styles = StyleSheet.create({
+   boostBadge: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    width: '100%',
+    height: 28,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#2196F3',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 4,
+    gap: 4,
+  },
+  boostBadgeText: {
+    color: '#FFF',
+    fontSize: 12,
+    fontWeight: '600',
+  },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',

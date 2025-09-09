@@ -46,6 +46,7 @@ const ServiceDetailScreen = ({ route }) => {
     const { width } = Dimensions.get('window');
     const [currentIndex, setCurrentIndex] = useState(0);
     const [favLoading, setFavLoading] = useState(true);
+    const isPromoted = eval(data.promotion) ;
 
     // Fetch service details if not passed in params
     useEffect(() => {
@@ -324,6 +325,13 @@ const ServiceDetailScreen = ({ route }) => {
                             )}
                         </TouchableOpacity>
                     </View>
+
+                    {isPromoted && (
+                    <View style={styles.boostBadge}>
+                        <Icon name="rocket" size={12} color="#FFF" />
+                        <Text style={styles.boostBadgeText}>Sponsored</Text>
+                    </View>
+                    )} 
                 </View>
 
                 {/* Service Content */}
@@ -470,6 +478,26 @@ const ServiceDetailScreen = ({ route }) => {
 };
 
 const styles = StyleSheet.create({
+
+     boostBadge: {
+    position: 'absolute',
+    bottom: 12,
+    left: 12,
+    // width: '100%',
+    height: 25,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#2196F3',
+    paddingHorizontal: 6,
+    paddingVertical: 3,
+    borderRadius: 4,
+    gap: 4,
+  },
+  boostBadgeText: {
+    color: '#FFF',
+    fontSize: 12,
+    fontWeight: '600',
+  },
     safeArea: {
         flex: 1,
         backgroundColor: '#FFF',

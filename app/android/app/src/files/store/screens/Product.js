@@ -37,6 +37,7 @@ import axios from 'axios';
 import useLogInAlert from '../utils/LogInAlert.js';
 import { getDeviceId } from '../utils/IdGen.js';
 // import Upload from 'react-native-background-upload';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export default function Product() {
   const route = useRoute();
@@ -306,6 +307,8 @@ export default function Product() {
       showLogInAlert()
     }
   };
+  const isPromoted = eval(data.promotion) ;
+
 
   const images = files && files.length > 0 ? files : [data?.thumbnail_id];
 
@@ -371,6 +374,7 @@ export default function Product() {
                   />
                 </TouchableOpacity>
               ))}
+
             </ScrollView>
             
             <View style={styles.carouselIndicator}>
@@ -397,6 +401,13 @@ export default function Product() {
                 )}
               </TouchableOpacity>
             </View>
+
+            {isPromoted && (
+              <View style={styles.boostBadge}>
+                <Icon name="rocket" size={12} color="#FFF" />
+                <Text style={styles.boostBadgeText}>Sponsored</Text>
+              </View>
+            )} 
           </View>
 
           {/* Product Info */}
@@ -538,6 +549,25 @@ export default function Product() {
 }
 
 const styles = StyleSheet.create({
+   boostBadge: {
+    position: 'absolute',
+    bottom: 12,
+    left: 12,
+    // width: '100%',
+    height: 25,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#2196F3',
+    paddingHorizontal: 6,
+    paddingVertical: 3,
+    borderRadius: 4,
+    gap: 4,
+  },
+  boostBadgeText: {
+    color: '#FFF',
+    fontSize: 12,
+    fontWeight: '600',
+  },
   safeArea: {
     flex: 1,
     backgroundColor: '#FFF',

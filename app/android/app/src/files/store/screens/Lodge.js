@@ -83,6 +83,12 @@ const LodgeCard = ({ item }) => {
             <Text style={styles.durationText}>12:34</Text>
           </View>
         </View>
+        {isPromoted && (
+          <View style={styles.boostBadge}>
+            <Icon name="rocket" size={12} color="#FFF" />
+            <Text style={styles.boostBadgeText}>Sponsored</Text>
+          </View>
+        )} 
       </TouchableOpacity>
 
       {/* Lodge Details - YouTube Style */}
@@ -166,6 +172,25 @@ const LodgeList = () => {
 };
 
 const styles = StyleSheet.create({
+  boostBadge: {
+    position: 'absolute',
+    bottom: 12,
+    left: 12,
+    // width: '100%',
+    height: 25,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#2196F3',
+    paddingHorizontal: 6,
+    paddingVertical: 3,
+    borderRadius: 4,
+    gap: 4,
+  },
+  boostBadgeText: {
+    color: '#FFF',
+    fontSize: 12,
+    fontWeight: '600',
+  },
   listContainer: {
     paddingVertical: 8,
     backgroundColor: '#FFFFFF',
