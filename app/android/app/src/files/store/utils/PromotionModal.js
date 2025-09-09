@@ -17,6 +17,7 @@ import categoriesData from '../../../../../../services.json';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Video from 'react-native-video';
 import { set_boost_modal } from '../../../../../../redux/boost_modal';
+import { useNavigation } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 
@@ -164,6 +165,7 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
 
   const dispatch = useDispatch()
 
+  const navigation = useNavigation()
   const { popup } = usePaystack();
   const payNow = (selectedPackage) => {
     const {end_date, start_date} = getAdDuration(selectedPackage.duration)
@@ -189,7 +191,9 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
           `Your subscription was successful.`,
           [{ text: 'OK' }]
         );
-        dispatch(set_boost_modal({data: null, visible: 0}))
+        navigation.goBack()
+        dispatch(set_boost_modal({data: null, visible: 0}));
+
       },
       onCancel: () => {
         Alert.alert('Payment Cancelled', 'Your payment was cancelled.');
