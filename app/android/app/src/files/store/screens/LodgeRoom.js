@@ -356,7 +356,7 @@ const AccommodationDetailScreen = ({ route, navigation }) => {
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity style={styles.connectionCnt} onPress={e => {
+      {user&&<TouchableOpacity style={styles.connectionCnt} onPress={e => {
         dispatch(set_connect_modal(1))
       }}>
         <View style={styles.connection}>
@@ -366,7 +366,7 @@ const AccommodationDetailScreen = ({ route, navigation }) => {
             {user?.connects} vendor connections
           </Text>
         </View>
-      </TouchableOpacity>
+      </TouchableOpacity>}
       
       <Animated.ScrollView 
         style={{ opacity: fadeAnim }}
