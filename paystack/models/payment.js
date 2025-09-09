@@ -73,8 +73,8 @@ class Payment {
   static async createPromotion(paymentData) {
     const { reference, product_id, duration, plan, amount, user_id, start_date, end_date } = paymentData;
     const query = `
-      INSERT INTO promotions (id, promotion_id, product_id, duration, plan, amount_paid, user_id, start_date, end_date, created_at)
-      VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, NOW())
+      INSERT INTO promotions (id, promotion_id, product_id, duration, plan, amount_paid, user_id, start_date, end_date, created_at, is_active)
+      VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, NOW(), ${true})
       RETURNING *
     `;
     const values = [reference, product_id, duration, plan, amount, user_id, start_date, end_date];

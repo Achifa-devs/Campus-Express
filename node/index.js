@@ -487,6 +487,69 @@ CAMPUSSPHERE_SERVER.get('/subscription', async (req, res) => {
 
 
 
+import cron from "node-cron";
+
+async function checkAndUpdatePromotions() {
+  try {
+    // 1. Get all active promotions
+    const promotionsRes = await pool.query(`
+      SELECT id, product_id, start_date, end_date
+      FROM promotions
+      WHERE is_active = TRUE
+    `);
+
+    const now = new Date();
+    console.log("promotionsRes: ", promotionsRes)
+
+
+    for (const promo of promotionsRes.rows) {
+      const { id, product_id, start_date, end_date } = promo;
+      const endDate = new Date(end_date);
+
+      console.log(end_date)
+      // 2. Check if promotion is expired
+      if (!endDate < now) {
+        console.log(
+          `Promotion ${id} for product ${product_id} has expired. Updating product...`
+        ); 
+
+        // Update Products table
+        await pool.query(
+          `UPDATE products SET promotion = FALSE WHERE product_id = $1`,
+          [product_id]
+        );
+
+        // Mark promotion as inactive
+        await pool.query(
+          `UPDATE promotions SET is_active = FALSE WHERE id = $1`,
+          [id]
+        );
+      } else {
+        // Still active → log remaining time
+        const timeRemaining = endDate - now;
+        const daysRemaining = Math.ceil(timeRemaining / (1000 * 60 * 60 * 24));
+        console.log(
+          `Promotion ${id} for product ${product_id} expires in ${daysRemaining} days.`
+        );
+      }
+    }
+
+    // pool.release();
+  } catch (err) {
+    console.error("Error checking promotions:", err);
+  }
+}
+
+// Schedule: run every day at 12 midnight
+// Cron format: second minute hour day month dayOfWeek
+// "0 0 * * *" → every day at 00:00
+cron.schedule("0 0 * * *", () => {
+  console.log("⏰ Running promotion check at midnight...");
+  checkAndUpdatePromotions();
+});
+
+// If you also want to run immediately at server start, uncomment below
+// checkAndUpdatePromotions(); 
 
 
 

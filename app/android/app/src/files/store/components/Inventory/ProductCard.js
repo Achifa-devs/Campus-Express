@@ -145,19 +145,21 @@ const styles = StyleSheet.create({
   // Boost/Promote elements
   boostBadge: {
     position: 'absolute',
-    top: 8,
-    left: 8,
+    bottom: 0,
+    left: 0,
+    width: '100%',
+    height: 28,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 69, 0, 0.9)',
-    paddingHorizontal: 6,
+    backgroundColor: '#2196F3',
+    paddingHorizontal: 8,
     paddingVertical: 3,
-    borderRadius: 4,
+    borderRadius: 0,
     gap: 4,
   },
   boostBadgeText: {
     color: '#FFF',
-    fontSize: 10,
+    fontSize: 12,
     fontWeight: '600',
   },
   promoteButton: {

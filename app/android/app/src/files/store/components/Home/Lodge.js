@@ -142,7 +142,7 @@ const Lodges = ({ data }) => {
               style={styles.video}
               resizeMode="cover"
               muted={true}
-              paused
+              // paused
             />
           </View>
           
@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#2196F3',
     paddingHorizontal: 8,
     paddingVertical: 3,
-    borderRadius: 4,
+    borderRadius: 0,
     gap: 4,
   },
   boostBadgeText: {
@@ -325,7 +325,7 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   video_container: {
-    height: 230,
+    height: 200,
     width: '100%',
     backgroundColor: '#000',
     borderRadius: 5,
@@ -356,10 +356,13 @@ const styles = StyleSheet.create({
   videoCard: {
     width: '100%',
     marginBottom: 16,
+    position: 'relative',
+
   },
   thumbnailContainer: {
     position: 'relative',
     marginBottom: 8,
+    height: 200,
   },
   videoInfo: {
     paddingHorizontal: 4,

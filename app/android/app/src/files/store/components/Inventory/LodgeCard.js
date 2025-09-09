@@ -29,7 +29,7 @@ const LodgeCard = ({ item, onShare, state='private', onDelete, onPromote }) => {
         [navigation]
     );
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
     const handlePromotePress = (data) => {
       if(!isPromoted){
@@ -136,16 +136,16 @@ const LodgeCard = ({ item, onShare, state='private', onDelete, onPromote }) => {
 const styles = StyleSheet.create({
    boostBadge: {
     position: 'absolute',
-    bottom: 12,
-    left: 12,
-    // width: '100%',
-    height: 25,
+    bottom: 0,
+    left: 0,
+    width: '100%',
+    height: 28,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#2196F3',
-    paddingHorizontal: 6,
+    paddingHorizontal: 8,
     paddingVertical: 3,
-    borderRadius: 4,
+    borderRadius: 0,
     gap: 4,
   },
   boostBadgeText: {
@@ -184,24 +184,7 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   // Boost/Promote elements
-  boostBadge: {
-    position: 'absolute',
-    top: 12,
-    left: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255, 69, 0, 0.9)',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 4,
-    gap: 4,
-    zIndex: 10,
-  },
-  boostBadgeText: {
-    color: '#FFF',
-    fontSize: 10,
-    fontWeight: '600',
-  },
+
   promoteButton: {
     position: 'absolute',
     top: 5,
