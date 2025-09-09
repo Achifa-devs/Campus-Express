@@ -25,57 +25,53 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
   const { shop } = useSelector(s => s?.shop);
 
   const subscriptionPlans = {
-    "Free": {
-      "name": "free",
-      "description": "Perfect for getting started with basic selling capabilities.",
-      "price": "₦0.00",
-      "discountPrice": "₦0.00",
-      "features": [
-        "Basic product listing",
-        "Up to 10 products",
-        "Standard search visibility",
-        "Basic seller profile"
-      ],
-      "current": true
-    },
-    "Basic": {
-      "name": "basic",
-      "description": "Ideal for new vendors who want to start selling with essential tools and visibility.",
-      "price": "₦500.00",
-      "discountPrice": "₦450.00",
-      "features": [
-        "Essential performance metrics (views, impressions, search performance)",
-        "Basic visibility in customer searches",
-        "Up to 50 products",
-        "Basic customer insights"
-      ]
-    },
-    "Standard": {
-      "name": "standard",
-      "description": "Best for growing vendors seeking deeper insights and improved visibility.",
-      "price": "₦1,200.00",
-      "discountPrice": "₦960.00",
-      "features": [
-        "Comprehensive analytics (views, impressions, search performance, shares)",
-        "Enhanced visibility in search results",
-        "Access to customer engagement insights",
-        "Up to 200 products"
-      ]
-    },
-    "Pro": {
-      "name": "pro",
-      "description": "Designed for professional vendors who want maximum reach, trust, and advanced tools.",
-      "price": "₦2,500.00",
-      "discountPrice": "₦1,750.00",
-      "features": [
-        "Full advanced analytics suite (search trends, shares, conversions, clicks)",
-        "Sponsored badge for premium trust and visibility",
-        "Priority placement in listings and promotions",
-        "Early access to new vendor tools and features",
-        "Unlimited products"
-      ]
-    }
-  };
+  "Free": {
+    "name": "free",
+    "description": "A starter plan with essential features to begin selling.",
+    "price": "₦0.00",
+    "discountPrice": "₦0.00",
+    "features": [
+      "List up to 2 products",
+      "Access to basic performance metrics (views)"
+    ],
+    "current": true
+  },
+  "Basic": {
+    "name": "basic",
+    "description": "Perfect for new vendors looking to establish their presence with core selling tools and increased visibility.",
+    "price": "₦500.00",
+    "discountPrice": "₦450.00",
+    "features": [
+      "List up to 12 products",
+      "Improved visibility in customer searches",
+      "Essential performance insights (impressions, views, and shares)"
+    ]
+  },
+  "Standard": {
+    "name": "standard",
+    "description": "Tailored for growing vendors who want broader reach and actionable insights for better performance.",
+    "price": "₦1,200.00",
+    "discountPrice": "₦960.00",
+    "features": [
+      "List up to 25 products",
+      "Enhanced placement in search results",
+      "Detailed analytics (impressions, views, shares, and search performance)"
+    ]
+  },
+  "Pro": {
+    "name": "pro",
+    "description": "The ultimate plan for professional vendors seeking maximum reach, credibility, and advanced selling tools.",
+    "price": "₦2,500.00",
+    "discountPrice": "₦1,750.00",
+    "features": [
+      "Unlimited product listings",
+      "Complete analytics suite (impressions, views, shares, search trends, and conversions)",
+      "Sponsored badge for premium trust and recognition",
+      "Priority visibility in search results"
+    ]
+  }
+};
+
 
   const handleSubscribe = (plan) => {
     const res = Object.entries(subscriptionPlans).find(item => item[0] === plan)

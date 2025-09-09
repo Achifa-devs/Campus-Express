@@ -33,10 +33,14 @@ import axios from 'axios';
 import { set_subscribed } from './redux/subscribed.js';
 import { set_tier } from './redux/tier.js';
 import { storeData } from './android/app/src/files/utils/AsyncStore.js.js';
-import VendorConnectionsModal from './android/app/src/files/store/screens/ConnectPurchase.js';
+import VendorConnectodal from './android/app/src/files/store/screens/ConnectPurchase.js';
 import VendorSubscriptionsModal from './android/app/src/files/store/utils/ToolsModal.js';
 import PromotionSubscriptionsModal from './android/app/src/files/store/utils/PromotionModal.js';
 import { set_boost_modal } from './redux/boost_modal.js';
+import VendorConnectModal from './android/app/src/files/store/utils/ConnectModal.js';
+import { set_connect_modal } from './redux/connect.js';
+import VendorConnectionsModal from './android/app/src/files/store/screens/ConnectPurchase.js';
+import { set_connect_purchase_modal } from './redux/connect_purchase.js';
 // import { set_campus } from './redux/reducer/location.js';   // ✅ add correct reducer
 // import { closeModal } from './redux/reducer/locale.js';      // ✅ add correct reducer
 
@@ -176,6 +180,8 @@ function NavCnt() {
   const { locale_modal } = useSelector(s => s.locale_modal);
   const { sub_modal } = useSelector(s => s.sub_modal);
   const { boost_modal } = useSelector(s => s.boost_modal);
+  const { connect_modal } = useSelector(s => s.connect_modal);
+  const { connect_purchase_modal } = useSelector(s => s.connect_purchase_modal);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -211,10 +217,6 @@ function NavCnt() {
       linkingSubscription.remove();
     };
   }, []);
-
-  const handleCloseModal = () => {
-    dispatch(set_sub_modal(0));
-  };
 
   useEffect(() => {
     if (user) {
@@ -272,7 +274,9 @@ function NavCnt() {
           <BottomModal
             visible={locale_modal === 1 ? true : false} 
             
-            children={<CampusSelection onCloseModal={handleCloseModal} />}
+            children={<CampusSelection onCloseModal={e=> {
+              dispatch(set_sub_modal(0));
+            }} />}
           />
         )
       }
@@ -280,8 +284,29 @@ function NavCnt() {
         (
             sub_modal === 1 ? 
             
-            <VendorSubscriptionsModal  onSelectPackage={''} onClose={handleCloseModal} />: ''
-            // <VendorConnectionsModal  onSelectPackage={''} onClose={handleCloseModal} />: ''
+            <VendorSubscriptionsModal  onSelectPackage={''} onClose={e=> {
+              dispatch(set_sub_modal(0))
+            }} />: ''
+        )
+      } 
+
+      {
+        (
+          connect_modal === 1 ? 
+          
+          <VendorConnectModal  onSelectPackage={''} onClose={e => {
+            dispatch(set_connect_modal(0))
+          }} />: ''
+        )
+      } 
+
+      {
+        (
+          connect_purchase_modal === 1 ? 
+          
+          <VendorConnectionsModal  onSelectPackage={''} onClose={e => {
+            dispatch(set_connect_purchase_modal(0))
+          }} />: ''
         )
       } 
 

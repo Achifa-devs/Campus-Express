@@ -484,6 +484,31 @@ CAMPUSSPHERE_SERVER.get('/subscription', async (req, res) => {
 });
 
 
+CAMPUSSPHERE_SERVER.post('/minus-connect', parser, async (req, res) => {
+
+  const {user_id} = req?.body;
+
+  try {
+    // Get seller's products
+    const result = await pool.query(
+      'UPDATE users SET connects = connects-1 WHERE user_id = $1 RETURNING *',
+      [user_id]
+    );
+    // Return combined data 
+    const updatedUser = result.rows[0]; // no need for await here
+
+    res.status(200).json({
+      success: true,
+      data: updatedUser,
+    });
+
+  } catch (err) {
+    console.error('DB Error:', err);
+    res.status(500).send({ error: 'Server Error' });
+  }
+});
+
+
 
 
 

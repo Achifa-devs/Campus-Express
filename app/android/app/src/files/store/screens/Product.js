@@ -38,6 +38,9 @@ import useLogInAlert from '../utils/LogInAlert.js';
 import { getDeviceId } from '../utils/IdGen.js';
 // import Upload from 'react-native-background-upload';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { set_connect_modal } from '../../../../../../redux/connect.js';
+import { set_user } from '../../../../../../redux/user.js';
+import useInsufficientConnectAlert from '../utils/ConnectZero.js';
 
 export default function Product() {
   const route = useRoute();
@@ -67,6 +70,22 @@ export default function Product() {
       let res = request?.data;
       
       return res;
+    } catch (error) {
+      console.log('error: ', error)
+      Alert.alert('Error', 'Please ensure you have stable network.');
+    }
+  }
+
+  async function UpdateConnections() {
+    setLoading(true)
+    try {
+      let request = await axios.post('https://cs-server-olive.vercel.app/minus-connect', {user_id: user?.user_id})
+      let res = request?.data;
+      
+      if(res.success){
+        dispatch(set_user(res.data))
+        return res.success;
+      }
     } catch (error) {
       console.log('error: ', error)
       Alert.alert('Error', 'Please ensure you have stable network.');
@@ -170,6 +189,7 @@ export default function Product() {
   }
 
   const showLogInAlert = useLogInAlert();
+  const showConnectAlert = useInsufficientConnectAlert();
 
   const handleSave = async () => {
     if (user) {
@@ -199,40 +219,50 @@ export default function Product() {
 
   const handleWhatsAppChat = async() => {
     if (user) {
-      let Analytics = await AddContactClick();
-      if(!Analytics){
-        setLoading(false)
-  
-        return Alert.alert('Error', 'Please ensure you have stable network and try again.');
-      }
-      setLoading(false)
-      if (!seller?.phone) {
-        return Alert.alert('Error', 'Seller phone number is missing.');
-      }
+      if (user?.connects > 0) {
+        let Analytics = await AddContactClick();
+        if(!Analytics){
+          setLoading(false)
     
-      let phoneNumber = seller.phone.replace(/\s+/g, '');
-      if (phoneNumber.startsWith('0')) {
-        phoneNumber = phoneNumber.substring(1);
-      }
-    
-      const fullPhoneNumber = `234${phoneNumber}`;
-      const productLink = `https://www.campussphere.net/store/product/${data?.product_id}`;
-      const message = `Hello, I am interested in your product on Campus Sphere. ${productLink}`;
-    
-      const whatsappURL = `whatsapp://send?phone=${fullPhoneNumber}&text=${encodeURIComponent(message)}`;
-      const fallbackURL = `https://wa.me/${fullPhoneNumber}?text=${encodeURIComponent(message)}`;
-    
-      Linking.canOpenURL(whatsappURL)
-      .then((supported) => {
-        if (supported) {
-          Linking.openURL(whatsappURL);
-        } else {
-          Linking.openURL(fallbackURL);
+          return Alert.alert('Error', 'Please ensure you have stable network and try again.');
         }
-      })
-      .catch((err) => {
-        Alert.alert('Error', 'Unable to open WhatsApp.');
-      });
+        let Connects = await UpdateConnections();
+        if(!Connects){
+          setLoading(false)
+    
+          return Alert.alert('Error', 'Please ensure you have stable network and try again.');
+        }
+        setLoading(false)
+        if (!seller?.phone) {
+          return Alert.alert('Error', 'Seller phone number is missing.');
+        }
+      
+        let phoneNumber = seller.phone.replace(/\s+/g, '');
+        if (phoneNumber.startsWith('0')) {
+          phoneNumber = phoneNumber.substring(1);
+        }
+      
+        const fullPhoneNumber = `234${phoneNumber}`;
+        const productLink = `https://www.campussphere.net/store/product/${data?.product_id}`;
+        const message = `Hello, I am interested in your product on Campus Sphere. ${productLink}`;
+      
+        const whatsappURL = `whatsapp://send?phone=${fullPhoneNumber}&text=${encodeURIComponent(message)}`;
+        const fallbackURL = `https://wa.me/${fullPhoneNumber}?text=${encodeURIComponent(message)}`;
+      
+        Linking.canOpenURL(whatsappURL)
+        .then((supported) => {
+          if (supported) {
+            Linking.openURL(whatsappURL);
+          } else {
+            Linking.openURL(fallbackURL);
+          }
+        })
+        .catch((err) => {
+          Alert.alert('Error', 'Unable to open WhatsApp.');
+        });
+      } else {
+        showConnectAlert()
+      }
     } else {
       showLogInAlert()
     }
@@ -240,18 +270,29 @@ export default function Product() {
 
   const handlePhoneCall = async() => {
     if (user) {
-      let Analytics = await AddContactClick();
-      if(!Analytics){
-        setLoading(false)
-  
-        return Alert.alert('Error', 'Please ensure you have stable network and try again.');
-      }
-      setLoading(false)
-      if (!seller?.phone) return Alert.alert('Error', 'Seller phone number is missing.');
+      if (user?.connects > 0) {
+        let Analytics = await AddContactClick();
+        if(!Analytics){
+          setLoading(false)
     
-      const callURL = `tel:+234${seller.phone}`;
-      Linking.openURL(callURL);
-    } else {
+          return Alert.alert('Error', 'Please ensure you have stable network and try again.');
+        }
+        let Connects = await UpdateConnections();
+        if(!Connects){
+          setLoading(false)
+    
+          return Alert.alert('Error', 'Please ensure you have stable network and try again.');
+        }
+  
+        setLoading(false)
+        if (!seller?.phone) return Alert.alert('Error', 'Seller phone number is missing.');
+      
+        const callURL = `tel:+234${seller.phone}`;
+        Linking.openURL(callURL);
+      } else {
+        showConnectAlert()
+      }
+    }else {
       showLogInAlert()
     }
   };
@@ -321,7 +362,7 @@ export default function Product() {
             height: '100%', 
             width: '100%',
             position: 'absolute',
-            top: 0,
+            top: 1,
             left: 0,
             zIndex: 1000,
             display: 'flex',
@@ -339,8 +380,21 @@ export default function Product() {
             onPress={() => navigation.goBack()}
           >
             <Ionicons name="arrow-back" size={24} color="#FFF" />
+
           </TouchableOpacity>
         </View>
+
+        <TouchableOpacity style={styles.connectionCnt} onPress={e => {
+          dispatch(set_connect_modal(1))
+        }}>
+          <View style={styles.connection}>
+            <Ionicons name="people-outline" size={24} color="#FFF" />
+            
+            <Text style={{fontSize: 12, color: '#fff', marginHorizontal: 8}}>
+              {user?.connects} vendor connections
+            </Text>
+          </View>
+        </TouchableOpacity>
         
         <Animated.ScrollView
           style={{ opacity: fadeAnim }}
@@ -405,7 +459,7 @@ export default function Product() {
             {isPromoted && (
               <View style={styles.boostBadge}>
                 <Icon name="rocket" size={12} color="#FFF" />
-                <Text style={styles.boostBadgeText}>Sponsored</Text>
+                <Text style={styles.boostBadgeText}>  Boosted</Text>
               </View>
             )} 
           </View>
@@ -574,10 +628,38 @@ const styles = StyleSheet.create({
   },
   header: {
     position: 'absolute',
-    top: Platform.OS === 'ios' ? 50 : 30,
+    top: Platform.OS === 'ios' ? 55 : 35,
     left: 20,
     zIndex: 10,
   },
+  connectionCnt: {
+    position: 'absolute',
+    top: Platform.OS === 'ios' ? 30 : 10,
+    left: 0,
+    right: 0,
+    zIndex: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    display: 'flex',
+   
+  },
+  connection: {
+    backgroundColor: '#FF4500',
+    borderRadius: 8,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    display: 'flex',
+  },
+
   backButton: {
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     borderRadius: 20,
@@ -626,7 +708,7 @@ const styles = StyleSheet.create({
   },
   actionButtons: {
     position: 'absolute',
-    top: 15,
+    top: 32,
     right: 15,
     zIndex: 2,
   },

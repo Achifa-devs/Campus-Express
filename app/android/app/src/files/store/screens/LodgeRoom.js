@@ -22,13 +22,15 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import Video from 'react-native-video';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Btm from '../components/Product/Btm';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { get_saved, save_prod, unsave_prod } from '../utils/Saver';
 import { getData, storeData } from '../../utils/AsyncStore.js';
 import axios from 'axios';
 import { useRoute } from '@react-navigation/native';
 import useLogInAlert from '../utils/LogInAlert.js';
 import { getDeviceId } from '../utils/IdGen.js';
+import { set_connect_modal } from '../../../../../../redux/connect.js';
+import useInsufficientConnectAlert from '../utils/ConnectZero.js';
 
 const AccommodationDetailScreen = ({ route, navigation }) => {
   const { data } = useRoute().params;
@@ -44,6 +46,21 @@ const AccommodationDetailScreen = ({ route, navigation }) => {
 
   let showLogInAlert = useLogInAlert()
   
+  async function UpdateConnections() {
+    setLoading(true)
+    try {
+      let request = await axios.post('https://cs-server-olive.vercel.app/minus-connect', {user_id: user?.user_id})
+      let res = request?.data;
+      
+      if(res.success){
+        dispatch(set_user(res.data))
+        return res.success;
+      }
+    } catch (error) {
+      console.log('error: ', error)
+      Alert.alert('Error', 'Please ensure you have stable network.');
+    }
+  }
 
   const handleSave = async () => {
     if (user) {
@@ -123,6 +140,9 @@ const AccommodationDetailScreen = ({ route, navigation }) => {
       })();
     }
   }, [data, user]);
+    const dispatch = useDispatch()
+    const showConnectAlert = useInsufficientConnectAlert();
+  
   
   useEffect(() => {
     if (data && data.product_id && user?.user_id) {
@@ -153,46 +173,82 @@ const AccommodationDetailScreen = ({ route, navigation }) => {
     }
   }, [data, user]);
 
-  const handleWhatsAppChat = () => {
+  const handleWhatsAppChat = async() => {
     if (user) {
-      if (!seller?.phone) {
-        return Alert.alert('Error', 'Seller phone number is missing.');
-      }
-  
-      let phoneNumber = seller.phone.replace(/\s+/g, '');
-      if (phoneNumber.startsWith('0')) {
-        phoneNumber = phoneNumber.substring(1);
-      }
+      if (user?.connects > 0) {
+        let Analytics = await AddContactClick();
+        if(!Analytics){
+          setLoading(false)
     
-      const fullPhoneNumber = `234${phoneNumber}`;
-      const productLink = `https://www.campussphere.net/store/product/${data?.product_id}`;
-      const message = `Hello, I am interested in your accommodation on Campus Sphere. ${productLink}`;
-    
-      const whatsappURL = `whatsapp://send?phone=${fullPhoneNumber}&text=${encodeURIComponent(message)}`;
-      const fallbackURL = `https://wa.me/${fullPhoneNumber}?text=${encodeURIComponent(message)}`;
-  
-      Linking.canOpenURL(whatsappURL)
-      .then((supported) => {
-        if (supported) {
-          Linking.openURL(whatsappURL);
-        } else {
-          Linking.openURL(fallbackURL);
+          return Alert.alert('Error', 'Please ensure you have stable network and try again.');
         }
-      })
-      .catch((err) => {
-        Alert.alert('Error', 'Unable to open WhatsApp.');
-      });
+        let Connects = await UpdateConnections();
+        if(!Connects){
+          setLoading(false)
+    
+          return Alert.alert('Error', 'Please ensure you have stable network and try again.');
+        }
+        setLoading(false)
+        if (!seller?.phone) {
+          return Alert.alert('Error', 'Seller phone number is missing.');
+        }
+      
+        let phoneNumber = seller.phone.replace(/\s+/g, '');
+        if (phoneNumber.startsWith('0')) {
+          phoneNumber = phoneNumber.substring(1);
+        }
+      
+        const fullPhoneNumber = `234${phoneNumber}`;
+        const productLink = `https://www.campussphere.net/store/product/${data?.product_id}`;
+        const message = `Hello, I am interested in your product on Campus Sphere. ${productLink}`;
+      
+        const whatsappURL = `whatsapp://send?phone=${fullPhoneNumber}&text=${encodeURIComponent(message)}`;
+        const fallbackURL = `https://wa.me/${fullPhoneNumber}?text=${encodeURIComponent(message)}`;
+      
+        Linking.canOpenURL(whatsappURL)
+        .then((supported) => {
+          if (supported) {
+            Linking.openURL(whatsappURL);
+          } else {
+            Linking.openURL(fallbackURL);
+          }
+        })
+        .catch((err) => {
+          Alert.alert('Error', 'Unable to open WhatsApp.');
+        });
+      } else {
+        showConnectAlert()
+      }
     } else {
       showLogInAlert()
     }
   };
 
-  const handlePhoneCall = () => {
+  const handlePhoneCall = async() => {
     if (user) {
-      if (!seller?.phone) return Alert.alert('Error', 'Seller phone number is missing.');
-      const callURL = `tel:+234${seller.phone}`;
-      Linking.openURL(callURL);
-    } else {
+      if (user?.connects > 0) {
+        let Analytics = await AddContactClick();
+        if(!Analytics){
+          setLoading(false)
+    
+          return Alert.alert('Error', 'Please ensure you have stable network and try again.');
+        }
+        let Connects = await UpdateConnections();
+        if(!Connects){
+          setLoading(false)
+    
+          return Alert.alert('Error', 'Please ensure you have stable network and try again.');
+        }
+  
+        setLoading(false)
+        if (!seller?.phone) return Alert.alert('Error', 'Seller phone number is missing.');
+      
+        const callURL = `tel:+234${seller.phone}`;
+        Linking.openURL(callURL);
+      } else {
+        showConnectAlert()
+      }
+    }else {
       showLogInAlert()
     }
   };
@@ -299,6 +355,18 @@ const AccommodationDetailScreen = ({ route, navigation }) => {
           <Ionicons name="arrow-back" size={24} color="#FFF" />
         </TouchableOpacity>
       </View>
+
+      <TouchableOpacity style={styles.connectionCnt} onPress={e => {
+        dispatch(set_connect_modal(1))
+      }}>
+        <View style={styles.connection}>
+          <Ionicons name="people-outline" size={24} color="#FFF" />
+          
+          <Text style={{fontSize: 12, color: '#fff', marginHorizontal: 8}}>
+            {user?.connects} vendor connections
+          </Text>
+        </View>
+      </TouchableOpacity>
       
       <Animated.ScrollView 
         style={{ opacity: fadeAnim }}
@@ -365,7 +433,7 @@ const AccommodationDetailScreen = ({ route, navigation }) => {
           {isPromoted && (
             <View style={styles.boostBadge}>
               <Icon name="rocket" size={12} color="#FFF" />
-              <Text style={styles.boostBadgeText}>Sponsored</Text>
+              <Text style={styles.boostBadgeText}>  Boosted</Text>
             </View>
           )} 
         </View>
@@ -563,7 +631,7 @@ const styles = StyleSheet.create({
   },
   header: {
     position: 'absolute',
-    top: Platform.OS === 'ios' ? 50 : 30,
+    top: Platform.OS === 'ios' ? 55 : 35,
     left: 20,
     zIndex: 10,
   },
@@ -602,6 +670,33 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  connectionCnt: {
+    position: 'absolute',
+    top: Platform.OS === 'ios' ? 30 : 10,
+    left: 0,
+    right: 0,
+    zIndex: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    display: 'flex',
+   
+  },
+  connection: {
+    backgroundColor: '#FF4500',
+    borderRadius: 8,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    display: 'flex',
+  },
   carouselIndicator: {
     position: 'absolute',
     bottom: 15,
@@ -621,7 +716,7 @@ const styles = StyleSheet.create({
   },
   actionButtons: {
     position: 'absolute',
-    top: 15,
+    top: 32,
     right: 15,
     zIndex: 2,
   },

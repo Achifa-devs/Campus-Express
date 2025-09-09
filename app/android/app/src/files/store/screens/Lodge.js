@@ -86,7 +86,7 @@ const LodgeCard = ({ item }) => {
         {isPromoted && (
           <View style={styles.boostBadge}>
             <Icon name="rocket" size={12} color="#FFF" />
-            <Text style={styles.boostBadgeText}>Sponsored</Text>
+            <Text style={styles.boostBadgeText}>  Boosted</Text>
           </View>
         )} 
       </TouchableOpacity>
