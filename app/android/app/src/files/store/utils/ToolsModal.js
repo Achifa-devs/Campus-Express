@@ -32,7 +32,8 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
     "discountPrice": "₦0.00",
     "features": [
       "List up to 2 products",
-      "Access to basic performance metrics (views)"
+      "Access to basic performance metrics (views)",
+      "View and respond to customer reviews to build trust and improve sales."
     ],
     "current": true
   },
@@ -43,8 +44,9 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
     "discountPrice": "₦450.00",
     "features": [
       "List up to 12 products",
-      "Improved visibility in customer searches",
-      "Essential performance insights (impressions, views, and shares)"
+      
+      "Essential performance insights (impressions, views, and shares)",
+      "View and respond to customer reviews to build trust and improve sales."
     ]
   },
   "Standard": {
@@ -54,8 +56,8 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
     "discountPrice": "₦960.00",
     "features": [
       "List up to 25 products",
-      "Enhanced placement in search results",
-      "Detailed analytics (impressions, views, shares, and search performance)"
+      "Detailed analytics (impressions, views, shares, and search performance)",
+      "View and respond to customer reviews to build trust and improve sales."
     ]
   },
   "Pro": {
@@ -67,7 +69,7 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
       "Unlimited product listings",
       "Complete analytics suite (impressions, views, shares, search trends, and conversions)",
       "Sponsored badge for premium trust and recognition",
-      "Priority visibility in search results"
+      "View and respond to customer reviews to build trust and improve sales."
     ]
   }
 };
@@ -301,8 +303,8 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
                 <Text style={styles.infoIconText}>📈</Text>
               </View>
               <View style={styles.infoContent}>
-                <Text style={styles.infoItemTitle}>Boost Your Visibility</Text>
-                <Text style={styles.infoItemText}>Get your products seen by more potential customers</Text>
+                <Text style={styles.infoItemTitle}>Boost sales</Text>
+                <Text style={styles.infoItemText}>Stay informed with customer reviews to improve your offerings.</Text>
               </View>
             </View>
             <View style={styles.infoItem}>

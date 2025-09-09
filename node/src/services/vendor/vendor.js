@@ -18,10 +18,14 @@ import shortId from "short-id"
 export const getVendor = async (payload) => {
   const { user_id } = payload;
 
-  // Business logic
-  const response = await findUserById({ user_id });
-
-  return response;
+  try {
+    // Business logic
+    const response = await findUserById({ user_id });
+  
+    return response;
+  } catch (error) {
+    console.log("error: ", error)
+  }
 };
 
 export const postNewVendor = async (payload) => {

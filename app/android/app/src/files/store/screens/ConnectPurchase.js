@@ -20,6 +20,7 @@ const {
 } = Dimensions.get('window');
 import { usePaystack } from 'react-native-paystack-webview';
 import { set_user } from '../../../../../../redux/user';
+import { set_connect_purchase_modal } from '../../../../../../redux/connect_purchase';
 
 const VendorConnectionsModal = ({ visible, onClose }) => {
   const [selectedPackage, setSelectedPackage] = useState(null);
@@ -137,9 +138,10 @@ const VendorConnectionsModal = ({ visible, onClose }) => {
           [{ text: 'OK', onPress: () => navigation.navigate('Home') }]
         );
         let newUser = { ...user };
-        newUser.connects = user.connects + selectedPackage.connections;
+        newUser.connects = parseInt(user.connects) + parseInt(selectedPackage.connections);
         dispatch(set_user(newUser));
-        navigation.goBack();
+        dispatch(set_connect_purchase_modal(0))
+        // navigation.goBack();
       },
       onCancel: () => {
         // setLoading(false);
