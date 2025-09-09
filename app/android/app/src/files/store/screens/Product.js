@@ -441,7 +441,7 @@ export default function Product() {
             {/* Seller Info */}
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Seller Information</Text>
-              <Btm user_id={data?.user_id} updateUser={updateUser} updateShop={updateShop} updateReview={updateReview} navigation={navigation} />
+              <Btm user_id={data?.user_id} updateUser={updateUser} updateShop={updateShop} updateReview={updateReview} product_id={data?.product_id} navigation={navigation} />
             </View>
 
             {/* Safety Tips */} 

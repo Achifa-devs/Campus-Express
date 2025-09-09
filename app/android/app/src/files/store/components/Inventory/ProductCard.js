@@ -1,6 +1,6 @@
 // components/ProductCard.js
 import js_ago from 'js-ago';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { debounce } from 'lodash';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import { set_boost_modal } from '../../../../../../../redux/boost_modal';
 
@@ -20,9 +20,18 @@ const { width } = Dimensions.get('window');
 
 const ProductCard = ({ item, onShare, state='private', onDelete, onStatusChange, onPromote }) => {
   const navigation = useNavigation();
-  
-  const isPromoted = eval(item.promotion) ;
+  const route = useRoute();
+  const [exploreshop, setExploreShop] = useState(false);
+  const isPromoted = eval(item.promotion)
 
+  useEffect(() => {
+    console.log(route.name)
+    if (route.name === "user-explore-shop") {
+      setExploreShop(true);
+    } else {
+      setExploreShop(false);
+    }
+  }, [route.name]);
   // const handleNavigation = useCallback(
   //   debounce((item) => {
   //     navigation.navigate('user-product', { data: item });
@@ -40,34 +49,42 @@ const ProductCard = ({ item, onShare, state='private', onDelete, onStatusChange,
   );
 
   const handlePromotePress = (data) => {
-    if(!isPromoted){
-      console.log("data: ", data)
-      dispatch(set_boost_modal({data: data, visible: 1}))
+    if (!exploreshop) {
+      if(!isPromoted){
+        dispatch(set_boost_modal({data: data, visible: 1}))
+      }
+    }else{
+      navigation.navigate('user-product', { data: item });
     }
   };
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={e => {
+      if(exploreshop){
+        navigation.navigate('user-product', {data: item})
+      }
+    }}>
       {/* Thumbnail - Clickable for navigation */}
       <TouchableOpacity onPress={e => handlePromotePress(item)}>
         <Image source={{ uri: item.thumbnail_id }} style={styles.thumbnail} />
         
         {/* Boost Badge - Overlay on thumbnail */}
-        {isPromoted ? (
-          <View style={styles.boostBadge}>
-            <Icon name="rocket" size={12} color="#FFF" />
-            <Text style={styles.boostBadgeText}>Promoted</Text>
-          </View>
-        ) : (
-          <TouchableOpacity 
-            style={styles.promoteButton} 
-            onPress={e => handlePromotePress(item)}
-            activeOpacity={0.7}
-          >
-            <Icon name="rocket-outline" size={12} color="#FFF" />
-            <Text style={styles.promoteButtonText}>Promote now</Text>
-          </TouchableOpacity>
-        )}
+        {!exploreshop ?
+          isPromoted ? (
+            <View style={styles.boostBadge}>
+              <Icon name="rocket" size={12} color="#FFF" />
+              <Text style={styles.boostBadgeText}>Promoted</Text>
+            </View>
+          ) : (
+            <TouchableOpacity 
+              style={styles.promoteButton} 
+              onPress={e => handlePromotePress(item)}
+              activeOpacity={0.7}
+            >
+              <Icon name="rocket-outline" size={12} color="#FFF" />
+              <Text style={styles.promoteButtonText}>Promote now</Text>
+            </TouchableOpacity>
+          ): ''}
       </TouchableOpacity>
       
       {/* Content */}
@@ -119,7 +136,7 @@ const ProductCard = ({ item, onShare, state='private', onDelete, onStatusChange,
           </View>}
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

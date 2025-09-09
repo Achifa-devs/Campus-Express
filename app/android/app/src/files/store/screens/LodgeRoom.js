@@ -432,7 +432,7 @@ const AccommodationDetailScreen = ({ route, navigation }) => {
           {/* Seller Info */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Contact Information</Text>
-            <Btm user_id={data?.user_id} updateUser={updateUser} updateShop={updateShop} updateReview={updateReview} navigation={navigation} />
+            <Btm user_id={data?.user_id} updateUser={updateUser} product_id={data?.product_id} updateShop={updateShop} updateReview={updateReview} navigation={navigation} />
           </View>
 
           {/* Safety Tips */} 

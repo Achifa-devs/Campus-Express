@@ -373,7 +373,7 @@ const ServiceDetailScreen = ({ route }) => {
                     {/* Seller Info */}
                     <View style={styles.section}>
                         <Text style={styles.sectionTitle}>Service Provider Information</Text>
-                        <Btm user_id={data?.user_id} updateUser={updateUser} updateShop={updateShop} updateReview={updateReview} navigation={navigation} />
+                        <Btm user_id={data?.user_id} product_id={data?.product_id} updateUser={updateUser} updateShop={updateShop} updateReview={updateReview} navigation={navigation} />
                     </View>
             
                     {/* Safety Tips */} 

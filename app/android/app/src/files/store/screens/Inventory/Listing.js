@@ -30,55 +30,55 @@ const Listing = () => {
   };
 
   const renderServiceItem = ({ item }) => {
-  const isPromoted = eval(item.promotion);
-  
-  const handlePromotePress = (data) => {
-    if(!isPromoted){
-      console.log("data: ", data)
-      dispatch(set_boost_modal({data: data, visible: 1}))
-    }
-  };
-  
+    const isPromoted = eval(item.promotion);
+    
+    const handlePromotePress = (data) => {
+      if(!isPromoted){
+        console.log("data: ", data)
+        dispatch(set_boost_modal({data: data, visible: 1}))
+      }
+    };
+    
 
-  return (
-    <TouchableOpacity
-      style={styles.serviceCard}
-      
-    >
-      <TouchableOpacity style={styles.imageContainer} onPress={e => handlePromotePress(item)}>
-        <Image 
-          source={{ uri: getCategoryImage(item.category) || item.image }} 
-          style={styles.serviceImage} 
-        />
+    return (
+      <TouchableOpacity
+        style={styles.serviceCard}
+        // user-service-room
+      >
+        <TouchableOpacity style={styles.imageContainer} onPress={e => handlePromotePress(item)}>
+          <Image 
+            source={{ uri: getCategoryImage(item.category) || item.image }} 
+            style={styles.serviceImage} 
+          />
+          
+          {/* Boost Badge/Promote Button - Overlay on image */}
+          {isPromoted ? (
+            <View style={styles.boostBadge}>
+              <Icon name="rocket" size={12} color="#FFF" />
+              <Text style={styles.boostBadgeText}>Promoted</Text>
+            </View>
+          ) : (
+            <TouchableOpacity 
+              style={styles.promoteButton} 
+              onPress={e => handlePromotePress(item)}
+              activeOpacity={0.7}
+            >
+              <Icon name="rocket-outline" size={12} color="#FFF" />
+              <Text style={styles.promoteButtonText}>Promote now</Text>
+            </TouchableOpacity>
+          )}
+        </TouchableOpacity>
         
-        {/* Boost Badge/Promote Button - Overlay on image */}
-        {isPromoted ? (
-          <View style={styles.boostBadge}>
-            <Icon name="rocket" size={12} color="#FFF" />
-            <Text style={styles.boostBadgeText}>Promoted</Text>
+        <View style={styles.serviceInfo}>
+          <Text style={styles.serviceName} numberOfLines={1}>{item.title}</Text>
+          <View style={styles.serviceMeta}>
+            <Text style={styles.serviceCategory}>{item.category} - <Text style={{fontWeight: 'bold'}}>{item?.others?.gender}</Text></Text>
+            <Text style={styles.serviceStats}>{item?.views} {parseInt(item?.views)>1?'views':'view'} • {js_ago(new Date(item?.date))}</Text>
           </View>
-        ) : (
-          <TouchableOpacity 
-            style={styles.promoteButton} 
-            onPress={e => handlePromotePress(item)}
-            activeOpacity={0.7}
-          >
-            <Icon name="rocket-outline" size={12} color="#FFF" />
-            <Text style={styles.promoteButtonText}>Promote now</Text>
-          </TouchableOpacity>
-        )}
-      </TouchableOpacity>
-      
-      <View style={styles.serviceInfo}>
-        <Text style={styles.serviceName} numberOfLines={1}>{item.title}</Text>
-        <View style={styles.serviceMeta}>
-          <Text style={styles.serviceCategory}>{item.category} - <Text style={{fontWeight: 'bold'}}>{item?.others?.gender}</Text></Text>
-          <Text style={styles.serviceStats}>{item?.views} {parseInt(item?.views)>1?'views':'view'} • {js_ago(new Date(item?.date))}</Text>
         </View>
-      </View>
-    </TouchableOpacity>
-  );
-};
+      </TouchableOpacity>
+    );
+  };
 
   const renderItem = ({ item }) => {
     if (item.purpose === 'product') {

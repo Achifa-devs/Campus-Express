@@ -1,6 +1,6 @@
 // components/LodgeCard.js
 import js_ago from 'js-ago';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -11,7 +11,7 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import Video from 'react-native-video';
 import { debounce } from 'lodash';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import { set_boost_modal } from '../../../../../../../redux/boost_modal';
 
@@ -19,12 +19,23 @@ const { width } = Dimensions.get('window');
 
 const LodgeCard = ({ item, onShare, state='private', onDelete, onPromote }) => {
     const navigation = useNavigation();
+    const route = useRoute();
     
-    const isPromoted = eval(item.promotion);
+    const [exploreshop, setExploreShop] = useState(false);
+      const isPromoted = eval(item.promotion)
+    
+      useEffect(() => {
+        console.log(route.name)
+        if (route.name === "user-explore-shop") {
+          setExploreShop(true);
+        } else {
+          setExploreShop(false);
+        }
+      }, [route.name]);
 
     const handleNavigation = useCallback(
         debounce((item) => {
-          navigation.navigate('user-product', { data: item });
+          navigation.navigate('user-lodge-room', { data: item });
         }, 300, { leading: true, trailing: false }),
         [navigation]
     );
@@ -32,13 +43,21 @@ const LodgeCard = ({ item, onShare, state='private', onDelete, onPromote }) => {
     const dispatch = useDispatch();
 
     const handlePromotePress = (data) => {
-      if(!isPromoted){
-        dispatch(set_boost_modal({data: data, visible: 1}))
+      if (!exploreshop) {
+        if(!isPromoted){
+          dispatch(set_boost_modal({data: data, visible: 1}))
+        }
+      } else{
+        navigation.navigate('user-lodge-room', { data: item });
       }
     };
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={e => {
+      if(exploreshop){
+        navigation.navigate('user-lodge-room', { data: item });
+      }
+    }}>
       {/* Video Thumbnail - Takes 70% of card */}
       <TouchableOpacity onPress={e => handlePromotePress(item)}>
         <View style={styles.videoContainer}>
@@ -58,10 +77,11 @@ const LodgeCard = ({ item, onShare, state='private', onDelete, onPromote }) => {
           </View>
 
           {/* Boost Badge/Promote Button - Overlay on video */}
-          {isPromoted ? (
-            <View style={styles.boostBadge}>
-              <Icon name="rocket" size={12} color="#FFF" />
-              <Text style={styles.boostBadgeText}>Promoted</Text>
+          {!exploreshop ?
+                    isPromoted ? (
+                      <View style={styles.boostBadge}>
+                        <Icon name="rocket" size={12} color="#FFF" />
+                        <Text style={styles.boostBadgeText}>Promoted</Text>
             </View>
           ) : (
             <TouchableOpacity 
@@ -72,7 +92,7 @@ const LodgeCard = ({ item, onShare, state='private', onDelete, onPromote }) => {
               <Icon name="rocket-outline" size={12} color="#FFF" />
               <Text style={styles.promoteButtonText}>Promote now</Text>
             </TouchableOpacity>
-          )}
+          ): ''}
         </View>
       </TouchableOpacity>
 
@@ -129,7 +149,7 @@ const LodgeCard = ({ item, onShare, state='private', onDelete, onPromote }) => {
           </TouchableOpacity>
         </View>}
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

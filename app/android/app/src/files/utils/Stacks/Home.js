@@ -6,7 +6,6 @@ import Notification from "../../store/screens/Notification";
 import Product from "../../store/screens/Product";
 import TypeProducts from "../../store/screens/Products";
 import Search from "../../store/screens/Search";
-import Shops from "../../store/screens/Shops";
 import Type from "../../store/screens/Type";
 import ShopDetails from "../../store/screens/Drawer/Shop/Details";
 import ShopContact from "../../store/screens/Drawer/Shop/Contact";
@@ -185,6 +184,7 @@ export function HomeStackScreen() {
             ),
             
         }}   name="user-explore-shop" component={Shop} />
+
         <HomeStack.Screen  options={{
                 header: ({navigation}) =>
                 (
@@ -352,16 +352,6 @@ export function HomeStackScreen() {
             ), 
             // headerShown: false, 
         }}  name="user-notification" component={NotificationScreen} /> 
-
-        <HomeStack.Screen  options={{
-            header: ({navigation}) =>
-            (
-                <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px'}}>
-
-                </View>
-            ), 
-            // headerShown: false,  
-        }} name="user-shops" component={Shops} />
           
         <HomeStack.Screen  options={{
             header: ({navigation}) =>

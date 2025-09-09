@@ -9,7 +9,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import useLogInAlert from '../../utils/LogInAlert';
 import { useSelector } from 'react-redux';
 
-export default function Btm({ updateUser, user_id, navigation, updateReview, updateShop }) {
+export default function Btm({ updateUser, user_id, navigation, product_id, updateReview, updateShop }) {
     let [data, setData] = useState('')
     let [reviews, setReviews] = useState(null)
     let [shop, setShop] = useState('')
@@ -29,8 +29,10 @@ export default function Btm({ updateUser, user_id, navigation, updateReview, upd
         })
         .then(async (result) => {
             let response = await result.json();
-            console.log("response: ", response)
-            setReviews(response?.data);
+            const data = response?.data.filter((item) => (item?.product_id === product_id));
+            console.log("response: ", data)
+
+            setReviews(data);
         })
         .catch((err) => {
             Alert.alert('Network error, please try again.');

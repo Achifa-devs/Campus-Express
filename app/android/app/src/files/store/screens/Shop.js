@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import { Alert, Image, StyleSheet, TouchableOpacity, View, Dimensions, FlatList } from 'react-native'
+import { Alert, Image, StyleSheet, TouchableOpacity, View, Dimensions, FlatList, ScrollView } from 'react-native'
 import { Text } from 'react-native'
 import Ionicons  from 'react-native-vector-icons/Ionicons';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -7,10 +7,15 @@ import LinearGradient from 'react-native-linear-gradient';
 import ProductCard from '../components/Inventory/ProductCard';
 import LodgeCard from '../components/Inventory/LodgeCard';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
-
-export default function Shop() {
-    let navigation = useNavigation()
+import { useDispatch, useSelector } from 'react-redux';
+import categoriesData from '../../../../../../services.json'
+import Icon from 'react-native-vector-icons/Ionicons';
+import js_ago from 'js-ago';
+import NavigationTabs from '../components/Home/Ads';
+ 
+export default function Shop() { 
+    let navigation = useNavigation();
+    const { option } = useSelector(s => s?.option);
     const {
         shop, reviews: review, user, user_id
     } = useRoute()?.params
@@ -40,7 +45,7 @@ export default function Shop() {
    
   return (
     <> 
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             {/* Header Banner */}
             <LinearGradient
                 colors={['#FF4500', '#FF7F50']}
@@ -88,17 +93,87 @@ export default function Shop() {
                     <Text style={styles.descriptionText}>{shop?.description}</Text>
                 </View>
             )} 
+            <NavigationTabs />
             <ShopAds user_id={user_id}/>
             
-        </View>
+        </ScrollView>
     </>
   )
 }
 
+const renderServiceItem = ({ item, handlePromotePress, exploreshop, navigation}) => {
+    const isPromoted = eval(item.promotion);
 
+    return (
+      <TouchableOpacity onPress={e => {
+        if(exploreshop){
+            navigation.navigate('user-service-room', {data: item})
+        }
+      }}
+        style={styles.serviceCard}
+        
+      >
+        <TouchableOpacity style={styles.imageContainer} onPress={e => handlePromotePress(item)}>
+          <Image 
+            source={{ uri: getCategoryImage(item.category) || item.image }} 
+            style={styles.serviceImage} 
+          />
+          
+          {/* Boost Badge/Promote Button - Overlay on image */}
+          {isPromoted ? (
+            <View style={styles.boostBadge}>
+              <Icon name="rocket" size={12} color="#FFF" />
+              <Text style={styles.boostBadgeText}>Promoted</Text>
+            </View>
+          ) : (
+            <TouchableOpacity 
+              style={styles.promoteButton} 
+              onPress={e => handlePromotePress(item)}
+              activeOpacity={0.7}
+            >
+              <Icon name="rocket-outline" size={12} color="#FFF" />
+              <Text style={styles.promoteButtonText}>Promote now</Text>
+            </TouchableOpacity>
+          )}
+        </TouchableOpacity>
+        
+        <View style={styles.serviceInfo}>
+          <Text style={styles.serviceName} numberOfLines={1}>{item.title}</Text>
+          <View style={styles.serviceMeta}>
+            <Text style={styles.serviceCategory}>{item.category} - <Text style={{fontWeight: 'bold'}}>{item?.others?.gender}</Text></Text>
+            <Text style={styles.serviceStats}>{item?.views} {parseInt(item?.views)>1?'views':'view'} • {js_ago(new Date(item?.date))}</Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+};
 function ShopAds({user_id}) {
 
+    const route = useRoute();
+    const dispatch = useDispatch()
+    const navigation = useNavigation();
+    
+    const [exploreshop, setExploreShop] = useState(false);
+
+    useEffect(() => {
+        if (route.name === "user-explore-shop") {
+            setExploreShop(true);
+        } else {
+            setExploreShop(false);
+        }
+    }, [route.name]);
+    const handlePromotePress = (data) => {
+        if (!exploreshop) {
+            if(!isPromoted){
+                dispatch(set_boost_modal({data: data, visible: 1}))
+            }
+        }else{
+            navigation.navigate('user-service-room', { data: data });
+        }
+    };
+
     const [userAds, setUserAds] = useState([]);
+    const { option } = useSelector(s => s?.option);
   
     // Initial load
     useEffect(() => {
@@ -119,26 +194,12 @@ function ShopAds({user_id}) {
         }
     }, [user_id]); 
 
-    const handleShare = (item) => {
-        console.log('Share:', item);
-    };
-
-    const handleDelete = (item) => {
-        console.log('Delete:', item);
-    };
-
-    const handleStatusChange = (item) => {
-        console.log('Change status:', item);
-    };
     const renderItem = ({ item }) => {
         if (item.purpose === 'product') {
           return (
             <ProductCard
                 state={'public'}
                 item={item}
-                onShare={() => handleShare(item)}
-                onDelete={() => handleDelete(item)}
-                onStatusChange={() => handleStatusChange(item)}
             />
           );
         } else if (item.purpose === 'accomodation') {
@@ -146,16 +207,14 @@ function ShopAds({user_id}) {
             <LodgeCard
                 state={'public'}
                 item={item}
-                onShare={() => handleShare(item)}
-                onDelete={() => handleDelete(item)}
-                onStatusChange={() => handleStatusChange(item)}
             />
           );
+        }else{
+            return renderServiceItem({ item, handlePromotePress, navigation, exploreshop });
         }
-        return null;
-      };
+    };
     
-      return (
+    return (
         <View style={{ flex: 1, padding: 5 }}>
 
             <View style={styles.bar} accessibilityRole="summary">
@@ -163,16 +222,106 @@ function ShopAds({user_id}) {
             </View>
                 
             <FlatList
-                data={userAds}
+                data={
+                    option === 'Products'
+                    ?userAds.filter(item => item.purpose === 'product')
+                    :option === 'Lodges'
+                    ?userAds.filter(item => item.purpose === 'accomodation')
+                    :userAds.filter(item => item.purpose === 'service')
+                }
                 renderItem={renderItem}
                 keyExtractor={item => item.id}
                 showsVerticalScrollIndicator={false}
             />
         </View>
-      );
+    );
 }
 
+
+const getCategoryImage = (categoryName) => {
+    for (let cat of categoriesData.items.category) {
+      const keys = Object.keys(cat).filter(k => k !== "img");
+      for (let key of keys) {
+        if (key === categoryName) {
+          return cat.img;
+        }
+      }
+    }
+    return null; // fallback
+};
 const styles = StyleSheet.create({
+    serviceCard: {
+        backgroundColor: '#FFF',
+        borderRadius: 8,
+        marginBottom: 12,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3,
+        overflow: 'hidden',
+        position: 'relative',
+    },
+    imageContainer: {
+        position: 'relative',
+        height: 120,
+    },
+    serviceImage: {
+        width: '100%',
+        height: '100%',
+        resizeMode: 'cover',
+    },
+    serviceInfo: {
+        padding: 12,
+    },
+    serviceName: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#1A1A1A',
+        marginBottom: 4,
+    },
+    serviceMeta: {
+        // Your existing styles
+    },
+    serviceCategory: {
+        fontSize: 14,
+        color: '#666',
+        marginBottom: 4,
+    },
+    serviceStats: {
+        fontSize: 12,
+        color: '#999',
+    },
+    serviceCard: {
+        flexDirection: 'row',
+        marginBottom: 5,
+        backgroundColor: '#fff',
+        borderRadius: 4,
+        overflow: 'hidden',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.1,
+        shadowRadius: 3,
+        elevation: 2,
+    },
+    serviceImage: {
+        width: 100,
+        height: '100%',
+    },
+    serviceInfo: {
+        flex: 1,
+        padding: 12,
+        justifyContent: 'space-between',
+    },
+    serviceName: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#000',
+        marginBottom: 8,
+    },
+    serviceMeta: {
+        justifyContent: 'space-between',
+    },
     container: {
         flex: 1,
         backgroundColor: '#F8F9FA',
