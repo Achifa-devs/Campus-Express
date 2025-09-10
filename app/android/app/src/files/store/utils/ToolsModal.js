@@ -9,251 +9,257 @@ import {
   Modal,
   Pressable,
   Alert,
+  Platform,
 } from 'react-native';
 import { usePaystack } from 'react-native-paystack-webview';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { set_shop } from '../../../../../../redux/shop';
+import LinearGradient from 'react-native-linear-gradient';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useNavigation } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 
 const VendorSubscriptionsModal = ({ visible, onClose }) => {
-  const [selectedPlan, setSelectedPlan] = useState("Free"); // Default to Free plan
+  const [selectedPlan, setSelectedPlan] = useState('Free');
   const [confirmModalVisible, setConfirmModalVisible] = useState(false);
   const [planToSubscribe, setPlanToSubscribe] = useState(null);
-  const [subscriptionExpiry, setSubscriptionExpiry] = useState(new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)); // 30 days from now
-  const { user } = useSelector(s => s?.user);
-  const { shop } = useSelector(s => s?.shop);
+  const [subscriptionExpiry, setSubscriptionExpiry] = useState(
+    new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+  );
+
+  const { user } = useSelector((s) => s?.user);
+  const { shop } = useSelector((s) => s?.shop);
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
 
   const subscriptionPlans = {
-  "Free": {
-    "name": "free",
-    "description": "A starter plan with essential features to begin selling.",
-    "price": "₦0.00",
-    "discountPrice": "₦0.00",
-    "features": [
-      "List up to 2 products",
-      "Access to basic performance metrics (views)",
-      "View and respond to customer reviews to build trust and improve sales."
-    ],
-    "current": true
-  },
-  "Basic": {
-    "name": "basic",
-    "description": "Perfect for new vendors looking to establish their presence with core selling tools and increased visibility.",
-    "price": "₦500.00",
-    "discountPrice": "₦450.00",
-    "features": [
-      "List up to 12 products",
-      
-      "Essential performance insights (impressions, views, and shares)",
-      "View and respond to customer reviews to build trust and improve sales."
-    ]
-  },
-  "Standard": {
-    "name": "standard",
-    "description": "Tailored for growing vendors who want broader reach and actionable insights for better performance.",
-    "price": "₦1,200.00",
-    "discountPrice": "₦960.00",
-    "features": [
-      "List up to 25 products",
-      "Detailed analytics (impressions, views, shares, and search performance)",
-      "View and respond to customer reviews to build trust and improve sales."
-    ]
-  },
-  "Pro": {
-    "name": "pro",
-    "description": "The ultimate plan for professional vendors seeking maximum reach, credibility, and advanced selling tools.",
-    "price": "₦2,500.00",
-    "discountPrice": "₦1,750.00",
-    "features": [
-      "Unlimited product listings",
-      "Complete analytics suite (impressions, views, shares, search trends, and conversions)",
-      "Sponsored badge for premium trust and recognition",
-      "View and respond to customer reviews to build trust and improve sales."
-    ]
-  }
-};
-
+    Free: {
+      name: 'free',
+      description:
+        'A starter plan with essential tools to begin selling and engage with customers.',
+      price: '₦0.00',
+      discountPrice: '₦0.00',
+      features: [
+        'List up to 2 products',
+        'Basic performance insights (views only)',
+        'View and respond to customer reviews to build trust and improve sales',
+      ],
+      current: true,
+      icon: '🚀',
+    },
+    Pro: {
+      name: 'pro',
+      description:
+        'A complete package for serious vendors who want advanced visibility, analytics, and credibility to maximize sales.',
+      price: '₦3,000.00',
+      discountPrice: '₦2,500.00',
+      features: [
+        'Unlimited product listings',
+        'Full analytics suite (impressions, views, shares, search appearances, and conversions)',
+        'Sponsored badge for premium trust and recognition',
+        'View and respond to customer reviews to build trust and improve sales',
+      ],
+      icon: '⭐',
+    },
+  };
 
   const handleSubscribe = (plan) => {
-    const res = Object.entries(subscriptionPlans).find(item => item[0] === plan)
-    console.log(res)
-    if (plan === "Free") {
-      setSelectedPlan("Free");
+    if (plan === 'Free') {
+      setSelectedPlan('Free');
+      Alert.alert('Selected', 'You have selected the Free plan.');
       return;
     }
+
+    // show confirm modal for paid plan
     setPlanToSubscribe(plan);
-    payNow(res[1])
-    // setConfirmModalVisible(true);
+    setConfirmModalVisible(true);
   };
 
   const { popup } = usePaystack();
+
   const payNow = (selectedPackage) => {
-        
+    if (!user) {
+      Alert.alert('Login required', 'Please sign in to continue with payment.');
+      return;
+    }
+
     const start_date = new Date();
     const end_date = new Date();
     end_date.setMonth(end_date.getMonth() + 1);
 
-    const reference = `REF-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
-    // setLoading(true);
+    const reference = `REF-${Date.now()}-${Math.random()
+      .toString(36)
+      .substring(2, 8)
+      .toUpperCase()}`;
+
+    // parse price safely (remove currency symbol and all commas)
+    const raw = String(selectedPackage?.discountPrice || selectedPackage?.price || '0');
+    const amountFloat = parseFloat(raw.replace(/[₦,]/g, '').trim()) || 0;
+
+    // Paystack expects amount in kobo (if using NGN), convert to integer kobo
+    // if your Paystack integration expects naira units, adjust accordingly.
+    const amountKobo = Math.round(amountFloat * 100);
+
     popup.newTransaction({
       email: user?.email,
-      amount: parseFloat(selectedPackage?.discountPrice.replace('₦', '').replace(',', '')),
-      reference: reference,
+      amount: amountKobo, // in kobo
+      reference,
       metadata: {
         user_id: user.user_id,
         type: 'tools',
         plan: selectedPackage.name,
         start_date,
-        end_date
+        end_date,
       },
-      
       onSuccess: (res) => {
-        // setLoading(false);
-        Alert.alert(
-          'Payment Successful!',
-          `Your subscription was successful.`,
-          [{ text: 'OK', onPress: () => navigation.navigate('Home') }]
-        );
-        let newShop = { ...shop };
-        newShop.tools = selectedPackage.name;
-        dispatch(set_shop(newShop));
-        navigation.goBack();
+        Alert.alert('Payment Successful!', `Your subscription was successful.`, [
+          {
+            text: 'OK',
+            onPress: () => {
+              // Update shop locally
+              const newShop = { ...shop, tools: selectedPackage.name };
+              dispatch(set_shop(newShop));
+              setSelectedPlan(selectedPackage.name.charAt(0).toUpperCase() + selectedPackage.name.slice(1));
+              setSubscriptionExpiry(end_date);
+              setConfirmModalVisible(false);
+              setPlanToSubscribe(null);
+              navigation.navigate('Home');
+            },
+          },
+        ]);
       },
       onCancel: () => {
-        // setLoading(false);
         Alert.alert('Payment Cancelled', 'Your payment was cancelled.');
       },
       onError: (err) => {
-        // setLoading(false);
-        Alert.alert('Payment Error', 'There was an error processing your payment.');
         console.log('Payment Error:', err);
-      }
+        Alert.alert('Payment Error', 'There was an error processing your payment.');
+      },
     });
   };
 
   const completeSubscription = () => {
-    // In a real app, this would integrate with your payment processing
-    console.log(`Subscribed to ${planToSubscribe} plan`);
-    setSelectedPlan(planToSubscribe);
-    
-    // Set expiry date to 30 days from now
-    setSubscriptionExpiry(new Date(Date.now() + 30 * 24 * 60 * 60 * 1000));
-    
-    setConfirmModalVisible(false);
-    setPlanToSubscribe(null);
+    // Proceed to payment for the selected plan
+    const pkg = subscriptionPlans[planToSubscribe];
+    if (!pkg) {
+      Alert.alert('Invalid Plan', 'Selected plan is not available.');
+      setConfirmModalVisible(false);
+      return;
+    }
+    payNow(pkg);
   };
 
   const calculateDiscountPercentage = (price, discountPrice) => {
-    const priceNum = parseFloat(price.replace('₦', '').replace(',', ''));
-    const discountNum = parseFloat(discountPrice.replace('₦', '').replace(',', ''));
-    
-    // Don't calculate for free plan
+    const priceNum = parseFloat(String(price).replace(/[₦,]/g, '').trim()) || 0;
+    const discountNum = parseFloat(String(discountPrice).replace(/[₦,]/g, '').trim()) || 0;
+
     if (priceNum === 0) return 0;
-    
+
     const discountPercent = Math.round(((priceNum - discountNum) / priceNum) * 100);
     return discountPercent;
   };
 
   const formatDate = (date) => {
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
+    if (!date) return '-';
+    return new Date(date).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
     });
   };
 
   const daysUntilExpiry = () => {
     const today = new Date();
-    const expiry = new Date(subscriptionExpiry);
+    const expiry = new Date(subscriptionExpiry || Date.now());
     const diffTime = expiry - today;
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     return diffDays;
   };
 
   return (
-    <Modal
-      animationType="slide"
-      transparent={false}
-      visible={visible}
-      onRequestClose={onClose}
-    >
+    <Modal animationType="slide" transparent={false} visible={visible} onRequestClose={onClose}>
       <View style={styles.modalContainer}>
-        <View style={styles.modalHeader}>
+        <View style={styles.modalHeader}> 
           <Text style={styles.modalTitle}>Vendor Subscription Plans</Text>
-          <Pressable onPress={onClose} style={styles.closeButton}>
-            <Text style={styles.closeButtonText}>×</Text>
+          <Pressable onPress={onClose} style={styles.closeButton} accessibilityLabel="Close">
+            <Ionicons name="close" size={22} color="#000" />
           </Pressable>
         </View>
 
         <ScrollView contentContainerStyle={styles.scrollContent}>
           {/* Current Plan Dashboard */}
           <View style={styles.dashboard}>
-            <Text style={styles.dashboardTitle}>Your Current Plan</Text>
+            <View style={styles.dashboardHeader}>
+              <Ionicons name="person-circle" size={26} color="#FF4500" />
+              <Text style={styles.dashboardTitle}>Your Current Plan</Text>
+            </View>
             <View style={styles.planInfo}>
               <View style={styles.planInfoLeft}>
                 <Text style={styles.currentPlanName}>{selectedPlan}</Text>
                 <Text style={styles.currentPlanPrice}>
-                  {selectedPlan === "Free" ? "Free Forever" : `${subscriptionPlans[selectedPlan].discountPrice}/month`}
+                  {selectedPlan === 'Free' ? 'Free Forever' : `${subscriptionPlans[selectedPlan]?.discountPrice}/month`}
                 </Text>
               </View>
               <View style={styles.planInfoRight}>
-                <Text style={styles.expiryText}>
-                  Expires: {formatDate(subscriptionExpiry)}
-                </Text>
-                <View style={[
-                  styles.expiryBadge, 
-                  daysUntilExpiry() <= 7 ? styles.expirySoon : styles.expiryOk
-                ]}>
-                  <Text style={styles.expiryBadgeText}>
-                    {daysUntilExpiry() <= 0 ? "Expired" : `${daysUntilExpiry()} days left`}
-                  </Text>
+                <Text style={styles.expiryText}>Expires: {formatDate(subscriptionExpiry)}</Text>
+                <View style={[styles.expiryBadge, daysUntilExpiry() <= 7 ? styles.expirySoon : styles.expiryOk]}>
+                  <Text style={styles.expiryBadgeText}>{daysUntilExpiry() <= 0 ? 'Expired' : `${daysUntilExpiry()} days left`}</Text>
                 </View>
               </View>
             </View>
           </View>
 
           <View style={styles.header}>
-            <Text style={styles.subtitle}>
-              Upgrade your vendor account with powerful tools to grow your business
-            </Text>
+            <Text style={styles.subtitle}>Upgrade your vendor account with powerful tools to grow your business</Text>
           </View>
 
-          <View style={styles.plansContainer}>
+          {/* Horizontal Plans */}
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.horizontalPlansContainer}
+            decelerationRate="fast"
+            snapToInterval={width * 0.85 + 20}
+            snapToAlignment="center"
+          >
             {Object.entries(subscriptionPlans).map(([planName, planDetails], index) => {
               const discountPercent = calculateDiscountPercentage(planDetails.price, planDetails.discountPrice);
-              const isCurrentPlan = selectedPlan === planName;
-              
+              const isCurrentPlan = selectedPlan?.toLowerCase() === planDetails.name;
+
               return (
-                <View 
-                  key={planName} 
+                <View
+                  key={planName}
                   style={[
                     styles.planCard,
                     isCurrentPlan && styles.currentPlanCard,
-                    index === 2 && styles.featuredPlan // Highlight the Standard plan now
+                    index === 1 && styles.featuredPlan,
+                    { width: width * 0.85, marginRight: 16 },
                   ]}
                 >
-                  {index === 2 && (
-                    <View style={styles.popularBadge}>
+                  {index === 1 && (
+                    <LinearGradient colors={['#FF4500', '#FF6347']} style={styles.popularBadge}>
+                      <Ionicons name="star" size={12} color="white" />
                       <Text style={styles.popularBadgeText}>MOST POPULAR</Text>
-                    </View>
+                    </LinearGradient>
                   )}
-                  
+
                   {isCurrentPlan && (
                     <View style={styles.currentBadge}>
+                      <Ionicons name="checkmark-circle" size={14} color="white" />
                       <Text style={styles.currentBadgeText}>CURRENT PLAN</Text>
                     </View>
                   )}
-                  
+
+                  <View style={styles.planIconContainer}>
+                    <Text style={styles.planIcon}>{planDetails.icon}</Text>
+                  </View>
+
                   <View style={styles.planHeader}>
                     <Text style={styles.planName}>{planName}</Text>
                     <View style={styles.priceContainer}>
-                      {planName !== "Free" && (
-                        <Text style={styles.originalPrice}>{planDetails.price}</Text>
-                      )}
-                      <Text style={styles.discountPrice}>
-                        {planName === "Free" ? "Free Forever" : `${planDetails.discountPrice}/month`}
-                      </Text>
+                      {planName !== 'Free' && <Text style={styles.originalPrice}>{planDetails.price}</Text>}
+                      <Text style={styles.discountPrice}>{planName === 'Free' ? 'Free Forever' : `${planDetails.discountPrice}/month`}</Text>
                       {discountPercent > 0 && (
                         <View style={styles.discountBadge}>
                           <Text style={styles.discountText}>Save {discountPercent}%</Text>
@@ -261,100 +267,91 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
                       )}
                     </View>
                   </View>
-                  
+
                   <Text style={styles.planDescription}>{planDetails.description}</Text>
-                  
+
                   <View style={styles.featuresContainer}>
-                    <Text style={styles.featuresTitle}>Features:</Text>
+                    <Text style={styles.featuresTitle}>What's included</Text>
                     {planDetails.features.map((feature, idx) => (
                       <View key={idx} style={styles.featureItem}>
                         <View style={styles.checkIcon}>
-                          <Text style={styles.checkIconText}>✓</Text>
+                          <Ionicons name="checkmark" size={14} color="white" />
                         </View>
                         <Text style={styles.featureText}>{feature}</Text>
                       </View>
                     ))}
                   </View>
-                  
+
                   <TouchableOpacity
-                    style={[
-                      styles.subscribeButton,
-                      isCurrentPlan && styles.currentButton
-                    ]}
+                    style={[styles.subscribeButton, isCurrentPlan && styles.currentButton, index === 1 && styles.featuredButton]}
                     onPress={() => handleSubscribe(planName)}
                     disabled={isCurrentPlan}
                   >
-                    <Text style={[
-                      styles.subscribeButtonText,
-                      isCurrentPlan && styles.currentButtonText
-                    ]}>
-                      {isCurrentPlan ? 'Current Plan' : planName === "Free" ? 'Select Free' : 'Subscribe Now'}
-                    </Text>
+                    <LinearGradient colors={isCurrentPlan ? ['#e0e0e0', '#e0e0e0'] : ['#FF6A00', '#FF4500']} style={styles.subscribeButtonInner}>
+                      <Text style={[styles.subscribeButtonText, isCurrentPlan && styles.currentButtonText]}>
+                        {isCurrentPlan ? 'Current Plan' : planName === 'Free' ? 'Select Free Plan' : 'Subscribe Now'}
+                      </Text>
+                    </LinearGradient>
                   </TouchableOpacity>
                 </View>
               );
             })}
-          </View>
+          </ScrollView>
 
           <View style={styles.infoSection}>
-            <Text style={styles.infoTitle}>Why Upgrade?</Text>
+            <Text style={styles.infoTitle}>Why Upgrade Your Plan?</Text>
+
             <View style={styles.infoItem}>
-              <View style={styles.infoIcon}>
-                <Text style={styles.infoIconText}>📈</Text>
-              </View>
+              <LinearGradient colors={['#FF4500', '#FF6347']} style={styles.infoIcon}>
+                <Ionicons name="trending-up" size={20} color="white" />
+              </LinearGradient>
               <View style={styles.infoContent}>
-                <Text style={styles.infoItemTitle}>Boost sales</Text>
-                <Text style={styles.infoItemText}>Stay informed with customer reviews to improve your offerings.</Text>
+                <Text style={styles.infoItemTitle}>Boost Sales & Visibility</Text>
+                <Text style={styles.infoItemText}>Gain more exposure and increase your sales with advanced features.</Text>
               </View>
             </View>
+
             <View style={styles.infoItem}>
-              <View style={styles.infoIcon}>
-                <Text style={styles.infoIconText}>🔍</Text>
-              </View>
+              <LinearGradient colors={['#FF4500', '#FF6347']} style={styles.infoIcon}>
+                <Ionicons name="analytics" size={20} color="white" />
+              </LinearGradient>
               <View style={styles.infoContent}>
                 <Text style={styles.infoItemTitle}>Advanced Analytics</Text>
-                <Text style={styles.infoItemText}>Understand your customers and optimize your offerings</Text>
+                <Text style={styles.infoItemText}>Understand customer behavior and optimize your product offerings.</Text>
               </View>
             </View>
+
             <View style={styles.infoItem}>
-              <View style={styles.infoIcon}>
-                <Text style={styles.infoIconText}>💼</Text>
-              </View>
+              <LinearGradient colors={['#FF4500', '#FF6347']} style={styles.infoIcon}>
+                <Ionicons name="business" size={20} color="white" />
+              </LinearGradient>
               <View style={styles.infoContent}>
                 <Text style={styles.infoItemTitle}>Grow Your Business</Text>
-                <Text style={styles.infoItemText}>Access tools designed to help you scale efficiently</Text>
+                <Text style={styles.infoItemText}>Access premium tools designed to help you scale efficiently.</Text>
               </View>
             </View>
           </View>
         </ScrollView>
 
         {/* Confirmation Modal */}
-        <Modal
-          animationType="fade"
-          transparent={true}
-          visible={confirmModalVisible}
-          onRequestClose={() => {
-            setConfirmModalVisible(!confirmModalVisible);
-          }}
-        >
+        <Modal animationType="fade" transparent={true} visible={confirmModalVisible} onRequestClose={() => setConfirmModalVisible(false)}>
           <View style={styles.centeredView}>
             <View style={styles.confirmModalView}>
-              <Text style={styles.modalTitle}>Confirm Subscription</Text>
+              <View style={styles.modalIcon}>
+                <Ionicons name="help-circle" size={44} color="#FF4500" />
+              </View>
+              <Text style={[styles.modalTitle, { color: '#2d3436' }]}>Confirm Subscription</Text>
               <Text style={styles.modalText}>
                 Are you sure you want to subscribe to the {planToSubscribe} plan for {planToSubscribe && subscriptionPlans[planToSubscribe].discountPrice}/month?
               </Text>
+
               <View style={styles.modalButtons}>
-                <Pressable
-                  style={[styles.button, styles.buttonCancel]}
-                  onPress={() => setConfirmModalVisible(false)}
-                >
+                <Pressable style={[styles.button, styles.buttonCancel]} onPress={() => setConfirmModalVisible(false)}>
                   <Text style={styles.buttonCancelText}>Cancel</Text>
                 </Pressable>
-                <Pressable
-                  style={[styles.button, styles.buttonSubscribe]}
-                  onPress={completeSubscription}
-                >
-                  <Text style={styles.buttonSubscribeText}>Subscribe</Text>
+
+                <Pressable style={[styles.button, styles.buttonSubscribe]} onPress={completeSubscription}>
+                  <Text style={styles.buttonSubscribeText}>Proceed to Pay</Text>
                 </Pressable>
               </View>
             </View>
@@ -368,60 +365,60 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
 const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: '#f9f9f9',
   },
   modalHeader: {
+    paddingTop: Platform.OS === 'ios' ? 44 : 24,
+    paddingBottom: 18,
+    paddingHorizontal: 16,
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-    backgroundColor: 'white',
+    backgroundColor: '#fff',
+    justifyContent: 'space-between',
   },
   modalTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
-    color: '#2d3436',
+    fontWeight: '700',
+    color: '#000',
   },
   closeButton: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    backgroundColor: '#f0f0f0',
+    width: 42,
+    height: 42,
+    borderRadius: 999,
+    backgroundColor: 'rgba(255,255,255,0.18)',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  closeButtonText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#2d3436',
-  },
   scrollContent: {
-    padding: 16,
+    padding: 12,
     paddingBottom: 40,
   },
-  // Dashboard styles
   dashboard: {
     backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 20,
-    marginBottom: 20,
+    borderRadius: 4,
+    padding: 18,
+    marginBottom: 8,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
     elevation: 3,
   },
+  dashboardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 14,
+  },
   dashboardTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 16,
+    fontWeight: '700',
     color: '#2d3436',
-    marginBottom: 15,
+    marginLeft: 8,
   },
   planInfo: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
   planInfoLeft: {
     flex: 1,
@@ -430,136 +427,165 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   currentPlanName: {
-    fontSize: 22,
-    fontWeight: 'bold',
+    fontSize: 20,
+    fontWeight: '800',
     color: '#FF4500',
-    marginBottom: 5,
+    marginBottom: 4,
   },
   currentPlanPrice: {
-    fontSize: 18,
+    fontSize: 16,
     color: '#2d3436',
-    fontWeight: '600',
+    fontWeight: '700',
   },
   expiryText: {
-    fontSize: 14,
+    fontSize: 13,
     color: '#636e72',
-    marginBottom: 5,
+    marginBottom: 6,
   },
   expiryBadge: {
     paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
   },
   expirySoon: {
     backgroundColor: '#FF4500',
   },
   expiryOk: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#4CAF50',
   },
   expiryBadgeText: {
     color: 'white',
     fontSize: 12,
-    fontWeight: 'bold',
+    fontWeight: '700',
   },
   header: {
-    marginBottom: 24,
+    marginBottom: 2,
     alignItems: 'center',
+    paddingHorizontal: 4,
+    paddingVertical: 10,
+    backgroundColor: '#fff'
+
   },
   subtitle: {
-    fontSize: 16,
-    color: '#636e72',
+    fontSize: 14,
+    color: '#000',
+    fontWeight: 'bold',
     textAlign: 'center',
-    marginHorizontal: 20,
+    lineHeight: 20,
+    maxWidth: 700,
   },
-  plansContainer: {
-    marginBottom: 30,
+  horizontalPlansContainer: {
+    paddingHorizontal: 14,
+    paddingVertical: 16,
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 6 },
   },
   planCard: {
     backgroundColor: 'white',
-    borderRadius: 12,
+    borderRadius: 4,
     padding: 20,
-    marginBottom: 20,
-    borderWidth: 2,
-    borderColor: 'transparent',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    borderWidth: 1,
+    borderColor: '#f0f0f0',
+    shadowColor: '#FF4500',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.06,
+    shadowRadius: 12,
+    elevation: 4,
     position: 'relative',
   },
   currentPlanCard: {
     borderColor: '#FF4500',
-    backgroundColor: '#fff4e0',
+    backgroundColor: '#fff',
+    borderWidth: 2
   },
   featuredPlan: {
     borderColor: '#FF4500',
-    transform: [{ scale: 1.02 }],
+    transform: [{ scale: 1.015 }],
+    shadowColor: '#FF4500',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.06,
+    shadowRadius: 12,
+    elevation: 6,
+    borderWidth: 2
+
   },
   popularBadge: {
     position: 'absolute',
-    top: -10,
-    alignSelf: 'center',
-    backgroundColor: '#FF4500',
+    top: -12,
+    left: 18,
     paddingHorizontal: 12,
-    paddingVertical: 4,
+    paddingVertical: 6,
     borderRadius: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  popularBadgeText: {
+    color: 'white',
+    fontSize: 11,
+    fontWeight: '800',
+    marginLeft: 8,
   },
   currentBadge: {
     position: 'absolute',
     top: -10,
-    right: 10,
-    backgroundColor: '#FF4500',
-    paddingHorizontal: 12,
-    paddingVertical: 4,
+    right: 12,
+    backgroundColor: '#4CAF50',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
     borderRadius: 20,
-  },
-  popularBadgeText: {
-    color: 'white',
-    fontSize: 12,
-    fontWeight: 'bold',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   currentBadgeText: {
     color: 'white',
-    fontSize: 12,
-    fontWeight: 'bold',
+    fontSize: 11,
+    fontWeight: '700',
+    marginLeft: 6,
+  },
+  planIconContainer: {
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  planIcon: {
+    fontSize: 36,
   },
   planHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: 12,
+    marginBottom: 10,
   },
   planName: {
     fontSize: 22,
-    fontWeight: 'bold',
+    fontWeight: '800',
     color: '#2d3436',
   },
   priceContainer: {
     alignItems: 'flex-end',
   },
   originalPrice: {
-    fontSize: 16,
-    color: '#636e72',
+    fontSize: 13,
+    color: '#8a8a8a',
     textDecorationLine: 'line-through',
   },
   discountPrice: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: '800',
     color: '#2d3436',
-    marginTop: 2,
+    marginTop: 4,
   },
   discountBadge: {
-    backgroundColor: '#FFA500',
+    backgroundColor: '#4CAF50',
     paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 12,
-    marginTop: 4,
+    paddingVertical: 4,
+    borderRadius: 6,
+    marginTop: 6,
   },
   discountText: {
     color: 'white',
     fontSize: 12,
-    fontWeight: 'bold',
+    fontWeight: '700',
   },
   planDescription: {
     fontSize: 14,
@@ -568,33 +594,28 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   featuresContainer: {
-    marginBottom: 20,
+    marginBottom: 18,
   },
   featuresTitle: {
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 15,
+    fontWeight: '700',
     color: '#2d3436',
     marginBottom: 12,
   },
   featureItem: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    marginBottom: 10,
+    marginBottom: 12,
   },
   checkIcon: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    backgroundColor: '#FF4500',
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    backgroundColor: '#4CAF50',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 10,
+    marginRight: 12,
     marginTop: 2,
-  },
-  checkIconText: {
-    color: 'white',
-    fontSize: 12,
-    fontWeight: 'bold',
   },
   featureText: {
     flex: 1,
@@ -603,57 +624,64 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   subscribeButton: {
-    backgroundColor: '#FF4500',
-    paddingVertical: 12,
-    borderRadius: 8,
-    alignItems: 'center',
+    borderRadius: 4,
+    overflow: 'hidden',
   },
+  subscribeButtonInner: {
+    paddingVertical: 14,
+    borderRadius: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  featuredButton: {},
   currentButton: {
-    backgroundColor: '#FF4500',
+    opacity: 0.85,
   },
   subscribeButtonText: {
     color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 15,
+    fontWeight: '800',
   },
   currentButtonText: {
-    fontWeight: 'bold',
+    color: '#8a8a8a',
   },
   infoSection: {
     backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 20,
-    marginTop: 10,
+    borderRadius: 4,
+    padding: 18,
+    marginTop: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 3,
   },
   infoTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 18,
+    fontWeight: '800',
     color: '#2d3436',
-    marginBottom: 16,
+    marginBottom: 14,
+    textAlign: 'center',
   },
   infoItem: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    marginBottom: 20,
+    marginBottom: 16,
   },
   infoIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#fff4e0',
+    width: 46,
+    height: 46,
+    borderRadius: 23,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 12,
-  },
-  infoIconText: {
-    fontSize: 20,
+    marginRight: 14,
   },
   infoContent: {
     flex: 1,
   },
   infoItemTitle: {
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 15,
+    fontWeight: '700',
     color: '#2d3436',
     marginBottom: 4,
   },
@@ -662,33 +690,32 @@ const styles = StyleSheet.create({
     color: '#636e72',
     lineHeight: 20,
   },
-  // Confirmation Modal styles
   centeredView: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0,0,0,0.45)',
   },
   confirmModalView: {
     margin: 20,
     backgroundColor: 'white',
-    borderRadius: 4,
-    padding: 25,
+    borderRadius: 14,
+    padding: 22,
     alignItems: 'center',
+    width: width * 0.9,
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    width: width * 0.8,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.12,
+    shadowRadius: 12,
+    elevation: 6,
+  },
+  modalIcon: {
+    marginBottom: 12,
   },
   modalText: {
-    marginBottom: 20,
+    marginBottom: 18,
     textAlign: 'center',
-    fontSize: 16,
+    fontSize: 15,
     lineHeight: 22,
     color: '#636e72',
   },
@@ -701,7 +728,8 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     padding: 12,
     elevation: 2,
-    minWidth: 100,
+    minWidth: 120,
+    alignItems: 'center',
   },
   buttonCancel: {
     backgroundColor: 'white',
@@ -710,16 +738,21 @@ const styles = StyleSheet.create({
   },
   buttonSubscribe: {
     backgroundColor: '#FF4500',
+    shadowColor: '#FF4500',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.18,
+    shadowRadius: 8,
+    elevation: 4,
   },
   buttonCancelText: {
     color: '#2d3436',
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: '700',
+    fontSize: 15,
   },
   buttonSubscribeText: {
     color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: '800',
+    fontSize: 15,
   },
 });
 
