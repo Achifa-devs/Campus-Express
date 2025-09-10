@@ -56,6 +56,15 @@ const ShopScreen = () => {
     user_id: ''
   });
 
+  let [review, set_review] = useState([])
+
+  useEffect(() => {
+    axios.get(`https://cs-server-olive.vercel.app/vendor/shop-reviews?shop_id=${shop?.shop_id}`)
+    .then((res) => {
+      set_review(res?.data?.data)
+    }).catch(err=>console.log(err))
+  }, [])
+
   const get_list_data = useCallback((id) => {
     setRefreshing(true)
     fetch(`https://cs-server-olive.vercel.app/vendor/products?user_id=${user?.user_id}`, {
@@ -578,15 +587,15 @@ const ShopScreen = () => {
         <UploadBtn navigation={navigation} toggleModal={toggleModal}/>
 
         {/* Performance Metrics */}
-        {/* <View style={styles.performanceSection}>
+        <View style={styles.performanceSection}>
           <Text style={styles.sectionTitle}>Performance Overview</Text>
           <View style={styles.metricsGrid}>
             {renderPerformanceMetric('eye', userAds.reduce((sum, item) => sum + parseInt(item.views), 0), 'Total Views')}
-            {renderPerformanceMetric('star', performanceData.totalReviews, 'Reviews')}
-            {renderPerformanceMetric('storefront', performanceData.totalShopViews, 'Shop Views')}
-            {renderPerformanceMetric('document-text', userAds.length, 'Total Ads')}
+            {renderPerformanceMetric('stats-chart', userAds.reduce((sum, item) => sum + parseInt(item.impression), 0), 'Total Impression')}
+            {renderPerformanceMetric('star-half', review.length, 'Total Reviews')}
+            {renderPerformanceMetric('cube', userAds.length, 'Total Ads')}
           </View>
-        </View> */}
+        </View>
  
         {/* Your Ads Section */}
         <View style={styles.adsSection}>
