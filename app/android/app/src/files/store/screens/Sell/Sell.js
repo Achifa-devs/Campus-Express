@@ -289,6 +289,8 @@ const ShopScreen = () => {
   const handlePromotePress = (data) => {
     if(!eval(data.promotion)){
       dispatch(set_boost_modal({data: data, visible: 1}))
+    }else{
+      navigation.navigate('user-metrics')
     }
   };
 
@@ -589,12 +591,14 @@ const ShopScreen = () => {
         {/* Performance Metrics */}
         <View style={styles.performanceSection}>
           <Text style={styles.sectionTitle}>Performance Overview</Text>
-          <View style={styles.metricsGrid}>
+          <TouchableOpacity style={styles.metricsGrid} activeOpacity={.8} onPress={e => {
+            navigation.navigate('user-shop')
+          }}>
             {renderPerformanceMetric('eye', userAds.reduce((sum, item) => sum + parseInt(item.views), 0), 'Total Views')}
             {renderPerformanceMetric('stats-chart', userAds.reduce((sum, item) => sum + parseInt(item.impression), 0), 'Total Impression')}
             {renderPerformanceMetric('star-half', review.length, 'Total Reviews')}
             {renderPerformanceMetric('cube', userAds.length, 'Total Ads')}
-          </View>
+          </TouchableOpacity>
         </View>
  
         {/* Your Ads Section */}

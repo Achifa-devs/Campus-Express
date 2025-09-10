@@ -42,7 +42,7 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
       discountPrice: '₦0.00',
       features: [
         'List up to 2 products',
-        'Basic performance insights (views only)',
+        'Basic performance insights (impression and views only)',
         'View and respond to customer reviews to build trust and improve sales',
       ],
       current: true,

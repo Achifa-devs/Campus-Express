@@ -29,13 +29,15 @@ const Listing = () => {
     console.log('Change status:', item);
   };
 
-  const renderServiceItem = ({ item }) => {
+  const renderServiceItem = ({ item, navigation }) => {
     const isPromoted = eval(item.promotion);
     
     const handlePromotePress = (data) => {
       if(!isPromoted){
         console.log("data: ", data)
         dispatch(set_boost_modal({data: data, visible: 1}))
+      }else{
+        navigation.navigate('user-metrics')
       }
     };
     
@@ -100,7 +102,7 @@ const Listing = () => {
         />
       );
     } else{
-      return renderServiceItem({ item });
+      return renderServiceItem({ item, navigation });
     }
   };
 

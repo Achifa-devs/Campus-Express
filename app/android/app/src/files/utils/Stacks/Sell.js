@@ -26,6 +26,7 @@ import AnalyticsScreen from "../../store/screens/Analytics";
 import { useNavigation } from "@react-navigation/native";
 import VendorConnectionsScreen from "../../store/screens/ConnectPurchase";
 import NavigationTabs from "../../store/components/Home/Ads";
+import Analytics from "../../store/utils/Analytics";
 
 const SellStack = createNativeStackNavigator();
 export function SellStackScreen() {
@@ -215,10 +216,42 @@ export function SellStackScreen() {
         <SellStack.Screen  options={{
           header: ({navigation}) =>
           (
+            <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
+              <TouchableOpacity style={{
+                height: 55,
+                borderRadius: 15,
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+                width: 45,
+              }} onPress={e => navigation.goBack()}> 
+                  <Ionicons name={'chevron-back'} size={25} color={'#000'} />
+              </TouchableOpacity>
+              <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
+                <Text style={{
+                  fontSize: 16,
+                  fontWeight: 'bold',
+                  color: '#000',
+                  marginLeft: 0,
+                  // flexShrink: 1,
+                  marginBottom: 5
+                }}>
+                  Performance metrics
+                </Text>
+              </View>
+            </View>
+          ),
+          
+        }}   name="user-metrics" component={Analytics} />
+
+        <SellStack.Screen  options={{
+          header: ({navigation}) =>
+          (
 
             <>
               <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center',  elevation: 2, paddingLeft: 15, paddingRight: 25}}>
-                <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5}}>
+                <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#fff', marginRight: 15, borderRadius: 50, padding: 5}}>
                   <Ionicons name={'chevron-back'} size={25} color={'#000'} />
                 </TouchableOpacity>
                   <View style={{backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10}}>
