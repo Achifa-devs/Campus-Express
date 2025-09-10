@@ -407,7 +407,7 @@ const AnalyticsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: '#fff',
   },
   loadingContainer: {
     flex: 1,
