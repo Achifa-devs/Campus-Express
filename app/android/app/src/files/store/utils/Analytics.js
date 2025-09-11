@@ -1,16 +1,17 @@
 import { useRoute } from '@react-navigation/native';
 import axios from 'axios';
+import js_ago from 'js-ago';
 import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   View,
   Text,
   ScrollView,
-  SectionList,
   TouchableOpacity,
   Dimensions,
   SafeAreaView,
   StatusBar,
+  FlatList,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -22,6 +23,8 @@ const AnalyticsScreen = () => {
   const {
     data
   } = useRoute()?.params
+
+  const [metrics, setMetrics] = useState([])
 
   // Sample analytics data
   const analyticsData = [
@@ -180,17 +183,17 @@ const AnalyticsScreen = () => {
       <View style={styles.itemHeader}>
         <View style={styles.locationContainer}>
           <Ionicons name="location-outline" size={16} color="#666" />
-          <Text style={styles.locationText}>{item.location}</Text>
+          <Text style={styles.locationText}>{item.campus}</Text>
         </View>
-        <Text style={styles.timeText}>{item.time}</Text>
+        <Text style={styles.timeText}>{js_ago(new Date(item.created_at))}</Text>
       </View>
       
       <View style={styles.itemBody}>
         <View style={styles.actionBadge}>
-          <Text style={styles.actionText}>{item.action}</Text>
+          <Text style={styles.actionText}>{item.source === 'views' ? "Viewed" : item.source === 'search_appearances' ? "Product searched" : item.source === 'impression' ? "Impressions" : item.source === 'shares' ? "Shared" : "Contact clicked"}</Text>
         </View>
         
-        <View style={styles.detailsContainer}>
+        {/* <View style={styles.detailsContainer}>
           <View style={styles.detailItem}>
             <Ionicons name="time-outline" size={14} color="#666" />
             <Text style={styles.detailText}>{item.duration}</Text>
@@ -200,7 +203,7 @@ const AnalyticsScreen = () => {
             <Ionicons name="pricetag-outline" size={14} color="#666" />
             <Text style={styles.detailText}>{item.value}</Text>
           </View>
-        </View>
+        </View> */}
       </View>
     </View>
   );
@@ -217,11 +220,24 @@ const AnalyticsScreen = () => {
       try {
         const response = await axios.get('https://cs-server-olive.vercel.app/boosted-metrics', {params: {product_id: data?.product_id}});
 
-        console.log("response.data: ", response.data) 
-  
-        if (response.data && response.data.data.result === "ok") {
-          selectShopLogo()
-        }
+        const result = response.data.data;
+        console.log("result: ", result)
+
+        setMetrics(result)
+        // result.map(item => {
+        //   if(item.source === 'views'){
+
+        //   }else if(item.source === 'impressions'){
+
+        //   }else if(item.source === 'contact_clicks'){
+
+        //   }else if(item.source === 'search_appearances'){
+
+        //   }else if(item.source === 'shares'){
+
+        //   }
+        // })
+
       } catch (error) {
           console.log("error: ", error)
         
@@ -245,31 +261,31 @@ const AnalyticsScreen = () => {
         >
           <View style={[styles.summaryCard, { backgroundColor: '#6366F1' }]}>
             <Ionicons name="eye-outline" size={20} color="white" />
-            <Text style={styles.summaryNumber}>{data.views}</Text>
+            <Text style={styles.summaryNumber}>{metrics.filter(item=> item.source === 'views').length}</Text>
             <Text style={styles.summaryLabel}>Views</Text>
           </View>
           
           <View style={[styles.summaryCard, { backgroundColor: '#10B981' }]}>
             <Ionicons name="analytics-outline" size={20} color="white" />
-            <Text style={styles.summaryNumber}>{data.impression}</Text>
+            <Text style={styles.summaryNumber}>{metrics.filter(item=> item.source === 'impressions').length}</Text>
             <Text style={styles.summaryLabel}>Impression</Text>
           </View>
           
           <View style={[styles.summaryCard, { backgroundColor: '#F59E0B' }]}>
             <Ionicons name="call-outline" size={20} color="white" />
-            <Text style={styles.summaryNumber}>{data.contact_click}</Text>
+            <Text style={styles.summaryNumber}>{metrics.filter(item=> item.source === 'contact_click').length}</Text>
             <Text style={styles.summaryLabel}>Contacts</Text>
           </View>
           
           <View style={[styles.summaryCard, { backgroundColor: '#EF4444' }]}>
             <Ionicons name="search-outline" size={20} color="white" />
-            <Text style={styles.summaryNumber}>{data.search_appearances}</Text>
+            <Text style={styles.summaryNumber}>{metrics.filter(item=> item.source === 'search_appearances').length}</Text>
             <Text style={styles.summaryLabel}>Search appearances</Text>
           </View>
           
           <View style={[styles.summaryCard, { backgroundColor: '#EF4444' }]}>
             <Ionicons name="share-outline" size={20} color="white" />
-            <Text style={styles.summaryNumber}>{data.shares}</Text>
+            <Text style={styles.summaryNumber}>{metrics.filter(item=> item.source === 'shares').length}</Text>
             <Text style={styles.summaryLabel}>Shares</Text>
           </View>
         </ScrollView>
@@ -284,8 +300,8 @@ const AnalyticsScreen = () => {
         {/* Analytics List */}
         <View style={styles.listContainer}>
           <Text style={styles.listTitle}>Activity Log</Text>
-          <SectionList
-            sections={analyticsData}
+          <FlatList
+            data={metrics}
             keyExtractor={(item) => item.id}
             renderItem={renderItem}
             // renderSectionHeader={renderSectionHeader}
