@@ -131,7 +131,7 @@ const ReviewSubmissionScreen = ({ navigation }) => {
                     rating={rating}
                     onChange={setRating}
                     starSize={40}
-                    color="#FFD700"
+                    color="#FF4500"
                     starStyle={styles.starStyle}
                 />
                 <Text style={styles.ratingText}>

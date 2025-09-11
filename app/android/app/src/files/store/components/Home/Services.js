@@ -98,7 +98,7 @@ const ServicesScreen = ({data}) => {
         <Text style={styles.featuredName}>{item.name}</Text>
         <View style={styles.featuredMeta}>
           <View style={styles.ratingContainer}>
-            <Icon name="star" size={14} color="#FFD700" />
+            <Icon name="star" size={14} color="#FF4500" />
             <Text style={styles.featuredRating}>{item.rating}</Text>
             <Text style={styles.featuredReviews}>({item.reviews})</Text>
           </View>
@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.6)',
   },
   featuredBadge: {
-    color: '#FFD700',
+    color: '#FF4500',
     fontSize: 10,
     fontWeight: 'bold',
     marginBottom: 4,

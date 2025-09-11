@@ -166,7 +166,7 @@ export default function Btm({ updateUser, user_id, navigation, product_id, updat
             {/* Reviews Header */}
             <View style={styles.reviewsHeader}>
                 <View style={styles.reviewsTitleContainer}>
-                    <Ionicons name="star" size={20} color="#FFD700" />
+                    <Ionicons name="star" size={20} color="#FF4500" />
                     <Text style={styles.reviewsTitle}>Reviews ({reviews?.length})</Text>
                 </View>
                 

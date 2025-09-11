@@ -52,6 +52,10 @@ const ProductCard = ({ item, onShare, state='private', onDelete, onStatusChange,
     if (!exploreshop) {
       if(!isPromoted){
         dispatch(set_boost_modal({data: data, visible: 1}))
+      }else{
+        navigation.navigate('user-metrics', {
+          data: data
+        })
       }
     }else{
       navigation.navigate('user-product', { data: item });

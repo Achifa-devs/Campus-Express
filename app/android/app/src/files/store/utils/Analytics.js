@@ -26,157 +26,7 @@ const AnalyticsScreen = () => {
 
   const [metrics, setMetrics] = useState([])
 
-  // Sample analytics data
-  const analyticsData = [
-    {
-      title: 'Today',
-      data: [
-        {
-          id: '1',
-          location: 'New York, NY',
-          time: '10:30 AM',
-          action: 'Product View',
-          duration: '2 minutes',
-          value: '$149.99',
-        },
-        {
-          id: '2',
-          location: 'Los Angeles, CA',
-          time: '11:45 AM',
-          action: 'Add to Cart',
-          duration: '1 minute',
-          value: '$79.99',
-        },
-        {
-          id: '3',
-          location: 'Chicago, IL',
-          time: '1:15 PM',
-          action: 'Purchase',
-          duration: '5 minutes',
-          value: '$249.99',
-        },
-        {
-          id: '4',
-          location: 'Miami, FL',
-          time: '3:20 PM',
-          action: 'Product View',
-          duration: '3 minutes',
-          value: '$99.99',
-        },
-        {
-          id: '5',
-          location: 'Seattle, WA',
-          time: '4:45 PM',
-          action: 'Add to Cart',
-          duration: '2 minutes',
-          value: '$199.99',
-        },
-      ],
-    },
-    {
-      title: 'Yesterday',
-      data: [
-        {
-          id: '6',
-          location: 'Boston, MA',
-          time: '9:15 AM',
-          action: 'Product View',
-          duration: '4 minutes',
-          value: '$129.99',
-        },
-        {
-          id: '7',
-          location: 'Austin, TX',
-          time: '11:30 AM',
-          action: 'Purchase',
-          duration: '3 minutes',
-          value: '$89.99',
-        },
-        {
-          id: '8',
-          location: 'Denver, CO',
-          time: '2:45 PM',
-          action: 'Add to Cart',
-          duration: '2 minutes',
-          value: '$179.99',
-        },
-      ],
-    },
-    {
-      title: 'This Week',
-      data: [
-        {
-          id: '9',
-          location: 'San Francisco, CA',
-          time: 'Monday, 10:15 AM',
-          action: 'Purchase',
-          duration: '6 minutes',
-          value: '$299.99',
-        },
-        {
-          id: '10',
-          location: 'Portland, OR',
-          time: 'Tuesday, 1:30 PM',
-          action: 'Product View',
-          duration: '3 minutes',
-          value: '$69.99',
-        },
-        {
-          id: '11',
-          location: 'Phoenix, AZ',
-          time: 'Wednesday, 3:45 PM',
-          action: 'Add to Cart',
-          duration: '2 minutes',
-          value: '$159.99',
-        },
-      ],
-    },
-  ];
 
-  // Summary statistics
-  const summaryData = {
-    today: {
-      totalViews: 42,
-      totalSales: 8,
-      conversionRate: '19%',
-      totalRevenue: '$1,249.99',
-    },
-    yesterday: {
-      totalViews: 38,
-      totalSales: 6,
-      conversionRate: '16%',
-      totalRevenue: '$899.99',
-    },
-    week: {
-      totalViews: 215,
-      totalSales: 32,
-      conversionRate: '15%',
-      totalRevenue: '$4,599.99',
-    },
-  };
-
-  const getSummaryData = () => {
-    return summaryData[selectedFilter] || summaryData.today;
-  };
-
-  const renderFilterButton = (title, value) => (
-    <TouchableOpacity
-      style={[
-        styles.filterButton,
-        selectedFilter === value && styles.filterButtonActive,
-      ]}
-      onPress={() => setSelectedFilter(value)}
-    >
-      <Text
-        style={[
-          styles.filterButtonText,
-          selectedFilter === value && styles.filterButtonTextActive,
-        ]}
-      >
-        {title}
-      </Text>
-    </TouchableOpacity>
-  );
 
   const renderItem = ({ item }) => (
     <View style={styles.itemContainer}>
@@ -190,7 +40,7 @@ const AnalyticsScreen = () => {
       
       <View style={styles.itemBody}>
         <View style={styles.actionBadge}>
-          <Text style={styles.actionText}>{item.source === 'views' ? "Viewed" : item.source === 'search_appearances' ? "Product searched" : item.source === 'impression' ? "Impressions" : item.source === 'shares' ? "Shared" : "Contact clicked"} by {item.fname}</Text>
+          <Text style={styles.actionText}>{item.source === 'views' ? "Viewed" : item.source === 'search_appearances' ? "Product searched" : item.source === 'impression' ? "Impression created" : item.source === 'shares' ? "Shared" : "Contact clicked"} by {item.fname} {item.lname}</Text>
         </View>
         
         {/* <View style={styles.detailsContainer}>
@@ -259,7 +109,7 @@ const AnalyticsScreen = () => {
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.summaryContainer}
         >
-          <View style={[styles.summaryCard, { backgroundColor: '#6366F1' }]}>
+          <View style={[styles.summaryCard, { backgroundColor: '#FF4500' }]}>
             <Ionicons name="eye-outline" size={20} color="white" />
             <Text style={styles.summaryNumber}>{metrics.filter(item=> item.source === 'views').length}</Text>
             <Text style={styles.summaryLabel}>Views</Text>
@@ -267,13 +117,13 @@ const AnalyticsScreen = () => {
           
           <View style={[styles.summaryCard, { backgroundColor: '#10B981' }]}>
             <Ionicons name="analytics-outline" size={20} color="white" />
-            <Text style={styles.summaryNumber}>{metrics.filter(item=> item.source === 'impressions').length}</Text>
+            <Text style={styles.summaryNumber}>{metrics.filter(item=> item.source === 'impression').length}</Text>
             <Text style={styles.summaryLabel}>Impression</Text>
           </View>
           
           <View style={[styles.summaryCard, { backgroundColor: '#F59E0B' }]}>
             <Ionicons name="call-outline" size={20} color="white" />
-            <Text style={styles.summaryNumber}>{metrics.filter(item=> item.source === 'contact_click').length}</Text>
+            <Text style={styles.summaryNumber}>{metrics.filter(item=> item.source === 'contact_clicks').length}</Text>
             <Text style={styles.summaryLabel}>Contacts</Text>
           </View>
           
@@ -384,7 +234,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F1F5F9',
   },
   filterButtonActive: {
-    backgroundColor: '#6366F1',
+    backgroundColor: '#FF4500',
   },
   filterButtonText: {
     color: '#64748B',

@@ -247,7 +247,13 @@ const AnalyticsScreen = () => {
           </View>
           <View style={secondStyle.statItem}>
             <Text style={secondStyle.statValue}>
-              {Math.round(products.reduce((sum, item) => sum + item[activeFilter], 0) / products.length)}
+              {
+                products.reduce((sum, item) => {
+                  const value = Number(item[activeFilter]) || 0; // safely handle null/undefined
+                  console.log(sum, '+', value);
+                  return ((sum + value)/products.length).toFixed(7);
+                }, 0)
+              }
             </Text>
             <Text style={secondStyle.statLabel}>Average</Text>
           </View>
@@ -403,7 +409,7 @@ const styles = StyleSheet.create({
   },
   loadingContainer: {
     flex: 1,
-    justifyContent: 'cesecondStylenter',
+    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F8F9FA',
   },

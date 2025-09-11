@@ -13,7 +13,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import { set_shop } from '../../../../../../../redux/shop';
 import js_ago from 'js-ago';
 import { launchImageLibrary } from 'react-native-image-picker';
-
+import { set_sub_modal } from '../../../../../../../redux/sub';
+import { BlurView } from '@react-native-community/blur';
 export default function Shopile() {
     let [review, set_review] = useState([])
     const {shop} = useSelector(s => s.shop);
@@ -71,7 +72,6 @@ export default function Shopile() {
         }
     }
 
-
    
     const [modalVisible, setModalVisible] = useState(false);
     const [isCategory, setIsCategory] = useState(false);
@@ -104,7 +104,7 @@ export default function Shopile() {
     
     const uploadToServer = async (image) => {
     try {
-        setIsLoading(true); // Correct loading state
+        setIsLoading(true);
         const formData = new FormData();
         formData.append('file', {
             uri: image.uri,
@@ -121,13 +121,12 @@ export default function Shopile() {
 
         if (result.success && result.data.url) {
             set_logo(result.data.url);
-            setIsLoading(false); // Correct loading state
-
+            setIsLoading(false);
         }
     } catch (err) {
         console.error('Upload failed:', err.message);
     } finally {
-        setIsLoading(false); // Correct loading state
+        setIsLoading(false);
     }
     };
 
@@ -143,129 +142,95 @@ export default function Shopile() {
             }
         } catch (err) {
             console.error('Upload failed:', err.message);
-
         } finally {
             setIsLoading(false);
         }
     };
+    
     if (isLoading) {
         return (
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color="#FF4500" />
+            <Text style={styles.loadingText}>Processing...</Text>
           </View>
         );
     }
+
+    function handleSub(params) {
+        if(!shop.tools){
+            dispatch(set_sub_modal(1))
+        }
+    }
+
   return (
     <> 
         <BottomModal visible={modalVisible} onClose={toggleModal}>
-            <ScrollView style={{padding: 8}} showsVerticalScrollIndicator={false}>
+            <ScrollView style={{padding: 20}} showsVerticalScrollIndicator={false}>
                 <View style={styles.modalHeader}>
                     <Text style={styles.modalTitle}>Shop Settings</Text>
+                    <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeButton}>
+                        <Ionicons name="close" size={24} color="#666" />
+                    </TouchableOpacity>
                 </View>
                 
                 <View style={styles.infoCard}>
-                    <Ionicons name="information-circle" size={24} color="#FF4500" />
-                    <Text style={styles.infoText}>You are trying to update your shop name and description.</Text>
-                    <Text style={styles.learnMoreText}>Learn more in our help articles.</Text>
+                    <Ionicons name="information-circle" size={20} color="#FF4500" />
+                    <Text style={styles.infoText}>Update your shop information to improve visibility and customer trust</Text>
                 </View>
             
                 {/* Image Upload Section */}
                 <View style={styles.inputGroup}>
                     <Text style={styles.inputLabel}>Shop Logo</Text>
-                    <View style={{
-                        alignItems: 'center',
-                        marginBottom: 20,
-                    }}>
+                    <View style={styles.imageUploadContainer}>
                         <TouchableOpacity 
-                            style={{
-                                width: 100,
-                                height: 100,
-                                borderRadius: 50,
-                                backgroundColor: '#F8F9FA',
-                                borderWidth: 2,
-                                borderColor: '#E9ECEF',
-                                borderStyle: 'dashed',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                marginBottom: 12,
-                            }}
-                            onPress={() => {
-                                selectShopLogo()
-                                console.log('Open image picker');
-                            }}
+                            style={styles.imageUploadButton}
+                            onPress={selectShopLogo}
                         >
                             {shop?.logo_url ? (
                                 <Image 
                                     source={{ uri: shop.logo_url }} 
-                                    style={{
-                                        width: 96,
-                                        height: 96,
-                                        borderRadius: 48,
-                                    }}
+                                    style={styles.previewImage}
                                 />
                             ) : (
-                                <Ionicons name="camera" size={32} color="#6C757D" />
+                                <View style={styles.uploadPlaceholder}>
+                                    <Ionicons name="camera" size={32} color="#6C757D" />
+                                    <Text style={styles.uploadText}>Add Logo</Text>
+                                </View>
                             )}
                         </TouchableOpacity>
                         
-                        <TouchableOpacity 
-                            style={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                backgroundColor: '#FF4500',
-                                paddingHorizontal: 16,
-                                paddingVertical: 10,
-                                borderRadius: 8,
-                            }}
-                            onPress={async() => {
-                                // Add your image upload logic here
-                                console.log('Upload image');
-                                const result = await deleteFromServer(shop?.logo_url)
-                            }}
-                        >
-                            <Ionicons name="cloud-upload" size={18} color="#FFF" />
-                            <Text style={{
-                                color: '#FFF',
-                                fontWeight: '600',
-                                marginLeft: 8,
-                                fontSize: 14,
-                            }}>
-                                {shop?.logo_url ? 'Change Logo' : 'Upload Logo'}
-                            </Text>
-                        </TouchableOpacity>
-                      
-                        
-                        {/* <Text style={{
-                            fontSize: 12,
-                            color: '#6C757D',
-                            textAlign: 'center',
-                            marginTop: 8,
-                        }}>
-                            Recommended: 300×300 pixels, JPG or PNG
-                        </Text> */}
+                        {shop?.logo_url && (
+                            <TouchableOpacity 
+                                style={styles.changeButton}
+                                onPress={selectShopLogo}
+                            >
+                                <Ionicons name="sync" size={16} color="#FFF" />
+                                <Text style={styles.changeButtonText}>Change</Text>
+                            </TouchableOpacity>
+                        )}
                     </View>
                 </View>
 
                 {!isCategory ? (
                     <>
                         <View style={styles.inputGroup}>
-                            <Text style={styles.inputLabel}>Shop name</Text>
+                            <Text style={styles.inputLabel}>Shop Name</Text>
                             <TextInput 
                                 style={styles.textInput} 
-                                onChangeText={e => set_title(e)}   
-                                placeholder="Enter shop name" 
+                                onChangeText={set_title}   
+                                placeholder="Enter your shop name" 
                                 placeholderTextColor="#999"
                                 defaultValue={shop?.title}
                             />
                         </View>
                         
                         <View style={styles.inputGroup}>
-                            <Text style={styles.inputLabel}>Shop description</Text>
+                            <Text style={styles.inputLabel}>Shop Description</Text>
                             <TextInput
                                 multiline
-                                placeholder="Describe your shop..."
+                                placeholder="Describe what makes your shop unique..."
                                 placeholderTextColor="#999"
-                                onChangeText={e => set_description(e)}   
+                                onChangeText={set_description}   
                                 style={[styles.textInput, styles.multilineInput]}
                                 textAlignVertical="top"
                                 defaultValue={shop?.description}
@@ -274,7 +239,8 @@ export default function Shopile() {
                     </>
                 ) : (
                     <>
-                        <Text style={styles.sectionTitleModal}>Shop categories</Text>
+                        <Text style={styles.sectionTitleModal}>Shop Categories</Text>
+                        <Text style={styles.sectionSubtitle}>Select categories that best describe your products</Text>
                         <ScrollView style={styles.categoryScroll} showsVerticalScrollIndicator={false}>
                             <View style={styles.categoryContainer}>
                                 {items.category.map((item, index) => {
@@ -305,32 +271,42 @@ export default function Shopile() {
                             </View>
                         </ScrollView>
                         
-                        <View style={styles.selectedCategories}>
-                            <Text style={styles.sectionTitleModal}>Selected categories</Text>
-                            <ScrollView style={styles.selectedScroll} showsVerticalScrollIndicator={false}>
-                                <View style={styles.selectedContainer}>
-                                    {list.map((item, index) => (
-                                        <TouchableOpacity 
-                                            key={index} 
-                                            style={styles.selectedPill}
-                                            onPress={() => set_list(list.filter(filt => filt !== item))}
-                                        >
-                                            <Text style={styles.selectedText}>{item}</Text>
-                                            <Ionicons name="close" size={16} color="#FF4500" />
-                                        </TouchableOpacity>
-                                    ))}
-                                </View>
-                            </ScrollView>
-                        </View>
+                        {list.length > 0 && (
+                            <View style={styles.selectedCategories}>
+                                <Text style={styles.sectionTitleModal}>Selected Categories</Text>
+                                <ScrollView style={styles.selectedScroll} showsVerticalScrollIndicator={false}>
+                                    <View style={styles.selectedContainer}>
+                                        {list.map((item, index) => (
+                                            <TouchableOpacity 
+                                                key={index} 
+                                                style={styles.selectedPill}
+                                                onPress={() => set_list(list.filter(filt => filt !== item))}
+                                            >
+                                                <Text style={styles.selectedText}>{item}</Text>
+                                                <Ionicons name="close" size={16} color="#FF4500" />
+                                            </TouchableOpacity>
+                                        ))}
+                                    </View>
+                                </ScrollView>
+                            </View>
+                        )}
                     </>
                 )}
                 
-                <TouchableOpacity 
-                    onPress={() => updateShop()} 
-                    style={styles.setupButton}
-                >
-                    <Text style={styles.setupButtonText}>Set up</Text>
-                </TouchableOpacity>
+                <View style={styles.modalActions}>
+                    <TouchableOpacity 
+                        onPress={() => setModalVisible(false)} 
+                        style={styles.cancelButton}
+                    >
+                        <Text style={styles.cancelButtonText}>Cancel</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                        onPress={updateShop} 
+                        style={styles.saveButton}
+                    >
+                        <Text style={styles.saveButtonText}>Save Changes</Text>
+                    </TouchableOpacity>
+                </View>
             </ScrollView>
         </BottomModal>
         
@@ -338,170 +314,238 @@ export default function Shopile() {
             <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
                 {/* Header Banner */}
                 <LinearGradient
-                    colors={['#FF4500', '#FF7F50']}
+                    colors={['#FF4500', '#FF6347']}
                     style={styles.banner}
                     start={{x: 0, y: 0}}
                     end={{x: 1, y: 0}}
                 >
                     <View style={styles.bannerContent}>
-                        {/* <Text style={styles.bannerText}>Your Shop Profile</Text> */}
-                        <Ionicons name="storefront" size={40} color="#FFF" />
-                        
-                        <Text style={styles.bannerText}>{shop?.title}</Text>
-                        <Text style={[styles.verificationText, {color: '#fff'}]}>{user?.campus}</Text>
+                        <View style={styles.bannerIcon}>
+                            <Ionicons name="storefront" size={32} color="#FFF" />
+                        </View>
+                        <Text style={styles.bannerTitle}>{shop?.title || 'Your Shop'}</Text>
+                        <Text style={styles.bannerSubtitle}>{user?.campus}</Text>
                     </View>
                 </LinearGradient>
 
                 {/* Shop Header */}
                 <View style={styles.shopHeader}>
-                    <View style={styles.avatarContainer}>
-                        {shop?.logo_url ? (
-                            <Image 
-                                style={styles.avatar} 
-                                source={{uri: shop?.logo_url}} 
-                            />
-                        ) : (
-                            <View style={styles.avatarPlaceholder}>
-                                <Ionicons name="storefront" size={32} color="#FF4500" />
+                    <View style={styles.avatarSection}>
+                        <View style={styles.avatarContainer}>
+                            {shop?.logo_url ? (
+                                <Image 
+                                    style={styles.avatar} 
+                                    source={{uri: shop?.logo_url}} 
+                                />
+                            ) : (
+                                <View style={styles.avatarPlaceholder}>
+                                    <Ionicons name="storefront" size={28} color="#FF4500" />
+                                </View>
+                            )}
+                        </View>
+                        
+                        <View style={styles.shopInfo}>
+                            <Text style={styles.shopTitle}>{user?.fname} {user?.lname}</Text>
+                            <View style={styles.verificationSection}>
+                                <View style={[
+                                    styles.verificationBadge,
+                                    eval(shop?.is_verified) ? styles.verified : styles.notVerified
+                                ]}>
+                                    <Ionicons 
+                                        name={eval(shop?.is_verified) ? "shield-checkmark" : "alert-circle"} 
+                                        size={16} 
+                                        color={eval(shop?.is_verified) ? "#10B981" : "#FF4500"} 
+                                    />
+                                    <Text style={styles.verificationText}>
+                                        {eval(shop?.is_verified) ? 'Verified Shop' : 'Verification Pending'}
+                                    </Text>
+                                </View>
                             </View>
-                        )}
+                        </View>   
                     </View>
-                    
-                    <View style={styles.shopInfo}>
-                        <Text style={styles.shopTitle}>{user?.fname} {user?.lname}</Text>
-                        <TouchableOpacity style={styles.verificationBadge}>
-                            <Ionicons name={eval(shop.is_verified) ? "shield-checkmark" : "close-circle"} size={16} color="#FF4500" />
-                            <Text style={styles.verificationText}>{eval(shop?.is_verified) ? 'Verified': 'Get Verified Now'}</Text>
-                        </TouchableOpacity>
-                    </View>   
                     
                     <TouchableOpacity 
                         style={styles.editButton}
                         onPress={() => toggleModal(false)}
                     >
-                        <Ionicons name="create-outline" size={22} color="#2D3436" />
+                        <Ionicons name="create-outline" size={22} color="#FF4500" />
                     </TouchableOpacity>
+                </View>
+                
+                {/* Stats Overview */}
+                <View style={styles.statsContainer}>
+                    <View style={styles.statItem}>
+                        <Ionicons name="eye-outline" size={20} color="#536878" />
+                        <Text style={styles.statNumber}>{products.reduce((sum, item) => sum + parseInt(item.views || 0), 0)}</Text>
+                        <Text style={styles.statLabel}>Views</Text>
+                    </View>
+                    <View style={styles.statDivider} />
+                    <View style={styles.statItem}>
+                        <Ionicons name="mail-outline" size={20} color="#10B981" />
+                        <Text style={styles.statNumber}>{review.length}</Text>
+                        <Text style={styles.statLabel}>Reviews</Text>
+                    </View>
+                    <View style={styles.statDivider} />
+                    <View style={styles.statItem}>
+                        <Ionicons name="star-outline" size={20} color="#FF4500" />
+                        <Text style={styles.statNumber}>
+                            {review.length > 0 ? (review.reduce((sum, item) => sum + item.rating, 0) / review.length).toFixed(1) : '0.0'}
+                        </Text>
+                        <Text style={styles.statLabel}>Rating</Text>
+                    </View>
                 </View>
                 
                 {/* Description */}
                 {shop?.description && (
                     <View style={styles.descriptionCard}>
+                        <Text style={styles.descriptionLabel}>About</Text>
                         <Text style={styles.descriptionText}>{shop?.description}</Text>
                     </View>
                 )} 
                 
-                {/* Categories */}
-                {/* <View style={styles.sectionCard}>
-                    <View style={styles.sectionHeader}>
-                        <Text style={styles.sectionTitle}>Categories</Text>
-                        <TouchableOpacity onPress={() => toggleModal(true)}>
-                            <Ionicons name="create-outline" size={22} color="#2D3436" />
-                        </TouchableOpacity>
-                    </View>
-                    
-                    {shop?.category && JSON.parse(shop.category).length > 0 ? (
-                        <View style={styles.categoriesContainer}>
-                            {JSON.parse(shop.category).map((item, index) => (
-                                <View key={index} style={styles.categoryTag}>
-                                    <Text style={styles.categoryTagText}>{item}</Text>
-                                </View>
-                            ))}
-                        </View>
-                    ) : (
-                        <Text style={styles.emptyText}>No categories added yet</Text>
-                    )}
-                </View>  */}
-                
-                {/* Reviews */}
+                {/* Reviews Section */}
                 <View style={styles.sectionCard}>
                     <View style={styles.sectionHeader}>
                         <View>
-                            <Text style={styles.sectionTitle}>Reviews</Text>
-                            <View style={styles.visibilityInfo}>
-                                <Ionicons name="eye" size={16} color="#666" />
-                                <Text style={styles.visibilityText}>Visible to the public</Text>
+                            <Text style={styles.sectionTitle}>Customer Reviews</Text>
+                            <View style={styles.ratingSummary}>
+                                <StarRating
+                                    rating={review.length > 0 ? review.reduce((sum, item) => sum + item.rating, 0) / review.length : 0}
+                                    starSize={18}
+                                    color="#FF4500"
+                                    starStyle={{marginRight: 2}}
+                                    onChange={() => {}}
+                                />
+                                <Text style={styles.ratingText}>({review.length} reviews)</Text>
                             </View>
                         </View>
                     </View>
                     
                     {review.length > 0 ? (
                         <View style={styles.reviewsContainer}>
-                            {review.slice(0, 3).map((item, index) => (
+                            {review.slice(0, 2).map((item, index) => (
                                 <View key={index} style={styles.reviewItem}>
-                                    <StarRating
-                                        rating={item.rating}
-                                        starSize={20}
-                                        color="#FF4500"
-                                        starStyle={{marginRight: 2}}
-                                    />
-                                    <View style={styles.reviewContent}>
-                                        <Text style={styles.reviewTitle}>{item.review}</Text>
-                                        <Text style={styles.reviewComment}>{item.comment}</Text>
+                                    <View style={styles.reviewHeader}>
+                                        <StarRating
+                                            rating={item.rating}
+                                            starSize={16}
+                                            color="#FF4500"
+                                            starStyle={{marginRight: 1}}
+                                            onChange={() => {}}
+                                        />
                                         <Text style={styles.reviewDate}>
                                             {new Date(item.date).toLocaleDateString()}
                                         </Text>
                                     </View>
+                                    {item.comment && (
+                                        <Text style={styles.reviewComment} numberOfLines={3}>
+                                            "{item.comment}"
+                                        </Text>
+                                    )}
+                                    <Text style={styles.reviewer}>- {item.review}</Text>
                                 </View>
                             ))}
                         </View>
                     ) : (
                         <View style={styles.emptyState}>
-                            <ReviewSvg width={80} height={80} />
+                            <ReviewSvg width={60} height={60} />
+                            <Text style={styles.emptyStateTitle}>No Reviews Yet</Text>
                             <Text style={styles.emptyStateText}>
-                                Your reviews from clients will be shown here.
+                                Customer reviews will appear here once you start receiving feedback.
                             </Text>
                         </View>
                     )}
                     
-                    <TouchableOpacity 
-                        onPress={() => navigation.navigate('user-reviews', {data: review})} 
-                        style={styles.viewAllButton}
-                    >
-                        <Text style={styles.viewAllText}>Show all reviews</Text>
-                        <Ionicons name="arrow-forward" size={18} color="#2D3436" />
-                    </TouchableOpacity>
+                    {review.length > 0 && (
+                        <TouchableOpacity 
+                            onPress={() => navigation.navigate('user-reviews', {data: review})} 
+                            style={styles.viewAllButton}
+                        >
+                            <Text style={styles.viewAllText}>View All Reviews</Text>
+                            <Ionicons name="arrow-forward" size={16} color="#FF4500" />
+                        </TouchableOpacity>
+                    )}
                 </View>  
                 
-                {/* Analytics */}
+                {/* Analytics Section */}
                 <View style={styles.sectionCard}>
                     <View style={styles.sectionHeader}>
                         <View>
-                            <Text style={styles.sectionTitle}>Analytics</Text>
+                           <TouchableOpacity style={styles.sectionHeader} onPress={() => {
+                                if(shop.tools){
+                                    navigation.navigate('user-analytics')
+                                }else{
+                                    handleSub()
+                                }
+                            }}>
+                                <View style={styles.premiumSectionHeader}>
+                                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                        <Text style={[styles.sectionTitle, {marginRight: 8}]}>Shop Analytics</Text>
+                                        <View style={styles.premiumBadge}>
+                                            <Ionicons name="medal" size={14} color="#FFD700" />
+                                            <Text style={styles.premiumText}>PREMIUM</Text>
+                                        </View>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+ 
                             <View style={styles.visibilityInfo}>
-                                <Ionicons name="lock-closed" size={16} color="#666" />
-                                <Text style={styles.visibilityText}>Private to you only</Text>
+                                <Ionicons name="lock-closed" size={14} color="#64748B" />
+                                <Text style={styles.visibilityText}>Private to you</Text>
                             </View>
                         </View>
                     </View>
                     
-                    <View style={styles.analyticsContainer}>
-                        {[
-                            // {title: `${shop?.views} shop views`, summary: 'Discover who viewed your shop', icon: 'people'},
-                            {title: `${products.reduce((sum, item) => sum + parseInt(item.impression), 0)} post impression`, summary: 'Checkout who\'s engaging with your product', icon: 'stats-chart'},
-                            {title: `${products.reduce((sum, item) => sum + parseInt(item.search_appearances), 0)} search appearances`, summary: 'See how often your product appear in searches', icon: 'compass'}
-                        ].map((item, index) => (
-                            <TouchableOpacity 
-                                key={index} 
-                                style={styles.analyticsItem}
+                    <View style={styles.analyticsGrid}>
+                        <View style={styles.analyticsCard}>
+                            <View style={[styles.analyticsIcon, {backgroundColor: '#EFF6FF'}]}>
+                                <Ionicons name="stats-chart" size={24} color="#3B82F6" />
+                            </View>
+                            <BlurView
+                                style={{ padding: 10, borderRadius: 5 }}
+                                blurType="light"
+                                blurAmount={5}
+                                reducedTransparencyFallbackColor="white"
                             >
-                                <View style={styles.analyticsIcon}>
-                                    <Ionicons name={item.icon} size={24} color="#FF4500" />
-                                </View>
-                                <View style={styles.analyticsContent}>
-                                    <Text style={styles.analyticsTitle}>{item.title}</Text>
-                                    <Text style={styles.analyticsSummary}>{item.summary}</Text>
-                                </View>
-                                <Ionicons name="chevron-forward" size={20} color="#999" />
-                            </TouchableOpacity>
-                        ))}
+                                <Text style={styles.analyticsNumber}>
+                                    {products.reduce((sum, item) => sum + parseInt(item.impression || 0), 0).toLocaleString()}
+                                </Text>
+                            </BlurView>
+                            <Text style={styles.analyticsLabel}>Post Impressions</Text>
+                        </View>
+                        
+                        <View style={styles.analyticsCard}>
+                            <View style={[styles.analyticsIcon, {backgroundColor: '#F0FDF4'}]}>
+                                <Ionicons name="compass" size={24} color="#22C55E" />
+                            </View>
+                            <BlurView 
+                                style={{padding: 10, borderRadius: 5}}
+                                blurType="light"
+                                blurAmount={5}
+                                reducedTransparencyFallbackColor="white"
+                            >
+                                <Text style={styles.analyticsNumber}>
+                                    {products.reduce((sum, item) => sum + parseInt(item.search_appearances || 0), 0).toLocaleString()}
+                                </Text>
+                            </BlurView>
+                            <Text style={styles.analyticsLabel}>Search Appearances</Text>
+                        </View>
                     </View>
                     
                     <TouchableOpacity 
-                        onPress={() => navigation.navigate('user-analytics')} 
-                        style={styles.viewAllButton}
+                        onPress={() => {
+                            if(shop.tools){
+                                navigation.navigate('user-analytics')
+                            }else{
+                                handleSub()
+                            }
+                        }} 
+                        style={styles.analyticsButton}
                     >
-                        <Text style={styles.viewAllText}>Show all analytics</Text>
-                        <Ionicons name="arrow-forward" size={18} color="#2D3436" />
+                        <Text style={styles.analyticsButtonText}>{
+                            shop.tools? 'View Detailed Analytics' : 'Subscribe To View Analytics'    
+                        }</Text>
+                        <Ionicons name="arrow-forward" size={16} color="#FF4500" />
                     </TouchableOpacity>
                 </View> 
             </ScrollView>
@@ -511,37 +555,106 @@ export default function Shopile() {
 }
 
 const styles = StyleSheet.create({
+
+    premiumSectionHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        marginBottom: 0,
+    },
+    premiumBadge: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: 'rgba(255, 215, 0, 0.15)',
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        borderRadius: 12,
+        borderWidth: 1,
+        borderColor: 'rgba(255, 215, 0, 0.3)',
+    },
+    premiumText: {
+        fontSize: 10,
+        fontWeight: '800',
+        color: '#D4AF37',
+        marginLeft: 4,
+        textTransform: 'uppercase',
+        },
+        premiumIndicator: {
+        position: 'relative',
+        padding: 4,
+    },
+    premiumTooltip: {
+        position: 'absolute',
+        top: -30,
+        left: -40,
+        backgroundColor: '#333',
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        borderRadius: 4,
+        width: 100,
+    },
+    tooltipText: {
+        color: '#FFF',
+        fontSize: 10,
+        textAlign: 'center',
+    },
+    premiumGradient: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+        borderRadius: 20,
+    },
     container: {
         flex: 1,
-        backgroundColor: '#F8F9FA',
+        backgroundColor: '#F8FAFC',
     },
     scrollView: {
         flex: 1,
     },
     banner: {
-        height: 140,
-        width: '100%',
+        height: 160,
         justifyContent: 'center',
         alignItems: 'center',
     },
     bannerContent: {
-        padding: 16,
+        alignItems: 'center',
+        padding: 20,
+    },
+    bannerIcon: {
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        backgroundColor: 'rgba(255,255,255,0.2)',
         justifyContent: 'center',
         alignItems: 'center',
+        marginBottom: 12,
     },
-    bannerText: {
+    bannerTitle: {
         color: '#FFF',
         fontSize: 24,
         fontWeight: '700',
         textAlign: 'center',
+        marginBottom: 4,
+    },
+    bannerSubtitle: {
+        color: 'rgba(255,255,255,0.9)',
+        fontSize: 14,
+        fontWeight: '500',
     },
     shopHeader: {
         backgroundColor: '#FFF',
         padding: 20,
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'space-between',
         borderBottomWidth: 1,
-        borderBottomColor: '#EEE',
+        borderBottomColor: '#F1F5F9',
+    },
+    avatarSection: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        flex: 1,
     },
     avatarContainer: {
         width: 80,
@@ -551,11 +664,12 @@ const styles = StyleSheet.create({
         borderColor: '#FFF',
         backgroundColor: '#FFF',
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 3,
+        shadowRadius: 8,
+        elevation: 4,
         marginTop: -40,
+        marginRight: 16,
     },
     avatar: {
         width: '100%',
@@ -572,62 +686,112 @@ const styles = StyleSheet.create({
     },
     shopInfo: {
         flex: 1,
-        marginLeft: 16,
     },
     shopTitle: {
-        fontSize: 22,
+        fontSize: 20,
         fontWeight: '700',
-        color: '#2D3436',
+        color: '#1F2937',
         marginBottom: 8,
+    },
+    verificationSection: {
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     verificationBadge: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#FFF8F6',
         paddingHorizontal: 12,
         paddingVertical: 6,
-        borderRadius: 4,
+        borderRadius: 16,
         alignSelf: 'flex-start',
-        borderWidth: 1,
-        borderColor: '#FFE5DE',
+    },
+    verified: {
+        backgroundColor: '#ECFDF5',
+    },
+    notVerified: {
+        backgroundColor: '#FEF2F2',
     },
     verificationText: {
-        color: '#FF4500',
         fontSize: 12,
         fontWeight: '600',
         marginLeft: 6,
     },
     editButton: {
-        padding: 8,
-        backgroundColor: '#F8F9FA',
+        padding: 10,
+        backgroundColor: '#F1F5F9',
         borderRadius: 20,
+    },
+    statsContainer: {
+        backgroundColor: '#FFF',
+        flexDirection: 'row',
+        padding: 20,
+        borderBottomWidth: 1,
+        borderBottomColor: '#F1F5F9',
+    },
+    statItem: {
+        flex: 1,
+        alignItems: 'center',
+    },
+    statNumber: {
+        fontSize: 20,
+        fontWeight: '700',
+        color: '#1F2937',
+        marginVertical: 4,
+    },
+    statLabel: {
+        fontSize: 12,
+        color: '#64748B',
+        fontWeight: '500',
+    },
+    statDivider: {
+        width: 1,
+        backgroundColor: '#E5E7EB',
+        marginHorizontal: 10,
     },
     descriptionCard: {
         backgroundColor: '#FFF',
         padding: 20,
         borderBottomWidth: 1,
-        borderBottomColor: '#EEE',
+        borderBottomColor: '#F1F5F9',
+    },
+    descriptionLabel: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#374151',
+        marginBottom: 8,
     },
     descriptionText: {
-        fontSize: 16,
-        lineHeight: 24,
-        color: '#2D3436',
+        fontSize: 15,
+        lineHeight: 22,
+        color: '#4B5563',
     },
     sectionCard: {
         backgroundColor: '#FFF',
         marginTop: 8,
         padding: 20,
+        borderRadius: 0,
     },
     sectionHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 16,
+        alignItems: 'flex-start',
+        marginBottom: 20,
     },
     sectionTitle: {
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: '700',
-        color: '#2D3436',
+        color: '#1F2937',
+        marginBottom: 4,
+    },
+    ratingSummary: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 4,
+    },
+    ratingText: {
+        fontSize: 14,
+        color: '#64748B',
+        marginLeft: 8,
     },
     visibilityInfo: {
         flexDirection: 'row',
@@ -635,105 +799,92 @@ const styles = StyleSheet.create({
         marginTop: 4,
     },
     visibilityText: {
-        fontSize: 14,
-        color: '#666',
-        marginLeft: 6,
-    },
-    categoriesContainer: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        gap: 8,
-    },
-    categoryTag: {
-        backgroundColor: '#F8F9FA',
-        paddingHorizontal: 16,
-        paddingVertical: 8,
-        borderRadius: 20,
-        borderWidth: 1,
-        borderColor: '#EEE',
-    },
-    categoryTagText: {
-        color: '#2D3436',
-        fontSize: 14,
-        fontWeight: '500',
-    },
-    emptyText: {
-        color: '#999',
-        fontSize: 16,
-        fontStyle: 'italic',
-        textAlign: 'center',
-        marginVertical: 20,
+        fontSize: 12,
+        color: '#64748B',
+        marginLeft: 4,
     },
     reviewsContainer: {
         gap: 16,
     },
     reviewItem: {
-        paddingBottom: 16,
-        borderBottomWidth: 1,
-        borderBottomColor: '#F1F3F5',
+        padding: 16,
+        backgroundColor: '#F9FAFB',
+        borderRadius: 4,
+        borderWidth: 1,
+        borderColor: '#E5E7EB',
     },
-    reviewContent: {
-        marginTop: 8,
-    },
-    reviewTitle: {
-        fontSize: 18,
-        fontWeight: '600',
-        color: '#2D3436',
-        marginBottom: 4,
-    },
-    reviewComment: {
-        fontSize: 16,
-        color: '#666',
-        lineHeight: 22,
+    reviewHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         marginBottom: 8,
     },
     reviewDate: {
+        fontSize: 12,
+        color: '#6B7280',
+    },
+    reviewComment: {
         fontSize: 14,
-        color: '#999',
+        color: '#374151',
+        lineHeight: 20,
+        marginBottom: 8,
+        fontStyle: 'italic',
+    },
+    reviewer: {
+        fontSize: 13,
+        color: '#6B7280',
+        fontWeight: '500',
     },
     emptyState: {
         alignItems: 'center',
-        paddingVertical: 40,
+        padding: 40,
     },
-    emptyStateText: {
-        fontSize: 16,
-        color: '#999',
-        textAlign: 'center',
-        marginTop: 16,
-        lineHeight: 22,
-    },
-    analyticsContainer: {
-        gap: 12,
-    },
-    analyticsItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        padding: 16,
-        backgroundColor: '#F8F9FA',
-        borderRadius: 12,
-    },
-    analyticsIcon: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-        backgroundColor: '#FFF8F6',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginRight: 16,
-    },
-    analyticsContent: {
-        flex: 1,
-    },
-    analyticsTitle: {
+    emptyStateTitle: {
         fontSize: 16,
         fontWeight: '600',
-        color: '#2D3436',
+        color: '#374151',
+        marginTop: 16,
+        marginBottom: 8,
+    },
+    emptyStateText: {
+        fontSize: 14,
+        color: '#6B7280',
+        textAlign: 'center',
+        lineHeight: 20,
+    },
+    analyticsGrid: {
+        flexDirection: 'row',
+        gap: 16,
+        marginBottom: 20,
+    },
+    analyticsCard: {
+        flex: 1,
+        backgroundColor: '#F9FAFB',
+        padding: 20,
+        borderRadius: 4,
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#E5E7EB',
+    },
+    analyticsIcon: {
+        width: 48,
+        height: 48,
+        borderRadius: 24,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 12,
+    },
+    analyticsNumber: {
+        fontSize: 20,
+        fontWeight: '700',
+        color: '#1F2937',
         marginBottom: 4,
     },
-    analyticsSummary: {
-        fontSize: 14,
-        color: '#666',
-        lineHeight: 20,
+    analyticsLabel: {
+        fontSize: 12,
+        color: '#64748B',
+        textAlign: 'center',
+        fontWeight: '500',
     },
     viewAllButton: {
         flexDirection: 'row',
@@ -741,82 +892,148 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: 16,
         borderTopWidth: 1,
-        borderTopColor: '#F1F3F5',
+        borderTopColor: '#F1F5F9',
         marginTop: 8,
     },
     viewAllText: {
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: '600',
-        color: '#2D3436',
+        color: '#FF4500',
+        marginRight: 8,
+    },
+    analyticsButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 16,
+        backgroundColor: '#F8FAFC',
+        borderRadius: 4,
+        borderWidth: 1,
+        borderColor: '#E5E7EB',
+    },
+    analyticsButtonText: {
+        fontSize: 14,
+        fontWeight: '600',
+        color: '#FF4500',
         marginRight: 8,
     },
     // Modal Styles
     modalHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         marginBottom: 20,
     },
     modalTitle: {
-        fontSize: 24,
+        fontSize: 20,
         fontWeight: '700',
-        color: '#2D3436',
-        textAlign: 'center',
+        color: '#1F2937',
+    },
+    closeButton: {
+        padding: 4,
     },
     infoCard: {
-        backgroundColor: '#FFF8F6',
-        padding: 20,
+        backgroundColor: '#FFFBEB',
+        padding: 16,
         borderRadius: 12,
         borderWidth: 1,
-        borderColor: '#FFE5DE',
+        borderColor: '#FEF3C7',
         marginBottom: 24,
+        flexDirection: 'row',
+        alignItems: 'flex-start',
     },
     infoText: {
-        fontSize: 16,
-        color: '#2D3436',
-        lineHeight: 22,
-        marginTop: 8,
-        marginBottom: 12,
+        fontSize: 14,
+        color: '#92400E',
+        lineHeight: 20,
+        marginLeft: 12,
+        flex: 1,
     },
     loadingContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#F8F9FA',
+        backgroundColor: '#F8FAFC',
     },
     loadingText: {
         marginTop: 16,
         fontSize: 16,
-        color: '#666',
-    },
-    learnMoreText: {
-        fontSize: 16,
-        color: '#FF4500',
-        fontWeight: '600',
+        color: '#64748B',
     },
     inputGroup: {
         marginBottom: 24,
     },
     inputLabel: {
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: '600',
-        color: '#2D3436',
+        color: '#374151',
         marginBottom: 8,
     },
+    imageUploadContainer: {
+        alignItems: 'center',
+        marginBottom: 8,
+    },
+    imageUploadButton: {
+        width: 100,
+        height: 100,
+        borderRadius: 50,
+        backgroundColor: '#F9FAFB',
+        borderWidth: 2,
+        borderColor: '#E5E7EB',
+        borderStyle: 'dashed',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 12,
+    },
+    previewImage: {
+        width: 96,
+        height: 96,
+        borderRadius: 48,
+    },
+    uploadPlaceholder: {
+        alignItems: 'center',
+    },
+    uploadText: {
+        fontSize: 12,
+        color: '#6B7280',
+        marginTop: 4,
+    },
+    changeButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#FF4500',
+        paddingHorizontal: 12,
+        paddingVertical: 8,
+        borderRadius: 8,
+    },
+    changeButtonText: {
+        color: '#FFF',
+        fontSize: 12,
+        fontWeight: '600',
+        marginLeft: 4,
+    },
     textInput: {
-        backgroundColor: '#F8F9FA',
+        backgroundColor: '#F9FAFB',
         borderWidth: 1,
-        borderColor: '#E9ECEF',
+        borderColor: '#E5E7EB',
         borderRadius: 8,
         padding: 16,
         fontSize: 16,
-        color: '#2D3436',
+        color: '#1F2937',
     },
     multilineInput: {
-        height: 120,
+        height: 100,
         textAlignVertical: 'top',
     },
     sectionTitleModal: {
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: '600',
-        color: '#2D3436',
+        color: '#374151',
+        marginBottom: 8,
+    },
+    sectionSubtitle: {
+        fontSize: 14,
+        color: '#6B7280',
         marginBottom: 16,
     },
     categoryScroll: {
@@ -831,25 +1048,25 @@ const styles = StyleSheet.create({
     categoryPill: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#F8F9FA',
+        backgroundColor: '#F9FAFB',
         paddingHorizontal: 16,
-        paddingVertical: 12,
+        paddingVertical: 10,
         borderRadius: 20,
         borderWidth: 1,
-        borderColor: '#E9ECEF',
+        borderColor: '#E5E7EB',
         gap: 8,
     },
     categoryPillSelected: {
-        backgroundColor: '#E7F5FF',
-        borderColor: '#339AF0',
+        backgroundColor: '#EFF6FF',
+        borderColor: '#3B82F6',
     },
     categoryText: {
-        color: '#2D3436',
+        color: '#374151',
         fontSize: 14,
         fontWeight: '500',
     },
     categoryTextSelected: {
-        color: '#339AF0',
+        color: '#3B82F6',
     },
     selectedCategories: {
         marginBottom: 24,
@@ -865,29 +1082,48 @@ const styles = StyleSheet.create({
     selectedPill: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#E7F5FF',
-        paddingHorizontal: 16,
-        paddingVertical: 12,
-        borderRadius: 20,
+        backgroundColor: '#EFF6FF',
+        paddingHorizontal: 12,
+        paddingVertical: 8,
+        borderRadius: 16,
         borderWidth: 1,
-        borderColor: '#339AF0',
-        gap: 8,
+        borderColor: '#3B82F6',
+        gap: 6,
     },
     selectedText: {
-        color: '#339AF0',
-        fontSize: 14,
+        color: '#3B82F6',
+        fontSize: 12,
         fontWeight: '500',
     },
-    setupButton: {
-        backgroundColor: '#FF4500',
-        borderRadius: 12,
-        padding: 18,
-        alignItems: 'center',
-        marginBottom: 20,
+    modalActions: {
+        flexDirection: 'row',
+        gap: 12,
+        marginTop: 8,
     },
-    setupButtonText: {
+    cancelButton: {
+        flex: 1,
+        backgroundColor: '#F9FAFB',
+        padding: 16,
+        borderRadius: 8,
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#E5E7EB',
+    },
+    cancelButtonText: {
+        color: '#374151',
+        fontSize: 16,
+        fontWeight: '600',
+    },
+    saveButton: {
+        flex: 1,
+        backgroundColor: '#FF4500',
+        padding: 16,
+        borderRadius: 8,
+        alignItems: 'center',
+    },
+    saveButtonText: {
         color: '#FFF',
-        fontSize: 18,
-        fontWeight: '700',
+        fontSize: 16,
+        fontWeight: '600',
     },
 });

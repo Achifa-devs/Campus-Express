@@ -46,6 +46,10 @@ const LodgeCard = ({ item, onShare, state='private', onDelete, onPromote }) => {
       if (!exploreshop) {
         if(!isPromoted){
           dispatch(set_boost_modal({data: data, visible: 1}))
+        }else{
+          navigation.navigate('user-metrics', {
+            data: data
+          })
         }
       } else{
         navigation.navigate('user-lodge-room', { data: item });

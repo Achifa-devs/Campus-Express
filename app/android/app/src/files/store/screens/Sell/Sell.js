@@ -13,6 +13,7 @@ import {
   RefreshControl,
   KeyboardAvoidingView,
   TextInput,
+  Alert,
 } from 'react-native';
 import { debounce } from 'lodash';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -256,11 +257,8 @@ const ShopScreen = () => {
   };
 
 
-  const handleNavigation = useCallback(
-    debounce((item) => {
-      navigation.navigate('user-product', { data: item });
-    }, 300, { leading: true, trailing: false }),
-    [navigation]
+  const handleNavigation = (item) => (
+    navigation.navigate('user-metrics', { data: item })
   );
 
   const getCategoryImage = (categoryName) => {
@@ -302,7 +300,7 @@ const ShopScreen = () => {
     
     <TouchableOpacity 
       style={styles.adCard}
-      onPress={() => {e=>handlePromotePress(item)}}
+      onPress={() => navigation.navigate('user-metrics', {data: item})}
     >
       {item?.purpose !== 'accomodation' ? (
         <TouchableOpacity onPress={e=>handlePromotePress(item)}>
@@ -312,7 +310,7 @@ const ShopScreen = () => {
           />
         </TouchableOpacity>
       ) : (
-        <View style={{
+        <TouchableOpacity onPress={e=>handlePromotePress(item)} style={{
           height: 100,          // ✅ explicit height (same as Image for consistency)
           width: 100,
           backgroundColor: '#000',
@@ -327,7 +325,7 @@ const ShopScreen = () => {
             muted={true}
             paused
           />
-        </View>
+        </TouchableOpacity>
       )}
 
       {/* Boost Badge/Promote Button - Overlay on image */}

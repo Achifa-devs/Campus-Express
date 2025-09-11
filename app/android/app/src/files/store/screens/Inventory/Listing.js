@@ -1,9 +1,9 @@
 // screens/MyAdsScreen.js
-import React, { useEffect } from 'react';
-import { View, FlatList, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, FlatList, Text, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
 import ProductCard from '../../components/Inventory/ProductCard';
 import LodgeCard from '../../components/Inventory/LodgeCard';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import categoriesData from '../../../../../../../services.json'
 import js_ago from 'js-ago';
@@ -16,6 +16,16 @@ const Listing = () => {
   const route = useRoute();
   const { data } = route?.params;
   const { option } = useSelector(s => s?.option);
+  const [exploreshop, setExploreShop] = useState(false);
+
+  useEffect(() => {
+    console.log(route.name)
+    if (route.name === "user-explore-shop") {
+      setExploreShop(true);
+    } else {
+      setExploreShop(false);
+    }
+  }, [route.name]);
   
   const handleShare = (item) => {
     console.log('Share:', item);
@@ -33,11 +43,17 @@ const Listing = () => {
     const isPromoted = eval(item.promotion);
     
     const handlePromotePress = (data) => {
-      if(!isPromoted){
-        console.log("data: ", data)
-        dispatch(set_boost_modal({data: data, visible: 1}))
-      }else{
-        navigation.navigate('user-metrics')
+      if (!exploreshop) {
+        if(!isPromoted){
+          console.log("data: ", data)
+          dispatch(set_boost_modal({data: data, visible: 1}))
+        }else{
+          navigation.navigate('user-metrics', {
+            data: data
+          })
+        }
+      } else {
+        navigation.navigate('user-product', { data: data });
       }
     };
     
@@ -81,6 +97,8 @@ const Listing = () => {
       </TouchableOpacity>
     );
   };
+
+  const navigation = useNavigation()
 
   const renderItem = ({ item }) => {
     if (item.purpose === 'product') {
