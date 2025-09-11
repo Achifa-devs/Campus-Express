@@ -22,6 +22,8 @@ import {
 import {openSettings} from "react-native-permissions"
 
 import { useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
 // import RNFS from 'react-native-fs';
 function StackNavigator () { 
     const version = ('1.0.2');
@@ -53,7 +55,24 @@ function StackNavigator () {
     }, [auth])
 
     
+    const reqHandler = async () => {
+      axios.get(`http://192.168.0.4:9090/subscription-plan`)
+      .then((response) => {
+        console.log('response: ', response?.data)
+        storeData('tools_plan', JSON.stringify(response.data))  
+      }).catch(err=>console.log(err))  
+    }
 
+    const getToolsplan = async (params) => {  
+      let data = await getData('tools_plan');
+      if (!data) { 
+        reqHandler()
+      }
+    }
+
+    useEffect(() => {
+      getToolsplan()
+    }, [])
     return (
         <>
          

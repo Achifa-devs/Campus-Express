@@ -13,6 +13,7 @@ import locale_modal from './locale'
 import option from './option';
 import sub_modal from './sub'
 import boost_modal from './boost_modal'
+import ads_modal from './ads_modal'
 import connect_modal from './connect'
 import subscribed from './subscribed'
 import products from './products'
@@ -25,6 +26,7 @@ let store = configureStore({
     products: products,
     sub_modal: sub_modal,
     boost_modal: boost_modal,
+    ads_modal: ads_modal,
     connect_modal: connect_modal,
     subscribed: subscribed,
     user: user,

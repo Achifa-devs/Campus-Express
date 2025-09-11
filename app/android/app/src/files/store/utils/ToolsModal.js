@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -17,6 +17,7 @@ import { set_shop } from '../../../../../../redux/shop';
 import LinearGradient from 'react-native-linear-gradient';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
 const { width } = Dimensions.get('window');
 
@@ -27,55 +28,23 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
   const [subscriptionExpiry, setSubscriptionExpiry] = useState(
     new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
   );
+  const [subscriptionPlans, setsubscriptionPlans] = useState([])
 
   const { user } = useSelector((s) => s?.user);
   const { shop } = useSelector((s) => s?.shop);
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  const subscriptionPlans = {
-    Free: {
-      name: 'free',
-      description:
-        'A starter plan with essential tools to begin selling and engage with customers.',
-      price: '₦0.00',
-      discountPrice: '₦0.00',
-      features: [
-        'List up to 2 products',
-        'Basic performance insights (impression and views only)',
-        'View and respond to customer reviews to build trust and improve sales',
-      ],
-      current: true,
-      icon: '🚀',
-    },
-    Standard: {
-      name: 'pro',
-      description:
-        'A comprehensive package for growing vendors seeking actionable insights, and enhanced credibility to accelerate sales.',
-      price: '₦2,000.00',
-      discountPrice: '₦1,500.00',
-      features: [
-        'List up to 20 products',
-        'More analytics suite (impressions, views, shares)',
-        'View and respond to customer reviews to build trust and improve sales',
-      ],
-      icon: '⭐',
-    },
-    Pro: {
-      name: 'pro',
-      description:
-        'A complete package for serious vendors who want advanced analytics, and credibility to maximize sales.',
-      price: '₦3,000.00',
-      discountPrice: '₦2,500.00',
-      features: [
-        'Unlimited product listings',
-        'Full analytics suite (impressions, views, shares, search appearances, and conversions)',
-        'Sponsored badge for premium trust and recognition',
-        'View and respond to customer reviews to build trust and improve sales',
-      ],
-      icon: '🚀',
-    },
-  };
+  useEffect(() => {
+    const getToolsplan = async () => {  
+      let data = await getData('tools_plan');
+      if (data) {
+        setsubscriptionPlans(JSON.parse(data))
+      }
+    }
+    getToolsplan();
+  }, [])
+
 
   const handleSubscribe = (plan) => {
     if (plan === 'Free') {

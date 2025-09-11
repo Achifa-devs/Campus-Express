@@ -41,6 +41,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { set_connect_modal } from '../../../../../../redux/connect.js';
 import { set_user } from '../../../../../../redux/user.js';
 import useInsufficientConnectAlert from '../utils/ConnectZero.js';
+import { set_ads_modal } from '../../../../../../redux/ads_modal.js';
 
 export default function Product() {
   const route = useRoute();
@@ -310,6 +311,24 @@ export default function Product() {
   function updateShop(data) {
     setShop(data)
   }
+
+  const { ads_modal } = useSelector(s => s.ads_modal);
+  
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("beforeRemove", (e) => {
+      console.log("User is going back or leaving this screen");
+      console.log("Action type:", e.data.action.type); // e.g. "POP", "GO_BACK"
+      if(ads_modal.data === 1){
+        dispatch(set_ads_modal({data: 0, visible: 1}))
+      }else{
+        dispatch(set_ads_modal({data: 1, visible: 0}))
+      }
+      // If you want to prevent going back:
+      // e.preventDefault();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   const handleWriteReview = () => {
     if (user) {

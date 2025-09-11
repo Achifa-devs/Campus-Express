@@ -41,6 +41,8 @@ import VendorConnectModal from './android/app/src/files/store/utils/ConnectModal
 import { set_connect_modal } from './redux/connect.js';
 import VendorConnectionsModal from './android/app/src/files/store/screens/ConnectPurchase.js';
 import { set_connect_purchase_modal } from './redux/connect_purchase.js';
+import AdModal from './android/app/src/files/store/utils/Ads.js';
+import { set_ads_modal } from './redux/ads_modal.js';
 // import { set_campus } from './redux/reducer/location.js';   // ✅ add correct reducer
 // import { closeModal } from './redux/reducer/locale.js';      // ✅ add correct reducer
 
@@ -179,6 +181,7 @@ function NavCnt() {
   const { user } = useSelector(s => s.user);
   const { locale_modal } = useSelector(s => s.locale_modal);
   const { sub_modal } = useSelector(s => s.sub_modal);
+  const { ads_modal } = useSelector(s => s.ads_modal);
   const { boost_modal } = useSelector(s => s.boost_modal);
   const { connect_modal } = useSelector(s => s.connect_modal);
   const { connect_purchase_modal } = useSelector(s => s.connect_purchase_modal);
@@ -296,6 +299,16 @@ function NavCnt() {
           
           <VendorConnectModal  onSelectPackage={''} onClose={e => {
             dispatch(set_connect_modal(0))
+          }} />: ''
+        )
+      } 
+
+      {
+        (
+          ads_modal.visible == 1 ? 
+          
+          <AdModal  onSelectPackage={''} onClose={e => {
+            dispatch(set_ads_modal({data: ads_modal.data, visible: 0}))
           }} />: ''
         )
       } 

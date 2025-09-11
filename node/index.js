@@ -484,6 +484,23 @@ CAMPUSSPHERE_SERVER.get('/subscription', async (req, res) => {
 });
 
 
+CAMPUSSPHERE_SERVER.get('/subscription-plan', async (req, res) => {
+
+  try {
+    // Get seller's products
+    const result = await pool.query(
+      'SELECT * FROM subscription_plans'
+    ); 
+    // Return combined data 
+    res.status(200).send(result.rows);
+
+  } catch (err) {
+    console.error('DB Error:', err);
+    res.status(500).send({ error: 'Server Error' });
+  }
+});
+
+
 CAMPUSSPHERE_SERVER.post('/minus-connect', parser, async (req, res) => {
 
   const {user_id} = req?.body;
