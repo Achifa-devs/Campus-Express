@@ -90,7 +90,8 @@
     "redux-toolkit": "^1.1.2",
     "regjsparser": "^0.10.0",
     "short-id": "^0.1.0-1",
-    "socket.io-client": "^4.7.2"
+    "socket.io-client": "^4.7.2",
+    "text-encoding": "^0.7.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

@@ -476,7 +476,7 @@ export default function Shopile() {
                     
                     <View style={styles.analyticsContainer}>
                         {[
-                            {title: `${shop?.views} shop views`, summary: 'Discover who viewed your shop', icon: 'people'},
+                            // {title: `${shop?.views} shop views`, summary: 'Discover who viewed your shop', icon: 'people'},
                             {title: `${products.reduce((sum, item) => sum + parseInt(item.impression), 0)} post impression`, summary: 'Checkout who\'s engaging with your product', icon: 'stats-chart'},
                             {title: `${products.reduce((sum, item) => sum + parseInt(item.search_appearances), 0)} search appearances`, summary: 'See how often your product appear in searches', icon: 'compass'}
                         ].map((item, index) => (

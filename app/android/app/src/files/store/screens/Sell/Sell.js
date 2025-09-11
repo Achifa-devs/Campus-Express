@@ -290,7 +290,9 @@ const ShopScreen = () => {
     if(!eval(data.promotion)){
       dispatch(set_boost_modal({data: data, visible: 1}))
     }else{
-      navigation.navigate('user-metrics')
+      navigation.navigate('user-metrics', {
+        data: data
+      })
     }
   };
 

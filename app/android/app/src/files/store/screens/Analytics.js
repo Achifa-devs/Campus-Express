@@ -185,17 +185,9 @@ const AnalyticsScreen = () => {
       }
     >
       {/* Header */}
-      {/* <View style={styles.header}>
-        <Text style={styles.headerTitle}>Shop Analytics</Text>
-        <View style={styles.timeframeContainer}>
-          <TimeframeButton label="7D" value="7d" />
-          <TimeframeButton label="30D" value="30d" />
-          <TimeframeButton label="90D" value="90d" />
-        </View>
-      </View> */}
+     
 
       {/* Overview Metrics */}
-      {/* Filter Buttons */}
       <ScrollView 
         horizontal 
         showsHorizontalScrollIndicator={false}

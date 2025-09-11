@@ -1,178 +1,288 @@
-import React, { useState } from "react";
-import { 
-  View, 
-  Text, 
-  TouchableOpacity, 
-  FlatList, 
-  StyleSheet, 
+import { useRoute } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+import {
+  StyleSheet,
+  View,
+  Text,
   ScrollView,
+  SectionList,
+  TouchableOpacity,
   Dimensions,
-  SafeAreaView
-} from "react-native";
+  SafeAreaView,
+  StatusBar,
+} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const { width } = Dimensions.get('window');
 
-const data = [
-  { id: "1", name: "Product A", views: 120, impressions: 300, shares: 45, contacts: 15, reviews: 8 },
-  { id: "2", name: "Product B", views: 80, impressions: 200, shares: 30, contacts: 10, reviews: 5 },
-  { id: "3", name: "Product C", views: 150, impressions: 400, shares: 60, contacts: 20, reviews: 12 },
-  { id: "4", name: "Product D", views: 95, impressions: 250, shares: 35, contacts: 12, reviews: 7 },
-  { id: "5", name: "Product E", views: 200, impressions: 500, shares: 75, contacts: 25, reviews: 15 },
-];
-
-const filters = [
-  { key: "views", label: "Views", icon: "eye-outline" },
-  { key: "impressions", label: "Impressions", icon: "analytics-outline" },
-  { key: "shares", label: "Shares", icon: "share-social-outline" },
-  { key: "contacts", label: "Contacts", icon: "chatbubble-ellipses-outline" },
-  { key: "reviews", label: "Reviews", icon: "star-outline" },
-];
-
 const AnalyticsScreen = () => {
-  const [activeFilter, setActiveFilter] = useState("views");
+  const [selectedFilter, setSelectedFilter] = useState('today');
 
-  const getIconForFilter = (filterKey) => {
-    const filter = filters.find(f => f.key === filterKey);
-    return filter ? filter.icon : "help-outline";
+  const {
+    data
+  } = useRoute()?.params
+
+  // Sample analytics data
+  const analyticsData = [
+    {
+      title: 'Today',
+      data: [
+        {
+          id: '1',
+          location: 'New York, NY',
+          time: '10:30 AM',
+          action: 'Product View',
+          duration: '2 minutes',
+          value: '$149.99',
+        },
+        {
+          id: '2',
+          location: 'Los Angeles, CA',
+          time: '11:45 AM',
+          action: 'Add to Cart',
+          duration: '1 minute',
+          value: '$79.99',
+        },
+        {
+          id: '3',
+          location: 'Chicago, IL',
+          time: '1:15 PM',
+          action: 'Purchase',
+          duration: '5 minutes',
+          value: '$249.99',
+        },
+        {
+          id: '4',
+          location: 'Miami, FL',
+          time: '3:20 PM',
+          action: 'Product View',
+          duration: '3 minutes',
+          value: '$99.99',
+        },
+        {
+          id: '5',
+          location: 'Seattle, WA',
+          time: '4:45 PM',
+          action: 'Add to Cart',
+          duration: '2 minutes',
+          value: '$199.99',
+        },
+      ],
+    },
+    {
+      title: 'Yesterday',
+      data: [
+        {
+          id: '6',
+          location: 'Boston, MA',
+          time: '9:15 AM',
+          action: 'Product View',
+          duration: '4 minutes',
+          value: '$129.99',
+        },
+        {
+          id: '7',
+          location: 'Austin, TX',
+          time: '11:30 AM',
+          action: 'Purchase',
+          duration: '3 minutes',
+          value: '$89.99',
+        },
+        {
+          id: '8',
+          location: 'Denver, CO',
+          time: '2:45 PM',
+          action: 'Add to Cart',
+          duration: '2 minutes',
+          value: '$179.99',
+        },
+      ],
+    },
+    {
+      title: 'This Week',
+      data: [
+        {
+          id: '9',
+          location: 'San Francisco, CA',
+          time: 'Monday, 10:15 AM',
+          action: 'Purchase',
+          duration: '6 minutes',
+          value: '$299.99',
+        },
+        {
+          id: '10',
+          location: 'Portland, OR',
+          time: 'Tuesday, 1:30 PM',
+          action: 'Product View',
+          duration: '3 minutes',
+          value: '$69.99',
+        },
+        {
+          id: '11',
+          location: 'Phoenix, AZ',
+          time: 'Wednesday, 3:45 PM',
+          action: 'Add to Cart',
+          duration: '2 minutes',
+          value: '$159.99',
+        },
+      ],
+    },
+  ];
+
+  // Summary statistics
+  const summaryData = {
+    today: {
+      totalViews: 42,
+      totalSales: 8,
+      conversionRate: '19%',
+      totalRevenue: '$1,249.99',
+    },
+    yesterday: {
+      totalViews: 38,
+      totalSales: 6,
+      conversionRate: '16%',
+      totalRevenue: '$899.99',
+    },
+    week: {
+      totalViews: 215,
+      totalSales: 32,
+      conversionRate: '15%',
+      totalRevenue: '$4,599.99',
+    },
   };
 
-  const renderItem = ({ item, index }) => {
-    const value = item[activeFilter];
-    let progressPercentage = 0;
-    
-    // Calculate progress percentage based on the highest value in the dataset
-    if (data.length > 0) {
-      const maxValue = Math.max(...data.map(i => i[activeFilter]));
-      progressPercentage = (value / maxValue) * 100;
-    }
-    
-    return (
-      <View style={[
-        styles.card,
-        index === 0 && styles.firstCard,
-        index === data.length - 1 && styles.lastCard
-      ]}>
-        <View style={styles.cardHeader}>
-          <Text style={styles.productName}>{item.name}</Text>
-          <View style={styles.valueContainer}>
-            <Ionicons name={getIconForFilter(activeFilter)} size={16} color="#FF4500" />
-            <Text style={styles.valueText}>{value}</Text>
-          </View>
+  const getSummaryData = () => {
+    return summaryData[selectedFilter] || summaryData.today;
+  };
+
+  const renderFilterButton = (title, value) => (
+    <TouchableOpacity
+      style={[
+        styles.filterButton,
+        selectedFilter === value && styles.filterButtonActive,
+      ]}
+      onPress={() => setSelectedFilter(value)}
+    >
+      <Text
+        style={[
+          styles.filterButtonText,
+          selectedFilter === value && styles.filterButtonTextActive,
+        ]}
+      >
+        {title}
+      </Text>
+    </TouchableOpacity>
+  );
+
+  const renderItem = ({ item }) => (
+    <View style={styles.itemContainer}>
+      <View style={styles.itemHeader}>
+        <View style={styles.locationContainer}>
+          <Ionicons name="location-outline" size={16} color="#666" />
+          <Text style={styles.locationText}>{item.location}</Text>
+        </View>
+        <Text style={styles.timeText}>{item.time}</Text>
+      </View>
+      
+      <View style={styles.itemBody}>
+        <View style={styles.actionBadge}>
+          <Text style={styles.actionText}>{item.action}</Text>
         </View>
         
-        <View style={styles.progressBar}>
-          <View 
-            style={[
-              styles.progressFill,
-              { width: `${progressPercentage}%` }
-            ]} 
-          />
-        </View>
-        
-        <View style={styles.metricsRow}>
-          <View style={styles.metricItem}>
-            <Ionicons name="eye-outline" size={14} color="#64748B" />
-            <Text style={styles.metricText}>{item.views}</Text>
+        <View style={styles.detailsContainer}>
+          <View style={styles.detailItem}>
+            <Ionicons name="time-outline" size={14} color="#666" />
+            <Text style={styles.detailText}>{item.duration}</Text>
           </View>
-          <View style={styles.metricItem}>
-            <Ionicons name="analytics-outline" size={14} color="#64748B" />
-            <Text style={styles.metricText}>{item.impressions}</Text>
-          </View>
-          <View style={styles.metricItem}>
-            <Ionicons name="share-social-outline" size={14} color="#64748B" />
-            <Text style={styles.metricText}>{item.shares}</Text>
-          </View>
-          <View style={styles.metricItem}>
-            <Ionicons name="chatbubble-ellipses-outline" size={14} color="#64748B" />
-            <Text style={styles.metricText}>{item.contacts}</Text>
-          </View>
-          <View style={styles.metricItem}>
-            <Ionicons name="star-outline" size={14} color="#64748B" />
-            <Text style={styles.metricText}>{item.reviews}</Text>
+          
+          <View style={styles.detailItem}>
+            <Ionicons name="pricetag-outline" size={14} color="#666" />
+            <Text style={styles.detailText}>{item.value}</Text>
           </View>
         </View>
       </View>
-    );
-  };
+    </View>
+  );
+
+  const renderSectionHeader = ({ section: { title } }) => (
+    <View style={styles.sectionHeader}>
+      <Text style={styles.sectionHeaderText}>{title}</Text>
+    </View>
+  );
+
+  useEffect(() => {
+
+    try {
+      
+    } catch (error) {
+        console.log("error: ", error)
+      
+    }
+
+  }, [])
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="dark-content" />
       
-      {/* Filter Buttons */}
-      <ScrollView 
-        horizontal 
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.filterRow}
-      >
-        {filters.map((filter) => (
-          <TouchableOpacity
-            key={filter.key}
-            style={[
-              styles.filterButton,
-              activeFilter === filter.key && styles.activeFilter,
-            ]}
-            onPress={() => setActiveFilter(filter.key)}
-          >
-            <Ionicons 
-              name={filter.icon} 
-              size={16} 
-              color={activeFilter === filter.key ? "#fff" : "#FF4500"} 
-            />
-            <Text
-              style={[
-                styles.filterText,
-                activeFilter === filter.key && styles.activeFilterText,
-              ]}
-            >
-              {filter.label}
-            </Text>
-          </TouchableOpacity>
-        ))}
+      <ScrollView style={styles.scrollView}>
+        {/* Summary Cards - Made more compact */}
+        <ScrollView 
+          horizontal 
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.summaryContainer}
+        >
+          <View style={[styles.summaryCard, { backgroundColor: '#6366F1' }]}>
+            <Ionicons name="eye-outline" size={20} color="white" />
+            <Text style={styles.summaryNumber}>{data.views}</Text>
+            <Text style={styles.summaryLabel}>Views</Text>
+          </View>
+          
+          <View style={[styles.summaryCard, { backgroundColor: '#10B981' }]}>
+            <Ionicons name="analytics-outline" size={20} color="white" />
+            <Text style={styles.summaryNumber}>{data.impression}</Text>
+            <Text style={styles.summaryLabel}>Impression</Text>
+          </View>
+          
+          <View style={[styles.summaryCard, { backgroundColor: '#F59E0B' }]}>
+            <Ionicons name="call-outline" size={20} color="white" />
+            <Text style={styles.summaryNumber}>{data.contact_click}</Text>
+            <Text style={styles.summaryLabel}>Contacts</Text>
+          </View>
+          
+          <View style={[styles.summaryCard, { backgroundColor: '#EF4444' }]}>
+            <Ionicons name="search-outline" size={20} color="white" />
+            <Text style={styles.summaryNumber}>{data.search_appearances}</Text>
+            <Text style={styles.summaryLabel}>Search appearances</Text>
+          </View>
+          
+          <View style={[styles.summaryCard, { backgroundColor: '#EF4444' }]}>
+            <Ionicons name="share-outline" size={20} color="white" />
+            <Text style={styles.summaryNumber}>{data.shares}</Text>
+            <Text style={styles.summaryLabel}>Shares</Text>
+          </View>
+        </ScrollView>
+        
+        {/* Filter Options */}
+        {/* <View style={styles.filterContainer}>
+          {renderFilterButton('Today', 'today')}
+          {renderFilterButton('Yesterday', 'yesterday')}
+          {renderFilterButton('This Week', 'week')}
+        </View> */}
+        
+        {/* Analytics List */}
+        <View style={styles.listContainer}>
+          <Text style={styles.listTitle}>Activity Log</Text>
+          <SectionList
+            sections={analyticsData}
+            keyExtractor={(item) => item.id}
+            renderItem={renderItem}
+            // renderSectionHeader={renderSectionHeader}
+            showsVerticalScrollIndicator={false}
+            scrollEnabled={false} // Disable internal scrolling
+          />
+        </View>
       </ScrollView>
-      
-      {/* Summary Card */}
-      <View style={styles.summaryCard}>
-        <View style={styles.summaryHeader}>
-          <Text style={styles.summaryTitle}>Performance Summary</Text>
-          <Text style={styles.summarySubtitle}>Sorted by {filters.find(f => f.key === activeFilter)?.label}</Text>
-        </View>
-        <View style={styles.summaryStats}>
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>
-              {data.reduce((sum, item) => sum + item[activeFilter], 0)}
-            </Text>
-            <Text style={styles.statLabel}>Total</Text>
-          </View>
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>
-              {Math.max(...data.map(item => item[activeFilter]))}
-            </Text>
-            <Text style={styles.statLabel}>Highest</Text>
-          </View>
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>
-              {Math.round(data.reduce((sum, item) => sum + item[activeFilter], 0) / data.length)}
-            </Text>
-            <Text style={styles.statLabel}>Average</Text>
-          </View>
-        </View>
-      </View>
-
-      {/* List Header */}
-      <View style={styles.listHeader}>
-        <Text style={styles.listTitle}>Product Performance</Text>
-        <Text style={styles.listCount}>{data.length} products</Text>
-      </View>
-
-      {/* List */}
-      <FlatList
-        data={data}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.listContent}
-        showsVerticalScrollIndicator={false}
-      />
     </SafeAreaView>
   );
 };
@@ -180,7 +290,10 @@ const AnalyticsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8FAFC",
+    backgroundColor: '#F8FAFC',
+  },
+  scrollView: {
+    flex: 1,
   },
   header: {
     flexDirection: 'row',
@@ -188,7 +301,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingVertical: 16,
-    backgroundColor: '#fff',
+    backgroundColor: 'white',
     borderBottomWidth: 1,
     borderBottomColor: '#E2E8F0',
   },
@@ -197,53 +310,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#1E293B',
   },
-  filterIcon: {
-    padding: 4,
-  },
-  filterRow: {
+  summaryContainer: {
     paddingHorizontal: 16,
-    paddingVertical: 16,
-    height: 80,
-    marginBottom: 30
-  },
-  filterButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: "#E2E8F0",
-    backgroundColor: '#fff',
-    marginRight: 8,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  activeFilter: {
-    backgroundColor: "#FF4500",
-    borderColor: "#FF4500",
-  },
-  filterText: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: "#64748B",
-    marginLeft: 6,
-  },
-  activeFilterText: {
-    color: "#fff",
+    paddingVertical: 16, // Reduced padding
   },
   summaryCard: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 20,
-    marginHorizontal: 16,
-    marginBottom: 20,
+    width: width * 0.35, // Made cards narrower
+    borderRadius: 4,
+    padding: 12, // Reduced padding
+    marginRight: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -253,115 +330,123 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
-  summaryHeader: {
-    marginBottom: 16,
+  summaryNumber: {
+    fontSize: 20, // Slightly smaller font
+    fontWeight: 'bold',
+    color: 'white',
+    marginVertical: 6, // Reduced margin
   },
-  summaryTitle: {
+  summaryLabel: {
+    fontSize: 12, // Smaller font
+    color: 'white',
+    opacity: 0.9,
+  },
+  filterContainer: {
+    flexDirection: 'row',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: 'white',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E2E8F0',
+  },
+  filterButton: {
+    paddingHorizontal: 14,
+    paddingVertical: 6,
+    borderRadius: 20,
+    marginRight: 8,
+    backgroundColor: '#F1F5F9',
+  },
+  filterButtonActive: {
+    backgroundColor: '#6366F1',
+  },
+  filterButtonText: {
+    color: '#64748B',
+    fontWeight: '500',
+    fontSize: 14,
+  },
+  filterButtonTextActive: {
+    color: 'white',
+  },
+  listContainer: {
+    padding: 8,
+  },
+  listTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#1E293B',
+    marginBottom: 16,
+  },
+  sectionHeader: {
+    backgroundColor: '#F1F5F9',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    marginBottom: 8,
+  },
+  sectionHeaderText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#475569',
+  },
+  itemContainer: {
+    backgroundColor: 'white',
+    borderRadius: 4,
+    padding: 16,
     marginBottom: 4,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
   },
-  summarySubtitle: {
-    fontSize: 14,
-    color: '#64748B',
-  },
-  summaryStats: {
+  itemHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
   },
-  statItem: {
+  locationContainer: {
+    flexDirection: 'row',
     alignItems: 'center',
   },
-  statValue: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#FF4500',
-    marginBottom: 4,
+  locationText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#334155',
+    marginLeft: 4,
   },
-  statLabel: {
+  timeText: {
     fontSize: 12,
     color: '#64748B',
   },
-  listHeader: {
+  itemBody: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    marginBottom: 12,
   },
-  listTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#1E293B',
+  actionBadge: {
+    backgroundColor: '#EFF6FF',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 4,
   },
-  listCount: {
-    fontSize: 14,
-    color: '#64748B',
+  actionText: {
+    fontSize: 12,
+    fontWeight: '500',
+    color: '#3B82F6',
   },
-  listContent: {
-    paddingHorizontal: 16,
-    paddingBottom: 20,
+  detailsContainer: {
+    alignItems: 'flex-end',
   },
-  card: {
-    backgroundColor: "#fff",
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 12,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  firstCard: {
-    marginTop: 0,
-  },
-  lastCard: {
-    marginBottom: 20,
-  },
-  cardHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  productName: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: '#1E293B',
-  },
-  valueContainer: {
+  detailItem: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: 4,
   },
-  valueText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: "#FF4500",
-    marginLeft: 6,
-  },
-  progressBar: {
-    height: 6,
-    backgroundColor: '#E2E8F0',
-    borderRadius: 3,
-    marginBottom: 12,
-    overflow: 'hidden',
-  },
-  progressFill: {
-    height: '100%',
-    backgroundColor: '#FF4500',
-    borderRadius: 3,
-  },
-  metricsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  metricItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  metricText: {
+  detailText: {
     fontSize: 12,
     color: '#64748B',
     marginLeft: 4,
