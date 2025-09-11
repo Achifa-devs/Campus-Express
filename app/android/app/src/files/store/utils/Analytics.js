@@ -190,7 +190,7 @@ const AnalyticsScreen = () => {
       
       <View style={styles.itemBody}>
         <View style={styles.actionBadge}>
-          <Text style={styles.actionText}>{item.source === 'views' ? "Viewed" : item.source === 'search_appearances' ? "Product searched" : item.source === 'impression' ? "Impressions" : item.source === 'shares' ? "Shared" : "Contact clicked"}</Text>
+          <Text style={styles.actionText}>{item.source === 'views' ? "Viewed" : item.source === 'search_appearances' ? "Product searched" : item.source === 'impression' ? "Impressions" : item.source === 'shares' ? "Shared" : "Contact clicked"} by {item.fname}</Text>
         </View>
         
         {/* <View style={styles.detailsContainer}>
