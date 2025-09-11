@@ -501,16 +501,9 @@ export default function Shopile() {
                             <View style={[styles.analyticsIcon, {backgroundColor: '#EFF6FF'}]}>
                                 <Ionicons name="stats-chart" size={24} color="#3B82F6" />
                             </View>
-                            <BlurView
-                                style={{ padding: 10, borderRadius: 5 }}
-                                blurType="light"
-                                blurAmount={5}
-                                reducedTransparencyFallbackColor="white"
-                            >
-                                <Text style={styles.analyticsNumber}>
-                                    {products.reduce((sum, item) => sum + parseInt(item.impression || 0), 0).toLocaleString()}
-                                </Text>
-                            </BlurView>
+                            <Text style={styles.analyticsNumber}>
+                                {shop.promotion ? products.reduce((sum, item) => sum + parseInt(item.impression || 0), 0).toLocaleString() : '***'}
+                            </Text>
                             <Text style={styles.analyticsLabel}>Post Impressions</Text>
                         </View>
                         
@@ -518,16 +511,9 @@ export default function Shopile() {
                             <View style={[styles.analyticsIcon, {backgroundColor: '#F0FDF4'}]}>
                                 <Ionicons name="compass" size={24} color="#22C55E" />
                             </View>
-                            <BlurView 
-                                style={{padding: 10, borderRadius: 5}}
-                                blurType="light"
-                                blurAmount={5}
-                                reducedTransparencyFallbackColor="white"
-                            >
-                                <Text style={styles.analyticsNumber}>
-                                    {products.reduce((sum, item) => sum + parseInt(item.search_appearances || 0), 0).toLocaleString()}
-                                </Text>
-                            </BlurView>
+                            <Text style={styles.analyticsNumber}>
+                                {shop.promotion ? products.reduce((sum, item) => sum + parseInt(item.search_appearances || 0), 0).toLocaleString() : '***'}
+                            </Text>
                             <Text style={styles.analyticsLabel}>Search Appearances</Text>
                         </View>
                     </View>

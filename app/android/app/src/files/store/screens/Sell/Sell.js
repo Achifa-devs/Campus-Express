@@ -257,10 +257,6 @@ const ShopScreen = () => {
   };
 
 
-  const handleNavigation = (item) => (
-    navigation.navigate('user-metrics', { data: item })
-  );
-
   const getCategoryImage = (categoryName) => {
     console.log(categoriesData)
     for (let cat of categoriesData.items.category) {
@@ -285,13 +281,9 @@ const ShopScreen = () => {
   );
   
   const handlePromotePress = (data) => {
-    if(!eval(data.promotion)){
-      dispatch(set_boost_modal({data: data, visible: 1}))
-    }else{
-      navigation.navigate('user-metrics', {
-        data: data
-      })
-    }
+    navigation.navigate('user-metrics', {
+      data: data
+    })
   };
 
 

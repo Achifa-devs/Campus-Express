@@ -48,10 +48,23 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
       current: true,
       icon: '🚀',
     },
+    Standard: {
+      name: 'pro',
+      description:
+        'A comprehensive package for growing vendors seeking actionable insights, and enhanced credibility to accelerate sales.',
+      price: '₦2,000.00',
+      discountPrice: '₦1,500.00',
+      features: [
+        'List up to 20 products',
+        'More analytics suite (impressions, views, shares)',
+        'View and respond to customer reviews to build trust and improve sales',
+      ],
+      icon: '⭐',
+    },
     Pro: {
       name: 'pro',
       description:
-        'A complete package for serious vendors who want advanced visibility, analytics, and credibility to maximize sales.',
+        'A complete package for serious vendors who want advanced analytics, and credibility to maximize sales.',
       price: '₦3,000.00',
       discountPrice: '₦2,500.00',
       features: [
@@ -60,7 +73,7 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
         'Sponsored badge for premium trust and recognition',
         'View and respond to customer reviews to build trust and improve sales',
       ],
-      icon: '⭐',
+      icon: '🚀',
     },
   };
 

@@ -12,91 +12,79 @@ import {
   SafeAreaView,
   StatusBar,
   FlatList,
+  ActivityIndicator,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { set_boost_modal } from '../../../../../../redux/boost_modal';
+import { useDispatch, useSelector } from 'react-redux';
+import { BlurView } from '@react-native-community/blur';
 
 const { width } = Dimensions.get('window');
 
 const AnalyticsScreen = () => {
-  const [selectedFilter, setSelectedFilter] = useState('today');
+  const { data } = useRoute()?.params;
+  const [loading, setLoading] = useState(true);
+  const [metrics, setMetrics] = useState(null);
 
-  const {
-    data
-  } = useRoute()?.params
+  useEffect(() => {
+    if(metrics){
+      setLoading(false)
+    }else{
+      setLoading(true)
+    }
+  }, [metrics])
 
-  const [metrics, setMetrics] = useState([])
-
-
-
-  const renderItem = ({ item }) => (
+  const renderItem = ({ item, index }) => (
     <View style={styles.itemContainer}>
       <View style={styles.itemHeader}>
         <View style={styles.locationContainer}>
           <Ionicons name="location-outline" size={16} color="#666" />
-          <Text style={styles.locationText}>{item.campus}</Text>
+          <Text style={styles.locationText}>{ shop.promotion ? item.campus : '****'}</Text>
         </View>
         <Text style={styles.timeText}>{js_ago(new Date(item.created_at))}</Text>
       </View>
       
       <View style={styles.itemBody}>
         <View style={styles.actionBadge}>
-          <Text style={styles.actionText}>{item.source === 'views' ? "Viewed" : item.source === 'search_appearances' ? "Product searched" : item.source === 'impression' ? "Impression created" : item.source === 'shares' ? "Shared" : "Contact clicked"} by {item.fname} {item.lname}</Text>
+          <Text style={styles.actionText}>{shop.promotion ? item.source === 'views' ? "Viewed" : item.source === 'search_appearances' ? "Product searched" : item.source === 'impression' ? "Impression created" : item.source === 'shares' ? "Shared" : "Contact clicked" : '****'} {shop.promotion ? 'by' : ''} {shop.promotion ? item.fname : '******'} {shop.promotion ? item.lname : '******'}</Text>
         </View>
-        
-        {/* <View style={styles.detailsContainer}>
-          <View style={styles.detailItem}>
-            <Ionicons name="time-outline" size={14} color="#666" />
-            <Text style={styles.detailText}>{item.duration}</Text>
-          </View>
-          
-          <View style={styles.detailItem}>
-            <Ionicons name="pricetag-outline" size={14} color="#666" />
-            <Text style={styles.detailText}>{item.value}</Text>
-          </View>
-        </View> */}
       </View>
     </View>
   );
 
-  const renderSectionHeader = ({ section: { title } }) => (
-    <View style={styles.sectionHeader}>
-      <Text style={styles.sectionHeaderText}>{title}</Text>
-    </View>
-  );
-
   useEffect(() => {
-
     async function getMetrics(params) {
       try {
         const response = await axios.get('https://cs-server-olive.vercel.app/boosted-metrics', {params: {product_id: data?.product_id}});
-
         const result = response.data.data;
-        console.log("result: ", result)
-
-        setMetrics(result)
-        // result.map(item => {
-        //   if(item.source === 'views'){
-
-        //   }else if(item.source === 'impressions'){
-
-        //   }else if(item.source === 'contact_clicks'){
-
-        //   }else if(item.source === 'search_appearances'){
-
-        //   }else if(item.source === 'shares'){
-
-        //   }
-        // })
-
+        console.log("result: ", result);
+        setMetrics(result);
       } catch (error) {
-          console.log("error: ", error)
-        
+        console.log("error: ", error);
       }
     }
+    getMetrics();
+  }, []);
+  const dispatch = useDispatch()
+  
 
-    getMetrics()
+  const handlePromotePress = (data) => {
+    console.log(data.promotion)
+    if((!data.promotion)){
+      dispatch(set_boost_modal({data: data, visible: 1}))
+    }
+  };
+  const { shop } = useSelector(s => s.shop);
 
-  }, [])
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#FF4500" />
+        <Text style={styles.loadingText}>Loading your shop...</Text>
+      </View>
+    );
+  }
+  
 
   return (
     <SafeAreaView style={styles.container}>
@@ -123,29 +111,22 @@ const AnalyticsScreen = () => {
           
           <View style={[styles.summaryCard, { backgroundColor: '#F59E0B' }]}>
             <Ionicons name="call-outline" size={20} color="white" />
-            <Text style={styles.summaryNumber}>{metrics.filter(item=> item.source === 'contact_clicks').length}</Text>
+            <Text style={styles.summaryNumber}>{shop.promotion ? metrics.filter(item=> item.source === 'contact_clicks').length : '****'}</Text>
             <Text style={styles.summaryLabel}>Contacts</Text>
           </View>
           
           <View style={[styles.summaryCard, { backgroundColor: '#EF4444' }]}>
             <Ionicons name="search-outline" size={20} color="white" />
-            <Text style={styles.summaryNumber}>{metrics.filter(item=> item.source === 'search_appearances').length}</Text>
+            <Text style={styles.summaryNumber}>{shop.promotion ? metrics.filter(item=> item.source === 'search_appearances').length : '****'}</Text>
             <Text style={styles.summaryLabel}>Search appearances</Text>
           </View>
           
-          <View style={[styles.summaryCard, { backgroundColor: '#EF4444' }]}>
+          <View style={[styles.summaryCard, { backgroundColor: '#6366F1' }]}>
             <Ionicons name="share-outline" size={20} color="white" />
-            <Text style={styles.summaryNumber}>{metrics.filter(item=> item.source === 'shares').length}</Text>
+            <Text style={styles.summaryNumber}>{shop.promotion ? metrics.filter(item=> item.source === 'shares').length : '****'}</Text>
             <Text style={styles.summaryLabel}>Shares</Text>
           </View>
         </ScrollView>
-        
-        {/* Filter Options */}
-        {/* <View style={styles.filterContainer}>
-          {renderFilterButton('Today', 'today')}
-          {renderFilterButton('Yesterday', 'yesterday')}
-          {renderFilterButton('This Week', 'week')}
-        </View> */}
         
         {/* Analytics List */}
         <View style={styles.listContainer}>
@@ -154,17 +135,45 @@ const AnalyticsScreen = () => {
             data={metrics}
             keyExtractor={(item) => item.id}
             renderItem={renderItem}
-            // renderSectionHeader={renderSectionHeader}
             showsVerticalScrollIndicator={false}
-            scrollEnabled={false} // Disable internal scrolling
+            scrollEnabled={false}
           />
         </View>
       </ScrollView>
+
+      {/* Fixed Bottom Button */}
+      <View style={styles.fixedButtonContainer}>
+        <TouchableOpacity activeOpacity={data.promotion ? .9 : .5}
+          style={[styles.promoteButton, data.promotion && styles.promotedButton]}
+          onPress={e=>handlePromotePress(data)}
+        >
+          <Ionicons 
+            name={data.promotion ? "rocket" : "rocket-outline"} 
+            size={20} 
+            color="white" 
+            style={styles.buttonIcon}
+          />
+          <Text style={styles.promoteButtonText}>
+            {data.promotion ? 'Promoted' : 'Promote now'}
+          </Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F8F9FA',
+  },
+  loadingText: {
+    marginTop: 16,
+    fontSize: 16,
+    color: '#666',
+  },
   container: {
     flex: 1,
     backgroundColor: '#F8FAFC',
@@ -189,12 +198,12 @@ const styles = StyleSheet.create({
   },
   summaryContainer: {
     paddingHorizontal: 16,
-    paddingVertical: 16, // Reduced padding
+    paddingVertical: 16,
   },
   summaryCard: {
-    width: width * 0.35, // Made cards narrower
+    width: width * 0.35,
     borderRadius: 4,
-    padding: 12, // Reduced padding
+    padding: 12,
     marginRight: 10,
     justifyContent: 'center',
     alignItems: 'center',
@@ -208,44 +217,19 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   summaryNumber: {
-    fontSize: 20, // Slightly smaller font
+    fontSize: 20,
     fontWeight: 'bold',
     color: 'white',
-    marginVertical: 6, // Reduced margin
+    marginVertical: 6,
   },
   summaryLabel: {
-    fontSize: 12, // Smaller font
+    fontSize: 12,
     color: 'white',
     opacity: 0.9,
   },
-  filterContainer: {
-    flexDirection: 'row',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    backgroundColor: 'white',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E2E8F0',
-  },
-  filterButton: {
-    paddingHorizontal: 14,
-    paddingVertical: 6,
-    borderRadius: 20,
-    marginRight: 8,
-    backgroundColor: '#F1F5F9',
-  },
-  filterButtonActive: {
-    backgroundColor: '#FF4500',
-  },
-  filterButtonText: {
-    color: '#64748B',
-    fontWeight: '500',
-    fontSize: 14,
-  },
-  filterButtonTextActive: {
-    color: 'white',
-  },
   listContainer: {
     padding: 8,
+    marginBottom: 80, // Added margin to prevent content from being hidden behind fixed button
   },
   listTitle: {
     fontSize: 18,
@@ -315,18 +299,44 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: '#3B82F6',
   },
-  detailsContainer: {
-    alignItems: 'flex-end',
+  // Fixed Button Styles
+  fixedButtonContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: 16,
+    backgroundColor: 'white',
+    borderTopWidth: 1,
+    borderTopColor: '#E2E8F0',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: -2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 5,
   },
-  detailItem: {
+  promoteButton: {
+    backgroundColor: '#FF4500',
+    borderRadius: 8,
+    padding: 16,
     flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 4,
   },
-  detailText: {
-    fontSize: 12,
-    color: '#64748B',
-    marginLeft: 4,
+  promotedButton: {
+    backgroundColor: '#10B981',
+  },
+  promoteButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  buttonIcon: {
+    marginRight: 8,
   },
 });
 
