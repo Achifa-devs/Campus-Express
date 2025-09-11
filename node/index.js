@@ -511,7 +511,9 @@ CAMPUSSPHERE_SERVER.post('/minus-connect', parser, async (req, res) => {
 
 CAMPUSSPHERE_SERVER.get('/boosted-metrics', parser, async (req, res) => {
 
-  const {product_id} = req?.query;
+  const {
+    product_id
+  } = req?.query;
 
   try {
     // Get seller's products
@@ -556,7 +558,8 @@ CAMPUSSPHERE_SERVER.get('/boosted-metrics', parser, async (req, res) => {
     );
 
     // Return combined data 
-    const list = result.rows[0]; // no need for await here
+    console.log(result.rows)
+    const list = result.rows; // no need for await here
 
     res.status(200).json({
       success: true,

@@ -1,4 +1,5 @@
 import { useRoute } from '@react-navigation/native';
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
@@ -212,12 +213,22 @@ const AnalyticsScreen = () => {
 
   useEffect(() => {
 
-    try {
-      
-    } catch (error) {
-        console.log("error: ", error)
-      
+    async function getMetrics(params) {
+      try {
+        const response = await axios.get('https://cs-server-olive.vercel.app/boosted-metrics', {params: {product_id: data?.product_id}});
+
+        console.log("response.data: ", response.data) 
+  
+        if (response.data && response.data.data.result === "ok") {
+          selectShopLogo()
+        }
+      } catch (error) {
+          console.log("error: ", error)
+        
+      }
     }
+
+    getMetrics()
 
   }, [])
 
