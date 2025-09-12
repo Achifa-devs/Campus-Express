@@ -10,12 +10,11 @@
     "test": "jest"
   },
   "dependencies": {
-    "@expo/vector-icons": "^14.1.0",
+    "@candlefinance/blur-view": "^0.5.3",
     "@hurshore/react-native-paystack-webview": "^5.0.3",
     "@legendapp/motion": "^2.2.0",
     "@notifee/react-native": "^9.1.8",
     "@react-native-async-storage/async-storage": "1.21.0",
-    "@react-native-community/blur": "^4.4.1",
     "@react-native-community/datetimepicker": "^8.2.0",
     "@react-native-cookies/cookies": "^6.2.1",
     "@react-native-firebase/app": "^22.2.1",
@@ -29,7 +28,6 @@
     "@reduxjs/toolkit": "^1.9.7",
     "axios": "^1.5.1",
     "countrycitystatejson": "^21.3.2703",
-    "expo-linear-gradient": "^14.1.5",
     "js-ago": "^2.1.1",
     "notifee": "^0.0.1",
     "numeral": "^2.0.6",

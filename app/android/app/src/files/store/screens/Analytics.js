@@ -13,7 +13,7 @@ import {
 import { LineChart, BarChart, PieChart } from 'react-native-chart-kit';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useSelector } from 'react-redux';
-
+import { BlurView } from "@candlefinance/blur-view"
 const filters = [
   { key: "views", label: "Views", icon: "eye-outline" },
   { key: "impression", label: "Impressions", icon: "analytics-outline" },
@@ -47,10 +47,10 @@ const AnalyticsScreen = () => {
     //   averageOrderValue: 98.13,
     },
     trafficSources: [
-      { name: 'Direct', value: 45 },
-      { name: 'Social Media', value: 25 },
-      { name: 'Search', value: 20 },
-      { name: 'Referral', value: 10 },
+      { name: 'Views', value: products.reduce((sum, item) => sum + parseInt(item.views), 0) },
+      { name: 'Search', value: products.reduce((sum, item) => sum + parseInt(item.search_appearances), 0)},
+      { name: 'Shares', value: products.reduce((sum, item) => sum + parseInt(item.shares), 0) },
+      { name: 'Contact', value: products.reduce((sum, item) => sum + parseInt(item.contact_click), 0) },
     ],
     topProducts: [
       { name: 'Wireless Headphones', views: 1234, conversions: 52 },
@@ -337,7 +337,7 @@ const AnalyticsScreen = () => {
       </View> */}
 
       {/* Traffic Sources */}
-      {/* <View style={styles.section}>
+      <View style={styles.section}>
         <Text style={styles.sectionTitle}>Traffic Sources</Text>
         <PieChart
           data={analyticsData.trafficSources.map((source, index) => ({
@@ -357,7 +357,8 @@ const AnalyticsScreen = () => {
           paddingLeft="15"
           style={styles.chart}
         />
-      </View> */}
+        
+      </View>
 
       {/* Top Performing Products */}
       <View style={styles.section}>

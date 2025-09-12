@@ -22,13 +22,7 @@ export default function UploadBtn({ navigation, toggleModal }) {
         description="Publish your accommodations, products, or services available for sale or rent."
         icon={<UploadIcon />}
         color="#FF4500"
-        onPress={() => {
-          if(tier.ad_quota > 0){
-            toggleModal()
-          }else{
-            dispatch(set_sub_modal(1))
-          }
-        }}
+        onPress={() => {toggleModal()}}
       />
 
       

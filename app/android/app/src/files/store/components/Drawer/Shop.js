@@ -49,7 +49,7 @@ export default function Shopile() {
         .catch((err) => {
             set_server_err(!true)
             Alert.alert('Network error, please try again.')
-            console.log(err)
+            console.log(err) 
         })
     }
     const [modalVisible, setModalVisible] = useState(false);

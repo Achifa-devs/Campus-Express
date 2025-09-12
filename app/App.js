@@ -32,7 +32,7 @@ import { setUserAuthTo } from './redux/reducer/auth.js';
 import axios from 'axios';
 import { set_subscribed } from './redux/subscribed.js';
 import { set_tier } from './redux/tier.js';
-import { storeData } from './android/app/src/files/utils/AsyncStore.js.js';
+import { getData, storeData } from './android/app/src/files/utils/AsyncStore.js.js';
 import VendorConnectodal from './android/app/src/files/store/screens/ConnectPurchase.js';
 import VendorSubscriptionsModal from './android/app/src/files/store/utils/ToolsModal.js';
 import PromotionSubscriptionsModal from './android/app/src/files/store/utils/PromotionModal.js';
@@ -265,6 +265,43 @@ function NavCnt() {
     };
   }, [user, dispatch, resumeTick]);
 
+
+  const reqHandler = async (retries = 3, delay = 2000) => {
+    for (let attempt = 1; attempt <= retries; attempt++) {
+      try {
+        const response = await axios.get(
+          "https://cs-server-olive.vercel.app/subscription-plan"
+        );
+
+        await storeData("tools_plan", JSON.stringify(response.data));
+        console.log("Request successful ✅", response.data); 
+        return response.data; // stop retrying if successful
+      } catch (err) {
+        console.warn(`Attempt ${attempt} failed:`, err.message);
+
+        if (attempt < retries) {
+          // wait before retrying
+          await new Promise((resolve) => setTimeout(resolve, delay));
+          console.log("Retrying..."); 
+        } else {  
+          console.error("All retries failed ❌");
+          throw err; // rethrow after last attempt
+        }
+      }
+    }
+  };
+
+ 
+  const getToolsplan = async (params) => {  
+    let data = await getData('tools_plan');   
+    if (!data) { 
+      reqHandler()
+    }
+  }
+ 
+  useEffect(() => {
+    getToolsplan()
+  }, [])
 
   
   return (

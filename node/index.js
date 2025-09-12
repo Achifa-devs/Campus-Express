@@ -536,35 +536,35 @@ CAMPUSSPHERE_SERVER.get('/boosted-metrics', parser, async (req, res) => {
     // Get seller's products
     const result = await pool.query(
       `
-        SELECT 'views' AS source, v.id, v.user_id, u.campus, u.lname, u.fname, v.date::timestamp AS created_at
+        SELECT 'views' AS source, v.id, v.user_id, u.campus, u.lname, u.fname, u.email, u.phone, v.date::timestamp AS created_at
         FROM views v
         JOIN users u ON v.user_id = u.user_id
         WHERE v.product_id = $1
 
         UNION ALL
 
-        SELECT 'impression' AS source, i.id, i.user_id, u.campus, u.lname, u.fname, i.date::timestamp AS created_at
+        SELECT 'impression' AS source, i.id, i.user_id, u.campus, u.lname, u.fname, u.email, u.phone, i.date::timestamp AS created_at
         FROM impression i
         JOIN users u ON i.user_id = u.user_id
         WHERE i.product_id = $1
 
         UNION ALL
 
-        SELECT 'contact_clicks' AS source, c.id, c.user_id, u.campus, u.lname, u.fname, c.date::timestamp AS created_at
+        SELECT 'contact_clicks' AS source, c.id, c.user_id, u.campus, u.lname, u.fname, u.email, u.phone, c.date::timestamp AS created_at
         FROM contact_clicks c
         JOIN users u ON c.user_id = u.user_id
         WHERE c.product_id = $1
 
         UNION ALL
 
-        SELECT 'search_appearances' AS source, s.id, s.user_id, u.campus, u.lname, u.fname, s.appeared_at::timestamp AS created_at
+        SELECT 'search_appearances' AS source, s.id, s.user_id, u.campus, u.lname, u.fname, u.email, u.phone, s.appeared_at::timestamp AS created_at
         FROM search_appearances s
         JOIN users u ON s.user_id = u.user_id
         WHERE s.product_id = $1
 
         UNION ALL
 
-        SELECT 'shares' AS source, sh.id, sh.user_id, u.campus, u.lname, u.fname, sh.date::timestamp AS created_at
+        SELECT 'shares' AS source, sh.id, sh.user_id, u.campus, u.lname, u.fname, u.email, u.phone, sh.date::timestamp AS created_at
         FROM shares sh
         JOIN users u ON sh.user_id = u.user_id
         WHERE sh.product_id = $1

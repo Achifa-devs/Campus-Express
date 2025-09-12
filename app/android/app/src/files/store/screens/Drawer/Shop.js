@@ -14,7 +14,7 @@ import { set_shop } from '../../../../../../../redux/shop';
 import js_ago from 'js-ago';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { set_sub_modal } from '../../../../../../../redux/sub';
-import { BlurView } from '@react-native-community/blur';
+import { BlurView } from '@candlefinance/blur-view';
 export default function Shopile() {
     let [review, set_review] = useState([])
     const {shop} = useSelector(s => s.shop);
@@ -157,7 +157,7 @@ export default function Shopile() {
     }
 
     function handleSub(params) {
-        if(!shop.tools){
+        if(shop.subscription.plan !== 'free'){
             dispatch(set_sub_modal(1))
         }
     }
@@ -472,7 +472,7 @@ export default function Shopile() {
                     <View style={styles.sectionHeader}>
                         <View>
                            <TouchableOpacity style={styles.sectionHeader} onPress={() => {
-                                if(shop.tools){
+                                if(shop.subscription.plan !== 'free'){
                                     navigation.navigate('user-analytics')
                                 }else{
                                     handleSub()
@@ -520,7 +520,7 @@ export default function Shopile() {
                     
                     <TouchableOpacity 
                         onPress={() => {
-                            if(shop.tools){
+                            if(shop.subscription.plan !== 'free'){
                                 navigation.navigate('user-analytics')
                             }else{
                                 handleSub()
@@ -529,7 +529,7 @@ export default function Shopile() {
                         style={styles.analyticsButton}
                     >
                         <Text style={styles.analyticsButtonText}>{
-                            shop.tools? 'View Detailed Analytics' : 'Subscribe To View Analytics'    
+                            shop.subscription.plan !== 'free'? 'View Detailed Analytics' : 'Subscribe To View Analytics'    
                         }</Text>
                         <Ionicons name="arrow-forward" size={16} color="#FF4500" />
                     </TouchableOpacity>

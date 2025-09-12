@@ -17,7 +17,7 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { set_boost_modal } from '../../../../../../redux/boost_modal';
 import { useDispatch, useSelector } from 'react-redux';
-import { BlurView } from '@react-native-community/blur';
+import { BlurView } from '@candlefinance/blur-view';
 
 const { width } = Dimensions.get('window');
 
@@ -25,6 +25,9 @@ const AnalyticsScreen = () => {
   const { data } = useRoute()?.params;
   const [loading, setLoading] = useState(true);
   const [metrics, setMetrics] = useState(null);
+  const { shop } = useSelector(s => s.shop);
+
+  let plan = shop.subscription.plan;
 
   useEffect(() => {
     if(metrics){
@@ -39,14 +42,26 @@ const AnalyticsScreen = () => {
       <View style={styles.itemHeader}>
         <View style={styles.locationContainer}>
           <Ionicons name="location-outline" size={16} color="#666" />
-          <Text style={styles.locationText}>{ shop.promotion ? item.campus : '****'}</Text>
+          <Text style={[styles.locationText,  plan !== 'standard' && plan !== 'premium' && styles.blur ]}>{item.campus}</Text>
         </View>
         <Text style={styles.timeText}>{js_ago(new Date(item.created_at))}</Text>
       </View>
       
       <View style={styles.itemBody}>
         <View style={styles.actionBadge}>
-          <Text style={styles.actionText}>{shop.promotion ? item.source === 'views' ? "Viewed" : item.source === 'search_appearances' ? "Product searched" : item.source === 'impression' ? "Impression created" : item.source === 'shares' ? "Shared" : "Contact clicked" : '****'} {shop.promotion ? 'by' : ''} {shop.promotion ? item.fname : '******'} {shop.promotion ? item.lname : '******'}</Text>
+          <Text style={[styles.actionText,  plan !== 'premium' &&  plan !== 'standard' && styles.blur ]}>{item.source === 'views' ? "Viewed" : item.source === 'search_appearances' ? "Product searched" : item.source === 'impression' ? "Impression created" : item.source === 'shares' ? "Shared" : "Contact clicked"} by {item.fname} {item.lname}</Text>
+        </View>
+
+        <View style={styles.detailsContainer}>
+          <View style={styles.detailItem}>
+            <Ionicons name="mail-outline" size={14} color="#666" />
+            <Text style={[styles.detailText,  plan !== 'premium' && styles.blur]}>{item.email}</Text>
+          </View>
+          
+          <View style={styles.detailItem}>
+            <Ionicons name="call-outline" size={14} color="#666" />
+            <Text style={[styles.detailText,  plan !== 'premium' && styles.blur]}>{item.phone}</Text>
+          </View>
         </View>
       </View>
     </View>
@@ -74,7 +89,6 @@ const AnalyticsScreen = () => {
       dispatch(set_boost_modal({data: data, visible: 1}))
     }
   };
-  const { shop } = useSelector(s => s.shop);
 
   if (loading) {
     return (
@@ -108,24 +122,34 @@ const AnalyticsScreen = () => {
             <Text style={styles.summaryNumber}>{metrics.filter(item=> item.source === 'impression').length}</Text>
             <Text style={styles.summaryLabel}>Impression</Text>
           </View>
-          
-          <View style={[styles.summaryCard, { backgroundColor: '#F59E0B' }]}>
-            <Ionicons name="call-outline" size={20} color="white" />
-            <Text style={styles.summaryNumber}>{shop.promotion ? metrics.filter(item=> item.source === 'contact_clicks').length : '****'}</Text>
-            <Text style={styles.summaryLabel}>Contacts</Text>
+
+          <View style={[styles.summaryCard, { backgroundColor: '#6366F1' }]}>
+            <Ionicons name="share-outline" size={20} color="white" />
+            <Text style={[styles.summaryNumber, 
+              plan === 'free' && styles.blur 
+            ]}>{metrics.filter(item=> item.source === 'shares').length}</Text>
+            <Text style={styles.summaryLabel}>Shares</Text>
           </View>
-          
+
           <View style={[styles.summaryCard, { backgroundColor: '#EF4444' }]}>
             <Ionicons name="search-outline" size={20} color="white" />
-            <Text style={styles.summaryNumber}>{shop.promotion ? metrics.filter(item=> item.source === 'search_appearances').length : '****'}</Text>
+            <Text style={[styles.summaryNumber,  
+              plan === 'free' && styles.blur 
+            ]}>{metrics.filter(item=> item.source === 'search_appearances').length}</Text>
             <Text style={styles.summaryLabel}>Search appearances</Text>
           </View>
           
-          <View style={[styles.summaryCard, { backgroundColor: '#6366F1' }]}>
-            <Ionicons name="share-outline" size={20} color="white" />
-            <Text style={styles.summaryNumber}>{shop.promotion ? metrics.filter(item=> item.source === 'shares').length : '****'}</Text>
-            <Text style={styles.summaryLabel}>Shares</Text>
+          <View style={[styles.summaryCard, { backgroundColor: '#F59E0B' }]}>
+            <Ionicons name="call-outline" size={20} color="white" />
+            <Text style={[styles.summaryNumber, 
+              plan === 'free' && styles.blur 
+            ]}>{metrics.filter(item=> item.source === 'contact_clicks').length}</Text>
+            <Text style={styles.summaryLabel}>Contacts</Text>
           </View>
+          
+          
+          
+          
         </ScrollView>
         
         {/* Analytics List */}
@@ -163,6 +187,12 @@ const AnalyticsScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  blur:{
+    color: "transparent", 
+    textShadowColor: "rgba(0, 0, 0, 0.5)", 
+    textShadowOffset: { width: 0, height: 0 }, 
+    textShadowRadius: 15 
+  },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',

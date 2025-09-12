@@ -1162,6 +1162,11 @@
     deepmerge "^3.2.0"
     hoist-non-react-statics "^3.3.0"
 
+"@candlefinance/blur-view@^0.5.3":
+  version "0.5.3"
+  resolved "https://registry.yarnpkg.com/@candlefinance/blur-view/-/blur-view-0.5.3.tgz#50db0a2735092f3530776181e4908c8e9698fa73"
+  integrity sha512-cadAtDYUAXtw3rpn2B+/pGkdbR6FRzOS2JHyR6rMbrdI9kNybM8lXPeMT8RfwDAal8j/lHacgcA6nw3n97QHpw==
+
 "@canvas/image-data@^1.0.0":
   version "1.0.0"
   resolved "https://registry.npmjs.org/@canvas/image-data/-/image-data-1.0.0.tgz"
@@ -1205,11 +1210,6 @@
   version "8.57.0"
   resolved "https://registry.npmjs.org/@eslint/js/-/js-8.57.0.tgz"
   integrity sha512-Ys+3g2TaW7gADOJzPt83SJtCDhMjndcDMFVQ/Tj9iA1BfJzFKD9mAUXT3OenpuPHbI6P/myECxRJrofUsDx/5g==
-
-"@expo/vector-icons@^14.1.0":
-  version "14.1.0"
-  resolved "https://registry.npmjs.org/@expo/vector-icons/-/vector-icons-14.1.0.tgz"
-  integrity sha512-7T09UE9h8QDTsUeMGymB4i+iqvtEeaO5VvUjryFB4tugDTG/bkzViWA74hm5pfjjDEhYMXWaX112mcvhccmIwQ==
 
 "@firebase/analytics-compat@0.2.17":
   version "0.2.17"
@@ -2064,11 +2064,6 @@
   integrity sha512-JL0w36KuFHFCvnbOXRekqVAUplmOyT/OuCQkogo6X98MtpSaJOKEAeZnYO8JB0U/RIEixZaGI5px73YbRm/oag==
   dependencies:
     merge-options "^3.0.4"
-
-"@react-native-community/blur@^4.4.1":
-  version "4.4.1"
-  resolved "https://registry.yarnpkg.com/@react-native-community/blur/-/blur-4.4.1.tgz#72cbc0be5a84022c33091683ec6888925ebcca6e"
-  integrity sha512-XBSsRiYxE/MOEln2ayunShfJtWztHwUxLFcSL20o+HNNRnuUDv+GXkF6FmM2zE8ZUfrnhQ/zeTqvnuDPGw6O8A==
 
 "@react-native-community/cli-clean@13.6.9":
   version "13.6.9"
@@ -4667,11 +4662,6 @@ expect@^29.7.0:
     jest-matcher-utils "^29.7.0"
     jest-message-util "^29.7.0"
     jest-util "^29.7.0"
-
-expo-linear-gradient@^14.1.5:
-  version "14.1.5"
-  resolved "https://registry.yarnpkg.com/expo-linear-gradient/-/expo-linear-gradient-14.1.5.tgz#414bf0c8145089087198d4dd5a419eb324af2a02"
-  integrity sha512-BSN3MkSGLZoHMduEnAgfhoj3xqcDWaoICgIr4cIYEx1GcHfKMhzA/O4mpZJ/WC27BP1rnAqoKfbclk1eA70ndQ==
 
 eyes@0.1.x:
   version "0.1.8"

@@ -29,6 +29,7 @@ import LoginButton from '../../utils/LogAlert';
 import { set_products } from '../../../../../../../redux/products';
 import axios from 'axios';
 import { set_boost_modal } from '../../../../../../../redux/boost_modal';
+import { set_sub_modal } from '../../../../../../../redux/sub';
 const { width } = Dimensions.get('window');
 
 const ShopScreen = () => {
@@ -251,9 +252,40 @@ const ShopScreen = () => {
     await deleteFromServer(shopLogo)
   };
 
+  const [customModalVisible, setcustomModalVisible] = useState(false);
+  const toggleCustomModal = () => {
+    setcustomModalVisible(!customModalVisible);
+    
+  }
+
   const [modalVisible, setModalVisible] = useState(false);
   const toggleModal = () => {
-    setModalVisible(!modalVisible);
+    let p = (shop.subscription.plan)
+    let publishable = p === 'free' ? 2 : p === 'basic' ? 7 : p === 'standard' ? 20 : 10000000000
+    
+    if (userAds.length < publishable) {
+      setModalVisible(!modalVisible);
+    } else {
+      Alert.alert(
+        "Upgrade Needed", "Upgrade your plan to keep reaching more customers.",
+        [
+          {
+            text: "Cancel",
+            style: "cancel",
+            onPress: () => console.log("User canceled"),
+          },
+          {
+            text: "Upgrade now",
+            onPress: () => {
+              console.log("Redirecting to login...");
+              dispatch(set_sub_modal(1));
+              // navigation.navigate("Login"); // if using react-navigation
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+    }
   };
 
 
@@ -573,7 +605,7 @@ const ShopScreen = () => {
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} /> 
         }
       >
         

@@ -27,6 +27,7 @@ import { useNavigation } from "@react-navigation/native";
 import VendorConnectionsScreen from "../../store/screens/ConnectPurchase";
 import NavigationTabs from "../../store/components/Home/Ads";
 import Analytics from "../../store/utils/Analytics";
+import { capitalize } from "../../store/utils/Capitalize";
 
 const SellStack = createNativeStackNavigator();
 export function SellStackScreen() {
@@ -39,10 +40,10 @@ export function SellStackScreen() {
         let navigation = useNavigation()
         useEffect(() => {
             console.log(campus)
-        }, [campus])
+        }, [campus]) 
     
         function handleSub(params) {
-            if(!subscribed){
+            if(shop.subscription.plan === 'free'){
                 dispatch(set_sub_modal(1))
             }else{
                 navigation.navigate('Profile', {
@@ -99,25 +100,24 @@ export function SellStackScreen() {
 
                   {/* Right Section */}
                   <View style={styles.rightSection}>
-                      {/* Subscribe Button */}
-                      {user && (
-                      <TouchableOpacity
-                          style={[styles.button, subscribed && styles.subscribedButton]}
-                          onPress={e=> handleSub()}
-                          activeOpacity={0.8}
-                          >
-                          <View style={styles.buttonContent}>
-                            <Icon 
-                            name={subscribed ? "diamond" : "diamond-outline"} 
-                            size={16} 
-                            color={subscribed ? "#FFF" : "#FF4500"} 
-                            style={styles.icon}
-                            />
-                            <Text style={[styles.buttonText, subscribed && styles.subscribedText]}>
-                            {subscribed ? `${tier.plan} Plan` : 'Subscribe Now'}
-                            </Text>
-                          </View>
-                      </TouchableOpacity>
+                      {shop && (
+                        <TouchableOpacity
+                            style={[styles.button, shop.subscription.plan !== 'free' && styles.subscribedButton]}
+                            onPress={e=> handleSub()}
+                            activeOpacity={0.8}
+                            >
+                            <View style={styles.buttonContent}>
+                              <Icon 
+                              name={shop.subscription.plan !== 'free' ? "diamond" : "diamond-outline"} 
+                              size={16} 
+                              color={shop.subscription.plan !== 'free' ? "#FFF" : "#FF4500"} 
+                              style={styles.icon}
+                              />
+                              <Text style={[styles.buttonText, shop.subscription.plan !== 'free' && styles.subscribedText]}>
+                              {shop.subscription.plan !== 'free' ? `${capitalize(shop.subscription.plan)} Plan` : 'Upgrade Now'}
+                              </Text> 
+                            </View>
+                        </TouchableOpacity> 
                       )}
                   </View>
               </View>
@@ -198,7 +198,7 @@ export function SellStackScreen() {
           ),
           
         }}   name="user-shop" component={Shopile} />
-
+ 
         <SellStack.Screen  options={{
           header: ({navigation}) =>
           (
@@ -229,25 +229,24 @@ export function SellStackScreen() {
               </View>
 
               <View style={styles.rightSection}>
-                {/* Subscribe Button */}
-                {user && (
-                <TouchableOpacity
-                    style={[styles.button, subscribed && styles.subscribedButton]}
-                    onPress={e=> handleSub()}
-                    activeOpacity={0.8}
-                    >
-                    <View style={styles.buttonContent}>
-                      <Icon 
-                      name={subscribed ? "diamond" : "diamond-outline"} 
-                      size={16} 
-                      color={subscribed ? "#FFF" : "#FF4500"} 
-                      style={styles.icon}
-                      />
-                      <Text style={[styles.buttonText, subscribed && styles.subscribedText]}>
-                      {subscribed ? `${tier.plan} Plan` : 'Subscribe Now'}
-                      </Text>
-                    </View>
-                </TouchableOpacity>
+                {shop && (
+                  <TouchableOpacity
+                      style={[styles.button, shop.subscription.plan !== 'free' && styles.subscribedButton]}
+                      onPress={e=> handleSub()}
+                      activeOpacity={0.8}
+                      >
+                      <View style={styles.buttonContent}>
+                        <Icon 
+                        name={shop.subscription.plan !== 'free' ? "diamond" : "diamond-outline"} 
+                        size={16} 
+                        color={shop.subscription.plan !== 'free' ? "#FFF" : "#FF4500"} 
+                        style={styles.icon}
+                        />
+                        <Text style={[styles.buttonText, shop.subscription.plan !== 'free' && styles.subscribedText]}>
+                        {shop.subscription.plan !== 'free' ? `${capitalize(shop.subscription.plan)} Plan` : 'Upgrade Now'}
+                        </Text> 
+                      </View>
+                  </TouchableOpacity> 
                 )}
               </View>
             </View>

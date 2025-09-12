@@ -18,6 +18,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
+import { getData } from '../../utils/AsyncStore.js';
+import { capitalize } from './Capitalize.js';
 
 const { width } = Dimensions.get('window');
 
@@ -38,10 +40,11 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
   useEffect(() => {
     const getToolsplan = async () => {  
       let data = await getData('tools_plan');
+      console.log('tools_plan: ', data)
       if (data) {
         setsubscriptionPlans(JSON.parse(data))
       }
-    }
+    } 
     getToolsplan();
   }, [])
 
@@ -178,9 +181,9 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
             </View>
             <View style={styles.planInfo}>
               <View style={styles.planInfoLeft}>
-                <Text style={styles.currentPlanName}>{selectedPlan}</Text>
+                <Text style={styles.currentPlanName}>{shop.subscription.plan}</Text>
                 <Text style={styles.currentPlanPrice}>
-                  {selectedPlan === 'Free' ? 'Free Forever' : `${subscriptionPlans[selectedPlan]?.discountPrice}/month`}
+                  {shop.subscription.plan === 'free' ? 'Free Forever' : `${subscriptionPlans[shop.subscription.plan]?.discount_price}/month`}
                 </Text>
               </View>
               <View style={styles.planInfoRight}>
@@ -191,7 +194,7 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
               </View>
             </View>
           </View>
-
+ 
           <View style={styles.header}>
             <Text style={styles.subtitle}>Upgrade your vendor account with powerful tools to grow your business</Text>
           </View>
@@ -207,12 +210,11 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
           >
             {Object.entries(subscriptionPlans).map(([planName, planDetails], index) => {
               const discountPercent = calculateDiscountPercentage(planDetails.price, planDetails.discountPrice);
-              const isCurrentPlan = selectedPlan?.toLowerCase() === planDetails.name;
-
-              return (
-                <View
+              const isCurrentPlan = shop.subscription.plan === planDetails?.name;
+              return (  
+                <View  
                   key={planName}
-                  style={[
+                  style={[   
                     styles.planCard,
                     isCurrentPlan && styles.currentPlanCard,
                     index === 1 && styles.featuredPlan,
@@ -231,18 +233,18 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
                       <Ionicons name="checkmark-circle" size={14} color="white" />
                       <Text style={styles.currentBadgeText}>CURRENT PLAN</Text>
                     </View>
-                  )}
+                  )} 
 
                   <View style={styles.planIconContainer}>
                     <Text style={styles.planIcon}>{planDetails.icon}</Text>
                   </View>
-
+ 
                   <View style={styles.planHeader}>
-                    <Text style={styles.planName}>{planName}</Text>
+                    <Text style={styles.planName}>{capitalize(planDetails.name)}</Text>
                     <View style={styles.priceContainer}>
                       {planName !== 'Free' && <Text style={styles.originalPrice}>{planDetails.price}</Text>}
-                      <Text style={styles.discountPrice}>{planName === 'Free' ? 'Free Forever' : `${planDetails.discountPrice}/month`}</Text>
-                      {discountPercent > 0 && (
+                      <Text style={styles.discountPrice}>{planName === 'Free' ? 'Free Forever' : `${planDetails.discount_price}/month`}</Text>
+                      {discountPercent > 0 && ( 
                         <View style={styles.discountBadge}>
                           <Text style={styles.discountText}>Save {discountPercent}%</Text>
                         </View>
