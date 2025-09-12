@@ -12,8 +12,8 @@ import {
 } from 'react-native';
 import { LineChart, BarChart, PieChart } from 'react-native-chart-kit';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useSelector } from 'react-redux';
-import { BlurView } from "@candlefinance/blur-view"
+import { useDispatch, useSelector } from 'react-redux';
+import { set_sub_modal } from '../../../../../../redux/sub';
 const filters = [
   { key: "views", label: "Views", icon: "eye-outline" },
   { key: "impression", label: "Impressions", icon: "analytics-outline" },
@@ -23,7 +23,7 @@ const filters = [
 ];
 const AnalyticsScreen = () => {
 
-  
+  const dispatch = useDispatch()
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [selectedTimeframe, setSelectedTimeframe] = useState('7d'); // 7d, 30d, 90d
@@ -118,6 +118,9 @@ const AnalyticsScreen = () => {
     return filter ? filter.icon : "help-outline";
   };
 
+  let plan = shop.subscription.plan;
+
+
   const renderItem = ({ item, index }) => {
     const value = item[activeFilter];
     let progressPercentage = 0;
@@ -132,16 +135,17 @@ const AnalyticsScreen = () => {
       <View style={[
         secondStyle.card,
         index === 0 && secondStyle.firstCard,
-        index === products.length - 1 && secondStyle.lastCard
+        index === products.length - 1 && secondStyle.lastCard,
+        plan !== 'standard' && plan !== 'premium' && styles.blur 
       ]}>
         <View style={secondStyle.cardHeader}>
-          <Text style={secondStyle.productName}>{item.title} ({item.purpose.charAt(0).toUpperCase() + item.purpose.slice(1)})</Text>
+          <Text style={[secondStyle.productName, plan !== 'standard' && plan !== 'premium' &&styles.blur ]}>{item.title} ({item.purpose.charAt(0).toUpperCase() + item.purpose.slice(1)})</Text>
           <View style={secondStyle.valueContainer}>
             <Ionicons name={getIconForFilter(activeFilter)} size={16} color="#FF4500" />
-            <Text style={secondStyle.valueText}>{value}</Text>
+            <Text style={[secondStyle.valueText, plan !== 'standard' && plan !== 'premium' &&styles.blur ]}>{value}</Text>
           </View>
         </View>
-        
+         
         <View style={secondStyle.progressBar}>
           <View 
             style={[
@@ -154,23 +158,23 @@ const AnalyticsScreen = () => {
         <View style={secondStyle.metricsRow}>
           <View style={secondStyle.metricItem}>
             <Ionicons name="eye-outline" size={14} color="#64748B" />
-            <Text style={secondStyle.metricText}>{item.views}</Text>
+            <Text style={[secondStyle.metricText, plan !== 'standard' && plan !== 'premium' &&styles.blur ]}>{item.views}</Text>
           </View>
           <View style={secondStyle.metricItem}>
             <Ionicons name="analytics-outline" size={14} color="#64748B" />
-            <Text style={secondStyle.metricText}>{item.impression}</Text>
+            <Text style={[secondStyle.metricText, plan !== 'standard' && plan !== 'premium' &&styles.blur ]}>{item.impression}</Text>
           </View>
           <View style={secondStyle.metricItem}>
             <Ionicons name="share-social-outline" size={14} color="#64748B" />
-            <Text style={secondStyle.metricText}>{item.shares}</Text>
+            <Text style={[secondStyle.metricText, plan !== 'standard' && plan !== 'premium' &&styles.blur ]}>{item.shares}</Text>
           </View>
           <View style={secondStyle.metricItem}>
             <Ionicons name="chatbubble-ellipses-outline" size={14} color="#64748B" />
-            <Text style={secondStyle.metricText}>{item.contact_click}</Text>
+            <Text style={[secondStyle.metricText, plan !== 'standard' && plan !== 'premium' &&styles.blur ]}>{item.contact_click}</Text>
           </View>
           <View style={secondStyle.metricItem}>
             <Ionicons name="search-outline" size={14} color="#64748B" />
-            <Text style={secondStyle.metricText}>{item.search_appearances}</Text>
+            <Text style={[secondStyle.metricText, plan !== 'standard' && plan !== 'premium' &&styles.blur ]}>{item.search_appearances}</Text>
           </View>
         </View>
       </View>
@@ -347,17 +351,36 @@ const AnalyticsScreen = () => {
             legendFontColor: '#7F7F7F',
             legendFontSize: 12,
           }))}
+          
           width={Dimensions.get('window').width - 32}
           height={200}
           chartConfig={{
             color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
           }}
+          hasLegend={plan !== 'premium' ? false : true}
           accessor="population"
           backgroundColor="transparent"
           paddingLeft="15"
           style={styles.chart}
         />
-        
+        {plan !== 'premium' && 
+
+          <TouchableOpacity style={styles.sectionHeader} onPress={() => {
+            dispatch(set_sub_modal(1))
+          }}>
+            <View style={styles.premiumSectionHeader}>
+              <View style={{flexDirection: 'column', alignItems: 'center'}}>
+                <Text style={[styles.listTitle, {textAlign: 'center', fontWeight: 'bold'}]}>Upgrade To Premium Access Pie Chart Data</Text>
+
+                <View style={styles.premiumBadge}>
+                  <Ionicons name="medal" size={14} color="#FFD700" />
+                  <Text style={styles.premiumText}>PREMIUM</Text>
+                </View>
+              </View>
+            </View>
+          </TouchableOpacity>
+        }
+
       </View>
 
       {/* Top Performing Products */}
@@ -369,11 +392,11 @@ const AnalyticsScreen = () => {
             <View style={styles.productInfo}>
               <Text style={styles.productName}>{product.title}</Text>
               <Text style={styles.productStats}>
-                {product.views} views • {(product?.contact_click/product?.views)*100} conversions
+                {product.views} views • <Text style={[plan !== 'premium' && styles.blur]}>{(product?.contact_click/product?.views)*100} conversions</Text>
               </Text>
             </View>
             <View style={styles.conversionRate}>
-              <Text style={styles.conversionText}>
+              <Text style={[styles.conversionText, plan !== 'premium' && styles.blur]}>
                 {(((product?.contact_click/product?.views)*100 / (product.views * 100))).toFixed(1)}%
               </Text>
             </View>
@@ -404,6 +427,62 @@ const AnalyticsScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  premiumSectionHeader: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 0,
+  },
+  premiumBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 215, 0, 0.15)',
+    paddingHorizontal: 8,
+    marginTop: 7,
+    paddingVertical: 4,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 215, 0, 0.3)',
+  },
+  premiumText: {
+    fontSize: 10,
+    fontWeight: '800',
+    color: '#D4AF37',
+    marginLeft: 4,
+    textTransform: 'uppercase',
+    },
+  premiumIndicator: {
+    position: 'relative',
+    padding: 4,
+  },
+  premiumTooltip: {
+    position: 'absolute',
+    top: -30,
+    left: -40,
+    backgroundColor: '#333',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
+    width: 100,
+  },
+  tooltipText: {
+    color: '#FFF',
+    fontSize: 10,
+    textAlign: 'center',
+  },
+  premiumGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+  },
+  blur:{
+    color: "transparent", 
+    textShadowColor: "rgba(0, 0, 0, 0.5)", 
+    textShadowOffset: { width: 0, height: 0 }, 
+    textShadowRadius: 15 
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',

@@ -157,10 +157,9 @@ export default function Shopile() {
     }
 
     function handleSub(params) {
-        if(shop.subscription.plan !== 'free'){
-            dispatch(set_sub_modal(1))
-        }
+        dispatch(set_sub_modal(1))
     }
+    let plan = shop.subscription.plan;
 
   return (
     <> 
@@ -501,8 +500,8 @@ export default function Shopile() {
                             <View style={[styles.analyticsIcon, {backgroundColor: '#EFF6FF'}]}>
                                 <Ionicons name="stats-chart" size={24} color="#3B82F6" />
                             </View>
-                            <Text style={styles.analyticsNumber}>
-                                {shop.promotion ? products.reduce((sum, item) => sum + parseInt(item.impression || 0), 0).toLocaleString() : '***'}
+                            <Text style={[styles.analyticsNumber, plan === 'free' && styles.blur]}>
+                                {products.reduce((sum, item) => sum + parseInt(item.impression || 0), 0).toLocaleString()}
                             </Text>
                             <Text style={styles.analyticsLabel}>Post Impressions</Text>
                         </View>
@@ -511,8 +510,8 @@ export default function Shopile() {
                             <View style={[styles.analyticsIcon, {backgroundColor: '#F0FDF4'}]}>
                                 <Ionicons name="compass" size={24} color="#22C55E" />
                             </View>
-                            <Text style={styles.analyticsNumber}>
-                                {shop.promotion ? products.reduce((sum, item) => sum + parseInt(item.search_appearances || 0), 0).toLocaleString() : '***'}
+                            <Text style={[styles.analyticsNumber, plan === 'free' && styles.blur]}>
+                                {products.reduce((sum, item) => sum + parseInt(item.search_appearances || 0), 0).toLocaleString()}
                             </Text>
                             <Text style={styles.analyticsLabel}>Search Appearances</Text>
                         </View>
@@ -542,6 +541,12 @@ export default function Shopile() {
 
 const styles = StyleSheet.create({
 
+    blur:{
+        color: "transparent", 
+        textShadowColor: "rgba(0, 0, 0, 0.5)", 
+        textShadowOffset: { width: 0, height: 0 }, 
+        textShadowRadius: 15 
+    },
     premiumSectionHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',

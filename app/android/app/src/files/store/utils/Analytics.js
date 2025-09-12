@@ -49,16 +49,16 @@ const AnalyticsScreen = () => {
       
       <View style={styles.itemBody}>
         <View style={styles.actionBadge}>
-          <Text style={[styles.actionText,  plan !== 'premium' &&  plan !== 'standard' && styles.blur ]}>{item.source === 'views' ? "Viewed" : item.source === 'search_appearances' ? "Product searched" : item.source === 'impression' ? "Impression created" : item.source === 'shares' ? "Shared" : "Contact clicked"} by {item.fname} {item.lname}</Text>
+          <Text style={[styles.actionText,  plan !== 'premium' &&  plan !== 'standard' && styles.blur ]}>{item.source === 'views' ? "Viewed" : item.source === 'search_appearances' ? "Product searched" : item.source === 'impression' ? "Impression created" : item.source === 'shares' ? "Shared" : "Contact clicked"} by {item.fname}.{item.lname[0]}</Text>
         </View>
 
         <View style={styles.detailsContainer}>
-          <View style={styles.detailItem}>
+          <View style={[styles.detailItem, {flexDirection: 'row', alignItems: 'center'}]}>
             <Ionicons name="mail-outline" size={14} color="#666" />
             <Text style={[styles.detailText,  plan !== 'premium' && styles.blur]}>{item.email}</Text>
           </View>
           
-          <View style={styles.detailItem}>
+          <View style={[styles.detailItem, {flexDirection: 'row', alignItems: 'center'}]}>
             <Ionicons name="call-outline" size={14} color="#666" />
             <Text style={[styles.detailText,  plan !== 'premium' && styles.blur]}>{item.phone}</Text>
           </View>
