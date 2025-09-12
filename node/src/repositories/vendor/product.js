@@ -114,8 +114,17 @@ export async function deleteProduct({ product_id }) {
     `DELETE FROM products WHERE product_id = $1`,
     [product_id]
   );
-  return errorHandler(result?.rowCount);
+  return (result?.rowCount) === 1 ? true : false;
 }
+
+export async function deleteProductPromotion({ product_id }) {
+  const result = await pool.query(
+    `DELETE FROM promotions WHERE product_id = $1`,
+    [product_id]
+  );
+  return;
+}
+
 
 // UPDATE product
 export async function updateProduct({ constantData, dynamicData, shipping_data }) {

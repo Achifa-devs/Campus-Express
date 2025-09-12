@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions,
+  Share,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Video from 'react-native-video';
@@ -17,7 +18,7 @@ import { set_boost_modal } from '../../../../../../../redux/boost_modal';
 
 const { width } = Dimensions.get('window');
 
-const LodgeCard = ({ item, onShare, state='private', onDelete, onPromote }) => {
+const LodgeCard = ({ item, state='private', onDelete, onPromote }) => {
     const navigation = useNavigation();
     const route = useRoute();
     
@@ -44,26 +45,55 @@ const LodgeCard = ({ item, onShare, state='private', onDelete, onPromote }) => {
 
     const handlePromotePress = (data) => {
       if (!exploreshop) {
-        if(!isPromoted){
-          dispatch(set_boost_modal({data: data, visible: 1}))
-        }else{
-          navigation.navigate('user-metrics', {
-            data: data
-          })
-        }
+        navigation.navigate('user-metrics', {
+          data: data
+        })
       } else{
         navigation.navigate('user-lodge-room', { data: item });
+      }
+    };
+
+    const onShare = async (item) => {
+      try {
+        // Build URL with price as the reference
+        const url = `https://www.campussphere.net/store/product/${item.product_id}`;
+  
+        const result = await Share.share({
+          message: `Check out this lodge for ₦${item.price}!\n\nClick here: ${url}`,
+          url: url, // For iOS, adds link preview
+          title: `${item.title} Plan`,
+        });
+  
+        if (result.action === Share.sharedAction) {
+          if (result.activityType) {
+            console.log("Shared with activity type:", result.activityType);
+          } else {
+            console.log("Shared successfully");
+          }
+        } else if (result.action === Share.dismissedAction) {
+          console.log("Share dismissed");
+        }
+      } catch (error) {
+        console.error("Error sharing:", error.message);
       }
     };
 
   return (
     <TouchableOpacity style={styles.container} onPress={e => {
       if(exploreshop){
-        navigation.navigate('user-lodge-room', { data: item });
+        navigation.navigate('user-product', {data: item})
+      }else{
+        handlePromotePress(item)
       }
     }}>
       {/* Video Thumbnail - Takes 70% of card */}
-      <TouchableOpacity onPress={e => handlePromotePress(item)}>
+      <TouchableOpacity onPress={e => {
+        if(exploreshop){
+          navigation.navigate('user-product', {data: item})
+        }else{
+          handlePromotePress(item)
+        }
+      }}>
         <View style={styles.videoContainer}>
           <Video
             source={{ uri: item.thumbnail_id }}
@@ -82,15 +112,15 @@ const LodgeCard = ({ item, onShare, state='private', onDelete, onPromote }) => {
 
           {/* Boost Badge/Promote Button - Overlay on video */}
           {!exploreshop ?
-                    isPromoted ? (
-                      <View style={styles.boostBadge}>
-                        <Icon name="rocket" size={12} color="#FFF" />
-                        <Text style={styles.boostBadgeText}>Promoted</Text>
+            isPromoted ? (
+              <View style={styles.boostBadge}>
+                <Icon name="rocket" size={12} color="#FFF" />
+                <Text style={styles.boostBadgeText}>Promoted</Text>
             </View>
           ) : (
             <TouchableOpacity 
               style={styles.promoteButton} 
-              onPress={e => handlePromotePress(item)}
+              onPress={e => dispatch(set_boost_modal({data: item, visible: 1}))}
               activeOpacity={0.7}
             >
               <Icon name="rocket-outline" size={12} color="#FFF" />
@@ -142,12 +172,12 @@ const LodgeCard = ({ item, onShare, state='private', onDelete, onPromote }) => {
             <Text style={[styles.actionText, styles.viewText]}>View</Text>
           </TouchableOpacity>
           
-          <TouchableOpacity onPress={onShare} style={styles.actionButton}>
+          <TouchableOpacity onPress={e => onShare(item)} style={styles.actionButton}>
             <Icon name="share-social" size={20} color="#666" />
             <Text style={styles.actionText}>Share</Text>
           </TouchableOpacity>
           
-          <TouchableOpacity onPress={onDelete} style={[styles.actionButton, styles.deleteButton]}>
+          <TouchableOpacity onPress={e=>onDelete(item, 'video')} style={[styles.actionButton, styles.deleteButton]}>
             <Icon name="trash" size={20} color="#FF3B30" />
             <Text style={[styles.actionText, styles.deleteText]}>Delete</Text>
           </TouchableOpacity>

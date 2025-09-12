@@ -1,7 +1,10 @@
+import { v2 as cloudinary } from 'cloudinary';
+
 import {
   createProduct, 
   deleteProduct, 
   findProductById, 
+  deleteProductPromotion,
   findProducts, 
   findProductsThumbnailById, 
   updateAdQuota, 
@@ -83,11 +86,36 @@ export const postUpdateProduct = async (payload) => {
 
 
 export const postDeleteProduct = async (payload) => {
-    const { product_id } = payload;
+  const { product_id, type } = payload;
 
-    // Business logic
-    const response = await deleteProduct({ product_id });
-    // DELETE product thumbnail from cloudinary
+  try {
+    const deleteFolder = async (folderName, resourceType = 'image') => {
+      try {
+        // Delete all resources inside the folder
+        const resources = await cloudinary.api.delete_resources_by_prefix(folderName, {
+          resource_type: resourceType,
+        });
+  
+        console.log("Deleted resources:", resources);
+  
+        // Delete the folder itself
+        const folder = await cloudinary.api.delete_folder(folderName);
+        console.log("Deleted folder:", folder);
+  
+        return { resources, folder };
+      } catch (error) {
+        console.error("Error deleting Cloudinary folder:", error);
+        throw error;
+      }
+    };
+    // await deleteFolder(product_id, type);
+    await deleteProductPromotion({product_id});
+    await deleteProduct({product_id});
 
-    return response;
+    return true;
+  } catch (error) {
+    console.log("error: ", error);
+    throw new Error("Error: ", error);
+  }
+
 };

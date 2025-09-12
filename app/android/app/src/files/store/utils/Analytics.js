@@ -187,6 +187,25 @@ const AnalyticsScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  emptyState: {
+    backgroundColor: '#FFF',
+    padding: 40,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  emptyStateText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#666',
+    marginTop: 16,
+    marginBottom: 8,
+  },
+  emptyStateSubtext: {
+    fontSize: 14,
+    color: '#999',
+    textAlign: 'center',
+  },
   blur:{
     color: "transparent", 
     textShadowColor: "rgba(0, 0, 0, 0.5)", 

@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   FlatList,
   RefreshControl,
+  Alert,
 } from 'react-native';
 import { LineChart, BarChart, PieChart } from 'react-native-chart-kit';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -81,27 +82,7 @@ const AnalyticsScreen = () => {
     fetchAnalyticsData();
   };
 
-    
-
-  const TimeframeButton = ({ label, value }) => (
-    <TouchableOpacity
-      style={[
-        styles.timeframeButton,
-        selectedTimeframe === value && styles.timeframeButtonActive
-      ]}
-      onPress={() => setSelectedTimeframe(value)}
-    >
-      <Text
-        style={[
-          styles.timeframeButtonText,
-          selectedTimeframe === value && styles.timeframeButtonTextActive
-        ]}
-      >
-        {label}
-      </Text>
-    </TouchableOpacity>
-  );
-
+   
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
@@ -111,6 +92,7 @@ const AnalyticsScreen = () => {
     );
   }
 
+ 
 
   
   const getIconForFilter = (filterKey) => {
@@ -180,6 +162,20 @@ const AnalyticsScreen = () => {
       </View>
     );
   };
+
+   if(products.length === 0){
+    return(
+      <>
+        <View style={styles.emptyState}>
+          <Ionicons name="images" size={50} color="#CCC" />
+          <Text style={styles.emptyStateText}>No ads published yet</Text>
+          <Text style={styles.emptyStateSubtext}>
+            Start by publishing your first ad to get analytics data!
+          </Text>
+        </View>
+      </>
+    )
+  }
   
   return (
     <ScrollView
@@ -427,6 +423,26 @@ const AnalyticsScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  emptyState: {
+    height: '100%',
+    backgroundColor: '#FFF',
+    padding: 40,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  emptyStateText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#666',
+    marginTop: 16,
+    marginBottom: 8,
+  },
+  emptyStateSubtext: {
+    fontSize: 14,
+    color: '#999',
+    textAlign: 'center',
+  },
   premiumSectionHeader: {
     flexDirection: 'column',
     justifyContent: 'center',

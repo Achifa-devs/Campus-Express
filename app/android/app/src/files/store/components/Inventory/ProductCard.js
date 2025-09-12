@@ -9,16 +9,18 @@ import {
   Image,
   Dimensions,
   Alert,
+  Share,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { debounce } from 'lodash';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import { set_boost_modal } from '../../../../../../../redux/boost_modal';
+import axios from 'axios';
 
 const { width } = Dimensions.get('window');
 
-const ProductCard = ({ item, onShare, state='private', onDelete, onStatusChange, onPromote }) => {
+const ProductCard = ({ item, state='private', onDelete, onStatusChange, onPromote }) => {
   const navigation = useNavigation();
   const route = useRoute();
   const [exploreshop, setExploreShop] = useState(false);
@@ -32,12 +34,33 @@ const ProductCard = ({ item, onShare, state='private', onDelete, onStatusChange,
       setExploreShop(false);
     }
   }, [route.name]);
-  // const handleNavigation = useCallback(
-  //   debounce((item) => {
-  //     navigation.navigate('user-product', { data: item });
-  //   }, 300, { leading: true, trailing: false }),
-  //   [navigation]
-  // );
+  
+  const onShare = async (item) => {
+    try {
+      // Build URL with price as the reference
+      const url = `https://www.campussphere.net/store/product/${item.product_id}`;
+
+      const result = await Share.share({
+        message: `Check out this product for ₦${item.price}!\n\nClick here: ${url}`,
+        url: url, // For iOS, adds link preview
+        title: `${item.title} Plan`,
+      });
+
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          console.log("Shared with activity type:", result.activityType);
+        } else {
+          console.log("Shared successfully");
+        }
+      } else if (result.action === Share.dismissedAction) {
+        console.log("Share dismissed");
+      }
+    } catch (error) {
+      console.error("Error sharing:", error.message);
+    }
+  };
+
+  
 
   const dispatch = useDispatch()
   
@@ -66,10 +89,18 @@ const ProductCard = ({ item, onShare, state='private', onDelete, onStatusChange,
     <TouchableOpacity style={styles.container} onPress={e => {
       if(exploreshop){
         navigation.navigate('user-product', {data: item})
+      }else{
+        handlePromotePress(item)
       }
     }}>
       {/* Thumbnail - Clickable for navigation */}
-      <TouchableOpacity onPress={e => handlePromotePress(item)}>
+      <TouchableOpacity onPress={e => {
+        if(exploreshop){
+          navigation.navigate('user-product', {data: item})
+        }else{
+          handlePromotePress(item)
+        }
+      }}>
         <Image source={{ uri: item.thumbnail_id }} style={styles.thumbnail} />
         
         {/* Boost Badge - Overlay on thumbnail */}
@@ -82,7 +113,7 @@ const ProductCard = ({ item, onShare, state='private', onDelete, onStatusChange,
           ) : (
             <TouchableOpacity 
               style={styles.promoteButton} 
-              onPress={e => handlePromotePress(item)}
+              onPress={e => dispatch(set_boost_modal({data: item, visible: 1}))}
               activeOpacity={0.7}
             >
               <Icon name="rocket-outline" size={12} color="#FFF" />
@@ -130,11 +161,11 @@ const ProductCard = ({ item, onShare, state='private', onDelete, onStatusChange,
               <Text style={[styles.actionText, styles.viewText]}>View</Text>
             </TouchableOpacity>
             
-            <TouchableOpacity onPress={onShare} style={styles.actionButton}>
+            <TouchableOpacity onPress={e => onShare(item)} style={styles.actionButton}>
               <Icon name="share-social" size={16} color="#666" />
             </TouchableOpacity>
             
-            <TouchableOpacity onPress={onDelete} style={[styles.actionButton, styles.deleteButton]}>
+            <TouchableOpacity onPress={e=>onDelete(item)} style={[styles.actionButton, styles.deleteButton]}>
               <Icon name="trash" size={16} color="#FF3B30" />
             </TouchableOpacity>
           </View>}

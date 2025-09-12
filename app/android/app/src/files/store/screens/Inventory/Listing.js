@@ -1,6 +1,6 @@
 // screens/MyAdsScreen.js
 import React, { useEffect, useState } from 'react';
-import { View, FlatList, Text, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
+import { View, FlatList, Text, StyleSheet, Image, TouchableOpacity, Alert, Share, ActivityIndicator } from 'react-native';
 import ProductCard from '../../components/Inventory/ProductCard';
 import LodgeCard from '../../components/Inventory/LodgeCard';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -9,6 +9,7 @@ import categoriesData from '../../../../../../../services.json'
 import js_ago from 'js-ago';
 import { useDispatch, useSelector } from 'react-redux';
 import { set_boost_modal } from '../../../../../../../redux/boost_modal';
+import axios from 'axios';
 
 const Listing = () => {
 
@@ -17,6 +18,12 @@ const Listing = () => {
   const { data } = route?.params;
   const { option } = useSelector(s => s?.option);
   const [exploreshop, setExploreShop] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [userAds, setUserAds] = useState([])
+  useEffect(() => {
+    setUserAds(data)
+  }, [data])
 
   useEffect(() => {
     console.log(route.name)
@@ -26,17 +33,72 @@ const Listing = () => {
       setExploreShop(false);
     }
   }, [route.name]);
+
+  const onDelete = async (item, type='image') => {
+    setIsLoading(true)
+    try {
+      const response = await axios.get('http://192.168.0.4:9090/vendor/delete-product', {params: {product_id: item.product_id, type: type}});
   
-  const handleShare = (item) => {
-    console.log('Share:', item);
-  };
+      const result = await response.data;
+      if(result.success){
+        setIsLoading(false);
+        Alert.alert("Success", "Item was deleted successfully!");
+        let newData = data.filter(data => data.product_id !== item.product_id);
+        setUserAds(newData);
+      }else{
+        Alert.alert(
+          "Error", "Internal server error"
+        )
+        Alert.alert(
+          "Internal server error",
+          "Try again to see if it works out successfully.",
+          [
+            {
+              text: "Cancel",
+              style: "cancel",
+              onPress: () => console.log("User canceled"),
+            },
+            {
+              text: "Try again",
+              onPress: () => {
+                onDelete()
+              },
+            },
+          ],
+          { cancelable: false }
+        );
+      }
 
-  const handleDelete = (item) => {
-    console.log('Delete:', item);
-  };
+    } catch (error) {
+      console.log("error: ", error)
+      setIsLoading(false)
+    }
+  }
+  
+  
+  const onShare = async (item) => {
+    try {
+      // Build URL with price as the reference
+      const url = `https://www.campussphere.net/store/product/${item.product_id}`;
 
-  const handleStatusChange = (item) => {
-    console.log('Change status:', item);
+      const result = await Share.share({
+        message: `Check out this service for ₦${item.price}!\n\nClick here: ${url}`,
+        url: url, // For iOS, adds link preview
+        title: `${item.title} Plan`,
+      });
+
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          console.log("Shared with activity type:", result.activityType);
+        } else {
+          console.log("Shared successfully");
+        }
+      } else if (result.action === Share.dismissedAction) {
+        console.log("Share dismissed");
+      }
+    } catch (error) {
+      console.error("Error sharing:", error.message);
+    }
   };
 
   const renderServiceItem = ({ item, navigation }) => {
@@ -44,14 +106,9 @@ const Listing = () => {
     
     const handlePromotePress = (data) => {
       if (!exploreshop) {
-        if(!isPromoted){
-          console.log("data: ", data)
-          dispatch(set_boost_modal({data: data, visible: 1}))
-        }else{
-          navigation.navigate('user-metrics', {
-            data: data
-          })
-        }
+        navigation.navigate('user-metrics', {
+          data: data
+        })
       } else {
         navigation.navigate('user-product', { data: data });
       }
@@ -61,7 +118,7 @@ const Listing = () => {
     return (
       <TouchableOpacity
         style={styles.serviceCard}
-        // user-service-room
+        onPress={e => handlePromotePress(item)}
       >
         <TouchableOpacity style={styles.imageContainer} onPress={e => handlePromotePress(item)}>
           <Image 
@@ -78,7 +135,7 @@ const Listing = () => {
           ) : (
             <TouchableOpacity 
               style={styles.promoteButton} 
-              onPress={e => handlePromotePress(item)}
+              onPress={e => dispatch(set_boost_modal({data: item, visible: 1}))}
               activeOpacity={0.7}
             >
               <Icon name="rocket-outline" size={12} color="#FFF" />
@@ -91,9 +148,17 @@ const Listing = () => {
           <Text style={styles.serviceName} numberOfLines={1}>{item.title}</Text>
           <View style={styles.serviceMeta}>
             <Text style={styles.serviceCategory}>{item.category} - <Text style={{fontWeight: 'bold'}}>{item?.others?.gender}</Text></Text>
+            
             <Text style={styles.serviceStats}>{item?.views} {parseInt(item?.views)>1?'views':'view'} • {js_ago(new Date(item?.date))}</Text>
           </View>
-        </View>
+
+          <TouchableOpacity onPress={e => onShare(item)} style={styles.actionButton}>
+            <Icon name="share-social" size={16} color="#666" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={e=>onDelete(item)} style={[styles.actionButton, styles.deleteButton, {right: 45}]}>
+            <Icon name="trash" size={16} color="#FF3B30" />
+          </TouchableOpacity>
+      </View>
       </TouchableOpacity>
     );
   };
@@ -105,24 +170,33 @@ const Listing = () => {
       return (
         <ProductCard
           item={item}
-          onShare={() => handleShare(item)}
-          onDelete={() => handleDelete(item)}
-          onStatusChange={() => handleStatusChange(item)}
+          onDelete={onDelete}
         />
       );
     } else if (item.purpose === 'accomodation') {
       return (
         <LodgeCard
           item={item}
-          onShare={() => handleShare(item)}
-          onDelete={() => handleDelete(item)}
-          onStatusChange={() => handleStatusChange(item)}
+          onDelete={onDelete}
         />
       );
     } else{
       return renderServiceItem({ item, navigation });
     }
   };
+
+  if(isLoading){
+    return (
+      <View style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#F8F9FA',
+      }}>
+        <ActivityIndicator size="large" color="#FF4500" />
+      </View>
+    );
+  }
 
   return (
 
@@ -135,10 +209,10 @@ const Listing = () => {
           <FlatList
             data={
               option === 'Products'
-              ?data.filter(item => item.purpose === 'product')
+              ?userAds.filter(item => item.purpose === 'product')
               :option === 'Lodges'
-              ?data.filter(item => item.purpose === 'accomodation')
-              :data.filter(item => item.purpose === 'service')
+              ?userAds.filter(item => item.purpose === 'accomodation')
+              :userAds.filter(item => item.purpose === 'service')
             }
             renderItem={renderItem}
             keyExtractor={(item, index) => index.toString()}
@@ -174,6 +248,23 @@ const Listing = () => {
   };
  
 const styles = StyleSheet.create({
+  actions: {
+    flexDirection: 'row',
+    gap: 8,
+    alignItems: 'center',
+  },
+  actionButton: {
+    padding: 6,
+    borderRadius: 6,
+    backgroundColor: '#F8F9FA',
+    justifyContent: 'center',
+    alignItems: 'center',
+    minWidth: 36,
+    height: 36,
+    position: 'absolute',
+    bottom: 2, 
+    right: 2
+  },
   serviceCard: {
     backgroundColor: '#FFF',
     borderRadius: 8,
