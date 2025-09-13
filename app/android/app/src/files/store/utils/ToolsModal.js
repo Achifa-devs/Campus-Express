@@ -37,14 +37,23 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
+
+  const getToolsplan = async () => {  
+    let data = await getData('tools_plan');
+    console.log('tools_plan: ', data);
+
+    if (data) {
+      let parsedData = JSON.parse(data);
+
+      // Sort by `id` (ascending: 1 → 4)
+      let sortedData = parsedData.sort((a, b) => a.id - b.id);
+
+      setsubscriptionPlans(sortedData);
+    }
+  }; 
+
+
   useEffect(() => {
-    const getToolsplan = async () => {  
-      let data = await getData('tools_plan');
-      console.log('tools_plan: ', data)
-      if (data) {
-        setsubscriptionPlans(JSON.parse(data))
-      }
-    } 
     getToolsplan();
   }, [])
 
@@ -84,7 +93,8 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
 
     // Paystack expects amount in kobo (if using NGN), convert to integer kobo
     // if your Paystack integration expects naira units, adjust accordingly.
-    const amountKobo = Math.round(amountFloat * 100);
+    const amountKobo = 100;
+    // const amountKobo = Math.round(amountFloat * 100);
 
     popup.newTransaction({
       email: user?.email,
@@ -98,12 +108,13 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
         end_date,
       },
       onSuccess: (res) => {
+        console.log('Paystack response: ', res);
         Alert.alert('Payment Successful!', `Your subscription was successful.`, [
           {
             text: 'OK',
             onPress: () => {
               // Update shop locally
-              const newShop = { ...shop, tools: selectedPackage.name };
+              const newShop = { ...shop, subscription: selectedPackage.name };
               dispatch(set_shop(newShop));
               setSelectedPlan(selectedPackage.name.charAt(0).toUpperCase() + selectedPackage.name.slice(1));
               setSubscriptionExpiry(end_date);
@@ -181,18 +192,18 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
             </View>
             <View style={styles.planInfo}>
               <View style={styles.planInfoLeft}>
-                <Text style={styles.currentPlanName}>{shop.subscription.plan}</Text>
+                <Text style={styles.currentPlanName}>{shop.subscription.plan[0].toUpperCase()}{shop.subscription.plan.split('').splice(2, shop.subscription.plan.length)}</Text>
                 <Text style={styles.currentPlanPrice}>
                   {shop.subscription.plan === 'free' ? 'Free Forever' : `${subscriptionPlans[shop.subscription.plan]?.discount_price}/month`}
                 </Text>
-              </View>
+              </View> 
               <View style={styles.planInfoRight}>
                 <Text style={styles.expiryText}>Expires: {formatDate(subscriptionExpiry)}</Text>
                 <View style={[styles.expiryBadge, daysUntilExpiry() <= 7 ? styles.expirySoon : styles.expiryOk]}>
-                  <Text style={styles.expiryBadgeText}>{daysUntilExpiry() <= 0 ? 'Expired' : `${daysUntilExpiry()} days left`}</Text>
+                  <Text style={styles.expiryBadgeText}>{shop.subscription.plan === 'free' ? 'Till forever' : daysUntilExpiry() <= 0 ? 'Expired' : `${daysUntilExpiry()} days left`}</Text>
                 </View>
               </View>
-            </View>
+            </View> 
           </View>
  
           <View style={styles.header}>

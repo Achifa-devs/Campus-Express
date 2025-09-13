@@ -266,31 +266,21 @@ function NavCnt() {
   }, [user, dispatch, resumeTick]);
 
 
-  const reqHandler = async (retries = 3, delay = 2000) => {
-    for (let attempt = 1; attempt <= retries; attempt++) {
-      try {
-        const response = await axios.get(
-          "https://cs-server-olive.vercel.app/subscription-plan"
-        );
+  const reqHandler = async () => {
+    try {
+      const response = await axios.get(
+        "https://cs-server-olive.vercel.app/subscription-plan"
+      );
 
-        await storeData("tools_plan", JSON.stringify(response.data));
-        console.log("Request successful ✅", response.data); 
-        return response.data; // stop retrying if successful
-      } catch (err) {
-        console.warn(`Attempt ${attempt} failed:`, err.message);
+      await storeData("tools_plan", JSON.stringify(response.data));
+      console.log("Request successful ✅", response.data); 
+      return response.data; // stop retrying if successful
+    } catch (err) {
+      console.warn(`Attempt ${attempt} failed:`, err.message);
 
-        if (attempt < retries) {
-          // wait before retrying
-          await new Promise((resolve) => setTimeout(resolve, delay));
-          console.log("Retrying..."); 
-        } else {  
-          console.error("All retries failed ❌");
-          throw err; // rethrow after last attempt
-        }
-      }
-    }
+    }  
   };
-
+ 
  
   const getToolsplan = async (params) => {  
     let data = await getData('tools_plan');   
@@ -301,7 +291,7 @@ function NavCnt() {
  
   useEffect(() => {
     getToolsplan()
-  }, [])
+  }, [user])
 
   
   return (

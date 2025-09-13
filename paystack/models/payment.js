@@ -44,9 +44,9 @@ class Payment {
   }
 
   static async updateTool(toolData) {
-    const { plan, user_id } = toolData;
-    const query = 'UPDATE shops SET tools = $1 WHERE user_id = $2 RETURNING *';
-    const result = await pool.query(query, [plan, user_id]);
+    const { subscription, user_id } = toolData;
+    const query = `UPDATE shops SET subscription = $1 WHERE user_id = $2 RETURNING *`;
+    const result = await pool.query(query, [subscription, user_id]);
     return result.rows[0];
   }
 

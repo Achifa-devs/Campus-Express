@@ -95,7 +95,13 @@ async function toolHandler(event) {
     if (paymentRecord) {
       console.log(`Payment created successfully: ${paymentRecord.id}`);
       // Update subscriptions only if payment creation was successful
-      const toolUpdate = await Payment.updateTool({ plan, user_id });
+      let subscription = {
+        "plan": plan,
+        "start_date": start_date,
+        "end_date": end_date,
+        "updated_at": new Date()
+      }
+      const toolUpdate = await Payment.updateTool({ subscription, user_id });
       if (toolUpdate) {
         console.log(`Tool updated for user: ${user_id}`);
       } else {
