@@ -82,7 +82,7 @@ const Listing = () => {
       const url = `https://www.campussphere.net/store/product/${item.product_id}`;
 
       const result = await Share.share({
-        message: `Check out this service for ₦${item.price}!\n\nClick here: ${url}`,
+        message: `Check out this service for ₦${item.price} on Campus Sphere!: ${url}`,
         url: url, // For iOS, adds link preview
         title: `${item.title} Plan`,
       });

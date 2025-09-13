@@ -20,6 +20,7 @@ import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { getData } from '../../utils/AsyncStore.js';
 import { capitalize } from './Capitalize.js';
+import { set_sub_modal } from '../../../../../../redux/sub.js';
 
 const { width } = Dimensions.get('window');
 
@@ -85,17 +86,15 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
       .toUpperCase()}`;
 
     // parse price safely (remove currency symbol and all commas)
-    const raw = String(selectedPackage?.discountPrice || selectedPackage?.price || '0');
+    const raw = String(selectedPackage?.discount_price);
     const amountFloat = parseFloat(raw.replace(/[₦,]/g, '').trim()) || 0;
 
     // Paystack expects amount in kobo (if using NGN), convert to integer kobo
     // if your Paystack integration expects naira units, adjust accordingly.
-    const amountKobo = 100;
-    // const amountKobo = Math.round(amountFloat * 100);
 
     popup.newTransaction({
       email: user?.email,
-      amount: amountKobo, // in kobo
+      amount: amountFloat, // in kobo
       reference,
       metadata: {
         user_id: user.user_id,
@@ -107,9 +106,9 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
       onSuccess: (res) => {
         let subscription = {
           "plan": selectedPackage.name,
-          "start_date": start_date,
-          "end_date": end_date,
-          "updated_at": start_date
+          "start_date": start_date,  // 🚨 Date object
+          "end_date": end_date,      // 🚨 Date object
+          "updated_at": start_date   // 🚨 Date object
         }
         Alert.alert('Payment Successful!', `Your subscription was successful.`, [
           {
@@ -119,6 +118,7 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
               const newShop = { ...shop, subscription: subscription };
               dispatch(set_shop(newShop));
               setSubscriptionExpiry(end_date);
+              dispatch(set_sub_modal(0))
               navigation.navigate('Sell');
             },
           },

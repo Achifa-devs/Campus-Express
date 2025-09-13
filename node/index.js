@@ -484,19 +484,21 @@ CAMPUSSPHERE_SERVER.get('/subscription', async (req, res) => {
 });
 
 
-CAMPUSSPHERE_SERVER.get('/subscription-plan', async (req, res) => {
-
+CAMPUSSPHERE_SERVER.get('/plans', async (req, res) => {
   try {
-    // Get seller's products
-    const result = await pool.query(
-      'SELECT * FROM subscription_plans'
-    ); 
-    // Return combined data 
-    res.status(200).send(result.rows);
+    const promoPlans = await pool.query(`SELECT * FROM promo_plans`);
+    const connectionPricing = await pool.query(`SELECT * FROM connection_pricing`);
+    const vendors = await pool.query(`SELECT * FROM vendor_tools_subscription`);
+
+    res.status(200).json({
+      promo_plans: promoPlans.rows,
+      connection_pricing: connectionPricing.rows,
+      vendors: vendors.rows
+    });
 
   } catch (err) {
     console.error('DB Error:', err);
-    res.status(500).send({ error: 'Server Error' });
+    res.status(500).json({ error: 'Server Error' });
   }
 });
 

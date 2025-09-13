@@ -268,29 +268,36 @@ function NavCnt() {
 
   const reqHandler = async () => {
     try {
-      const response = await axios.get(
-        "https://cs-server-olive.vercel.app/subscription-plan"
-      );
+      const response = await axios.get("https://cs-server-olive.vercel.app/plans");
 
-      await storeData("tools_plan", JSON.stringify(response.data));
+      // Save different parts separately
+      await storeData("promo_plan", JSON.stringify(response.data.promo_plans));
+      await storeData("connect_plan", JSON.stringify(response.data.connection_pricing));
+      await storeData("tools_plan", JSON.stringify(response.data.vendors));
+
       console.log("Request successful ✅", response.data); 
       return response.data; // stop retrying if successful
     } catch (err) {
-      console.warn(`Attempt ${attempt} failed:`, err.message);
-
-    }  
-  };
- 
- 
-  const getToolsplan = async (params) => {  
-    let data = await getData('tools_plan');   
-    if (!data) { 
-      reqHandler()
+      console.warn("Request failed ❌:", err.message);
     }
-  }
+  };
+
+  const getPlans = async () => {  
+    let promo = await getData("promo_plan");   
+    let connect = await getData("connect_plan");   
+    let vendor = await getData("tools_plan");
+
+    // If any of them is missing, fetch again
+    if (!promo || !connect || !vendor) { 
+      return await reqHandler();
+    }
+
+    return { promo, connect, vendor };
+  };
+
  
   useEffect(() => {
-    getToolsplan()
+    getPlans()
   }, [user])
 
   

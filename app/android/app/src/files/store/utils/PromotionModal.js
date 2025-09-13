@@ -32,7 +32,7 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
       "id": 1,
       "title": "Flash Promo",
       "duration": "1 Day",
-      "price": "₦1000.00",
+      "price": "₦1,000.00",
       "discountPrice": "₦600.00",
       "description": "Perfect for quick promotions or urgent product launches. Gain instant visibility within 24 hours.",
       "features": [
@@ -46,8 +46,8 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
       "id": 2,
       "title": "Weekend Spotlight",
       "duration": "3 Days",
-      "price": "₦2500.00",
-      "discountPrice": "₦1500.00",
+      "price": "₦2,500.00",
+      "discountPrice": "₦1,500.00",
       "description": "Ideal for short bursts of attention. Capture weekend shoppers with a 3-day spotlight campaign.",
       "features": [
         "Ad runs for 3 days",
@@ -60,8 +60,8 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
       "id": 3,
       "title": "Weekly Exposure",
       "duration": "1 Week",
-      "price": "₦5000.00",
-      "discountPrice": "₦3500.00",
+      "price": "₦5,000.00",
+      "discountPrice": "₦3,500.00",
       "description": "A balanced plan designed to maximize visibility and sales over the course of one week.",
       "features": [
         "Ad runs for 7 days",
@@ -74,8 +74,8 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
       "id": 4,
       "title": "Extended Reach",
       "duration": "2 Weeks",
-      "price": "₦9500.00",
-      "discountPrice": "₦6600.00",
+      "price": "₦9,500.00",
+      "discountPrice": "₦6,600.00",
       "description": "Two weeks of consistent exposure to help strengthen your brand and boost product recognition.",
       "features": [
         "Ad runs for 14 days",
@@ -88,8 +88,8 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
       "id": 5,
       "title": "Monthly Campaign",
       "duration": "1 Month",
-      "price": "₦18000.00",
-      "discountPrice": "₦11400.00",
+      "price": "₦18,000.00",
+      "discountPrice": "₦11,400.00",
       "description": "The ultimate package for vendors who want to dominate visibility with a full month of promotion.",
       "features": [
         "Ad runs for 30 days",
@@ -119,6 +119,10 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
       }
     }
     return null;
+  };
+
+  const handlePackageSelect = (pkg) => {
+    setSelectedPackage(pkg.id);
   };
 
   const handleSubscribe = (pkg) => {
@@ -173,8 +177,9 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
     
     popup.newTransaction({
       email: user?.email,
-      amount: parseFloat(selectedPackage?.discountPrice.replace('₦', '').replace(',', '')),
+      // amount: parseFloat(selectedPackage?.discountPrice.replace('₦', '').replace(',', '')),
       reference: reference,
+      amount: 100, 
       metadata: {
         user_id: user.user_id,
         type: 'promotion',
@@ -221,9 +226,7 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
         </View>
 
         <ScrollView contentContainerStyle={styles.scrollContent}>
-          
-
-          {/* Ad Preview Section - FIXED */}
+          {/* Ad Preview Section */}
           <View style={styles.adPreviewSection}>
             <Text style={styles.sectionTitle}>Your Ad Preview</Text>
             <Text style={styles.sectionSubtitle}>See how your promotion will appear to customers</Text>
@@ -289,86 +292,103 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
             )}
           </View>
 
-          {/* Promotion Packages - Horizontal Scroll */}
+          {/* Promotion Packages - Horizontal Layout */}
           <View style={styles.packagesSection}>
             <Text style={styles.sectionTitle}>Choose Your Promotion Package</Text>
             <Text style={styles.sectionSubtitle}>
               Select the duration that works best for your campaign goals
             </Text>
 
-            <ScrollView 
-              horizontal 
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.horizontalScrollContainer}
-            >
-              {promotionPackages.map((pkg, index) => {
-                const discountPercent = calculateDiscountPercentage(pkg.price, pkg.discountPrice);
-                const isSelected = selectedPackage === pkg.id;
-                
-                return (
-                  <View 
-                    key={pkg.id} 
-                    style={[
-                      styles.packageCard,
-                      isSelected && styles.selectedPackage,
-                      index === 2 && styles.featuredPackage,
-                      { width: width * 0.85 }
-                    ]}
-                  >
-                    {index === 2 && (
-                      <View style={styles.popularBadge}>
-                        <Text style={styles.popularBadgeText}>RECOMMENDED</Text>
-                      </View>
-                    )}
-                    
-                    <View style={styles.packageHeader}>
-                      <View>
-                        <Text style={styles.packageTitle}>{pkg.title}</Text>
-                        <Text style={styles.packageDuration}>{pkg.duration}</Text>
-                      </View>
-                      <View style={styles.priceContainer}>
-                        <Text style={styles.originalPrice}>{pkg.price}</Text>
-                        <Text style={styles.discountPrice}>{pkg.discountPrice}</Text>
-                        {discountPercent > 0 && (
-                          <View style={styles.discountBadge}>
-                            <Text style={styles.discountText}>Save {discountPercent}%</Text>
-                          </View>
-                        )}
-                      </View>
-                    </View>
-                    
-                    <Text style={styles.packageDescription}>{pkg.description}</Text>
-                    
-                    <View style={styles.featuresContainer}>
-                      <Text style={styles.featuresTitle}>What's Included:</Text>
-                      {pkg.features.map((feature, idx) => (
-                        <View key={idx} style={styles.featureItem}>
-                          <View style={styles.checkIcon}>
-                            <Text style={styles.checkIconText}>✓</Text>
-                          </View>
-                          <Text style={styles.featureText}>{feature}</Text>
-                        </View>
-                      ))}
-                    </View>
-                    
+            <View style={styles.packageCardsContainer}>
+              <ScrollView 
+                horizontal 
+                showsHorizontalScrollIndicator={true}
+                contentContainerStyle={styles.horizontalScrollContainer}
+                snapToInterval={width * 0.8 + 16}
+                decelerationRate="fast"
+              >
+                {promotionPackages.map((pkg, index) => {
+                  const discountPercent = calculateDiscountPercentage(pkg.price, pkg.discountPrice);
+                  const isSelected = selectedPackage === pkg.id;
+                  
+                  return (
                     <TouchableOpacity
+                      key={pkg.id} 
                       style={[
-                        styles.subscribeButton,
-                        isSelected && styles.selectedButton
+                        styles.packageCard,
+                        isSelected && styles.selectedPackage,
+                        index === 2 && styles.featuredPackage,
                       ]}
-                      onPress={() => handleSubscribe(pkg)}
+                      onPress={() => handlePackageSelect(pkg)}
                     >
-                      <Text style={[
-                        styles.subscribeButtonText,
-                        isSelected && styles.selectedButtonText
-                      ]}>
-                        {isSelected ? 'Selected' : 'Purchase Now'}
-                      </Text>
+                      {index === 2 && (
+                        <View style={styles.popularBadge}>
+                          <Text style={styles.popularBadgeText}>RECOMMENDED</Text>
+                        </View>
+                      )}
+                      
+                      <View style={styles.packageHeader}>
+                        <View>
+                          <Text style={styles.packageTitle}>{pkg.title}</Text>
+                          <Text style={styles.packageDuration}>{pkg.duration}</Text>
+                        </View>
+                        <View style={styles.priceContainer}>
+                          <Text style={styles.originalPrice}>{pkg.price}</Text>
+                          <Text style={styles.discountPrice}>{pkg.discountPrice}</Text>
+                          {discountPercent > 0 && (
+                            <View style={styles.discountBadge}>
+                              <Text style={styles.discountText}>Save {discountPercent}%</Text>
+                            </View>
+                          )}
+                        </View>
+                      </View>
+                      
+                      <Text style={styles.packageDescription}>{pkg.description}</Text>
+                      
+                      <View style={styles.featuresContainer}>
+                        <Text style={styles.featuresTitle}>What's Included:</Text>
+                        {pkg.features.map((feature, idx) => (
+                          <View key={idx} style={styles.featureItem}>
+                            <View style={styles.checkIcon}>
+                              <Text style={styles.checkIconText}>✓</Text>
+                            </View>
+                            <Text style={styles.featureText}>{feature}</Text>
+                          </View>
+                        ))}
+                      </View>
+                      
+                      <TouchableOpacity
+                        style={[
+                          styles.subscribeButton,
+                          isSelected && styles.selectedButton
+                        ]}
+                        onPress={() => handleSubscribe(pkg)}
+                      >
+                        <Text style={[
+                          styles.subscribeButtonText,
+                          isSelected && styles.selectedButtonText
+                        ]}>
+                          {isSelected ? 'Selected' : 'Purchase Now'}
+                        </Text>
+                      </TouchableOpacity>
                     </TouchableOpacity>
-                  </View>
-                );
-              })}
-            </ScrollView>
+                  );
+                })}
+              </ScrollView>
+              
+              {/* Scroll indicator for better UX */}
+              <View style={styles.scrollIndicator}>
+                {promotionPackages.map((_, index) => (
+                  <View 
+                    key={index} 
+                    style={[
+                      styles.scrollDot,
+                      index === 2 && styles.scrollDotActive
+                    ]} 
+                  />
+                ))}
+              </View>
+            </View>
           </View>
 
           {/* Performance Stats */}
@@ -647,22 +667,26 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
+  packageCardsContainer: {
+    marginBottom: 10,
+  },
   horizontalScrollContainer: {
-    paddingHorizontal: 5,
+    paddingHorizontal: 8,
     paddingVertical: 10,
   },
   packageCard: {
     backgroundColor: 'white',
-    borderRadius: 8,
+    borderRadius: 12,
     padding: 16,
-    marginRight: 12,
+    marginRight: 16,
+    width: width * 0.8,
     borderWidth: 2,
     borderColor: 'transparent',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 5,
     position: 'relative',
   },
   featuredPackage: {
@@ -671,7 +695,7 @@ const styles = StyleSheet.create({
   },
   selectedPackage: {
     borderColor: '#00b894',
-    backgroundColor: '#fff4e0',
+    backgroundColor: '#f8fff9',
   },
   popularBadge: {
     position: 'absolute',
@@ -681,6 +705,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 4,
     borderRadius: 20,
+    zIndex: 1,
   },
   popularBadgeText: {
     color: 'white',
@@ -712,7 +737,7 @@ const styles = StyleSheet.create({
     textDecorationLine: 'line-through',
   },
   discountPrice: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#2d3436',
     marginTop: 2,
@@ -786,6 +811,24 @@ const styles = StyleSheet.create({
   },
   selectedButtonText: {
     fontWeight: 'bold',
+  },
+  // Scroll indicator
+  scrollIndicator: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 12,
+  },
+  scrollDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#ccc',
+    marginHorizontal: 4,
+  },
+  scrollDotActive: {
+    backgroundColor: '#FF4500',
+    width: 12,
   },
   // Info Section
   infoSection: {

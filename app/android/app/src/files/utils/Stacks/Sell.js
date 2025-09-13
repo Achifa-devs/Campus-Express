@@ -37,22 +37,22 @@ export function SellStackScreen() {
     const {campus} = useSelector(s => s.campus);
     const {tier} = useSelector(s => s.tier);
         
-        let navigation = useNavigation()
-        useEffect(() => {
-            console.log(campus)
-        }, [campus]) 
-    
-        function handleSub(params) {
-            if(shop.subscription.plan === 'free'){
-                dispatch(set_sub_modal(1))
-            }else{
-                navigation.navigate('Profile', {
-                    screen: 'user-subscription',   // 👈 nested screen name
-                    params: { sub: true },         // 👈 params go here
-                });
-    
-            }
-        }
+    let navigation = useNavigation()
+    useEffect(() => {
+      console.log(campus)
+    }, [campus]) 
+
+    function handleSub(params) {
+      if(shop.subscription.plan === 'free'){
+        dispatch(set_sub_modal(1))
+      }else{
+        navigation.navigate('Profile', {
+          screen: 'user-subscription',   // 👈 nested screen name
+          params: { sub: true },         // 👈 params go here
+        });
+
+      }
+    }
     
     const dispatch = useDispatch()
     useEffect(() => {
