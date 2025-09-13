@@ -18,87 +18,36 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Video from 'react-native-video';
 import { set_boost_modal } from '../../../../../../redux/boost_modal';
 import { useNavigation } from '@react-navigation/native';
+import { getData } from '../../utils/AsyncStore.js';
 
 const { width } = Dimensions.get('window');
 
 const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
-  const [selectedPackage, setSelectedPackage] = useState(null);
-  const { user } = useSelector(s => s.user);
   const { boost_modal } = useSelector(s => s.boost_modal);
+  const [selectedPackage, setSelectedPackage] = useState(boost_modal.data.promotion);
+  const { user } = useSelector(s => s.user);
   const [adImageUri, setAdImageUri] = useState(null);
 
-  const promotionPackages = [
-    {
-      "id": 1,
-      "title": "Flash Promo",
-      "duration": "1 Day",
-      "price": "₦1,000.00",
-      "discountPrice": "₦600.00",
-      "description": "Perfect for quick promotions or urgent product launches. Gain instant visibility within 24 hours.",
-      "features": [
-        "Ad runs for 24 hours",
-        "Boosted visibility in search results",
-        "Highlighted placement on homepage",
-        "Best for flash sales or urgent offers"
-      ]
-    },
-    {
-      "id": 2,
-      "title": "Weekend Spotlight",
-      "duration": "3 Days",
-      "price": "₦2,500.00",
-      "discountPrice": "₦1,500.00",
-      "description": "Ideal for short bursts of attention. Capture weekend shoppers with a 3-day spotlight campaign.",
-      "features": [
-        "Ad runs for 3 days",
-        "Priority listing across categories",
-        "Increased homepage impressions",
-        "Recommended for weekend deals"
-      ]
-    },
-    {
-      "id": 3,
-      "title": "Weekly Exposure",
-      "duration": "1 Week",
-      "price": "₦5,000.00",
-      "discountPrice": "₦3,500.00",
-      "description": "A balanced plan designed to maximize visibility and sales over the course of one week.",
-      "features": [
-        "Ad runs for 7 days",
-        "Prominent placement in search results",
-        "Enhanced category exposure",
-        "Ideal for standard campaigns"
-      ]
-    },
-    {
-      "id": 4,
-      "title": "Extended Reach",
-      "duration": "2 Weeks",
-      "price": "₦9,500.00",
-      "discountPrice": "₦6,600.00",
-      "description": "Two weeks of consistent exposure to help strengthen your brand and boost product recognition.",
-      "features": [
-        "Ad runs for 14 days",
-        "Sustained visibility on homepage",
-        "Higher engagement rate",
-        "Great for building product awareness"
-      ]
-    },
-    {
-      "id": 5,
-      "title": "Monthly Campaign",
-      "duration": "1 Month",
-      "price": "₦18,000.00",
-      "discountPrice": "₦11,400.00",
-      "description": "The ultimate package for vendors who want to dominate visibility with a full month of promotion.",
-      "features": [
-        "Ad runs for 30 days",
-        "Premium placement across all sections",
-        "Maximum brand exposure",
-        "Best value for long-term campaigns"
-      ]
+  const [promotionPackages, setPromotionPackages] = useState([])
+    
+  const getPromoPlan = async () => {  
+    let data = await getData('promo_plan');
+    console.log('promo_plan: ', data);
+
+    if (data) {
+      let parsedData = JSON.parse(data);
+
+      // Sort by `id` (ascending: 1 → 4)
+      let sortedData = parsedData.sort((a, b) => a.id - b.id);
+
+      setPromotionPackages(sortedData);
     }
-  ];
+  }; 
+  
+  
+  useEffect(() => {
+    getPromoPlan();
+  }, [])
 
   useEffect(() => {
     if (boost_modal?.data) {
@@ -122,16 +71,16 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
   };
 
   const handlePackageSelect = (pkg) => {
-    setSelectedPackage(pkg.id);
+    payNow(pkg);
   };
 
   const handleSubscribe = (pkg) => {
     payNow(pkg);
   };
 
-  const calculateDiscountPercentage = (price, discountPrice) => {
+  const calculateDiscountPercentage = (price, discount_price) => {
     const priceNum = parseFloat(price.replace('₦', '').replace(',', ''));
-    const discountNum = parseFloat(discountPrice.replace('₦', '').replace(',', ''));
+    const discountNum = parseFloat(discount_price.replace('₦', '').replace(',', ''));
     const discountPercent = Math.round(((priceNum - discountNum) / priceNum) * 100);
     return discountPercent;
   };
@@ -171,15 +120,15 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
 
   const navigation = useNavigation()
   const { popup } = usePaystack();
+
   const payNow = (selectedPackage) => {
     const {end_date, start_date} = getAdDuration(selectedPackage.duration)
     const reference = `REF-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
     
     popup.newTransaction({
       email: user?.email,
-      // amount: parseFloat(selectedPackage?.discountPrice.replace('₦', '').replace(',', '')),
+      amount: parseFloat(selectedPackage?.discount_price.replace('₦', '').replace(',', '')),
       reference: reference,
-      amount: 100, 
       metadata: {
         user_id: user.user_id,
         type: 'promotion',
@@ -308,7 +257,7 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
                 decelerationRate="fast"
               >
                 {promotionPackages.map((pkg, index) => {
-                  const discountPercent = calculateDiscountPercentage(pkg.price, pkg.discountPrice);
+                  const discountPercent = calculateDiscountPercentage(pkg.price, pkg.discount_price);
                   const isSelected = selectedPackage === pkg.id;
                   
                   return (
@@ -334,7 +283,7 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
                         </View>
                         <View style={styles.priceContainer}>
                           <Text style={styles.originalPrice}>{pkg.price}</Text>
-                          <Text style={styles.discountPrice}>{pkg.discountPrice}</Text>
+                          <Text style={styles.discount_price}>{pkg.discount_price}</Text>
                           {discountPercent > 0 && (
                             <View style={styles.discountBadge}>
                               <Text style={styles.discountText}>Save {discountPercent}%</Text>
@@ -736,7 +685,7 @@ const styles = StyleSheet.create({
     color: '#636e72',
     textDecorationLine: 'line-through',
   },
-  discountPrice: {
+  discount_price: {
     fontSize: 20,
     fontWeight: 'bold',
     color: '#2d3436',

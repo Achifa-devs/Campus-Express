@@ -43,14 +43,14 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
     let data = await getData('tools_plan');
     console.log('tools_plan: ', data);
 
-    // if (data) {
-    //   let parsedData = JSON.parse(data);
+    if (data) {
+      let parsedData = JSON.parse(data);
 
-    //   // Sort by `id` (ascending: 1 → 4)
-    //   let sortedData = parsedData.sort((a, b) => a.id - b.id);
+      // Sort by `id` (ascending: 1 → 4)
+      let sortedData = parsedData.sort((a, b) => a.id - b.id);
 
-    //   setsubscriptionPlans(sortedData);
-    // }
+      setsubscriptionPlans(sortedData);
+    }
   }; 
 
 

@@ -1,4 +1,4 @@
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import axios from 'axios';
 import js_ago from 'js-ago';
 import React, { useEffect, useState } from 'react';
@@ -82,11 +82,14 @@ const AnalyticsScreen = () => {
   }, []);
   const dispatch = useDispatch()
   
+  const navigation = useNavigation()
 
   const handlePromotePress = (data) => {
     console.log(data.promotion)
     if((!data.promotion)){
       dispatch(set_boost_modal({data: data, visible: 1}))
+    }else{
+      navigation.navigate('user-promotion-data', {data: data})
     }
   };
 

@@ -483,6 +483,25 @@ CAMPUSSPHERE_SERVER.get('/subscription', async (req, res) => {
   }
 });
 
+CAMPUSSPHERE_SERVER.get('/promo', async (req, res) => {
+
+  const {product_id} = req?.query;
+
+  try {
+    // Get seller's products
+    const result = await pool.query(
+      'SELECT * FROM promotions WHERE product_id = $1',
+      [product_id]
+    );
+    // Return combined data 
+    res.status(200).send(result.rows[0]);
+
+  } catch (err) {
+    console.error('DB Error:', err);
+    res.status(500).send({ error: 'Server Error' });
+  }
+});
+
 
 CAMPUSSPHERE_SERVER.get('/plans', async (req, res) => {
   try {

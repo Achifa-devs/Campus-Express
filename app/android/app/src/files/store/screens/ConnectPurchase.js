@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -11,16 +11,13 @@ import {
   Alert,
   Dimensions,
 } from 'react-native';
-import { set_sub_modal } from '../../../../../../redux/sub';
 import { useDispatch, useSelector } from 'react-redux';
 
-const { 
-  width, 
-  height 
-} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 import { usePaystack } from 'react-native-paystack-webview';
 import { set_user } from '../../../../../../redux/user';
 import { set_connect_purchase_modal } from '../../../../../../redux/connect_purchase';
+import { getData } from '../../utils/AsyncStore.js';
 
 const VendorConnectionsModal = ({ visible, onClose }) => {
   const [selectedPackage, setSelectedPackage] = useState(null);
@@ -29,64 +26,40 @@ const VendorConnectionsModal = ({ visible, onClose }) => {
   const { user } = useSelector(s => s?.user);
 
   const { popup } = usePaystack();
-  const connectionPricing = {
-    bundle_packs: [
-      {
-        "name": "Instant Connect",
-        "discount_price": "₦100.00",
-        "price": "₦100.00",
-        "amount": 100,
-        "connections": 1,
-        "description": "Perfect for one time enquiry",
-        "id": "single"
-      },
-      {
-        "name": "Starter Connect",
-        "discount_price": "₦450.00",
-        "price": "₦500.00",
-        "amount": 450,
-        "connections": 5,
-        "description": "Perfect for new vendors testing the waters",
-        "id": "starter"
-      },
-      {
-        "name": "Growth Connect",
-        "discount_price": "₦1,200.00",
-        "price": "₦1,500.00",
-        "amount": 1200,
-        "connections": 15,
-        "description": "For growing vendors looking to expand visibility",
-        "id": "growth"
-      },
-      {
-        "name": "Pro Connect",
-        "discount_price": "₦2,100.00",
-        "price": "₦3,000.00",
-        "amount": 2100,
-        "connections": 30,
-        "description": "Designed for serious vendors aiming for consistent sales",
-        "id": "pro"
-      },
-      {
-        "name": "Elite Connect",
-        "discount_price": "₦3,600.00",
-        "price": "₦5,000.00",
-        "amount": 3600,
-        "connections": 60,
-        "description": "For established vendors maximizing reach and engagement",
-        "id": "elite"
-      },
-      {
-        "name": "Enterprise Connect",
-        "discount_price": "₦6,000.00",
-        "price": "₦12,000.00",
-        "amount": 6000,
-        "connections": 120,
-        "description": "Tailored for top vendors with high demand",
-        "id": "enterprise"
+  const [bundle_packs, set_bundle_packs] = useState([]);
+
+  const getConnectPlan = async () => {
+    try {
+      let data = await getData('connect_plan');
+      console.log('connect_plan: ', data);
+
+      if (data) {
+        let parsedData = JSON.parse(data);
+
+        if (Array.isArray(parsedData)) {
+          // Sort by `code` if available
+          let sortedData = parsedData.sort((a, b) => {
+            if (a.code && b.code) return a.code - b.code;
+            return 0;
+          });
+          set_bundle_packs(sortedData);
+        } else {
+          console.warn('connect_plan is not an array:', parsedData);
+          set_bundle_packs([]);
+        }
+      } else {
+        console.warn('connect_plan not found in storage');
+        set_bundle_packs([]);
       }
-    ]
+    } catch (err) {
+      console.error('Error loading connect_plan:', err);
+      set_bundle_packs([]); // fallback to empty
+    }
   };
+
+  useEffect(() => {
+    getConnectPlan();
+  }, []);
 
   const handlePurchase = () => {
     if (!selectedPackage) {
@@ -94,90 +67,78 @@ const VendorConnectionsModal = ({ visible, onClose }) => {
       return;
     }
 
+    const pack = bundle_packs.find(p => p.code === selectedPackage);
+    if (!pack) {
+      Alert.alert('Error', 'The selected package could not be found.');
+      return;
+    }
 
-    // dispatch(set_sub_modal(0));
-    
-    // // Find the selected package
-    const pack = connectionPricing.bundle_packs.find(p => p.id === selectedPackage);
     const packageData = {
       type: selectedPackage === 'single' ? 'single' : 'bundle',
-      ...pack
+      ...pack,
     };
-    payNow(packageData)
-    
-    // navigation.navigate('user-payment', { 
-    //   selectedPackage: packageData, 
-    //   connectionPricing 
-    // });
-    // onClose();
+
+    payNow(packageData);
   };
 
   const payNow = (selectedPackage) => {
-      
     const start_date = new Date();
     const end_date = new Date();
     end_date.setMonth(end_date.getMonth() + 1);
 
     const reference = `REF-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
-    // setLoading(true);
     popup.newTransaction({
       email: user?.email,
-      amount: parseFloat(selectedPackage?.discount_price.replace('₦', '').replace(',', '')),
+      amount: parseFloat(
+        selectedPackage?.discount_price
+          ?.replace('₦', '')
+          ?.replace(',', '') || selectedPackage.amount
+      ),
       reference: reference,
       metadata: {
-        user_id: user.user_id,
+        user_id: user?.user_id,
         type: 'connect',
-        no_of_connects: selectedPackage.connections
+        no_of_connects: selectedPackage.connections,
       },
-      
+
       onSuccess: (res) => {
-        // setLoading(false);
-        Alert.alert(
-          'Payment Successful!',
-          `Your purchase was successful.`,
-          [{ text: 'OK', onPress: () => navigation.navigate('Home') }]
-        );
+        Alert.alert('Payment Successful!', `Your purchase was successful.`, [
+          { text: 'OK', onPress: () => navigation.navigate('Home') },
+        ]);
         let newUser = { ...user };
-        newUser.connects = parseInt(user.connects) + parseInt(selectedPackage.connections);
+        newUser.connects =
+          parseInt(user.connects || 0) + parseInt(selectedPackage.connections || 0);
         dispatch(set_user(newUser));
-        dispatch(set_connect_purchase_modal(0))
-        // navigation.goBack();
+        dispatch(set_connect_purchase_modal(0));
       },
       onCancel: () => {
-        // setLoading(false);
         Alert.alert('Payment Cancelled', 'Your payment was cancelled.');
       },
       onError: (err) => {
-        // setLoading(false);
         Alert.alert('Payment Error', 'There was an error processing your payment.');
         console.log('Payment Error:', err);
-      }
+      },
     });
   };
+
   const calculateDiscount = (connections, price) => {
+    if (!connections || !price) return 0;
     const singlePrice = connections * 100;
     const discount = singlePrice - price;
     const discountPercent = Math.round((discount / singlePrice) * 100);
     return discountPercent;
   };
 
-  // Get the single connection package (first item)
-  const singleConnectionPack = connectionPricing.bundle_packs[0];
-  
-  // Get the bundle packages (all items except the first)
-  const bundlePacks = connectionPricing.bundle_packs.slice(1);
+  // Safely extract single + bundle
+  const singleConnectionPack = bundle_packs.length > 0 ? bundle_packs[0] : null;
+  const bundlePacks = bundle_packs.length > 1 ? bundle_packs.slice(1) : [];
 
   return (
-    <Modal
-      animationType="slide"
-      transparent={true}
-      visible={visible}
-      onRequestClose={onClose}
-    >
+    <Modal animationType="slide" transparent={true} visible={visible} onRequestClose={onClose}>
       <TouchableWithoutFeedback onPress={onClose}>
         <View style={styles.modalOverlay} />
       </TouchableWithoutFeedback>
-      
+
       <View style={styles.modalContainer}>
         <View style={styles.modalHeader}>
           <Text style={styles.modalTitle}>Vendor Connections</Text>
@@ -185,70 +146,77 @@ const VendorConnectionsModal = ({ visible, onClose }) => {
             <Text style={styles.closeButtonText}>×</Text>
           </TouchableOpacity>
         </View>
-        
+
         <ScrollView style={styles.modalContent}>
           <Text style={styles.modalSubtitle}>
             Use connection credits to contact vendors. Purchase more when exhausted.
           </Text>
 
-          <View style={styles.pricingSection}>
-            <Text style={styles.sectionTitle}>Single Connection</Text>
-            <TouchableOpacity
-              style={[
-                styles.packageCard,
-                selectedPackage === singleConnectionPack.id && styles.selectedPackage,
-              ]}
-              onPress={() => setSelectedPackage(singleConnectionPack.id)}
-            >
-              <View style={styles.packageHeader}>
-                <Text style={styles.connectionsCount}>1 Connection</Text>
-                <View style={styles.priceTag}>
-                  <Text style={styles.priceText}>₦{singleConnectionPack.amount}</Text>
-                </View>
-              </View>
-              <Text style={styles.packageDescription}>
-                {singleConnectionPack.description}
-              </Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.pricingSection}>
-            <Text style={styles.sectionTitle}>Bundle Packs</Text>
-            <Text style={styles.sectionSubtitle}>Save more with our bundle offers</Text>
-            
-            {bundlePacks.map((pack) => {
-              const discountPercent = calculateDiscount(pack.connections, pack.amount);
-              return (
-                <TouchableOpacity
-                  key={pack.id}
-                  style={[
-                    styles.packageCard,
-                    styles.bundleCard,
-                    selectedPackage === pack.id && styles.selectedPackage,
-                  ]}
-                  onPress={() => setSelectedPackage(pack.id)}
-                >
-                  {discountPercent > 0 && (
-                    <View style={styles.discountBadge}>
-                      <Text style={styles.discountText}>Save {discountPercent}%</Text>
-                    </View>
-                  )}
-                  <View style={styles.packageHeader}>
-                    <View>
-                      <Text style={styles.packageName}>{pack.name}</Text>
-                      <Text style={styles.connectionsCount}>{pack.connections} Connections</Text>
-                    </View>
-                    <View style={styles.priceTag}>
-                      <Text style={styles.priceText}>₦{pack.amount}</Text>
-                    </View>
+          {singleConnectionPack && (
+            <View style={styles.pricingSection}>
+              <Text style={styles.sectionTitle}>Single Connection</Text>
+              <TouchableOpacity
+                style={[
+                  styles.packageCard,
+                  selectedPackage === singleConnectionPack.code && styles.selectedPackage,
+                ]}
+                onPress={() => setSelectedPackage(singleConnectionPack.code)}
+              >
+                <View style={styles.packageHeader}>
+                  <Text style={styles.connectionsCount}>1 Connection</Text>
+                  <View style={styles.priceTag}>
+                    <Text style={styles.priceText}>₦{singleConnectionPack.amount}</Text>
                   </View>
-                  <Text style={styles.packageDescription}>
-                    Only ₦{Math.round(pack.amount / pack.connections)} per connection • {pack.description}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
+                </View>
+                <Text style={styles.packageDescription}>
+                  {singleConnectionPack.description}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
+          {bundlePacks.length > 0 && (
+            <View style={styles.pricingSection}>
+              <Text style={styles.sectionTitle}>Bundle Packs</Text>
+              <Text style={styles.sectionSubtitle}>Save more with our bundle offers</Text>
+
+              {bundlePacks.map((pack) => {
+                const discountPercent = calculateDiscount(pack.connections, pack.amount);
+                return (
+                  <TouchableOpacity
+                    key={pack.code}
+                    style={[
+                      styles.packageCard,
+                      styles.bundleCard,
+                      selectedPackage === pack.code && styles.selectedPackage,
+                    ]}
+                    onPress={() => setSelectedPackage(pack.code)}
+                  >
+                    {discountPercent > 0 && (
+                      <View style={styles.discountBadge}>
+                        <Text style={styles.discountText}>Save {discountPercent}%</Text>
+                      </View>
+                    )}
+                    <View style={styles.packageHeader}>
+                      <View>
+                        <Text style={styles.packageName}>{pack.name}</Text>
+                        <Text style={styles.connectionsCount}>
+                          {pack.connections} Connections
+                        </Text>
+                      </View>
+                      <View style={styles.priceTag}>
+                        <Text style={styles.priceText}>₦{pack.amount}</Text>
+                      </View>
+                    </View>
+                    <Text style={styles.packageDescription}>
+                      Only ₦{Math.round(pack.amount / pack.connections)} per connection •{' '}
+                      {pack.description}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          )}
 
           <View style={styles.infoBox}>
             <Text style={styles.infoTitle}>How it works</Text>
@@ -278,7 +246,7 @@ const VendorConnectionsModal = ({ visible, onClose }) => {
             <Text style={styles.totalText}>Total:</Text>
             <Text style={styles.totalPrice}>
               {selectedPackage
-                ? `₦${connectionPricing.bundle_packs.find(p => p.id === selectedPackage).amount}`
+                ? `₦${bundle_packs.find(p => p.code === selectedPackage)?.amount || 0}`
                 : 'Select a package'}
             </Text>
           </View>
@@ -306,8 +274,6 @@ const styles = StyleSheet.create({
     width: width,
     height: height * 1,
     backgroundColor: 'white',
-    // borderTopLeftRadius: 20,
-    // borderTopRightRadius: 20,
     overflow: 'hidden',
   },
   modalHeader: {

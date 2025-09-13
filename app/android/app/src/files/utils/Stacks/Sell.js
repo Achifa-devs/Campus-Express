@@ -28,6 +28,7 @@ import VendorConnectionsScreen from "../../store/screens/ConnectPurchase";
 import NavigationTabs from "../../store/components/Home/Ads";
 import Analytics from "../../store/utils/Analytics";
 import { capitalize } from "../../store/utils/Capitalize";
+import PromotedAdDetailsScreen from "../../store/screens/PromotionAnalysis";
 
 const SellStack = createNativeStackNavigator();
 export function SellStackScreen() {
@@ -123,6 +124,46 @@ export function SellStackScreen() {
               </View>
           ),
       }}  name="user-sell" component={Sell} />
+
+      <SellStack.Screen  options={{
+        header: ({navigation}) =>
+        (
+          <View style={styles.headerContainer}>
+            {/* Logo */}
+            <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', backgroundColor: '#FFF', alignItems: 'center', paddingLeft: -10, paddingRight: 5 }}>
+              <TouchableOpacity style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#fff', marginRight: 5, borderRadius: 50, padding: 5 }} onPress={e => navigation.goBack()}>
+                <Ionicons name={'chevron-back'} size={20} />
+              </TouchableOpacity>
+              <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
+                <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Campaign info</Text>
+              </View>
+            </View>
+
+            {/* Right Section */}
+            <View style={styles.rightSection}>
+              {shop && (
+                <TouchableOpacity
+                  style={[styles.button, shop.subscription.plan !== 'free' && styles.subscribedButton]}
+                  onPress={e=> handleSub()}
+                  activeOpacity={0.8}
+                  >
+                  <View style={styles.buttonContent}>
+                    <Icon 
+                    name={shop.subscription.plan !== 'free' ? "diamond" : "diamond-outline"} 
+                    size={16} 
+                    color={shop.subscription.plan !== 'free' ? "#FFF" : "#FF4500"} 
+                    style={styles.icon}
+                    />
+                    <Text style={[styles.buttonText, shop.subscription.plan !== 'free' && styles.subscribedText]}>
+                    {shop.subscription.plan !== 'free' ? `${capitalize(shop.subscription.plan)} Plan` : 'Upgrade Now'}
+                    </Text> 
+                  </View>
+                </TouchableOpacity> 
+              )}
+            </View>
+          </View>
+        ),
+      }}  name="user-promotion-data" component={PromotedAdDetailsScreen} />
       
 
       <SellStack.Screen  options={{

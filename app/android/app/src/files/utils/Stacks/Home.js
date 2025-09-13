@@ -52,6 +52,7 @@ import ReviewSubmissionScreen from "../../store/screens/Review";
 import Shop from "../../store/screens/Shop";
 import { setUserAuthTo } from "../../../../../../redux/reducer/auth";
 import { useNavigation } from "@react-navigation/native";
+import { set_connect_modal } from "../../../../../../redux/connect";
 const HomeStack = createNativeStackNavigator();
 export function HomeStackScreen() {
    
@@ -67,15 +68,8 @@ export function HomeStackScreen() {
     }, [campus])
 
     function handleSub(params) {
-        if(!subscribed){
-            dispatch(set_sub_modal(1))
-        }else{
-            navigation.navigate('Profile', {
-                screen: 'user-subscription',   // 👈 nested screen name
-                params: { sub: true },         // 👈 params go here
-            });
+        dispatch(set_connect_modal(1))
 
-        }
     }
 
     return (  
@@ -113,13 +107,13 @@ export function HomeStackScreen() {
                                     >
                                     <View style={styles.buttonContent}>
                                         <Icon 
-                                        name={subscribed ? "diamond" : "diamond-outline"} 
+                                        name={subscribed ? "people-outline" : "people-outline-outline"} 
                                         size={16} 
                                         color={subscribed ? "#FFF" : "#FF4500"} 
                                         style={styles.icon}
                                         />
                                         <Text style={[styles.buttonText, subscribed && styles.subscribedText]}>
-                                        {subscribed ? `${tier.plan} Plan` : 'Subscribe Now'}
+                                        {user.connects} {user.connects > 1 ? 'vendor connects' : 'vendor connect'}
                                         </Text>
                                     </View>
                                 </TouchableOpacity>
