@@ -43,7 +43,7 @@ export function SellStackScreen() {
     }, [campus]) 
 
     function handleSub(params) {
-      if(shop.subscription.plan === 'free'){
+      if(shop.subscription.plan !== 'free'){ 
         dispatch(set_sub_modal(1))
       }else{
         navigation.navigate('Profile', {
@@ -51,26 +51,26 @@ export function SellStackScreen() {
           params: { sub: true },         // 👈 params go here
         });
 
-      }
+      } 
     }
     
     const dispatch = useDispatch()
     useEffect(() => {
-        if (!shop) {
-            fetch(`https://cs-server-olive.vercel.app/details?user_id=${user?.user_id}`, {
-                headers: {
-                "Content-Type": "Application/json" 
-                }
-            })
-            .then(async (result) => {
-                let response = await result.json();
-                dispatch(set_shop(response?.data[0]))
-            })
-            .catch((err) => {
-                Alert.alert('Network error, please try again.');
-                console.log(err);
-            });
-        }
+      if (!shop) {
+        fetch(`https://cs-server-olive.vercel.app/details?user_id=${user?.user_id}`, {
+          headers: {
+          "Content-Type": "Application/json" 
+          }
+        })
+        .then(async (result) => {
+          let response = await result.json();
+          dispatch(set_shop(response?.data[0]))
+        })
+        .catch((err) => {
+          Alert.alert('Network error, please try again.');
+          console.log(err);
+        });
+      }
     }, [user])
 
   return (

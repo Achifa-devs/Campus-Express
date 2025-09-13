@@ -488,7 +488,7 @@ CAMPUSSPHERE_SERVER.get('/plans', async (req, res) => {
   try {
     const promoPlans = await pool.query(`SELECT * FROM promo_plans`);
     const connectionPricing = await pool.query(`SELECT * FROM connection_pricing`);
-    const vendors = await pool.query(`SELECT * FROM vendor_tools_subscription`);
+    const vendors = await pool.query(`SELECT * FROM subscription_plans`);
 
     res.status(200).json({
       promo_plans: promoPlans.rows,
