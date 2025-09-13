@@ -41,8 +41,8 @@ import React, { useCallback, useEffect } from "react";
 import UserProfileScreen from "../../store/screens/PersonalInfo";
 import UserIcons from "../../media/icons/UserIcons";
 import SubscriptionScreen from "../../store/screens/Subscription";
-import VendorSubscriptionsScreen from "../../store/screens/ToolPurchase";
 import PromotionSubscriptionsScreen from "../../store/screens/Promotion";
+import VendorSubscriptionsScreen from "../../store/screens/Promotion";
 const ProfileStack = createNativeStackNavigator();
 export function ProfileStackScreen() {
   const dispatch = useDispatch()
@@ -263,7 +263,7 @@ export function ProfileStackScreen() {
                 </View>
             ),
             
-        }} name="user-subscription" component={PromotionSubscriptionsScreen} />
+        }} name="user-subscription" component={VendorSubscriptionsScreen} />
  
         <ProfileStack.Screen  options={{
             header: ({navigation}) =>

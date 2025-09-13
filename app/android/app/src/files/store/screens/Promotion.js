@@ -1,646 +1,674 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   View,
   Text,
   TouchableOpacity,
   ScrollView,
-  SafeAreaView,
   Dimensions,
   Alert,
-  Image,
+  Platform,
+  ActivityIndicator,
 } from 'react-native';
+import { usePaystack } from 'react-native-paystack-webview';
+import { useSelector, useDispatch } from 'react-redux';
+import { set_shop } from '../../../../../../redux/shop';
+import LinearGradient from 'react-native-linear-gradient';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useNavigation } from '@react-navigation/native';
+import { getData } from '../../utils/AsyncStore.js';
+import { set_sub_modal } from '../../../../../../redux/sub.js';
+import { capitalize } from '../utils/Capitalize.js';
 
 const { width } = Dimensions.get('window');
 
-const PromotionSubscriptionsScreen = () => {
-  const [selectedPackage, setSelectedPackage] = useState(null);
-  const [selectedAd, setSelectedAd] = useState(0); // For ad carousel
+const VendorSubscriptionsScreen = () => {
+  const [subscriptionExpiry, setSubscriptionExpiry] = useState(
+    new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+  );
+  const [subscriptionPlans, setSubscriptionPlans] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Sample ads data
-  const sampleAds = [
-    {
-      id: 1,
-      title: "Summer Collection",
-      image: "https://via.placeholder.com/300x200/4A90E2/FFFFFF?text=Summer+Collection",
-      description: "Promote your summer products with vibrant visuals"
-    },
-    {
-      id: 2,
-      title: "Flash Sale",
-      image: "https://via.placeholder.com/300x200/FF6B6B/FFFFFF?text=Flash+Sale",
-      description: "Create urgency with limited-time offers"
-    },
-    {
-      id: 3,
-      title: "New Arrivals",
-      image: "https://via.placeholder.com/300x200/50C878/FFFFFF?text=New+Arrivals",
-      description: "Showcase your latest products to eager customers"
+  const { user } = useSelector((s) => s?.user);
+  const { shop } = useSelector((s) => s?.shop);
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    setSubscriptionExpiry(new Date(shop?.subscription?.end_date));
+  }, [shop]); 
+
+  const getToolsplan = async () => {  
+    try {
+      let data = await getData('tools_plan');
+      console.log('tools_plan: ', data);
+
+      if (data) {
+        let parsedData = JSON.parse(data);
+        let sortedData = parsedData.sort((a, b) => a.id - b.id);
+        setSubscriptionPlans(sortedData);
+      }
+    } catch (error) {
+      console.error('Error fetching tools plan:', error);
+      Alert.alert('Error', 'Failed to load subscription plans');
+    } finally {
+      setLoading(false);
     }
-  ];
+  }; 
 
-  const promotionPackages = [
-    {
-      "id": 1,
-      "title": "Flash Promo",
-      "duration": "1 Day",
-      "price": "₦1000.00",
-      "discountPrice": "₦600.00",
-      "description": "Perfect for quick promotions or urgent product launches. Gain instant visibility within 24 hours.",
-      "features": [
-        "Ad runs for 24 hours",
-        "Boosted visibility in search results",
-        "Highlighted placement on homepage",
-        "Best for flash sales or urgent offers"
-      ]
-    },
-    {
-      "id": 2,
-      "title": "Weekend Spotlight",
-      "duration": "3 Days",
-      "price": "₦2500.00",
-      "discountPrice": "₦1500.00",
-      "description": "Ideal for short bursts of attention. Capture weekend shoppers with a 3-day spotlight campaign.",
-      "features": [
-        "Ad runs for 3 days",
-        "Priority listing across categories",
-        "Increased homepage impressions",
-        "Recommended for weekend deals"
-      ]
-    },
-    {
-      "id": 3,
-      "title": "Weekly Exposure",
-      "duration": "7 Days (1 Week)",
-      "price": "₦5000.00",
-      "discountPrice": "₦3500.00",
-      "description": "A balanced plan designed to maximize visibility and sales over the course of one week.",
-      "features": [
-        "Ad runs for 7 days",
-        "Prominent placement in search results",
-        "Enhanced category exposure",
-        "Ideal for standard campaigns"
-      ]
-    },
-    {
-      "id": 4,
-      "title": "Extended Reach",
-      "duration": "14 Days (2 Weeks)",
-      "price": "₦9500.00",
-      "discountPrice": "₦6600.00",
-      "description": "Two weeks of consistent exposure to help strengthen your brand and boost product recognition.",
-      "features": [
-        "Ad runs for 14 days",
-        "Sustained visibility on homepage",
-        "Higher engagement rate",
-        "Great for building product awareness"
-      ]
-    },
-    {
-      "id": 5,
-      "title": "Monthly Campaign",
-      "duration": "30 Days (1 Month)",
-      "price": "₦18000.00",
-      "discountPrice": "₦11400.00",
-      "description": "The ultimate package for vendors who want to dominate visibility with a full month of promotion.",
-      "features": [
-        "Ad runs for 30 days",
-        "Premium placement across all sections",
-        "Maximum brand exposure",
-        "Best value for long-term campaigns"
-      ]
-    }
-  ];
+  useEffect(() => {
+    getToolsplan();
+  }, []);
 
-  const handleSubscribe = (pkg) => {
-    Alert.alert(
-      'Confirm Promotion',
-      `Are you sure you want to purchase the ${pkg.title} package for ${pkg.discountPrice}?`,
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { 
-          text: 'Purchase', 
-          onPress: () => completePurchase(pkg),
-          style: 'default'
-        },
-      ]
-    );
+  const handleSubscribe = (planDetails) => {
+    if (planDetails.name.toLowerCase() === 'free') {
+      Alert.alert('Selected', 'You have selected the Free plan.');
+      return;
+    }   
+    payNow(planDetails);
   };
 
-  const completePurchase = (pkg) => {
-    // In a real app, this would integrate with your payment processing
-    Alert.alert('Success', `You have successfully purchased the ${pkg.title} package!`);
-    setSelectedPackage(pkg.id);
+  const { popup } = usePaystack();
+
+  const payNow = (selectedPackage) => {
+    if (!user) {
+      Alert.alert('Login required', 'Please sign in to continue with payment.');
+      navigation.navigate('Login');
+      return;
+    }
+
+    const start_date = new Date();
+    const end_date = new Date();
+    end_date.setMonth(end_date.getMonth() + 1);
+
+    const reference = `REF-${Date.now()}-${Math.random()
+      .toString(36)
+      .substring(2, 8)
+      .toUpperCase()}`;
+
+    const raw = String(selectedPackage?.discount_price);
+    const amountFloat = parseFloat(raw.replace(/[₦,]/g, '').trim()) || 0;
+
+    popup.newTransaction({
+      email: user?.email,
+      amount: amountFloat,
+      reference,
+      metadata: {
+        user_id: user.user_id,
+        type: 'tools',
+        plan: selectedPackage.name,
+        start_date,
+        end_date,
+      },
+      onSuccess: (res) => {
+        let subscription = {
+          "plan": selectedPackage.name,
+          "start_date": start_date,
+          "end_date": end_date,
+          "updated_at": start_date
+        };
+        Alert.alert('Payment Successful!', `Your subscription was successful.`, [
+          {
+            text: 'OK',
+            onPress: () => {
+              const newShop = { ...shop, subscription: subscription };
+              dispatch(set_shop(newShop));
+              setSubscriptionExpiry(end_date);
+              dispatch(set_sub_modal(0));
+              navigation.navigate('Sell');
+            },
+          },
+        ]);
+      },
+      onCancel: () => {
+        Alert.alert('Payment Cancelled', 'Your payment was cancelled.');
+      },
+      onError: (err) => {
+        console.log('Payment Error:', err);
+        Alert.alert('Payment Error', 'There was an error processing your payment.');
+      },
+    });
   };
 
   const calculateDiscountPercentage = (price, discountPrice) => {
-    const priceNum = parseFloat(price.replace('₦', '').replace(',', ''));
-    const discountNum = parseFloat(discountPrice.replace('₦', '').replace(',', ''));
+    const priceNum = parseFloat(String(price).replace(/[₦,]/g, '').trim()) || 0;
+    const discountNum = parseFloat(String(discountPrice).replace(/[₦,]/g, '').trim()) || 0;
+
+    if (priceNum === 0) return 0;
+
     const discountPercent = Math.round(((priceNum - discountNum) / priceNum) * 100);
     return discountPercent;
   };
 
-  const nextAd = () => {
-    setSelectedAd((prev) => (prev + 1) % sampleAds.length);
+  const formatDate = (date) => {
+    if (!date) return '-';
+    return new Date(date).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
   };
 
-  const prevAd = () => {
-    setSelectedAd((prev) => (prev - 1 + sampleAds.length) % sampleAds.length);
+  const daysUntilExpiry = () => {
+    const today = new Date();
+    const expiry = new Date(subscriptionExpiry || Date.now());
+    const diffTime = expiry - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
   };
+
+  const currentPlan = subscriptionPlans.find(p => p.name === shop.subscription.plan);
+
+  const getButtonLabel = (currentPlan, planName) => {
+    if (planName === 'free') {
+      return 'Select Free Plan';
+    }
+
+    if (currentPlan === 'basic') {
+      if (planName === 'standard' || planName === 'premium') return 'Upgrade now';
+      if (planName === 'basic') return 'Current Plan';
+      return 'Disabled';
+    }
+
+    if (currentPlan === 'standard') {
+      if (planName === 'premium') return 'Upgrade';
+      if (planName === 'standard') return 'Current Plan';
+      return 'Disabled';
+    }
+
+    if (currentPlan === 'premium') {
+      if (planName === 'premium') return 'Current Plan';
+      return 'Disabled';
+    }
+
+    return 'Subscribe Now';
+  };
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#FF6A00" />
+        <Text style={styles.loadingText}>Loading subscription plans...</Text>
+      </View>
+    );
+  }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
+      
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        <View style={styles.header}>
-          <Text style={styles.title}>Promote Your Products</Text>
-          <Text style={styles.subtitle}>
-            Boost visibility and increase sales with our targeted promotion packages
-          </Text>
-        </View>
-
-        {/* Ad Preview Section */}
-        <View style={styles.adPreviewSection}>
-          <Text style={styles.sectionTitle}>Your Ad Preview</Text>
-          <Text style={styles.sectionSubtitle}>See how your promotion will appear to customers</Text>
-          
-          <View style={styles.adCarousel}>
-            <View style={styles.adContainer}>
-              <Image 
-                source={{ uri: sampleAds[selectedAd].image }} 
-                style={styles.adImage}
-                resizeMode="cover"
-              />
-              <View style={styles.adOverlay}>
-                <Text style={styles.adTitle}>{sampleAds[selectedAd].title}</Text>
-                <Text style={styles.adDescription}>{sampleAds[selectedAd].description}</Text>
+        {/* Current Plan Dashboard */}
+        <View style={styles.dashboard}>
+          <View style={styles.dashboardHeader}>
+            <Ionicons name="person-circle" size={26} color="#FF4500" />
+            <Text style={styles.dashboardTitle}>Your Current Plan</Text>
+          </View>
+          <View style={styles.planInfo}>
+            <View style={styles.planInfoLeft}>
+              <Text style={styles.currentPlanName}>
+                {shop?.subscription?.plan[0]?.toUpperCase()}{shop?.subscription?.plan?.slice(1)}
+              </Text>
+              <Text style={styles.currentPlanPrice}>
+                {shop.subscription.plan === 'free' 
+                  ? 'Free Forever' 
+                  : `${currentPlan?.discount_price}/month`}
+              </Text>
+            </View> 
+            <View style={styles.planInfoRight}>
+              <Text style={styles.expiryText}>Expires: {formatDate(subscriptionExpiry)}</Text>
+              <View style={[styles.expiryBadge, daysUntilExpiry() <= 7 ? styles.expirySoon : styles.expiryOk]}>
+                <Text style={styles.expiryBadgeText}>
+                  {shop.subscription.plan === 'free' ? 'Till forever' : daysUntilExpiry() <= 0 ? 'Expired' : `${daysUntilExpiry()} days left`}
+                </Text>
               </View>
             </View>
-            
-            <View style={styles.carouselControls}>
-              <TouchableOpacity onPress={prevAd} style={styles.carouselButton}>
-                <Text style={styles.carouselButtonText}>‹</Text>
-              </TouchableOpacity>
-              <View style={styles.carouselDots}>
-                {sampleAds.map((_, index) => (
-                  <View 
-                    key={index} 
-                    style={[
-                      styles.carouselDot,
-                      index === selectedAd && styles.carouselDotActive
-                    ]} 
-                  />
-                ))}
-              </View>
-              <TouchableOpacity onPress={nextAd} style={styles.carouselButton}>
-                <Text style={styles.carouselButtonText}>›</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
+          </View> 
         </View>
 
-        {/* Performance Stats */}
-        <View style={styles.statsSection}>
-          <Text style={styles.sectionTitle}>Expected Results</Text>
-          <View style={styles.statsGrid}>
-            <View style={styles.statItem}>
-              <Text style={styles.statValue}>3-5x</Text>
-              <Text style={styles.statLabel}>More Views</Text>
-            </View>
-            <View style={styles.statItem}>
-              <Text style={styles.statValue}>2-4x</Text>
-              <Text style={styles.statLabel}>More Clicks</Text>
-            </View>
-            <View style={styles.statsItem}>
-              <Text style={styles.statValue}>40-60%</Text>
-              <Text style={styles.statLabel}>Higher Conversion</Text>
-            </View>
-          </View>
+        <View style={styles.headerSection}>
+          <Text style={styles.subtitle}>Upgrade your vendor account with powerful tools to grow your business</Text>
         </View>
 
-        {/* Promotion Packages - Horizontal Scroll */}
+        {/* Horizontal Plans */}
         <View style={styles.packagesSection}>
-          <Text style={styles.sectionTitle}>Choose Your Promotion Package</Text>
+          <Text style={styles.sectionTitle}>Choose Your Plan</Text>
           <Text style={styles.sectionSubtitle}>
-            Select the duration that works best for your campaign goals
+            Select the plan that works best for your business needs
           </Text>
-
-          <ScrollView 
-            horizontal 
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.horizontalScrollContainer}
-          >
-            {promotionPackages.map((pkg, index) => {
-              const discountPercent = calculateDiscountPercentage(pkg.price, pkg.discountPrice);
-              const isSelected = selectedPackage === pkg.id;
-              
-              return (
-                <View 
-                  key={pkg.id} 
-                  style={[
-                    styles.packageCard,
-                    isSelected && styles.selectedPackage,
-                    index === 2 && styles.featuredPackage,
-                    { width: width * 0.85 } // Set width for horizontal scrolling
-                  ]}
-                >
-                  {index === 2 && (
-                    <View style={styles.popularBadge}>
-                      <Text style={styles.popularBadgeText}>RECOMMENDED</Text>
-                    </View>
-                  )}
-                  
-                  <View style={styles.packageHeader}>
-                    <View>
-                      <Text style={styles.packageTitle}>{pkg.title}</Text>
-                      <Text style={styles.packageDuration}>{pkg.duration}</Text>
-                    </View>
-                    <View style={styles.priceContainer}>
-                      <Text style={styles.originalPrice}>{pkg.price}</Text>
-                      <Text style={styles.discountPrice}>{pkg.discountPrice}</Text>
-                      {discountPercent > 0 && (
-                        <View style={styles.discountBadge}>
-                          <Text style={styles.discountText}>Save {discountPercent}%</Text>
-                        </View>
-                      )}
-                    </View>
-                  </View>
-                  
-                  <Text style={styles.packageDescription}>{pkg.description}</Text>
-                  
-                  <View style={styles.featuresContainer}>
-                    <Text style={styles.featuresTitle}>What's Included:</Text>
-                    {pkg.features.map((feature, idx) => (
-                      <View key={idx} style={styles.featureItem}>
-                        <View style={styles.checkIcon}>
-                          <Text style={styles.checkIconText}>✓</Text>
-                        </View>
-                        <Text style={styles.featureText}>{feature}</Text>
-                      </View>
-                    ))}
-                  </View>
-                  
-                  <TouchableOpacity
-                    style={[
-                      styles.subscribeButton,
-                      isSelected && styles.selectedButton
+          
+          <View style={styles.packageCardsContainer}>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={true}
+              contentContainerStyle={styles.horizontalScrollContainer}
+              decelerationRate="fast"
+              snapToInterval={width * 0.8 + 16}
+              snapToAlignment="center"
+            >
+              {subscriptionPlans.map((planDetails, index) => {
+                const discountPercent = calculateDiscountPercentage(planDetails.price, planDetails.discount_price);
+                const isCurrentPlan = shop.subscription.plan === planDetails?.name;
+                
+                return (  
+                  <View  
+                    key={planDetails.id}
+                    style={[   
+                      styles.planCard,
+                      isCurrentPlan && styles.currentPlanCard,
+                      // index === 1 && styles.featuredPlan,
+                      { width: width * 0.8, marginRight: 16 },
                     ]}
-                    onPress={() => handleSubscribe(pkg)}
                   >
-                    <Text style={[
-                      styles.subscribeButtonText,
-                      isSelected && styles.selectedButtonText
-                    ]}>
-                      {isSelected ? 'Selected' : 'Purchase Now'}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              );
-            })}
-          </ScrollView>
+                    {index === 2 && (
+                      <LinearGradient colors={['#FF4500', '#FF6347']} style={styles.popularBadge}>
+                        <Ionicons name="star" size={12} color="white" />
+                        <Text style={styles.popularBadgeText}>MOST POPULAR</Text>
+                      </LinearGradient>
+                    )}
+
+                    {isCurrentPlan && (
+                      <View style={styles.currentBadge}>
+                        <Ionicons name="checkmark-circle" size={14} color="white" />
+                        <Text style={styles.currentBadgeText}>CURRENT PLAN</Text>
+                      </View>
+                    )} 
+
+                    <View style={styles.planIconContainer}>
+                      <Text style={styles.planIcon}>{planDetails.icon}</Text>
+                    </View>
+
+                    <View style={styles.planHeader}> 
+                      <Text style={styles.planName}>{capitalize(planDetails?.name)}</Text>
+                      <View style={styles.priceContainer}>
+                        {planDetails.name !== 'free' && (
+                          <Text style={styles.originalPrice}>{planDetails.price}</Text>
+                        )}
+                        <Text style={styles.discountPrice}>
+                          {planDetails.name === 'free' ? 'Free Forever' : `${planDetails.discount_price}/month`}
+                        </Text>
+                        {discountPercent > 0 && ( 
+                          <View style={styles.discountBadge}>
+                            <Text style={styles.discountText}>Save {discountPercent}%</Text>
+                          </View>
+                        )}
+                      </View>
+                    </View>
+
+                    <Text style={styles.planDescription}>{planDetails.description}</Text>
+
+                    <View style={styles.featuresContainer}>
+                      <Text style={styles.featuresTitle}>What's included</Text>
+                      {planDetails.features.map((feature, idx) => (
+                        <View key={idx} style={styles.featureItem}>
+                          <View style={styles.checkIcon}>
+                            <Ionicons name="checkmark" size={14} color="white" />
+                          </View>
+                          <Text style={styles.featureText}>{feature}</Text>
+                        </View>
+                      ))}
+                    </View>
+
+                    <TouchableOpacity
+                      style={[styles.subscribeButton, isCurrentPlan && styles.currentButton]} 
+                      onPress={() => handleSubscribe(planDetails)}
+                      disabled={isCurrentPlan || shop.subscription.plan !== 'free' && planDetails.name === 'free'}
+                    >
+                      <LinearGradient 
+                        colors={isCurrentPlan ? ['#e0e0e0', '#e0e0e0'] : shop.subscription.plan !== 'free' && planDetails.name === 'free'?  ['#e0e0e0', '#e0e0e0'] : ['#FF6A00', '#FF4500']} 
+                        style={styles.subscribeButtonInner}
+                      >
+                        <Text style={[styles.subscribeButtonText, isCurrentPlan && styles.currentButtonText, shop.subscription.plan !== 'free' && planDetails.name === 'free' ?  styles.currentButtonText : '']}>
+                          {/* {isCurrentPlan ? 'Current Plan' : planDetails.name === 'free' ? 'Select Free Plan' : 'Subscribe Now'} */}
+                          {getButtonLabel(shop.subscription.plan, planDetails.name)}
+                        </Text>
+                      </LinearGradient>
+                    </TouchableOpacity>
+                  </View>
+                );
+              })}
+            </ScrollView>
+            
+            {/* Scroll indicator */}
+            <View style={styles.scrollIndicator}>
+              {subscriptionPlans.map((_, index) => (
+                <View 
+                  key={index} 
+                  style={[
+                    styles.scrollDot,
+                    index === 1 && styles.scrollDotActive
+                  ]} 
+                />
+              ))}
+            </View>
+          </View>
         </View>
 
-        {/* Additional Information */}
+        {/* Info Section */}
         <View style={styles.infoSection}>
-          <Text style={styles.sectionTitle}>How Promotion Works</Text>
-          
-          <View style={styles.processSteps}>
-            <View style={styles.processStep}>
-              <View style={styles.stepNumber}>
-                <Text style={styles.stepNumberText}>1</Text>
-              </View>
-              <View style={styles.stepContent}>
-                <Text style={styles.stepTitle}>Select a Package</Text>
-                <Text style={styles.stepDescription}>
-                  Choose the promotion duration that fits your campaign goals
-                </Text>
-              </View>
-            </View>
-            
-            <View style={styles.processStep}>
-              <View style={styles.stepNumber}>
-                <Text style={styles.stepNumberText}>2</Text>
-              </View>
-              <View style={styles.stepContent}>
-                <Text style={styles.stepTitle}>Customize Your Ad</Text>
-                <Text style={styles.stepDescription}>
-                  Add compelling images and text to attract customers
-                </Text>
-              </View>
-            </View>
-            
-            <View style={styles.processStep}>
-              <View style={styles.stepNumber}>
-                <Text style={styles.stepNumberText}>3</Text>
-              </View>
-              <View style={styles.stepContent}>
-                <Text style={styles.stepTitle}>Launch & Track</Text>
-                <Text style={styles.stepDescription}>
-                  Monitor performance and adjust your strategy as needed
-                </Text>
-              </View>
-            </View>
-          </View>
-        </View>
+          <Text style={styles.infoTitle}>Why Upgrade Your Plan?</Text>
 
-        {/* FAQ Section */}
-        <View style={styles.faqSection}>
-          <Text style={styles.sectionTitle}>Frequently Asked Questions</Text>
-          
-          <View style={styles.faqItem}>
-            <Text style={styles.faqQuestion}>How quickly will my promotion start?</Text>
-            <Text style={styles.faqAnswer}>
-              Your promotion will go live within 1 hour of purchase approval.
-            </Text>
+          <View style={styles.infoItem}>
+            <LinearGradient colors={['#FF4500', '#FF6347']} style={styles.infoIcon}>
+              <Ionicons name="trending-up" size={20} color="white" />
+            </LinearGradient>
+            <View style={styles.infoContent}>
+              <Text style={styles.infoItemTitle}>Boost Sales & Visibility</Text>
+              <Text style={styles.infoItemText}>Gain more exposure and increase your sales with advanced features.</Text>
+            </View>
           </View>
-          
-          <View style={styles.faqItem}>
-            <Text style={styles.faqQuestion}>Can I cancel my promotion?</Text>
-            <Text style={styles.faqAnswer}>
-              Promotions can be cancelled within 1 hour of purchase for a full refund.
-            </Text>
+
+          <View style={styles.infoItem}>
+            <LinearGradient colors={['#FF4500', '#FF6347']} style={styles.infoIcon}>
+              <Ionicons name="analytics" size={20} color="white" />
+            </LinearGradient>
+            <View style={styles.infoContent}>
+              <Text style={styles.infoItemTitle}>Advanced Analytics</Text>
+              <Text style={styles.infoItemText}>Understand customer behavior and optimize your product offerings.</Text>
+            </View>
           </View>
-          
-          <View style={styles.faqItem}>
-            <Text style={styles.faqQuestion}>How will I track my results?</Text>
-            <Text style={styles.faqAnswer}>
-              You'll receive detailed analytics showing views, clicks, and conversions.
-            </Text>
+
+          <View style={styles.infoItem}>
+            <LinearGradient colors={['#FF4500', '#FF6347']} style={styles.infoIcon}>
+              <Ionicons name="business" size={20} color="white" />
+            </LinearGradient>
+            <View style={styles.infoContent}>
+              <Text style={styles.infoItemTitle}>Grow Your Business</Text>
+              <Text style={styles.infoItemText}>Access premium tools designed to help you scale efficiently.</Text>
+            </View>
           </View>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: '#f9f9f9',
   },
-  scrollContent: {
-    padding: 16,
-    paddingBottom: 40,
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f9f9f9',
+  },
+  loadingText: {
+    marginTop: 16,
+    fontSize: 16,
+    color: '#666',
   },
   header: {
-    marginBottom: 24,
+    paddingTop: Platform.OS === 'ios' ? 50 : 24,
+    paddingBottom: 16,
+    paddingHorizontal: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
+  },
+  backButton: {
+    padding: 8,
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#000',
+    flex: 1,
+    textAlign: 'center',
+    marginHorizontal: 16,
+  },
+  headerRight: {
+    width: 40,
+  },
+  scrollContent: {
+    padding: 8,
+    paddingBottom: 40,
+  },
+  dashboard: {
+    backgroundColor: 'white',
+    borderRadius: 4,
+    padding: 20,
+    marginBottom: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  dashboardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  dashboardTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#2d3436',
+    marginLeft: 12,
+  },
+  planInfo: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
+  planInfoLeft: {
+    flex: 1,
+  },
+  planInfoRight: {
+    alignItems: 'flex-end',
+  },
+  currentPlanName: {
+    fontSize: 22,
+    fontWeight: '800',
+    color: '#FF4500',
+    marginBottom: 4,
+  },
+  currentPlanPrice: {
+    fontSize: 18,
     color: '#2d3436',
+    fontWeight: '700',
+  },
+  expiryText: {
+    fontSize: 14,
+    color: '#636e72',
     marginBottom: 8,
-    textAlign: 'center',
+  },
+  expiryBadge: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+  },
+  expirySoon: {
+    backgroundColor: '#FF4500',
+  },
+  expiryOk: {
+    backgroundColor: '#4CAF50',
+  },
+  expiryBadgeText: {
+    color: 'white',
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  headerSection: {
+    marginBottom: 8,
+    alignItems: 'center',
+    padding: 16,
+    backgroundColor: '#fff',
+    borderRadius: 4,
   },
   subtitle: {
     fontSize: 16,
-    color: '#636e72',
+    color: '#000',
+    fontWeight: '600',
     textAlign: 'center',
-    marginHorizontal: 20,
+    lineHeight: 24,
+  },
+  packagesSection: {
+    backgroundColor: 'white',
+    borderRadius: 4,
+    padding: 20,
+    marginBottom: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   sectionTitle: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#2d3436',
     marginBottom: 8,
+    textAlign: 'center',
   },
   sectionSubtitle: {
     fontSize: 14,
     color: '#636e72',
     marginBottom: 20,
-  },
-  // Ad Preview Styles
-  adPreviewSection: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 20,
-    marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  adCarousel: {
-    alignItems: 'center',
-  },
-  adContainer: {
-    width: width - 72,
-    height: 200,
-    borderRadius: 12,
-    overflow: 'hidden',
-    marginBottom: 16,
-    position: 'relative',
-  },
-  adImage: {
-    width: '100%',
-    height: '100%',
-  },
-  adOverlay: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    padding: 16,
-  },
-  adTitle: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 4,
-  },
-  adDescription: {
-    color: 'white',
-    fontSize: 14,
-  },
-  carouselControls: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  carouselButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#0984e3',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  carouselButtonText: {
-    color: 'white',
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  carouselDots: {
-    flexDirection: 'row',
-    marginHorizontal: 16,
-  },
-  carouselDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#ddd',
-    marginHorizontal: 4,
-  },
-  carouselDotActive: {
-    backgroundColor: '#0984e3',
-    width: 16,
-  },
-  // Stats Section
-  statsSection: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 20,
-    marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  statsGrid: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  statItem: {
-    alignItems: 'center',
-    flex: 1,
-  },
-  statValue: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#0984e3',
-    marginBottom: 4,
-  },
-  statLabel: {
-    fontSize: 14,
-    color: '#636e72',
     textAlign: 'center',
   },
-  // Packages Section - Horizontal Scroll
-  packagesSection: {
-    marginBottom: 20,
-  },
-  horizontalScrollContainer: {
-    paddingHorizontal: 5,
-    paddingVertical: 10,
-  },
-  packagesContainer: {
+  packageCardsContainer: {
     marginBottom: 10,
   },
-  packageCard: {
+  horizontalScrollContainer: {
+    paddingHorizontal: 8,
+    paddingVertical: 10,
+  },
+  planCard: {
     backgroundColor: 'white',
-    borderRadius: 12,
+    borderRadius: 4,
     padding: 20,
-    marginRight: 15,
     borderWidth: 2,
     borderColor: 'transparent',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 5,
     position: 'relative',
   },
-  featuredPackage: {
-    borderColor: '#0984e3',
-    transform: [{ scale: 1.02 }],
+  featuredPlan: {
+    borderColor: '#FF4500',
+    // transform: [{ scale: 1.02 }],
   },
-  selectedPackage: {
+  currentPlanCard: {
     borderColor: '#00b894',
-    backgroundColor: '#f0fdfa',
+    backgroundColor: '#f8fff9',
   },
   popularBadge: {
     position: 'absolute',
-    top: -10,
-    alignSelf: 'center',
-    backgroundColor: '#0984e3',
+    top: -12,
+    left: 20,
     paddingHorizontal: 12,
-    paddingVertical: 4,
+    paddingVertical: 6,
     borderRadius: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    zIndex: 1,
   },
   popularBadgeText: {
     color: 'white',
-    fontSize: 12,
-    fontWeight: 'bold',
+    fontSize: 11,
+    fontWeight: '800',
+    marginLeft: 6,
   },
-  packageHeader: {
+  currentBadge: {
+    position: 'absolute',
+    top: -10,
+    right: 16,
+    backgroundColor: '#4CAF50',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    zIndex: 1,
+  },
+  currentBadgeText: {
+    color: 'white',
+    fontSize: 11,
+    fontWeight: '700',
+    marginLeft: 6,
+  },
+  planIconContainer: {
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  planIcon: {
+    fontSize: 40,
+  },
+  planHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: 12,
+    marginBottom: 8,
   },
-  packageTitle: {
-    fontSize: 22,
-    fontWeight: 'bold',
+  planName: {
+    fontSize: 24,
+    fontWeight: '800',
     color: '#2d3436',
-  },
-  packageDuration: {
-    fontSize: 16,
-    color: '#636e72',
-    marginTop: 4,
+    flex: 1,
   },
   priceContainer: {
     alignItems: 'flex-end',
+    marginLeft: 16,
   },
   originalPrice: {
-    fontSize: 16,
-    color: '#636e72',
+    fontSize: 14,
+    color: '#8a8a8a',
     textDecorationLine: 'line-through',
   },
   discountPrice: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 22,
+    fontWeight: '800',
     color: '#2d3436',
-    marginTop: 2,
+    marginTop: 4,
   },
   discountBadge: {
-    backgroundColor: '#00b894',
+    backgroundColor: '#4CAF50',
     paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 12,
-    marginTop: 4,
+    paddingVertical: 4,
+    borderRadius: 6,
+    marginTop: 8,
   },
   discountText: {
     color: 'white',
     fontSize: 12,
-    fontWeight: 'bold',
+    fontWeight: '700',
   },
-  packageDescription: {
+  planDescription: {
     fontSize: 14,
     color: '#636e72',
-    marginBottom: 16,
+    marginBottom: 20,
     lineHeight: 20,
+    textAlign: 'center',
   },
   featuresContainer: {
-    marginBottom: 20,
+    marginBottom: 24,
   },
   featuresTitle: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '700',
     color: '#2d3436',
-    marginBottom: 12,
+    marginBottom: 8,
+    textAlign: 'center',
   },
   featureItem: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    marginBottom: 10,
+    marginBottom: 12,
   },
   checkIcon: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    backgroundColor: '#00b894',
+    width: 24,
+    height: 24,
+    borderRadius: 4,
+    backgroundColor: '#4CAF50',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 10,
+    marginRight: 12,
     marginTop: 2,
-  },
-  checkIconText: {
-    color: 'white',
-    fontSize: 12,
-    fontWeight: 'bold',
   },
   featureText: {
     flex: 1,
@@ -649,26 +677,43 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   subscribeButton: {
-    backgroundColor: '#0984e3',
-    paddingVertical: 12,
+    borderRadius: 8,
+    overflow: 'hidden',
+  },
+  subscribeButtonInner: {
+    paddingVertical: 16,
     borderRadius: 8,
     alignItems: 'center',
-  },
-  selectedButton: {
-    backgroundColor: '#00b894',
+    justifyContent: 'center',
   },
   subscribeButtonText: {
     color: 'white',
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: '800',
   },
-  selectedButtonText: {
-    fontWeight: 'bold',
+  currentButtonText: {
+    color: '#8a8a8a',
   },
-  // Process Steps
+  scrollIndicator: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 16,
+  },
+  scrollDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#ccc',
+    marginHorizontal: 4,
+  },
+  scrollDotActive: {
+    backgroundColor: '#FF4500',
+    width: 12,
+  },
   infoSection: {
     backgroundColor: 'white',
-    borderRadius: 12,
+    borderRadius: 4,
     padding: 20,
     marginBottom: 20,
     shadowColor: '#000',
@@ -677,69 +722,40 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
-  processSteps: {
-    marginTop: 16,
+  infoTitle: {
+    fontSize: 20,
+    fontWeight: '800',
+    color: '#2d3436',
+    marginBottom: 20,
+    textAlign: 'center',
   },
-  processStep: {
+  infoItem: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     marginBottom: 20,
   },
-  stepNumber: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    backgroundColor: '#0984e3',
+  infoIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 12,
-    marginTop: 2,
+    marginRight: 16,
   },
-  stepNumberText: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  stepContent: {
+  infoContent: {
     flex: 1,
   },
-  stepTitle: {
+  infoItemTitle: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '700',
     color: '#2d3436',
     marginBottom: 4,
   },
-  stepDescription: {
-    fontSize: 14,
-    color: '#636e72',
-    lineHeight: 20,
-  },
-  // FAQ Section
-  faqSection: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 20,
-    marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  faqItem: {
-    marginBottom: 16,
-  },
-  faqQuestion: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#2d3436',
-    marginBottom: 8,
-  },
-  faqAnswer: {
+  infoItemText: {
     fontSize: 14,
     color: '#636e72',
     lineHeight: 20,
   },
 });
 
-export default PromotionSubscriptionsScreen;
+export default VendorSubscriptionsScreen

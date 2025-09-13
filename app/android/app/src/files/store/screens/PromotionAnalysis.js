@@ -13,69 +13,41 @@ import {
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { set_boost_modal } from '../../../../../../redux/boost_modal';
+import Video from 'react-native-video';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const PromotedAdDetailsScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { data } = route.params
+  const { data } = route.params;
   const [loading, setLoading] = useState(true);
   const [timeRemaining, setTimeRemaining] = useState({});
-  const [adData, setAdData] = useState(null);
+  const [adData, setAdData] = useState({});
 
   useEffect(() => {
-    async function getMetrics(params) {
-    try {
-        const response = await axios.get('https://cs-server-olive.vercel.app/promotion', {params: {product_id: data?.product_id}});
-        const result = response.data.data;
+    async function getMetrics() {
+      try {
+        const response = await axios.get('https://cs-server-olive.vercel.app/promo', {
+          params: { product_id: data?.product_id }
+        });
+        const result = response.data;
         console.log("result: ", result);
         setAdData(result);
-    } catch (error) {
+        setLoading(false);
+      } catch (error) {
         console.log("error: ", error);
-    }
+        setLoading(false);
+      }
     }
     getMetrics();
-}, []);
-
-  // Sample data - in real app, this would come from route params or API
-  useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
-      setAdData({
-        id: 'promo-123',
-        title: 'Premium Smartphone X Pro',
-        price: 89999,
-        originalPrice: 99999,
-        category: 'Electronics',
-        image: 'https://via.placeholder.com/300x200/4A90E2/FFFFFF?text=Promoted+Ad',
-        views: 1250,
-        clicks: 89,
-        promotion: {
-          package: 'Weekly Exposure',
-          pricePaid: 3500,
-          startDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
-          endDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), // 5 days from now
-          status: 'active',
-          features: [
-            'Priority listing in search results',
-            'Highlighted placement on homepage',
-            'Increased visibility across categories',
-            'Premium ad badge'
-          ]
-        },
-        performance: {
-          impressions: 12500,
-          clickThroughRate: '7.12%',
-          conversionRate: '2.3%'
-        }
-      });
-      setLoading(false);
-    }, 1000);
   }, []);
 
   useEffect(() => {
-    if (adData?.promotion?.endDate) {
+    if (adData?.end_date) {
       const interval = setInterval(() => {
         calculateTimeRemaining();
       }, 1000);
@@ -85,10 +57,10 @@ const PromotedAdDetailsScreen = () => {
   }, [adData]);
 
   const calculateTimeRemaining = () => {
-    if (!adData?.promotion?.endDate) return;
+    if (!adData?.end_date) return;
 
     const now = new Date().getTime();
-    const endDate = new Date(adData.promotion.endDate).getTime();
+    const endDate = new Date(adData.end_date).getTime();
     const distance = endDate - now;
 
     if (distance < 0) {
@@ -105,10 +77,11 @@ const PromotedAdDetailsScreen = () => {
   };
 
   const formatCurrency = (amount) => {
-    return `₦${amount.toLocaleString('en-US')}`;
+    return `₦${amount?.toLocaleString('en-US') || '0'}`;
   };
 
   const formatDate = (date) => {
+    if (!date) return '-';
     return new Date(date).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
@@ -117,22 +90,11 @@ const PromotedAdDetailsScreen = () => {
       minute: '2-digit'
     });
   };
+    
+  const dispatch = useDispatch()
 
   const handleExtendPromotion = () => {
-    Alert.alert(
-      'Extend Promotion',
-      'Would you like to extend this promotion?',
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel'
-        },
-        {
-          text: 'Extend',
-          onPress: () => navigation.navigate('PromotionPackages', { adId: adData.id })
-        }
-      ]
-    );
+    dispatch(set_boost_modal({data: data, visible: 1}))
   };
 
   if (loading) {
@@ -159,159 +121,178 @@ const PromotedAdDetailsScreen = () => {
   return (
     <View style={styles.container}>
      
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        {/* Ad Card */}
-        <View style={styles.adCard}>
-          <Image source={{ uri: data.thumbnail }} style={styles.adImage} />
-          <View style={styles.adContent}>
-            <Text style={styles.adTitle} numberOfLines={2}>{data.title}</Text>
-            <View style={styles.priceContainer}>
-              <Text style={styles.currentPrice}>{formatCurrency(data.price)}</Text>
-              {data.originalPrice && (
-                <Text style={styles.originalPrice}>{formatCurrency(data.originalPrice)}</Text>
-              )}
-            </View>
-            <View style={styles.adStats}>
-              <View style={styles.statItem}>
-                <Ionicons name="eye-outline" size={16} color="#666" />
-                <Text style={styles.statText}>{data.views.toLocaleString()} views</Text>
+
+      {/* Main Content with Scroll */}
+      <View style={styles.contentContainer}>
+        <ScrollView 
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          {/* Ad Card */}
+          <View style={styles.adCard}>
+            {
+                data.purpose === 'product'
+                ?
+                <Image source={{ uri: data.thumbnail_id }} style={styles.adImage} />
+                : 
+                <Video source={{ uri: data.thumbnail_id }} style={styles.adImage} />
+            }
+            <View style={styles.adContent}>
+              <Text style={styles.adTitle} numberOfLines={2}>{data.title}</Text>
+              <View style={styles.priceContainer}>
+                <Text style={styles.currentPrice}>{formatCurrency(data.price)}</Text>
+                {data.originalPrice && (
+                  <Text style={styles.originalPrice}>{formatCurrency(data.originalPrice)}</Text>
+                )}
               </View>
-              {/* <View style={styles.statItem}>
-                <Ionicons name="click-outline" size={16} color="#666" />
-                <Text style={styles.statText}>{data.clicks} clicks</Text>
-              </View> */}
+              <View style={styles.adStats}>
+                <View style={styles.statItem}>
+                  <Ionicons name="eye-outline" size={16} color="#666" />
+                  <Text style={styles.statText}>{data.views?.toLocaleString() || 0} views</Text>
+                </View>
+              </View>
             </View>
           </View>
-        </View>
 
-        {/* Promotion Status Card */}
-        <View style={styles.statusCard}>
-          <View style={styles.statusHeader}>
-            <Text style={styles.statusTitle}>Promotion Status</Text>
-            <View style={[styles.statusBadge, 
-              adData.promotion.status === 'active' ? styles.statusActive : styles.statusInactive]}>
-              <Text style={styles.statusBadgeText}>
-                {adData.promotion.status.toUpperCase()}
+          {/* Promotion Status Card */}
+          <View style={styles.statusCard}>
+            <View style={styles.statusHeader}>
+              <Text style={styles.statusTitle}>Promotion Status</Text>
+              <View style={[styles.statusBadge, 
+                adData.is_active ? styles.statusActive : styles.statusInactive]}>
+                <Text style={styles.statusBadgeText}>
+                  {adData.is_active ? 'ACTIVE' : 'SUSPENDED'}
+                </Text>
+              </View>
+            </View>
+            
+            {!timeRemaining.expired ? (
+              <View style={styles.timerContainer}>
+                <Text style={styles.timerLabel}>Time Remaining:</Text>
+                <View style={styles.timer}>
+                  <View style={styles.timeUnit}>
+                    <Text style={styles.timeValue}>{timeRemaining.days || 0}</Text>
+                    <Text style={styles.timeLabel}>Days</Text>
+                  </View>
+                  <Text style={styles.timeSeparator}>:</Text>
+                  <View style={styles.timeUnit}>
+                    <Text style={styles.timeValue}>{timeRemaining.hours || 0}</Text>
+                    <Text style={styles.timeLabel}>Hours</Text>
+                  </View>
+                  <Text style={styles.timeSeparator}>:</Text>
+                  <View style={styles.timeUnit}>
+                    <Text style={styles.timeValue}>{timeRemaining.minutes || 0}</Text>
+                    <Text style={styles.timeLabel}>Mins</Text>
+                  </View>
+                  <Text style={styles.timeSeparator}>:</Text>
+                  <View style={styles.timeUnit}>
+                    <Text style={styles.timeValue}>{timeRemaining.seconds || 0}</Text>
+                    <Text style={styles.timeLabel}>Secs</Text>
+                  </View>
+                </View>
+              </View>
+            ) : (
+              <View style={styles.expiredContainer}>
+                <Ionicons name="time-outline" size={32} color="#FF6A00" />
+                <Text style={styles.expiredText}>Promotion has ended</Text>
+              </View>
+            )}
+          </View>
+
+          {/* Promotion Details Card */}
+          <View style={styles.detailsCard}>
+            <Text style={styles.cardTitle}>Promotion Details</Text>
+            
+            <View style={styles.detailRow}>
+              <Ionicons name="cube-outline" size={20} color="#666" />
+              <Text style={styles.detailLabel}>Package:</Text>
+              <Text style={styles.detailValue}>{adData.plan || 'N/A'}</Text>
+            </View>
+
+            <View style={styles.detailRow}>
+              <Ionicons name="cash-outline" size={20} color="#666" />
+              <Text style={styles.detailLabel}>Price Paid:</Text>
+              <Text style={[styles.detailValue, styles.priceValue]}>
+                {formatCurrency(adData.amount_paid)}
               </Text>
             </View>
+
+            <View style={styles.detailRow}>
+              <Ionicons name="calendar-outline" size={20} color="#666" />
+              <Text style={styles.detailLabel}>Start Date:</Text>
+              <Text style={styles.detailValue}>{formatDate(adData.start_date)}</Text>
+            </View>
+
+            <View style={styles.detailRow}>
+              <Ionicons name="flag-outline" size={20} color="#666" />
+              <Text style={styles.detailLabel}>End Date:</Text>
+              <Text style={styles.detailValue}>{formatDate(adData.end_date)}</Text>
+            </View>
           </View>
-          
-          {!timeRemaining.expired ? (
-            <View style={styles.timerContainer}>
-              <Text style={styles.timerLabel}>Time Remaining:</Text>
-              <View style={styles.timer}>
-                <View style={styles.timeUnit}>
-                  <Text style={styles.timeValue}>{timeRemaining.days}</Text>
-                  <Text style={styles.timeLabel}>Days</Text>
-                </View>
-                <Text style={styles.timeSeparator}>:</Text>
-                <View style={styles.timeUnit}>
-                  <Text style={styles.timeValue}>{timeRemaining.hours}</Text>
-                  <Text style={styles.timeLabel}>Hours</Text>
-                </View>
-                <Text style={styles.timeSeparator}>:</Text>
-                <View style={styles.timeUnit}>
-                  <Text style={styles.timeValue}>{timeRemaining.minutes}</Text>
-                  <Text style={styles.timeLabel}>Mins</Text>
-                </View>
-                <Text style={styles.timeSeparator}>:</Text>
-                <View style={styles.timeUnit}>
-                  <Text style={styles.timeValue}>{timeRemaining.seconds}</Text>
-                  <Text style={styles.timeLabel}>Secs</Text>
-                </View>
+
+          {/* Features Card */}
+          <View style={styles.featuresCard}>
+            <Text style={styles.cardTitle}>Included Features</Text>
+            {[
+              'Priority listing in search results',
+              'Highlighted placement on homepage',
+              'Increased visibility across categories',
+              'Premium ad badge'
+            ].map((feature, index) => (
+              <View key={index} style={styles.featureItem}>
+                <Ionicons name="checkmark-circle" size={20} color="#4CAF50" />
+                <Text style={styles.featureText}>{feature}</Text>
+              </View>
+            ))}
+          </View>
+
+          {/* Performance Card */}
+          <View style={styles.performanceCard}>
+            <Text style={styles.cardTitle}>Performance Metrics</Text>
+            
+            <View style={styles.metricRow}>
+              <View style={styles.metricItem}>
+                <Text style={styles.metricValue}>{data.impression || 0}</Text>
+                <Text style={styles.metricLabel}>Impressions</Text>
+              </View>
+              
+              <View style={styles.metricItem}>
+                <Text style={styles.metricValue}>{data.views || 0}</Text>
+                <Text style={styles.metricLabel}>Views</Text>
+              </View>
+              
+              <View style={styles.metricItem}>
+                <Text style={styles.metricValue}>
+                  {data.views ? ((data.contact_click / data.views) * 100).toFixed(1) + '%' : '0%'}
+                </Text>
+                <Text style={styles.metricLabel}>Conversion</Text>
               </View>
             </View>
-          ) : (
-            <View style={styles.expiredContainer}>
-              <Ionicons name="time-outline" size={32} color="#FF6A00" />
-              <Text style={styles.expiredText}>Promotion has ended</Text>
-            </View>
-          )}
-        </View>
-
-        {/* Promotion Details Card */}
-        <View style={styles.detailsCard}>
-          <Text style={styles.cardTitle}>Promotion Details</Text>
-          
-          <View style={styles.detailRow}>
-            <Ionicons name="cube-outline" size={20} color="#666" />
-            <Text style={styles.detailLabel}>Package:</Text>
-            <Text style={styles.detailValue}>{adData.promotion.package}</Text>
           </View>
 
-          <View style={styles.detailRow}>
-            <Ionicons name="cash-outline" size={20} color="#666" />
-            <Text style={styles.detailLabel}>Price Paid:</Text>
-            <Text style={[styles.detailValue, styles.priceValue]}>
-              {formatCurrency(adData.promotion.pricePaid)}
-            </Text>
-          </View>
+          {/* Spacer for fixed buttons */}
+          <View style={styles.spacer} />
+        </ScrollView>
+      </View>
 
-          <View style={styles.detailRow}>
-            <Ionicons name="calendar-outline" size={20} color="#666" />
-            <Text style={styles.detailLabel}>Start Date:</Text>
-            <Text style={styles.detailValue}>{formatDate(adData.promotion.startDate)}</Text>
-          </View>
+      {/* Fixed Bottom Buttons */}
+      <View style={styles.fixedButtons}>
+        <TouchableOpacity 
+          style={[styles.actionButton, styles.extendButton]}
+          onPress={handleExtendPromotion}
+        >
+          {/* <Ionicons name="refresh-outline" size={20} color="#FFF" /> */}
+          <Text style={styles.extendButtonText}>Extend Promotion</Text>
+        </TouchableOpacity>
 
-          <View style={styles.detailRow}>
-            <Ionicons name="flag-outline" size={20} color="#666" />
-            <Text style={styles.detailLabel}>End Date:</Text>
-            <Text style={styles.detailValue}>{formatDate(adData.promotion.endDate)}</Text>
-          </View>
-        </View>
-
-        {/* Features Card */}
-        <View style={styles.featuresCard}>
-          <Text style={styles.cardTitle}>Included Features</Text>
-          {adData.promotion.features.map((feature, index) => (
-            <View key={index} style={styles.featureItem}>
-              <Ionicons name="checkmark-circle" size={20} color="#4CAF50" />
-              <Text style={styles.featureText}>{feature}</Text>
-            </View>
-          ))}
-        </View>
-
-        {/* Performance Card */}
-        <View style={styles.performanceCard}>
-          <Text style={styles.cardTitle}>Performance Metrics</Text>
-          
-          <View style={styles.metricRow}>
-            <View style={styles.metricItem}>
-              <Text style={styles.metricValue}>{adData.performance.impressions.toLocaleString()}</Text>
-              <Text style={styles.metricLabel}>Impressions</Text>
-            </View>
-            
-            <View style={styles.metricItem}>
-              <Text style={styles.metricValue}>{adData.performance.clickThroughRate}</Text>
-              <Text style={styles.metricLabel}>Click Rate</Text>
-            </View>
-            
-            <View style={styles.metricItem}>
-              <Text style={styles.metricValue}>{adData.performance.conversionRate}</Text>
-              <Text style={styles.metricLabel}>Conversion</Text>
-            </View>
-          </View>
-        </View>
-
-        {/* Action Buttons */}
-        <View style={styles.actionButtons}>
-          <TouchableOpacity 
-            style={[styles.actionButton, styles.extendButton]}
-            onPress={handleExtendPromotion}
-          >
-            <Ionicons name="refresh-outline" size={20} color="#FFF" />
-            <Text style={styles.extendButtonText}>Extend Promotion</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity 
-            style={[styles.actionButton, styles.viewAdButton]}
-            onPress={() => navigation.navigate('AdDetails', { adId: adData.id })}
-          >
-            <Ionicons name="eye-outline" size={20} color="#FF6A00" />
-            <Text style={styles.viewAdButtonText}>View Ad</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+        <TouchableOpacity 
+          style={[styles.actionButton, styles.viewAdButton]}
+          onPress={() => navigation.navigate('user-product', { data: data })}
+        >
+          <Ionicons name="eye-outline" size={20} color="#FF6A00" />
+          <Text style={styles.viewAdButtonText}>View Ad</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -326,7 +307,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingTop: Platform.OS === 'ios' ? 50 : 16,
+    paddingTop: Platform.OS === 'ios' ? 50 : 24,
     paddingBottom: 16,
     backgroundColor: '#fff',
     borderBottomWidth: 1,
@@ -343,9 +324,12 @@ const styles = StyleSheet.create({
   headerRight: {
     width: 40,
   },
+  contentContainer: {
+    flex: 1,
+  },
   scrollContent: {
     padding: 8,
-    paddingBottom: 30,
+    paddingBottom: 60, // Extra padding for fixed buttons
   },
   loadingContainer: {
     flex: 1,
@@ -441,7 +425,7 @@ const styles = StyleSheet.create({
   statusCard: {
     backgroundColor: '#fff',
     borderRadius: 4,
-    padding: 16,
+    padding: 20,
     marginBottom: 8,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -482,7 +466,8 @@ const styles = StyleSheet.create({
   timerLabel: {
     fontSize: 16,
     color: '#666',
-    marginBottom: 12,
+    marginBottom: 8,
+    fontWeight: '600',
   },
   timer: {
     flexDirection: 'row',
@@ -491,7 +476,7 @@ const styles = StyleSheet.create({
   },
   timeUnit: {
     alignItems: 'center',
-    marginHorizontal: 6,
+    marginHorizontal: 8,
     minWidth: 50,
   },
   timeValue: {
@@ -524,7 +509,7 @@ const styles = StyleSheet.create({
   detailsCard: {
     backgroundColor: '#fff',
     borderRadius: 4,
-    padding: 16,
+    padding: 20,
     marginBottom: 8,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -541,19 +526,21 @@ const styles = StyleSheet.create({
   detailRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 8,
   },
   detailLabel: {
     fontSize: 14,
     color: '#666',
     marginLeft: 8,
-    marginRight: 8,
+    marginRight: 12,
     width: 80,
+    fontWeight: '500',
   },
   detailValue: {
     fontSize: 14,
     color: '#2d3436',
     flex: 1,
+    fontWeight: '600',
   },
   priceValue: {
     fontWeight: 'bold',
@@ -563,7 +550,7 @@ const styles = StyleSheet.create({
   featuresCard: {
     backgroundColor: '#fff',
     borderRadius: 4,
-    padding: 16,
+    padding: 20,
     marginBottom: 8,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -579,7 +566,7 @@ const styles = StyleSheet.create({
   featureText: {
     fontSize: 14,
     color: '#2d3436',
-    marginLeft: 8,
+    marginLeft: 12,
     flex: 1,
     lineHeight: 20,
   },
@@ -587,7 +574,7 @@ const styles = StyleSheet.create({
   performanceCard: {
     backgroundColor: '#fff',
     borderRadius: 4,
-    padding: 16,
+    padding: 20,
     marginBottom: 8,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -601,6 +588,7 @@ const styles = StyleSheet.create({
   },
   metricItem: {
     alignItems: 'center',
+    flex: 1,
   },
   metricValue: {
     fontSize: 20,
@@ -611,12 +599,28 @@ const styles = StyleSheet.create({
   metricLabel: {
     fontSize: 12,
     color: '#666',
+    textAlign: 'center',
   },
-  // Action Buttons Styles
-  actionButtons: {
+  spacer: {
+    height: 20,
+  },
+  // Fixed Bottom Buttons
+  fixedButtons: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    gap: 12,
+    padding: 8,
+    backgroundColor: '#fff',
+    borderTopWidth: 1,
+    borderTopColor: '#e0e0e0',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 8,
   },
   actionButton: {
     flex: 1,
@@ -625,25 +629,27 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 16,
     borderRadius: 8,
-    gap: 8,
+    marginHorizontal: 8,
   },
   extendButton: {
-    backgroundColor: '#FF6A00',
+    backgroundColor: '#FF4500',
   },
   viewAdButton: {
     backgroundColor: '#fff',
     borderWidth: 2,
-    borderColor: '#FF6A00',
+    borderColor: '#FF4500',
   },
   extendButtonText: {
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 16,
+    marginLeft: 8,
   },
   viewAdButtonText: {
-    color: '#FF6A00',
+    color: '#FF4500',
     fontWeight: 'bold',
     fontSize: 16,
+    marginLeft: 8,
   },
 });
 

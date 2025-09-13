@@ -44,7 +44,7 @@ export function SellStackScreen() {
     }, [campus]) 
 
     function handleSub(params) {
-      if(shop.subscription.plan !== 'free'){ 
+      if(shop.subscription.plan === 'free'){ 
         dispatch(set_sub_modal(1))
       }else{
         navigation.navigate('Profile', {

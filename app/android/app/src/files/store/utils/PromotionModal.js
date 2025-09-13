@@ -19,21 +19,36 @@ import Video from 'react-native-video';
 import { set_boost_modal } from '../../../../../../redux/boost_modal';
 import { useNavigation } from '@react-navigation/native';
 import { getData } from '../../utils/AsyncStore.js';
+import axios from 'axios';
 
 const { width } = Dimensions.get('window');
 
 const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
   const { boost_modal } = useSelector(s => s.boost_modal);
-  const [selectedPackage, setSelectedPackage] = useState(boost_modal.data.promotion);
+  const [selectedPackage, setSelectedPackage] = useState({});
   const { user } = useSelector(s => s.user);
   const [adImageUri, setAdImageUri] = useState(null);
 
   const [promotionPackages, setPromotionPackages] = useState([])
+
+  useEffect(() => {
+    async function getMetrics() {
+      try {
+        const response = await axios.get('https://cs-server-olive.vercel.app/promo', {
+          params: { product_id: boost_modal?.data?.product_id }
+        });
+        const result = response.data;
+        console.log("result: ", result);
+        setSelectedPackage(result);
+      } catch (error) {
+        console.log("error: ", error);
+      }
+    }
+    getMetrics();
+  }, []);
     
   const getPromoPlan = async () => {  
     let data = await getData('promo_plan');
-    console.log('promo_plan: ', data);
-
     if (data) {
       let parsedData = JSON.parse(data);
 
@@ -70,9 +85,6 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
     return null;
   };
 
-  const handlePackageSelect = (pkg) => {
-    payNow(pkg);
-  };
 
   const handleSubscribe = (pkg) => {
     payNow(pkg);
@@ -115,6 +127,43 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
       end_date: endDate
     };
   }
+
+  const getPackageButtonLabel = (currentPkg, pkgId) => {
+    if (!currentPkg) return 'Purchase Now'; // if no package yet
+
+    if (currentPkg === 'Flash Promo') {
+      if (pkgId === '3-Day Spotlight' || pkgId === 'Weekly Exposure' || pkgId === '2-Week Campaign' || pkgId === 'Monthly Campaign') {
+        return 'Upgrade';
+      }
+      if (pkgId === 'Flash Promo') return 'Selected';
+      return 'Disabled';
+    }
+
+    if (currentPkg === '3-Day Spotlight') {
+      if (pkgId === 'Weekly Exposure' || pkgId === '2-Week Campaign' || pkgId === 'Monthly Campaign') return 'Upgrade';
+      if (pkgId === '3-Day Spotlight') return 'Selected';
+      return 'Disabled';
+    }
+
+    if (currentPkg === 'Weekly Exposure') {
+      if (pkgId === '2-Week Campaign' || pkgId === 'Monthly Campaign') return 'Upgrade';
+      if (pkgId === 'Weekly Exposure') return 'Selected';
+      return 'Disabled';
+    }
+
+    if (currentPkg === '2-Week Campaign') {
+      if (pkgId === 'Monthly Campaign') return 'Upgrade';
+      if (pkgId === '2-Week Campaign') return 'Selected';
+      return 'Disabled';
+    }
+
+    if (currentPkg === 'Monthly Campaign') {
+      if (pkgId === 'Monthly Campaign') return 'Selected';
+      return 'Disabled';
+    }
+
+    return 'Purchase Now';
+  };
 
   const dispatch = useDispatch()
 
@@ -258,7 +307,7 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
               >
                 {promotionPackages.map((pkg, index) => {
                   const discountPercent = calculateDiscountPercentage(pkg.price, pkg.discount_price);
-                  const isSelected = selectedPackage === pkg.id;
+                  const isSelected = selectedPackage.plan === pkg.title; 
                   
                   return (
                     <TouchableOpacity
@@ -268,7 +317,6 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
                         isSelected && styles.selectedPackage,
                         index === 2 && styles.featuredPackage,
                       ]}
-                      onPress={() => handlePackageSelect(pkg)}
                     >
                       {index === 2 && (
                         <View style={styles.popularBadge}>
@@ -312,15 +360,19 @@ const PromotionSubscriptionsModal = ({ visible, onClose, onSubscribe }) => {
                           isSelected && styles.selectedButton
                         ]}
                         onPress={() => handleSubscribe(pkg)}
+                        disabled={isSelected}
                       >
                         <Text style={[
                           styles.subscribeButtonText,
                           isSelected && styles.selectedButtonText
                         ]}>
-                          {isSelected ? 'Selected' : 'Purchase Now'}
+                          {/* {isSelected ? 'Selected' : 'Purchase Now'} */}
+                          {
+                            getPackageButtonLabel(selectedPackage.plan, pkg.title)
+                          }
                         </Text>
                       </TouchableOpacity>
-                    </TouchableOpacity>
+                    </TouchableOpacity> 
                   );
                 })}
               </ScrollView>
