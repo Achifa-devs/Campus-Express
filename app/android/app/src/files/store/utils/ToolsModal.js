@@ -24,9 +24,6 @@ import { capitalize } from './Capitalize.js';
 const { width } = Dimensions.get('window');
 
 const VendorSubscriptionsModal = ({ visible, onClose }) => {
-  const [selectedPlan, setSelectedPlan] = useState('Free');
-  const [confirmModalVisible, setConfirmModalVisible] = useState(false);
-  const [planToSubscribe, setPlanToSubscribe] = useState(null);
   const [subscriptionExpiry, setSubscriptionExpiry] = useState(
     new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
   );
@@ -38,6 +35,9 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
   const navigation = useNavigation();
 
 
+  useEffect(() => {
+    setSubscriptionExpiry(new Date(shop.subscription.end_date))
+  }, [shop])
   const getToolsplan = async () => {  
     let data = await getData('tools_plan');
     console.log('tools_plan: ', data);
@@ -58,16 +58,13 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
   }, [])
 
 
-  const handleSubscribe = (plan) => {
-    if (plan === 'Free') {
-      setSelectedPlan('Free');
+  const handleSubscribe = (planName) => {
+    if (subscriptionPlans[planName].name.toLowerCase() === 'free') {
       Alert.alert('Selected', 'You have selected the Free plan.');
       return;
-    }
-
-    // show confirm modal for paid plan
-    setPlanToSubscribe(plan);
-    setConfirmModalVisible(true);
+    }   
+    const pkg = subscriptionPlans[planName]; 
+    payNow(pkg)
   };
 
   const { popup } = usePaystack();
@@ -108,19 +105,21 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
         end_date,
       },
       onSuccess: (res) => {
-        console.log('Paystack response: ', res);
+        let subscription = {
+          "plan": selectedPackage.name,
+          "start_date": start_date,
+          "end_date": end_date,
+          "updated_at": start_date
+        }
         Alert.alert('Payment Successful!', `Your subscription was successful.`, [
           {
             text: 'OK',
             onPress: () => {
               // Update shop locally
-              const newShop = { ...shop, subscription: selectedPackage.name };
+              const newShop = { ...shop, subscription: subscription };
               dispatch(set_shop(newShop));
-              setSelectedPlan(selectedPackage.name.charAt(0).toUpperCase() + selectedPackage.name.slice(1));
               setSubscriptionExpiry(end_date);
-              setConfirmModalVisible(false);
-              setPlanToSubscribe(null);
-              navigation.navigate('Home');
+              navigation.navigate('Sell');
             },
           },
         ]);
@@ -135,16 +134,7 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
     });
   };
 
-  const completeSubscription = () => {
-    // Proceed to payment for the selected plan
-    const pkg = subscriptionPlans[planToSubscribe];
-    if (!pkg) {
-      Alert.alert('Invalid Plan', 'Selected plan is not available.');
-      setConfirmModalVisible(false);
-      return;
-    }
-    payNow(pkg);
-  };
+ 
 
   const calculateDiscountPercentage = (price, discountPrice) => {
     const priceNum = parseFloat(String(price).replace(/[₦,]/g, '').trim()) || 0;
@@ -173,6 +163,8 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
     return diffDays;
   };
 
+  const currentPlan = subscriptionPlans.find(p => p.name === shop.subscription.plan);
+
   return (
     <Modal animationType="slide" transparent={false} visible={visible} onRequestClose={onClose}>
       <View style={styles.modalContainer}>
@@ -192,9 +184,11 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
             </View>
             <View style={styles.planInfo}>
               <View style={styles.planInfoLeft}>
-                <Text style={styles.currentPlanName}>{shop.subscription.plan[0].toUpperCase()}{shop.subscription.plan.split('').splice(2, shop.subscription.plan.length)}</Text>
+                <Text style={styles.currentPlanName}>{shop?.subscription?.plan[0]?.toUpperCase()}{shop?.subscription?.plan?.slice(1)}</Text>
                 <Text style={styles.currentPlanPrice}>
-                  {shop.subscription.plan === 'free' ? 'Free Forever' : `${subscriptionPlans[shop.subscription.plan]?.discount_price}/month`}
+                  {shop.subscription.plan === 'free' 
+                    ? 'Free Forever' 
+                    : `${currentPlan?.discountPrice}/month`}
                 </Text>
               </View> 
               <View style={styles.planInfoRight}>
@@ -232,7 +226,7 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
                     { width: width * 0.85, marginRight: 16 },
                   ]}
                 >
-                  {index === 1 && (
+                  {index === 2 && (
                     <LinearGradient colors={['#FF4500', '#FF6347']} style={styles.popularBadge}>
                       <Ionicons name="star" size={12} color="white" />
                       <Text style={styles.popularBadgeText}>MOST POPULAR</Text>
@@ -251,7 +245,7 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
                   </View>
  
                   <View style={styles.planHeader}>
-                    <Text style={styles.planName}>{capitalize(planDetails.name)}</Text>
+                    <Text style={styles.planName}>{capitalize(planDetails?.name)}</Text>
                     <View style={styles.priceContainer}>
                       {planName !== 'Free' && <Text style={styles.originalPrice}>{planDetails.price}</Text>}
                       <Text style={styles.discountPrice}>{planName === 'Free' ? 'Free Forever' : `${planDetails.discount_price}/month`}</Text>
@@ -328,30 +322,7 @@ const VendorSubscriptionsModal = ({ visible, onClose }) => {
           </View>
         </ScrollView>
 
-        {/* Confirmation Modal */}
-        <Modal animationType="fade" transparent={true} visible={confirmModalVisible} onRequestClose={() => setConfirmModalVisible(false)}>
-          <View style={styles.centeredView}>
-            <View style={styles.confirmModalView}>
-              <View style={styles.modalIcon}>
-                <Ionicons name="help-circle" size={44} color="#FF4500" />
-              </View>
-              <Text style={[styles.modalTitle, { color: '#2d3436' }]}>Confirm Subscription</Text>
-              <Text style={styles.modalText}>
-                Are you sure you want to subscribe to the {planToSubscribe} plan for {planToSubscribe && subscriptionPlans[planToSubscribe].discountPrice}/month?
-              </Text>
-
-              <View style={styles.modalButtons}>
-                <Pressable style={[styles.button, styles.buttonCancel]} onPress={() => setConfirmModalVisible(false)}>
-                  <Text style={styles.buttonCancelText}>Cancel</Text>
-                </Pressable>
-
-                <Pressable style={[styles.button, styles.buttonSubscribe]} onPress={completeSubscription}>
-                  <Text style={styles.buttonSubscribeText}>Proceed to Pay</Text>
-                </Pressable>
-              </View>
-            </View>
-          </View>
-        </Modal>
+     
       </View>
     </Modal>
   );

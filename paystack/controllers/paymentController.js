@@ -99,7 +99,7 @@ async function toolHandler(event) {
         "plan": plan,
         "start_date": start_date,
         "end_date": end_date,
-        "updated_at": new Date()
+        "updated_at": start_date
       }
       const toolUpdate = await Payment.updateTool({ subscription, user_id });
       if (toolUpdate) {
