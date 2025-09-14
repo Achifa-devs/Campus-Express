@@ -203,11 +203,11 @@ const ShopScreen = () => {
       setFormError('Shop name must be at least 3 characters long.');
       return false;
     }
-    if (!shopForm.logo) {
-      Vibration.vibrate(200)
-      setFormError('Shop logo is needed.');
-      return false;
-    }
+    // if (!shopForm.logo) {
+    //   Vibration.vibrate(200)
+    //   setFormError('Shop logo is needed.');
+    //   return false;
+    // }
     if (!shopForm.address1 || !shopForm.address2 || !shopForm.address3) {
       Vibration.vibrate(200)
       setFormError('All address fields are required.');
@@ -223,7 +223,7 @@ const ShopScreen = () => {
     if (!validateForm()) return;
 
     setIsLoading(true)
-    fetch(`http://192.168.0.4:9090/vendor/create-shop`, {
+    fetch(`https://cs-server-olive.vercel.app/vendor/create-shop`, {
       method: 'post',
       headers: {
         "Content-Type": "Application/json"

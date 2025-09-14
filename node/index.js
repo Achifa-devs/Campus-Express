@@ -466,7 +466,7 @@ CAMPUSSPHERE_SERVER.get('/packages', async (req, res) => {
 
 CAMPUSSPHERE_SERVER.get('/subscription', async (req, res) => {
 
-  const {user_id} = req?.query;
+  const { user_id } = req?.query;
 
   try {
     // Get seller's products
@@ -475,7 +475,11 @@ CAMPUSSPHERE_SERVER.get('/subscription', async (req, res) => {
       [user_id]
     );
     // Return combined data 
-    res.status(200).send({subscribed: result.rows[0].plan !== 'Free' ? true: false, data: result.rows[0]});
+    if(result.rows.length > 0){
+      res.status(200).send({subscribed: result.rows[0].plan.toLowerCase() !== 'free' ? true: false, data: result.rows[0]});
+    }else{
+      res.status(200).send({subscribed: false, data: {}});
+    }
 
   } catch (err) {
     console.error('DB Error:', err);

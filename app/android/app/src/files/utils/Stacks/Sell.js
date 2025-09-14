@@ -83,9 +83,9 @@ export function SellStackScreen() {
                   {/* Logo */}
                   <TouchableOpacity style={styles.logoContainer} onPress={() => navigation.navigate('user-shop')}>
                       <Image 
-                          source={{ uri: shop?.logo_url }} 
-                          style={styles.logo}
-                          // resizeMode="contain"
+                        source={{ uri: shop && shop?.logo_url }} 
+                        style={styles.logo}
+                        // resizeMode="contain"
                       />
                       <Text numberOfLines={1} style={{
                           fontSize: 11,
@@ -95,31 +95,31 @@ export function SellStackScreen() {
                           flexShrink: 1,
                           marginBottom: 5
                       }}>
-                          {shop?.title}
+                        {shop && shop?.title}
                       </Text>
                   </TouchableOpacity>
 
                   {/* Right Section */}
                   <View style={styles.rightSection}>
-                      {shop && (
-                        <TouchableOpacity
-                            style={[styles.button, shop.subscription.plan !== 'free' && styles.subscribedButton]}
-                            onPress={e=> handleSub()}
-                            activeOpacity={0.8}
-                            >
-                            <View style={styles.buttonContent}>
-                              <Icon 
-                              name={shop.subscription.plan !== 'free' ? "diamond" : "diamond-outline"} 
-                              size={16} 
-                              color={shop.subscription.plan !== 'free' ? "#FFF" : "#FF4500"} 
-                              style={styles.icon}
-                              />
-                              <Text style={[styles.buttonText, shop.subscription.plan !== 'free' && styles.subscribedText]}>
-                              {shop.subscription.plan !== 'free' ? `${capitalize(shop.subscription.plan)} Plan` : 'Upgrade Now'}
-                              </Text> 
-                            </View>
-                        </TouchableOpacity> 
-                      )}
+                    {shop && (
+                      <TouchableOpacity
+                          style={[styles.button, shop.subscription.plan !== 'free' && styles.subscribedButton]}
+                          onPress={e=> handleSub()}
+                          activeOpacity={0.8}
+                          >
+                          <View style={styles.buttonContent}>
+                            <Icon 
+                            name={shop.subscription.plan !== 'free' ? "diamond" : "diamond-outline"} 
+                            size={16} 
+                            color={shop.subscription.plan !== 'free' ? "#FFF" : "#FF4500"} 
+                            style={styles.icon}
+                            />
+                            <Text style={[styles.buttonText, shop.subscription.plan !== 'free' && styles.subscribedText]}>
+                            {shop.subscription.plan !== 'free' ? `${capitalize(shop.subscription.plan)} Plan` : 'Upgrade Now'}
+                            </Text> 
+                          </View>
+                      </TouchableOpacity> 
+                    )}
                   </View>
               </View>
           ),
