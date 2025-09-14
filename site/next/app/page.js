@@ -315,7 +315,7 @@ export default function Page() {
           
           <div class="founder-section">
             
-            <div class="team-grid">
+            <div class="team-grid" style={{display: 'flex', justifyContent: 'center'}}>
               <div class="team-card founder-card">
                 <img src="https://res.cloudinary.com/daqbhghwq/image/upload/v1746981002/1742973114382_ldrmy5.jpg" alt="Founder" class="team-img" />
                 <div class="team-info">
@@ -323,6 +323,21 @@ export default function Page() {
                   <h3 class="team-name">Akpulu Fabian</h3>
                   <p class="team-title">Product Vision & Strategy | Software Design & Engineering</p>
                   <p class="team-bio">Serial entrepreneur with 5+ years experience in building e-commerce platforms across Africa.</p>
+                  {/* <div class="social-links">
+                    <a href="#" class="social-link">in</a>
+                    <a href="#" class="social-link">tw</a>
+                    <a href="#" class="social-link">ig</a>
+                  </div> */}
+                </div>
+              </div>
+
+              <div class="team-card founder-card">
+                <img src="https://res.cloudinary.com/daqbhghwq/image/upload/v1757403785/IMG-20250809-WA0017_ili5nn.jpg" alt="Co-Founder" class="team-img" />
+                <div class="team-info">
+                  <span class="team-role founder-role">Co-Founder & Investor</span>
+                  <h3 class="team-name">Jomilojuan Jorin</h3>
+                  <p class="team-title">Strategic Guidance & Funding</p>
+                  <p class="team-bio">Entrepreneur and investor with extensive experience in advising startups and funding innovative ventures.</p>
                   {/* <div class="social-links">
                     <a href="#" class="social-link">in</a>
                     <a href="#" class="social-link">tw</a>
