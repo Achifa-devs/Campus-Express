@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Sell from "../../store/screens/Sell/Sell";
 import Notice from "../../store/screens/Sell/Notice";
 import { 
+  Alert,
     Dimensions,
     Image,
   
@@ -81,9 +82,15 @@ export function SellStackScreen() {
           (
               <View style={styles.headerContainer}>
                   {/* Logo */}
-                  <TouchableOpacity style={styles.logoContainer} onPress={() => navigation.navigate('user-shop')}>
+                  <TouchableOpacity style={styles.logoContainer} onPress={() => {
+                    if(shop?.shop_id){
+                      navigation.navigate('user-shop')
+                    }else{
+                      Alert.alert('Please register your shop first!')
+                    }
+                  }}>
                       <Image 
-                        source={{ uri: shop ? shop?.logo_url : 'https://res.cloudinary.com/daqbhghwq/image/upload/e_background_removal/f_png/v1750632165/20250622_233137_0000_lq4yjm.png' }} 
+                        source={{ uri: shop?.logo_url ? shop?.logo_url : 'https://res.cloudinary.com/daqbhghwq/image/upload/v1746402998/Untitled_design-removebg-preview_peqlme.png'}} 
                         style={styles.logo}
                         // resizeMode="contain"
                       />
@@ -370,7 +377,8 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: 50,
-
+    borderWidth: 1,
+    borderColor: '#FF4500'
   },
   rightSection: {
     flexDirection: 'row',
