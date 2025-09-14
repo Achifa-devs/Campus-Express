@@ -70,7 +70,7 @@ export async function findShopDetailsById({ user_id }) {
 
 // Create new shop
 export async function createShop({ 
-  logo,
+  logo=null,
   shopName,
   description,
   address1,
@@ -90,7 +90,7 @@ export async function createShop({
         id,shop_id,user_id,title,category,status,description,logo_url,open_hrs,social_links,is_verified,created_at,street,lodge,town,views,subscription
     ) VALUES (
         DEFAULT,
-        '${await shortId.generate(10)}', '${user_id}', '${shopName}', '', 'active', '${description}', '${logo}', '', '', ${false}, '${new Date()}', '${address1}', '${address2}', '${address3}', ${0}, ${subscription}
+        '${await shortId.generate(10)}', '${user_id}', '${shopName}', '', 'active', '${description}', '${logo}', '', '', ${false}, '${new Date()}', '${address1}', '${address2}', '${address3}', ${0}, ${JSON.stringify(subscription)}
     )`
   );
   let response = await errorHandler(result?.rowCount);
