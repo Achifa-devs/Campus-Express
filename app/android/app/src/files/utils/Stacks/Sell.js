@@ -90,10 +90,10 @@ export function SellStackScreen() {
                     }
                   }}>
                       <Image 
-                        source={{ uri: shop?.logo_url ? shop?.logo_url : 'https://res.cloudinary.com/daqbhghwq/image/upload/v1746402998/Untitled_design-removebg-preview_peqlme.png'}} 
+                        source={{ uri: shop?.logo_url !== 'NULL' && shop?.logo_url || 'https://res.cloudinary.com/daqbhghwq/image/upload/v1746402998/Untitled_design-removebg-preview_peqlme.png'}} 
                         style={styles.logo}
                         // resizeMode="contain"
-                      />
+                      /> 
                       <Text numberOfLines={1} style={{
                           fontSize: 11,
                           fontWeight: 'bold',

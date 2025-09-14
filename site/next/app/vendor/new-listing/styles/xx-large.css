@@ -1,0 +1,192 @@
+@media screen  and (min-width: 1200px) {
+    *{
+        box-sizing: border-box;
+    }
+
+    html,body{
+        height: 100%;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        background-color: #f9f9f9;
+    }
+
+    .buyer-header{
+        height: 70px;
+        width: 100%; 
+        background-color: #fff;
+        display: flex;
+        position: sticky;
+        top: 0;
+        align-items: center;
+        padding: 20px 85px 20px 85px;
+        
+    }
+    .buyer-header .input-cnt{
+        height: 100%;
+        width: 50%;
+        position: relative;
+        display: flex;
+        margin: auto;
+        align-items: center;
+        flex-direction: row;
+
+    }
+    .buyer-header ul{
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        width: 20%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .buyer-header ul li{
+        cursor: pointer;
+        display: flex;
+        white-space: nowrap;
+        align-items: center;
+        color: orangered;
+        font-weight: 500;
+        font-size: small;
+        height: 35px;
+        border-radius: 5px;
+        padding: 0 10px 0 10px;
+        justify-content: space-between;
+    }
+    .buyer-header ul li:hover{
+        background-color: rgb(255, 68, 0);
+        background-color: rgb(255, 68, 0, .1);
+    }
+    .buyer-header .input-cnt input{
+        height: 45px;
+        float: left;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+        font-size: large;
+        padding: 20px;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue';
+        font-weight: bolder;
+        width: 100%;
+
+    }
+    .buyer-header .input-cnt button{
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue';
+        height: 45px;
+        font-weight: bold;
+        float: right;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        position: relative;
+        width: 100px;
+        background-color: orangered;
+        color: #fff;
+        outline: none;
+        margin-left: 5px;
+        font-weight: 500;
+        border: none;
+
+    }
+
+    
+    
+    .seller-editor{
+        height: 100%;
+        position: relative;
+        width: calc(100% - 280px);
+        background: #f9f9f9;
+        padding: 10px;
+        overflow: hidden;
+        float: right;
+    }
+
+    .seller-editor-cnt{
+        height: calc(100% - 100px);
+        position: relative;
+        width: 100%;
+        background: #f9f9f9;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+        float: right;
+    }
+   .item-cnt{
+        height: 100%;
+        overflow: auto;
+
+        width: calc(100% - 350px);
+        padding: 10px;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue';
+        background-color: #fff;
+    }
+   .item-cnt .item-cnt-btm{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+   .file{
+        display: flex;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue';
+        width: 300px;
+        background-color: #fff;
+        padding: 10px;
+        height: 100%;
+        align-items: flex-start;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+   .file .file-cnt{
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+
+        align-items: center;
+        justify-content: flex-start;
+    }
+   .file-cnt .img-cnt{
+        height: 125px;
+        width: 125px;
+        display: flex;
+        align-items: center;
+        margin: 10px 5px;
+        justify-content: center;
+        flex-wrap: wrap;
+        background: #f9f9f9;
+        font-size: small;
+    }
+   .file-cnt .img-cnt label{
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue';
+        text-align: center;
+        cursor: pointer;
+        font-size: small;
+        font-weight: 500;
+    }
+    .seller-editor-btn-cnt{
+        height: 60px;
+        width: 100%;
+        padding: 15px;
+        background-color: #fff;
+        position: absolute;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        color: #fff;
+        justify-content: flex-end;
+        left: 0;
+    }
+    .seller-editor-btn-cnt button{
+        padding: 10px;
+        outline: none;
+        border: none;
+        display: flex;
+        align-items: center;
+        color: #fff;
+        border-radius: 5px;
+        justify-content: center;
+        background-color: #FF4500;
+    }
+}

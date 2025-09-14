@@ -101,18 +101,18 @@ export function HomeStackScreen() {
                                 {user && (
                                 
                                 <TouchableOpacity
-                                    style={[styles.button, subscribed && styles.subscribedButton]}
+                                    style={[styles.button, styles.subscribedButton]}
                                     onPress={e=> handleSub()}
                                     activeOpacity={0.8}
                                     >
                                     <View style={styles.buttonContent}>
                                         <Icon 
-                                        name={subscribed ? "people-outline" : "people-outline-outline"} 
-                                        size={16} 
-                                        color={subscribed ? "#FFF" : "#FF4500"} 
-                                        style={styles.icon}
+                                            name={"people-outline"} 
+                                            size={16} 
+                                            color={"#fff"} 
+                                            style={styles.icon}
                                         />
-                                        <Text style={[styles.buttonText, subscribed && styles.subscribedText]}>
+                                        <Text style={[styles.buttonText, styles.subscribedText]}>
                                         {user.connects} {user.connects > 1 ? 'vendor connects' : 'vendor connect'}
                                         </Text>
                                     </View>

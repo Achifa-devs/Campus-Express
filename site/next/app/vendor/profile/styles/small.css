@@ -1,0 +1,265 @@
+@media screen and (max-width: 480px) {
+    *{
+        box-sizing: border-box;
+    }
+
+    html,body{
+        height: 100%;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        background-color: #f9f9f9;
+    }
+
+    .buyer-header{
+        height: 70px;
+        width: 100%; 
+        background-color: #fff;
+        display: flex;
+        position: sticky;
+        top: 0;
+        align-items: center;
+        padding: 20px 85px 20px 85px;
+        
+    }
+    .buyer-header .input-cnt{
+        height: 100%;
+        width: 50%;
+        position: relative;
+        display: flex;
+        margin: auto;
+        align-items: center;
+        flex-direction: row;
+
+    }
+    .buyer-header ul{
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        width: 20%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .buyer-header ul li{
+        cursor: pointer;
+        display: flex;
+        white-space: nowrap;
+        align-items: center;
+        color: orangered;
+        font-weight: 500;
+        font-size: small;
+        height: 35px;
+        border-radius: 5px;
+        padding: 0 10px 0 10px;
+        justify-content: space-between;
+    }
+    .buyer-header ul li:hover{
+        background-color: rgb(255, 68, 0);
+        background-color: rgb(255, 68, 0, .1);
+    }
+    .buyer-header .input-cnt input{
+        height: 45px;
+        float: left;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+        font-size: large;
+        padding: 20px;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue';
+        font-weight: bolder;
+        width: 100%;
+
+    }
+    .buyer-header .input-cnt button{
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue';
+        height: 45px;
+        font-weight: bold;
+        float: right;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        position: relative;
+        width: 100px;
+        background-color: orangered;
+        color: #fff;
+        outline: none;
+        margin-left: 5px;
+        font-weight: 500;
+        border: none;
+
+    }
+
+    
+    .seller-profile{
+        height: calc(100% - 110px);
+        position: relative;
+        width: calc(100% - 0px);
+        background: #f9f9f9;
+        padding: 5px;
+        float: right;
+        overflow: auto;
+    }
+    .seller-profile-cnt{
+        height: 100%;
+        position: relative;
+        width: 100%;
+        background: #f9f9f9;
+        padding: 5px;
+        float: right;
+
+    }
+
+    .seller-profile-cnt .top{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 13;
+        background-color: #fff;
+        padding: 5px 5px;
+        margin-bottom: 5px;
+        border-top-right-radius: 10px;
+        border-top-left-radius: 10px;
+    }
+    .seller-profile-cnt .summary{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        font-size: 13;
+        background-color: #fff;
+        padding: 5px 10px;
+        font-weight: 500;
+        margin-bottom: 5px;
+    }
+    .seller-profile-cnt .summary div{
+        height: auto;
+        width: 48%;
+        cursor: pointer;
+        margin: 10px 0px;
+        padding: 8px;
+        background-color: #f9f9f9;
+        border-radius: 13px;
+    }
+    .seller-profile-cnt .mid{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: small;
+        flex-wrap: wrap;
+        background-color: #fff;
+        padding: 5px 10px;
+        margin-bottom: 5px;
+    }
+    .seller-profile-cnt .mid div{
+        width: 50%;
+        height: auto;
+        padding: 5px;
+        float: left;
+        font-size: medium;
+        margin-bottom: 10px;
+        font-weight: 400;
+    }
+    .input-cnt input {
+        height: 100%;
+        width: calc(100% - 0px);
+        padding: 10px 2.5px;
+    }
+    .input-cnt select {
+        height: 100%;
+        width: calc(100% - 0px);
+        padding: 10px 2.5px;
+    }
+    .input-cnt label {
+        font-size: small;
+    }
+    .seller-profile-cnt .mid section{
+        width: 100%;
+        height: auto;
+        float: left;
+        font-size: small;
+        
+        margin-bottom: 5px;
+        font-weight: 400;
+    }
+    .seller-profile-cnt .mid section h3,h6{
+        padding: 0;
+        margin: 10px;
+
+    }
+
+    .seller-profile-cnt .btm{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: small;
+        flex-wrap: wrap;
+        background-color: #fff;
+        padding: 5px 10px;
+        margin-bottom: 5px;
+    }
+    .seller-profile-cnt .btm div{
+        width: 50%;
+        height: auto;
+        padding: 8px;
+        float: left;
+        font-size: small;
+        margin-bottom: 5px;
+        font-weight: 400;
+    }
+    .seller-profile-cnt .btm section{
+        width: 100%;
+        height: auto;
+        float: left;
+        font-size: small;
+        
+        margin-bottom: 5px;
+        font-weight: 400;
+    }
+    .seller-profile-cnt .btm section h3,h6{
+        padding: 0;
+        margin: 10px;
+    }
+
+
+
+    
+
+    .seller-profile ul li{
+        padding: 10px;
+        cursor: pointer;
+        margin: 10px 0px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-start;
+        font-weight: 500;
+        border-radius: 8px;
+    }
+
+    .seller-profile ul li:hover{
+        background-color: #fff4e0;
+    }
+
+    .seller-profile-btn-cnt{
+        height: 60px;
+        width: 100%;
+        padding: 15px;
+        background-color: #fff;
+        position: absolute;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        color: #fff;
+        justify-content: flex-end;
+        left: 0;
+    } 
+    .seller-profile-btn-cnt button{
+        padding: 10px;
+        outline: none;
+        border: none;
+        display: flex;
+        align-items: center;
+        color: #fff;
+        border-radius: 5px;
+        justify-content: center;
+        background-color: #FF4500;
+    }
+}

@@ -59,6 +59,9 @@ const ItemCard = React.memo(({ item, onPress }) => {
         setWishlisted(false)
         setFavLoading(false);
       }
+    } else{
+      setWishlisted(false)
+      setFavLoading(false);
     }
   }, [Fav])
 

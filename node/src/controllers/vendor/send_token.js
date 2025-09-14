@@ -14,7 +14,7 @@ export async function SEND_TOKEN(req, res) {
 export async function SEND_TOKEN_PWD(req, res) {
     
     try {
-        let response = sendTokenPwd(req.body)
+        let response = await sendTokenPwd(req.body);
         res.status(201).json({ success: true, data: response });
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });

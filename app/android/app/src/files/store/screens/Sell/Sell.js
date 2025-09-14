@@ -31,6 +31,7 @@ import { set_products } from '../../../../../../../redux/products';
 import axios from 'axios';
 import { set_boost_modal } from '../../../../../../../redux/boost_modal';
 import { set_sub_modal } from '../../../../../../../redux/sub';
+import { set_shop } from '../../../../../../../redux/shop';
 const { width } = Dimensions.get('window');
 
 const ShopScreen = () => {
@@ -236,18 +237,19 @@ const ShopScreen = () => {
       let response = await result.json(); 
       console.log(response)
       if (response?.success) {
+        dispatch(set_shop(response.data))
         setShopExists(true);
-        
       }
     })
     .catch((error) => {
       setIsLoading(!true)
-      
       console.log(error)
     })
     // After successful submission:
     // setShopExists(true);
   };
+
+ 
 
   const removePhoto = async () => {
     await deleteFromServer(shopLogo)

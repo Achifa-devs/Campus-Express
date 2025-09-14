@@ -48,11 +48,12 @@ export const postNewShop = async (payload) => {
       address2,
       address3,
       user_id
-     });
+    });
   
     return response;
   } catch (error) {
     console.log(error)
+    return false
   }
 };
 
