@@ -37,7 +37,7 @@ const Listing = () => {
   const onDelete = async (item, type='image') => {
     setIsLoading(true)
     try {
-      const response = await axios.get('http://192.168.0.4:9090/vendor/delete-product', {params: {product_id: item.product_id, type: type}});
+      const response = await axios.get('https://cs-server-olive.vercel.app/vendor/delete-product', {params: {product_id: item.product_id, type: type}});
   
       const result = await response.data;
       if(result.success){

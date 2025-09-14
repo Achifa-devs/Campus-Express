@@ -43,6 +43,8 @@ import VendorConnectionsModal from './android/app/src/files/store/screens/Connec
 import { set_connect_purchase_modal } from './redux/connect_purchase.js';
 import AdModal from './android/app/src/files/store/utils/Ads.js';
 import { set_ads_modal } from './redux/ads_modal.js';
+import DisruptiveAdModal from './android/app/src/files/store/utils/DisruptiveModal.js';
+import { set_sponsored_modal } from './redux/disruptor.js';
 // import { set_campus } from './redux/reducer/location.js';   // ✅ add correct reducer
 // import { closeModal } from './redux/reducer/locale.js';      // ✅ add correct reducer
 
@@ -183,6 +185,7 @@ function NavCnt() {
   const { sub_modal } = useSelector(s => s.sub_modal);
   const { ads_modal } = useSelector(s => s.ads_modal);
   const { boost_modal } = useSelector(s => s.boost_modal);
+  const { sponsored_modal } = useSelector(s => s.sponsored_modal);
   const { connect_modal } = useSelector(s => s.connect_modal);
   const { connect_purchase_modal } = useSelector(s => s.connect_purchase_modal);
   const dispatch = useDispatch();
@@ -363,6 +366,15 @@ function NavCnt() {
           
           <PromotionSubscriptionsModal  onSelectPackage={''} onClose={e=> dispatch(set_boost_modal(0))} />: ''
         )
+      } 
+
+      {
+        // (
+          // sponsored_modal.visible === 1 ? 
+          
+          // <DisruptiveAdModal visible={sponsored_modal.visible === 1 ? true: false}  onSelectPackage={''} onClose={e=> dispatch(set_sponsored_modal(0))} />
+          // : ''
+        // )
       } 
 
     </SafeAreaProvider>

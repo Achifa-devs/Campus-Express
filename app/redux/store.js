@@ -17,6 +17,7 @@ import ads_modal from './ads_modal'
 import connect_modal from './connect'
 import subscribed from './subscribed'
 import products from './products'
+import sponsored_modal from './disruptor'
 import connect_purchase_modal from './connect_purchase'
 let store = configureStore({
   reducer: {
@@ -24,6 +25,7 @@ let store = configureStore({
     auth: userAuth,
     cookie: cookie,
     products: products,
+    sponsored_modal: sponsored_modal,
     sub_modal: sub_modal,
     boost_modal: boost_modal,
     ads_modal: ads_modal,

@@ -79,12 +79,18 @@ export async function createShop({
   user_id
  }) {
   
+  const subscription = {
+    "plan": "free",
+    "start_date": new Date(),
+    "end_date": "NUll",
+    "updated_at": new Date()
+  }
   const result = await pool.query(
     `INSERT INTO shops (
-        id,shop_id,user_id,title,category,status,description,logo_url,open_hrs,social_links,is_verified,created_at,street,lodge,town,views
+        id,shop_id,user_id,title,category,status,description,logo_url,open_hrs,social_links,is_verified,created_at,street,lodge,town,views,subscription
     ) VALUES (
         DEFAULT,
-        '${await shortId.generate(10)}', '${user_id}', '${shopName}', '', 'active', '${description}', '${logo}', '', '', ${false}, '${new Date()}', '${address1}', '${address2}', '${address3}', ${0}
+        '${await shortId.generate(10)}', '${user_id}', '${shopName}', '', 'active', '${description}', '${logo}', '', '', ${false}, '${new Date()}', '${address1}', '${address2}', '${address3}', ${0}, ${subscription}
     )`
   );
   let response = await errorHandler(result?.rowCount);
