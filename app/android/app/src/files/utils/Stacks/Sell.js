@@ -83,7 +83,7 @@ export function SellStackScreen() {
                   {/* Logo */}
                   <TouchableOpacity style={styles.logoContainer} onPress={() => navigation.navigate('user-shop')}>
                       <Image 
-                        source={{ uri: shop && shop?.logo_url }} 
+                        source={{ uri: shop ? shop?.logo_url : 'https://res.cloudinary.com/daqbhghwq/image/upload/e_background_removal/f_png/v1750632165/20250622_233137_0000_lq4yjm.png' }} 
                         style={styles.logo}
                         // resizeMode="contain"
                       />
