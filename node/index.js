@@ -683,9 +683,14 @@ cron.schedule("0 0 * * *", () => {
 // If you also want to run immediately at server start, uncomment below
 // checkAndUpdatePromotions(); 
 
-
-
-
+cron.schedule("* * * * *", async () => {
+  try {
+    await pool.query("DELETE FROM token WHERE expires_at < NOW() - INTERVAL '1 minute'");
+    console.log("Expired tokens deleted");
+  } catch (err) {
+    console.error("Error deleting tokens:", err);
+  }
+});
 
 
 

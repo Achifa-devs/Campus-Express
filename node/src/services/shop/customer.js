@@ -111,27 +111,44 @@ export const postResetCustomerEmail = async (payload) => {
 
 export const postConfirmEmail = async (payload) => {
   const { email } = payload;
+  
   const token = generateNumericToken();
-  let hashedToken = await bcrypt.hash(token, 10)
-  
+  const hashedToken = await bcrypt.hash(token, 10);
 
-  // Business logic
-  let user = await findUserByEmail({ email });
-  if (user) {
-    let response = await createToken('email', hashedToken, user?.email);
-    if (response) {
-      let template = tokenTemplate(`${user?.fname} ${user?.lname}`, token, user?.email);
-      // let template = await send_mail_via_brevo(`${user?.fname} ${user?.lname}`, token, user?.email);
-      await send_email('Email confirmation', template, user?.email);
-      return response;
-
+  try {
+    // Check user
+    const user = await findUserByEmail({ email });
+    if (!user) {
+      throw new Error("User not found.");
     }
-    throw new Error("Error occured, try again.");
-    
-  
-    // console.log(response)
- }
+
+    // Store token
+    const isTokenCreated = await createToken("email", hashedToken, user.email);
+    if (!isTokenCreated) {
+      throw new Error("Failed to create token.");
+    }
+
+    // Generate email template (sync or async depending on your tokenTemplate)
+    const template = tokenTemplate(
+      `${user.fname} ${user.lname}`,
+      token,
+      user.email
+    );
+
+    // Send email
+    const sent = await send_email("Email confirmation", template, user.email);
+
+    if (!sent) {
+      throw new Error("Failed to send confirmation email.");
+    }
+
+    return true; // Success
+  } catch (error) {
+    console.error("postConfirmEmail error:", error.message);
+    throw new Error("Internal server error.");
+  }
 };
+
 
 export const postResetCustomerPhone = async (payload) => {
   const { phone, user_id } = payload;
