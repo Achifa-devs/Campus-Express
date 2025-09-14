@@ -35,22 +35,30 @@ export const getCustomer = async (payload) => {
 export const postVerifyToken = async (payload) => {
   const { token, email } = payload;
 
-  // Business logic
-  const hashedToken = await findTokenByEmail({ email });
-  if (!hashedToken) {
-    throw new Error("Error getting token.");
 
-  }
-  console.log(token, hashedToken.token)
-  const tokenAuth = await bcrypt.compare(token, hashedToken.token);
-  if (tokenAuth) {
+  try {
+    // 1. Find token stored for this user
+    const hashedToken = await findTokenByEmail({ email });
+    if (!hashedToken) {
+      throw new Error("No token found for this email.");
+    }
+
+    // 2. Compare raw token with hashed token
+    const isValid = await bcrypt.compare(token, hashedToken.token);
+
+    if (!isValid) {
+      throw new Error("Invalid or expired token. Try again in the next 30 minutes.");
+    }
+
+    // 3. Token is valid → remove it to prevent reuse
     await deleteTokenByEmail({ email });
     return true;
+  } catch (err) {
+    console.error("Token verification error:", err.message);
+    return false; // you can throw if you prefer
   }
-  throw new Error("Error verifying token, Try again in the next 30 minutes.");
-  
-
 };
+
 
 export const postNewCustomer = async (payload) => {
   const { fname,lname,email,phone,pwd,state,campus,gender } = payload;
