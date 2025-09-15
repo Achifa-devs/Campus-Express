@@ -42,6 +42,7 @@ import { set_connect_modal } from '../../../../../../redux/connect.js';
 import { set_user } from '../../../../../../redux/user.js';
 import useInsufficientConnectAlert from '../utils/ConnectZero.js';
 import { set_ads_modal } from '../../../../../../redux/ads_modal.js';
+import { set_sponsored_modal } from '../../../../../../redux/disruptor.js';
 
 export default function Product() {
   const route = useRoute();
@@ -312,17 +313,15 @@ export default function Product() {
     setShop(data)
   }
 
-  const { ads_modal } = useSelector(s => s.ads_modal);
+  const { sponsored_modal } = useSelector(s => s.sponsored_modal);
+
   
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (e) => {
       console.log("User is going back or leaving this screen");
       console.log("Action type:", e.data.action.type); // e.g. "POP", "GO_BACK"
-      if(ads_modal.data === 1){
-        dispatch(set_ads_modal({data: 0, visible: 1}))
-      }else{
-        dispatch(set_ads_modal({data: 1, visible: 0}))
-      }
+      dispatch(set_sponsored_modal({data: null, visible: 1}))
+
       // If you want to prevent going back:
       // e.preventDefault();
     });

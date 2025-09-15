@@ -10,6 +10,7 @@ import {
   StatusBar,
   AppState,
   Linking,
+  Alert,
 } from 'react-native';
 import { PaystackProvider } from 'react-native-paystack-webview';
 import { NavigationContainer, useFocusEffect, useNavigationState, useRoute } from '@react-navigation/native';
@@ -301,13 +302,32 @@ function NavCnt() {
     getPlans()
   }, [user])
 
-  
+  useEffect(() => {
+    const fetchSponsors = async () => {
+      try {
+        const resp = await axios.get('https://cs-server-olive.vercel.app/sponsorship', {
+          params: { campus: user?.campus },
+        });
+
+        const data = await resp?.data;
+        console.log('data from sponsors: ', data);
+        storeData('sponsored', JSON.stringify(data));
+
+      } catch (error) {
+        console.log("Request failed, retrying in", error);
+      }
+    };
+
+    fetchSponsors();
+  }, [user]); // runs whenever campus changes
+
+
+     
   return (
     <SafeAreaProvider style={{ flex: 1 }}>
 
-      {/* {mode === 'shop' && <Shop />} */}
-      {/* {mode === 'auth' && <AuthStackScreen />} */}
-      <AuthStackScreen />
+      {mode === 'shop' && <Shop />}
+      {mode === 'auth' && <AuthStackScreen />} 
       {
         (
           <BottomModal
@@ -368,15 +388,15 @@ function NavCnt() {
       } 
 
       {
-        // (
-          // sponsored_modal.visible === 1 ? 
+        (
+          sponsored_modal.visible === 1 ? 
           
-          // <DisruptiveAdModal visible={sponsored_modal.visible === 1 ? true: false}  onSelectPackage={''} onClose={e=> dispatch(set_sponsored_modal(0))} />
-          // : ''
-        // )
+          <DisruptiveAdModal visible={sponsored_modal.visible === 1 ? true: false}  onSelectPackage={''} onClose={e=> dispatch(set_sponsored_modal({data: null, visible: 0}))} />
+          : ''
+        )
       } 
 
-    </SafeAreaProvider>
+    </SafeAreaProvider> 
   );
 }
 // --------------------

@@ -172,10 +172,10 @@ const SubscriptionScreen = () => {
         style={[
           styles.packageCard,
           isCurrent && styles.currentPackageCard,
-          planKey === 'Premium' && styles.premiumPackageCard,
+          planKey.toLowerCase() === 'premium' && styles.premiumPackageCard,
         ]}
       >
-        {planKey === 'Premium' && !isCurrent && (
+        {planKey.toLowerCase() === 'premium' && !isCurrent && (
           <LinearGradient
             colors={['#FF6B35', '#FF4500']}
             style={styles.popularBadge}

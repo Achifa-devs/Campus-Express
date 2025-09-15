@@ -503,6 +503,42 @@ CAMPUSSPHERE_SERVER.get('/promo', async (req, res) => {
   }
 });
 
+CAMPUSSPHERE_SERVER.get('/sponsorship', async (req, res) => {
+
+  const {campus} = req?.query;
+
+  try {
+    // Get seller's products
+    const result = await pool.query(
+      `
+        SELECT 
+          u.user_id AS user_id,
+          u.fname,            
+          u.lname,            
+          u.phone,            
+          u.campus,          
+          ARRAY_AGG(p.*) AS products
+        FROM vendor_tools_subscription s
+        JOIN users u 
+          ON s.user_id = u.user_id
+        JOIN products p 
+          ON p.user_id = u.user_id
+        WHERE s.plan = 'premium'
+          AND ($1::text IS NULL OR u.campus = $1::text)
+        GROUP BY u.user_id, u.fname, u.lname, u.phone, u.campus;
+      `,
+      [campus === null || campus === 'null' || campus === '' ? 'NULL' : campus]
+    );
+    console.log(result.rows)
+    // Return combined data 
+    res.status(200).send(result.rows);
+
+  } catch (err) {
+    console.error('DB Error:', err);
+    res.status(500).send({ error: 'Server Error' });
+  }
+});
+
 CAMPUSSPHERE_SERVER.get('/plans', async (req, res) => {
   try {
     const promoPlans = await pool.query(`SELECT * FROM promo_plans`);
