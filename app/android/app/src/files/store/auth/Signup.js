@@ -3,7 +3,6 @@ import {
   ActivityIndicator,
   Alert,
   Dimensions,
-  FlatList,
   Image,
   KeyboardAvoidingView,
   Platform,
@@ -13,7 +12,8 @@ import {
   TextInput,
   TouchableOpacity,
   Vibration,
-  View
+  View,
+  Keyboard
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import DropdownExample from '../../utils/DropDown.js';
@@ -24,9 +24,6 @@ import { useDispatch } from 'react-redux';
 import { setUserAuthTo } from '../../../../../../redux/reducer/auth.js';
 
 const Signup = ({updateActiveJsx}) => {
-    const screenHeight = Dimensions.get("window").height;
-    const screenWidth = Dimensions.get("window").width;
-    const [id, setId] = useState('')
   const [formData, setFormData] = useState({
     fname: '',
     lname: '',
@@ -51,86 +48,7 @@ const Signup = ({updateActiveJsx}) => {
   const [campusLocaleList, setCampusLocaleList] = useState([]);
   const navigation = useNavigation();
   const [serverErr, setServerErr] = useState('');
- 
-
-  // Form fields configuration
-  const formFields = [
-    {
-      id: 'fname',
-      label: 'First name',
-      type: 'text',
-      placeholder: 'Enter first name',
-      keyboardType: 'default',
-      error: errors.fname,
-      halfWidth: true
-    },
-    {
-      id: 'lname',
-      label: 'Last name',
-      type: 'text',
-      placeholder: 'Enter last name',
-      keyboardType: 'default',
-      error: errors.lname,
-      halfWidth: true 
-    }, 
-    {
-      id: 'email',
-      label: 'Email',
-      type: 'text',
-      placeholder: 'Enter email',
-      keyboardType: 'email-address',
-      error: errors.email,
-      halfWidth: false
-    },
-    {
-      id: 'phone',
-      label: 'WhatsApp number',
-      type: 'tel',
-      placeholder: 'Enter your whatsapp number',
-      keyboardType: 'numeric',
-      error: errors.phone,
-      halfWidth: false
-    },
-    {
-      id: 'pwd',
-      label: 'Password',
-      type: 'password',
-      placeholder: 'Enter password',
-      keyboardType: 'default',
-      error: errors.pwd,
-      halfWidth: false,
-      rightIcon: (
-        <TouchableOpacity 
-          onPress={() => setIsPwdVisible(!isPwdVisible)}
-          style={styles.eyeIcon}
-        >
-          <Text>{isPwdVisible ? '👁️' : '👁️‍🗨️'}</Text>
-        </TouchableOpacity>
-      )
-    },
-    {
-      id: 'state',
-      label: 'State',
-      type: 'dropdown',
-      data: data,
-      fieldName: 'label',
-      name: 'state',
-      placeholder: 'Select state',
-      error: errors.state,
-      halfWidth: false
-    },
-    {
-      id: 'campus',
-      label: 'Campus',
-      type: 'dropdown',
-      data: campusLocaleList,
-      fieldName: 'text',
-      name: 'campus',
-      placeholder: 'Select campus',
-      error: errors.campus,
-      halfWidth: false
-    }
-  ];
+  const [focusedInput, setFocusedInput] = useState(null);
 
   useEffect(() => {
     if (formData.state) {
@@ -144,8 +62,8 @@ const Signup = ({updateActiveJsx}) => {
 
   const updateData = useCallback((value, name) => {
     setFormData(prev => ({ ...prev, [name]: value }));
-    // Clear error when field is updated
     setErrors(prev => ({ ...prev, [name]: '' }));
+    setServerErr('');
   }, []);
 
   const validateField = useCallback((field, value) => {
@@ -192,10 +110,10 @@ const Signup = ({updateActiveJsx}) => {
     return isValid;
   }, [formData, validateField]);
     
-    const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const handleSignup = useCallback(async () => {
-    setServerErr('')
+    setServerErr('');
     if (!validateForm()) {
       Vibration.vibrate(300);
       return;
@@ -203,33 +121,21 @@ const Signup = ({updateActiveJsx}) => {
 
     setServerLoading(true);
     try {
-      // Simulate API call
-    //   await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Replace with actual API call
-      
       const response = await fetch('https://cs-server-olive.vercel.app/vendor/registration', {
         method: 'POST',
         headers: { "Content-Type": "Application/json" },
         body: JSON.stringify(formData)
       });
       const data = await response.json();
-      console.log(data)
+      console.log(data);
        
-    if (data.success) {
+      if (data.success) {
         await storeData('user', JSON.stringify(data.data.user));
-        dispatch(setUserAuthTo(false))
-        console.log(data)
-    } else {
-        // Handle specific errors
-        setServerErr(data.message)
+        dispatch(setUserAuthTo(false));
+      } else {
+        setServerErr(data.message);
         Vibration.vibrate(300);
- 
-    }
-      
-      
-      // For demo purposes, navigate after "successful" signup
-    //   navigation.navigate('user-login');
+      }
     } catch (error) {
       console.error('Signup error:', error);
       Alert.alert('Error', 'Failed to sign up. Please try again.');
@@ -238,191 +144,280 @@ const Signup = ({updateActiveJsx}) => {
     }
   }, [formData, navigation, validateForm]);
 
-
-
   const inputRefs = useRef({});
   const scrollViewRef = useRef();
 
   const focusNextField = (nextField) => {
-      inputRefs.current[nextField]?.focus();
+    inputRefs.current[nextField]?.focus();
   };
 
-  const handleInputFocus = (event, fieldId) => {
-      // Measure the input position and scroll to it
-      const scrollResponder = scrollViewRef.current?.getScrollResponder();
-      if (scrollResponder) {
-          scrollResponder.scrollResponderScrollNativeHandleToKeyboard(
-              event.target,
-              0, // extra offset
-              true
-          );
-      }
+  const handleInputFocus = (fieldId) => {
+    setFocusedInput(fieldId);
   };
 
-    const renderItem = useCallback(({ item }) => {
-      if (item.type === 'dropdown') {
-        return (
-          <View style={[styles.inputContainer, item.halfWidth && styles.halfWidthContainer]}>
-            <Text style={styles.label}>{item.label}</Text>
-            <DropdownExample
-              dropdownPosition="top"
-              fieldName={item.fieldName}
-              updateData={updateData}
-              dropdownData={item.data}
-              input_name={item.id}
-              placeholder={item.placeholder}
-            />
-            {item.error ? <Text style={styles.errorText}>{item.error}</Text> : null}
-          </View>
-        );
-      }
+  const handleInputBlur = () => {
+    setFocusedInput(null);
+  };
 
-        return (
-            <View style={[styles.inputContainer, item.halfWidth && styles.halfWidthContainer]}>
-                <Text style={styles.label}>{item.label}</Text>
-                <View style={styles.inputWrapper}>
-                    <TextInput
-                        ref={ref => inputRefs.current[item.id] = ref}
-                        style={styles.input}
-                        placeholder={item.placeholder}
-                        value={formData[item.id]}
-                        onChangeText={(text) => updateData(text, item.id)}
-                        secureTextEntry={item.type === 'password' && !isPwdVisible}
-                        keyboardType={item.keyboardType || 'default'}
-                        onFocus={(event) => handleInputFocus(event, item.id)}
-                        blurOnSubmit={item.id !== 'pwd'}
-                        onSubmitEditing={() => {
-                            if (item.id !== 'pwd') {
-                                const nextField = getNextField(item.id);
-                                if (nextField) {
-                                    focusNextField(nextField);
-                                }
-                            } else {
-                                Keyboard.dismiss();
-                            }
-                        }}
-                        returnKeyType={item.id === 'pwd' ? 'done' : 'next'}
-                    />
-                    {item.rightIcon || null}
-                </View>
-                {item.error ? <Text style={styles.errorText}>{item.error}</Text> : null}
-            </View>
-        );
-    }, [formData, isPwdVisible, updateData]);
+  const formFields = [
+    {
+      id: 'fname',
+      label: 'First name',
+      type: 'text',
+      placeholder: 'Enter first name',
+      keyboardType: 'default',
+      error: errors.fname,
+      halfWidth: true
+    },
+    {
+      id: 'lname',
+      label: 'Last name',
+      type: 'text',
+      placeholder: 'Enter last name',
+      keyboardType: 'default',
+      error: errors.lname,
+      halfWidth: true 
+    }, 
+    {
+      id: 'email',
+      label: 'Email',
+      type: 'text',
+      placeholder: 'Enter email',
+      keyboardType: 'email-address',
+      error: errors.email
+    },
+    {
+      id: 'phone',
+      label: 'WhatsApp number',
+      type: 'tel',
+      placeholder: 'Enter your whatsapp number',
+      keyboardType: 'numeric',
+      error: errors.phone
+    },
+    {
+      id: 'pwd',
+      label: 'Password',
+      type: 'password',
+      placeholder: 'Enter password',
+      keyboardType: 'default',
+      error: errors.pwd,
+      rightIcon: (
+        <TouchableOpacity 
+          onPress={() => setIsPwdVisible(!isPwdVisible)}
+          style={styles.eyeIcon}
+        >
+          <Text style={styles.eyeIconText}>{isPwdVisible ? '👁️' : '👁️‍🗨️'}</Text>
+        </TouchableOpacity>
+      )
+    },
+    {
+      id: 'state',
+      label: 'State',
+      type: 'dropdown',
+      data: data,
+      fieldName: 'label',
+      name: 'state',
+      placeholder: 'Select state',
+      error: errors.state
+    },
+    {
+      id: 'campus',
+      label: 'Campus',
+      type: 'dropdown',
+      data: campusLocaleList,
+      fieldName: 'text',
+      name: 'campus',
+      placeholder: 'Select campus',
+      error: errors.campus
+    }
+  ];
 
-    const getNextField = (currentField) => {
-        const currentIndex = formFields.findIndex(field => field.id === currentField);
-        if (currentIndex < formFields.length - 1) {
-            return formFields[currentIndex + 1].id;
-        }
-        return null;
-    };
+  const renderInputField = useCallback((item) => {
+    if (item.type === 'dropdown') {
+      return (
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>{item.label}</Text>
+          <DropdownExample
+            dropdownPosition="top"
+            fieldName={item.fieldName}
+            updateData={updateData}
+            dropdownData={item.data}
+            input_name={item.id}
+            placeholder={item.placeholder}
+          />
+          {item.error ? <Text style={styles.errorText}>{item.error}</Text> : null}
+        </View>
+      );
+    }
 
     return (
-        <>
-          
-            {serverLoading && (
-                <View style={styles.loadingOverlay}>
-                    <ActivityIndicator size="large" color="#FF4500" />
-                </View>
-            )}
-
-            <KeyboardAvoidingView
-                behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-                keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}
-                style={{ flex: 1 }}
-            >
-                <ScrollView
-                    ref={scrollViewRef}
-                    style={styles.container}
-                    contentContainerStyle={styles.formContainer}
-                    showsVerticalScrollIndicator={false}
-                    keyboardShouldPersistTaps="handled"
-                    automaticallyAdjustContentInsets={false}
-                    contentInset={{ bottom: 100 }} // Extra space at bottom
-                >
-                    <View style={styles.header}>
-                        <View style={styles.logoContainer}>
-                            <Image 
-                                style={styles.logo} 
-                                source={{ uri: 'https://res.cloudinary.com/daqbhghwq/image/upload/v1746402998/Untitled_design-removebg-preview_peqlme.png' }} 
-                            />
-                        </View>
-                        <Text style={styles.title}>Registration Form</Text>
-                        <Text style={[styles.title, {fontSize: 12, color: 'red', textDecoration: 'underline'}]}>{serverErr}</Text>
-                    </View>
-                    
-                    {formFields.map((item) => renderItem({ item }))}
-                </ScrollView>
-            </KeyboardAvoidingView>
-
-            <View style={styles.footer}>
-                <TouchableOpacity 
-                    onPress={() => navigation.navigate('user-login')} 
-                    style={styles.loginLink}
-                    disabled={serverLoading ? true : false}
-                >
-                    <Text style={styles.loginText}>Already Have An Account? </Text>
-                    <Text style={[styles.loginText, styles.loginTextBold]}>SignIn Here</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity 
-                    style={styles.signupButton} 
-                    onPress={handleSignup}
-                    disabled={serverLoading}
-                >
-                    <Text style={styles.signupButtonText}>
-                        {serverLoading ? 'Processing...' : 'Signup'}
-                    </Text>
-                </TouchableOpacity>
-            </View>
-        </>
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>{item.label}</Text>
+        <View style={[
+          styles.inputWrapper, 
+          focusedInput === item.id && styles.inputFocused,
+          item.error && styles.inputError
+        ]}>
+          <TextInput
+            ref={ref => inputRefs.current[item.id] = ref}
+            style={styles.input}
+            placeholder={item.placeholder}
+            value={formData[item.id]}
+            onChangeText={(text) => updateData(text, item.id)}
+            secureTextEntry={item.type === 'password' && !isPwdVisible}
+            keyboardType={item.keyboardType || 'default'}
+            onFocus={() => handleInputFocus(item.id)}
+            onBlur={handleInputBlur}
+            blurOnSubmit={item.id !== 'pwd'}
+            onSubmitEditing={() => {
+              if (item.id !== 'pwd') {
+                const nextField = getNextField(item.id);
+                if (nextField) {
+                  focusNextField(nextField);
+                }
+              } else {
+                Keyboard.dismiss();
+              }
+            }}
+            returnKeyType={item.id === 'pwd' ? 'done' : 'next'}
+            placeholderTextColor="#999"
+            editable={!serverLoading}
+          />
+          {item.rightIcon || null}
+        </View>
+        {item.error ? <Text style={styles.errorText}>{item.error}</Text> : null}
+      </View>
     );
+  }, [formData, isPwdVisible, updateData, focusedInput, serverLoading]);
+
+  const getNextField = (currentField) => {
+    const currentIndex = formFields.findIndex(field => field.id === currentField);
+    if (currentIndex < formFields.length - 1) {
+      return formFields[currentIndex + 1].id;
+    }
+    return null;
+  };
+
+  return (
+    <View style={styles.container}>
+      {serverLoading && (
+        <View style={styles.loadingOverlay}>
+          <ActivityIndicator size="large" color="#FF4500" />
+          <Text style={styles.loadingText}>Creating your account...</Text>
+        </View>
+      )}
+
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.keyboardAvoidView}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+      >
+        <ScrollView
+          ref={scrollViewRef}
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
+          <View style={styles.header}>
+            <View style={styles.logoContainer}>
+              <Image 
+                style={styles.logo} 
+                source={{ uri: 'https://res.cloudinary.com/daqbhghwq/image/upload/v1746402998/Untitled_design-removebg-preview_peqlme.png' }} 
+              />
+            </View>
+            <Text style={styles.title}>Create Account</Text>
+            <Text style={styles.subtitle}>Join our community today</Text>
+            
+            {serverErr ? (
+              <View style={styles.errorBanner}>
+                <Text style={styles.errorBannerText}>{serverErr}</Text>
+              </View>
+            ) : null}
+          </View>
+          
+          {/* First row (fname + lname) */}
+          <View style={styles.formRow}>
+            {formFields.slice(0, 2).map((item) => (
+              <View key={item.id} style={styles.halfWidthContainer}>
+                {renderInputField(item)}
+              </View>
+            ))}
+          </View>
+          
+          {/* Other fields */}
+          {formFields.slice(2).map((item) => (
+            <View key={item.id}>
+              {renderInputField(item)}
+            </View>
+          ))}
+        </ScrollView>
+      </KeyboardAvoidingView>
+
+      <View style={styles.footer}>
+        <TouchableOpacity 
+          onPress={() => navigation.navigate('user-login')} 
+          style={styles.loginLink}
+          disabled={serverLoading}
+        >
+          <Text style={styles.loginText}>Already have an account? </Text>
+          <Text style={[styles.loginText, styles.loginTextBold]}>Sign in</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          style={[styles.signupButton, serverLoading && styles.signupButtonDisabled]} 
+          onPress={handleSignup}
+          disabled={serverLoading}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.signupButtonText}>
+            {serverLoading ? 'Creating Account...' : 'Create Account'}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
 };
-
-
-
-
-
-
-
-
-
-
-
-// ... (keep your existing styles)
-const screenWidth = Dimensions.get("window").width;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF',
+    backgroundColor: '#FFFFFF',
+  },
+  keyboardAvoidView: {
+    flex: 1,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    padding: 20,
+    paddingBottom: 120,
   },
   loadingOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 10,
+    zIndex: 1000,
+  },
+  loadingText: {
+    marginTop: 16,
+    color: '#FF4500',
+    fontSize: 16,
   },
   header: {
     alignItems: 'center',
-    backgroundColor: '#FFF',
-    borderColor: '#fff',
-    width: '100%',
-    paddingTop: 20,
-    paddingBottom: 30,
+    marginBottom: 30,
   },
   logoContainer: {
-    height: 100,
     width: 100,
+    height: 100,
     borderRadius: 50,
-    borderWidth: 4,
-    borderColor: '#fff',
+    backgroundColor: '#FFF',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 10,
-    backgroundColor: '#FFF',
+    marginBottom: 20,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -430,55 +425,82 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   logo: {
-    height: 80,
     width: 80,
+    height: 80,
     resizeMode: 'contain',
   },
   title: {
+    fontSize: 24,
+    fontWeight: 'bold',
     color: '#FF4500',
-    fontWeight: '500',
-    fontSize: 20,
-    marginBottom: 10,
+    marginBottom: 8,
   },
-  formContainer: {
-    padding: 16,
-    paddingBottom: 200,
-    display: 'flex', justifyContent: 'space-between',backgroundColor: '#fff', flexDirection: 'row', flexWrap: 'wrap'
+  subtitle: {
+    fontSize: 16,
+    color: '#666',
+    marginBottom: 16,
   },
-  inputContainer: {
-    marginBottom: 15,
-    width: screenWidth*.9
+  errorBanner: {
+    backgroundColor: '#FFEBEE',
+    padding: 12,
+    borderRadius: 8,
+    width: '100%',
+    alignItems: 'center',
+  },
+  errorBannerText: {
+    color: '#D32F2F',
+    fontSize: 14,
+  },
+  formRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 16,
   },
   halfWidthContainer: {
-    width: screenWidth*.4,
+    width: '48%',
+  },
+  inputContainer: {
+    marginBottom: 20,
+    width: '100%',
   },
   label: {
-    marginBottom: 5,
-    color: '#333',
     fontSize: 14,
+    fontWeight: '600',
+    color: '#333',
+    marginBottom: 8,
   },
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: 1,
+    borderWidth: 1, 
     borderColor: '#DDD',
-    borderRadius: 5,
+    borderRadius: 8,
     backgroundColor: '#FFF',
     overflow: 'hidden',
+  },
+  inputFocused: {
+    borderColor: '#FF4500',
+  },
+  inputError: {
+    borderColor: '#D32F2F',
   },
   input: {
     flex: 1,
     height: 50,
-    paddingHorizontal: 15,
+    paddingHorizontal: 16,
     fontSize: 16,
+    color: '#333',
   },
   eyeIcon: {
     padding: 15,
   },
+  eyeIconText: {
+    fontSize: 18,
+  },
   errorText: {
-    color: 'red',
+    color: '#D32F2F',
     fontSize: 12,
-    marginTop: 3,
+    marginTop: 5,
     paddingLeft: 5,
   },
   footer: {
@@ -486,31 +508,39 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#EEE',
     backgroundColor: '#FFF',
-    position: 'absolute', bottom: 0, zIndex: 1000, width: '100%'
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 5,
   },
   loginLink: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginBottom: 15,
+    marginBottom: 20,
   },
   loginText: {
-    color: '#FF4500',
-    fontSize: 14,
+    color: '#666',
+    fontSize: 15,
   },
   loginTextBold: {
-    fontWeight: 'bold',
+    fontWeight: '600',
+    color: '#FF4500',
   },
   signupButton: {
     backgroundColor: '#FF4500',
     height: 50,
-    borderRadius: 5,
+    borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  signupButtonDisabled: {
+    backgroundColor: '#FFA280',
   },
   signupButtonText: {
     color: '#FFF',
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: '600',
   },
 });
 

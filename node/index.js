@@ -325,7 +325,6 @@ CAMPUSSPHERE_SERVER.post('/delete', async (req, res) => {
   }
 });
 
-
 CAMPUSSPHERE_SERVER.get('/image-folder', (req,res) => {
   let {folderName} = req.query
   // Configure Cloudinary with your credentials
@@ -349,7 +348,6 @@ CAMPUSSPHERE_SERVER.get('/image-folder', (req,res) => {
   // Call the function and pass the folder name you want to fetch assets from
   fetchFolderAssets(folderName);
 })
-
 
 CAMPUSSPHERE_SERVER.get('/vendor/report', async (req, res) => {
   const { user_id } = req.query;
@@ -445,7 +443,6 @@ CAMPUSSPHERE_SERVER.post('/update-photo', parser, async (req, res) => {
 
 });
 
-
 CAMPUSSPHERE_SERVER.get('/packages', async (req, res) => {
 
   try {
@@ -506,7 +503,6 @@ CAMPUSSPHERE_SERVER.get('/promo', async (req, res) => {
   }
 });
 
-
 CAMPUSSPHERE_SERVER.get('/plans', async (req, res) => {
   try {
     const promoPlans = await pool.query(`SELECT * FROM promo_plans`);
@@ -524,7 +520,6 @@ CAMPUSSPHERE_SERVER.get('/plans', async (req, res) => {
     res.status(500).json({ error: 'Server Error' });
   }
 });
-
 
 CAMPUSSPHERE_SERVER.post('/minus-connect', parser, async (req, res) => {
 
@@ -549,7 +544,6 @@ CAMPUSSPHERE_SERVER.post('/minus-connect', parser, async (req, res) => {
     res.status(500).send({ error: 'Server Error' });
   }
 });
-
 
 CAMPUSSPHERE_SERVER.get('/boosted-metrics', parser, async (req, res) => {
 
@@ -631,31 +625,29 @@ async function checkAndUpdatePromotions() {
     `);
 
     const now = new Date();
-    console.log("promotionsRes: ", promotionsRes)
-
 
     for (const promo of promotionsRes.rows) {
       const { id, product_id, start_date, end_date } = promo;
       const endDate = new Date(end_date);
 
-      console.log(end_date)
       // 2. Check if promotion is expired
-      if (!endDate < now) {
+      if (endDate < now) {
         console.log(
           `Promotion ${id} for product ${product_id} has expired. Updating product...`
         ); 
 
-        // Update Products table
+        // Update Products table → remove promotion flag
         await pool.query(
-          `UPDATE products SET promotion = FALSE WHERE product_id = $1`,
+          `UPDATE products SET promotion = FALSE WHERE id = $1`,
           [product_id]
         );
 
-        // Mark promotion as inactive
+        // Mark promotion as inactive (safer than deleting)
         await pool.query(
           `UPDATE promotions SET is_active = FALSE WHERE id = $1`,
           [id]
         );
+
       } else {
         // Still active → log remaining time
         const timeRemaining = endDate - now;
@@ -666,9 +658,61 @@ async function checkAndUpdatePromotions() {
       }
     }
 
-    // pool.release();
   } catch (err) {
     console.error("Error checking promotions:", err);
+  }
+}
+
+async function checkAndUpdateSubscriptions() {
+  try {
+    // 1. Get all active subscriptions
+    const subscriptionsRes = await pool.query(`
+      SELECT id, user_id, start_date, end_date
+      FROM vendor_tools_subscription
+    `);
+
+    const now = new Date();
+
+    for (const sub of subscriptionsRes.rows) {
+      const { id, user_id, start_date, end_date } = sub;
+      const endDate = new Date(end_date);
+
+      // 2. Check if subscription is expired
+      if (endDate < now) {
+        console.log(
+          `Subscription ${id} for user ${user_id} has expired. Updating shop...`
+        ); 
+
+        // Update Shops table → downgrade to free plan
+        const subscription = {
+          plan: "free",
+          start_date: new Date().toISOString(),
+          end_date: null,
+          updated_at: new Date().toISOString()
+        };
+
+        await pool.query(
+          `UPDATE shops SET subscription = $2 WHERE user_id = $1`,
+          [user_id, JSON.stringify(subscription)]
+        );
+
+        // Delete expired subscription
+        await pool.query(
+          `DELETE FROM vendor_tools_subscription WHERE id = $1`,
+          [id]
+        );
+      } else {
+        // Still active → log remaining time
+        const timeRemaining = endDate - now;
+        const daysRemaining = Math.ceil(timeRemaining / (1000 * 60 * 60 * 24));
+        console.log(
+          `Subscription ${id} for user ${user_id} expires in ${daysRemaining} days.`
+        );
+      }
+    }
+
+  } catch (err) {
+    console.error("Error checking subscriptions:", err);
   }
 }
 
@@ -678,19 +722,22 @@ async function checkAndUpdatePromotions() {
 cron.schedule("0 0 * * *", () => {
   console.log("⏰ Running promotion check at midnight...");
   checkAndUpdatePromotions();
+  checkAndUpdateSubscriptions()
 });
 
 // If you also want to run immediately at server start, uncomment below
 // checkAndUpdatePromotions(); 
+// checkAndUpdateSubscriptions()
 
-// cron.schedule("* * * * *", async () => {
-//   try {
-//     await pool.query("DELETE FROM token WHERE expires_at < NOW() - INTERVAL '1 minute'");
-//     console.log("Expired tokens deleted");
-//   } catch (err) {
-//     console.error("Error deleting tokens:", err);
-//   }
-// });
+ 
+cron.schedule("* * * * *", async () => { 
+  try {
+    await pool.query("DELETE FROM token WHERE expires_at < NOW() - INTERVAL '1 minute'");
+    console.log("Expired tokens deleted");
+  } catch (err) {
+    console.error("Error deleting tokens:", err);
+  }
+});
 
 
 

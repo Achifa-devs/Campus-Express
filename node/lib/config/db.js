@@ -6,7 +6,7 @@ const config = {
     rejectUnauthorized: false
   },
   // Optional pool tuning (can remove if not needed)
-  connectionTimeoutMillis: 10000,
+  connectionTimeoutMillis: 100000,
   idleTimeoutMillis: 10000
 };
 const pool = new Pool.Pool(config);

@@ -190,22 +190,27 @@ export const postResetCustomerPwd = async (payload) => {
   const { email, password } = payload;
 
 
-  // Business logic
-  let customer = await findUserByEmail({ email });
-  if (!customer) {
-    throw new Error("Internal server error, please try again.");
-    
+  try {
+    // Business logic
+    let customer = await findUserByEmail({ email });
+    if (!customer) {
+      throw new Error("Internal server error, please try again.");
+      
+    }
+    let oldPwd = customer.password;
+    let comparison = await bcrypt.compare(password, oldPwd);
+  
+    if (comparison) {
+      throw new Error("New password cannot be the same as old password");
+    } 
+    const hashedPwd = await bcrypt.hash(password, 10)
+  
+    const response = await updateCustomerPasswordById({ user_id: customer?.user_id, password: hashedPwd });
+    return response;
+  } catch (error) {
+    console.log("Error: ", error);
+    return error
   }
-  let oldPwd = customer.password;
-  let comparison = await bcrypt.compare(password, oldPwd);
-
-  if (comparison) {
-    throw new Error("New password cannot be the same as old password");
-  } 
-  const hashedPwd = await bcrypt.hash(password, 10)
-
-  const response = await updateCustomerPasswordById({ user_id: customer?.user_id, password: hashedPwd });
-  return response;
 };
 
 

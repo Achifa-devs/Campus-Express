@@ -268,7 +268,6 @@ function NavCnt() {
     };
   }, [user, dispatch, resumeTick]);
 
-
   const reqHandler = async () => {
     try {
       const response = await axios.get("https://cs-server-olive.vercel.app/plans");
@@ -298,7 +297,6 @@ function NavCnt() {
     return { promo, connect, vendor };
   };
 
- 
   useEffect(() => {
     getPlans()
   }, [user])
@@ -307,8 +305,9 @@ function NavCnt() {
   return (
     <SafeAreaProvider style={{ flex: 1 }}>
 
-      {mode === 'shop' && <Shop />}
-      {mode === 'auth' && <AuthStackScreen />}
+      {/* {mode === 'shop' && <Shop />} */}
+      {/* {mode === 'auth' && <AuthStackScreen />} */}
+      <AuthStackScreen />
       {
         (
           <BottomModal
