@@ -1,0 +1,165 @@
+{
+  "data": [
+    {
+      "label": "Abia"
+    },
+    {
+      "label": "Adamawa"
+    },
+    {
+      "label": "Akwa Ibom"
+    },
+    {
+      "label": "Anambra"
+    },
+    {
+      "label": "Bauchi"
+    },
+    {
+      "label": "Bayelsa"
+    },
+    {
+      "label": "Benue"
+    },
+    {
+      "label": "Borno"
+    },
+    {
+      "label": "Cross River"
+    },
+    {
+      "label": "Delta"
+    },
+    {
+      "label": "Ebonyi"
+    },
+    {
+      "label": "Edo"
+    },
+    {
+      "label": "Ekiti"
+    },
+    {
+      "label": "Enugu"
+    },
+    {
+      "label": "Gombe"
+    },
+    {
+      "label": "Imo"
+    },
+    {
+      "label": "Jigawa"
+    },
+    {
+      "label": "Kaduna"
+    },
+    {
+      "label": "Kano"
+    },
+    {
+      "label": "Katsina"
+    },
+    {
+      "label": "Kebbi"
+    },
+    {
+      "label": "Kogi"
+    },
+    {
+      "label": "Kwara"
+    },
+    {
+      "label": "Lagos"
+    },
+    {
+      "label": "Nasarawa"
+    },
+    {
+      "label": "Niger"
+    },
+    {
+      "label": "Ogun"
+    },
+    {
+      "label": "Ondo"
+    },
+    {
+      "label": "Osun"
+    },
+    {
+      "label": "Oyo"
+    },
+    {
+      "label": "Plateau"
+    },
+    {
+      "label": "Rivers"
+    },
+    {
+      "label": "Sokoto"
+    },
+    {
+      "label": "Taraba"
+    },
+    {
+      "label": "Yobe"
+    },
+    {
+      "label": "Zamfara"
+    },
+    {
+      "label": "FCT - Abuja"
+    }
+  ],
+  "school_choices": {
+    "37": [
+      {
+        "value": 169,
+        "text": "Abia State College Of Education, Arochukwu"
+      },
+      {
+        "value": 166,
+        "text": "Abia State Polytechnic, Aba"
+      },
+      {
+        "value": 171,
+        "text": "ABSU"
+      },
+      {
+        "value": 168,
+        "text": "Covenant Polytechnic, Aba"
+      },
+      {
+        "value": 167,
+        "text": "Gregory Univerisity, Uturu"
+      },
+      {
+        "value": 170,
+        "text": "MOUAU"
+      }
+    ],
+    "36": [
+      {
+        "value": 175,
+        "text": "Adamawa State Polytechnic, Mubi"
+      },
+      {
+        "value": 176,
+        "text": "Adamawa State University, Mubi"
+      },
+      {
+        "value": 174,
+        "text": "American University of Nigeria, Yola"
+      },
+      {
+        "value": 172,
+        "text": "Federal Polytechnic, Mubi"
+      },
+      {
+        "value": 173,
+        "text": "Modibbo Adama University of Technology, Yola"
+      }
+    ]
+  }
+}

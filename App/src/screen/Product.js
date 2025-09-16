@@ -35,14 +35,12 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { get_saved, save_prod, unsave_prod } from '../utils/Saver.js';
 import axios from 'axios';
 import useLogInAlert from '../utils/LogInAlert.js';
-import { getDeviceId } from '../utils/IdGen.js';
-// import Upload from 'react-native-background-upload';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { set_connect_modal } from '../../../../../../redux/connect.js';
-import { set_user } from '../../../../../../redux/user.js';
+import { set_connect_modal } from '../../redux/connect.js';
+import { set_user } from '../../redux/user.js';
 import useInsufficientConnectAlert from '../utils/ConnectZero.js';
-import { set_ads_modal } from '../../../../../../redux/ads_modal.js';
-import { set_sponsored_modal } from '../../../../../../redux/disruptor.js';
+import { set_sponsored_modal } from '../../redux/modal/disruptor.js';
+import Tools from '../utils/generalHandler.js';
 
 export default function Product() {
   const route = useRoute();
@@ -95,7 +93,7 @@ export default function Product() {
   }
 
   async function AddShare() {
-    let id = await getDeviceId()
+    let id = await Tools.getDeviceId()
     setLoading(true)
     try {
       let request = await axios.post('https://cs-server-olive.vercel.app/share', {product_id: data?.product_id, user_id: user ? user.user_id : id})

@@ -234,7 +234,7 @@ const Lodges = ({ data }) => {
 };
 
 const styles = StyleSheet.create({
-   boostBadge: {
+  boostBadge: {
     position: 'absolute',
     bottom: 0,
     left: 0,
