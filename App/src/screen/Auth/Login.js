@@ -120,7 +120,9 @@ const Login = ({ updateActiveJsx }) => {
       if (data.success) {
         await Memory.store('user', (data.data.user));
         dispatch(set_user(data.data.user))
+        dispatch(set_campus(data.data.user?.campus))
         dispatch(set_mode('main'))
+
       } else {
         // Handle specific errors
         setServerErr(data.message)

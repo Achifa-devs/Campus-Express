@@ -64,4 +64,23 @@ export class Product {
             method: "DELETE",
         });
     }
+
+
+    // Impression
+    static async createImpression(payload) {
+        return request({
+            url: `/impression`,
+            method: "POST",
+            data: payload
+        });
+    }
+
+    static async createView(payload) {
+        return request({
+            url: `/product-view`,
+            method: "POST",
+            data: payload
+        });
+    }
 }
+

@@ -1,9 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-// import Category from "../../store/screens/Category";
-// import Home from "../../store/screens/Home";
-// import Product from "../../store/screens/Product";
-// import TypeProducts from "../../store/screens/Products";
-// import Type from "../../store/screens/Type";
+
 import Ionicons from 'react-native-vector-icons/Ionicons'; 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -16,24 +12,21 @@ import {
     TouchableOpacity,
     View 
 } from 'react-native';
-// import LodgeListScreen from "../../store/screens/Lodge";
-// import AccommodationDetailScreen from "../../store/screens/LodgeRoom";
-// import Productimages from "../../store/screens/Productimages";
-// import NavigationTabs from "../../store/components/Home/Ads";
-// import AdvancedSearchBar from "../../store/components/Home/Search";
-// import ServiceDetailScreen from "../../store/screens/ServiceRoom";
-// import ReviewSubmissionScreen from "../../store/screens/Review";
-// import Shop from "../../store/screens/Shop";
+
 import { useNavigation } from "@react-navigation/native";
 import { set_connect_modal } from "../../redux/modal/connect";
 import Home from "../screen/Home";
 import Offers from "../components/Home/Offers"; 
-import SearchBar from "../reusables/Search";
+import SearchBar from "../components/Home/Search";
 import Type from "../screen/Type";
 import TypeProducts from "../screen/Filter";
 import Category from "../screen/Category";
 import Product from "../screen/Product";
-// import { set_connect_modal } from "../../../../../../redux/connect";
+import ProductImages from "../screen/ProductImages";
+import ReviewSubmissionScreen from "../screen/Review";
+import Shop from "../screen/ExploreShop";
+import Service from "../screen/Service";
+import Accommodation from "../screen/Accomodation";
 const HomeStack = createNativeStackNavigator();
 export function HomeStackScreen() {
    
@@ -41,11 +34,7 @@ export function HomeStackScreen() {
     const {campus} = useSelector(s => s.campus);
     
     const dispatch = useDispatch()
-    let navigation = useNavigation()
-    useEffect(() => {
-        console.log(campus)
-    }, [campus])
-
+    
     function handleSub(params) {
         dispatch(set_connect_modal(1))
 
@@ -157,135 +146,93 @@ export function HomeStackScreen() {
           // headerShown: false,  
         }}  name="product" component={Product} />
 
-        {/* <HomeStack.Screen  options={{
-            header: ({navigation}) =>
-            (
-            <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
-                <TouchableOpacity style={{
-                height: 55,
-                borderRadius: 15,
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-                width: 45,
-                }} onPress={e => navigation.goBack()}> 
-                    <Ionicons name={'chevron-back'} size={25} color={'#000'} />
-                </TouchableOpacity>
-                <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
-                <Text style={{
-                    fontSize: 16,
-                    fontWeight: 'bold',
-                    color: '#000',
-                    marginLeft: 0,
-                    // flexShrink: 1,
-                    marginBottom: 5
-                }}>
-                    Explore Campus Vendors
-                </Text>
-                </View>
+        <HomeStack.Screen  options={{
+          header: ({navigation}) =>
+          (
+            <View style={{ height: 45, display: 'none', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px'}}>
+
             </View>
-            ),
-            
-        }}   name="shop" component={Shop} />
+          ), 
+          // headerShown: false,  
+        }}  name="product-images" component={ProductImages} />
 
         <HomeStack.Screen  options={{
             header: ({navigation}) =>
             (
-                <>
-                    <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', paddingHorizontal: 10, width: '100%', backgroundColor: '#FFF', alignItems: 'center', padding: '10px' }}>
-                        <TouchableOpacity onPress={e=> navigation.goBack()} style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 2.5}}>
-                            <Ionicons name={"chevron-back"} size={25} /> 
-                        </TouchableOpacity>
-                        <View>
-                            <Text style={{
-                                fontSize: 20,
-                                fontWeight: 'bold', 
-                                color: '#111',
-                            }}>Publish your review</Text>
-                            
-                        </View>
-                    </View>
-                
-                    
-                </> 
+              <>
+                <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', paddingHorizontal: 10, width: '100%', backgroundColor: '#FFF', alignItems: 'center', padding: '10px' }}>
+                  <TouchableOpacity onPress={e=> navigation.goBack()} style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 2.5}}>
+                    <Ionicons name={"chevron-back"} size={25} /> 
+                  </TouchableOpacity>
+                  <View>
+                    <Text style={{
+                      fontSize: 20,
+                      fontWeight: 'bold', 
+                      color: '#111',
+                    }}>Publish your review</Text>
+                      
+                  </View>
+                </View>
+              </> 
             ),
             // headerShown: false, 
         }}  name="review-submission" component={ReviewSubmissionScreen} />
 
         <HomeStack.Screen  options={{
-            header: ({navigation}) =>
+          header: ({navigation}) =>
             (
-                <>
-                    <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', paddingHorizontal: 10, width: '100%', backgroundColor: '#FFF', alignItems: 'center', padding: '10px' }}>
-                        <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5}}>
-                            <BackSvg width={22} height={22} />
-                        </TouchableOpacity>
-                        <View>
-                            <Text style={{
-                                fontSize: 20,
-                                fontWeight: 'bold', 
-                                color: '#111',
-                            }}>Campus Lodge</Text>
-                            <Text style={{
-                                fontSize: 13,
-                                color: '#777',
-                                marginTop: .4,
-                            }}>Find lodges at your campus area</Text>
-                        </View>
-                    </View>
-                
-                    
-                </>
-            ),
-        // headerShown: false, 
-        }}  name="lodge" component={LodgeListScreen} />
+            <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
+              <TouchableOpacity style={{
+              height: 55,
+              borderRadius: 15,
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              alignItems: 'center',
+              width: 45,
+              }} onPress={e => navigation.goBack()}> 
+                <Ionicons name={'chevron-back'} size={25} color={'#000'} />
+              </TouchableOpacity>
+              <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
+                <Text style={{
+                  fontSize: 16,
+                  fontWeight: 'bold',
+                  color: '#000',
+                  marginLeft: 0,
+                  // flexShrink: 1,
+                  marginBottom: 5
+                }}>
+                  Explore Campus Vendors
+                </Text>
+              </View>
+            </View>
+          ),
+            
+        }}   name="explore-shop" component={Shop} />
 
         <HomeStack.Screen  options={{
-            header: ({navigation}) =>
-            (
-                <View style={{ height: 55, display: 'none', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px'}}>
+          header: ({navigation}) =>
+          (
+            <View style={{ height: 55, display: 'none', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px'}}>
 
-                </View>
-            ), 
+            </View>
+          ), 
             // headerShown: false, 
-        }} name="service-room" component={ServiceDetailScreen} />
+        }} name="service-room" component={Service} />
           
     
        
 
         <HomeStack.Screen  options={{
-            header: ({navigation}) =>
-            (
-                <View style={{ height: 45, display: 'none', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px'}}>
+          header: ({navigation}) =>
+          (
+            <View style={{ height: 55, display: 'none', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px'}}>
 
-                </View>
-            ), 
-            // headerShown: false,  
-        }}  name="product" component={Product} />
-
-        <HomeStack.Screen  options={{
-            header: ({navigation}) =>
-            (
-                <View style={{ height: 45, display: 'none', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px'}}>
-
-                </View>
-            ), 
-            // headerShown: false,  
-        }}  name="product-images" component={Productimages} />
-        <HomeStack.Screen  options={{
-            header: ({navigation}) =>
-            (
-                <View style={{ height: 55, display: 'none', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px'}}>
-
-                </View>
-            ), 
-            // headerShown: false,  
-        }}  name="lodge-room" component={AccommodationDetailScreen} />
+            </View>
+          ), 
+          // headerShown: false,  
+        }}  name="lodge-room" component={Accommodation} />
         
-         
-        
-         */}
 
     </HomeStack.Navigator>
   );

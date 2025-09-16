@@ -27,20 +27,20 @@ import LinearGradient from 'react-native-linear-gradient';
 import Top from '../components/Product/Top';
 import Mid from '../components/Product/Mid';
 import Btm from '../components/Product/Btm';
-import CallSvg from '../../media/assets/call-svgrepo-com.svg';
-import WpSvg from '../../media/assets/whatsapp-svgrepo-com.svg';
-import { getData, storeData } from '../../utils/AsyncStore.js';
+import CallSvg from '../assets/call-svgrepo-com.svg';
+import WpSvg from '../assets/whatsapp-svgrepo-com.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { get_saved, save_prod, unsave_prod } from '../utils/Saver.js';
 import axios from 'axios';
-import useLogInAlert from '../utils/LogInAlert.js';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { set_connect_modal } from '../../redux/connect.js';
-import { set_user } from '../../redux/user.js';
-import useInsufficientConnectAlert from '../utils/ConnectZero.js';
+import { set_connect_modal } from '../../redux/modal/connect.js';
 import { set_sponsored_modal } from '../../redux/modal/disruptor.js';
 import Tools from '../utils/generalHandler.js';
+import Memory from '../utils/memoryHandler.js';
+import { Favourite } from '../api/wishlist.js';
+import useLogInAlert from '../utils/useLoginAlert.js';
+import useInsufficientConnectAlert from '../utils/useZeroConnectAlert.js';
+import { set_user } from '../../redux/info/user.js';
 
 export default function Product() {
   const route = useRoute();
@@ -50,7 +50,6 @@ export default function Product() {
   const [loading, setLoading] = useState(false);
   const [saved, setSaved] = useState(false);
   const navigation = useNavigation();
-  const { product_id } = useRoute()?.params;
   const fadeAnim = new Animated.Value(1);
   const { width } = Dimensions.get('window');
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -130,10 +129,7 @@ export default function Product() {
     if (data && data.product_id) {
       (async function getFavourite() {
         try {
-          const result = await get_saved({
-            user_id: user?.user_id,
-            product_id: data?.product_id
-          });
+          const result = await Favourite.getFavourite(user.user_id, data?.product_id);
 
           if (result?.success) {
             setFavLoading(false);
@@ -141,7 +137,7 @@ export default function Product() {
           } else {
             setFavLoading(false);
             setSaved(false);
-          }
+          } 
         } catch (error) {
           setFavLoading(false);
           setSaved(false);
@@ -155,28 +151,10 @@ export default function Product() {
     if (data && data.product_id && user?.user_id) {
       setTimeout(async () => {
         try {
-          const res = await axios.post('https://cs-server-olive.vercel.app/product-view', {
+          Tools.createView({
             user_id: user?.user_id,
-            product_id: data?.product_id
-          });
-      
-          const response = res.data;
-          if (response?.success) {  
-            const newHistory = { date: new Date(), data: data };
-            const prevHistory = await getData('history');
-            console.log(prevHistory)
-            if(prevHistory !== null && prevHistory !== 'null'){
-              const arr = JSON.parse(prevHistory);
-              let duplicate = arr.filter(item => item.data.product_id === data?.product_id).length>0;
-              if(!duplicate){
-                storeData('history', JSON.stringify([...arr, newHistory]));
-              }
-            }else{
-              storeData('history', JSON.stringify([newHistory]));
-            }
-
-           
-          }
+            data: data
+          })
         } catch (error) {
           console.error('Error in product view request:', error);
         }
@@ -195,7 +173,7 @@ export default function Product() {
     if (user) {
       setFavLoading(true);
       if (!saved) {
-        const result = await save_prod({
+        const result = await Favourite.createFavourite({
           user_id: user?.user_id,
           product_id: data?.product_id
         });
@@ -203,7 +181,7 @@ export default function Product() {
           setSaved(true);
         }
       } else {
-        const result = await unsave_prod({
+        const result = await Favourite.deleteFavourite({
           user_id: user?.user_id,
           product_id: data?.product_id
         });
@@ -318,7 +296,7 @@ export default function Product() {
     const unsubscribe = navigation.addListener("beforeRemove", async(e) => {
       console.log("User is going back or leaving this screen");
       console.log("Action type:", e.data.action.type); // e.g. "POP", "GO_BACK"
-      const stringified = await getData('sponsored');
+      const stringified = await Memory.get('sponsored');
       const parsedDdata = (stringified)
       console.log("products", (parsedDdata))
       
@@ -350,14 +328,14 @@ export default function Product() {
           Alert.alert('You already published a review for this product');
         } else if (hasUserReview) {
           // User has a review for another product in the shop, but not this one
-          navigation.navigate('user-review-submission', { 
+          navigation.navigate('review-submission', { 
             product: data,
             seller,
             shop
           });
         } else {
           // User has no reviews at all, allow review
-          navigation.navigate('user-review-submission', { 
+          navigation.navigate('review-submission', { 
             product: data,
             seller,
             shop
@@ -436,7 +414,7 @@ export default function Product() {
               {images.map((image, index) => (
                 <TouchableOpacity 
                   onPress={() => {
-                    navigation.navigate('user-product-images', {
+                    navigation.navigate('product-images', {
                       files: images,
                       index: currentIndex,
                     });

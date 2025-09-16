@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { debounce } from 'lodash';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
@@ -19,7 +19,7 @@ import { useDispatch, useSelector } from 'react-redux';
 // Redux
 import Tools from '../../utils/generalHandler';
 import { set_mode } from '../../../redux/info/mode';
-import { Favourite } from '../../api';
+import { Favourite, Product } from '../../api';
 
 // Constants
 const { width } = Dimensions.get('window');
@@ -33,7 +33,7 @@ const ItemCard = React.memo(({ item, onPress }) => {
   const { user } = useSelector((s) => s?.user);
 
   const [loading, setLoading] = useState(true);
-  const [wishlistLoading, setWishlistLoading] = useState(false);
+  const [wishlistLoading, setWishlistLoading] = useState(true);
   const [wishlisted, setWishlisted] = useState(false);
   const [favorites, setFavorites] = useState([]);
 
@@ -52,13 +52,23 @@ const ItemCard = React.memo(({ item, onPress }) => {
     if (user?.user_id) fetchFavorites();
   }, [user?.user_id]);
 
+  useFocusEffect(
+    useCallback(() => {
+      if (user?.user_id) fetchFavorites();
+    }, [user?.user_id])
+  );
+
   // Update wishlist state based on fetched favorites
   useEffect(() => {
+    
     if (!favorites?.length) {
       setWishlisted(false);
+      setWishlistLoading(false);
+      
       return;
     }
     const isSaved = favorites.some((f) => f?.order?.product_id === item?.product_id);
+    setWishlistLoading(false);
     setWishlisted(isSaved);
   }, [favorites, item?.product_id]);
 
@@ -92,6 +102,7 @@ const ItemCard = React.memo(({ item, onPress }) => {
     } finally {
       setWishlistLoading(false);
     }
+
   };
 
   const isPromoted = !!eval(item?.promotion); // ⚠️ Consider replacing eval for security
@@ -131,7 +142,7 @@ const ItemCard = React.memo(({ item, onPress }) => {
             <Text style={styles.conditionText}>{item.others.condition}</Text>
           </View>
         )}
-
+ 
         {/* Wishlist Button */}
         <TouchableOpacity
           style={[styles.wishlistButton, wishlisted && styles.wishlistButtonActive]}
@@ -185,11 +196,15 @@ const ItemCard = React.memo(({ item, onPress }) => {
 // -----------------------------------------------------------------------------
 // Hot Component
 // -----------------------------------------------------------------------------
-export default function ProductOffer({ data }) {
+// -----------------------------------------------------------------------------
+// Hot Component
+// -----------------------------------------------------------------------------
+export default function ProductOffer({ data, loading }) {
   const navigation = useNavigation();
   const { user } = useSelector((s) => s?.user);
   const [deviceId, setDeviceId] = useState('');
 
+ 
   // Assign guest device ID if no user
   useEffect(() => {
     if (!user?.user_id) {
@@ -216,21 +231,27 @@ export default function ProductOffer({ data }) {
 
   const viewabilityConfig = { viewAreaCoveragePercentThreshold: 50 };
 
-  const onViewableItemsChanged = useRef(({ viewableItems }) => {
-    viewableItems.forEach((v) => AddImpression(v.item));
-  }).current;
-
-  // Track impressions
-  async function AddImpression(product) {
-    try {
-      const response = await axios.post('https://cs-server-olive.vercel.app/impression', {
-        product_id: product?.product_id,
-        user_id: user?.user_id || deviceId,
+  const onViewableItemsChanged = useCallback(
+    ({ viewableItems }) => {
+      viewableItems.forEach((v) => {
+        Product.createImpression({
+          product_id: v.item?.product_id,
+          user_id: user?.user_id || deviceId,
+        });
       });
-      console.log('Impression:', response?.data);
-    } catch (error) {
-      console.log('Impression error:', error);
-    }
+    },
+    [user?.user_id, deviceId]
+  );
+
+  /** Loading State */
+  if (loading) {
+    return (
+      <View style={styles.emptyContainer}>
+        <ActivityIndicator size="large" color="#FF4500" />
+        <Text style={styles.emptyTitle}>Loading Offers...</Text>
+        <Text style={styles.emptySubtitle}>Please wait while we fetch products</Text>
+      </View>
+    );
   }
 
   return (
@@ -254,9 +275,9 @@ export default function ProductOffer({ data }) {
         ListEmptyComponent={() => (
           <View style={styles.emptyContainer}>
             <Icon name="search-outline" size={48} color="#DFE3E8" />
-            <Text style={styles.emptyTitle}>No Products found</Text>
+            <Text style={styles.emptyTitle}>No Products Found</Text>
             <Text style={styles.emptySubtitle}>
-              Try refreshing and also adjust your filter or location
+              Try refreshing or adjust your filter/location
             </Text>
           </View>
         )}

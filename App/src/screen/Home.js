@@ -1,14 +1,14 @@
 
 import React, { useCallback, useEffect, useState } from 'react'
 import Banner from '../components/Home/Banner'
-import { FlatList, RefreshControl, StyleSheet, Text, View } from 'react-native'
+import { Alert, FlatList, RefreshControl, StyleSheet, Text, View } from 'react-native'
 import CategoryDislay from '../components/Home/CategoryDisplay';
 import { useSelector } from 'react-redux';
-import OfferContainer from '../components/Home/OfferContainer';
 import { Product } from '../api';
 import ProductOffer from '../components/Home/ProductOffer';
 import AccomodationOffer from '../components/Home/AccomodationOffer';
 import ServicesOffer from '../components/Home/ServiceOffer';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function Home() {
 
@@ -18,33 +18,47 @@ export default function Home() {
   const { user } = useSelector(s => s?.user);
   const { campus } = useSelector(s => s?.campus);
   const { option } = useSelector(s => s?.option);
-
-  useEffect(() => {
-    setData([])
-  }, [option])
+  const [loading, setLoading] = useState(true);
 
   async function $() {
-    Product.getOffers(campus, option).then((data) => {
-      const uniqueData = Array.from(
-        new Map(data?.data?.map((item) => [item.product_id, item])).values()
+    try {
+      Product.getOffers(campus, option).then((data) => {
+        const uniqueData = Array.from(
+          new Map(data?.data?.map((item) => [item.product_id, item])).values()
+        );
+        setData(uniqueData);
+        setLoading(false)
+      })
+    } catch (error) {
+      Alert.alert(
+        'Internal Server Error',
+        'Please try again!',
+        [
+          { text: 'Cancel', style: 'cancel' },
+          { text: 'Try Again', onPress: () => $().finally(() => setRefreshing(false)) },
+        ],
+        { cancelable: true }
       );
-      setData(uniqueData);
-    })
+
+    }
   }
 
   const onRefresh = useCallback(() => {
+    setData([])
+    setLoading(true)
     setRefreshing(true);
     $().finally(() => setRefreshing(false));
-    Product.getOffer()
   }, [user, campus, option]); // refresh logic depends on user + campus
 
   // Initial load + auto refresh when campus changes
   useEffect(() => {
+    setData([])
+    setLoading(true)
     setRefreshing(true); // trigger spinner
     $().finally(() => setRefreshing(false));
-    
   }, [campus, option]);
 
+  
 
 
   
@@ -68,9 +82,9 @@ export default function Home() {
     { 
       key: 'hot', 
       component: 
-        option === 'Products' ? <ProductOffer data={data} /> 
-      : option === 'Lodges' ? <AccomodationOffer data={data} /> 
-      : option === 'Services' ? <ServicesOffer data={data} /> : ''
+        option === 'Products' ? <ProductOffer data={data} loading={loading} /> 
+      : option === 'Lodges' ? <AccomodationOffer data={data} loading={loading} /> 
+      : option === 'Services' ? <ServicesOffer data={data} loading={loading} /> : ''
     }
   ];
 

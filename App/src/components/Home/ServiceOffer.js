@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -7,23 +7,65 @@ import {
   Image,
   StyleSheet,
   Dimensions,
-  FlatList
+  FlatList,
+  ActivityIndicator
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import jsAgo from 'js-ago';
 import categoriesData from '../../json/services.json';
+import Tools from '../../utils/generalHandler';
+import { useSelector } from 'react-redux';
+import { Product } from '../../api';
 
 const { width } = Dimensions.get('window');
 
-const ServicesOffer = ({ data = [] }) => {
+const ServicesOffer = ({ data = [], loading }) => {
   const navigation = useNavigation();
   const [activeCategory, setActiveCategory] = useState('All');
+  const [deviceId, setDeviceId] = useState('');
+  const { user } = useSelector((state) => state?.user);
+
+  // Show loading until data arrives
+  const isFirstRender = useRef(true);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return; // skip the first run
+    }
+    setLoading(false);
+  }, [data]);
+
+
+  const viewabilityConfig = { viewAreaCoveragePercentThreshold: 50 };
+
+  // stable onViewableItemsChanged
+  const onViewableItemsChanged = useCallback(
+    ({ viewableItems }) => {
+      viewableItems.forEach((v) => {
+        Product.createImpression({
+          product_id: v.item?.product_id,
+          user_id: user?.user_id || deviceId,
+        });
+      });
+    },
+    [user?.user_id, deviceId]
+  );
+
+  // Assign guest device ID if no user
+  useEffect(() => {
+    if (!user?.user_id) {
+      Tools.getDeviceId()
+        .then((res) => setDeviceId(res))
+        .catch((err) => console.log('Device ID error:', err));
+    }
+  }, [user?.user_id]);
 
   /** Get category image from service JSON */
-  const getCategoryImage = useCallback(categoryName => {
+  const getCategoryImage = useCallback((categoryName) => {
     for (let cat of categoriesData.items.category) {
-      if (Object.keys(cat).some(key => key !== 'img' && key === categoryName)) {
+      if (Object.keys(cat).some((key) => key !== 'img' && key === categoryName)) {
         return cat.img;
       }
     }
@@ -36,7 +78,7 @@ const ServicesOffer = ({ data = [] }) => {
       <TouchableOpacity
         style={[
           styles.categoryItem,
-          activeCategory === item.name && styles.activeCategory
+          activeCategory === item.name && styles.activeCategory,
         ]}
         onPress={() => setActiveCategory(item.name)}
       >
@@ -48,7 +90,7 @@ const ServicesOffer = ({ data = [] }) => {
         <Text
           style={[
             styles.categoryText,
-            activeCategory === item.name && styles.activeCategoryText
+            activeCategory === item.name && styles.activeCategoryText,
           ]}
         >
           {item.name}
@@ -63,7 +105,7 @@ const ServicesOffer = ({ data = [] }) => {
     ({ item }) => (
       <TouchableOpacity
         style={styles.serviceCard}
-        onPress={() => navigation.navigate('user-service-room', { data: item })}
+        onPress={() => navigation.navigate('service-room', { data: item })}
       >
         <Image
           source={{ uri: getCategoryImage(item.category) || item.image }}
@@ -83,11 +125,16 @@ const ServicesOffer = ({ data = [] }) => {
           </Text>
 
           <Text style={styles.serviceCategory}>
-            {item.category} - <Text style={{ fontWeight: 'bold' }}>{item?.others?.gender || 'Any'}</Text>
+            {item.category} -{' '}
+            <Text style={{ fontWeight: 'bold' }}>
+              {item?.others?.gender || 'Any'}
+            </Text>
           </Text>
 
           <Text style={styles.serviceStats}>
-            {item?.views || 0} {parseInt(item?.views) > 1 ? 'views' : 'view'} • {jsAgo(new Date(item?.date))}
+            {item?.views || 0}{' '}
+            {parseInt(item?.views) > 1 ? 'views' : 'view'} •{' '}
+            {jsAgo(new Date(item?.date))}
           </Text>
         </View>
       </TouchableOpacity>
@@ -95,17 +142,29 @@ const ServicesOffer = ({ data = [] }) => {
     [getCategoryImage, navigation]
   );
 
+  /** Loading State */
+  if (loading) {
+    return (
+      <View style={styles.emptyContainer}>
+        <ActivityIndicator size="large" color="#FF4500" />
+        <Text style={styles.emptyTitle}>Loading Services...</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Categories can be added here if needed */}
-
         {/* Services List */}
         <FlatList
           data={data}
           renderItem={renderServiceItem}
-          keyExtractor={item => item.id?.toString() || Math.random().toString()}
+          keyExtractor={(item) =>
+            item.id?.toString() || Math.random().toString()
+          }
           scrollEnabled={false}
+          onViewableItemsChanged={onViewableItemsChanged}
+          viewabilityConfig={viewabilityConfig}
           contentContainerStyle={styles.servicesList}
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
@@ -121,6 +180,9 @@ const ServicesOffer = ({ data = [] }) => {
     </View>
   );
 };
+
+
+
 
 /* -------------------- Styles -------------------- */
 const styles = StyleSheet.create({

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import {
   View,
   Text,
@@ -15,105 +15,139 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import jsAgo from 'js-ago';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { get_saved_list, save_prod, unsave_prod } from '../../utils/Saver';
 import { set_mode } from '../../../redux/info/mode';
-import { Favourite } from '../../api';
+import { Favourite, Product } from '../../api'; // <-- ensure Product is exported from your api index
+import Tools from '../../utils/generalHandler';
 
-const AccomodationOffer = ({ data = [] }) => {
+const AccomodationOffer = ({ data = [], loading }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { user } = useSelector(state => state?.user);
+  const { user } = useSelector((state) => state?.user);
 
-  const [loading, setLoading] = useState(true);
-  const [favLoading, setFavLoading] = useState({});
-  const [wishlisted, setWishlisted] = useState({});
-  const [favList, setFavList] = useState([]);
+  const [favLoading, setFavLoading] = useState({}); // map productId -> bool
+  const [wishlisted, setWishlisted] = useState({}); // map productId -> true
+  const [deviceId, setDeviceId] = useState('');
+
+
+  const viewabilityConfig = { viewAreaCoveragePercentThreshold: 50 };
+
+  // stable onViewableItemsChanged
+  const onViewableItemsChanged = useCallback(({ viewableItems }) => {
+    viewableItems.forEach((v) => {
+      Product.createImpression({ 
+        product_id: v.item?.product_id,
+        user_id: user?.user_id || deviceId,
+      });
+    });
+   }, [user?.user_id, deviceId]);
+
+  // Assign guest device ID if no user
+  useEffect(() => {
+    if (!user?.user_id) {
+      Tools.getDeviceId()
+        .then((res) => setDeviceId(res))
+        .catch((err) => console.log('Device ID error:', err));
+    }
+  }, [user?.user_id]);
 
   /** Fetch user's favourites */
   const fetchFavourites = useCallback(async () => {
-    if (!user?.user_id) return;
+    if (!user?.user_id) {
+      setFavLoading(false);
+      return;
+    }
 
     try {
       const result = await Favourite.getFavourites(user.user_id);
       if (result?.success) {
         const favs = result.data || [];
-        setFavList(favs);
 
         // Create a lookup map for quick access
         const favMap = favs.reduce((acc, item) => {
-          if (item?.order?.product_id) acc[item.order.product_id] = true;
+          const pid = item?.order?.product_id;
+          if (pid) acc[pid] = true;
           return acc;
         }, {});
+
         setWishlisted(favMap);
       } else {
-        setFavList([]);
         setWishlisted({});
       }
     } catch (error) {
       console.error('Fetch favourites error:', error);
-      setFavList([]);
       setWishlisted({});
     } finally {
-      setLoading(false);
+      setFavLoading(false);
     }
   }, [user?.user_id]);
 
   useEffect(() => {
-    if (user) fetchFavourites();
-    else setLoading(false);
-  }, [user, fetchFavourites]);
+    // fetch favourites when user changes
+    fetchFavourites();
+  }, [fetchFavourites]);
 
   /** Handle save/unsave */
-  const handleSave = async productId => {
-    setFavLoading(prev => ({ ...prev, [productId]: true }));
+  const handleSave = useCallback(
+    async (productId) => {
+      // block concurrent toggles for same product
+      setFavLoading((prev) => ({ ...prev, [productId]: true }));
 
-    try {
-      if (!user) {
-        Alert.alert(
-          'Login Required',
-          'You need to login first to continue.',
-          [
-            { text: 'Cancel', style: 'cancel' },
-            { text: 'Login', onPress: () => dispatch(set_mode('auth')) },
-          ],
-          { cancelable: false }
-        );
-        return;
-      }
-
-      if (!wishlisted[productId]) {
-        const result = await Favourite.createFavourite({ user_id: user.user_id, product_id: productId });
-        if (result?.success) {
-          setWishlisted(prev => ({ ...prev, [productId]: true }));
+      try {
+        if (!user) {
+          Alert.alert(
+            'Login Required',
+            'You need to login first to continue.',
+            [
+              { text: 'Cancel', style: 'cancel' },
+              { text: 'Login', onPress: () => dispatch(set_mode('auth')) },
+            ],
+            { cancelable: false }
+          );
+          return;
         }
-      } else {
-        const result = await Favourite.deleteFavourite({ user_id: user.user_id, product_id: productId });
-        if (result?.success) {
-          setWishlisted(prev => {
-            const updated = { ...prev };
-            delete updated[productId];
-            return updated;
+
+        if (!wishlisted[productId]) {
+          const result = await Favourite.createFavourite({
+            user_id: user.user_id,
+            product_id: productId,
           });
+          if (result?.success) {
+            setWishlisted((prev) => ({ ...prev, [productId]: true }));
+          }
+        } else {
+          const result = await Favourite.deleteFavourite({
+            user_id: user.user_id,
+            product_id: productId,
+          });
+          if (result?.success) {
+            setWishlisted((prev) => {
+              const updated = { ...prev };
+              delete updated[productId];
+              return updated;
+            });
+          }
         }
+      } catch (error) {
+        console.error('Save/unsave error:', error);
+      } finally {
+        setFavLoading((prev) => ({ ...prev, [productId]: false }));
       }
-    } catch (error) {
-      console.error('Save/unsave error:', error);
-    } finally {
-      setFavLoading(prev => ({ ...prev, [productId]: false }));
-    }
-  };
+    },
+    [user, wishlisted, dispatch]
+  );
 
   /** Render each lodge item */
   const renderLodgeItem = useCallback(
     ({ item }) => {
-      const isWishlisted = wishlisted[item?.product_id];
-      const isLoading = favLoading[item?.product_id];
+      const pid = item?.product_id ?? item?.id;
+      const isWishlisted = !!wishlisted[pid];
+      const isLoading = !!favLoading[pid];
       const isPromoted = item?.promotion === 'true' || item?.promotion === true;
 
       return (
         <TouchableOpacity
           style={styles.card}
-          onPress={() => navigation.navigate('user-lodge-room', { data: item })}
+          onPress={() => navigation.navigate('lodge-room', { data: item })}
           activeOpacity={0.9}
         >
           {/* Video Thumbnail */}
@@ -123,7 +157,11 @@ const AccomodationOffer = ({ data = [] }) => {
               style={styles.video}
               resizeMode="cover"
               muted
+              paused={true}
+              repeat={false}
+              ignoreSilentSwitch="ignore"
             />
+
 
             {/* Top Badges */}
             {item?.others?.cType && (
@@ -137,7 +175,7 @@ const AccomodationOffer = ({ data = [] }) => {
             {/* Wishlist Button */}
             <TouchableOpacity
               style={[styles.wishlistBtn, isWishlisted && styles.wishlistBtnActive]}
-              onPress={() => handleSave(item?.product_id)}
+              onPress={() => handleSave(pid)}
               disabled={isLoading}
             >
               {isLoading ? (
@@ -179,34 +217,39 @@ const AccomodationOffer = ({ data = [] }) => {
             </View>
 
             <Text style={styles.stats}>
-              {item?.views} {parseInt(item?.views) > 1 ? 'views' : 'view'} • {jsAgo(new Date(item?.date))}
+              {item?.views ?? 0} {parseInt(item?.views ?? 0) > 1 ? 'views' : 'view'} • {jsAgo(new Date(item?.date))}
             </Text>
           </View>
         </TouchableOpacity>
       );
     },
-    [wishlisted, favLoading, handleSave]
+    [navigation, wishlisted, favLoading, handleSave]
   );
 
   /** Loading State */
   if (loading) {
     return (
-      <View style={styles.empty}>
-        <Icon name="search-outline" size={48} color="#DFE3E8" />
-        <Text style={styles.emptyTitle}>Loading Accommodation</Text>
-        <Text style={styles.emptySubtitle}>Try adjusting your filter or location</Text>
+      <View style={styles.emptyContainer}>
+        <ActivityIndicator size="large" color="#FF4500" />
+        <Text style={styles.emptyTitle}>Loading Offers...</Text>
+        <Text style={styles.emptySubtitle}>Please wait while we fetch products</Text>
       </View>
     );
   }
+
+  
+ 
 
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
         data={data}
         renderItem={renderLodgeItem}
-        keyExtractor={item => item?.id || item?.product_id?.toString()}
+        keyExtractor={(item) => String(item?.product_id ?? item?.id ?? Math.random())}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.list}
+        onViewableItemsChanged={onViewableItemsChanged}
+        viewabilityConfig={viewabilityConfig}
         ListEmptyComponent={
           <View style={styles.empty}>
             <Icon name="search-outline" size={48} color="#DFE3E8" />

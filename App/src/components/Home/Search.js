@@ -13,8 +13,8 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useDispatch, useSelector } from 'react-redux';
-import { set_locale_modal } from '../../redux/modal/locale';
-import Tools from '../utils/generalHandler';
+import { set_locale_modal } from '../../../redux/modal/locale';
+import Tools from '../../utils/generalHandler';
 
 const { width } = Dimensions.get('window');
 

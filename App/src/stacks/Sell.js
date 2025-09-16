@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Sell from "../screens/Sell/Sell";
+import Sell from "../screen/Sell";
 import { 
   Alert,
     Dimensions,
@@ -15,35 +15,25 @@ import {
 } from 'react-native';
 import React, { useEffect } from "react";
 import Ionicons  from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, FontAwesome, etc.
-import Icon  from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, FontAwesome, etc.
-import Create from "../../store/screens/Sell/Create";
-import Listing from "../../store/screens/Inventory/Listing";
-import { set_sub_modal } from "../../../../../../redux/sub";
-import { set_shop } from "../../../../../../redux/shop";
-import Shopile from "../../store/screens/Drawer/Shop";
-import Reviews from "../../store/screens/Drawer/Reviews";
-import AnalyticsScreen from "../../store/screens/Analytics";
 import { useNavigation } from "@react-navigation/native";
-import VendorConnectionsScreen from "../../store/screens/ConnectPurchase";
-import NavigationTabs from "../../store/components/Home/Ads";
-import Analytics from "../../store/utils/Analytics";
-import { capitalize } from "../../store/utils/Capitalize";
-import PromotedAdDetailsScreen from "../../store/screens/PromotionAnalysis";
+import { set_sub_modal } from "../../redux/modal/sub";
+import { set_shop } from "../../redux/info/shop";
+import Tools from "../utils/generalHandler";
+import Icon from 'react-native-vector-icons/Ionicons';
+import axios from "axios";
+import Shop from "../screen/Shop";
+import Reviews from "../screen/Reviews";
+import AnalyticsScreen from "../screen/Analytics";
+import Create from "../screen/Create";
+import Inventory from "../screen/Inventory";
 
 const SellStack = createNativeStackNavigator();
 export function SellStackScreen() {
+    const dispatch = useDispatch()
     const {user} = useSelector(s => s.user);
     const {shop} = useSelector(s => s.shop);
-    const {subscribed} = useSelector(s => s.subscribed);
-    const {campus} = useSelector(s => s.campus);
-    const {tier} = useSelector(s => s.tier);
-        
     let navigation = useNavigation()
-    useEffect(() => {
-      console.log(campus)
-    }, [campus]) 
-
-    function handleSub(params) {
+    function handleSub() {
       if(shop.subscription.plan === 'free'){ 
         dispatch(set_sub_modal(1))
       }else{
@@ -51,99 +41,57 @@ export function SellStackScreen() {
           screen: 'user-subscription',   // 👈 nested screen name
           params: { sub: true },         // 👈 params go here
         });
-
       } 
     }
     
-    const dispatch = useDispatch()
     useEffect(() => {
       if (!shop) {
-        fetch(`https://cs-server-olive.vercel.app/details?user_id=${user?.user_id}`, {
+        axios.get(`https://cs-server-olive.vercel.app/details?user_id=${user?.user_id}`, {
           headers: {
-          "Content-Type": "Application/json" 
+            'Content-Type': 'application/json'
           }
         })
-        .then(async (result) => {
-          let response = await result.json();
-          dispatch(set_shop(response?.data[0]))
+        .then((response) => {
+          // Axios automatically parses JSON
+          dispatch(set_shop(response.data?.data[0]));
         })
         .catch((err) => {
           Alert.alert('Network error, please try again.');
           console.log(err);
         });
       }
-    }, [user])
+    }, [user]);
 
   return (
     <SellStack.Navigator>
       <SellStack.Screen  options={{
-          header: ({navigation}) =>
-          (
-              <View style={styles.headerContainer}>
-                  {/* Logo */}
-                  <TouchableOpacity style={styles.logoContainer} onPress={() => {
-                    if(shop?.shop_id){
-                      navigation.navigate('user-shop')
-                    }else{
-                      Alert.alert('Please register your shop first!')
-                    }
-                  }}>
-                      <Image 
-                        source={{ uri: shop?.logo_url !== 'NULL' && shop?.logo_url || 'https://res.cloudinary.com/daqbhghwq/image/upload/v1746402998/Untitled_design-removebg-preview_peqlme.png'}} 
-                        style={styles.logo}
-                        // resizeMode="contain"
-                      /> 
-                      <Text numberOfLines={1} style={{
-                          fontSize: 11,
-                          fontWeight: 'bold',
-                          color: '#000',
-                          marginLeft: 0,
-                          flexShrink: 1,
-                          marginBottom: 5
-                      }}>
-                        {shop && shop?.title}
-                      </Text>
-                  </TouchableOpacity>
-
-                  {/* Right Section */}
-                  <View style={styles.rightSection}>
-                    {shop && (
-                      <TouchableOpacity
-                          style={[styles.button, shop.subscription.plan !== 'free' && styles.subscribedButton]}
-                          onPress={e=> handleSub()}
-                          activeOpacity={0.8}
-                          >
-                          <View style={styles.buttonContent}>
-                            <Icon 
-                            name={shop.subscription.plan !== 'free' ? "diamond" : "diamond-outline"} 
-                            size={16} 
-                            color={shop.subscription.plan !== 'free' ? "#FFF" : "#FF4500"} 
-                            style={styles.icon}
-                            />
-                            <Text style={[styles.buttonText, shop.subscription.plan !== 'free' && styles.subscribedText]}>
-                            {shop.subscription.plan !== 'free' ? `${capitalize(shop.subscription.plan)} Plan` : 'Upgrade Now'}
-                            </Text> 
-                          </View>
-                      </TouchableOpacity> 
-                    )}
-                  </View>
-              </View>
-          ),
-      }}  name="user-sell" component={Sell} />
-
-      <SellStack.Screen  options={{
         header: ({navigation}) =>
-        (
+          (
           <View style={styles.headerContainer}>
             {/* Logo */}
-            <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', backgroundColor: '#FFF', alignItems: 'center', paddingLeft: -10, paddingRight: 5 }}>
-              <TouchableOpacity style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#fff', marginRight: 5, borderRadius: 50, padding: 5 }} onPress={e => navigation.goBack()}>
-                <Ionicons name={'chevron-back'} size={20} />
-              </TouchableOpacity>
-              <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
-                <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Campaign info</Text>
-              </View>
-            </View>
+            <TouchableOpacity style={styles.logoContainer} onPress={() => {
+              if(shop?.shop_id){
+                navigation.navigate('shop')
+              }else{
+                Alert.alert('Please register your shop first!')
+              }
+            }}>
+              <Image 
+                source={{ uri: shop?.logo_url !== 'NULL' && shop?.logo_url || 'https://res.cloudinary.com/daqbhghwq/image/upload/v1746402998/Untitled_design-removebg-preview_peqlme.png'}} 
+                style={styles.logo}
+                // resizeMode="contain"
+              /> 
+              <Text numberOfLines={1} style={{
+                fontSize: 11,
+                fontWeight: 'bold',
+                color: '#000',
+                marginLeft: 0,
+                flexShrink: 1,
+                marginBottom: 5
+              }}>
+                {shop && shop?.title}
+              </Text>
+            </TouchableOpacity>
 
             {/* Right Section */}
             <View style={styles.rightSection}>
@@ -152,16 +100,16 @@ export function SellStackScreen() {
                   style={[styles.button, shop.subscription.plan !== 'free' && styles.subscribedButton]}
                   onPress={e=> handleSub()}
                   activeOpacity={0.8}
-                  >
+                >
                   <View style={styles.buttonContent}>
                     <Icon 
-                    name={shop.subscription.plan !== 'free' ? "diamond" : "diamond-outline"} 
-                    size={16} 
-                    color={shop.subscription.plan !== 'free' ? "#FFF" : "#FF4500"} 
-                    style={styles.icon}
+                      name={shop.subscription.plan !== 'free' ? "diamond" : "diamond-outline"} 
+                      size={16} 
+                      color={shop.subscription.plan !== 'free' ? "#FFF" : "#FF4500"} 
+                      style={styles.icon}
                     />
                     <Text style={[styles.buttonText, shop.subscription.plan !== 'free' && styles.subscribedText]}>
-                    {shop.subscription.plan !== 'free' ? `${capitalize(shop.subscription.plan)} Plan` : 'Upgrade Now'}
+                    {shop?.subscription?.plan !== 'free' ? `${Tools.capitalize(shop?.subscription?.plan)} Plan` : 'Upgrade Now'}
                     </Text> 
                   </View>
                 </TouchableOpacity> 
@@ -169,32 +117,97 @@ export function SellStackScreen() {
             </View>
           </View>
         ),
-      }}  name="user-promotion-data" component={PromotedAdDetailsScreen} />
-      
+      }}  name="sell" component={Sell} />
 
       <SellStack.Screen  options={{
-          header: ({navigation}) =>
-          (
-              <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
-                  <TouchableOpacity style={{
-                      height: 55,
-                      borderRadius: 15,
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'flex-start',
-                      alignItems: 'center',
-                      width: 45,
-                  }} onPress={e => navigation.goBack()}> 
-                      <Ionicons name={'chevron-back'} size={25} color={'#000'} />
-                  </TouchableOpacity>
-                  <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
-                      <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Create new ads</Text>
-                  </View>
-              </View>
-          ),
-      }}  name="user-new-listing" component={Create} />
-      
+        header: ({navigation}) =>
+        (
+          <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
+            <TouchableOpacity style={{
+              height: 55,
+              borderRadius: 15,
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              alignItems: 'center',
+              width: 45,
+            }} onPress={e => navigation.goBack()}> 
+                <Ionicons name={'chevron-back'} size={25} color={'#000'} />
+            </TouchableOpacity>
+            <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
+              <Text style={{
+                fontSize: 16,
+                fontWeight: 'bold',
+                color: '#000',
+                marginLeft: 0,
+                // flexShrink: 1,
+                marginBottom: 5
+              }}>
+                My Shop
+              </Text>
+            </View>
+          </View>
+        ),
+        
+      }}   name="shop" component={Shop} />
+
       <SellStack.Screen  options={{
+        header: ({navigation}) =>
+        (
+
+          <>
+            <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center',  elevation: 2, paddingLeft: 15, paddingRight: 25}}>
+              <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#fff', marginRight: 15, borderRadius: 50, padding: 5}}>
+                <Ionicons name={'chevron-back'} size={25} color={'#000'} />
+              </TouchableOpacity>
+                <View style={{backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10}}>
+                <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Reviews</Text>
+              </View>
+            </View>
+          </> 
+        ),
+      }} name="reviews" component={Reviews} />  
+
+      <SellStack.Screen  options={{
+        header: ({navigation}) =>
+        (
+
+          <>
+            <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center',  elevation: 2, paddingLeft: 15, paddingRight: 25}}>
+              <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#fff', marginRight: 15, borderRadius: 50, padding: 5}} onPress={e => navigation.goBack()}>
+                <Ionicons name={'chevron-back'} size={25} color={'#000'} />
+              </TouchableOpacity>
+              <View style={{backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10}}>
+                <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Analytics</Text>
+              </View>
+            </View>
+          </> 
+        ),
+      }} name="analytics" component={AnalyticsScreen} /> 
+
+      <SellStack.Screen  options={{
+        header: ({navigation}) =>
+        (
+          <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
+            <TouchableOpacity style={{
+              height: 55,
+              borderRadius: 15,
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              alignItems: 'center',
+              width: 45,
+            }} onPress={e => navigation.goBack()}> 
+              <Ionicons name={'chevron-back'} size={25} color={'#000'} />
+            </TouchableOpacity>
+            <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
+              <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Create new ads</Text>
+            </View>
+          </View>
+        ),
+      }}  name="create" component={Create} />
+
+       <SellStack.Screen  options={{
           header: ({navigation}) =>
           (
             <>
@@ -210,14 +223,60 @@ export function SellStackScreen() {
             </>
             
           ),
-      }}  name="user-inventory" component={Listing} /> 
+      }}  name="inventory" component={Inventory} />
+
+      {/* <SellStack.Screen  options={{
+        header: ({navigation}) =>
+        (
+          <View style={styles.headerContainer}>
+            <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', backgroundColor: '#FFF', alignItems: 'center', paddingLeft: -10, paddingRight: 5 }}>
+              <TouchableOpacity style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#fff', marginRight: 5, borderRadius: 50, padding: 5 }} onPress={e => navigation.goBack()}>
+                <Ionicons name={'chevron-back'} size={20} />
+              </TouchableOpacity>
+              <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
+                <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Campaign info</Text>
+              </View>
+            </View>
+
+            <View style={styles.rightSection}>
+              {shop && (
+                <TouchableOpacity
+                  style={[styles.button, shop.subscription.plan !== 'free' && styles.subscribedButton]}
+                  onPress={e=> handleSub()}
+                  activeOpacity={0.8}
+                  >
+                  <View style={styles.buttonContent}>
+                    <Icon 
+                    name={shop.subscription.plan !== 'free' ? "diamond" : "diamond-outline"} 
+                    size={16} 
+                    color={shop.subscription.plan !== 'free' ? "#FFF" : "#FF4500"} 
+                    style={styles.icon}
+                    />
+                    <Text style={[styles.buttonText, shop.subscription.plan !== 'free' && styles.subscribedText]}>
+                    {shop.subscription.plan !== 'free' ? `${Tools.Tools.capitalize(shop.subscription.plan)} Plan` : 'Upgrade Now'}
+                    </Text> 
+                  </View>
+                </TouchableOpacity> 
+              )}
+            </View>
+          </View>
+        ),
+      }}  name="user-promotion-data" component={PromotedAdDetailsScreen} />
+       */}
+
+      {/*
+      
+       */}
 
        
 
-        <SellStack.Screen  options={{
-          header: ({navigation}) =>
-          (
-            <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
+      {/* 
+
+      <SellStack.Screen  options={{
+        header: ({navigation}) =>
+        (
+          <View style={styles.headerContainer}>
+            <View style={[{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', backgroundColor: '#FFF', alignItems: 'center', elevation: 0, paddingLeft: 5, paddingRight: 20 }]}>
               <TouchableOpacity style={{
                 height: 55,
                 borderRadius: 15,
@@ -227,114 +286,51 @@ export function SellStackScreen() {
                 alignItems: 'center',
                 width: 45,
               }} onPress={e => navigation.goBack()}> 
-                  <Ionicons name={'chevron-back'} size={25} color={'#000'} />
+                <Ionicons name={'chevron-back'} size={25} color={'#000'} />
               </TouchableOpacity>
-              <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
-                <Text style={{
-                  fontSize: 16,
-                  fontWeight: 'bold',
-                  color: '#000',
-                  marginLeft: 0,
-                  // flexShrink: 1,
-                  marginBottom: 5
-                }}>
-                  My Shop
-                </Text>
-              </View>
+
+              <Text style={{
+                fontSize: 16,
+                fontWeight: 'bold',
+                color: '#000',
+                marginLeft: 0,
+                // flexShrink: 1,
+                marginBottom: 5 
+              }}>
+                Performance
+              </Text>
             </View>
-          ),
-          
-        }}   name="user-shop" component={Shopile} />
- 
-        <SellStack.Screen  options={{
-          header: ({navigation}) =>
-          (
-            <View style={styles.headerContainer}>
-              <View style={[{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', backgroundColor: '#FFF', alignItems: 'center', elevation: 0, paddingLeft: 5, paddingRight: 20 }]}>
-                <TouchableOpacity style={{
-                  height: 55,
-                  borderRadius: 15,
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'flex-start',
-                  alignItems: 'center',
-                  width: 45,
-                }} onPress={e => navigation.goBack()}> 
-                  <Ionicons name={'chevron-back'} size={25} color={'#000'} />
-                </TouchableOpacity>
 
-                <Text style={{
-                  fontSize: 16,
-                  fontWeight: 'bold',
-                  color: '#000',
-                  marginLeft: 0,
-                  // flexShrink: 1,
-                  marginBottom: 5 
-                }}>
-                  Performance
-                </Text>
-              </View>
-
-              <View style={styles.rightSection}>
-                {shop && (
-                  <TouchableOpacity
-                      style={[styles.button, shop.subscription.plan !== 'free' && styles.subscribedButton]}
-                      onPress={e=> handleSub()}
-                      activeOpacity={0.8}
-                      >
-                      <View style={styles.buttonContent}>
-                        <Icon 
-                        name={shop.subscription.plan !== 'free' ? "diamond" : "diamond-outline"} 
-                        size={16} 
-                        color={shop.subscription.plan !== 'free' ? "#FFF" : "#FF4500"} 
-                        style={styles.icon}
-                        />
-                        <Text style={[styles.buttonText, shop.subscription.plan !== 'free' && styles.subscribedText]}>
-                        {shop.subscription.plan !== 'free' ? `${capitalize(shop.subscription.plan)} Plan` : 'Upgrade Now'}
-                        </Text> 
-                      </View>
-                  </TouchableOpacity> 
-                )}
-              </View>
+            <View style={styles.rightSection}>
+              {shop && (
+                <TouchableOpacity
+                    style={[styles.button, shop.subscription.plan !== 'free' && styles.subscribedButton]}
+                    onPress={e=> handleSub()}
+                    activeOpacity={0.8}
+                    >
+                    <View style={styles.buttonContent}>
+                      <Icon 
+                      name={shop.subscription.plan !== 'free' ? "diamond" : "diamond-outline"} 
+                      size={16} 
+                      color={shop.subscription.plan !== 'free' ? "#FFF" : "#FF4500"} 
+                      style={styles.icon}
+                      />
+                      <Text style={[styles.buttonText, shop.subscription.plan !== 'free' && styles.subscribedText]}>
+                      {shop.subscription.plan !== 'free' ? `${Tools.capitalize(shop.subscription.plan)} Plan` : 'Upgrade Now'}
+                      </Text> 
+                    </View>
+                </TouchableOpacity> 
+              )}
             </View>
-          ),
-          
-        }}   name="user-metrics" component={Analytics} />
+          </View>
+        ),
+        
+      }}   name="user-metrics" component={Analytics} />
 
-        <SellStack.Screen  options={{
-          header: ({navigation}) =>
-          (
+      
 
-            <>
-              <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center',  elevation: 2, paddingLeft: 15, paddingRight: 25}}>
-                <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#fff', marginRight: 15, borderRadius: 50, padding: 5}}>
-                  <Ionicons name={'chevron-back'} size={25} color={'#000'} />
-                </TouchableOpacity>
-                  <View style={{backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10}}>
-                  <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Reviews</Text>
-                </View>
-              </View>
-            </> 
-          ),
-        }} name="user-reviews" component={Reviews} />  
-
-        <SellStack.Screen  options={{
-          header: ({navigation}) =>
-          (
-
-            <>
-              <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center',  elevation: 2, paddingLeft: 15, paddingRight: 25}}>
-                <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#fff', marginRight: 15, borderRadius: 50, padding: 5}} onPress={e => navigation.goBack()}>
-                  <Ionicons name={'chevron-back'} size={25} color={'#000'} />
-                </TouchableOpacity>
-                  <View style={{backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10}}>
-                  <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Analytics</Text>
-                </View>
-              </View>
-            </> 
-          ),
-        }} name="user-analytics" component={AnalyticsScreen} />  
-                
+        */}
+              
     </SellStack.Navigator>  
   );
 }

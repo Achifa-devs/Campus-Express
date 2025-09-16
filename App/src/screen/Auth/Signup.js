@@ -131,6 +131,7 @@ const Signup = () => {
       if (data.success) {
         await Memory.store('user', (data.data.user));
         dispatch(set_user(data.data.user))
+        dispatch(set_campus(data.data.user?.campus))
         dispatch(set_mode('main'))
       } else {
         setServerErr(data.message);
