@@ -26,6 +26,9 @@ import Reviews from "../screen/Reviews";
 import AnalyticsScreen from "../screen/Analytics";
 import Create from "../screen/Create";
 import Inventory from "../screen/Inventory";
+import Offers from "../components/Home/Offers";
+import PromotedAdDetails from "../screen/Promotion";
+import Performance from "../screen/Performance";
 
 const SellStack = createNativeStackNavigator();
 export function SellStackScreen() {
@@ -219,13 +222,13 @@ export function SellStackScreen() {
                   <Text style={{ color: '#000', display: 'flex', fontSize: 20, fontWeight: '500', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Inventory</Text>
                 </View>
               </View>
-              <NavigationTabs />
+              <Offers />
             </>
             
           ),
       }}  name="inventory" component={Inventory} />
 
-      {/* <SellStack.Screen  options={{
+      <SellStack.Screen  options={{
         header: ({navigation}) =>
         (
           <View style={styles.headerContainer}>
@@ -253,7 +256,7 @@ export function SellStackScreen() {
                     style={styles.icon}
                     />
                     <Text style={[styles.buttonText, shop.subscription.plan !== 'free' && styles.subscribedText]}>
-                    {shop.subscription.plan !== 'free' ? `${Tools.Tools.capitalize(shop.subscription.plan)} Plan` : 'Upgrade Now'}
+                    {shop.subscription.plan !== 'free' ? `${Tools.capitalize(shop.subscription.plan)} Plan` : 'Upgrade Now'}
                     </Text> 
                   </View>
                 </TouchableOpacity> 
@@ -261,16 +264,9 @@ export function SellStackScreen() {
             </View>
           </View>
         ),
-      }}  name="user-promotion-data" component={PromotedAdDetailsScreen} />
-       */}
-
-      {/*
+      }}  name="promotion-data" component={PromotedAdDetails} />
       
-       */}
 
-       
-
-      {/* 
 
       <SellStack.Screen  options={{
         header: ({navigation}) =>
@@ -325,11 +321,11 @@ export function SellStackScreen() {
           </View>
         ),
         
-      }}   name="user-metrics" component={Analytics} />
+      }}   name="metrics" component={Performance} />
 
       
 
-        */}
+       
               
     </SellStack.Navigator>  
   );

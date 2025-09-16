@@ -26,16 +26,7 @@ const ServicesOffer = ({ data = [], loading }) => {
   const [deviceId, setDeviceId] = useState('');
   const { user } = useSelector((state) => state?.user);
 
-  // Show loading until data arrives
-  const isFirstRender = useRef(true);
-
-  useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return; // skip the first run
-    }
-    setLoading(false);
-  }, [data]);
+ 
 
 
   const viewabilityConfig = { viewAreaCoveragePercentThreshold: 50 };
