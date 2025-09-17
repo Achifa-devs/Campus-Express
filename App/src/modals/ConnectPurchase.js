@@ -121,17 +121,28 @@ const ConnectionPurchase = ({ visible, onClose }) => {
     });
   };
 
-  const calculateDiscount = (connections, price) => {
-    if (!connections || !price) return 0;
-    const singlePrice = connections * 100;
-    const discount = singlePrice - price;
-    const discountPercent = Math.round((discount / singlePrice) * 100);
-    return discountPercent;
+  const calculateDiscount = (discount, price) => {
+    if (!discount || !price) return 0;
+
+    // Parse out "₦" and commas
+    const d = parseFloat(discount.replace('₦', '').replace(',', ''));
+    const p = parseFloat(price.replace('₦', '').replace(',', ''));
+
+    if (isNaN(d) || isNaN(p) || p === 0) return 0;
+
+    // Calculate how much was discounted
+    const amt = p - d;
+
+    // Calculate percentage
+    const real_discounted = (amt / p) * 100;
+
+    // Round to 1 decimal place
+    return Math.round(real_discounted * 10) / 10;
   };
 
+
   // Safely extract single + bundle
-  const singleConnectionPack = bundle_packs.length > 0 ? bundle_packs[0] : null;
-  const bundlePacks = bundle_packs.length > 1 ? bundle_packs.slice(1) : [];
+  const bundlePacks = bundle_packs.length > 1 ? bundle_packs : [];
 
   return (
     <Modal animationType="slide" transparent={true} visible={visible} onRequestClose={onClose}>
@@ -152,36 +163,14 @@ const ConnectionPurchase = ({ visible, onClose }) => {
             Use connection credits to contact vendors. Purchase more when exhausted.
           </Text>
 
-          {singleConnectionPack && (
-            <View style={styles.pricingSection}>
-              <Text style={styles.sectionTitle}>Single Connection</Text>
-              <TouchableOpacity
-                style={[
-                  styles.packageCard,
-                  selectedPackage === singleConnectionPack.code && styles.selectedPackage,
-                ]}
-                onPress={() => setSelectedPackage(singleConnectionPack.code)}
-              >
-                <View style={styles.packageHeader}>
-                  <Text style={styles.connectionsCount}>1 Connection</Text>
-                  <View style={styles.priceTag}>
-                    <Text style={styles.priceText}>₦{singleConnectionPack.amount}</Text>
-                  </View>
-                </View>
-                <Text style={styles.packageDescription}>
-                  {singleConnectionPack.description}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          )}
-
           {bundlePacks.length > 0 && (
             <View style={styles.pricingSection}>
               <Text style={styles.sectionTitle}>Bundle Packs</Text>
               <Text style={styles.sectionSubtitle}>Save more with our bundle offers</Text>
 
               {bundlePacks.map((pack) => {
-                const discountPercent = calculateDiscount(pack.connections, pack.amount);
+                const discountPercent = calculateDiscount(pack.discount_price, pack.price);
+
                 return (
                   <TouchableOpacity
                     key={pack.code}

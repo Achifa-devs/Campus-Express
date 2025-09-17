@@ -510,23 +510,30 @@ CAMPUSSPHERE_SERVER.get('/sponsorship', async (req, res) => {
   try {
     // Get seller's products
     const result = await pool.query(
-      `
-        SELECT 
-          u.user_id AS user_id,
-          u.fname,            
-          u.lname,            
-          u.phone,            
-          u.campus,          
-          ARRAY_AGG(p.*) AS products
-        FROM vendor_tools_subscription s
-        JOIN users u 
-          ON s.user_id = u.user_id
-        JOIN products p 
-          ON p.user_id = u.user_id
-        WHERE s.plan = 'premium'
-          AND ($1::text IS NULL OR u.campus = $1::text)
-        GROUP BY u.user_id, u.fname, u.lname, u.phone, u.campus;
-      `,
+     `SELECT 
+        u.user_id,
+        u.fname,
+        u.lname,
+        u.phone,
+        u.campus,
+        JSON_AGG(
+          JSON_BUILD_OBJECT(
+            'product_id', p.product_id,
+            'name', p.name,
+            'price', p.price,
+            'status', p.status,
+            'category', p.category
+          )
+        ) AS products
+      FROM vendor_tools_subscription s
+      JOIN users u 
+        ON s.user_id = u.user_id
+      JOIN products p 
+        ON p.user_id = u.user_id
+      WHERE s.plan = 'premium'
+        AND ($1::text IS NULL OR u.campus = $1::text)
+      GROUP BY u.user_id, u.fname, u.lname, u.phone, u.campus;
+    `
       [campus === null || campus === 'null' || campus === '' ? 'NULL' : campus]
     );
     console.log(result.rows)

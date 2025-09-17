@@ -41,7 +41,7 @@ const Profile = ({ navigation }) => {
     {
       section: "Settings",
       links: user ? [
-        { label: "Account", icon: "wallet-outline", nav: "account" },
+        // { label: "Account", icon: "wallet-outline", nav: "account" },
         { label: "Subscription & Billing", icon: "card-outline", nav: "subscription" },
 
         // { label: "Preference", icon: "options-outline", nav: "user-preference" },

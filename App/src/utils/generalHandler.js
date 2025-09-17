@@ -33,15 +33,15 @@ class Tools {
             const newHistory = { date: new Date(), data: data };
             const prevHistory = await Memory.get('history');
             console.log(prevHistory)
-            if(prevHistory !== null && prevHistory !== 'null'){
+            if(prevHistory){
                 const arr = (prevHistory);
                 let duplicate = arr.filter(item => item.data.product_id === data?.product_id).length>0;
                 if(!duplicate){
-                Memory.store('history', ([...arr, newHistory]));
+                    Memory.store('history', ([...arr, newHistory]));
                 }
-        }else{
-            Memory.store('history', ([newHistory]));
-        }
+            }else{
+                Memory.store('history', ([newHistory]));
+            }
 
             
         }

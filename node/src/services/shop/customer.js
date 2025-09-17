@@ -173,10 +173,10 @@ export const postResetCustomerPhone = async (payload) => {
 };
 
 export const postUpdateCustomerProfile = async (payload) => {
-  const { user_id, fname, lname, gender, campus, state } = payload;
+  const { user_id, fname, lname, email, phone, gender, campus, state } = payload;
   try {
     // Business logic
-    const response = await updateCustomerProfileById({ user_id, fname, lname, campus, state , gender:  gender.toLowerCase() === 'male' ? 1 : 0 });
+    const response = await updateCustomerProfileById({ user_id, fname, lname, email, phone, campus, state , gender:  gender.toLowerCase() === 'male' ? 1 : 0 });
   
     return response;
   } catch (error) {

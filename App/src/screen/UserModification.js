@@ -19,6 +19,8 @@ export default function UserModification() {
     
     let [fname, set_fname] =  useState('')
     let [lname, set_lname] =  useState('')
+    let [email, set_email] =  useState('')
+    let [phone, set_phone] =  useState('')
     let [states, set_states] =  useState('')
     let [cities, set_cities] =  useState('')
     let [gender, setGender] = useState('')
@@ -28,6 +30,8 @@ export default function UserModification() {
     useEffect(() => {
         set_fname(user?.fname)
         set_lname(user?.lname)
+        set_email(user?.email)
+        set_phone(user?.phone)
         setState(user?.state)
         setCampus(user?.campus)
         setGender(user?.gender)
@@ -82,7 +86,7 @@ export default function UserModification() {
     async function update_user(){
         try {
             const req = await axios.post('https://cs-server-olive.vercel.app/profile-update', {
-                fname, lname, campus, state, gender, user_id: user?.user_id
+                fname, lname, email, phone, campus, state, gender, user_id: user?.user_id
             })
             let response = req.data;
             console.log('response: ', response)
@@ -363,12 +367,12 @@ export default function UserModification() {
 
                 <View style={styles.inputCnt}>
                     <Text style={styles.label}>Phone number</Text>
-                    <TextInput style={styles.input} value={`${user?.phone}`} />
+                    <TextInput onChange={txt => set_phone(txt)} style={styles.input} defaultValue={`${user?.phone}`} />
                 </View>
                 
                 <View style={styles.inputCnt}>
                     <Text style={styles.label}>Email</Text>
-                    <TextInput style={styles.input} value={`${user?.email}`} />
+                    <TextInput onChange={txt => set_email(txt)} style={styles.input} defaultValue={`${user?.email}`} />
                 </View>
 
                 {/* <Text style={[styles.label, {borderBottomColor: '#000', borderBottomWidth: 1}]}>Change phone number</Text> */}

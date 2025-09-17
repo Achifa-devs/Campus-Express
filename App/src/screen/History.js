@@ -25,7 +25,7 @@ export default function History() {
       const result = await Memory.get('history');
       console.log(result)
       if (result) {
-        setData(JSON.parse(result));
+        setData((result));
       } else {
         setData([]);
       }

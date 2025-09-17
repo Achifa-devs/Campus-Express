@@ -109,11 +109,11 @@ export async function updateCustomerEmailById({ user_id, email }) {
 };
 
 
-export async function updateCustomerProfileById({ user_id, fname, lname, gender, campus, state }) {
+export async function updateCustomerProfileById({ user_id, fname, lname, email, phone, gender, campus, state }) {
   
   const result = await pool.query(
-    `UPDATE users set fname=$1, lname=$2, gender=$3, campus=$5, state=$6 WHERE user_id = $4`,
-    [fname, lname, gender, user_id, campus, state]
+    `UPDATE users set fname=$1, lname=$2, email=$3, phone=$4 gender=$5, campus=$6, state=$7 WHERE user_id = $8`,
+    [fname, lname, email, phone, gender, campus, state, user_id]
   );
   return result.rows[0];
 };
