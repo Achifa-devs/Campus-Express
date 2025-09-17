@@ -23,6 +23,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import Memory from '../../utils/memoryHandler.js';
 import { set_user } from '../../../redux/info/user.js';
 import { set_mode } from '../../../redux/info/mode.js';
+import { set_campus } from '../../../redux/info/campus.js';
 
 const { width, height } = Dimensions.get('window');
 

@@ -1,26 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 
-export default function DropdownComp({ dropdownData, default_value, fieldName, input_name, placeholder, updateData, dropdownPosition }) {
-  const [value, setValue] = useState('');
-
+export default function DropdownComp({
+  dropdownData,
+  default_value,
+  fieldName,
+  input_name,
+  placeholder,
+  updateData,
+  dropdownPosition
+}) {
+  const [value, setValue] = useState(null);
 
   useEffect(() => {
-    console.log('default_value: ', default_value)
-    setValue({title: default_value});
+    if (default_value) {
+      setValue(default_value); // ✅ just set the string value
+    }
   }, [default_value]);
-
-  useEffect(() => {
-    console.log('dropdownData: ', dropdownData)
-    setValue({title: dropdownData});
-  }, [dropdownData]);
 
   return (
     <View style={styles.container}>
       <Dropdown
         style={styles.dropdown}
-        
         placeholderStyle={styles.placeholder}
         selectedTextStyle={styles.selectedText}
         inputSearchStyle={styles.searchInput}
@@ -32,12 +34,10 @@ export default function DropdownComp({ dropdownData, default_value, fieldName, i
         valueField={fieldName || "title"}
         placeholder={placeholder}
         searchPlaceholder="Search..."
-        value={value}
+        value={value} // ✅ this should be the raw value, not an object
         onChange={item => {
-          setValue(item);
-          let key = fieldName || "title";
-          console.log(input_name,item[key])
-          updateData(item[key], input_name);
+          setValue(item[fieldName || "title"]); // ✅ set the value
+          updateData(item[fieldName || "title"], input_name);
         }}
       />
     </View>

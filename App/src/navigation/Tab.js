@@ -10,7 +10,7 @@ import { useNavigationState } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { HomeStackScreen } from '../stacks/Home';
-// import { ProfileStackScreen } from '../stacks/Profile';
+import { ProfileStackScreen } from '../stacks/Profile';
 import { SellStackScreen } from '../stacks/Sell';
 
 const Tab = createBottomTabNavigator();
@@ -104,10 +104,10 @@ export default function Main() {
         name="Sell"  
         component={SellStackScreen} 
       />
-      {/* <Tab.Screen 
+      <Tab.Screen 
         name="Profile" 
         component={ProfileStackScreen} 
-      />  */}
+      /> 
      
     </Tab.Navigator>
   );

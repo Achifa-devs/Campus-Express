@@ -22,6 +22,8 @@ import { useDispatch } from 'react-redux';
 import Tools from '../../utils/generalHandler.js'
 import Memory from '../../utils/memoryHandler.js';
 import { set_mode } from '../../../redux/info/mode.js';
+import { set_campus } from '../../../redux/info/campus.js';
+import { set_user } from '../../../redux/info/user.js';
 const Signup = () => {
   const [formData, setFormData] = useState({
     fname: '',
