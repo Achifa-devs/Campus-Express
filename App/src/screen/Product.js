@@ -303,7 +303,7 @@ export default function Product() {
       dispatch(set_sponsored_modal({data: null, visible: 1}))
 
       parsedDdata.map(item => {
-        console.log("products list", JSON.parse(item.products))
+        console.log("products list", (item.products))
       })   
       // If you want to prevent going back:
       // e.preventDefault();
