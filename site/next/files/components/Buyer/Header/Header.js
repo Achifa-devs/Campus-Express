@@ -38,7 +38,7 @@ import tabletsSvg from '../../../assets/tablet-svgrepo-com.svg'
 
 import orderSvg from '../../../assets/order-completed-svgrepo-com.svg'
 import cartSvg from '../../../assets/cart-shopping-fast-svgrepo-com.svg'
-import acctSvg from '../../../assets/user-svgrepo-com (2).svg'
+import acctSvg from '../../../assets/svgrepo-com (2).svg'
 import inboxSvg from '../../../assets/inbox-alt-svgrepo-com (1).svg'
 import savedSvg from '../../../assets/bookmark-outlined-saved-svgrepo-com.svg'
 import helpSvg from '../../../assets/help-svgrepo-com.svg'

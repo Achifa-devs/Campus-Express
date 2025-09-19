@@ -123,12 +123,13 @@ const ItemCard = React.memo(({ item, onPress }) => {
           onLoadEnd={() => setLoading(false)}
         />
 
-        {isPromoted && (
+        {/* stage 2 or 3 */}
+        {/* {isPromoted && (
           <View style={styles.boostBadge}>
             <Icon name="rocket" size={12} color="#FFF" />
             <Text style={styles.boostBadgeText}> Boosted</Text>
           </View>
-        )}
+        )} */}
 
         {loading && (
           <View style={styles.loadingOverlay}>

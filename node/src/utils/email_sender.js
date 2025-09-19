@@ -15,7 +15,7 @@ export async function send_email(subject, template, email) {
     });
 
     // Email content 
-    const mailOptions = {
+    const mailOptions = { 
       from: '"Campus Sphere" <campus-sphere@campussphere.net>',
       to: email,
       subject,

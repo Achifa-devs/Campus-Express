@@ -136,6 +136,7 @@ export const postConfirmEmail = async (payload) => {
       throw new Error("Failed to create token.");
     }
 
+
     // Generate email template (sync or async depending on your tokenTemplate)
     const template = tokenTemplate(
       `${user.fname} ${user.lname}`,
@@ -149,10 +150,12 @@ export const postConfirmEmail = async (payload) => {
     if (!sent) {
       throw new Error("Failed to send confirmation email.");
     }
+    console.log(sent)
+
 
     return true; // Success
   } catch (error) {
-    console.error("postConfirmEmail error:", error.message);
+    console.error("postConfirmEmail error:", error);
     throw new Error("Internal server error.");
   }
 };

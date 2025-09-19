@@ -556,7 +556,7 @@ export default function Create({ route }) {
   
       setUploading(true)
       console.log(productId)
-      fetch('https://cs-server-olive.vercel.app/vendor/create-product', {
+      fetch('https://cs-node.vercel.app/vendor/create-product', {
         method: 'post',
         headers: {
           "Content-Type": "Application/json"

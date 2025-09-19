@@ -8,7 +8,7 @@ import closeSvg from '@/public/close-square-svgrepo-com (1).svg'
 
 import '@/app/store/account-managements/styles/small.css'
 import { useSelector } from 'react-redux'
-import me from '../../../public/user-rounded-svgrepo-com.svg'
+import me from '../../../public/rounded-svgrepo-com.svg'
 import security from '../../../public/password-svgrepo-com.svg'
 import arrow from '../../../public/down-arrow-backup-2-svgrepo-com.svg'
 import { data } from 'autoprefixer'

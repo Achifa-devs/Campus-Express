@@ -19,7 +19,7 @@ export default function Home() {
     setData([]);
     try {
       const res = await fetch(
-        `https://cs-server-olive.vercel.app/trends?limit=20&category=${btoa(
+        `https://cs-node.vercel.app/trends?limit=20&category=${btoa(
           'trends'
         )}&campus=${campus === 'All campus' ? null : campus}&purpose=${option === 'Products' ? 'product' : option === 'Lodges' ? 'accomodation' : 'service'}`,
         {

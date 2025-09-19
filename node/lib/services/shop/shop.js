@@ -17,12 +17,12 @@ export const getShopOwner = async payload => {
 };
 export const getShopReviews = async payload => {
   const {
-    user_id
+    shop_id
   } = payload;
 
   // Business logic
   const response = await findShopReviewsById({
-    user_id
+    shop_id
   });
   return response;
 };
@@ -51,35 +51,36 @@ export const getShopContent = async payload => {
 export const postShopReview = async payload => {
   const {
     shop_id,
-    user_id,
-    order_id,
-    user_id,
+    product_id,
+    buyer_id,
     review,
     date,
     comment,
     rating
   } = payload;
-
-  // Business logic
-  const response = await createShopReview({
-    shop_id,
-    user_id,
-    order_id,
-    user_id,
-    review,
-    date,
-    comment,
-    rating
-  });
-  return response;
+  try {
+    // Business logic
+    const response = await createShopReview({
+      shop_id,
+      product_id,
+      buyer_id,
+      review,
+      date,
+      comment,
+      rating
+    });
+    return response;
+  } catch (error) {
+    console.log("error: ", error);
+  }
 };
 
 // export const postShopVisit = async (payload) => {
-//   const { user_id, product_id } = payload;
+//   const { buyer_id, product_id } = payload;
 //   // Business logic
 
-//   let existingView = await findShopViewById({ product_id, user_id });
-//   let newView = await createShopView ({ user_id, product_id });
+//   let existingView = await findShopViewById({ product_id, buyer_id });
+//   let newView = await createShopView ({ buyer_id, product_id });
 //   if (existingView.length > 0) {
 //     throw new Error("Already viewed")
 //   } else if(newView < 1){

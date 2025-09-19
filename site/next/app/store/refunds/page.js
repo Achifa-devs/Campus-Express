@@ -23,7 +23,7 @@ const Refund = () => {
    
     useEffect(() => {
         if(user_id !== '' && user_id !== null){
-            axios.get('https://cs-server-olive.vercel.app/refunds', {params: {user_id: user_id.trim()}})
+            axios.get('https://cs-node.vercel.app/refunds', {params: {user_id: user_id.trim()}})
             .then(({data})=>{
                 console.log(data)
                 setItems(data)

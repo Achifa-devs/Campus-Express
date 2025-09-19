@@ -121,7 +121,7 @@ const Signup = ({updateActiveJsx}) => {
 
     setServerLoading(true);
     try {
-      const response = await fetch('https://cs-server-olive.vercel.app/vendor/registration', {
+      const response = await fetch('https://cs-node.vercel.app/vendor/registration', {
         method: 'POST',
         headers: { "Content-Type": "Application/json" },
         body: JSON.stringify(formData)

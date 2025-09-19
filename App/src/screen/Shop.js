@@ -15,6 +15,7 @@ import BottomModal from '../reusables/BtmModal';
 import { set_shop } from '../../redux/info/shop';
 import { set_sub_modal } from '../../redux/modal/sub';
 export default function Shop() {
+    const dispatch = useDispatch()
     let {shop} = useSelector(s => s.shop);
     let { products } = useSelector(s => s.products);
     let { user } = useSelector(s => s.user)
@@ -28,9 +29,16 @@ export default function Shop() {
     let [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-      axios.get(`https://cs-server-olive.vercel.app/vendor/shop-reviews?shop_id=${shop?.shop_id}`)
+      axios.get(`https://cs-node.vercel.app/vendor/shop-reviews?shop_id=${shop?.shop_id}`)
       .then((res) => {
-        set_review(res?.data?.data)
+        const response = res.data.data;
+        if (res.data) {
+            if(Array.isArray(response) && response.length > 0){
+                console.log(response)
+                set_review(response)
+
+            }
+        } 
       }).catch(err=>console.log(err))
     }, [])
 
@@ -40,7 +48,6 @@ export default function Shop() {
       dispatch(set_shop(newShop))
     }, [logo])
 
-    const dispatch = useDispatch()
 
     function updateShop() {
         let list = [
@@ -52,7 +59,7 @@ export default function Shop() {
 
         if (list.filter(item => item !== '' && item !== undefined).length === list.length) {
             setIsLoading(true)
-            axios.post(`https://cs-server-olive.vercel.app/vendor/update-shop`, {
+            axios.post(`https://cs-node.vercel.app/vendor/update-shop`, {
                 title,
                 description,
                 user_id: user?.user_id,
@@ -109,7 +116,7 @@ export default function Shop() {
             type: image.type || 'image/jpeg',
         });
 
-        const response = await axios.post('https://cs-server-olive.vercel.app/upload', formData, {
+        const response = await axios.post('https://cs-node.vercel.app/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         });
 
@@ -130,7 +137,7 @@ export default function Shop() {
     const deleteFromServer = async (url) => {
         try {
             setIsLoading(true);
-            const response = await axios.post('https://cs-server-olive.vercel.app/delete', {
+            const response = await axios.post('https://cs-node.vercel.app/delete', {
                 url
             });
 
@@ -153,10 +160,11 @@ export default function Shop() {
         );
     }
 
-    function handleSub(params) {
+    function handleSub() {
         dispatch(set_sub_modal(1))
     }
-    let plan = shop.subscription.plan;
+    let plan = shop?.subscription?.plan || 'free';
+
 
   return (
     <> 
@@ -378,14 +386,20 @@ export default function Shop() {
                     <View style={styles.statDivider} />
                     <View style={styles.statItem}>
                         <Ionicons name="mail-outline" size={20} color="#10B981" />
-                        <Text style={styles.statNumber}>{review.length}</Text>
+                        <Text style={styles.statNumber}>{review?.length}</Text>
                         <Text style={styles.statLabel}>Reviews</Text>
                     </View>
                     <View style={styles.statDivider} />
                     <View style={styles.statItem}>
                         <Ionicons name="star-outline" size={20} color="#FF4500" />
                         <Text style={styles.statNumber}>
-                            {review.length > 0 ? (review.reduce((sum, item) => sum + item.rating, 0) / review.length).toFixed(1) : '0.0'}
+                            {
+                                review?.length > 0 ? 
+                                (review?.reduce((sum, item) => sum + (parseInt(item.rating) || 0), 0) / review?.length).toFixed(1) 
+                                : '0.0'
+                            }
+
+
                         </Text>
                         <Text style={styles.statLabel}>Rating</Text>
                     </View>
@@ -406,24 +420,24 @@ export default function Shop() {
                             <Text style={styles.sectionTitle}>Customer Reviews</Text>
                             <View style={styles.ratingSummary}>
                                 <StarRating
-                                    rating={review.length > 0 ? review.reduce((sum, item) => sum + item.rating, 0) / review.length : 0}
+                                    rating={review?.length > 0 ? review?.reduce((sum, item) => sum + parseInt(item.rating), 0) / review?.length : 0}
                                     starSize={18}
                                     color="#FF4500"
                                     starStyle={{marginRight: 2}}
                                     onChange={() => {}}
                                 />
-                                <Text style={styles.ratingText}>({review.length} reviews)</Text>
+                                <Text style={styles.ratingText}>({review?.length} reviews)</Text>
                             </View>
                         </View>
                     </View>
                     
-                    {review.length > 0 ? (
+                    {review?.length > 0 ? (
                         <View style={styles.reviewsContainer}>
-                            {review.slice(0, 2).map((item, index) => (
+                            {review?.slice(0, 2).map((item, index) => (
                                 <View key={index} style={styles.reviewItem}>
                                     <View style={styles.reviewHeader}>
                                         <StarRating
-                                            rating={item.rating}
+                                            rating={parseInt(item.rating)}
                                             starSize={16}
                                             color="#FF4500"
                                             starStyle={{marginRight: 1}}
@@ -452,7 +466,7 @@ export default function Shop() {
                         </View>
                     )}
                     
-                    {review.length > 0 && (
+                    {review?.length > 0 && (
                         <TouchableOpacity 
                             onPress={() => navigation.navigate('reviews', {data: review})} 
                             style={styles.viewAllButton}
@@ -467,7 +481,8 @@ export default function Shop() {
                 <View style={styles.sectionCard}>
                     <View style={styles.sectionHeader}>
                         <View>
-                           <TouchableOpacity style={styles.sectionHeader} onPress={() => {
+                            {/* Stage 2 or 3 */}
+                           {/* <TouchableOpacity style={styles.sectionHeader} onPress={() => {
                                 if(shop.subscription.plan !== 'free'){
                                     navigation.navigate('analytics')
                                 }else{
@@ -483,7 +498,7 @@ export default function Shop() {
                                         </View>
                                     </View>
                                 </View>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
  
                             <View style={styles.visibilityInfo}>
                                 <Ionicons name="lock-closed" size={14} color="#64748B" />
@@ -497,7 +512,10 @@ export default function Shop() {
                             <View style={[styles.analyticsIcon, {backgroundColor: '#EFF6FF'}]}>
                                 <Ionicons name="stats-chart" size={24} color="#3B82F6" />
                             </View>
-                            <Text style={[styles.analyticsNumber, plan === 'free' && styles.blur]}>
+                            {/* <Text style={[styles.analyticsNumber, plan === 'free' && styles.blur]}>
+                                {products.reduce((sum, item) => sum + parseInt(item.impression || 0), 0).toLocaleString()}
+                            </Text> */}
+                            <Text style={[styles.analyticsNumber]}>
                                 {products.reduce((sum, item) => sum + parseInt(item.impression || 0), 0).toLocaleString()}
                             </Text>
                             <Text style={styles.analyticsLabel}>Post Impressions</Text>
@@ -507,7 +525,10 @@ export default function Shop() {
                             <View style={[styles.analyticsIcon, {backgroundColor: '#F0FDF4'}]}>
                                 <Ionicons name="compass" size={24} color="#22C55E" />
                             </View>
-                            <Text style={[styles.analyticsNumber, plan === 'free' && styles.blur]}>
+                            {/* <Text style={[styles.analyticsNumber, plan === 'free' && styles.blur]}>
+                                {products.reduce((sum, item) => sum + parseInt(item.search_appearances || 0), 0).toLocaleString()}
+                            </Text> */}
+                            <Text style={[styles.analyticsNumber]}>
                                 {products.reduce((sum, item) => sum + parseInt(item.search_appearances || 0), 0).toLocaleString()}
                             </Text>
                             <Text style={styles.analyticsLabel}>Search Appearances</Text>
@@ -516,16 +537,19 @@ export default function Shop() {
                     
                     <TouchableOpacity 
                         onPress={() => {
-                            if(shop.subscription.plan !== 'free'){
-                                navigation.navigate('analytics')
-                            }else{
-                                handleSub()
-                            }
+                            // stage 2 or 3
+                            // if(shop.subscription.plan !== 'free'){
+                            //     navigation.navigate('analytics')
+                            // }else{
+                            //     handleSub()
+                            // }
+                            navigation.navigate('analytics')
                         }} 
                         style={styles.analyticsButton}
                     >
                         <Text style={styles.analyticsButtonText}>{
-                            shop.subscription.plan !== 'free'? 'View Detailed Analytics' : 'Subscribe To View Analytics'    
+                           'View Detailed Analytics'
+                            // shop.subscription.plan !== 'free'? 'View Detailed Analytics' : 'Subscribe To View Analytics'    
                         }</Text>
                         <Ionicons name="arrow-forward" size={16} color="#FF4500" />
                     </TouchableOpacity>

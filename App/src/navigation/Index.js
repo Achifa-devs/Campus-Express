@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Memory from "../utils/memoryHandler";
 import { set_user } from "../../redux/info/user";
@@ -7,7 +7,7 @@ import AuthStackScreen from "./Auth";
 import Main from "./Tab";
 import WelcomeScreen from "./Welcome";
 import { set_mode } from "../../redux/info/mode";
-import { NavigationContainer } from "@react-navigation/native";
+import { getFocusedRouteNameFromRoute, NavigationContainer, useNavigation } from "@react-navigation/native";
 import { SafeAreaView, StatusBar, StyleSheet } from "react-native";
 import { set_campus } from "../../redux/info/campus";
 import { PaystackProvider } from 'react-native-paystack-webview';
@@ -26,6 +26,9 @@ import Promotion from "../modals/Promotion";
 import Sponsorship from "../modals/Sponsorship";
 import { set_boost_modal } from "../../redux/modal/boost_modal";
 import { set_sponsored_modal } from "../../redux/modal/disruptor";
+import { set_nested_nav } from "../../redux/nested_navigation";
+import Tools from "../utils/generalHandler";
+import { Chat } from "../api/chat";
 
 function NavigationHandler() {
 
@@ -38,12 +41,15 @@ function NavigationHandler() {
   const { connect_purchase_modal } = useSelector(s => s.connect_purchase_modal);
   const { mode } = useSelector((s) => s.mode);
   const { user } = useSelector(s => s?.user);
-  
+  const { nested_nav } = useSelector(s => s?.nested_nav);
   const dispatch = useDispatch();
+
+
 
   useEffect(() => {
     if (user) {
       dispatch(set_campus(user?.campus));
+      Chat.init(user?.user_id, "http://10.31.82.146:4000");
     }
   }, [user]); 
 
@@ -78,7 +84,7 @@ function NavigationHandler() {
 
   const reqHandler = async () => {
     try {
-      const response = await axios.get("https://cs-server-olive.vercel.app/plans");
+      const response = await axios.get("https://cs-node.vercel.app/plans");
 
       // Save different parts separately
       await Memory.store("promo_plan", (response.data.promo_plans));
@@ -112,7 +118,7 @@ function NavigationHandler() {
   useEffect(() => {
     const fetchSponsors = async () => {
       try {
-        const resp = await axios.get('https://cs-server-olive.vercel.app/sponsorship', {
+        const resp = await axios.get('https://cs-node.vercel.app/sponsorship', {
           params: { campus: user?.campus },
         });
 
@@ -128,6 +134,8 @@ function NavigationHandler() {
     fetchSponsors();
   }, [user]); // runs whenever campus changes
 
+  const routeNameRef = useRef();
+  const navigationRef = useRef(); 
 
   return (
 
@@ -137,7 +145,26 @@ function NavigationHandler() {
         <StatusBar barStyle="light-content" backgroundColor={"#FF4500"} />
 
         <PaystackProvider publicKey={'pk_live_13343a7bd4deeebc644070871efcdf8fdcf280f7'} defaultChannels={["card", "bank", "ussd", "bank_transfer"]} debug={true}>
-          <NavigationContainer>
+          <NavigationContainer 
+            ref={navigationRef}
+            onReady={() =>
+              (routeNameRef.current = navigationRef.current.getCurrentRoute()?.name)
+            }
+            onStateChange={async () => {
+              const currentRoute = navigationRef.current?.getCurrentRoute();
+              const name = currentRoute?.name;
+
+              if (name) {
+                console.log('📍 Current screen:', name);
+
+                if (name === 'home' || name === 'sell' || name === 'profile' || name === 'chat') {
+                  dispatch(set_nested_nav({ boolean: true, id: Tools.generateId() }));
+                } else {
+                  dispatch(set_nested_nav({ boolean: false, id: Tools.generateId() }));
+                }
+              }
+            }}
+          >
             {mode === null && <WelcomeScreen />}
             {mode === "main" && <Main />}
             {mode === "intro" && <GetStartedScreen />}

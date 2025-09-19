@@ -70,7 +70,7 @@ export default function History() {
             <Text style={styles.emptyText}>No history yet</Text>
             <TouchableOpacity
               style={styles.browseButton}
-              onPress={() => navigation.navigate('user-home')} // Adjust navigation target as needed
+              onPress={() => navigation.navigate('home')} // Adjust navigation target as needed
             >
               <Text style={styles.browseButtonText}>Browse Products</Text>
             </TouchableOpacity>
@@ -99,7 +99,7 @@ const Card = ({ data }) => {
   return (
     <TouchableOpacity 
       style={styles.card} 
-      onPress={() => navigation.navigate('user-product', { product_id: data?.data?.product_id })} 
+      onPress={() => navigation.navigate('product', { data: data?.data})} 
     >
        {data?.data?.purpose !== 'accomodation' ? (
           <Image 

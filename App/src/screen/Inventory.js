@@ -27,7 +27,7 @@ const Inventory = () => {
 
   useEffect(() => {
     console.log(route.name)
-    if (route.name === "user-explore-shop") {
+    if (route.name === "explore-shop") {
       setExploreShop(true);
     } else {
       setExploreShop(false);
@@ -37,7 +37,7 @@ const Inventory = () => {
   const onDelete = async (item, type='image') => {
     setIsLoading(true)
     try {
-      const response = await axios.get('https://cs-server-olive.vercel.app/vendor/delete-product', {params: {product_id: item.product_id, type: type}});
+      const response = await axios.get('https://cs-node.vercel.app/vendor/delete-product', {params: {product_id: item.product_id, type: type}});
   
       const result = await response.data;
       if(result.success){
@@ -106,11 +106,11 @@ const Inventory = () => {
     
     const handlePromotePress = (data) => {
       if (!exploreshop) {
-        navigation.navigate('user-metrics', {
+        navigation.navigate('metrics', {
           data: data
         })
       } else {
-        navigation.navigate('user-product', { data: data });
+        navigation.navigate('product', { data: data });
       }
     };
     
@@ -127,7 +127,8 @@ const Inventory = () => {
           />
           
           {/* Boost Badge/Promote Button - Overlay on image */}
-          {isPromoted ? (
+          {/* stage 2 or 3 */}
+          {/* {isPromoted ? (
             <View style={styles.boostBadge}>
               <Icon name="rocket" size={12} color="#FFF" />
               <Text style={styles.boostBadgeText}>Promoted</Text>
@@ -141,7 +142,7 @@ const Inventory = () => {
               <Icon name="rocket-outline" size={12} color="#FFF" />
               <Text style={styles.promoteButtonText}>Promote now</Text>
             </TouchableOpacity>
-          )}
+          )} */}
         </TouchableOpacity>
         
         <View style={styles.serviceInfo}>

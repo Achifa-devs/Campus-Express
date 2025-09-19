@@ -49,7 +49,7 @@ const Accommodation = ({ route, navigation }) => {
   async function UpdateConnections() {
     setLoading(true)
     try {
-      let request = await axios.post('https://cs-server-olive.vercel.app/minus-connect', {user_id: user?.user_id})
+      let request = await axios.post('https://cs-node.vercel.app/minus-connect', {user_id: user?.user_id})
       let res = request?.data;
       
       if(res.success){
@@ -100,7 +100,7 @@ const Accommodation = ({ route, navigation }) => {
 
   useEffect(() => {
     try {
-      fetch(`https://cs-server-olive.vercel.app/image-folder?folderName=${data?.product_id}`, {
+      fetch(`https://cs-node.vercel.app/image-folder?folderName=${data?.product_id}`, {
         headers: { 
           "Content-Type": "Application/json" 
         } 
@@ -311,7 +311,7 @@ const Accommodation = ({ route, navigation }) => {
     let id = await Tools.getDeviceId()
     setLoading(true)
     try {
-      let request = await axios.post('https://cs-server-olive.vercel.app/share', {product_id: data?.product_id, user_id: user ? user.user_id : id})
+      let request = await axios.post('https://cs-node.vercel.app/share', {product_id: data?.product_id, user_id: user ? user.user_id : id})
       let res = request?.data;
       
       return res;
@@ -372,7 +372,7 @@ const Accommodation = ({ route, navigation }) => {
             {images.map((image, index) => (
               <TouchableOpacity 
                 onPress={() => {
-                  navigation.navigate('user-product-images', {
+                  navigation.navigate('product-images', {
                     files: images,
                     index: currentIndex,
                   });

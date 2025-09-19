@@ -1,4 +1,4 @@
-const Description = ({item}) => {
+typescriptconst Description = ({item}) => {
 
     return ( 
         <>

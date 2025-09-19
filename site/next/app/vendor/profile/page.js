@@ -781,7 +781,7 @@ function ShopInfo({campusLocaleList}) {
 // let [shop, setShop] = useState('')
     let [newShopName, setNewShopName] = useState('');
     function set_shop_name() {
-        fetch(`https://cs-server-olive.vercel.app/seller.shop-name-update`, {
+        fetch(`https://cs-node.vercel.app/seller.shop-name-update`, {
             method: 'post',
             headers: {
                 "Content-Type": "Application/json"

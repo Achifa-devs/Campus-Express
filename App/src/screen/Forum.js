@@ -42,7 +42,7 @@ const threads = [
 ];
 
 const ForumCard = ({ thread, navigation }) => (
-  <TouchableOpacity style={styles.card} onPress={e => navigation.navigate('user-topic-replies')}>
+  <TouchableOpacity style={styles.card} onPress={e => navigation.navigate('topic-replies')}>
     <Text style={styles.title}>{thread.title}</Text>
     <Text style={styles.preview}>{thread.preview}</Text>
     <View style={styles.metaRow}>
@@ -55,7 +55,7 @@ const ForumCard = ({ thread, navigation }) => (
 
 const ForumScreen = ({ navigation }) => {
   const handleCreateThread = () => {
-    navigation.navigate('user-thread'); // Uncomment if using navigation
+    navigation.navigate('thread'); // Uncomment if using navigation
     console.log('Navigate to create thread screen');
   };
   return (

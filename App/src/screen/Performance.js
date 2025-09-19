@@ -43,25 +43,29 @@ const Performance = () => {
       <View style={styles.itemHeader}>
         <View style={styles.locationContainer}>
           <Ionicons name="location-outline" size={16} color="#666" />
-          <Text style={[styles.locationText,  plan !== 'standard' && plan !== 'premium' && styles.blur ]}>{item.campus}</Text>
+          {/* <Text style={[styles.locationText,  plan !== 'standard' && plan !== 'premium' && styles.blur ]}>{item.campus}</Text> */}
+          <Text style={[styles.locationText]}>{item.campus}</Text>
         </View>
         <Text style={styles.timeText}>{js_ago(new Date(item.created_at))}</Text>
       </View>
       
       <View style={styles.itemBody}>
         <View style={styles.actionBadge}>
-          <Text style={[styles.actionText,  plan !== 'premium' &&  plan !== 'standard' && styles.blur ]}>{item.source === 'views' ? "Viewed" : item.source === 'search_appearances' ? "Product searched" : item.source === 'impression' ? "Impression created" : item.source === 'shares' ? "Shared" : "Contact clicked"} by {item.fname}.{item.lname[0]}</Text>
+          {/* <Text style={[styles.actionText,  plan !== 'premium' &&  plan !== 'standard' && styles.blur ]}>{item.source === 'views' ? "Viewed" : item.source === 'search_appearances' ? "Product searched" : item.source === 'impression' ? "Impression created" : item.source === 'shares' ? "Shared" : "Contact clicked"} by {item.fname}.{item.lname[0]}</Text> */}
+          <Text style={[styles.actionText]}>{item.source === 'views' ? "Viewed" : item.source === 'search_appearances' ? "Product searched" : item.source === 'impression' ? "Impression created" : item.source === 'shares' ? "Shared" : "Contact clicked"} by {item.fname}</Text>
         </View>
 
         <View style={styles.detailsContainer}>
           <View style={[styles.detailItem, {flexDirection: 'row', alignItems: 'center'}]}>
             <Ionicons name="mail-outline" size={14} color="#666" />
-            <Text style={[styles.detailText,  plan !== 'premium' && styles.blur]}> {item.email}</Text>
+            {/* <Text style={[styles.detailText,  plan !== 'premium' && styles.blur]}> {item.email}</Text> */}
+            <Text style={[styles.detailText]}> {item.email}</Text>
           </View>
           
           <View style={[styles.detailItem, {flexDirection: 'row', alignItems: 'center'}]}>
             <Ionicons name="call-outline" size={14} color="#666" />
-            <Text style={[styles.detailText,  plan !== 'premium' && styles.blur]}> +234-{item.phone}</Text>
+            {/* <Text style={[styles.detailText,  plan !== 'premium' && styles.blur]}> +234-{item.phone}</Text> */}
+            <Text style={[styles.detailText]}> +234-{item.phone}</Text>
           </View>
         </View>
       </View>
@@ -71,7 +75,7 @@ const Performance = () => {
   useEffect(() => {
     async function getMetrics(params) {
       try {
-        const response = await axios.get('https://cs-server-olive.vercel.app/boosted-metrics', {params: {product_id: data?.product_id}});
+        const response = await axios.get('https://cs-node.vercel.app/boosted-metrics', {params: {product_id: data?.product_id}});
         const result = response.data.data;
         console.log("result: ", result);
         setMetrics(result);
@@ -106,7 +110,6 @@ const Performance = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" />
       
       <ScrollView style={styles.scrollView}>
         {/* Summary Cards - Made more compact */}
@@ -129,25 +132,28 @@ const Performance = () => {
 
           <View style={[styles.summaryCard, { backgroundColor: '#6366F1' }]}>
             <Ionicons name="share-outline" size={20} color="white" />
-            <Text style={[styles.summaryNumber, 
+            {/* <Text style={[styles.summaryNumber, 
               plan === 'free' && styles.blur 
-            ]}>{metrics.filter(item=> item.source === 'shares').length}</Text>
+            ]}>{metrics.filter(item=> item.source === 'shares').length}</Text> */}
+            <Text style={[styles.summaryNumber]}>{metrics.filter(item=> item.source === 'shares').length}</Text>
             <Text style={styles.summaryLabel}>Shares</Text>
           </View>
 
           <View style={[styles.summaryCard, { backgroundColor: '#EF4444' }]}>
             <Ionicons name="search-outline" size={20} color="white" />
-            <Text style={[styles.summaryNumber,  
+            {/* <Text style={[styles.summaryNumber,  
               plan === 'free' && styles.blur 
-            ]}>{metrics.filter(item=> item.source === 'search_appearances').length}</Text>
+            ]}>{metrics.filter(item=> item.source === 'search_appearances').length}</Text> */}
+            <Text style={[styles.summaryNumber]}>{metrics.filter(item=> item.source === 'search_appearances').length}</Text>
             <Text style={styles.summaryLabel}>Search appearances</Text>
           </View>
           
           <View style={[styles.summaryCard, { backgroundColor: '#F59E0B' }]}>
             <Ionicons name="call-outline" size={20} color="white" />
-            <Text style={[styles.summaryNumber, 
+            {/* <Text style={[styles.summaryNumber, 
               plan === 'free' && styles.blur 
-            ]}>{metrics.filter(item=> item.source === 'contact_clicks').length}</Text>
+            ]}>{metrics.filter(item=> item.source === 'contact_clicks').length}</Text> */}
+            <Text style={[styles.summaryNumber,]}>{metrics.filter(item=> item.source === 'contact_clicks').length}</Text>
             <Text style={styles.summaryLabel}>Contacts</Text>
           </View>
           
@@ -170,7 +176,8 @@ const Performance = () => {
       </ScrollView>
 
       {/* Fixed Bottom Button */}
-      <View style={styles.fixedButtonContainer}>
+      {/* stage 2 or 3 */}
+      {/* <View style={styles.fixedButtonContainer}>
         <TouchableOpacity activeOpacity={data.promotion ? .9 : .5}
           style={[styles.promoteButton, data.promotion && styles.promotedButton]}
           onPress={e=>handlePromotePress(data)}
@@ -185,7 +192,7 @@ const Performance = () => {
             {data.promotion ? 'Promoted' : 'Promote now'}
           </Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </SafeAreaView>
   );
 };

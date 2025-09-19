@@ -12,9 +12,10 @@ import connect_modal from './modal/connect';
 import products from './info/products';
 import sponsored_modal from './modal/disruptor';
 import connect_purchase_modal from './modal/connect_purchase';
-
+import nested_nav from './nested_navigation'
 const store = configureStore({
   reducer: {
+    nested_nav: nested_nav,
     user,
     mode,
     shop,

@@ -100,7 +100,7 @@ export function tokenTemplate(name, token, email) {
                             <p>To complete your your email verification, please use the token below:</p>
 
                             <div class="token-box">${token}</div>
-                            <p>This token will expire in <strong>10 minutes</strong>. If you didn&apos;t make this request, you can safely ignore this email.</p>
+                            <p>This token will expire in <strong>60 seconds</strong>. If you didn&apos;t make this request, you can safely ignore this email.</p>
 
                             <p>You can just use this link below to continue</p>
                             <button >

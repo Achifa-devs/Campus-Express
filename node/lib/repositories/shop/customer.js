@@ -108,9 +108,13 @@ export async function updateCustomerProfileById({
   user_id,
   fname,
   lname,
-  gender
+  email,
+  phone,
+  gender,
+  campus,
+  state
 }) {
-  const result = await pool.query(`UPDATE users set fname=$1, lname=$2, gender=$3 WHERE user_id = $4`, [fname, lname, gender, user_id]);
+  const result = await pool.query(`UPDATE users set fname=$1, lname=$2, email=$3, phone=$4 gender=$5, campus=$6, state=$7 WHERE user_id = $8`, [fname, lname, email, phone, gender, campus, state, user_id]);
   return result.rows[0];
 }
 ;

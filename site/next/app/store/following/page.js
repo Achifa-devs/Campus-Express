@@ -15,7 +15,7 @@ export default function Following() {
     } = useSelector(s => s.user_id);
    
     useEffect(() => {
-        axios.get('https://cs-server-olive.vercel.app/following', {params: {id: user_id}})
+        axios.get('https://cs-node.vercel.app/following', {params: {id: user_id}})
         .then(({data})=>{
             setItems(data)
         })

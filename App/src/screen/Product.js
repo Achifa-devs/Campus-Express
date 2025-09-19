@@ -41,6 +41,7 @@ import { Favourite } from '../api/wishlist.js';
 import useLogInAlert from '../utils/useLoginAlert.js';
 import useInsufficientConnectAlert from '../utils/useZeroConnectAlert.js';
 import { set_user } from '../../redux/info/user.js';
+import { Chat } from '../api/chat.js';
 
 export default function Product() {
   const route = useRoute();
@@ -65,7 +66,7 @@ export default function Product() {
   async function AddContactClick() {
     setLoading(true)
     try {
-      let request = await axios.post('https://cs-server-olive.vercel.app/contact-click', {product_id: data?.product_id, user_id: user?.user_id})
+      let request = await axios.post('https://cs-node.vercel.app/contact-click', {product_id: data?.product_id, user_id: user?.user_id})
       let res = request?.data;
       
       return res;
@@ -78,7 +79,7 @@ export default function Product() {
   async function UpdateConnections() {
     setLoading(true)
     try {
-      let request = await axios.post('https://cs-server-olive.vercel.app/minus-connect', {user_id: user?.user_id})
+      let request = await axios.post('https://cs-node.vercel.app/minus-connect', {user_id: user?.user_id})
       let res = request?.data;
       
       if(res.success){
@@ -95,7 +96,7 @@ export default function Product() {
     let id = await Tools.getDeviceId()
     setLoading(true)
     try {
-      let request = await axios.post('https://cs-server-olive.vercel.app/share', {product_id: data?.product_id, user_id: user ? user.user_id : id})
+      let request = await axios.post('https://cs-node.vercel.app/share', {product_id: data?.product_id, user_id: user ? user.user_id : id})
       let res = request?.data;
       
       return res;
@@ -107,7 +108,7 @@ export default function Product() {
 
   useEffect(() => {
     try {
-      fetch(`https://cs-server-olive.vercel.app/image-folder?folderName=${data?.product_id}`, {
+      fetch(`https://cs-node.vercel.app/image-folder?folderName=${data?.product_id}`, {
         headers: { 
           "Content-Type": "Application/json" 
         } 
@@ -275,6 +276,7 @@ export default function Product() {
     }
   };
 
+
   let [reviews, setReviews] = useState(null)
   let [shop, setShop] = useState(null)
 
@@ -292,25 +294,23 @@ export default function Product() {
   const { sponsored_modal } = useSelector(s => s.sponsored_modal);
 
   
-  useEffect(() => {
-    const unsubscribe = navigation.addListener("beforeRemove", async(e) => {
-      console.log("User is going back or leaving this screen");
-      console.log("Action type:", e.data.action.type); // e.g. "POP", "GO_BACK"
-      const stringified = await Memory.get('sponsored');
-      const parsedDdata = (stringified)
-      console.log("products", (parsedDdata))
+  // useEffect(() => {
+  //   const unsubscribe = navigation.addListener("beforeRemove", async(e) => {
+  //     console.log("User is going back or leaving this screen");
+  //     console.log("Action type:", e.data.action.type); // e.g. "POP", "GO_BACK"
+  //     const stringified = await Memory.get('sponsored');
+  //     const parsedDdata = (stringified)
+  //     console.log("products", (parsedDdata))
       
-      dispatch(set_sponsored_modal({data: null, visible: 1}))
+  //     dispatch(set_sponsored_modal({data: null, visible: 1}))
 
-      parsedDdata.map(item => {
-        console.log("products list", (item.products))
-      })   
-      // If you want to prevent going back:
-      // e.preventDefault();
-    });
+  //     parsedDdata.map(item => {
+  //       console.log("products list", JSON.parse(item.products))
+  //     })   
+  //   });
 
-    return unsubscribe;
-  }, [navigation]);
+  //   return unsubscribe;
+  // }, [navigation]);
 
   const handleWriteReview = () => {
     if (user) {
@@ -349,7 +349,7 @@ export default function Product() {
       showLogInAlert()
     }
   };
-  const isPromoted = eval(data.promotion) ;
+  const isPromoted = eval(data?.promotion) ;
 
 
   const images = files && files.length > 0 ? files : [data?.thumbnail_id];
@@ -385,7 +385,8 @@ export default function Product() {
           </TouchableOpacity>
         </View>
 
-        {user&&<TouchableOpacity style={styles.connectionCnt} onPress={e => {
+        {/* stage 2 or 3 */}
+        {/* {user&&<TouchableOpacity style={styles.connectionCnt} onPress={e => {
           dispatch(set_connect_modal(1))
         }}>
           <View style={styles.connection}>
@@ -395,7 +396,7 @@ export default function Product() {
               {user?.connects} vendor connections
             </Text>
           </View>
-        </TouchableOpacity>}
+        </TouchableOpacity>} */}
         
         <Animated.ScrollView
           style={{ opacity: fadeAnim }}
@@ -457,12 +458,13 @@ export default function Product() {
               </TouchableOpacity>
             </View>
 
-            {isPromoted && (
+            {/* stage 2 or 3 */}
+            {/* {isPromoted && (
               <View style={styles.boostBadge}>
                 <Icon name="rocket" size={12} color="#FFF" />
                 <Text style={styles.boostBadgeText}>  Boosted</Text>
               </View>
-            )} 
+            )}  */}
           </View>
 
           {/* Product Info */}
@@ -473,13 +475,37 @@ export default function Product() {
             <View style={styles.priceContainer}>
               <View style={styles.actionRow}>
 
-                <TouchableOpacity style={styles.wpButton} onPress={handleWhatsAppChat}>
+                {/* <TouchableOpacity style={styles.wpButton} onPress={handleWhatsAppChat}>
                   <WpSvg height={20} width={20} fill="#FFF" />
                   <Text style={styles.wpText}>Chat</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.callButton} onPress={handlePhoneCall}>
                   <CallSvg height={18} width={18} fill="#FFF" />
                   <Text style={styles.callText}>Call</Text>
+                </TouchableOpacity> */}
+                <TouchableOpacity style={styles.callButton} onPress={() => {
+                  // Chat.sendMessage(
+                  //   data?.user_id,
+                  //   `I need more details about this offer, ${JSON.stringify(data)}`
+                  // )
+                  if (user.user_id !== data.user_id) {
+                    const room = Tools.generateConversationId(user?.user_id, data?.user_id)
+                    navigation.navigate('Chat', {
+                      screen: 'chat-room',
+                      params: {
+                        data, 
+                        from: 'product',
+                        room: room,
+                        session_id: Tools.generateId()
+                      },
+                    });
+                  } else {
+                    Alert.alert('This offer is from your inventory')
+                  }
+
+                }}>
+                  <Ionicons name={"chatbubble"} size={18} color="#FFF" />
+                  <Text style={styles.callText}>Chat Vendor</Text>
                 </TouchableOpacity>
 
               </View>

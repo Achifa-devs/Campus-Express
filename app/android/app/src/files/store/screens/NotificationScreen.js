@@ -19,7 +19,7 @@ export default function NotificationScreen() {
   const fetchData = async () => {
     try {
       const res = await fetch(
-        `https://cs-server-olive.vercel.app/notice`,  // Fixed URL typo
+        `https://cs-node.vercel.app/notice`,  // Fixed URL typo
         {
           headers: { 'Content-Type': 'application/json' },
         }

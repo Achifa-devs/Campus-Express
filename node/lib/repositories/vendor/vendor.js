@@ -19,11 +19,11 @@ export async function createVendor({
   const result = await pool.query(`INSERT INTO users (
     id, fname, lname, user_id, email, phone, password, state,
     campus, isActive, isVerified, isEmailVerified, isPhoneVerified,
-    date, lastseen, gender, deviceid
+    date, lastseen, gender, deviceid, photo
     ) VALUES (
     DEFAULT, $1, $2, $3, $4, $5, $6, $7,
-    $8, $9, $10, $11, $12, $13, $14, $15, $16
-    )`, [fname, lname, user_id, email, phone, hashedPwd, state, campus, false, false, false, false, `${new Date()}`, `${new Date()}`, null, deviceId]);
+    $8, $9, $10, $11, $12, $13, $14, $15, $16, $17
+    )`, [fname, lname, user_id, email, phone, hashedPwd, state, campus, false, false, false, false, `${new Date()}`, `${new Date()}`, null, deviceId, null]);
   let response = await errorHandler(result?.rowCount);
   return response;
 }
@@ -65,6 +65,13 @@ export async function findUserByEmail({
   email
 }) {
   const result = await pool.query(`SELECT * FROM users WHERE email = $1`, [email]);
+  return result.rows[0];
+}
+;
+export async function findUserByPhone({
+  phone
+}) {
+  const result = await pool.query(`SELECT * FROM users WHERE phone = $1`, [phone]);
   return result.rows[0];
 }
 ;

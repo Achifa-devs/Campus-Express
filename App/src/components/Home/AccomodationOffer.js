@@ -190,12 +190,13 @@ const AccomodationOffer = ({ data = [], loading }) => {
             </TouchableOpacity>
 
             {/* Promotion Badge */}
-            {isPromoted && (
+            {/* stage 2 or 3 */}
+            {/* {isPromoted && (
               <View style={styles.boostBadge}>
                 <Icon name="rocket" size={12} color="#FFF" />
                 <Text style={styles.boostText}>Boosted</Text>
               </View>
-            )}
+            )} */}
           </View>
 
           {/* Lodge Info */}

@@ -31,7 +31,7 @@ const PromotedAdDetails = () => {
   useEffect(() => {
     async function getMetrics() {
       try {
-        const response = await axios.get('https://cs-server-olive.vercel.app/promo', {
+        const response = await axios.get('https://cs-node.vercel.app/promo', {
           params: { product_id: data?.product_id }
         });
         const result = response.data;
@@ -287,7 +287,7 @@ const PromotedAdDetails = () => {
 
         <TouchableOpacity 
           style={[styles.actionButton, styles.viewAdButton]}
-          onPress={() => navigation.navigate('user-product', { data: data })}
+          onPress={() => navigation.navigate('product', { data: data })}
         >
           <Ionicons name="eye-outline" size={20} color="#FF6A00" />
           <Text style={styles.viewAdButtonText}>View Ad</Text>

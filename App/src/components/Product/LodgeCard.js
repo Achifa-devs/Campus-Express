@@ -27,7 +27,7 @@ const LodgeCard = ({ item, state='private', onDelete, onPromote }) => {
     
       useEffect(() => {
         console.log(route.name)
-        if (route.name === "user-explore-shop") {
+        if (route.name === "explore-shop") {
           setExploreShop(true);
         } else {
           setExploreShop(false);
@@ -36,7 +36,7 @@ const LodgeCard = ({ item, state='private', onDelete, onPromote }) => {
 
     const handleNavigation = useCallback(
         debounce((item) => {
-          navigation.navigate('user-lodge-room', { data: item });
+          navigation.navigate('lodge-room', { data: item });
         }, 300, { leading: true, trailing: false }),
         [navigation]
     );
@@ -45,11 +45,11 @@ const LodgeCard = ({ item, state='private', onDelete, onPromote }) => {
 
     const handlePromotePress = (data) => {
       if (!exploreshop) {
-        navigation.navigate('user-metrics', {
+        navigation.navigate('metrics', {
           data: data
         })
       } else{
-        navigation.navigate('user-lodge-room', { data: item });
+        navigation.navigate('lodge-room', { data: item });
       }
     };
 
@@ -81,7 +81,7 @@ const LodgeCard = ({ item, state='private', onDelete, onPromote }) => {
   return (
     <TouchableOpacity style={styles.container} onPress={e => {
       if(exploreshop){
-        navigation.navigate('user-product', {data: item})
+        navigation.navigate('product', {data: item})
       }else{
         handlePromotePress(item)
       }
@@ -89,7 +89,7 @@ const LodgeCard = ({ item, state='private', onDelete, onPromote }) => {
       {/* Video Thumbnail - Takes 70% of card */}
       <TouchableOpacity onPress={e => {
         if(exploreshop){
-          navigation.navigate('user-product', {data: item})
+          navigation.navigate('product', {data: item})
         }else{
           handlePromotePress(item)
         }
@@ -111,7 +111,8 @@ const LodgeCard = ({ item, state='private', onDelete, onPromote }) => {
           </View>
 
           {/* Boost Badge/Promote Button - Overlay on video */}
-          {!exploreshop ?
+          {/* stage 2 or 3 */}
+          {/* {!exploreshop ?
             isPromoted ? (
               <View style={styles.boostBadge}>
                 <Icon name="rocket" size={12} color="#FFF" />
@@ -126,7 +127,7 @@ const LodgeCard = ({ item, state='private', onDelete, onPromote }) => {
               <Icon name="rocket-outline" size={12} color="#FFF" />
               <Text style={styles.promoteButtonText}>Promote now</Text>
             </TouchableOpacity>
-          ): ''}
+          ): ''} */}
         </View>
       </TouchableOpacity>
 

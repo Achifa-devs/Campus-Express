@@ -6,7 +6,7 @@ import '@/app/store/account-managements/styles/xx-large.css'
 import '@/app/store/account-managements/styles/medium.css'
 import '@/app/store/account-managements/styles/small.css'
 import { useSelector } from 'react-redux'
-import me from '../../../public/user-rounded-svgrepo-com.svg'
+import me from '../../../public/rounded-svgrepo-com.svg'
 import security from '../../../public/password-svgrepo-com.svg'
 import arrow from '../../../public/down-arrow-backup-2-svgrepo-com.svg'
 import { data } from 'autoprefixer'
@@ -202,7 +202,7 @@ function EditProfile({ data, Validation }) {
     if (fname !== '' && lname !== '' && gender !== '' && fname.length > 3 && lname.length > 3) {
       buyer_overlay_setup(true, 'Updating profile')
 
-      axios.post('https://cs-server-olive.vercel.app/profile-update', {fname,lname,gender,user_id})
+      axios.post('https://cs-node.vercel.app/profile-update', {fname,lname,gender,user_id})
       .then(({data})=>{
         window.location.reload()
         buyer_overlay_setup(false, '')
@@ -280,7 +280,7 @@ function Edit({ edit, data }) {
       
       body[edit.toLowerCase().split(' ')[0]] = value_state;
 
-      axios.post(`https://cs-server-olive.vercel.app/${(edit.toLowerCase().split(' ')[0])}-update`, body)
+      axios.post(`https://cs-node.vercel.app/${(edit.toLowerCase().split(' ')[0])}-update`, body)
       .then(({data})=>{
         if (data.success) {
           window.location.reload()
@@ -365,7 +365,7 @@ function Password() {
         if (pwd === cpwd) {
           // alert(user_id)
           buyer_overlay_setup(true, `Updating password`)
-          axios.post(`https://cs-server-olive.vercel.app/alter-password`, {pwd,user_id,oldpwd})
+          axios.post(`https://cs-node.vercel.app/alter-password`, {pwd,user_id,oldpwd})
           .then(({data})=>{
             console.log(data)
             

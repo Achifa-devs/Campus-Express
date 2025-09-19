@@ -77,7 +77,7 @@ const ProductCard = ({ item, navigation, user, Fav }) => {
   return (
     <TouchableOpacity
       activeOpacity={0.8}
-      onPress={() => navigation.navigate('user-product', { data: item })}
+      onPress={() => navigation.navigate('product', { data: item })}
       style={styles.productCard}
     >
       <View style={styles.productInner}>
@@ -243,7 +243,7 @@ export default function TypeProducts() {
     try {
       setRefreshing(true);
       const result = await fetch(
-        `https://cs-server-olive.vercel.app/products-type?category=${category}&type=${type}&purpose=${option === 'Products' ? 'product' : option === 'Lodges' ? 'accomodation' : 'service'}`,
+        `https://cs-node.vercel.app/products-type?category=${category}&type=${type}&purpose=${option === 'Products' ? 'product' : option === 'Lodges' ? 'accomodation' : 'service'}`,
         { headers: { 'Content-Type': 'application/json' } }
       );
 

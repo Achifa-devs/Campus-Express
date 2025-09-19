@@ -26,7 +26,7 @@ export default function Shop() {
         if (shop && shop.shop_id && user?.user_id) {
         setTimeout(async () => {
             try {
-                const res = await axios.post('https://cs-server-olive.vercel.app/shop-view', {
+                const res = await axios.post('https://cs-node.vercel.app/shop-view', {
                     user_id: user?.user_id,
                     shop_id: shop?.shop_id
                 });
@@ -108,7 +108,7 @@ const renderServiceItem = ({ item, handlePromotePress, exploreshop, navigation})
     return (
       <TouchableOpacity onPress={e => {
         if(exploreshop){
-            navigation.navigate('user-service-room', {data: item})
+            navigation.navigate('service-room', {data: item})
         }
       }}
         style={styles.serviceCard}
@@ -121,7 +121,8 @@ const renderServiceItem = ({ item, handlePromotePress, exploreshop, navigation})
           />
           
           {/* Boost Badge/Promote Button - Overlay on image */}
-          {isPromoted ? (
+          {/* stage 2 or 3 */}
+          {/* {isPromoted ? (
             <View style={styles.boostBadge}>
               <Icon name="rocket" size={12} color="#FFF" />
               <Text style={styles.boostBadgeText}>Promoted</Text>
@@ -135,7 +136,7 @@ const renderServiceItem = ({ item, handlePromotePress, exploreshop, navigation})
               <Icon name="rocket-outline" size={12} color="#FFF" />
               <Text style={styles.promoteButtonText}>Promote now</Text>
             </TouchableOpacity>
-          )}
+          )} */}
         </TouchableOpacity>
         
         <View style={styles.serviceInfo}>
@@ -157,20 +158,23 @@ function ShopAds({user_id}) {
     const [exploreshop, setExploreShop] = useState(false);
 
     useEffect(() => {
-        if (route.name === "user-explore-shop") {
+        if (route.name === "explore-shop") {
             setExploreShop(true);
         } else {
             setExploreShop(false);
         }
     }, [route.name]);
     const handlePromotePress = (data) => {
-        if (!exploreshop) {
-            if(!isPromoted){
-                dispatch(set_boost_modal({data: data, visible: 1}))
-            }
-        }else{
-            navigation.navigate('user-service-room', { data: data });
-        }
+        // stage 2 or 3
+        // if (!exploreshop) {
+        //     if(!isPromoted){
+        //         dispatch(set_boost_modal({data: data, visible: 1}))
+        //     }
+        // }else{
+        //     navigation.navigate('service-room', { data: data });
+        // }
+        navigation.navigate('service-room', { data: data });
+
     };
 
     const [userAds, setUserAds] = useState([]);
@@ -179,7 +183,7 @@ function ShopAds({user_id}) {
     // Initial load
     useEffect(() => {
         if (user_id) {
-            fetch(`https://cs-server-olive.vercel.app/vendor/products?user_id=${user_id}`, {
+            fetch(`https://cs-node.vercel.app/vendor/products?user_id=${user_id}`, {
               headers: {
                 "Content-Type": "Application/json"
               }

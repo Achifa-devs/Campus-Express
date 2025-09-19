@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Alert } from 'react-native';
 
-const BASE_URL = 'https://cs-server-olive.vercel.app';
+const BASE_URL = 'https://cs-node.vercel.app/';
 
 export const save_prod = async ({ user_id, product_id }) => {
     console.log(user_id, product_id);

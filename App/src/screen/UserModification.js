@@ -85,7 +85,7 @@ export default function UserModification() {
     
     async function update_user(){
         try {
-            const req = await axios.post('https://cs-server-olive.vercel.app/profile-update', {
+            const req = await axios.post('https://cs-node.vercel.app/profile-update', {
                 fname, lname, email, phone, campus, state, gender, user_id: user?.user_id
             })
             let response = req.data;
@@ -114,7 +114,7 @@ export default function UserModification() {
 
     function updatePhoto() {
         setIsLoading(true)
-        axios.post(`https://cs-server-olive.vercel.app/update-photo`, {
+        axios.post(`https://cs-node.vercel.app/update-photo`, {
             user_id: user?.user_id,
             photo
         })
@@ -171,7 +171,7 @@ export default function UserModification() {
                 type: image.type || 'image/jpeg',
             });
     
-            const response = await axios.post('https://cs-server-olive.vercel.app/upload', formData, {
+            const response = await axios.post('https://cs-node.vercel.app/upload', formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
             });
     
@@ -193,7 +193,7 @@ export default function UserModification() {
     const deleteFromServer = async (url) => {
         try {
             setIsLoading(true);
-            const response = await axios.post('https://cs-server-olive.vercel.app/delete', {
+            const response = await axios.post('https://cs-node.vercel.app/delete', {
                 url
             });
 

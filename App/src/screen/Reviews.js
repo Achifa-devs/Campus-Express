@@ -22,16 +22,16 @@ export default function Reviews() {
 
     // Calculate average rating
     const averageRating = data.length > 0 
-        ? (data.reduce((sum, item) => sum + item.rating, 0) / data.length).toFixed(1)
+        ? (data.reduce((sum, item) => sum + parseInt(item.rating), 0) / data.length).toFixed(1)
         : 0;
 
     // Group reviews by rating
     const ratingDistribution = {
-        5: data.filter(item => item.rating === 5).length,
-        4: data.filter(item => item.rating === 4).length,
-        3: data.filter(item => item.rating === 3).length,
-        2: data.filter(item => item.rating === 2).length,
-        1: data.filter(item => item.rating === 1).length
+        5: data.filter(item => parseInt(item.rating) === 5).length,
+        4: data.filter(item => parseInt(item.rating) === 4).length,
+        3: data.filter(item => parseInt(item.rating) === 3).length,
+        2: data.filter(item => parseInt(item.rating) === 2).length,
+        1: data.filter(item => parseInt(item.rating) === 1).length
     };
 
     const formatDate = (dateString) => {
@@ -102,7 +102,7 @@ export default function Reviews() {
                                 <View style={styles.reviewHeader}>
                                     <View style={styles.ratingContainer}>
                                         <StarRating
-                                            rating={item.rating}
+                                            rating={parseInt(item.rating)}
                                             starSize={20}
                                             color="#FF4500"
                                             starStyle={{marginRight: 1}}

@@ -103,12 +103,13 @@ const ServicesOffer = ({ data = [], loading }) => {
           style={styles.serviceImage}
         />
 
-        {item.promotion && (
+        {/* stage 2 or 3 */}
+        {/* {item.promotion && (
           <View style={styles.boostBadge}>
             <Icon name="rocket" size={12} color="#FFF" />
             <Text style={styles.boostBadgeText}>Boosted</Text>
           </View>
-        )}
+        )} */}
 
         <View style={styles.serviceInfo}>
           <Text style={styles.serviceName} numberOfLines={1}>

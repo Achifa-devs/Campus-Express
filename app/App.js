@@ -52,7 +52,7 @@ import { set_sponsored_modal } from './redux/disruptor.js';
 function App() {
   
   useEffect(() => {
-    axios.get('https://cs-server-olive.vercel.app/packages')
+    axios.get('https://cs-node.vercel.app/packages')
     .then((res) => {
       const packageArray = res.data.packageData;
       const formatPackages = (packagesArray) => {
@@ -114,7 +114,7 @@ function AppFinale() {
 
   const checkAppVersion = async () => {
     try {
-      const response = await fetch('https://cs-server-olive.vercel.app/version-check', {
+      const response = await fetch('https://cs-node.vercel.app/version-check', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -238,7 +238,7 @@ function NavCnt() {
 
     async function SubWithRetry(retryDelay = 2000) {
       try {
-        const resp = await axios.get('https://cs-server-olive.vercel.app/subscription', {
+        const resp = await axios.get('https://cs-node.vercel.app/subscription', {
           params: { user_id: user.user_id },
         });
 
@@ -271,7 +271,7 @@ function NavCnt() {
 
   const reqHandler = async () => {
     try {
-      const response = await axios.get("https://cs-server-olive.vercel.app/plans");
+      const response = await axios.get("https://cs-node.vercel.app/plans");
 
       // Save different parts separately
       await storeData("promo_plan", JSON.stringify(response.data.promo_plans));
@@ -305,7 +305,7 @@ function NavCnt() {
   useEffect(() => {
     const fetchSponsors = async () => {
       try {
-        const resp = await axios.get('https://cs-server-olive.vercel.app/sponsorship', {
+        const resp = await axios.get('https://cs-node.vercel.app/sponsorship', {
           params: { campus: user?.campus },
         });
 

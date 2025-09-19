@@ -25,7 +25,7 @@ export default function Shop() {
         if (shop && shop.shop_id && user?.user_id) {
         setTimeout(async () => {
             try {
-                const res = await axios.post('https://cs-server-olive.vercel.app/shop-view', {
+                const res = await axios.post('https://cs-node.vercel.app/shop-view', {
                     user_id: user?.user_id,
                     shop_id: shop?.shop_id
                 });
@@ -178,7 +178,7 @@ function ShopAds({user_id}) {
     // Initial load
     useEffect(() => {
         if (user_id) {
-            fetch(`https://cs-server-olive.vercel.app/vendor/products?user_id=${user_id}`, {
+            fetch(`https://cs-node.vercel.app/vendor/products?user_id=${user_id}`, {
               headers: {
                 "Content-Type": "Application/json"
               }

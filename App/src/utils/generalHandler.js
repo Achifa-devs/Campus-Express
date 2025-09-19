@@ -50,6 +50,28 @@ class Tools {
     static capitalize(str) {
         return str && str.charAt(0).toUpperCase() + str.slice(1);
     }
+
+    static formatNumber(num) {
+        if (num < 1000) {
+            return num.toString(); // leave small numbers as-is
+        } else if (num < 1_000_000) {
+            return (num / 1000).toFixed(num % 1000 === 0 ? 0 : 1) + "k";
+        } else if (num < 1_000_000_000) {
+            return (num / 1_000_000).toFixed(num % 1_000_000 === 0 ? 0 : 1) + "m";
+        } else {
+            return (num / 1_000_000_000).toFixed(num % 1_000_000_000 === 0 ? 0 : 1) + "b";
+        }
+    }
+
+    static generateConversationId(userA, userB) {
+        console.log(userA, userB)
+        if (userA === userB) {
+        throw new Error("Conversation requires two different users");
+        }
+        // Sort the two IDs lexicographically (alphabet + number ordering)
+        return [userA, userB].sort((a, b) => (a < b ? -1 : a > b ? 1 : 0)).join('_');
+    }
+
 }
 
 

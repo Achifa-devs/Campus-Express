@@ -73,15 +73,20 @@ export const postNewVendor = async (payload) => {
     [user_id, plan, start_date, end_date, true, created_at]
   );
 
+   const token = generateVendorJwtToken(user_id);
   return {
     ...response,
-    user: { fname, lname, user_id, email, phone, state, campus }
+    user: { fname, lname, user_id, email, phone, state, campus },
+    cookie: token
   };
 
 };
 
 export const postLoginVendor = async (payload) => {
-  const { email,pwd } = payload;
+  const { 
+    email,
+    pwd 
+  } = payload;
 
   // Business logic
   const user = await findUserByEmail({ email });
@@ -89,6 +94,7 @@ export const postLoginVendor = async (payload) => {
   if (user) {
     const auth = await bcrypt.compare(pwd, user.password);
     if (auth) {
+      console.log(user.user_id)
       const token = generateVendorJwtToken(user.user_id);
       return({user: user, cookie: token});
     }

@@ -15,7 +15,7 @@ export async function GET_FAVOURITE(req, res) {
 }
 export async function GET_FAVOURITES(req, res) {
   try {
-    const favourites = await getFavourites(req.body);
+    const favourites = await getFavourites(req.query);
     res.status(201).json({
       success: true,
       data: favourites
@@ -43,7 +43,7 @@ export async function POST_FAVOURITE(req, res) {
 }
 export async function DELETE_FAVOURITE(req, res) {
   try {
-    const delete_favourite = await postDeleteFavourite(req.body);
+    const delete_favourite = await postDeleteFavourite(req.query);
     res.status(201).json({
       success: true,
       data: delete_favourite

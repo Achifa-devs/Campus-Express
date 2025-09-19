@@ -121,10 +121,12 @@ const AnalyticsScreen = () => {
         plan !== 'standard' && plan !== 'premium' && styles.blur 
       ]}>
         <View style={secondStyle.cardHeader}>
-          <Text style={[secondStyle.productName, plan !== 'standard' && plan !== 'premium' &&styles.blur ]}>{item.title} ({item.purpose.charAt(0).toUpperCase() + item.purpose.slice(1)})</Text>
+          {/* <Text style={[secondStyle.productName, plan !== 'standard' && plan !== 'premium' &&styles.blur ]}>{item.title} ({item.purpose.charAt(0).toUpperCase() + item.purpose.slice(1)})</Text> */}
+          <Text style={[secondStyle.productName]}>{item.title} ({item.purpose.charAt(0).toUpperCase() + item.purpose.slice(1)})</Text>
           <View style={secondStyle.valueContainer}>
             <Ionicons name={getIconForFilter(activeFilter)} size={16} color="#FF4500" />
-            <Text style={[secondStyle.valueText, plan !== 'standard' && plan !== 'premium' &&styles.blur ]}>{value}</Text>
+            {/* <Text style={[secondStyle.valueText, plan !== 'standard' && plan !== 'premium' &&styles.blur ]}>{value}</Text> */}
+            <Text style={[secondStyle.valueText]}>{value}</Text>
           </View>
         </View>
          
@@ -353,13 +355,16 @@ const AnalyticsScreen = () => {
           chartConfig={{
             color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
           }}
-          hasLegend={plan !== 'premium' ? false : true}
+          // hasLegend={plan !== 'premium' ? false : true}
+          hasLegend={true}
           accessor="population"
           backgroundColor="transparent"
           paddingLeft="15"
           style={styles.chart}
         />
-        {plan !== 'premium' && 
+
+        {/* stage 2 or 3 */}
+        {/* {plan !== 'premium' && 
 
           <TouchableOpacity style={styles.sectionHeader} onPress={() => {
             dispatch(set_sub_modal(1))
@@ -375,7 +380,8 @@ const AnalyticsScreen = () => {
               </View>
             </View>
           </TouchableOpacity>
-        }
+        } */}
+
 
       </View>
 
@@ -387,12 +393,18 @@ const AnalyticsScreen = () => {
           <View key={index} style={styles.productItem}>
             <View style={styles.productInfo}>
               <Text style={styles.productName}>{product.title}</Text>
-              <Text style={styles.productStats}>
+              {/* <Text style={styles.productStats}>
                 {product.views} views • <Text style={[plan !== 'premium' && styles.blur]}>{(product?.contact_click/product?.views)*100} conversions</Text>
+              </Text> */}
+               <Text style={styles.productStats}>
+                {product.views} views • <Text style={[]}>{(product?.contact_click/product?.views)*100} conversions</Text>
               </Text>
             </View>
             <View style={styles.conversionRate}>
-              <Text style={[styles.conversionText, plan !== 'premium' && styles.blur]}>
+              {/* <Text style={[styles.conversionText, plan !== 'premium' && styles.blur]}>
+                {(((product?.contact_click/product?.views)*100 / (product.views * 100))).toFixed(1)}%
+              </Text> */}
+              <Text style={[styles.conversionText]}>
                 {(((product?.contact_click/product?.views)*100 / (product.views * 100))).toFixed(1)}%
               </Text>
             </View>

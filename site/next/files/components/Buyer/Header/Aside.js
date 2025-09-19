@@ -28,7 +28,7 @@ import cosmeticsSvg from '@/public/medical-medicine-health-23-svgrepo-com.svg'
 import tabletsSvg from '@/public/tablet-svgrepo-com.svg'
 
 import helpSvg from '@/public/help-svgrepo-com.svg'
-import userSvg from '@/public/user-alt-1-svgrepo-com.svg'
+import userSvg from '@/public/alt-1-svgrepo-com.svg'
 import contactSvg from '@/public/costumer-support-call-svgrepo-com.svg'
 
 

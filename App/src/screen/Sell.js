@@ -31,6 +31,7 @@ import LoginReminder from '../reusables/LoginReminder';
 import { set_products } from '../../redux/info/products';
 import { set_sub_modal } from '../../redux/modal/sub';
 import { set_shop } from '../../redux/info/shop';
+import Tools from '../utils/generalHandler';
 const { width } = Dimensions.get('window');
 
 const ShopScreen = () => {
@@ -61,7 +62,7 @@ const ShopScreen = () => {
   let [review, set_review] = useState([])
 
   useEffect(() => {
-    axios.get(`https://cs-server-olive.vercel.app/vendor/shop-reviews?shop_id=${shop?.shop_id}`)
+    axios.get(`https://cs-node.vercel.app/vendor/shop-reviews?shop_id=${shop?.shop_id}`)
     .then((res) => {
       set_review(res?.data?.data)
     }).catch(err=>console.log(err))
@@ -69,7 +70,7 @@ const ShopScreen = () => {
 
   const get_list_data = useCallback((id) => {
     setRefreshing(true)
-    fetch(`https://cs-server-olive.vercel.app/vendor/products?user_id=${user?.user_id}`, {
+    fetch(`https://cs-node.vercel.app/vendor/products?user_id=${user?.user_id}`, {
       headers: {
         "Content-Type": "Application/json"
       }
@@ -109,7 +110,7 @@ const ShopScreen = () => {
   // Simulate checking if shop exists in DB
   useEffect(() => {
     (async function getUser(params) {
-      let res = await fetch(`https://cs-server-olive.vercel.app/vendor/shop?user_id=${user?.user_id}`)
+      let res = await fetch(`https://cs-node.vercel.app/vendor/shop?user_id=${user?.user_id}`)
       handleInputChange('user_id', user?.user_id)
       let response = await res.json()
       if (response?.success) {
@@ -158,7 +159,7 @@ const ShopScreen = () => {
         type: image.type || 'image/jpeg',
       });
 
-      const response = await axios.post('https://cs-server-olive.vercel.app/upload', formData, {
+      const response = await axios.post('https://cs-node.vercel.app/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
@@ -179,7 +180,7 @@ const ShopScreen = () => {
   const deleteFromServer = async (url) => {
     try {
       setIsLoading(true);
-      const response = await axios.post('https://cs-server-olive.vercel.app/delete', {
+      const response = await axios.post('https://cs-node.vercel.app/delete', {
         url
       });
 
@@ -222,7 +223,7 @@ const ShopScreen = () => {
     if (!validateForm()) return;
 
     setIsLoading(true)
-    fetch(`https://cs-server-olive.vercel.app/vendor/create-shop`, {
+    fetch(`https://cs-node.vercel.app/vendor/create-shop`, {
       method: 'post',
       headers: {
         "Content-Type": "Application/json"
@@ -354,7 +355,8 @@ const ShopScreen = () => {
       )}
 
       {/* Boost Badge/Promote Button - Overlay on image */}
-      {eval(item.promotion) ? (
+      {/* stage 2 or 3 */}
+      {/* {eval(item.promotion) ? (
         <View style={styles.boostBadge}>
           <Icon name="rocket" size={12} color="#FFF" />
           <Text style={styles.boostBadgeText}>Promoted</Text>
@@ -368,7 +370,7 @@ const ShopScreen = () => {
           <Icon name="rocket-outline" size={12} color="#FFF" />
           <Text style={styles.promoteButtonText}>Promote now</Text>
         </TouchableOpacity>
-      )}
+      )} */}
       <View style={styles.adContent}>
         <Text style={styles.adTitle} numberOfLines={2}>{item.title}</Text>
         <Text style={styles.adPrice}>
@@ -379,9 +381,9 @@ const ShopScreen = () => {
             :
             item?.purpose === 'accomodation'
             ?
-            '₦' + new Intl.NumberFormat('en-us').format(item?.price) + ' to pay ₦' + new Intl.NumberFormat('en-us').format(item?.others?.lodge_data?.upfront_pay) 
+            '₦' + Tools.formatNumber(item?.price) + ' to pay ₦' + Tools.formatNumber(item?.others?.lodge_data?.upfront_pay) 
             : 
-            '' 
+            ''
           }
         </Text>
         <View style={styles.adStats}>

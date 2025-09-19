@@ -70,7 +70,7 @@ const AnalyticsScreen = () => {
   useEffect(() => {
     async function getMetrics(params) {
       try {
-        const response = await axios.get('https://cs-server-olive.vercel.app/boosted-metrics', {params: {product_id: data?.product_id}});
+        const response = await axios.get('https://cs-node.vercel.app/boosted-metrics', {params: {product_id: data?.product_id}});
         const result = response.data.data;
         console.log("result: ", result);
         setMetrics(result);

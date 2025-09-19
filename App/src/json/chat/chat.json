@@ -1,0 +1,34 @@
+[
+  {
+    "chat_id": "chat_001",
+    "participants": [
+      { "user_id": "u101", "name": "Chinedu", "avatar": "https://example.com/u101.jpg" },
+      { "user_id": "u102", "name": "Amaka", "avatar": "https://example.com/u102.jpg" }
+    ],
+    "last_message": {
+      "message_id": "m501",
+      "sender_id": "u102",
+      "text": "See you tomorrow!",
+      "timestamp": "2025-09-18T14:30:00Z",
+      "status": "delivered"
+    },
+    "unread_count": 2,
+    "updated_at": "2025-09-18T14:30:00Z"
+  },
+  {
+    "chat_id": "chat_002",
+    "participants": [
+      { "user_id": "u101", "name": "Chinedu", "avatar": "https://example.com/u101.jpg" },
+      { "user_id": "u103", "name": "Emeka", "avatar": "https://example.com/u103.jpg" }
+    ],
+    "last_message": {
+      "message_id": "m550",
+      "sender_id": "u101",
+      "text": "Check the file I sent.",
+      "timestamp": "2025-09-18T10:45:00Z",
+      "status": "seen"
+    },
+    "unread_count": 0,
+    "updated_at": "2025-09-18T10:45:00Z"
+  }
+]

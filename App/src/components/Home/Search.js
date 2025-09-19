@@ -38,7 +38,7 @@ const SearchBar = () => {
     setIsSearching(false);
 
     if (query !== '' && query.trim() !== '') {
-      fetch(`https://cs-server-olive.vercel.app/search?word=${query}&campus=${campus==='All campus'? 'null':campus}&purpose=${option === 'Products' ? 'product' : option === 'Lodges' ? 'accomodation' : 'service'}&user_id=${user ? user?.user_id: id}`, {
+      fetch(`https://cs-node.vercel.app/search?word=${query}&campus=${campus==='All campus'? 'null':campus}&purpose=${option === 'Products' ? 'product' : option === 'Lodges' ? 'accomodation' : 'service'}&user_id=${user ? user?.user_id: id}`, {
         headers: {
           "Content-Type": "Application/json" 
         }
@@ -75,17 +75,20 @@ const SearchBar = () => {
         <Icon name="search" size={22} color="#FF4500" style={advancedStyles.icon} />
         
         {/* Search Input */}
-        <TextInput
+        {/* <TextInput
           style={advancedStyles.input}
           placeholder="Search for services, products, or businesses..."
           placeholderTextColor="#999"
           value={query}
           onChangeText={setQuery}
-          // onFocus={() => setIsSearching(true)}
-          onBlur={() => setIsSearching(false)}
+          onFocus={() => navigation.navigate('search')}
+          // onBlur={() => setIsSearching(false)}
           returnKeyType="search"
           clearButtonMode="while-editing"
-        />
+        /> */}
+        <TouchableOpacity style={[advancedStyles.input, {alignItems: 'center', flexDirection: 'row'}]} onPress={e => navigation.navigate('search')}>
+          <Text style={{color: '#999'}} numberOfLines={1}>Search for products, accomodation, or services ...</Text>
+        </TouchableOpacity>
         
         {/* Clear Button */}
         {query.length > 0 && (
@@ -119,7 +122,7 @@ const SearchBar = () => {
           <View style={styles.suggestionList}>
             {result?.map((item, index) => 
               <TouchableOpacity 
-                onPress={e => navigation.navigate('user-product', {data: item})} 
+                onPress={e => navigation.navigate('product', {data: item})} 
                 key={index} 
                 style={styles.suggestionItem}
               >

@@ -21,6 +21,7 @@ import { capitalize } from './Capitalize.js';
 import { set_sub_modal } from '../../redux/modal/sub.js';
 import Memory from '../utils/memoryHandler.js';
 import { set_shop } from '../../redux/info/shop.js';
+import Tools from '../utils/generalHandler.js';
 
 const { width } = Dimensions.get('window');
 

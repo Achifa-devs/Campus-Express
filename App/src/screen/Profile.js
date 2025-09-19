@@ -38,26 +38,26 @@ const Profile = ({ navigation }) => {
 
       ],
     },
-    {
-      section: "Settings",
-      links: user ? [
-        // { label: "Account", icon: "wallet-outline", nav: "account" },
-        { label: "Subscription & Billing", icon: "card-outline", nav: "subscription" },
+    // {
+    //   section: "Settings",
+    //   links: user ? [
+    //     { label: "Account", icon: "wallet-outline", nav: "account" },
+    //     { label: "Subscription & Billing", icon: "card-outline", nav: "subscription" },
 
-        // { label: "Preference", icon: "options-outline", nav: "user-preference" },
-        // { label: "Notification", icon: "notifications-outline", nav: "user-notification" },
-      ]: [
+    //     { label: "Preference", icon: "options-outline", nav: "preference" },
+    //     { label: "Notification", icon: "notifications-outline", nav: "notification" },
+    //   ]: [
 
-      ],
-    },
+    //   ],
+    // },
     {
       section: "Community and Legal",
       links: [
         { label: "Terms Of Service", icon: "document-text-outline", nav: "terms" },
         { label: "Privacy Policy", icon: "lock-closed-outline", nav: "privacy" },
         { label: "Campus Community", icon: "school-outline", nav: "support" },
-        // { label: "Blogs", icon: "book-outline", nav: "user-blog" },
-        // { label: "Forum", icon: "chatbubbles-outline", nav: "user-forum" },
+        // { label: "Blogs", icon: "book-outline", nav: "blog" },
+        // { label: "Forum", icon: "chatbubbles-outline", nav: "forum" },
       ],
     },
   ];

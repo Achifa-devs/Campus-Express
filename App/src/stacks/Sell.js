@@ -3,15 +3,11 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Sell from "../screen/Sell";
 import { 
   Alert,
-    Dimensions,
-    Image,
-  
-    StyleSheet,
-    Switch,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View 
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View 
 } from 'react-native';
 import React, { useEffect } from "react";
 import Ionicons  from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, FontAwesome, etc.
@@ -40,16 +36,13 @@ export function SellStackScreen() {
       if(shop.subscription.plan === 'free'){ 
         dispatch(set_sub_modal(1))
       }else{
-        navigation.navigate('Profile', {
-          screen: 'user-subscription',   // 👈 nested screen name
-          params: { sub: true },         // 👈 params go here
-        });
+        navigation.navigate('subscription');
       } 
     }
     
     useEffect(() => {
       if (!shop) {
-        axios.get(`https://cs-server-olive.vercel.app/details?user_id=${user?.user_id}`, {
+        axios.get(`https://cs-node.vercel.app/details?user_id=${user?.user_id}`, {
           headers: {
             'Content-Type': 'application/json'
           }
@@ -97,7 +90,7 @@ export function SellStackScreen() {
             </TouchableOpacity>
 
             {/* Right Section */}
-            <View style={styles.rightSection}>
+            {/* <View style={styles.rightSection}>
               {shop && (
                 <TouchableOpacity
                   style={[styles.button, shop.subscription.plan !== 'free' && styles.subscribedButton]}
@@ -117,7 +110,7 @@ export function SellStackScreen() {
                   </View>
                 </TouchableOpacity> 
               )}
-            </View>
+            </View> */}
           </View>
         ),
       }}  name="sell" component={Sell} />
@@ -125,33 +118,58 @@ export function SellStackScreen() {
       <SellStack.Screen  options={{
         header: ({navigation}) =>
         (
-          <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%', backgroundColor: '#FFF', alignItems: 'center', elevation: 2, paddingLeft: 15, paddingRight: 25 }}>
-            <TouchableOpacity style={{
-              height: 55,
-              borderRadius: 15,
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'flex-start',
-              alignItems: 'center',
-              width: 45,
-            }} onPress={e => navigation.goBack()}> 
-                <Ionicons name={'chevron-back'} size={25} color={'#000'} />
-            </TouchableOpacity>
-            <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
-              <Text style={{
-                fontSize: 16,
-                fontWeight: 'bold',
-                color: '#000',
-                marginLeft: 0,
-                // flexShrink: 1,
-                marginBottom: 5
-              }}>
-                My Shop
-              </Text>
+          <View style={styles.headerContainer}>
+            <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: 'auto', backgroundColor: '#FFF', alignItems: 'center', elevation: 0, paddingLeft: 5, paddingRight: 5 }}>
+              <TouchableOpacity style={{
+                height: 55,
+                borderRadius: 15,
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+                width: 45,
+              }} onPress={e => navigation.goBack()}>
+                  <Ionicons name={'chevron-back'} size={25} color={'#000'} />
+              </TouchableOpacity>
+              <View style={{ backgroundColor: '#fff', height: '100%', width: 'auto', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
+                <Text style={{
+                  fontSize: 16,
+                  fontWeight: 'bold',
+                  color: '#000',
+                  marginLeft: 0,
+                  // flexShrink: 1,
+                  marginBottom: 5
+                }}>
+                  My Shop
+                </Text>
+              </View>
             </View>
+
+            {/* <View style={styles.rightSection}>
+              {shop && (
+              <TouchableOpacity
+                style={[styles.button, shop.subscription.plan !== 'free' && styles.subscribedButton]}
+                onPress={e=> handleSub()}
+                activeOpacity={0.8}
+                >
+                <View style={styles.buttonContent}>
+                  <Icon
+                  name={shop.subscription.plan !== 'free' ? "diamond" : "diamond-outline"}
+                  size={16}
+                  color={shop.subscription.plan !== 'free' ? "#FFF" : "#FF4500"}
+                  style={styles.icon}
+                  />
+                  <Text style={[styles.buttonText, shop.subscription.plan !== 'free' && styles.subscribedText]}>
+                  {shop.subscription.plan !== 'free' ? `${Tools.capitalize(shop.subscription.plan)} Plan` : 'Upgrade Now'}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+              )}
+            </View> */}
           </View>
+
         ),
-        
+      
       }}   name="shop" component={Shop} />
 
       <SellStack.Screen  options={{
@@ -210,7 +228,7 @@ export function SellStackScreen() {
         ),
       }}  name="create" component={Create} />
 
-       <SellStack.Screen  options={{
+      <SellStack.Screen  options={{
           header: ({navigation}) =>
           (
             <>
@@ -241,27 +259,6 @@ export function SellStackScreen() {
               </View>
             </View>
 
-            <View style={styles.rightSection}>
-              {shop && (
-                <TouchableOpacity
-                  style={[styles.button, shop.subscription.plan !== 'free' && styles.subscribedButton]}
-                  onPress={e=> handleSub()}
-                  activeOpacity={0.8}
-                  >
-                  <View style={styles.buttonContent}>
-                    <Icon 
-                    name={shop.subscription.plan !== 'free' ? "diamond" : "diamond-outline"} 
-                    size={16} 
-                    color={shop.subscription.plan !== 'free' ? "#FFF" : "#FF4500"} 
-                    style={styles.icon}
-                    />
-                    <Text style={[styles.buttonText, shop.subscription.plan !== 'free' && styles.subscribedText]}>
-                    {shop.subscription.plan !== 'free' ? `${Tools.capitalize(shop.subscription.plan)} Plan` : 'Upgrade Now'}
-                    </Text> 
-                  </View>
-                </TouchableOpacity> 
-              )}
-            </View>
           </View>
         ),
       }}  name="promotion-data" component={PromotedAdDetails} />
@@ -297,27 +294,7 @@ export function SellStackScreen() {
               </Text>
             </View>
 
-            <View style={styles.rightSection}>
-              {shop && (
-                <TouchableOpacity
-                    style={[styles.button, shop.subscription.plan !== 'free' && styles.subscribedButton]}
-                    onPress={e=> handleSub()}
-                    activeOpacity={0.8}
-                    >
-                    <View style={styles.buttonContent}>
-                      <Icon 
-                      name={shop.subscription.plan !== 'free' ? "diamond" : "diamond-outline"} 
-                      size={16} 
-                      color={shop.subscription.plan !== 'free' ? "#FFF" : "#FF4500"} 
-                      style={styles.icon}
-                      />
-                      <Text style={[styles.buttonText, shop.subscription.plan !== 'free' && styles.subscribedText]}>
-                      {shop.subscription.plan !== 'free' ? `${Tools.capitalize(shop.subscription.plan)} Plan` : 'Upgrade Now'}
-                      </Text> 
-                    </View>
-                </TouchableOpacity> 
-              )}
-            </View>
+           
           </View>
         ),
         

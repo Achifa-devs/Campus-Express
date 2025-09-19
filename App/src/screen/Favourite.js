@@ -153,7 +153,7 @@ const Card = ({ data }) => {
       data?.product?.product_id?
       <TouchableOpacity 
         style={styles.card} 
-        onPress={() => navigation.navigate('user-product', { product_id: data?.product_id })} 
+        onPress={() => navigation.navigate('product', { product_id: data?.product_id })} 
       >
          {data?.product?.purpose !== 'accomodation' ? (
           <Image 

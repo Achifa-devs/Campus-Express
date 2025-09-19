@@ -43,7 +43,7 @@ export default function PasswordRecovery() {
            
             e.target.disabled = true;
             buyer_overlay_setup(true, 'Confirming Email')
-            fetch('https://cs-server-olive.vercel.app/comfirm-email', {
+            fetch('https://cs-node.vercel.app/confirm-email', {
                 method: 'POST',
                 headers: {
                     "Content-Type": "Application/json"

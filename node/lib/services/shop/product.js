@@ -12,53 +12,89 @@ export const getProduct = async payload => {
 };
 export const getSearch = async payload => {
   let {
-    word
+    word,
+    purpose,
+    campus
   } = payload;
-  const response = await findProducts({
-    limit: null
-  });
-  const filteredList = response.filter(item => item.title.toLowerCase().indexOf(word.toLowerCase()) > -1);
-  console.log("response: ", filteredList);
-  return filteredList;
+  try {
+    const response = await findProducts({
+      limit: null,
+      purpose,
+      campus
+    });
+    const filteredList = response.filter(item => item.title.toLowerCase().indexOf(word.toLowerCase()) > -1);
+    return filteredList;
+  } catch (error) {
+    console.log("error: ", error);
+    throw new Error("Error: ", error);
+  }
 };
 export const getProducts = async payload => {
   let {
     category,
     limit,
-    gender
+    gender,
+    campus,
+    purpose
   } = payload;
-  let trimmed = atob(category).trim();
+  try {
+    let trimmed = atob(category).trim();
 
-  // Ensure limit is a valid number
-  limit = parseInt(limit);
-  if (isNaN(limit) || limit <= 0) {
-    limit = 10; // Set a default limit if invalid
-  }
-  function capitalizeFirstLetter(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
-  let cap_gender = gender ? capitalizeFirstLetter(gender) : '';
+    // Ensure limit is a valid number
+    limit = parseInt(limit);
+    if (isNaN(limit) || limit <= 0) {
+      limit = 10; // Set a default limit if invalid
+    }
+    function capitalizeFirstLetter(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+    let cap_gender = gender ? capitalizeFirstLetter(gender) : '';
 
-  // Business logic
-  if (trimmed.toLowerCase() === 'fashion' || trimmed.toLowerCase() === 'lodge & apartments') {
-    const response = await findProductsByCategoryAndGender({
-      trimmed,
-      cap_gender,
-      limit
-    });
-    return response;
-  } else if (trimmed.toLowerCase() === 'trends') {
-    const response = await findProducts({
-      limit
-    });
-    console.log("response: ", response);
-    return response;
+    // Business logic
+    if (purpose === 'product') {
+      if (trimmed.toLowerCase() === 'fashion') {
+        const response = await findProductsByCategoryAndGender({
+          trimmed,
+          cap_gender,
+          limit,
+          campus,
+          purpose
+        });
+        return response;
+      } else if (trimmed.toLowerCase() === 'trends') {
+        const response = await findProducts({
+          limit,
+          campus,
+          purpose
+        });
+        return response;
+      } else {
+        const response = await findProductsByCategory({
+          category,
+          limit,
+          campus,
+          purpose
+        });
+        return response;
+      }
+    } else if (purpose === 'accomodation') {
+      const response = await findProducts({
+        limit,
+        campus,
+        purpose
+      });
+      return response;
+    } else {
+      const response = await findProducts({
+        limit,
+        campus,
+        purpose
+      });
+      return response;
+    }
+  } catch (error) {
+    console.log(error);
   }
-  const response = await findProductsByCategory({
-    category,
-    limit
-  });
-  return response;
 };
 export const getProductThumbnail = async payload => {
   const {
@@ -74,14 +110,16 @@ export const getProductThumbnail = async payload => {
 export const getProductType = async payload => {
   const {
     category,
-    type
+    type,
+    purpose
   } = payload;
 
   // Business logic
   try {
     const response = await findProductsType({
       type,
-      limit: 40
+      limit: 40,
+      purpose
     });
     return response;
   } catch (error) {
@@ -93,25 +131,29 @@ export const postProductView = async payload => {
     product_id,
     user_id
   } = payload;
-
-  // Business logic
-  let existingView = await findProductViewById({
-    product_id,
-    user_id
-  });
-  let newView = await createProductView({
-    user_id,
-    product_id
-  });
-  if (existingView.length > 0) {
-    throw new Error("Already viewed");
-  } else if (newView < 1) {
-    throw new Error("Error occured while updating view");
+  // console.log(product_id,user_id)
+  try {
+    // Business logic
+    let existingView = await findProductViewById({
+      product_id,
+      user_id
+    });
+    let newView = await createProductView({
+      user_id,
+      product_id
+    });
+    if (existingView.length > 0) {
+      throw new Error("Already viewed");
+    } else if (newView < 1) {
+      throw new Error("Error occured while updating view");
+    }
+    let response = await updateProductView({
+      product_id
+    });
+    return response;
+  } catch (error) {
+    console.log(error);
   }
-  let response = await updateProductView({
-    product_id
-  });
-  return response;
 };
 export const postUpdateProductViewForUnknownCustomer = async payload => {
   const {

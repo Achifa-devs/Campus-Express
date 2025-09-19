@@ -16,7 +16,7 @@ export default function NewsLetterPreference() {
         user_id 
     } = useSelector(s => s.user_id);
     useEffect(() => {
-        // axios.get('https://cs-server-olive.vercel.app/addresses', {params: {id: user_id}})
+        // axios.get('https://cs-node.vercel.app/addresses', {params: {id: user_id}})
         // .then(({data})=>{
         //     setItems(data)
         // })

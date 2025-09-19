@@ -1,0 +1,30 @@
+{
+  "chat_id": "chat_001",
+  "participants": ["u101", "u102"],
+  "messages": [
+    {
+      "message_id": "m499",
+      "sender_id": "u101",
+      "text": "Hey Amaka, are we still meeting?",
+      "attachments": [],
+      "timestamp": "2025-09-18T14:20:00Z",
+      "status": "seen"
+    },
+    {
+      "message_id": "m500",
+      "sender_id": "u102",
+      "text": "Yes, at 3 PM. Don’t be late.",
+      "attachments": [],
+      "timestamp": "2025-09-18T14:25:00Z",
+      "status": "seen"
+    },
+    {
+      "message_id": "m501",
+      "sender_id": "u102",
+      "text": "See you tomorrow!",
+      "attachments": [],
+      "timestamp": "2025-09-18T14:30:00Z",
+      "status": "delivered"
+    }
+  ]
+}

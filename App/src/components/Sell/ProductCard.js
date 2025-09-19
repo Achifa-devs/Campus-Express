@@ -28,7 +28,7 @@ const ProductCard = ({ item, state='private', onDelete, onStatusChange, onPromot
 
   useEffect(() => {
     console.log(route.name)
-    if (route.name === "user-explore-shop") {
+    if (route.name === "explore-shop") {
       setExploreShop(true);
     } else {
       setExploreShop(false);
@@ -66,7 +66,7 @@ const ProductCard = ({ item, state='private', onDelete, onStatusChange, onPromot
   
   const handleViewPress = useCallback(
     debounce((item) => {
-      navigation.navigate('user-product', { data: item });
+      navigation.navigate('product', { data: item });
     }, 300, { leading: true, trailing: false }),
     [navigation]
   );
@@ -76,19 +76,19 @@ const ProductCard = ({ item, state='private', onDelete, onStatusChange, onPromot
       if(!isPromoted){
         dispatch(set_boost_modal({data: data, visible: 1}))
       }else{
-        navigation.navigate('user-metrics', {
+        navigation.navigate('metrics', {
           data: data
         })
       }
     }else{
-      navigation.navigate('user-product', { data: item });
+      navigation.navigate('product', { data: item });
     }
   };
 
   return (
     <TouchableOpacity style={styles.container} onPress={e => {
       if(exploreshop){
-        navigation.navigate('user-product', {data: item})
+        navigation.navigate('product', {data: item})
       }else{
         handlePromotePress(item)
       }
@@ -96,7 +96,7 @@ const ProductCard = ({ item, state='private', onDelete, onStatusChange, onPromot
       {/* Thumbnail - Clickable for navigation */}
       <TouchableOpacity onPress={e => {
         if(exploreshop){
-          navigation.navigate('user-product', {data: item})
+          navigation.navigate('product', {data: item})
         }else{
           handlePromotePress(item)
         }
@@ -104,7 +104,7 @@ const ProductCard = ({ item, state='private', onDelete, onStatusChange, onPromot
         <Image source={{ uri: item.thumbnail_id }} style={styles.thumbnail} />
         
         {/* Boost Badge - Overlay on thumbnail */}
-        {!exploreshop ?
+        {/* {!exploreshop ?
           isPromoted ? (
             <View style={styles.boostBadge}>
               <Icon name="rocket" size={12} color="#FFF" />
@@ -119,7 +119,7 @@ const ProductCard = ({ item, state='private', onDelete, onStatusChange, onPromot
               <Icon name="rocket-outline" size={12} color="#FFF" />
               <Text style={styles.promoteButtonText}>Promote now</Text>
             </TouchableOpacity>
-          ): ''}
+          ): ''} */}
       </TouchableOpacity>
       
       {/* Content */}

@@ -41,7 +41,7 @@ const EmailScreen = ({ navigation }) => {
 
   function ConfirmEmail() {
     setLoading(true)
-    axios.post("https://cs-server-olive.vercel.app/comfirm-email", { email })
+    axios.post("https://cs-node.vercel.app/confirm-email", { email })
     .then((result) => {
         setLoading(false)
 

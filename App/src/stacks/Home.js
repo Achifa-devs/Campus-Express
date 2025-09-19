@@ -27,6 +27,7 @@ import ReviewSubmissionScreen from "../screen/Review";
 import Shop from "../screen/ExploreShop";
 import Service from "../screen/Service";
 import Accommodation from "../screen/Accomodation";
+import Search from "../screen/Search";
 const HomeStack = createNativeStackNavigator();
 export function HomeStackScreen() {
    
@@ -66,7 +67,7 @@ export function HomeStackScreen() {
                 
 
                 {/* Subscribe Button */}
-                {user && (
+                {/* {user && (
                 
                   <TouchableOpacity
                     style={[styles.button, styles.subscribedButton]}
@@ -85,7 +86,7 @@ export function HomeStackScreen() {
                       </Text>
                     </View>
                   </TouchableOpacity>
-                )}
+                )} */}
 
                 {
                   !user && (
@@ -116,6 +117,16 @@ export function HomeStackScreen() {
         ), 
         // headerShown: false,  
       }}  name="type" component={Type} />
+
+      <HomeStack.Screen  options={{
+        header: ({navigation}) =>
+        (
+            <View style={{ height: 55, display: 'none', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px'}}>
+
+            </View>
+        ), 
+        // headerShown: false,  
+      }}  name="search" component={Search} />
       <HomeStack.Screen  options={{
         header: ({navigation}) =>
         (

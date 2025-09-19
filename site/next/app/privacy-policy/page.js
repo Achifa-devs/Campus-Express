@@ -28,7 +28,7 @@ export default function page() {
                     - We collect information related to your transactions on the platform, including purchase history, item listings, and payment details.
                 </p>
                 <p>
-                    3. User-generated Content:
+                    3. generated Content:
                     - Information you provide through posts, comments, reviews, or other content shared on the platform.
                 </p>
                 <p>

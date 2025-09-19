@@ -39,7 +39,7 @@ const AdvancedSearchBar = () => {
     setIsSearching(false);
 
     if (query !== '' && query.trim() !== '') {
-      fetch(`https://cs-server-olive.vercel.app/search?word=${query}&campus=${campus==='All campus'? 'null':campus}&purpose=${option === 'Products' ? 'product' : option === 'Lodges' ? 'accomodation' : 'service'}&user_id=${user ? user?.user_id: id}`, {
+      fetch(`https://cs-node.vercel.app/search?word=${query}&campus=${campus==='All campus'? 'null':campus}&purpose=${option === 'Products' ? 'product' : option === 'Lodges' ? 'accomodation' : 'service'}&user_id=${user ? user?.user_id: id}`, {
         headers: {
           "Content-Type": "Application/json" 
         }

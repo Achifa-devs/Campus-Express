@@ -51,17 +51,21 @@ const Signup = () => {
   const [serverErr, setServerErr] = useState('');
   const [focusedInput, setFocusedInput] = useState(null);
 
+  // indexOf
   useEffect(() => {
     if (formData.state) {
       const stateIndex = data.findIndex(item => 
-        item.label.toLowerCase() === formData.state.toLowerCase()
+        item.title.toLowerCase() === formData.state.toLowerCase()
       );
+
       const campuses = Object.values(school_choices).reverse();
-      setCampusLocaleList(stateIndex >= 0 ? campuses[stateIndex] : []);
+      console.log(campuses[stateIndex])
+      setCampusLocaleList(campuses[stateIndex]);
     }
   }, [formData]);
 
   const updateData = useCallback((value, name) => {
+    console.log(value, name)
     setFormData(prev => ({ ...prev, [name]: value }));
     setErrors(prev => ({ ...prev, [name]: '' }));
     setServerErr('');
@@ -122,7 +126,7 @@ const Signup = () => {
 
     setServerLoading(true);
     try {
-      const response = await fetch('https://cs-server-olive.vercel.app/vendor/registration', {
+      const response = await fetch('https://cs-node.vercel.app/vendor/registration', {
         method: 'POST',
         headers: { "Content-Type": "Application/json" },
         body: JSON.stringify(formData)
@@ -132,6 +136,7 @@ const Signup = () => {
        
       if (data.success) {
         await Memory.store('user', (data.data.user));
+        await Memory.store('token', data.data.cookie);
         dispatch(set_user(data.data.user))
         dispatch(set_campus(data.data.user?.campus))
         dispatch(set_mode('main'))
@@ -165,7 +170,7 @@ const Signup = () => {
   const formFields = [
     {
       id: 'fname',
-      label: 'First name',
+      title: 'First name',
       type: 'text',
       placeholder: 'Enter first name',
       keyboardType: 'default',
@@ -174,7 +179,7 @@ const Signup = () => {
     },
     {
       id: 'lname',
-      label: 'Last name',
+      title: 'Last name',
       type: 'text',
       placeholder: 'Enter last name',
       keyboardType: 'default',
@@ -183,7 +188,7 @@ const Signup = () => {
     }, 
     {
       id: 'email',
-      label: 'Email',
+      title: 'Email',
       type: 'text',
       placeholder: 'Enter email',
       keyboardType: 'email-address',
@@ -191,7 +196,7 @@ const Signup = () => {
     },
     {
       id: 'phone',
-      label: 'WhatsApp number',
+      title: 'WhatsApp number',
       type: 'tel',
       placeholder: 'Enter your whatsapp number',
       keyboardType: 'numeric',
@@ -199,7 +204,7 @@ const Signup = () => {
     },
     {
       id: 'pwd',
-      label: 'Password',
+      title: 'Password',
       type: 'password',
       placeholder: 'Enter password',
       keyboardType: 'default',
@@ -215,20 +220,20 @@ const Signup = () => {
     },
     {
       id: 'state',
-      label: 'State',
+      title: 'State',
       type: 'dropdown',
       data: data,
-      fieldName: 'label',
+      fieldName: 'title',
       name: 'state',
       placeholder: 'Select state',
       error: errors.state
     },
     {
       id: 'campus',
-      label: 'Campus',
+      title: 'Campus',
       type: 'dropdown',
       data: campusLocaleList,
-      fieldName: 'text',
+      fieldName: 'title',
       name: 'campus',
       placeholder: 'Select campus',
       error: errors.campus
@@ -239,7 +244,7 @@ const Signup = () => {
     if (item.type === 'dropdown') {
       return (
         <View style={styles.inputContainer}>
-          <Text style={styles.label}>{item.label}</Text>
+          <Text style={styles.title}>{item.title}</Text>
           <DropdownComp
             dropdownPosition="top"
             fieldName={item.fieldName}
@@ -255,7 +260,7 @@ const Signup = () => {
 
     return (
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>{item.label}</Text>
+        <Text style={styles.title}>{item.title}</Text>
         <View style={[
           styles.inputWrapper, 
           focusedInput === item.id && styles.inputFocused,
@@ -466,7 +471,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     width: '100%',
   },
-  label: {
+  title: {
     fontSize: 14,
     fontWeight: '600',
     color: '#333',

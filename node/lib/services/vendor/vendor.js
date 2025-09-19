@@ -1,3 +1,4 @@
+import pool from "../../config/db.js";
 import { countEmail, countPhone, createVendor, findUserByEmail, findUserById, updateVendorEmailById, updateVendorPasswordById, updateVendorPhoneById, updateVendorProfileById } from "../../repositories/vendor/vendor.js";
 import { generateVendorJwtToken } from "../../utils/token.js";
 import bcrypt from "bcryptjs";
@@ -6,12 +7,15 @@ export const getVendor = async payload => {
   const {
     user_id
   } = payload;
-
-  // Business logic
-  const response = await findUserById({
-    user_id
-  });
-  return response;
+  try {
+    // Business logic
+    const response = await findUserById({
+      user_id
+    });
+    return response;
+  } catch (error) {
+    console.log("error: ", error);
+  }
 };
 export const postNewVendor = async payload => {
   const {
@@ -25,11 +29,12 @@ export const postNewVendor = async payload => {
     deviceId
   } = payload;
   console.log(deviceId._j);
-  // return true
-  // Business logic
+
+  // Hash password
   let hashedPwd = await bcrypt.hash(pwd, 10);
-  console.log(hashedPwd);
   let user_id = `CE-${shortId.generate(10)}`;
+
+  // Check email and phone
   let existingEmail = await countEmail({
     email
   });
@@ -37,10 +42,12 @@ export const postNewVendor = async payload => {
     phone
   });
   if (existingEmail > 0) {
-    throw new Error("Email exist");
+    throw new Error("Email exists");
   } else if (existingPhone > 0) {
-    throw new Error("Phone number exist");
+    throw new Error("Phone number exists");
   }
+
+  // Create vendor
   const response = await createVendor({
     fname,
     lname,
@@ -53,6 +60,15 @@ export const postNewVendor = async payload => {
     gender: null,
     deviceId: deviceId._j
   });
+
+  // Insert subscription for this new user
+  const plan = "Free"; // default starting plan
+  const start_date = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+  const end_date = null; // you can calculate trial end or leave null
+  const created_at = new Date().toISOString();
+  await pool.query(`INSERT INTO subscriptions (user_id, plan, start_date, end_date, is_active, created_at)
+    VALUES ($1, $2, $3, $4, $5, $6)`, [user_id, plan, start_date, end_date, true, created_at]);
+  const token = generateVendorJwtToken(user_id);
   return {
     ...response,
     user: {
@@ -63,7 +79,8 @@ export const postNewVendor = async payload => {
       phone,
       state,
       campus
-    }
+    },
+    cookie: token
   };
 };
 export const postLoginVendor = async payload => {

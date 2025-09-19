@@ -35,8 +35,9 @@ export function ProfileStackScreen() {
   const dispatch = useDispatch()
 
     const { user } = useSelector(s => s.user);
+    const { nested_nav } = useSelector(s => s.nested_nav);
     const navigation = useNavigation();
-    
+
     return (
         <ProfileStack.Navigator>
 
@@ -103,7 +104,7 @@ export function ProfileStackScreen() {
                         </View>
                     ),
                 }}
-                name="user-profile" component={Profile}
+                name="profile" component={Profile}
             />
 
             <ProfileStack.Screen  options={{
@@ -462,7 +463,7 @@ export function ProfileStackScreen() {
                 </View>
                     </>
                 ),
-            }}   name="user-thread" component={CreateTopicScreen} />
+            }}   name="thread" component={CreateTopicScreen} />
             
             <ProfileStack.Screen options={{
                 header: ({ navigation }) =>
@@ -487,7 +488,7 @@ export function ProfileStackScreen() {
                 </View>
                     </>
                 ),
-            }}   name="user-topic-replies" component={TopicDetailScreen} />
+            }}   name="topic-replies" component={TopicDetailScreen} />
 
             <ProfileStack.Screen options={{
                 header: ({ navigation }) =>
@@ -512,7 +513,7 @@ export function ProfileStackScreen() {
                 </View>
                     </>
                 ),
-            }}   name="user-report" component={Report} />
+            }}   name="report" component={Report} />
             
             <ProfileStack.Screen  options={{
                 header: ({navigation}) =>
@@ -535,7 +536,7 @@ export function ProfileStackScreen() {
                     </View>
                 ),
                 
-            }}   name="user-logout" component={Logout} />
+            }}   name="logout" component={Logout} />
             
             <ProfileStack.Screen  options={{
                 header: ({navigation}) =>
@@ -558,7 +559,7 @@ export function ProfileStackScreen() {
                     </View>
                 ),
                 
-            }}   name="user-security" component={Security} />
+            }}   name="security" component={Security} />
             
             
             
@@ -583,7 +584,7 @@ export function ProfileStackScreen() {
                     </View>
                 ),
                 
-            }}   name="user-blog" component={Blog} />
+            }}   name="blog" component={Blog} />
 
             
             

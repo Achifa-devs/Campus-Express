@@ -6,7 +6,7 @@ import '../../styles/Seller/setttings.css'
 import '../../styles/Seller/overlay.css' 
 import '../../styles/settings.css';
 import editSvg from '../../assets/edit-svgrepo-com.svg'
-import userPhoto from '../../assets/user-rounded-svgrepo-com.svg'
+import userPhoto from '../../assets/rounded-svgrepo-com.svg'
 
 import bankList from '../../bank.json' 
 import { useLocation } from 'react-router-dom'
@@ -432,7 +432,7 @@ function Payments() {
                                 let Bank = BankCode.current
                                 // alert(Bank)
                             
-                            fetch('https://cs-server-olive.vercel.app/bank-verification', {
+                            fetch('https://cs-node.vercel.app/bank-verification', {
                                 method: 'post',
                                 headers: {
                                     'Content-Type': 'application/json',

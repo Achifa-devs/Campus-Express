@@ -110,7 +110,7 @@ const User = () => {
 
         <View style={styles.actionsSection}>
           <TouchableOpacity style={styles.actionButton} onPress={e => {
-                navigation.navigate('user-edit-profile')
+                navigation.navigate('edit-profile')
             }}>
             <Text style={styles.actionButtonText}>Edit Profile</Text>
           </TouchableOpacity>

@@ -23,7 +23,7 @@ export function Shop() {
         let json_user = await getData('user');
         let parsed_user = JSON.parse(json_user);
         if (parsed_user) {
-          const userRes = await axios.get('https://cs-server-olive.vercel.app/vendor', {params: {user_id: parsed_user?.user_id}})
+          const userRes = await axios.get('https://cs-node.vercel.app/vendor', {params: {user_id: parsed_user?.user_id}})
           const user = await userRes.data;
           console.log(user, parsed_user.user_id)
     

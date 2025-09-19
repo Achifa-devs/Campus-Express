@@ -1,4 +1,7 @@
-import { getProduct, getProducts, getProductThumbnail, getProductType, getSearch, postProductView, postUpdateProductViewForUnknownCustomer } from "../../services/shop/product.js";
+import { getProductsByCategory } from "../../services/shop/categorized.js";
+import { getProduct, getProducts, getProductThumbnail, getProductType, postProductView, postUpdateProductViewForUnknownCustomer } from "../../services/shop/product.js";
+import { searchProducts } from "../../services/shop/search.js";
+import { getDashboardProducts } from "../../services/shop/trends.js";
 export async function GET_PRODUCT(req, res) {
   try {
     const product = await getProduct(req.query);
@@ -15,7 +18,7 @@ export async function GET_PRODUCT(req, res) {
 }
 export async function GET_PRODUCTS(req, res) {
   try {
-    const products = await getProducts({
+    const products = await getDashboardProducts({
       ...req.query,
       gender: req.headers.gender
     });
@@ -32,7 +35,7 @@ export async function GET_PRODUCTS(req, res) {
 }
 export async function GET_PRODUCTS_TYPE(req, res) {
   try {
-    const products = await getProductType(req.query);
+    const products = await getProductsByCategory(req.query);
     res.status(201).json({
       success: true,
       data: products
@@ -46,7 +49,7 @@ export async function GET_PRODUCTS_TYPE(req, res) {
 }
 export async function GET_SEARCH(req, res) {
   try {
-    const search_response = await getSearch(req.query);
+    const search_response = await searchProducts(req.query);
     res.status(201).json({
       success: true,
       data: search_response

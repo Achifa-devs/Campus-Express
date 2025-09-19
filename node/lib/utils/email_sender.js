@@ -1,38 +1,32 @@
 import nodemailer from 'nodemailer';
 export async function send_email(subject, template, email) {
-  // Create a transporter using SMTP
-  const transporter = nodemailer.createTransport({
-    host: 'smtp.privateemail.com',
-    // Replace with your SMTP server hostname
-    port: 465,
-    // Replace with your SMTP server port
-    secure: true,
-    // Set to true if using SSL/TLS
-    auth: {
-      user: 'campus-sphere@campussphere.net',
-      // Replace with your email address
-      pass: 'A!nianuli82003' // Replace with your email password or app-specific password
-    }
-  });
+  try {
+    // Create a transporter using SMTP
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.privateemail.com',
+      port: 465,
+      secure: true,
+      auth: {
+        user: 'campus-sphere@campussphere.net',
+        pass: 'A!nianuli82003'
+      }
+    });
 
-  // Email content 
-  const mailOptions = {
-    from: '"Campus Sphere" <campus-sphere@campussphere.net>',
-    // Replace with your email address
-    to: `${email}`,
-    // Replace with the recipient's email address
-    subject: subject,
-    html: template
-  };
+    // Email content 
+    const mailOptions = {
+      from: '"Campus Sphere" <campus-sphere@campussphere.net>',
+      to: email,
+      subject,
+      html: template
+    };
 
-  // Send the email
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.error('Error:', error);
-    } else {
-      console.log('Email sent:', info.response);
-    }
-  });
+    // Send the email
+    await transporter.sendMail(mailOptions);
+    return true; // ✅ Email sent successfully
+  } catch (error) {
+    console.error("Error sending email:", error);
+    return false; // ❌ Failed to send
+  }
 }
 export async function send_mail_via_brevo(subject, html, email) {
   let transporter = nodemailer.createTransport({

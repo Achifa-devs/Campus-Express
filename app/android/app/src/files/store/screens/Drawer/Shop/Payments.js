@@ -21,7 +21,7 @@ export default function Payments() {
         setModalVisible(!modalVisible);
     };
    function get() {
-        fetch(`https://cs-server-olive.vercel.app:9090/api/shop/payment/`, {
+        fetch(`https://cs-node.vercel.app/:9090/api/shop/payment/`, {
             method: 'post',
             headers: {
                 "Content-Type": "Application/json"

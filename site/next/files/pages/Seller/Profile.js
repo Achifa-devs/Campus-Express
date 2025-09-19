@@ -8,7 +8,7 @@ import Body from "../../components/Seller/Profile/Body";
 import { useEffect, useState } from 'react';
 import { GetSellerPhoto, GetSellerWallet, GetShop } from '../../api/seller/get';
 import { useSelector } from 'react-redux';
-import userPhoto from '../../assets/user-svgrepo-com (2).svg'
+import userPhoto from '../../assets/svgrepo-com (2).svg'
 
 const Me = () => {
 

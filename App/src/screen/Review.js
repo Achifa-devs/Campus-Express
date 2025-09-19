@@ -52,7 +52,7 @@ const ReviewSubmissionScreen = ({ navigation }) => {
 
     setIsSubmitting(true);
     
-    fetch(`https://cs-server-olive.vercel.app/review`, {
+    fetch(`https://cs-node.vercel.app/review`, {
       method: 'post',
 
       headers: {

@@ -34,7 +34,7 @@ const Promotion = ({ visible, onClose, onSubscribe }) => {
   useEffect(() => {
     async function getMetrics() {
       try {
-        const response = await axios.get('https://cs-server-olive.vercel.app/promo', {
+        const response = await axios.get('https://cs-node.vercel.app/promo', {
           params: { product_id: boost_modal?.data?.product_id }
         });
         const result = response.data;

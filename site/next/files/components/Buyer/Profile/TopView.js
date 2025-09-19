@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import editSvg from '../../../assets/edit-svgrepo-com.svg'
 
-import userPhoto from '../../../assets/user-svgrepo-com (2).svg'
+import userPhoto from '../../../assets/svgrepo-com (2).svg'
 
 import { useNavigate } from 'react-router-dom'
 import { GetSellerPhoto } from '../../../api/seller/get'
