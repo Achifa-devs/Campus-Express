@@ -60,7 +60,6 @@ io.use(async (socket, next) => {
     if (!token) return next(new Error('Authentication error'));
 
     const jwt = require('jsonwebtoken');
-    console.log(token, socket.handshake.query.user_id)
     const payload = jwt.verify(token, '1971-2022-2003-vendors'); 
     socket.user = { id: payload.id };  
     return next();
@@ -108,7 +107,7 @@ io.on('connection', (socket) => {
     try {
       const { receiver_id, content, message_type = 'text', media_url = null, created_at } = payload;
       const conversationId = generateConversationId(userId, receiver_id);
-      
+
       // ensure user is participant
       const ins = await pool.query(
         `INSERT INTO messages (
@@ -139,23 +138,17 @@ io.on('connection', (socket) => {
       );
 
       const message = ins.rows[0];
-      const participants = [message.sender_id, message.receiver_id];
-      for (const uid of participants) {
-        const sockets = onlineUsers.get(uid) || new Set();
-        for (const sid of sockets) {
-          io.to(sid).emit("message", {
-            message_id: message.mssg_id,
-            conversation_id: conversationId,
-            sender_id: message.sender_id,
-            receiver_id: message.receiver_id,
-            content: message.content,
-            media_url: message.media_url,
-            message_type: message.message_type,
-            created_at: message.created_at,
-            status: message.status,
-          });
-        }
-      }
+      io.to(conversationId).emit("message", {
+        message_id: message.mssg_id,
+        conversation_id: conversationId,
+        sender_id: message.sender_id,
+        receiver_id: message.receiver_id,
+        content: message.content,
+        media_url: message.media_url,
+        message_type: message.message_type,
+        created_at: message.created_at,
+        status: message.status,
+      })
       callback && callback({ success: true, message });
 
        
@@ -163,6 +156,7 @@ io.on('connection', (socket) => {
       console.error('send_message error', err);
       callback && callback({ success: false, error: 'internal' });
     }
+    
   });
 
   // When client acknowledges a message is delivered (client emits with messageId)
