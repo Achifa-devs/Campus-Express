@@ -44,6 +44,8 @@ export default function StoreTab({navigation}) {
     function updateTabBarStyle(data) {
       setTabBarStyle(data)
     }
+    const {unread} = useSelector(s => s.unread)
+    
 
     React.useEffect(() => {
       if(nested_nav.boolean){
@@ -87,6 +89,10 @@ export default function StoreTab({navigation}) {
           component={HomeStackScreen} /> 
         <Tab.Screen 
           name="Chat"  
+          options={{
+            // Show badge only if there are unread chats
+            tabBarBadge: unread > 0 ? (unread > 99 ? "99+" : unread) : undefined,
+          }}
           component={ChatStackScreen} />
         <Tab.Screen 
           name="Sell"  

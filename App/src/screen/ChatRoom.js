@@ -40,7 +40,6 @@ const ChatRoom = ({ route }) => {
   const flatListRef = useRef(null);
   const { user } = useSelector(s => s?.user);
 
-  const socketRef = useRef(null);
   useEffect(() => {
     
     if(from === 'product'){
@@ -96,8 +95,25 @@ const ChatRoom = ({ route }) => {
   ];
 
   useEffect(() => {
-    setMessages(mockMessages);
+    setMessages(room[1].messages);
   }, [room, navigation]);
+
+  useEffect(() => {
+    if(messages.length>0){
+      Chat.markAsRead(room[0], user?.user_id, (data) => {
+        console.log('conversation read')
+      })
+
+      Chat.socket.on("message_status_update", ({ conversation_id, user_id, status }) => {
+        console.log("📩 Status update:", { conversation_id, user_id, status });
+
+        // TODO: update Redux or state so UI reflects 'seen'
+      });
+
+    }
+
+
+  }, [messages])
 
   const sendMessage = () => {
     if (newMessage.trim()) {
@@ -152,11 +168,11 @@ const ChatRoom = ({ route }) => {
             styles.messageTime,
             item.sender_id === user?.user_id ? styles.myMessageTime : styles.otherMessageTime
           ]}>
-            {js_ago(item.created_at)}
+            {js_ago(new Date(item.created_at))}
           </Text>
           {item.sender_id === user?.user_id && (
             <Text style={styles.messageStatus}>
-              {item.status}{'🕒'}
+              {item.status.status}{'🕒'}
             </Text>
           )}
           

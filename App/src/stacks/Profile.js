@@ -76,7 +76,7 @@ export function ProfileStackScreen() {
                                     />
                                     :
                                     <View style={{height: 60, width: 60}}>
-                                        <Ionicons name={"user"} size={60} />
+                                        <Ionicons name={"person-circle"} size={60} color={"#fff"} />
                                     </View> 
                                 }
                                 <View>

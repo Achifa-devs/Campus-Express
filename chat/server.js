@@ -180,22 +180,49 @@ io.on('connection', (socket) => {
   });
 
   // When client marks as read
-  socket.on('message_read', async ({ messageId, conversationId }) => {
+  socket.on("mark_as_read", async ({ conversation_id, user_id }) => {
     try {
-      await pool.query('UPDATE message_status SET status = $1, updated_at = now() WHERE message_id = $2 AND user_id = $3 AND status != $1', ['read', messageId, userId]);
-      // update last_read_message_id for participant
-      await pool.query('UPDATE conversation_participants SET last_read_message_id = $1 WHERE conversation_id = $2 AND user_id = $3', [messageId, conversationId, userId]);
+      // ✅ Update all messages in this conversation for this receiver
+      await pool.query(
+        `UPDATE messages 
+        SET status = jsonb_set(status, '{status}', '"seen"') 
+        WHERE conversation_id = $1 AND receiver_id = $2`,
+        [conversation_id, user_id]
+      );
 
-      // inform sender sockets
-      const row = await pool.query('SELECT sender_id FROM messages WHERE id = $1', [messageId]);
-      if (row.rowCount > 0) {
-        const senderId = row.rows[0].sender_id;
-        const sockets = onlineUsers.get(senderId) || new Set();
-        for (const sid of sockets) {
-          io.to(sid).emit('message_status_update', { messageId, userId, status: 'read' });
+      // ✅ Get both sender and receiver IDs from this conversation
+      const result = await pool.query(
+        `SELECT DISTINCT sender_id, receiver_id 
+        FROM messages 
+        WHERE conversation_id = $1`,
+        [conversation_id]
+      );
+
+      if (result.rowCount > 0) {
+        const participants = new Set();
+
+        result.rows.forEach(row => {
+          participants.add(row.sender_id);
+          participants.add(row.receiver_id);
+        });
+
+        // ✅ Emit status update to all participants
+        for (const uid of participants) {
+          const sockets = onlineUsers.get(uid);
+          if (sockets) {
+            for (const sid of sockets) {
+              io.to(sid).emit("message_status_update", {
+                conversation_id,
+                user_id, // who marked as read
+                status: "seen",
+              });
+            }
+          }
         }
       }
-    } catch (err) { console.error(err); }
+    } catch (err) {
+      console.error("❌ Error marking as read:", err);
+    }
   });
 
   socket.on('typing', ({ conversationId, isTyping }) => {

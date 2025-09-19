@@ -8,7 +8,7 @@ import Main from "./Tab";
 import WelcomeScreen from "./Welcome";
 import { set_mode } from "../../redux/info/mode";
 import { getFocusedRouteNameFromRoute, NavigationContainer, useNavigation } from "@react-navigation/native";
-import { SafeAreaView, StatusBar, StyleSheet } from "react-native";
+import { Alert, SafeAreaView, StatusBar, StyleSheet } from "react-native";
 import { set_campus } from "../../redux/info/campus";
 import { PaystackProvider } from 'react-native-paystack-webview';
 import { CampusSelection } from "../modals/Campus";
@@ -29,6 +29,8 @@ import { set_sponsored_modal } from "../../redux/modal/disruptor";
 import { set_nested_nav } from "../../redux/nested_navigation";
 import Tools from "../utils/generalHandler";
 import { Chat } from "../api/chat";
+import { set_unread } from "../../redux/info/unread_chats";
+import { set_chat } from "../../redux/info/chat";
 
 function NavigationHandler() {
 
@@ -41,17 +43,70 @@ function NavigationHandler() {
   const { connect_purchase_modal } = useSelector(s => s.connect_purchase_modal);
   const { mode } = useSelector((s) => s.mode);
   const { user } = useSelector(s => s?.user);
-  const { nested_nav } = useSelector(s => s?.nested_nav);
+  const { chat } = useSelector(s => s?.chat);
+  
   const dispatch = useDispatch();
 
 
 
-  useEffect(() => {
-    if (user) {
-      dispatch(set_campus(user?.campus));
-      Chat.init(user?.user_id, "http://10.31.82.146:4000");
+  const fetchChatRooms = async (id) => {
+    try {
+      // setLoading(true);
+
+      Chat.fetchChatList(id, (data) => {
+        if (data?.success && data?.data) {
+          dispatch(set_chat(Object.entries(data.data)));
+        } else {
+          console.warn("⚠️ No chat data returned");
+        }
+        // setLoading(false);
+      });
+
+    } catch (error) {
+      console.error("❌ Error fetching chat rooms:", error);
+      // setLoading(false);
     }
-  }, [user]); 
+  };
+
+  useEffect(() => {
+    if (!user) return;
+
+    (async function initChat() {
+      dispatch(set_campus(user?.campus));
+
+      const isConnected = await Chat.init(
+        user?.user_id,
+        "https://campus-express-production.up.railway.app/"
+      );
+
+      if (isConnected) {
+        console.log("✅ Chat is online 🚀");
+        fetchChatRooms(user?.user_id);
+      } else {
+        console.log("❌ Chat failed to connect");
+      }
+    })();
+  }, [user]);
+
+  useEffect(() => {
+    if (!chat || !user) return;
+
+    // 📨 Calculate total unread messages across all conversations
+    const totalUnread = chat.reduce((acc, [convId, convData]) => {
+      const unreadCount = convData.messages.filter(
+        (msg) =>
+          msg.status.id === user.user_id &&
+          msg.status.status === "sent"
+      ).length;
+
+      return acc + unreadCount;
+    }, 0);
+
+    // ✅ Update Redux state once with the total unread count
+    dispatch(set_unread(totalUnread));
+
+  }, [chat, user, dispatch]);
+
 
   useEffect(() => {
     const checkAuthStatus = async () => {

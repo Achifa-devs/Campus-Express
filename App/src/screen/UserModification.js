@@ -334,7 +334,7 @@ export default function UserModification() {
                             <TouchableOpacity style={{height: 60, width: 60}} onPress={e => {
                                 toggleModal()
                             }}>
-                                <Ionicons color='#FF4500' size={60} />
+                                <Ionicons name={"person-circle"} color='#FF4500' size={60} />
                             </TouchableOpacity>  
                     }  
                 </View>

@@ -13,10 +13,13 @@ import {
   RefreshControl,
   TextInput
 } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import chatList from '../json/chat/chat.json'
 import js_ago from 'js-ago';
 import { Chat } from '../api/chat';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { set_unread } from '../../redux/info/unread_chats';
 const ChatList = ({ navigation }) => {
   const [chatRooms, setChatRooms] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -33,14 +36,9 @@ const ChatList = ({ navigation }) => {
       Chat.fetchChatList(id, (data) => {
         setChatRooms(Object.entries(data.data))
         setFilteredRooms(Object.entries(data.data));
+
       }) 
-      
-      // Sort by last message time (newest first)
-      // const sortedRooms = [...chatList].sort((a, b) => {
-      //   // Simple time comparison for demo
-      //   return new Date(b.updated_at) - new Date(a.updated_at);
-      // });
-      
+
     } catch (error) {
       console.error('Error fetching chat rooms:', error);
     } finally {
@@ -48,6 +46,30 @@ const ChatList = ({ navigation }) => {
       setRefreshing(false);
     }
   };
+
+
+  const dispatch = useDispatch();
+
+ 
+  useEffect(() => {
+    if (!chatRooms) return;
+
+    // Accumulate unread messages from all rooms
+    let totalUnread = 0;
+
+    chatRooms.forEach(([convId, convData]) => {
+      const unreadCount = convData.messages.filter(
+        (msg) =>
+          msg.status.id === user.user_id &&
+          msg.status.status === "sent"
+      ).length;
+
+      totalUnread += unreadCount;
+    });
+
+    // ✅ Update Redux state once with the total unread count
+    dispatch(set_unread(totalUnread));
+  }, [chatRooms, user.user_id, dispatch]);
 
   useEffect(() => {
     fetchChatRooms();
@@ -79,55 +101,108 @@ const ChatList = ({ navigation }) => {
     return timeString;
   };
 
-  const renderChatRoomItem = ({ item }) => (
-    <TouchableOpacity
-      style={styles.chatRoomItem}
-      onPress={() => handleChatRoomPress(item)}
-      activeOpacity={0.7}
-    >
-      <View style={styles.avatarContainer}>
-        <Image
-          source={{ uri: '' }}
-          style={styles.avatar}
-          resizeMode="cover"
-        />
-        {/* {item.isOnline && <View style={styles.onlineIndicator} />} */}
-      </View>
+  function getLastMessage(mssgsArr, type) {
+    if (!mssgsArr || mssgsArr.length === 0) return null;
 
-      <View style={styles.chatContent}>
-        <View style={styles.chatHeader}>
-          <Text style={styles.chatName} numberOfLines={1}>
-            {/* {item.participants[1].name} */}
-          </Text>
-          <Text style={styles.chatTime}>
-            {/* {js_ago(new Date(item.updated_at))} */}
-          </Text>
+    // Sort messages by created_at (latest last)
+    const sorted = mssgsArr.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+
+    // Return the last message
+    const response = type === 'mssg' ? {mssg: sorted[sorted.length - 1].content, isSender: sorted[sorted.length - 1].sender_id === user?.user_id}: sorted[sorted.length - 1].created_at
+    return response;
+  }
+    
+  
+
+
+  const renderChatRoomItem = ({ item }) => {
+    
+    
+    return(
+
+
+      <TouchableOpacity
+        style={styles.chatRoomItem}
+        onPress={() => handleChatRoomPress(item)}
+        activeOpacity={0.7} key={item[0]}
+      >
+        <View style={styles.avatarContainer}>
+         {
+          !item[1].recipient.photo
+          ?
+          <View style={[styles.avatar, {display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff4e0'}]}>
+            <Ionicons name={"person-circle-outline"} size={40} color={"#FF4500"} />
+          </View>
+          :
+          <Image
+            source={{ uri: item[1].recipient.photo }}
+            style={styles.avatar}
+            resizeMode="cover"
+          />
+         }
+          {/* {item.isOnline && <View style={styles.onlineIndicator} />} */}
         </View>
 
-        <View style={styles.chatPreview}>
-          {/* <Text 
-            style={[
-              styles.lastMessage,
-              item.unreadCount > 0 && styles.unreadMessage
-            ]}
-            numberOfLines={1}
-          >
-            {item.last_message.text}
-          </Text> */}
-          
-          {/* {item.unread_count > 0 && (
-            <View style={styles.unreadBadge}>
-              <Text style={styles.unreadCount}>
-                {item.unread_count > 99 ? '99+' : item.unread_count}
-              </Text>
-            </View>
-          )} */}
+        <View style={styles.chatContent}>
+          <View style={styles.chatHeader}>
+            <Text style={styles.chatName} numberOfLines={1}>
+              {item[1].recipient.fname} {item[1].recipient.lname}
+            </Text>
+            <Text style={styles.chatTime}>
+              {
+                js_ago(new Date(getLastMessage(item[1].messages, 'time')))
+              }
+            </Text>
+          </View>
+
+          <View style={styles.chatPreview}>
+            <Text 
+              style={[
+                styles.lastMessage,
+                // item.unreadCount > 0 && styles.unreadMessage
+              ]}
+              numberOfLines={1}
+            >
+              {
+                getLastMessage(item[1].messages, 'mssg').isSender
+                ?
+                'You: '
+                :
+                ''
+              }
+              {
+                getLastMessage(item[1].messages, 'mssg').mssg
+              }
+            </Text>
+            
+            {
+              (() => {
+                
+                const unreadCount = item[1].messages.filter(
+                  msg =>
+                    msg.status.id === user.user_id && // not sent by current user
+                    msg.status.status === "sent"      // still marked as sent
+                ).length;
+                
+
+                return (
+                  unreadCount > 0 && (
+                    <View style={styles.unreadBadge}>
+                      <Text style={styles.unreadCount}>
+                        {unreadCount > 99 ? "99+" : unreadCount}
+                      </Text>
+                    </View>
+                  )
+                );
+              })()
+            }
+
+          </View>
+
         </View>
-
-      </View>
-    </TouchableOpacity>
-  );
-
+      </TouchableOpacity>
+    );
+  }
   const renderEmptyState = () => (
     <View style={styles.emptyState}>
       <Text style={styles.emptyStateText}>

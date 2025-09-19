@@ -1,6 +1,8 @@
 // ChatClient.js
 import { io } from "socket.io-client";
 import Memory from "../utils/memoryHandler";
+import { useDispatch, useSelector } from "react-redux";
+import { set_chat } from "../../redux/info/chat";
 
 export class Chat {
   static socket = null;
@@ -13,32 +15,43 @@ export class Chat {
   static async init(userId, serverUrl) {
     const token = await Memory.get("token");
 
-    if (!this.socket) {
-      this.socket = io(serverUrl, {
-        transports: ["websocket"],
-        query: { user_id: userId }, // optional, since JWT holds userId
-        auth: { token },
-      });
+    return new Promise((resolve) => {
+      if (!this.socket) {
+        this.socket = io(serverUrl, {
+          transports: ["websocket"],
+          query: { user_id: userId },
+          auth: { token },
+        });
 
-      // ✅ Connection lifecycle logs
-      this.socket.on("connect", () => {
-        console.log("✅ Connected as:", userId);
-      });
+        // ✅ Connection success
+        this.socket.once("connect", () => {
+          console.log("✅ Connected as:", userId);
+          resolve(true);
+        });
 
-      this.socket.on("disconnect", () => {
-        console.log("❌ Disconnected from chat server");
-      });
+        // ❌ Disconnected
+        this.socket.once("disconnect", () => {
+          console.log("❌ Disconnected from chat server");
+          resolve(false);
+        });
 
-      this.socket.on("connect_error", (err) => {
-        console.error("⚠️ Connection error:", err.message);
-      });
+        // ⚠️ Connection error
+        this.socket.once("connect_error", (err) => {
+          console.error("⚠️ Connection error:", err.message);
+          resolve(false);
+        });
 
-      // ✅ Default message listener (for debugging)
-      this.socket.off("message").on("message", (data) => {
-        console.log("📩 Incoming message:", data);
-      });
-    }
+        // Debugging message listener
+        this.socket.off("message").on("message", (data) => {
+          console.log("📩 Incoming message:", data);
+        });
+      } else {
+        // Already connected
+        resolve(this.socket.connected);
+      }
+    });
   }
+
 
   /**
    * Send a message

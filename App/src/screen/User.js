@@ -58,7 +58,7 @@ const User = () => {
             />
             :
             <View style={{height: 60, width: 60}}>
-                <Ionicons name={"user"} color='#FF4500' size={60} />
+                <Ionicons name={"person-circle"} color='#FF4500' size={60} />
             </View>  
         }  
         <Text style={styles.userName}>

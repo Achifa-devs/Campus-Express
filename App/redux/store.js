@@ -1,6 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 import user from './info/user';
+import chat from './info/chat';
 import mode from './info/mode';
+import unread from './info/unread_chats';
 import shop from './info/shop';
 import campus from './info/campus'; 
 import locale_modal from './modal/locale';
@@ -16,6 +18,8 @@ import nested_nav from './nested_navigation'
 const store = configureStore({
   reducer: {
     nested_nav: nested_nav,
+    unread,
+    chat,
     user,
     mode,
     shop,
