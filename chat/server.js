@@ -103,12 +103,12 @@ io.on('connection', (socket) => {
   });
 
  
-  // send_message: client sends { conversationId, content, messageType, mediaUrl(optional) }
   socket.on('send_message', async (payload, callback) => {
    
     try {
-      const { receiver_id, content, message_type = 'text', media_url = null } = payload;
+      const { receiver_id, content, message_type = 'text', media_url = null, created_at } = payload;
       const conversationId = generateConversationId(userId, receiver_id);
+      
       // ensure user is participant
       const ins = await pool.query(
         `INSERT INTO messages (
@@ -123,7 +123,7 @@ io.on('connection', (socket) => {
           created_at, 
           status
         ) VALUES (
-          DEFAULT, $1, $2, $3, $4, $5, $6, $7, NOW(), $8
+          DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9
         ) RETURNING *`,
         [
           shortId.generate(16),   // $1 -> mssg_id
@@ -132,29 +132,31 @@ io.on('connection', (socket) => {
           receiver_id,            // $4 -> receiver_id
           content,                // $5 -> content
           message_type,           // $6 -> message_type
-          media_url,              // $7 -> media_url
+          media_url,  
+          created_at,            // $7 -> media_url
           JSON.stringify({ id: receiver_id, status: "sent" }) // $8 -> status
         ]
       );
 
-
       const message = ins.rows[0];
-      // if(create_mssg.rowCount > 0){
-        // Emit to room (all sockets in conversation room)
-      io.to(conversationId).emit('message', {
-        message_id: message.mssg_id,
-        conversation_id: conversationId,
-        sender_id: message.sender_id,
-        receiver_id: message.receiver_id,
-        content: message.content,
-        media_url: message.media_url,
-        message_type: message.message_type,
-        created_at: message.created_at,
-        status: message.status
-      });
-
+      const participants = [message.sender_id, message.receiver_id];
+      for (const uid of participants) {
+        const sockets = onlineUsers.get(uid) || new Set();
+        for (const sid of sockets) {
+          io.to(sid).emit("message", {
+            message_id: message.mssg_id,
+            conversation_id: conversationId,
+            sender_id: message.sender_id,
+            receiver_id: message.receiver_id,
+            content: message.content,
+            media_url: message.media_url,
+            message_type: message.message_type,
+            created_at: message.created_at,
+            status: message.status,
+          });
+        }
+      }
       callback && callback({ success: true, message });
-      // }
 
        
     } catch (err) {

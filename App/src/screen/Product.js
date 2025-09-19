@@ -495,7 +495,7 @@ export default function Product() {
                       params: {
                         data, 
                         from: 'product',
-                        room: room,
+                        room: [room],
                         session_id: Tools.generateId()
                       },
                     });

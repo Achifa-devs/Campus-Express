@@ -66,36 +66,9 @@ const ChatRoom = ({ route }) => {
   const LIGHT_ORANGE = '#FFE4D6';
   const LIGHT_BLUE = '#E6F4FF';
 
-  // Mock messages data
-  const mockMessages = [
-    {
-      id: '1',
-      text: 'Hey there! How are you doing today? 🎉',
-      sender: 'other',
-      time: '10:30 AM',
-      isRead: true,
-      isDelivered: true
-    },
-    {
-      id: '2',
-      text: "I'm doing amazing! Just finished that project we were working on. How about you?",
-      sender: 'me',
-      time: '10:31 AM',
-      isRead: true,
-      isDelivered: true
-    },
-    {
-      id: '3',
-      text: 'That\'s awesome news! 🚀 I just started working on the new design concepts. Do you have any feedback on the initial mockups?',
-      sender: 'other',
-      time: '10:32 AM',
-      isRead: true,
-      isDelivered: true
-    }
-  ];
-
   useEffect(() => {
     setMessages(room[1].messages);
+    Chat.joinConversation(room[0])
   }, [room, navigation]);
 
   useEffect(() => {
@@ -126,6 +99,7 @@ const ChatRoom = ({ route }) => {
         content: newMessage.trim(),
         message_type: "text",
         media_url: "",
+        created_at: new Date()
       },
       ({message}) => {
         console.log("✅ Sent message:", message);
