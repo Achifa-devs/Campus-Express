@@ -116,35 +116,55 @@ const ChatRoom = ({ route }) => {
   }, [messages])
 
   const sendMessage = () => {
+
+
+    const receiver_id = room[0].split('_').filter(item => item !== user?.user_id)[0]
+
+    Chat.sendMessage(
+      {
+        receiver_id,
+        content: newMessage.trim(),
+        message_type: "text",
+        media_url: "",
+      },
+      ({message}) => {
+        console.log("✅ Sent message:", message);
+
+        setMessages((prevMessages) => {
+          // Keep only valid ones (with real IDs)
+          const authentic = prevMessages.filter(
+            (item) => item?.mssg_id && item?.id
+          );
+
+          return [...authentic, message]; // append new one
+        });
+      }
+    );
+
+
     if (newMessage.trim()) {
       const newMsg = {
-        id: Date.now().toString(),
-        text: newMessage.trim(),
-        sender: 'me',
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        isDelivered: false,
-        isRead: false
+        id: '',
+        mssg_id: '',
+        conversation_id: room[0],
+        sender_id: user?.user_id,
+        receiver_id: receiver_id,
+        content: newMessage.trim(),
+        message_type: 'text',
+        media_url: '',
+        created_at: new Date(),
+        status: {
+          "id": receiver_id,
+          "status": "sending"
+        }
       };
       
       setMessages(prev => [...prev, newMsg]);
       setNewMessage('');
       
       // Simulate typing indicator
-      setIsTyping(true);
+      // setIsTyping(true);
       
-      // Simulate reply after 1-2 seconds
-      setTimeout(() => {
-        setIsTyping(false);
-        const reply = {
-          id: Date.now().toString(),
-          text: 'Thanks for your message! I\'ll get back to you soon. 😊',
-          sender: 'other',
-          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          isDelivered: true,
-          isRead: true
-        };
-        setMessages(prev => [...prev, reply]);
-      }, 1500 + Math.random() * 1000);
     }
   };
 
