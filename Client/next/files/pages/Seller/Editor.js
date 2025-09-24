@@ -411,7 +411,7 @@ const Editor = () => {
             
             if(update){
                 let product_id = searchParams.get('product_id');
-                fetch('https://cs-server-olive.vercel.app/seller.product-update', {
+                fetch('https://cs-node.vercel.app/seller.product-update', {
                     method: 'post',
                     headers: {
                         "Content-Type": "Application/json"
@@ -474,7 +474,7 @@ const Editor = () => {
                 })  
             }else{
 
-                fetch('https://cs-server-olive.vercel.app/seller.product-upload', {
+                fetch('https://cs-node.vercel.app/seller.product-upload', {
                     method: 'post',
                     headers: {
                         "Content-Type": "Application/json"

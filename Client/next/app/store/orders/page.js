@@ -22,7 +22,7 @@ const Order = () => {
    
     useEffect(() => {
         if(user_id !== '' && user_id !== null){
-            axios.get('https://cs-server-olive.vercel.app/orders', {params: {user_id: user_id.trim()}})
+            axios.get('https://cs-node.vercel.app/orders', {params: {user_id: user_id.trim()}})
             .then(({data})=>{
                 console.log(data)
                 setItems(data?.data)

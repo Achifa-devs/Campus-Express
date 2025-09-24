@@ -159,7 +159,7 @@ function OrderCard({item}) {
           <span>Order {item?.order?.status?.state === 'pending' ? 'In Progress' : item?.order?.status?.state === 'cancelled' ? 'Cancelled' : 'Completed'}</span>
             <button style={{display: screenWidth > 760 ? 'flex' : 'flex', width: 'auto', alignItems: 'center', borderRadius: '5px', background: 'red', visibility: item?.order?.status?.state === 'cancelled' ? 'hidden' : 'visible'}} onClick={e=> {
               seller_overlay_setup(true, 'Cancelling order.')
-              axios.post('https://cs-server-olive.vercel.app/vendor/cancel-order', {order_id: item?.order?.order_id})
+              axios.post('https://cs-node.vercel.app/vendor/cancel-order', {order_id: item?.order?.order_id})
               .then(({data})=>{
                 if(data){
                   seller_overlay_setup(false, '')

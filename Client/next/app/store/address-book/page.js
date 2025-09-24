@@ -20,7 +20,7 @@ export default function AddressBook() {
     } = useSelector(s => s.user_id);
     useEffect(() => {
         if (user_id !== '' && user_id !== 'null' && user_id !== undefined && user_id !== 'undefined' && user_id !== null) {
-            axios.get('https://cs-server-olive.vercel.app/addresses', {params: {id: user_id}})
+            axios.get('https://cs-node.vercel.app/addresses', {params: {id: user_id}})
             .then(({data})=>{
                 setItems(data)
             })

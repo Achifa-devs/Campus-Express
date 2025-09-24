@@ -29,9 +29,9 @@ export async function POST(req) {
     // ✅ Insert new order
     const insertOrder = await client.query(
       `INSERT INTO orders(
-        order_id, product_id, status, date, stock, user_id, price, pick_up_channels, havePaid
+        id, order_id, product_id, status, date, stock, user_id, price, pick_up_channels, havePaid
       ) VALUES (
-        $1, $2, $3, $4, $5, $6, $7, $8, false
+        DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, false
       ) RETURNING id`,
       [order_id, product_id, JSON.stringify({ state: 'pending' }), date, stock, user_id, price, JSON.stringify(locale)]
     );
@@ -45,8 +45,8 @@ export async function POST(req) {
     const mssg_obj = get_mssg('new-order');
     await client.query(
       `INSERT INTO buyer_inbox (
-        message_content, subject, created_at, user_id, action_id
-      ) VALUES ($1, $2, $3, $4, $5)`,
+        id, message_content, subject, created_at, user_id, action_id
+      ) VALUES (DEFAULT, $1, $2, $3, $4, $5)`,
       [mssg_obj.mssg, mssg_obj.subject, new Date(), user_id, product_id]
     );
 

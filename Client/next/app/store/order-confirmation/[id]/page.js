@@ -29,7 +29,7 @@ const OrderConfirmation = () => {
 
     useEffect(() => {
         if(user_id !== null && user_id !== 'null' && user_id !== undefined){
-            axios.get('https://cs-server-olive.vercel.app/order', {params: {user_id: user_id, product_id: pathname.split('/').splice(-1)[0]}})
+            axios.get('https://cs-node.vercel.app/order', {params: {user_id: user_id, product_id: pathname.split('/').splice(-1)[0]}})
             .then(({data})=>{
                 set_order_list(data[0])
                 // console.log(data)

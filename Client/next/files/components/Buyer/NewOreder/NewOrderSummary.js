@@ -22,7 +22,7 @@ export default function NewOrderSummary({item,stock,deliveryOpt,order_id}) {
         if (deliveryOpt !== -1) {
             if (deliveryOpt === 0 && check_2.length > 0 || deliveryOpt === 1 && check_1.length > 0) {
                 buyer_overlay_setup(true, 'Creating new order...')
-                fetch('https://cs-server-olive.vercel.app/new-order', {
+                fetch('/api/store/new-order', {
                     method: 'post',
                     headers: {
                         "Content-Type": "Application/json"

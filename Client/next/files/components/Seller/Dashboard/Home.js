@@ -47,7 +47,7 @@ const Home = () => {
     }, [])
 
     function setUpShop() {
-        fetch('https://cs-server-olive.vercel.app/seller.shop-setup', {
+        fetch('https://cs-node.vercel.app/seller.shop-setup', {
             method: 'post',
             headers: {
                 "Content-Type": "Application/json"
@@ -70,7 +70,7 @@ const Home = () => {
     }
 
     function setUpWallet() {
-        fetch('https://cs-server-olive.vercel.app/seller.wallet-setup', {
+        fetch('https://cs-node.vercel.app/seller.wallet-setup', {
             method: 'post',
             headers: {
                 "Content-Type": "Application/json"
