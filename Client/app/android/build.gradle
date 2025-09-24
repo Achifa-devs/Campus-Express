@@ -15,9 +15,10 @@ buildscript {
     dependencies {
         classpath("com.android.tools.build:gradle")
         classpath("com.facebook.react:react-native-gradle-plugin")
-        classpath("com.google.gms:google-services:4.3.15")// ✅ Firebase
+        // classpath("com.google.gms:google-services:4.3.15")// ✅ Firebase
         // classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.0")
+        // classpath ("org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.0")
     }
 }
 

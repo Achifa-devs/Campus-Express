@@ -1,20 +1,21 @@
-
 // lib/db.js
 import { Pool } from 'pg';
 
-let  DATABASE_URL  = "postgres://achifa.io.llc:cflV8XEbCO7h@ep-billowing-sunset-28191429-pooler.us-east-2.aws.neon.tech/neondb";
+const DATABASE_URL = process.env.DATABASE_URL || "postgres://achifa.io.llc:cflV8XEbCO7h@ep-billowing-sunset-28191429-pooler.us-east-2.aws.neon.tech/neondb";
+
+// Force IPv4 by adding `?options=--inet-family=ipv4`
+const connectionString = DATABASE_URL.includes('?')
+  ? `${DATABASE_URL}`
+  : `${DATABASE_URL}`;
 
 const pool = new Pool({
-    connectionString: DATABASE_URL,
-    ssl: {
-        rejectUnauthorized: false,
-    },
-    createTimeoutMillis: 8000,
-    connectionTimeoutMillis: 10000000,
-    acquireTimeoutMillis: 8000,
-    idleTimeoutMillis: 8000,
-    reapIntervalMillis: 1000,
-    createRetryIntervalMillis: 100
+  connectionString,
+  ssl: {
+    rejectUnauthorized: false, // required by Neon
+  },
+  max: 10, // max connections in pool
+  idleTimeoutMillis: 30000, // close idle connections after 30s
+  connectionTimeoutMillis: 10000, // fail if no connection after 10s
 });
 
 export default pool;

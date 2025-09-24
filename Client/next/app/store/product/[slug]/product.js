@@ -82,9 +82,11 @@ const ProductPageClient = ({product, slug}) => {
             let overlay = document.querySelector('.overlay');
             overlay.setAttribute('id', 'overlay');
             if (product.user_id) {
-                fetch(`/api/store/vendor?user_id=${product?.user_id}`, { cache: 'no-store',}).then(async (res) => {
+                fetch(`https://cs-server-olive.vercel.app/vendor?user_id=${product?.user_id}`, { cache: 'no-store',}).then(async (res) => {
                     let response = await res.json()
                     set_seller(response.data)
+                    console.log('seller: ', response)
+
                     overlay.removeAttribute('id')
 
                }).catch(err => console.log(err))
@@ -149,10 +151,10 @@ const ProductPageClient = ({product, slug}) => {
             if(user_id === null || user_id === '' || user_id === 'null'){
                 window.location.href=(`/login`)
             }else{
-                window.location.href=(`/new-order/${product.product_id}`)
+                window.location.href=(`/store/new-order/${product.product_id}`)
             }
         }else{
-            window.location.href=(`/checkout/${product.product_id}`)
+            window.location.href=(`/store/checkout/${product.product_id}`)
         }
     }
 
@@ -231,16 +233,16 @@ const ProductPageClient = ({product, slug}) => {
                         ''
                         :
                         <>
-                            <Contact phone={seller?.phone} item={product}  />
+                            {/* <Contact phone={seller?.phone} item={product}  /> */}
                             <br /> 
-                            {/* <button style={{marginBottom: '15px', background: '#FF4500', color: '#fff', border: 'none', outline: 'none',borderRadius: '2.5px'}} className='shadow-sm' onClick={handleOrder}>{
+                            <button style={{marginBottom: '15px', background: '#FF4500', color: '#fff', border: 'none', outline: 'none',borderRadius: '2.5px'}} className='shadow-sm' onClick={handleOrder}>{
                                 order_list.filter((data) => data.product.product_id === product.product_id && data.order.user_id === user_id).length > 0
                                 ?
 
                                 'View Order'
                                 :
                                 'Place Order Now'
-                            }</button> */}
+                            }</button>
                         </>
                     }
 

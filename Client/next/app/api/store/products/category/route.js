@@ -46,7 +46,7 @@ export async function GET(req) {
     return NextResponse.json({ bool: true, data: result.rows });
 
   } catch (error) {
-    console.error('Error fetching products:', error);
+    // console.error('Error fetching products:', error);
     return NextResponse.json({ bool: false, data: '' }, { status: 500 });
   }
 }

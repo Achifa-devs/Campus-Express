@@ -88,7 +88,7 @@ export default async function RootLayout({ children }) {
   // Fetch product schema
   let productSchema = null;
   try {
-    const res = await fetch(`https://www.campussphere.net/api/json-ld`, {
+    const res = await fetch(`/api/json-ld`, {
       next: { revalidate: 3600 }, // Revalidate every hour
       headers: {
         'Content-Type': 'application/json',

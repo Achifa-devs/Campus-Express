@@ -22,7 +22,7 @@ const Order = () => {
    
     useEffect(() => {
         if(user_id !== '' && user_id !== null){
-            axios.get('/api/store/orders', {params: {user_id: user_id.trim()}})
+            axios.get('https://cs-server-olive.vercel.app/orders', {params: {user_id: user_id.trim()}})
             .then(({data})=>{
                 console.log(data)
                 setItems(data?.data)
@@ -48,7 +48,12 @@ const Order = () => {
 
                     <div style={{justifyContent: 'flex-start', width: '100%', overflow: 'auto', alignItems: 'flex-start', height: '100%'}}>
                         {
+                            Array.isArray(items) 
+                            ?
                             items.map((item,index) => <OrderItem key={index} order={item?.order} item={item?.product}/> )
+
+                            :
+                            ''
                         }
                     </div>
                 </div>

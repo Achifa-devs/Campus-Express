@@ -105,7 +105,7 @@ export default function Showcase({type}) {
         
     useEffect(() => {
         try {
-            fetch(`https://www.campussphere.net/api/products/category?category=${btoa('trends')}&limit=${limit}`, {
+            fetch(`/api/products/category?category=${btoa('trends')}&limit=${limit}`, {
                 headers: {
                     'Gender': window.localStorage.getItem('cs-gender') 
                 }

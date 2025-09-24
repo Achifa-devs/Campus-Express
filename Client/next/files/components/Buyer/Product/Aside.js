@@ -12,7 +12,11 @@ export default function Aside({item,order_list,seller}) {
   useEffect(() => {let width = window.innerWidth;setScreenWidth(width)}, []);
 
   let {buyerData} = useSelector(s => s.buyerData)
+  let [shippingRange, setShippingRange] = useState(item?.shipping_range ? JSON.parse(item.shipping_range) : null)
 
+  useEffect(() => {
+    console.log('product: ', seller)
+  }, [seller])
 
   let dispatch = useDispatch()
 
@@ -80,43 +84,37 @@ export default function Aside({item,order_list,seller}) {
                     </select>
                   </div> */}
 
-                  <div className='shadow-md' style={{padding: '10px 10px', width: 'calc(100% - 0px)', display: 'flex', justifyContent: 'space-between', flexDirection: 'column'}}>
-                    {item?.shipping_range ? JSON.parse(item?.shipping_range)?.in_campus?.selected && (
-                      <>
-                        <div>+ Shipping fee: from {seller?.campus} only for ₦{item?.shipping_range ? new Intl.NumberFormat('en-us').format(JSON.parse(item?.shipping_range)?.in_campus?.price) : ''}</div>
-                      </>
-                    ) : ''}
-                  </div>
-
-                  <div className='shadow-md' style={{padding: '10px 10px', width: 'calc(100% - 0px)', display: 'flex', justifyContent: 'space-between', flexDirection: 'column'}}>
-                    {item?.shipping_range ? JSON.parse(item?.shipping_range)?.in_state?.selected && (
-                      <>
-                        <div>Ships within {seller?.state} only for ₦{item?.shipping_range ? new Intl.NumberFormat('en-us').format(JSON.parse(item?.shipping_range)?.in_state?.price) : ''}</div>
-                      </>
-                    ) :  ''}
-                    {
                     
-                      item?.shipping_range ? !JSON.parse(item?.shipping_range)?.in_state?.selected &&
-                      (<>
-                        <div>Does Not Ship Outside {seller?.campus} </div>
-                      </>)
-                      :''
-                    }
-                  </div>
+                <div className="shadow-md" style={{ padding: '10px', width: '100%', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {/* In Campus */}
+                  {shippingRange?.in_campus?.selected && (
+                    <div>
+                      + Shipping fee: from {seller?.campus} only for ₦
+                      {new Intl.NumberFormat('en-US').format(shippingRange.in_campus.price)}
+                    </div>
+                  )}
 
-                  <div className='shadow-md' style={{padding: '10px 10px', width: 'calc(100% - 0px)', display: 'flex', justifyContent: 'space-between', flexDirection: 'column'}}>
-                    {item?.shipping_range ? JSON.parse(item?.shipping_range)?.out_state?.selected && (
-                      <>
-                        <div>Ships in and outside {seller?.state} for ₦{item?.shipping_range ? new Intl.NumberFormat('en-us').format(JSON.parse(item?.shipping_range)?.out_state?.price) : ''}</div>
-                      </>
-                    ) : ''}
-                    {
-                      item?.shipping_range ? !JSON.parse(item?.shipping_range)?.out_state?.selected &&
-                      (<>
-                        <div>Does Not Ship Outside {seller?.state} </div>
-                      </>):''
-                    }
-                  </div>
+                  {/* In State */}
+                  {shippingRange?.in_state?.selected ? (
+                    <div>
+                      Ships within {seller?.state} only for ₦
+                      {new Intl.NumberFormat('en-US').format(shippingRange.in_state.price)}
+                    </div>
+                  ) : (
+                    <div>Does Not Ship Outside {seller?.campus}</div>
+                  )}
+
+                  {/* Out State */}
+                  {shippingRange?.out_state?.selected ? (
+                    <div>
+                      Ships in and outside {seller?.state} for ₦
+                      {new Intl.NumberFormat('en-US').format(shippingRange.out_state.price)}
+                    </div>
+                  ) : (
+                    <div>Does Not Ship Outside {seller?.state}</div>
+                  )}
+                </div>
+
 
                 </div>
 

@@ -38,3 +38,11 @@ removed 4 packages in 1m
 //     ],
 //     "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1746200400/services_icon_1_w5lpuy.png"
 // }
+
+
+//  @react-navigation/stack countrycitystatejson notifee react-native-animated-loader react-native-biometrics react-native-blob-util react-native-credit-card react-native-credit-card-ui react-native-date-picker react-native-document-picker react-native-dotenv react-native-drawer-layout react-native-dropdown-picker react-native-encrypted-storage react-native-feather react-native-filereader react-native-multiple-select-list react-native-orientation-locker react-native-paper react-native-phone-call react-native-phone-number-input react-native-picker-select react-native-progress react-native-ratings react-native-side-drawer redux-toolkit regjsparser short-id socket.io-client
+
+// @babel/core @babel/preset-env @babel/runtime @react-native/babel-preset @react-native/typescript-config @types/react-test-renderer babel-jest depcheck react-test-renderer typescript
+
+
+ @react-native-firebase/app @react-native-firebase/messaging react-native-flash-message

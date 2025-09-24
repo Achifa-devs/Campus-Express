@@ -216,7 +216,7 @@ export default function Listing() {
 
                                                 <button onClick={e=> {
                                                     seller_overlay_setup(true, 'Deleting Product...')
-                                                    fetch(`https://www.campussphere.net/api/vendor/upload/delete?product_id=${item?.product_id}`)
+                                                    fetch(`/api/vendor/upload/delete?product_id=${item?.product_id}`)
                                                     .then(async(result) => {
                                                         let response = await result.json();
                                                         if(response){
