@@ -1,7 +1,0 @@
-{
-  "name": "app",
-  "displayName": "Campus Sphere",
-  "androidStatusBar": {
-    "translucent": false
-  }
-}
