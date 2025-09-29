@@ -19,6 +19,7 @@ import js_ago from 'js-ago'
 import Video from '../Video'
 import { setSaveTo } from '@/redux/buyer_store/Save'
 import { open_notice } from '@/files/reusable.js/notice'
+import axios from 'axios';
 // import { SaveItem } from '@/app/api/buyer/post'
 // import { UnSaveItem } from '@/app/api/buyer/delete'
 // import { GetOrders } from '@/app/api/buyer/get'
@@ -62,46 +63,46 @@ const Card = ({item, index}) => {
 
 
 
-    // async function Saver(e,product_id) {  
-    //     if(buyer_info !== null){ 
-    //         let overlay = document.querySelector('.overlay')
-    //         overlay.setAttribute('id', 'overlay');
-    //         setBtnMode(btnMode) 
-    //         let saveList = savedItem;
-    //         let duplicateSearch = savedItem?.filter(data=> (data?.saved_item[0]?.product_id === product_id))
-    //         console.log('savedItem: ', savedItem.length > 0, savedItem)
+    async function Saver(e,product_id) {  
+        if(buyer_info !== null){ 
+            let overlay = document.querySelector('.overlay')
+            overlay.setAttribute('id', 'overlay');
+            setBtnMode(btnMode) 
+            let saveList = savedItem;
+            let duplicateSearch = savedItem?.filter(data=> (data?.saved_item[0]?.product_id === product_id))
+            console.log('savedItem: ', savedItem.length > 0, savedItem)
 
-    //         if(savedItem.length > 0){
-    //             console.log('duplicateSearch: ', duplicateSearch.length > 0)
+            if(savedItem.length > 0){
+                console.log('duplicateSearch: ', duplicateSearch.length > 0)
 
-    //             if(duplicateSearch.length > 0){
+                if(duplicateSearch.length > 0){
     
-    //                 let result = await UnSaveItem(product_id, buyer_info?.user_id);
-    //                 setBtnMode(!btnMode) 
-    //                 overlay.removeAttribute('id')
-    //                 dispatch(setSaveTo(result))
-    //                 open_notice('Item Was Successfuly Unsaved')
+                    let result = await UnSaveItem(product_id, buyer_info?.user_id);
+                    setBtnMode(!btnMode) 
+                    overlay.removeAttribute('id')
+                    dispatch(setSaveTo(result))
+                    open_notice('Item Was Successfuly Unsaved')
     
-    //             }else{
+                }else{
                     
-    //                 let result = await SaveItem(product_id, buyer_info?.user_id)
-    //                 setBtnMode(!btnMode) 
-    //                 overlay.removeAttribute('id')
-    //                 dispatch(setSaveTo(result))
-    //                 open_notice('Item Was Successfuly Saved')
+                    let result = await SaveItem(product_id, buyer_info?.user_id)
+                    setBtnMode(!btnMode) 
+                    overlay.removeAttribute('id')
+                    dispatch(setSaveTo(result))
+                    open_notice('Item Was Successfuly Saved')
     
-    //             }
-    //         }else{
+                }
+            }else{
     
-    //             let result = await SaveItem(product_id, buyer_info?.user_id)
-    //             setBtnMode(!btnMode) 
-    //             overlay.removeAttribute('id')
-    //             dispatch(setSaveTo(result))
-    //             open_notice('Item Was Successfuly Saved')
+                let result = await SaveItem(product_id, buyer_info?.user_id)
+                setBtnMode(!btnMode) 
+                overlay.removeAttribute('id')
+                dispatch(setSaveTo(result))
+                open_notice('Item Was Successfuly Saved')
 
-    //         }
-    //     }
-    // }
+            }
+        }
+    }
 
     useEffect(() => {
         console.log(savedItem)
@@ -114,19 +115,22 @@ const Card = ({item, index}) => {
     
     
 
-    // useEffect(() => {
-    //     // console.log(JSON.stringify(buyer_info))
-    //     if(buyer_info){
-    //         GetOrders(buyer_info?.user_id)
-    //         .then((result) => {
-    //             console.log(result)
-    //             if(result){
-    //                 set_order_list(result)
-    //             }
-    //         })
-    //         .catch((err) => console.log(err))
-    //     }
-    // }, [buyer_info]) 
+    useEffect(() => {
+        // console.log(JSON.stringify(buyer_info))
+        if (buyer_info) {
+            axios.get('/api/store/orders', {
+                params: {
+                    user_id: buyer_info?.user_id
+                }
+            })
+            .then((res) => {
+                if(res.data.bool){
+                    set_order_list(res.data.data)
+                }
+            })
+            .catch((err) => console.log(err))
+        }
+    }, [buyer_info]) 
  
     return ( 
         <> 
@@ -208,7 +212,7 @@ const Card = ({item, index}) => {
                             
                         </div>
 
-                        {/* <SaveButton data={item} Saver={Saver} isItemSaved={saved} /> */}
+                        <SaveButton data={item} Saver={Saver} isItemSaved={saved} />
 
                     </div>
 
