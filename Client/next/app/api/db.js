@@ -1,7 +1,7 @@
 // lib/db.js
 import { Pool } from 'pg';
 
-const DATABASE_URL = "postgres://achifa.io.llc:cflV8XEbCO7h@ep-billowing-sunset-28191429-pooler.us-east-2.aws.neon.tech/neondb";
+const DATABASE_URL = "postgresql://achifa.io.llc:cflV8XEbCO7h@ep-small-block-a55csuu3-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require";
 
 // Force IPv4 by adding `?options=--inet-family=ipv4`
 const connectionString = DATABASE_URL.includes('?')
@@ -9,7 +9,7 @@ const connectionString = DATABASE_URL.includes('?')
   : `${DATABASE_URL}`;
 
 const pool = new Pool({
-  connectionString,
+  connectionString: DATABASE_URL,
   ssl: {
     rejectUnauthorized: false, // required by Neon
   },
