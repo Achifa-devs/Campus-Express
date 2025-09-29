@@ -44,7 +44,7 @@ export async function POST(req) {
     // ✅ Insert into inbox
     const mssg_obj = get_mssg('new-order');
     await client.query(
-      `INSERT INTO buyer_inbox (
+      `INSERT INTO inbox (
         id, message_content, subject, created_at, user_id, action_id
       ) VALUES (DEFAULT, $1, $2, $3, $4, $5)`,
       [mssg_obj.mssg, mssg_obj.subject, new Date(), user_id, product_id]
