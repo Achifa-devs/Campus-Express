@@ -9,16 +9,42 @@ import FavouriteItem from '@/files/components/Buyer/Saved/FavouriteItem'
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux'
 import { setAccessoryTo } from "@/redux/buyer_store/Aceessories";
+import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup'
+import { open_notice } from '@/files/reusable.js/notice'
 
 export default function Favourite() {
   let [screenWidth, setScreenWidth] = useState(0);
   useEffect(() => {setScreenWidth(window.innerWidth)},[]);
   let [items, setItems] = useState([])
-  let dispatch = useDispatch()
+  // let dispatch = useDispatch()
 
   let {
     user_id 
   } = useSelector(s => s.user_id);
+ 
+  async function deleteFavourite (saved_id, user_id, product_id) { 
+
+    try {
+      axios.delete('/api/store/favourite/unsave', {params: {saved_id: saved_id, user_id: user_id}})
+      .then(({data})=>{
+        let old = items;
+        let filtered = old.filter(item => item?.saved_item?.product_id !== product_id)
+        setItems(filtered)
+        buyer_overlay_setup(false, 'Unsaving item');
+        open_notice(true, 'unsaved item successfully');
+        console.log(data) 
+      })
+      .catch(error=>{
+        buyer_overlay_setup(false, 'Unsaving item');
+        open_notice(true, 'unsaved item successfully');
+        console.log(error)
+      })
+    } catch (error) {
+      buyer_overlay_setup(false, 'Unsaving item');
+      open_notice(true, 'unsaved item successfully'); 
+      console.log(error)
+    }
+  }
   useEffect(() => {
     if (user_id !== '' && user_id !== null && user_id !== 'undefined' && user_id !== undefined && user_id !== 'null') {
       axios.get('/api/store/favourite', {params: {user_id: user_id}})
@@ -45,7 +71,7 @@ export default function Favourite() {
 
           <div style={{justifyContent: 'flex-start', width: '100%', overflow: 'auto', alignItems: 'flex-start', height: '100%'}}>
             {
-              items.map((item,index) => <FavouriteItem key={index} index={index} item={item}/> )
+              items.map((item,index) => <FavouriteItem key={index} index={index} item={item} deleteFavourite={deleteFavourite} /> )
             }
           </div>
         </div>

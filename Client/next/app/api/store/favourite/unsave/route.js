@@ -8,17 +8,18 @@ export async function DELETE(req) {
   try {
     // Extract user_id from the request query parameters
     const { searchParams } = new URL(req.url);
+    const saved_id = searchParams.get("saved_id");
     const user_id = searchParams.get("user_id");
-    const product_id = searchParams.get("product_id");
+  
 
-    if (!user_id || !product_id) {
-      return NextResponse.json({ error: "user_id and product_id are required" }, { status: 400 });
+    if (!saved_id) {
+      return NextResponse.json({ error: "saved_id is required" }, { status: 400 });
     }
 
     // Delete favourite for the buyer
     const unsaveResult = await pool.query(
-      `DELETE FROM "favourite" WHERE user_id = $1 AND product_id = $2`,
-      [user_id, product_id]
+      `DELETE FROM "favourite" WHERE saveditems_id = $1`,
+      [saved_id]
     );
 
     // If no favourites found

@@ -64,7 +64,7 @@ const Card = ({item, index}) => {
 
 
 
-    async function Saver(e,product_id) {  
+    async function Saver(e,product_id,saved_id=null) {  
         e.preventDefault();
         let overlay = document.querySelector('.overlay')
 
@@ -82,8 +82,8 @@ const Card = ({item, index}) => {
                     console.log('duplicateSearch: ', duplicateSearch.length > 0)
     
                     if(duplicateSearch.length > 0){
-    
-                        let result = await unsave_item(buyer_info?.user_id, product_id);
+
+                        let result = await unsave_item(data?.saved_item?.saveditems_id, buyer_info?.user_id);
                         setBtnMode(!btnMode) 
                         overlay.removeAttribute('id')
                         dispatch(setSaveTo(result))

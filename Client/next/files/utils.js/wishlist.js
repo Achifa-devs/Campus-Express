@@ -17,12 +17,12 @@ export function save_item (user_id, product_id) {
     })
 }
 
-export function unsave_item (user_id, product_id) {
+export function unsave_item (saved_id, user_id) {
     return new Promise((resolve, reject) => {
         axios.delete('/api/store/favourite/unsave', {
             params: {
                 user_id: user_id,
-                product_id: product_id
+                saved_id: saved_id
             }
         })
         .then((res) => {

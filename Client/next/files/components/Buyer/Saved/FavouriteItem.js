@@ -9,10 +9,13 @@ import { open_notice } from '@/files/reusable.js/notice';
 import { useSelector } from 'react-redux';
 import { json } from 'react-router-dom';
 
-export default function FavouriteItem({ item, index }) {
+export default function FavouriteItem({ item, index , deleteFavourite}) {
     let {
         user_id 
     } = useSelector(s => s.user_id);
+    let {
+        buyer_info 
+    } = useSelector(s => s.buyer_info);
     let [orders, set_orders] = useState([0]);
     let [ordered, set_ordered] = useState([0]);
    
@@ -100,23 +103,11 @@ export default function FavouriteItem({ item, index }) {
                         </div>
                     </div>
                     
-                    <div className="body-cnt-btm">
-                        <button onClick={e => {
-                            buyer_overlay_setup(true, 'Unsaving item')
-                            axios.delete('https://www.campussphere.net/api/store/favourite/unsave', {params: {user_id: item?.item?.user_id, product_id: item?.product?.product_id}})
-                            .then(({data})=>{
-                                e.target.parentElement.parentElement.parentElement.parentElement.remove()
-                                // setItems(data)
-                                console.log(data)
-                                buyer_overlay_setup(false, '')
-                                open_notice(true, 'unsaved item successfully')
-                            })
-                            .catch(error=>{
-                                console.log(error)
-                                buyer_overlay_setup(false, '')
-                                open_notice(true, 'unsaved item successfully')
-
-                            })
+                    <div className="body-cnt-btm"> 
+                        <button onClick={async(e) => { 
+                            buyer_overlay_setup(true, 'Unsaving item');
+                            await deleteFavourite(item?.saved_item?.saveditems_id, buyer_info?.user_id, item?.saved_item?.product_id);
+                           
                         }}>
                             Remove
                         </button>
