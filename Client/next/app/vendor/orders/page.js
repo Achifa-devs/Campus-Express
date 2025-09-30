@@ -110,7 +110,7 @@ function OrdersList({updateSelectedOrder, cards}) {
           {
             cards.map((item,index) => 
             
-              <ul key={index} style={{height: '90px', padding: '0', fontWeight: '300', background: '#fff', opacity: item.order.status.state === 'cancelled' ? '.5': '1', pointerEvents: item.order.status.state === 'cancelled' ? 'none': 'all' }}>
+              <ul key={index} style={{height: '90px', padding: '0', fontWeight: '300', background: '#fff', opacity: item.order.status.state === 'cancelled' ? '.5': '1', pointerEvents: item?.order?.status?.state === 'cancelled' ? 'none': 'all' }}>
             
                 <li key={index} className='tb-buyer'>
                   <span style={{marginLeft: '8px'}}> {index + 1}</span>

@@ -30,7 +30,7 @@ export default function Aside() {
             {/* <hr /> */}
             <ul>
 
-                {/* <li style={{background: active === 'orders' ? '#f9f9f9' : '#fff'}} onClick={e => {
+                <li style={{background: active === 'orders' ? '#f9f9f9' : '#fff'}} onClick={e => {
                     window.location.href=('/vendor/orders')
                 }}>
                     <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -42,7 +42,7 @@ export default function Aside() {
                     &nbsp;
                     &nbsp;
                     <span>Orders</span>
-                </li>  */}
+                </li> 
 
 
                 <li style={{background: active === 'listing' ? '#f9f9f9' : '#fff'}} onClick={e => window.location.href=('/vendor/listing')}>

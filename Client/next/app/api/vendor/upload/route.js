@@ -25,6 +25,7 @@ export async function POST(req) {
       campus,
       state,
       thumbnail_public_id,
+      purpose
     }=constantData
 
     
@@ -58,7 +59,7 @@ export async function POST(req) {
         title,
         description,
         price,
-        package,
+        promotion,
         category,
         others,
         date,
@@ -72,13 +73,17 @@ export async function POST(req) {
         shipping_duration,
         campus,
         uni_state,
-        thumbnail_public_id
+        thumbnail_public_id,
+        purpose,
+        contact_click,
+        impression,
+        search_appearances
       ) VALUES (
         DEFAULT,
         $1, $2, 'unsold', $3, $4,
         $5, $6, $7, $8, NOW(),
         $9, 0, 0, $10, $11,
-        $12, $13, $14, $15, $16, $17
+        $12, $13, $14, $15, $16, $17, $18, $19, $20, $21
       )
       `,
       [
@@ -87,7 +92,7 @@ export async function POST(req) {
         replacedTitle,
         replacedDescription,
         price,
-        0,
+        false,
         category,
         JSON.stringify(dynamicData),
         JSON.stringify(status),
@@ -99,6 +104,10 @@ export async function POST(req) {
         campus,
         state,
         thumbnail_public_id,
+        purpose,
+        0,
+        0,
+        0
       ]
     )
 

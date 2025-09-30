@@ -368,7 +368,7 @@ const Header = () => {
 
 
       <div style={{cursor: 'pointer'}} onClick={e => {
-        pathname.split('/').splice(-1)[0] !== '' || pathname.split('/').length === 1 ? '' : '/store'
+        pathname.split('/').splice(-1)[0] !== '' || pathname.split('/').length === 1 ? '' : window.location.href = '/store'
       }}>
         <Image
             src="https://res.cloudinary.com/daqbhghwq/image/upload/v1746402998/Untitled_design-removebg-preview_peqlme.png"

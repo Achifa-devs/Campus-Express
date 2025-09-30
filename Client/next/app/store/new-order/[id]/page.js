@@ -126,7 +126,9 @@ export default function NewOrder() {
 
   return (
     <>
-        <div className='new-order-card'>
+        <div className='new-order-card' style={{
+            background: '#fff'
+        }}> 
             <div className="new-order-card-cnt">
                 <OrderedItem item={item} updateStock={updateStock} />
                 <BuyerAddress />

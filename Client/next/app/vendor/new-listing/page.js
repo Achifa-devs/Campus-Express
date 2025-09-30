@@ -52,9 +52,16 @@ export default function NewListing() {
         out_state: {selected: false, price: 0}
     })
     let [imgFile, setImgFile] = useState([])
-    // let [uris, set_uris] = useState('')
-
+    let [purpose, set_purpose] = useState('product')
     
+    useEffect(() => {
+        if(isClient && typeof window !== 'undefined'){
+            const queryParams = new URLSearchParams(window.location.search);
+            const purpose = queryParams.get("purpose");
+            // alert(purpose)
+            set_purpose(purpose)
+        }
+    }, [isClient])  
 
     useEffect(() => {
         const queryParams = new URLSearchParams(window.location.search);
@@ -763,7 +770,8 @@ export default function NewListing() {
                         state: profile?.state,
                         stock: stock.current,
                         thumbnail_id: thumbnail_url,
-                        thumbnail_public_id: thumbnail_id
+                        thumbnail_public_id: thumbnail_id,
+                        purpose: purpose
                     }, 
                 
                     dynamicData: {
@@ -799,7 +807,7 @@ export default function NewListing() {
         .then(async(result) => {
             let response = await result.json();
             console.log(response);
-            if(response){
+            if(response.bool || response.success){
                 window.localStorage.setItem('draft_gender', '')
                 window.localStorage.setItem('draft_size', '')
                 window.localStorage.setItem('draft_sub_category', '')
@@ -836,7 +844,7 @@ export default function NewListing() {
                 
             
                 is_update ? open_notice(true, 'Update Successful, Redirecting...') : open_notice(true, 'Upload Successful, Redirecting...') 
-                // window.location.href = '/vendor/listing';
+                window.location.href = '/vendor/listing';
                 seller_overlay_setup(false, '')
 
             }else{
