@@ -836,7 +836,7 @@ export default function NewListing() {
                 
             
                 is_update ? open_notice(true, 'Update Successful, Redirecting...') : open_notice(true, 'Upload Successful, Redirecting...') 
-                window.location.href = '/vendor/listing';
+                // window.location.href = '/vendor/listing';
                 seller_overlay_setup(false, '')
 
             }else{
