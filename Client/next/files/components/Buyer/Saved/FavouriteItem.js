@@ -7,7 +7,6 @@ import axios from 'axios';
 import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup';
 import { open_notice } from '@/files/reusable.js/notice';
 import { useSelector } from 'react-redux';
-import { json } from 'react-router-dom';
 
 export default function FavouriteItem({ item, index , deleteFavourite}) {
     let {
@@ -44,12 +43,14 @@ export default function FavouriteItem({ item, index , deleteFavourite}) {
     
     useEffect(() => {
         if (orders) {
-            let result = orders.filter((data) => data?.product?.product_id === item?.item?.product_id);
-            console.log(result)
-            if(result.length > 0){
-                set_ordered(true)
-            } else {
-                set_ordered(false)
+            if (orders.length > 0) {
+                let result = orders.filter((data) => data?.product?.product_id === item?.item?.product_id);
+                console.log(result)
+                if(result.length > 0){
+                    set_ordered(true)
+                } else {
+                    set_ordered(false)
+                }
             }
         }
     }, [orders])

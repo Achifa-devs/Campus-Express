@@ -28,11 +28,13 @@ export default function Favourite() {
       axios.delete('/api/store/favourite/unsave', {params: {saved_id: saved_id, user_id: user_id}})
       .then(({data})=>{
         let old = items;
-        let filtered = old.filter(item => item?.saved_item?.product_id !== product_id)
-        setItems(filtered)
-        buyer_overlay_setup(false, 'Unsaving item');
-        open_notice(true, 'unsaved item successfully');
-        console.log(data) 
+       if (old.length > 0) {
+         let filtered = old.filter(item => item?.saved_item?.product_id !== product_id)
+         setItems(filtered)
+         buyer_overlay_setup(false, 'Unsaving item');
+         open_notice(true, 'unsaved item successfully');
+         console.log(data) 
+       }
       })
       .catch(error=>{
         buyer_overlay_setup(false, 'Unsaving item');
