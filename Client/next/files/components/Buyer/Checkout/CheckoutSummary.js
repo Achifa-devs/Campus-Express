@@ -152,7 +152,7 @@ const CheckoutSummary = ({ Total, Method, order_list, type }) => {
                         <span>Checkout SubTotal&nbsp;</span>
                         <span>
                             <small>(₦ </small>{new Intl.NumberFormat("en-us").format(
-                                (order_list?.product?.price * order_list?.order?.stock) + price
+                                (parseInt(order_list?.product?.price) * parseInt(order_list?.order?.stock)) + parseInt(price)
                             )})
                         </span>
                     </button>
