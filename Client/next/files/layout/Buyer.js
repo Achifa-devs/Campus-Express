@@ -13,6 +13,7 @@ import { setBuyerIdTo } from '@/redux/buyer_store/buyer_data';
 import { setBuyerInfoTo } from '@/redux/buyer_store/buyerInfo';
 import FilterAside from '../components/Buyer/dashboard/FilterAside'
 import { buyer_overlay_setup } from '../reusable.js/overlay-setup'
+import { setSaveTo } from '@/redux/buyer_store/Save'
 
 const BuyerLayout = ({children}) => {
 
@@ -50,7 +51,7 @@ const BuyerLayout = ({children}) => {
         
     }, [])
 
-
+    
     let [load_start, set_load_start] = useState(0);
 
     useEffect(() => {

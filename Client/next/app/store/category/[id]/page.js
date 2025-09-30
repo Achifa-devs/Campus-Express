@@ -53,6 +53,8 @@ import {
 } from '@/redux/buyer_store/Category'
 import axios from 'axios'
 import Carousel from '@/files/components/Buyer/dashboard/Carousel'
+import { fetch_saved_items } from '@/files/utils.js/wishlist'
+import { json } from 'react-router-dom'
 
 
 
@@ -209,96 +211,90 @@ const Dashboard = () => {
     });
   }
 
+  const fetchCity = async (lat, lng) => {
+      const apiKey = 'YOUR_GOOGLE_MAPS_API_KEY';
+      const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`;
   
-    
-    async function fetchSavedData(user_id) {
-        // GetSavedItem(user_id)
-        // .then((result) => {
-        //     dispatch(setSaveTo(result))
-        // })
-        // .catch(error=>{
-        //     console.log(error)
-        // })
-
-        // overlay.removeAttribute('id');
-    }
-
-    const fetchCity = async (lat, lng) => {
-        const apiKey = 'YOUR_GOOGLE_MAPS_API_KEY';
-        const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`;
-    
-        try {
-          const response = await fetch(url);
-          const data = await response.json();
-          if (data.results && data.results.length > 0) {
-            const addressComponents = data.results[0].address_components;
-            const cityComponent = addressComponents.find(component =>
-              component.types.includes('locality')
-            );
-            if (cityComponent) {
-              setCity(cityComponent.long_name);
-            }
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        if (data.results && data.results.length > 0) {
+          const addressComponents = data.results[0].address_components;
+          const cityComponent = addressComponents.find(component =>
+            component.types.includes('locality')
+          );
+          if (cityComponent) {
+            setCity(cityComponent.long_name);
           }
+        }
+      } catch (error) {
+        console.error('Error fetching city', error);
+      }
+    };
+
+  useEffect(() => {
+    setcategory(decodeURIComponent(pathname.split('/').slice(-1)[0]))
+    settype(decodeURIComponent(window.location.search.split('=')[1])) 
+  }, [])
+
+  useEffect(() => {
+      if (location.lat && location.lng) {
+        fetchCity(location.lat, location.lng);
+      }
+  }, [pathname]);
+
+  useEffect(() => {
+  if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+      position => {
+          setGeoLocation({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+          });
+      },
+      error => {
+          console.error('Error fetching location', error);
+      }
+      );
+  } else {
+      console.error('Geolocation is not supported by this browser');
+  }
+  }, []);
+
+  useEffect(() => {
+    let width = window.innerWidth;
+    setScreenWidth(width)
+  }, [])
+
+  useEffect(() => {
+    if (buyer_info) {
+      const user_id = buyer_info.user_id;
+      const fetchData = async () => {
+        try {
+          const response = await fetch_saved_items(user_id);
+          dispatch(setSaveTo(response));
         } catch (error) {
-          console.error('Error fetching city', error);
+          console.error(error);
         }
       };
 
-    useEffect(() => {
-      setcategory(decodeURIComponent(pathname.split('/').slice(-1)[0]))
-      settype(decodeURIComponent(window.location.search.split('=')[1])) 
-    }, [])
-
-    useEffect(() => {
-        if (location.lat && location.lng) {
-          fetchCity(location.lat, location.lng);
-        }
-    }, [pathname]);
-
-    useEffect(() => {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-        position => {
-            setGeoLocation({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-            });
-        },
-        error => {
-            console.error('Error fetching location', error);
-        }
-        );
-    } else {
-        console.error('Geolocation is not supported by this browser');
+      fetchData();
     }
-    }, []);
+  }, [buyer_info]);
 
-    useEffect(() => {
-        let width = window.innerWidth;
-        setScreenWidth(width)
-    }, [])
-
-    useEffect(() => {
-        
-        try {
-            fetchSavedData(window.localStorage.getItem('CE_user_id'))
-        } catch (error) {
-            console.log(error)
-        }
-    }, [])
 
   useEffect(() => {
     // alert(category)
-      let overlay = document.querySelector('.overlay');
-      
-      if(overlay){
-        overlay.setAttribute('id', 'overlay');
+    let overlay = document.querySelector('.overlay');
+    
+    if(overlay){
+      overlay.setAttribute('id', 'overlay');
       try {
         category !== '' ? fetchData(overlay, btoa(category)) : ''
       } catch (error) {
         console.log(error)
       }
-      }
+    }
   }, [pathname,category])
 
   useEffect(() => {

@@ -20,6 +20,7 @@ import Video from '../Video'
 import { setSaveTo } from '@/redux/buyer_store/Save'
 import { open_notice } from '@/files/reusable.js/notice'
 import axios from 'axios';
+import { save_item, unsave_item } from '@/files/utils.js/wishlist';
 // import { SaveItem } from '@/app/api/buyer/post'
 // import { UnSaveItem } from '@/app/api/buyer/delete'
 // import { GetOrders } from '@/app/api/buyer/get'
@@ -64,50 +65,59 @@ const Card = ({item, index}) => {
 
 
     async function Saver(e,product_id) {  
-        if(buyer_info !== null){ 
-            let overlay = document.querySelector('.overlay')
-            overlay.setAttribute('id', 'overlay');
-            setBtnMode(btnMode) 
-            let saveList = savedItem;
-            let duplicateSearch = savedItem?.filter(data=> (data?.saved_item[0]?.product_id === product_id))
-            console.log('savedItem: ', savedItem.length > 0, savedItem)
+        e.preventDefault();
+        let overlay = document.querySelector('.overlay')
 
-            if(savedItem.length > 0){
-                console.log('duplicateSearch: ', duplicateSearch.length > 0)
-
-                if(duplicateSearch.length > 0){
+        try {
+            
+            if(buyer_info !== null){ 
+                let overlay = document.querySelector('.overlay')
+                overlay.setAttribute('id', 'overlay');
+                setBtnMode(btnMode) 
+                let saveList = savedItem;
+                let duplicateSearch = savedItem?.filter(data=> (data?.saved_item?.product_id === product_id))
+                console.log('savedItem: ', savedItem.length > 0, savedItem)
     
-                    let result = await UnSaveItem(product_id, buyer_info?.user_id);
-                    setBtnMode(!btnMode) 
-                    overlay.removeAttribute('id')
-                    dispatch(setSaveTo(result))
-                    open_notice('Item Was Successfuly Unsaved')
+                if(savedItem.length > 0){
+                    console.log('duplicateSearch: ', duplicateSearch.length > 0)
     
+                    if(duplicateSearch.length > 0){
+    
+                        let result = await unsave_item(buyer_info?.user_id, product_id);
+                        setBtnMode(!btnMode) 
+                        overlay.removeAttribute('id')
+                        dispatch(setSaveTo(result))
+                        open_notice(true, 'Item Was Successfuly Unsaved')
+        
+                    }else{
+                        
+                        let result = await save_item(buyer_info?.user_id, product_id)
+                        setBtnMode(!btnMode) 
+                        overlay.removeAttribute('id')
+                        dispatch(setSaveTo(result))
+                        open_notice(true,'Item Was Successfuly Saved')
+        
+                    }
                 }else{
-                    
-                    let result = await SaveItem(product_id, buyer_info?.user_id)
+        
+                    let result = await save_item(buyer_info?.user_id, product_id)
                     setBtnMode(!btnMode) 
                     overlay.removeAttribute('id')
                     dispatch(setSaveTo(result))
-                    open_notice('Item Was Successfuly Saved')
+                    open_notice(true,'Item Was Successfuly Saved')
     
                 }
-            }else{
-    
-                let result = await SaveItem(product_id, buyer_info?.user_id)
-                setBtnMode(!btnMode) 
-                overlay.removeAttribute('id')
-                dispatch(setSaveTo(result))
-                open_notice('Item Was Successfuly Saved')
-
             }
+        } catch (error) {
+            overlay.removeAttribute('id');
+            open_notice(true, "Internal server error")
         }
     }
 
     useEffect(() => {
-        console.log(savedItem)
+        console.log("savedItem", savedItem)
         if(savedItem){
-            let result = savedItem.filter(data=> (data.saved_item[0].product_id === item.product_id)).length > 0 ? true : false
+            let result = savedItem.filter(data=> (data.saved_item.product_id === item.product_id)).length > 0 ? true : false
             setSaved(result);
         }
     }, [savedItem])
