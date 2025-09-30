@@ -21,13 +21,13 @@ export default function Favourite() {
   } = useSelector(s => s.user_id);
   useEffect(() => {
     if (user_id !== '' && user_id !== null && user_id !== 'undefined' && user_id !== undefined && user_id !== 'null') {
-      axios.get('/api/store/inbox', {params: {user_id: user_id}})
+      axios.get('/api/store/favourite', {params: {user_id: user_id}})
       .then(({data})=>{
-          setItems(data.data)
-          console.log(data)
+        setItems(data.data)
+        console.log(data)
       })
       .catch(error=>{
-          console.log(error)
+        console.log(error)
       })
     }
 

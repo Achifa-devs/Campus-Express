@@ -7,6 +7,7 @@ import axios from 'axios';
 import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup';
 import { open_notice } from '@/files/reusable.js/notice';
 import { useSelector } from 'react-redux';
+import { json } from 'react-router-dom';
 
 export default function FavouriteItem({ item, index }) {
     let {
@@ -19,12 +20,12 @@ export default function FavouriteItem({ item, index }) {
     useEffect(() => {setScreenWidth(window.innerWidth)},[]);
     useEffect(() => {
         if (user_id !== '' && user_id !== null) {
-            buyer_overlay_setup(true, 'Loading')
+            // buyer_overlay_setup(true, 'Loading')
             
-            axios.get('https://cs-node.vercel.app/orders', {params: {user_id: user_id.trim()}})
+            axios.get('https://www.campussphere.net/api/store/orders', {params: {user_id: user_id.trim()}})
             .then(({data})=>{
                 console.log(data)
-                set_orders(data)
+                set_orders(data) 
                 buyer_overlay_setup(false, '')
 
             })
@@ -57,11 +58,11 @@ export default function FavouriteItem({ item, index }) {
             <div className="favourite-card-data-cnt">
                 <div className='thumbnail-cnt' style={{height: '100%'}}>
                     {
-                        item?.category === 'Lodge & Apartments'
+                        item?.product?.purpose === 'accomodation'
                         ?
-                        <Video thumbnail_id={item?.saved_item[0]?.thumbnail_id} height={"100%"} />
+                        <Video thumbnail_id={item?.product?.thumbnail_id} height={"100%"} />
                         :
-                        <Thumbnail thumbnail_id={item?.saved_item[0]?.thumbnail_id} height={"100%"}/>
+                        <Thumbnail thumbnail_id={item?.product?.thumbnail_id} height={"100%"}/>
                     }
                 </div> 
 
@@ -76,12 +77,12 @@ export default function FavouriteItem({ item, index }) {
                                 whiteSpace: 'nowrap', /* Prevent text from wrapping */
                                 overflow: 'hidden',    /* Hide any overflow text */
                                 textOverflow: 'ellipsis'
-                            }}>{item?.saved_item[0]?.title}</p>
+                            }}>{item?.product?.title}</p>
                         </div>
 
                         <div className="price">
                             &#8358;&nbsp;{
-                            new Intl.NumberFormat('en-us').format(item?.saved_item[0]?.price)}
+                            new Intl.NumberFormat('en-us').format(item?.product?.price)}
                         </div>
                     </div>
                     
@@ -91,18 +92,18 @@ export default function FavouriteItem({ item, index }) {
                                 whiteSpace: 'nowrap', /* Prevent text from wrapping */
                                 overflow: 'hidden',    /* Hide any overflow text */
                                 textOverflow: 'ellipsis'
-                            }}>Seller-id: {item?.saved_item[0]?.user_id}</span>
+                            }}>Seller-id: {item?.product?.user_id}</span>
                         </div>
 
                         <div className="stock">
-                            {item?.stock}
+                            {item?.product?.stock}
                         </div>
                     </div>
                     
                     <div className="body-cnt-btm">
                         <button onClick={e => {
                             buyer_overlay_setup(true, 'Unsaving item')
-                            axios.delete('https://cs-node.vercel.app/unsave-item', {params: {user_id: item?.item?.user_id, product_id: item?.saved_item[0]?.product_id}})
+                            axios.delete('https://www.campussphere.net/api/store/favourite/unsave', {params: {user_id: item?.item?.user_id, product_id: item?.product?.product_id}})
                             .then(({data})=>{
                                 e.target.parentElement.parentElement.parentElement.parentElement.remove()
                                 // setItems(data)
@@ -123,9 +124,9 @@ export default function FavouriteItem({ item, index }) {
                         <button onClick={e => {
                             ordered
                             ?
-                                window.location.href=(`/orders?item=${item?.item?.product_id}`)
+                                window.location.href=(`/orders?item=${item?.product?.product_id}`)
                             :
-                                window.location.href=(`/new-order/${item?.item?.product_id}`)
+                                window.location.href=(`/new-order/${item?.product?.product_id}`)
                         }}>
                             {
                                 ordered
