@@ -96,11 +96,7 @@ export default function FavouriteItem({ item, index , deleteFavourite}) {
                                 whiteSpace: 'nowrap', /* Prevent text from wrapping */
                                 overflow: 'hidden',    /* Hide any overflow text */
                                 textOverflow: 'ellipsis'
-                            }}>Seller-id: {item?.product?.user_id}</span>
-                        </div>
-
-                        <div className="stock">
-                            {item?.product?.stock}
+                            }}>{item?.product?.campus} in <b>{item?.product?.uni_state} state</b></span>
                         </div>
                     </div>
                     

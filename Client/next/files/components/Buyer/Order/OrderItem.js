@@ -131,17 +131,19 @@ export default function OrderItem({item,order}) {
                     </div>
                     
                     <div className="body-cnt-mid">
+                        <div className="stock">
+                            {order?.stock} unit ordered
+                        </div>
                         <div className="seller">
-                            <span style={{
+                            <b style={{
                                 whiteSpace: 'nowrap', /* Prevent text from wrapping */
                                 overflow: 'hidden',    /* Hide any overflow text */
-                                textOverflow: 'ellipsis'
-                            }}>Seller: {item?.user_id}</span>
+                                textOverflow: 'ellipsis',
+                                color: order?.havepaid ? 'green' : 'red'
+                            }}>{order?.havepaid ? 'Paid' : 'Unpaid'}</b>
                         </div>
 
-                        <div className="stock">
-                            {item?.stock} In stock
-                        </div>
+                       
                     </div>
                     
                     <div className="body-cnt-btm">
