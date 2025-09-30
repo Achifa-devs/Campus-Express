@@ -1,21 +1,72 @@
-.notice-cnt{
-    height: fit-content;
-    width: fit-content;
-    background-color: orangered;
-    position: fixed;
-    color: #fff;
-    bottom: -100vh;
-    /* bottom: 100px; */
-    border-radius: 5px;
-    transition: 1s;
-    padding: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    z-index: 1000;
-    /* top: 50%; */
-    left: 50%;
-    transform: translate(-50%, -50%);
+
+
+@media screen and (max-width: 480px) {
+    .notice-cnt{
+        height: 60;
+        width: 80%;
+        background-color: orangered;
+        position: fixed;
+        color: #fff;
+        bottom: -100vh;
+        /* bottom: 100px; */
+        border-radius: 10px;
+        transition: 1s;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        z-index: 1000;
+        /* top: 50%; */
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .notice-cnt{
+        height: 60;
+        width: 70%;
+        background-color: orangered;
+        position: fixed;
+        color: #fff;
+        bottom: -100vh;
+        /* bottom: 100px; */
+        border-radius: 10px;
+        transition: 1s;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        z-index: 1000;
+        /* top: 50%; */
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
+
+@media screen and (min-width: 769px) {
+    .notice-cnt{
+        height: 60;
+        width: fit-content;
+        background-color: orangered;
+        position: fixed;
+        color: #fff;
+        bottom: -100vh;
+        /* bottom: 100px; */
+        border-radius: 10px;
+        transition: 1s;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        z-index: 1000;
+        /* top: 50%; */
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
 }
 
 #notice-cnt{

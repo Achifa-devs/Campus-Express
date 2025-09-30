@@ -46,5 +46,5 @@ export function open_notice(bool,mssg) {
 
     setTimeout(() => {
         n_cnt.removeAttribute('id')
-    }, 6000);
+    }, 3000);
 }

@@ -87,7 +87,7 @@ const Card = ({item, index}) => {
                         setBtnMode(!btnMode) 
                         overlay.removeAttribute('id')
                         dispatch(setSaveTo(result))
-                        open_notice(true, 'Item Was Successfuly Unsaved')
+                        open_notice(true, 'Item Was Unsaved Successfuly')
         
                     }else{
                         
@@ -95,7 +95,7 @@ const Card = ({item, index}) => {
                         setBtnMode(!btnMode) 
                         overlay.removeAttribute('id')
                         dispatch(setSaveTo(result))
-                        open_notice(true,'Item Was Successfuly Saved')
+                        open_notice(true,'Item Was Saved Successfuly')
         
                     }
                 }else{
@@ -104,7 +104,7 @@ const Card = ({item, index}) => {
                     setBtnMode(!btnMode) 
                     overlay.removeAttribute('id')
                     dispatch(setSaveTo(result))
-                    open_notice(true,'Item Was Successfuly Saved')
+                    open_notice(true,'Item Was Saved Successfuly')
     
                 }
             }
@@ -117,7 +117,7 @@ const Card = ({item, index}) => {
     useEffect(() => {
         console.log("savedItem", savedItem)
         if(savedItem){
-            let result = savedItem.filter(data=> (data.saved_item.product_id === item.product_id)).length > 0 ? true : false
+            let result = [...savedItem].filter(data=> (data.saved_item.product_id === item.product_id)).length > 0;
             setSaved(result);
         }
     }, [savedItem])
