@@ -43,7 +43,7 @@ export default function PasswordRecovery() {
             })
             .then(async(result) => {
                 let response = await result.json();
-                if(response.bool){
+                if(response.success){
                     // dispatch(setSellerTo(response.cookie))
                     setActiveJsx(<EnterToken VerifyToken={VerifyToken} updateToken={updateToken} />)
                     seller_overlay_setup(false, '')
@@ -118,7 +118,7 @@ export default function PasswordRecovery() {
             .then(async(result) => {
                 let response = await result.json();
                 console.log(response)
-                if(response.bool){
+                if(response.success){
                     // dispatch(setSellerTo(response.cookie))
                     setActiveJsx(<UpdatePwd ResetPassword={ResetPassword} updateCpwd={updateCpwd} updatePwd={updatePwd} />)
                     seller_overlay_setup(false, '')
@@ -198,7 +198,7 @@ export default function PasswordRecovery() {
             .then(async(result) => {
                 let response = await result.json();
                 console.log(response)
-                if(response.bool){
+                if(response.success){
                     window.location.href='/seller/login'
                     seller_overlay_setup(false, '')
                 }else{
@@ -260,7 +260,7 @@ export default function PasswordRecovery() {
         let book = []
 
         function addErrMssg(err,pElem) {
-            // if(!err[0].bool){
+            // if(!err[0]success){
 
             let check = pElem.querySelector('.err-mssg');
             if(check){
@@ -315,8 +315,8 @@ export default function PasswordRecovery() {
                 if(item.name === 'email'){
 
                     var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    let empty = item.value !== '' ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please field cannot be empty.'}
-                    let validEmail = emailRegex.test(item.value) ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please enter a valid email address.'}
+                    let empty = item.value !== '' ? {success: true, mssg: ''} : {success: false, mssg: 'Please field cannot be empty.'}
+                    let validEmail = emailRegex.test(item.value) ? {success: true, mssg: ''} : {success: false, mssg: 'Please enter a valid email address.'}
                     let errs = [empty,validEmail];
                     console.log('empty',errs)
                     
@@ -327,8 +327,8 @@ export default function PasswordRecovery() {
             }else{
                 if(index === 0){
                     if(item.type === 'password'){
-                        let empty = item.value !== '' ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please field cannot be empty.'}
-                        let length = item.value.length >= 8 ? {bool: true, mssg: ''} :  {bool: false, mssg: 'Password must contain at least 8 characters.'}
+                        let empty = item.value !== '' ? {success: true, mssg: ''} : {success: false, mssg: 'Please field cannot be empty.'}
+                        let length = item.value.length >= 8 ? {success: true, mssg: ''} :  {success: false, mssg: 'Password must contain at least 8 characters.'}
                         let errs = [empty,length];
                         
                         addErrMssg(errs.filter(item => item.mssg !== ''),item.parentElement)
@@ -336,7 +336,7 @@ export default function PasswordRecovery() {
                     }
                 }else{
                     if(item.type === 'password'){
-                        let valid = cPwd===pwd ? {bool: true, mssg: ''} :  {bool: false, mssg: 'Password mismatch'}
+                        let valid = cPwd===pwd ? {success: true, mssg: ''} :  {success: false, mssg: 'Password mismatch'}
                         let errs = [valid];
                         
                         addErrMssg(errs.filter(item => item.mssg !== ''),item.parentElement)

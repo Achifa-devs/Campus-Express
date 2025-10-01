@@ -807,7 +807,7 @@ export default function NewListing() {
         .then(async(result) => {
             let response = await result.json();
             console.log(response);
-            if(response.bool || response.success){
+            if(response.success || response.success){
                 window.localStorage.setItem('draft_gender', '')
                 window.localStorage.setItem('draft_size', '')
                 window.localStorage.setItem('draft_sub_category', '')

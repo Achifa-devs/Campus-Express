@@ -140,7 +140,7 @@ export default function ConfirmToken() {
         let book = []
 
         function addErrMssg(err,pElem) {
-            // if(!err[0].bool){
+            // if(!err[0]success){
 
             let check = pElem.querySelector('.err-mssg');
             if(check){
@@ -194,8 +194,8 @@ export default function ConfirmToken() {
 
                 if(item.name === 'token'){
 
-                    let empty = item.value !== '' ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please field cannot be empty.'}
-                    let length = item.value.length === 5 ? {bool: true, mssg: ''} :  {bool: false, mssg: 'Token must contain at least 5 digits.'}
+                    let empty = item.value !== '' ? {success: true, mssg: ''} : {success: false, mssg: 'Please field cannot be empty.'}
+                    let length = item.value.length === 5 ? {success: true, mssg: ''} :  {success: false, mssg: 'Token must contain at least 5 digits.'}
                     let errs = [empty,length];
                     
                     addErrMssg(errs.filter(item => item.mssg !== ''),item.parentElement)

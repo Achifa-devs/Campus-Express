@@ -19,11 +19,11 @@ export async function GET(req) {
       .max_results(100)
       .execute();
 
-    return NextResponse.json({ data: result.resources, bool: true }, { status: 200 });
+    return NextResponse.json({ data: result.resources, success: true }, { status: 200 });
   } catch (error) {
     console.log(error);
     return NextResponse.json(
-      { data: "An error occurred", bool: false },
+      { data: "An error occurred", success: false },
       { status: 500 }
     );
   }

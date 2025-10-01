@@ -30,7 +30,7 @@ const SellerLogin = () => {
 
             let response = await LogSellerIn(email,pwd);
 
-            if(response?.bool){
+            if(response?.success){
                 window.localStorage.setItem("CE_user_id", response.id)
                 console.log(response)
                 // window.localStorage.setItem("CE_seller_name_initial", response.name)
@@ -73,7 +73,7 @@ const SellerLogin = () => {
         let book = []
 
         function addErrMssg(err,pElem) {
-            // if(!err[0].bool){
+            // if(!err[0]success){
 
                 let check = pElem.querySelector('.err-mssg');
                 if(check){
@@ -128,8 +128,8 @@ const SellerLogin = () => {
                 if(item.name === 'email'){
 
                     var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    let empty = item.value !== '' ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please field cannot be empty.'}
-                    let validEmail = emailRegex.test(item.value) ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please enter a valid email address.'}
+                    let empty = item.value !== '' ? {success: true, mssg: ''} : {success: false, mssg: 'Please field cannot be empty.'}
+                    let validEmail = emailRegex.test(item.value) ? {success: true, mssg: ''} : {success: false, mssg: 'Please enter a valid email address.'}
                     let errs = [empty,validEmail];
                     console.log('empty',errs)
                     
@@ -138,8 +138,8 @@ const SellerLogin = () => {
                 }
                 
             }else if(item.type === 'password'){
-                let empty = item.value !== '' ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please field cannot be empty.'}
-                let length = item.value.length >= 8 ? {bool: true, mssg: ''} :  {bool: false, mssg: 'Password must contain at least 8 characters.'}
+                let empty = item.value !== '' ? {success: true, mssg: ''} : {success: false, mssg: 'Please field cannot be empty.'}
+                let length = item.value.length >= 8 ? {success: true, mssg: ''} :  {success: false, mssg: 'Password must contain at least 8 characters.'}
                 let errs = [empty,length];
                 
                 addErrMssg(errs.filter(item => item.mssg !== ''),item.parentElement)

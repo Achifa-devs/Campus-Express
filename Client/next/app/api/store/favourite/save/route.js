@@ -20,12 +20,12 @@ export async function POST(req) {
     );
 
     if (saveResult.rows === 0) {
-      return NextResponse.json({ bool: false }, { status: 400 });
+      return NextResponse.json({ success: false }, { status: 400 });
     }
 
     const data = await pool.query(`SELECT * FROM favourite WHERE user_id = $1`, [user_id])
     if (data.rows.length === 0) {
-      return NextResponse.json({ bool: true, data: [] })
+      return NextResponse.json({ success: true, data: [] })
     }
 
     const favourites = data.rows.map(async(favourite) => {
@@ -36,7 +36,7 @@ export async function POST(req) {
     })
     const response = await Promise.all(favourites);
 
-    return NextResponse.json({data: response, bool: true}, { status: 200 });
+    return NextResponse.json({data: response, success: true}, { status: 200 });
 
   } catch (error) {
     console.error("Error saving favourite:", error);

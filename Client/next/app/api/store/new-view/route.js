@@ -35,17 +35,17 @@ export async function POST(req) {
         [product_id]
       )
       if (updateView.rowCount > 0) {
-        return NextResponse.json({ bool: true}, { status: 200 });
+        return NextResponse.json({ success: true}, { status: 200 });
         
       }
-      return NextResponse.json({ bool: false}, { status: 500 });
+      return NextResponse.json({ success: false}, { status: 500 });
 
     }
 
-    return NextResponse.json({ bool: true}, { status: 200 });
+    return NextResponse.json({ success: true}, { status: 200 });
 
   } catch (err) {
     console.error('Registration error:', err);
-    return NextResponse.json({ bool: false, message: 'Something went wrong' }, { status: 500 });
+    return NextResponse.json({ success: false, message: 'Something went wrong' }, { status: 500 });
   }
 }

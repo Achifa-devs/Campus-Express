@@ -34,21 +34,21 @@ export async function POST(req) {
         country = $7
         WHERE user_id = $8`,
         [Address1, Address2, Address3, Address4, City, State, Country, user_id]);
-      return NextResponse.json({ bool: res?.rowCount > 0 ? true : false }, { status: 200 });
+      return NextResponse.json({ success: res?.rowCount > 0 ? true : false }, { status: 200 });
     } else {
       const res = await pool.query(`INSERT INTO shipping(
         id,address1, address2, address3, address4, town, state, country,user_id
       ) VALUES(
         DEFAULT,$1,$2,$3,$4,$5,$6,$7,$8
       )`, [Address1, Address2, Address3, Address4, City, State, Country, user_id]);
-      return NextResponse.json({ bool: res?.rowCount > 0 ? true : false }, { status: 200 });
+      return NextResponse.json({ success: res?.rowCount > 0 ? true : false }, { status: 200 });
       
       
     }
 
   } catch (err) {
     console.error('Error getting seller:', err);
-    return NextResponse.json({ bool: false, message: 'Something went wrong' }, { status: 500 });
+    return NextResponse.json({ success: false, message: 'Something went wrong' }, { status: 500 });
   }
 }
 

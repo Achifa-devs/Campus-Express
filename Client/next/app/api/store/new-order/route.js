@@ -19,11 +19,10 @@ export async function POST(req) {
       [user_id, product_id]
     );
     if (rows.length > 0) {
-      return NextResponse.json({ message: 'Order already exists', bool: false }, { status: 409 });
+      return NextResponse.json({ message: 'Order already exists', success: false }, { status: 409 });
     }
 
     // ✅ Start transaction
-    await pool.query('BEGIN');
 
     // ✅ Insert new order
     const insertOrder = await pool.query(
@@ -36,8 +35,7 @@ export async function POST(req) {
     );
 
     if (insertOrder.rowCount === 0) {
-      await pool.query('ROLLBACK');
-      return NextResponse.json({ message: 'Failed to create order', bool: false }, { status: 500 });
+      return NextResponse.json({ message: 'Failed to create order', success: false }, { status: 500 });
     }
 
     // ✅ Insert into inbox
@@ -49,15 +47,11 @@ export async function POST(req) {
       [mssg_obj.mssg, mssg_obj.subject, new Date(), user_id, product_id]
     );
 
-    await pool.query('COMMIT');
-    return NextResponse.json({ message: 'Order created successfully', bool: true }, { status: 201 });
+    return NextResponse.json({ message: 'Order created successfully', success: true }, { status: 201 });
 
   } catch (err) {
-    await pool.query('ROLLBACK');
     console.error('Order creation error:', err);
-    return NextResponse.json({ message: 'Internal Server Error', bool: false }, { status: 500 });
-  } finally {
-    pool.release(); // ✅ Release connection back to pool
+    return NextResponse.json({ message: 'Internal Server Error', success: false }, { status: 500 });
   }
 }
  

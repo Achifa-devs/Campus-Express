@@ -63,9 +63,9 @@ const ForgotPwd = () => {
 
     
         var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        let empty = item.value !== '' ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please field cannot be empty.'}
-        let validEmail = emailRegex.test(item.value) ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please enter a valid email address.'}
-        // let emailDuplicate =  emailvailidity ? {bool: true, mssg: ''} : {bool: false, mssg: 'Email already exist, please try something else'} 
+        let empty = item.value !== '' ? {success: true, mssg: ''} : {success: false, mssg: 'Please field cannot be empty.'}
+        let validEmail = emailRegex.test(item.value) ? {success: true, mssg: ''} : {success: false, mssg: 'Please enter a valid email address.'}
+        // let emailDuplicate =  emailvailidity ? {success: true, mssg: ''} : {success: false, mssg: 'Email already exist, please try something else'} 
         let errs = [empty,validEmail];
         addErrMssg(errs.filter(item => item.mssg !== ''),item.parentElement)
         let list = errs.filter(item => item.mssg !== '')

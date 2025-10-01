@@ -119,7 +119,7 @@ const CardCnt = ({items}) => {
 
                                 {/* <button style={BtnStyles} onClick={e => {
                                     let response = isBuyerLoggedIn('dashboard');
-                                    if(!response.bool){set_elem(response.elem)} else{set_elem(AddToCart(e,item.product_id))}
+                                    if(!response.success){set_elem(response.elem)} else{set_elem(AddToCart(e,item.product_id))}
                                 }}>
 
                                 

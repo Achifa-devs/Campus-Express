@@ -59,7 +59,7 @@ const SearchBar = ({updateSearchText}) => {
           .then(async(res) => {
             let response = await res.json();
               console.log(response)
-            if (response.bool) {
+            if (response.success) {
               buyer_overlay_setup(false, '')
               dispatch(setSearchListTo(response.data))
             }else{

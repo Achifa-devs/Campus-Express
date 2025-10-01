@@ -22,7 +22,7 @@ export async function POST(req) {
       [email]
     );
     if (parseInt(emailCheck.rows[0].count) > 0) {
-      return NextResponse.json({ bool: false, message: 'Email already exists' }, { status: 400 });
+      return NextResponse.json({ success: false, message: 'Email already exists' }, { status: 400 });
     }
 
     // Check if phone already exists
@@ -31,7 +31,7 @@ export async function POST(req) {
       [phone]
     );
     if (parseInt(phoneCheck.rows[0].count) > 0) {
-      return NextResponse.json({ bool: false, message: 'Phone already exists' }, { status: 400 });
+      return NextResponse.json({ success: false, message: 'Phone already exists' }, { status: 400 });
     }
 
     // Insert seller
@@ -82,13 +82,13 @@ export async function POST(req) {
     });
 
     return NextResponse.json({
-      bool: true,
+      success: true,
       cookie: token,
       user: { fname, lname, user_id, email, phone, state, campus, gender }
     }, { status: 200 });
 
   } catch (err) {
     console.error('Registration error:', err);
-    return NextResponse.json({ bool: false, message: 'Something went wrong' }, { status: 500 });
+    return NextResponse.json({ success: false, message: 'Something went wrong' }, { status: 500 });
   }
 }

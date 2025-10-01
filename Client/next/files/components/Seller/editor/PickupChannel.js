@@ -42,7 +42,7 @@ export default function PickupChannel({updateLocation,title,edit,order_data}) {
                 fee: fee
             }
         })
-        if(response.bool){
+        if(response.success){
             updateLocation(response.locale)
         }
     }

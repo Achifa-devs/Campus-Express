@@ -39,7 +39,7 @@ export default function OrderTracker() {
             .then(({ data }) => {
                 console.log(data)
                 overlay.removeAttribute('id')
-                if (data.bool) {
+                if (data.success) {
                     
                     set_order_list(data?.data)
                 }

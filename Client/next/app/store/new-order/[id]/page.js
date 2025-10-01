@@ -70,7 +70,7 @@ export default function NewOrder() {
                 
                 let response = await res.json();
 
-                if (response.bool) {
+                if (response.success) {
                     console.log(response.data)
                     setItem(response?.data)
             } else {
@@ -106,7 +106,7 @@ export default function NewOrder() {
             .then(async(res) => {
                 let response = await res.json();
                 // overlay.removeAttribute('id')
-                if (response.bool) {
+                if (response.success) {
                     
                     set_order(response?.data?.data)
                     setstock(parseInt(response?.data[0]?.order?.stock))

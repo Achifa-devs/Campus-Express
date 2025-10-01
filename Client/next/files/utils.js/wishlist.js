@@ -7,7 +7,7 @@ export function save_item (user_id, product_id) {
             product_id: product_id
         })
         .then((res) => {
-            if(res.data.bool){
+            if(res.data.success){
                 resolve(res.data.data)
             }else{
                 reject("Internal server error")
@@ -26,7 +26,7 @@ export function unsave_item (saved_id, user_id) {
             }
         })
         .then((res) => {
-            if(res.data.bool){
+            if(res.data.success){
                 resolve(res.data.data)
             }else{
                 reject("Internal server error")
@@ -44,7 +44,7 @@ export function fetch_saved_items (user_id) {
             }
         })
         .then((res) => {
-            if(res.data.bool){
+            if(res.data.success){
                 resolve(res.data.data)
             }else{
                 reject("Internal server error")

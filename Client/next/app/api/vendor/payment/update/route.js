@@ -14,7 +14,7 @@ export async function POST(req) {
 
       if (paymentExist.rows.length === 1) {
         const res = await pool.query(`UPDATE payment set acct_num = '${bankAccountNumber}', beneficiary = '${accountBeneficiary}', bank = '${bankName}' WHERE user_id='${user_id}'`);
-        return NextResponse.json({ bool: res?.rowCount > 0 ? true : false }, { status: 200 });
+        return NextResponse.json({ success: res?.rowCount > 0 ? true : false }, { status: 200 });
       } else {
        const res = await pool.query(
           `
@@ -34,7 +34,7 @@ export async function POST(req) {
           )
           `
         )
-        return NextResponse.json({ bool: res?.rowCount > 0 ? true : false }, { status: 200 });
+        return NextResponse.json({ success: res?.rowCount > 0 ? true : false }, { status: 200 });
 
       }
 
@@ -42,7 +42,7 @@ export async function POST(req) {
 
   } catch (err) {
     console.error('Error updating payment:', err);
-    return NextResponse.json({ bool: false, message: 'Something went wrong' }, { status: 500 });
+    return NextResponse.json({ success: false, message: 'Something went wrong' }, { status: 500 });
   }
 }
 

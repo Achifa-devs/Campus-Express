@@ -7,13 +7,13 @@ export async function GET(request) {
    const user_id = searchParams.get('user_id')
 
    if (!user_id) {
-       return NextResponse.json({ bool: false, message: "user_id is required" })
+       return NextResponse.json({ success: false, message: "user_id is required" })
    }    
 
    try {
        const data = await pool.query(`SELECT * FROM favourite WHERE user_id = $1`, [user_id])
        if (data.rows.length === 0) {
-           return NextResponse.json({ bool: true, data: [] })
+           return NextResponse.json({ success: true, data: [] })
        }
 
        const favourites = data.rows.map(async(favourite) => {
@@ -25,9 +25,9 @@ export async function GET(request) {
        })
        const response = await Promise.all(favourites);
 
-       return NextResponse.json({data: response, bool: true}, { status: 200 });
+       return NextResponse.json({data: response, success: true}, { status: 200 });
 
    } catch (error) {
-       return NextResponse.json({ bool: false, message: error })
+       return NextResponse.json({ success: false, message: error })
    } 
 }

@@ -19,10 +19,10 @@ async function save_buyer_transaction(user_id, payment_src, payment_type, app_fe
         const values = [user_id, payment_src, payment_type, app_fee, amount, date, reason];
 
         const result = await pool.query(query, values);
-        return { bool: result.rowCount > 0 };
+        return { success: result.rowCount > 0 };
     } catch (err) {
         console.error("Database error:", err);
-        return { bool: false, error: err.message };
+        return { success: false, error: err.message };
     }
 }
 
@@ -44,17 +44,17 @@ async function update_order(product_id, user_id) {
 
         if (result.rowCount > 0) {
             return {
-                bool: true,
+                success: true,
                 order_id: result.rows[0].order_id,
                 stock: result.rows[0].stock,
                 address: result.rows[0].pick_up_channels?.[0]?.locale || null
             };
         } else {
-            return { bool: false };
+            return { success: false };
         }
     } catch (err) {
         console.error("Database error:", err);
-        return { bool: false, error: err.message };
+        return { success: false, error: err.message };
     }
 }
 
@@ -91,7 +91,7 @@ export async function POST(req) {
             );
 
             // If transaction saved successfully, update order
-            if (transactionResult.bool) {
+            if (transactionresult.success) {
                 await update_order(product_info.product_id, buyer_info.user_id);
             }
 

@@ -111,7 +111,7 @@ const Signup = () => {
             .then(async(result) => {
                 let response = await result.json();
                 console.log(response)
-                if(response.bool){
+                if(response.success){
                     window.location.href = '/vendor/shop'
                 }else{
                     seller_overlay_setup(false, '')
@@ -138,9 +138,9 @@ const Signup = () => {
 
                 if(item.name === 'shop_name'){
 
-                    let empty = item.value !== '' ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please field cannot be empty'}
-                    let length = item.value.length > 3 ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please shop name must be at least 3 letters.'}
-                    let specialCharFree = /^[a-zA-Z]+$/.test(item.value.trim()) ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please enter only alphabets.'}
+                    let empty = item.value !== '' ? {success: true, mssg: ''} : {success: false, mssg: 'Please field cannot be empty'}
+                    let length = item.value.length > 3 ? {success: true, mssg: ''} : {success: false, mssg: 'Please shop name must be at least 3 letters.'}
+                    let specialCharFree = /^[a-zA-Z]+$/.test(item.value.trim()) ? {success: true, mssg: ''} : {success: false, mssg: 'Please enter only alphabets.'}
                     let errs = [empty,length,specialCharFree];
                     
                     addErrMssg(errs.filter(item => item.mssg !== ''),item.parentElement);
@@ -150,9 +150,9 @@ const Signup = () => {
                     
                 }else if(item.name.toLowerCase() === 'address1'){
 
-                    let empty = item.value !== '' ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please field cannot be empty'}
-                    let length = item.value.length > 3 ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please address (1) must be at least 3 letters.'}
-                    // let specialCharFree = /^[a-zA-Z]+$/.test(item.value.trim()) ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please enter only alphabets.'}
+                    let empty = item.value !== '' ? {success: true, mssg: ''} : {success: false, mssg: 'Please field cannot be empty'}
+                    let length = item.value.length > 3 ? {success: true, mssg: ''} : {success: false, mssg: 'Please address (1) must be at least 3 letters.'}
+                    // let specialCharFree = /^[a-zA-Z]+$/.test(item.value.trim()) ? {success: true, mssg: ''} : {success: false, mssg: 'Please enter only alphabets.'}
 
                     let errs = [empty,length];
                     
@@ -163,9 +163,9 @@ const Signup = () => {
 
                 }else if(item.name.toLowerCase() === 'address2'){
 
-                    let empty = item.value !== '' ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please field cannot be empty'}
-                    let length = item.value.length > 3 ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please address (2) must be at least 3 letters.'}
-                    // let specialCharFree = /^[a-zA-Z]+$/.test(item.value.trim()) ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please enter only alphabets.'}
+                    let empty = item.value !== '' ? {success: true, mssg: ''} : {success: false, mssg: 'Please field cannot be empty'}
+                    let length = item.value.length > 3 ? {success: true, mssg: ''} : {success: false, mssg: 'Please address (2) must be at least 3 letters.'}
+                    // let specialCharFree = /^[a-zA-Z]+$/.test(item.value.trim()) ? {success: true, mssg: ''} : {success: false, mssg: 'Please enter only alphabets.'}
 
                     let errs = [empty,length];
                     
@@ -176,9 +176,9 @@ const Signup = () => {
 
                 }else if(item.name.toLowerCase() === 'address3'){
 
-                    let empty = item.value !== '' ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please field cannot be empty'}
-                    let length = item.value.length > 3 ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please address (3) must be at least 3 letters.'}
-                    // let specialCharFree = /^[a-zA-Z]+$/.test(item.value.trim()) ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please enter only alphabets.'}
+                    let empty = item.value !== '' ? {success: true, mssg: ''} : {success: false, mssg: 'Please field cannot be empty'}
+                    let length = item.value.length > 3 ? {success: true, mssg: ''} : {success: false, mssg: 'Please address (3) must be at least 3 letters.'}
+                    // let specialCharFree = /^[a-zA-Z]+$/.test(item.value.trim()) ? {success: true, mssg: ''} : {success: false, mssg: 'Please enter only alphabets.'}
 
                     let errs = [empty,length];
                     
@@ -190,7 +190,7 @@ const Signup = () => {
                 }
                 
             } else {
-                let errs = [logo !== '' ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please upload logo'}]
+                let errs = [logo !== '' ? {success: true, mssg: ''} : {success: false, mssg: 'Please upload logo'}]
                 addErrMssg(errs.filter(item => item.mssg !== ''),item.parentElement.parentElement);
                 let list =errs.filter(item => item.mssg !== '')
 

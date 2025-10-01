@@ -117,7 +117,7 @@ export default function PasswordRecovery() {
         let book = []
 
         function addErrMssg(err,pElem) {
-            // if(!err[0].bool){
+            // if(!err[0]success){
 
             let check = pElem.querySelector('.err-mssg');
             if(check){
@@ -172,8 +172,8 @@ export default function PasswordRecovery() {
                 if(item.name === 'email'){
 
                     var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    let empty = item.value !== '' ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please field cannot be empty.'}
-                    let validEmail = emailRegex.test(item.value) ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please enter a valid email address.'}
+                    let empty = item.value !== '' ? {success: true, mssg: ''} : {success: false, mssg: 'Please field cannot be empty.'}
+                    let validEmail = emailRegex.test(item.value) ? {success: true, mssg: ''} : {success: false, mssg: 'Please enter a valid email address.'}
                     let errs = [empty,validEmail];
                     console.log('empty',errs)
                     

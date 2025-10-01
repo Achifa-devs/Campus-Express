@@ -43,7 +43,7 @@ export default function Shop() {
                 seller_overlay_setup(false, '');
                 const response = result.data; // axios auto-parses JSON
 
-                if (response?.bool) {
+                if (response?.success) {
                     setShop(response?.shop);
 
                     document.querySelector('.shop-overlay').removeAttribute('id');

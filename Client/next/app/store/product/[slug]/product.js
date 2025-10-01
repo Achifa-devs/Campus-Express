@@ -112,7 +112,7 @@ const ProductPageClient = ({product, slug}) => {
         .then(async(res) => {
             let response = await res.json();
 
-            if (response.bool) {
+            if (response.success) {
                 
                 
             } else {
@@ -173,7 +173,7 @@ const ProductPageClient = ({product, slug}) => {
             fetch(`/api/store/orders?user_id=${user_id}`, { cache: 'no-store', }).then(async (res) => {
                 let response = await res.json();
                
-               if (response?.bool) {
+               if (response?.success) {
                     set_order_list(response?.data)
                }
            }).catch(err => console.log(err))

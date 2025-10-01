@@ -70,7 +70,7 @@ export default function Profile() {
             fetch(`/api/vendor/profile`, {method: 'post', body: JSON.stringify({user_id})})
             .then(async(result) => {
                 let response = await result.json(); 
-                if (response.bool) {
+                if (response.success) {
                     setProfile(response?.user)
                 }
             })
@@ -135,7 +135,7 @@ export default function Profile() {
         })   
         .then(async(result) => {
             let response = await result.json();
-            if(response.bool){
+            if(response.success){
                 dispatch(setSellerTo(response.cookie))
                 loader(false)
                 
@@ -175,7 +175,7 @@ export default function Profile() {
                 })   
                 .then(async(result) => {
                     let response = await result.json();
-                    if(response.bool){
+                    if(response.success){
                         dispatch(setBankTo(response.name))
                         saveUserData(url,data)
                         loader(false)
@@ -367,7 +367,7 @@ function PaymentInfo({ updatePaymentInfo }) {
             .then(async(result) => {
                 let response = await result.json(); 
                 console.log(response)
-                if (response?.bool) {
+                if (response?.success) {
                     dispatch(setBankTo(response.data?.beneficiary))
                     set_payment_info(response.data);
                     loader(false)
@@ -472,7 +472,7 @@ function ShippingInfo({updateShippingInfo}) {
             fetch(`/api/vendor/profile`, {method: 'post', body: JSON.stringify({user_id})})
             .then(async(result) => {
                 let response = await result.json(); 
-                if (response.bool) {
+                if (response.success) {
                     setProfile(response?.user)
                 }
             })
@@ -762,7 +762,7 @@ function ShopInfo({campusLocaleList}) {
             fetch(`/api/vendor/profile`, {method: 'post', body: JSON.stringify({user_id})})
             .then(async(result) => {
                 let response = await result.json(); 
-                if (response.bool) {
+                if (response.success) {
                     setProfile(response?.user)
                     
                     loader(false)

@@ -107,7 +107,7 @@ export default function PickupChannel({updateLocation,title,edit,order_data}) {
         //         index: edit?.index
         //     }
         // })
-        // if(response.bool){
+        // if(response.success){
         //     updateLocation(response.locale)
         // }
     }

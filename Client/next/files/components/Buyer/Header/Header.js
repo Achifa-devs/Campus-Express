@@ -138,7 +138,7 @@ const Header = () => {
       })
       .then(async(res) => {
         const response = await res.json();
-        if (response.bool) {
+        if (response.success) {
           dispatch(setSearchListTo(response.data));
         }
       })
@@ -422,7 +422,7 @@ const Header = () => {
                       })
                       .then(async(res) => {
                         const response = await res.json();
-                        if (response.bool) {
+                        if (response.success) {
                           dispatch(setSearchListTo(response.data));
                         }
                       })

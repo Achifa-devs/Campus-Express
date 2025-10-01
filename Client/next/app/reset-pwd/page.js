@@ -136,7 +136,7 @@ export default function ResetPwd() {
         let book = []
 
         function addErrMssg(err,pElem) {
-            // if(!err[0].bool){
+            // if(!err[0]success){
 
             let check = pElem.querySelector('.err-mssg');
             if(check){
@@ -187,8 +187,8 @@ export default function ResetPwd() {
 
         inputs.map((item) => {
            if(item.type === 'password'){
-                let empty = item.value !== '' ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please field cannot be empty.'}
-                let length = item.value.length >= 8 ? {bool: true, mssg: ''} :  {bool: false, mssg: 'Password must contain at least 8 characters.'}
+                let empty = item.value !== '' ? {success: true, mssg: ''} : {success: false, mssg: 'Please field cannot be empty.'}
+                let length = item.value.length >= 8 ? {success: true, mssg: ''} :  {success: false, mssg: 'Password must contain at least 8 characters.'}
                 let errs = [empty,length];
                 
                 addErrMssg(errs.filter(item => item.mssg !== ''),item.parentElement)

@@ -24,7 +24,7 @@ export async function GET() {
     if (!result.rows || result.rows.length === 0) {
       return new Response(
         JSON.stringify({ 
-          bool: false, 
+          success: false, 
           message: 'No active products found' 
         }),
         {
@@ -56,7 +56,7 @@ export async function GET() {
 
     return new Response(
       JSON.stringify({
-        bool: true,
+        success: true,
         data: {
           "@context": "https://schema.org",
           "@type": "ItemList",
@@ -80,7 +80,7 @@ export async function GET() {
     console.error('Error fetching products:', error);
     return new Response(
       JSON.stringify({ 
-        bool: false, 
+        success: false, 
         error: 'Internal server error' 
       }),
       {

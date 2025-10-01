@@ -113,7 +113,7 @@ export default function Showcase({type}) {
             .then(async(res) => {
                 let response = await res.json();
 
-                if (response.bool) {
+                if (response.success) {
                     
 
                     setCards(

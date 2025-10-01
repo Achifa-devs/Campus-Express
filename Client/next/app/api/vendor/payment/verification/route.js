@@ -17,11 +17,11 @@ export async function POST(req) {
       account_bank: code
     };
     const result = await flw.Misc.verify_Account(details);
-    return NextResponse.json({ name: result.data.account_name, bool: true }, { status: 200 });
+    return NextResponse.json({ name: result.data.account_name, success: true }, { status: 200 });
 
   } catch (err) {
     console.error('Error getting seller:', err);
-    return NextResponse.json({ bool: false, message: 'Something went wrong' }, { status: 500 });
+    return NextResponse.json({ success: false, message: 'Something went wrong' }, { status: 500 });
   }
 }
 

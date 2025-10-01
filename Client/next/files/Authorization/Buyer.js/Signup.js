@@ -158,9 +158,9 @@ const BuyerSignup = () => {
 
                 if(item.name === 'fname'){
 
-                    let empty = item.value !== '' ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please field cannot be empty'}
-                    let length = item.value.length > 3 ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please name must be at least 3 letters.'}
-                    let specialCharFree = /^[a-zA-Z]+$/.test(item.value.trim()) ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please enter only alphabets.'}
+                    let empty = item.value !== '' ? {success: true, mssg: ''} : {success: false, mssg: 'Please field cannot be empty'}
+                    let length = item.value.length > 3 ? {success: true, mssg: ''} : {success: false, mssg: 'Please name must be at least 3 letters.'}
+                    let specialCharFree = /^[a-zA-Z]+$/.test(item.value.trim()) ? {success: true, mssg: ''} : {success: false, mssg: 'Please enter only alphabets.'}
                     let errs = [empty,length,specialCharFree];
                     
                     addErrMssg(errs.filter(item => item.mssg !== ''),item.parentElement);
@@ -170,9 +170,9 @@ const BuyerSignup = () => {
                     
                 }else if(item.name === 'lname'){
 
-                    let empty = item.value !== '' ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please field cannot be empty'}
-                    let length = item.value.length > 3 ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please name must be at least 3 letters.'}
-                    let specialCharFree = /^[a-zA-Z]+$/.test(item.value.trim()) ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please enter only alphabets.'}
+                    let empty = item.value !== '' ? {success: true, mssg: ''} : {success: false, mssg: 'Please field cannot be empty'}
+                    let length = item.value.length > 3 ? {success: true, mssg: ''} : {success: false, mssg: 'Please name must be at least 3 letters.'}
+                    let specialCharFree = /^[a-zA-Z]+$/.test(item.value.trim()) ? {success: true, mssg: ''} : {success: false, mssg: 'Please enter only alphabets.'}
 
                     let errs = [empty,length,specialCharFree];
                     
@@ -185,9 +185,9 @@ const BuyerSignup = () => {
 
                     // let emailvailidity = await checkEmailDuplicate();
                     var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    let empty = item.value !== '' ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please field cannot be empty.'}
-                    let validEmail = emailRegex.test(item.value) ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please enter a valid email address.'}
-                    // let emailDuplicate =  emailvailidity ? {bool: true, mssg: ''} : {bool: false, mssg: 'Email already exist, please try something else'} 
+                    let empty = item.value !== '' ? {success: true, mssg: ''} : {success: false, mssg: 'Please field cannot be empty.'}
+                    let validEmail = emailRegex.test(item.value) ? {success: true, mssg: ''} : {success: false, mssg: 'Please enter a valid email address.'}
+                    // let emailDuplicate =  emailvailidity ? {success: true, mssg: ''} : {success: false, mssg: 'Email already exist, please try something else'} 
                     let errs = [empty,validEmail];
                     addErrMssg(errs.filter(item => item.mssg !== ''),item.parentElement)
                     let list = errs.filter(item => item.mssg !== '')
@@ -197,8 +197,8 @@ const BuyerSignup = () => {
                 
             }else if(item.type === 'password'){
                 if(item.name === 'password'){
-                    let empty = item.value !== '' ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please field cannot be empty.'}
-                    let length = item.value.length >= 8 ? {bool: true, mssg: ''} :  {bool: false, mssg: 'Password must contain at least 8 characters.'}
+                    let empty = item.value !== '' ? {success: true, mssg: ''} : {success: false, mssg: 'Please field cannot be empty.'}
+                    let length = item.value.length >= 8 ? {success: true, mssg: ''} :  {success: false, mssg: 'Password must contain at least 8 characters.'}
                     let errs = [empty,length];
                     
                     addErrMssg(errs.filter(item => item.mssg !== ''),item.parentElement)
@@ -209,8 +209,8 @@ const BuyerSignup = () => {
                 }
             }else if(item.type === 'number'){
                 if(item.name === 'phone'){
-                    let empty = item.value !== '' ? {bool: true, mssg: ''} : {bool: false, mssg: 'Please field cannot be empty.'}
-                    let length = item.value.length >= 11 ? {bool: true, mssg: ''} :  {bool: false, mssg: 'Invalid Phone Number'}
+                    let empty = item.value !== '' ? {success: true, mssg: ''} : {success: false, mssg: 'Please field cannot be empty.'}
+                    let length = item.value.length >= 11 ? {success: true, mssg: ''} :  {success: false, mssg: 'Invalid Phone Number'}
                     let errs = [empty,length];
                     
                     addErrMssg(errs.filter(item => item.mssg !== ''),item.parentElement)
@@ -221,12 +221,12 @@ const BuyerSignup = () => {
                 }
             }else if(item.type === 'radio'){
                 if(gender === null){
-                    let errs = [{bool: false, mssg: 'Please Select Your Gender.'}];
+                    let errs = [{success: false, mssg: 'Please Select Your Gender.'}];
                     addErrMssg(errs.filter(item => item.mssg !== ''),item.parentElement.parentElement.parentElement)
                     let list =errs.filter(item => item.mssg !== '')
                     list.length > 0 ? book.current.gender = false : book.current.gender = true
                 }else{
-                    let errs = [{bool: true, mssg: ''}];
+                    let errs = [{success: true, mssg: ''}];
                     addErrMssg(errs.filter(item => item.mssg !== ''),item.parentElement.parentElement.parentElement)
                     let list =errs.filter(item => item.mssg !== '')
                     list.length > 0 ? book.current.gender = false : book.current.gender = true
@@ -236,7 +236,7 @@ const BuyerSignup = () => {
 
         select.map(item => {
             if(item.name === 'state'){
-                let empty = state !== '' ?  {bool: true, mssg: ''} :  {bool: false, mssg: 'Please select a state'}
+                let empty = state !== '' ?  {success: true, mssg: ''} :  {success: false, mssg: 'Please select a state'}
                 let errs = [empty];
                     
                 addErrMssg(errs.filter(item => item.mssg !== ''),item.parentElement)
@@ -244,7 +244,7 @@ const BuyerSignup = () => {
 
                 list.length > 0 ? book.current.state = false : book.current.state = true
             }else if(item.name === 'campus'){
-                let empty = campus !== '' ?  {bool: true, mssg: ''} :  {bool: false, mssg: 'Please select a campus'}
+                let empty = campus !== '' ?  {success: true, mssg: ''} :  {success: false, mssg: 'Please select a campus'}
                 let errs = [empty];
                     
                 addErrMssg(errs.filter(item => item.mssg !== ''),item.parentElement)

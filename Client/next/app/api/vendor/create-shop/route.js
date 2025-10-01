@@ -24,11 +24,11 @@ export async function POST(req) {
         '${shortid.generate(10)}', '${user_id}', '${name}', '', 'active', '${summary}', '${logo}', '', '', ${false}, '${new Date()}', '${address1}', '${address2}', '${address3}'
       )`
     );
-    return NextResponse.json({ bool: res.rowCount > 0 ? true : false}, { status: res.rowCount > 0 ? 200 : 501 });
+    return NextResponse.json({ success: res.rowCount > 0 ? true : false}, { status: res.rowCount > 0 ? 200 : 501 });
 
   } catch (err) {
     console.error('Error creating shop:', err);
-    return NextResponse.json({ bool: false, message: 'Something went wrong' }, { status: 500 });
+    return NextResponse.json({ success: false, message: 'Something went wrong' }, { status: 500 });
   }
 }
 

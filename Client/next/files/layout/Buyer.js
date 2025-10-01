@@ -35,7 +35,7 @@ const BuyerLayout = ({children}) => {
             .then(async (res) => {
                 const data = await res.json();
 
-                if (data.bool) {
+                if (data.success) {
                     dispatch(setBuyerIdTo(data.id));
                 } else {
                 // Optionally redirect to login
@@ -89,7 +89,7 @@ const BuyerLayout = ({children}) => {
                 const response = result.data; // axios auto-parses JSON
                 console.log(response?.data);
 
-                if (response?.bool) {
+                if (response?.success) {
                     dispatch(setBuyerInfoTo(response?.data));
                     // window.localStorage.removeItem('id_for_unknown_buyer')
                     window.localStorage.setItem('CE_user_id', response?.data?.user_id);

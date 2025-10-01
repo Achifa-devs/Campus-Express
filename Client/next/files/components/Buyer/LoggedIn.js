@@ -4,9 +4,9 @@ export function isBuyerLoggedIn(resource) {
     let user_id = window.localStorage.getItem("CE_user_id")
     // let buyer_initial = window.localStorage.getItem("CE_buyer_name_initial")
     if(user_id){
-      return user_id !== '' ? {bool: true, elem: ''} : {bool: false, elem: <div className="overlay" id="overlay" > <BuyerLogin query={resource}/> </div>}
+      return user_id !== '' ? {success: true, elem: ''} : {success: false, elem: <div className="overlay" id="overlay" > <BuyerLogin query={resource}/> </div>}
     }else{
-        return {bool: false, elem: <div className="overlay" id="overlay" > <BuyerLogin query={resource}/> </div>}
+        return {success: false, elem: <div className="overlay" id="overlay" > <BuyerLogin query={resource}/> </div>}
     }
 }
 

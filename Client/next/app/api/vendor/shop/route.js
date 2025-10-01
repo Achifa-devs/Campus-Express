@@ -9,7 +9,7 @@ export async function GET(req) {
 
     if (!user_id) {
       return NextResponse.json(
-        { bool: false, message: 'User ID is required' },
+        { success: false, message: 'User ID is required' },
         { status: 400 }
       );
     }
@@ -20,14 +20,14 @@ export async function GET(req) {
     );
 
     return NextResponse.json(
-      { bool: res?.rows?.length > 0, shop: res?.rows[0] },
+      { success: res?.rows?.length > 0, shop: res?.rows[0] },
       { status: 200 }
     );
 
   } catch (err) {
     console.error('Error getting shop:', err);
     return NextResponse.json(
-      { bool: false, message: 'Internal server error' },
+      { success: false, message: 'Internal server error' },
       { status: 500 }
     );
   }

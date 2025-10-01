@@ -40,7 +40,7 @@ export default function ChangePhone({ route, navigation }) {
 
   async function update_phone_pin() {
     return await axios.post('https://estate-dun-eta.vercel.app/system.phone-update', { phone: new_phone, id: user?.userid })
-      .then(({ data }) => ({ bool: data.success }))
+      .then(({ data }) => ({ success: data.success }))
       .catch(err => (err.response?.data));
   }
 

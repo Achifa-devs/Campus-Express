@@ -35,24 +35,24 @@ const PasswordReset = () => {
         let result = inputs.map((item,index) => 
             (item.value.length < 8 && index === 0)
             ?
-                ({err: 'Password Must Contain At Least 8 Characters', bool: false, src:'pwd'})
+                ({err: 'Password Must Contain At Least 8 Characters', success: false, src:'pwd'})
             :
             (item.value !== pwd && index === 1)
             ?
-                ({err: 'Password Mismatch!', bool: false, src:'cPwd'})
+                ({err: 'Password Mismatch!', success: false, src:'cPwd'})
             :
             (item.value.length === 0 && index === 1)
             ?
-                ({err: 'Password Must Contain At Least 8 Characters', bool: false, src:'cPwd'})
+                ({err: 'Password Must Contain At Least 8 Characters', success: false, src:'cPwd'})
 
             :
             (item.value.length >= 8 && index === 0)
             ?
-                ({err: '', bool: true, src:'pwd'})
+                ({err: '', success: true, src:'pwd'})
             :
             (item.value === pwd && index === 1)
             ?
-                ({err: '', bool: true, src:'cPwd'})
+                ({err: '', success: true, src:'cPwd'})
             :
             ''
 
@@ -71,7 +71,7 @@ const PasswordReset = () => {
                 item.parentElement.append(err_comp)
             }
         })
-        let response = result.filter(item => item.bool === true)
+        let response = result.filter(item => itemsuccess === true)
         if(response.length > 1 ){
             ResetPwd(pwd)
         }

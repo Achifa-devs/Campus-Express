@@ -39,7 +39,7 @@ export async function GET(req) {
 
     const response = await Promise.all(productPromises);
 
-    return NextResponse.json({data: response[0], bool: true}, { status: 200 });
+    return NextResponse.json({data: response[0], success: true}, { status: 200 });
     
   } catch (error) {
     console.error("Error fetching orders:", error);

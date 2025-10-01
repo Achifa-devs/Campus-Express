@@ -31,7 +31,7 @@ const SellerLayout = ({children,setCookie}) => {
             .then(async (res) => {
                 const data = await res.json();
 
-                if (data.bool) {
+                if (data.success) {
                     dispatch(setBuyerIdTo(data.id));
                 } else {
                 // Optionally redirect to login

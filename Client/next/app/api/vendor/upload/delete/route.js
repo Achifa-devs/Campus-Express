@@ -31,12 +31,12 @@ export async function GET(req) {
         return res.status(500).json({ message: 'Failed to delete folder', error: error.message });
       }
     }else{
-      return NextResponse.json({ bool: false, message: 'Something went wrong' }, { status: 500 });
+      return NextResponse.json({ success: false, message: 'Something went wrong' }, { status: 500 });
     }
 
   } catch (err) {
     console.error('Error getting seller:', err);
-    return NextResponse.json({ bool: false, message: 'Something went wrong' }, { status: 500 });
+    return NextResponse.json({ success: false, message: 'Something went wrong' }, { status: 500 });
   }
 }
 

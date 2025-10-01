@@ -39,14 +39,14 @@ export async function GET(req) {
       query = `SELECT * FROM products WHERE category = $1 AND state->>'state' = 'active' LIMIT $2`;
       queryParams = [category, limit];
     } else {
-      return NextResponse.json({ bool: false, data: '' }, { status: 400 });
+      return NextResponse.json({ success: false, data: '' }, { status: 400 });
     }
 
     const result = await pool.query(query, queryParams);
-    return NextResponse.json({ bool: true, data: result.rows });
+    return NextResponse.json({ success: true, data: result.rows });
 
   } catch (error) {
     // console.error('Error fetching products:', error);
-    return NextResponse.json({ bool: false, data: '' }, { status: 500 });
+    return NextResponse.json({ success: false, data: '' }, { status: 500 });
   }
 }

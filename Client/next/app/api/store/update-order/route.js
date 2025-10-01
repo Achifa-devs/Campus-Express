@@ -25,7 +25,7 @@ export async function POST(req) {
       )
   
       if (existingOrderCount > 0) {
-        return NextResponse.json({data: '', bool: true}, { status: 500 });
+        return NextResponse.json({data: '', success: true}, { status: 500 });
       }
   
       const { rowCount: insertCount } = await pool.query(
@@ -38,7 +38,7 @@ export async function POST(req) {
       )
   
       if (insertCount === 0) {
-        return NextResponse.json({data: '', bool: false}, { status: 500 })
+        return NextResponse.json({data: '', success: false}, { status: 500 })
       }
   
       const mssg_obj = get_mssg('new-order');
@@ -51,12 +51,12 @@ export async function POST(req) {
         [mssg_obj.mssg, mssg_obj.subject, new Date(), user_id, product_id]
       )
   
-      return NextResponse.json({data: '', bool: true}, { status: 200 });
+      return NextResponse.json({data: '', success: true}, { status: 200 });
     }
-    return NextResponse.json({data: '', bool: false}, { status: 500 })
+    return NextResponse.json({data: '', success: false}, { status: 500 })
 
   } catch (err) {
     console.error('Order creation error:', err)
-    return NextResponse.json({data: '', bool: false}, { status: 500 })
+    return NextResponse.json({data: '', success: false}, { status: 500 })
   }
 }

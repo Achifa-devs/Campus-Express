@@ -15,7 +15,7 @@ export async function GET(request) {
     const slug = searchParams.get('slug') || 'Default Product';
     const res = await pool.query(`SELECT * FROM products WHERE product_id='${slug}'`);
 
-    return NextResponse.json({data: res.rows[0], bool: true}, { status: 200 });
+    return NextResponse.json({data: res.rows[0], success: true}, { status: 200 });
 
   }
 

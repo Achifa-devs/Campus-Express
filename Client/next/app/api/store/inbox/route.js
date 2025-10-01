@@ -11,10 +11,10 @@ export async function GET(request) {
     const user_id = searchParams.get('user_id');
     const result = await pool.query(`SELECT * FROM inbox WHERE user_id = $1`, [user_id]);
   
-    return NextResponse.json({data: result.rows, bool: true}, { status: 200 });
+    return NextResponse.json({data: result.rows, success: true}, { status: 200 });
   } catch (error) {
     console.error('Error fetching products:', error);
-    return NextResponse.json({ bool: false, data: '' }, { status: 500 });
+    return NextResponse.json({ success: false, data: '' }, { status: 500 });
   }
 
 }

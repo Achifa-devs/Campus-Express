@@ -134,7 +134,7 @@ const Card = ({item, index}) => {
                 }
             })
             .then((res) => {
-                if(res.data.bool){
+                if(res.data.success){
                     set_order_list(res.data.data)
                 }
             })

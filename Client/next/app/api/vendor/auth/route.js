@@ -10,18 +10,18 @@ export async function GET(req) {
     const user_secret = cookieStore.get('user_secret')?.value;
 
     if (!user_secret) {
-      return NextResponse.json({ bool: false, id: '' }, { status: 401 });
+      return NextResponse.json({ success: false, id: '' }, { status: 401 });
     }
 
     try {
       const decoded = jwt.verify(user_secret, 'kdiU$28Fs!9shF&2xZpD3Q#1gLx@R7TkWzPq');
-      return NextResponse.json({ bool: true, id: decoded.id }, { status: 200 });
+      return NextResponse.json({ success: true, id: decoded.id }, { status: 200 });
     } catch (err) {
       console.error('JWT error:', err.message);
-      return NextResponse.json({ bool: false, id: '' }, { status: 401 });
+      return NextResponse.json({ success: false, id: '' }, { status: 401 });
     }
   } catch (err) {
     console.error('Server error:', err.message);
-    return NextResponse.json({ bool: false, id: '' }, { status: 500 });
+    return NextResponse.json({ success: false, id: '' }, { status: 500 });
   }
 }

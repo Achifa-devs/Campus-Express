@@ -120,7 +120,7 @@ export async function POST(req) {
     }
   } catch (error) {
     console.error(error)
-    return NextResponse.json({ bool: false, message: 'Server error' }, { status: 500 });
+    return NextResponse.json({ success: false, message: 'Server error' }, { status: 500 });
     
   }
 }

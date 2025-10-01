@@ -30,7 +30,7 @@ export default function Carousel({category,product_id,updateReq}) {
         .then(async(res) => {
             let response = await res.json();
 
-            if (response.bool) {
+            if (response.success) {
                 
                 setCards(
                     response?.data?.map((item, index) => 

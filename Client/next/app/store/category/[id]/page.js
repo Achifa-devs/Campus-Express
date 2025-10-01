@@ -192,7 +192,7 @@ const Dashboard = () => {
     .then(async(res) => {
       let response = await res.json();
 
-      if (response.bool) {
+      if (response.success) {
         let filtered_response = insertFilterTag(response.data)
           console.log(filtered_response)
           setCards(

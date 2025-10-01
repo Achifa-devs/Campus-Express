@@ -14,10 +14,10 @@ export async function GET(request) {
   
     const list = result.rows;
     const filteredList = list.filter(item => item.title.toLowerCase().indexOf(word.toLowerCase()) > -1);
-    return NextResponse.json({data: filteredList, bool: true}, { status: 200 });
+    return NextResponse.json({data: filteredList, success: true}, { status: 200 });
   } catch (error) {
     console.error('Error fetching products:', error);
-    return NextResponse.json({ bool: false, data: '' }, { status: 500 });
+    return NextResponse.json({ success: false, data: '' }, { status: 500 });
   }
 
 }

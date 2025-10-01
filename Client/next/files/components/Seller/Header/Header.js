@@ -24,7 +24,7 @@ const Header = () => {
             })
             .then(async(result) => {
                 let response = await result.json(); 
-                if (response?.bool) {
+                if (response?.success) {
                     setProfile(response?.user)
                 } else {
                     window.location.reload()

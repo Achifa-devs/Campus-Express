@@ -16,7 +16,7 @@ export async function POST(req) {
     if (result.rows.length === 0) {
       return NextResponse.json({
         Mssg: "Email is not registered",
-        bool: false
+        success: false
       }, { status: 400 });
     }
 
@@ -34,7 +34,7 @@ export async function POST(req) {
     if (!passwordMatch) {
       return NextResponse.json({
         Mssg: "Invalid password",
-        bool: false
+        success: false
       }, { status: 400 });
     }
 
@@ -55,7 +55,7 @@ export async function POST(req) {
     });
 
     return NextResponse.json({
-      bool: true,
+      success: true,
       user,
       cookie: token
     }, { status: 200 });
@@ -64,7 +64,7 @@ export async function POST(req) {
     console.error('Login error:', error);
     return NextResponse.json({
       Mssg: "An error occurred during login",
-      bool: false
+      success: false
     }, { status: 500 });
   }
 }

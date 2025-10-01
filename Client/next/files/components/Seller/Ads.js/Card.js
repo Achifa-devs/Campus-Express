@@ -84,7 +84,7 @@ export default function Card({item,index}) {
                             let overlay = document.querySelector('.overlay')
                             overlay.setAttribute('id', 'overlay');          
                             let response = await  DeleteItem([item.product_id])
-                            if(response.bool){
+                            if(response.success){
                                 document.querySelector('.listing-overlay').removeAttribute('id')
                                 let list = [...document.querySelectorAll('.ads-card')]
                                 list.map((data,index) => {
