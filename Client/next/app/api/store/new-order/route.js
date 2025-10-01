@@ -9,7 +9,7 @@ export async function POST(req) {
   
   try {
     const body = await req.json();
-    const { user_id, product_id, stock, price, locale, vendor_id } = body;
+    const { user_id, product_id, stock, price, locale, vendor_id, shipping_fee } = body;
     const date = new Date();
     const order_id = shortId.generate();
 
@@ -27,11 +27,11 @@ export async function POST(req) {
     // ✅ Insert new order
     const insertOrder = await pool.query(
       `INSERT INTO orders(
-        id, order_id, product_id, status, date, stock, user_id, price, pick_up_channels, havePaid, vendor_id
+        id, order_id, product_id, status, date, stock, user_id, price, pick_up_channels, havePaid, vendor_id, shipping_fee
       ) VALUES (
-        DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, false, $9
+        DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, false, $9, $10
       ) RETURNING id`,
-      [order_id, product_id, JSON.stringify({ state: 'pending' }), date, stock, user_id, price, JSON.stringify(locale), vendor_id]
+      [order_id, product_id, JSON.stringify({ state: 'pending' }), date, stock, user_id, price, JSON.stringify(locale), vendor_id, shipping_fee]
     );
 
     if (insertOrder.rowCount === 0) {

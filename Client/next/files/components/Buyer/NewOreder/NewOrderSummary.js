@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, { use } from 'react'
 import { useEffect, useState } from "react";
 import { useSelector } from 'react-redux';
 import { open_notice } from '@/files/reusable.js/notice';
@@ -10,10 +10,84 @@ export default function NewOrderSummary({item,stock,deliveryOpt,order_id}) {
 
     let {pickup_channel} = useSelector(s=>s.pickup_channel)
     let {user_id}=useSelector(s=>s.user_id);
+    let {buyer_info}=useSelector(s=>s.buyer_info);
     useEffect(() => {let width = window.innerWidth;setScreenWidth(width)},[]);
 
     let [screenWidth, setScreenWidth] = useState(0);
-    
+    let [shipping_fee, set_shipping_fee] = useState(0);
+
+
+    useEffect(() => {
+        console.log("deliveryOpt changed: ", deliveryOpt);
+        // if (!order_list) return;
+        // console.log("order_list: ", order_list);
+        // console.log(order_list?.product?.shipping_range);
+
+        // const shippingRange = order_list?.product?.shipping_range
+        //     ? JSON.parse(order_list.product.shipping_range)
+        //     : null;
+        
+        // const orderRange = order_list?.order?.pick_up_channels?.map(item =>
+        //     item?.locale?.split(",").slice(0, item.channel === "Custom Pickup Location" ? -2 : -4)
+        // ) ?? [];
+
+        // if (orderRange.length > 0) {
+        //     let state = orderRange[0]?.shift()?.trim();
+        //     let camp = orderRange[0]?.join(",")?.trim();
+            
+        //     if (order_list.product.campus === camp) {
+        //         set_price(shippingRange?.in_campus?.price || 0);
+        //     } else if (order_list.product.uni_state === state) {
+        //         set_price(shippingRange?.in_state?.price || 0);
+        //     } else {
+        //         set_price(shippingRange?.out_state?.price || 0);
+        //     }
+        // }
+
+        // {
+        //     "in_campus": {
+        //         "selected": true,
+        //         "price": "500"
+        //     },
+        //     "in_state": {
+        //         "selected": true,
+        //         "price": "1500"
+        //     },
+        //     "out_state": {
+        //         "selected": true,
+        //         "price": "4000"
+        //     }
+        // }
+        let shipping_range = item?.shipping_range ? JSON.parse(item.shipping_range) : null;
+        console.log("shipping_range: ", shipping_range);
+        let accepted_range_price = []
+        if (shipping_range) {
+            Object.entries(shipping_range).forEach(([key, value]) => {
+                if (value !== null && value.selected) {
+                    accepted_range_price.push({ range: key, price: parseInt(value.price) });
+                }
+            });
+        }
+
+        accepted_range_price.map(range_obj => {
+            if (range_obj.range === 'in_campus') {
+                if(item?.campus === buyer_info?.campus) {
+                    set_shipping_fee(range_obj.price);
+                }
+            } else if (range_obj.range === 'in_state') {
+                    if(item?.uni_state === buyer_info?.state) {
+                    set_shipping_fee(range_obj.price);
+                }
+            } else if (range_obj.range === 'out_state') {
+                if(item?.uni_state !== buyer_info?.state) {
+                    set_shipping_fee(range_obj.price);
+                }
+            }
+        });
+        
+    }, [item]);
+
+  
     async function handleNewOrder() {
         // alert(stock)
 
@@ -30,7 +104,8 @@ export default function NewOrderSummary({item,stock,deliveryOpt,order_id}) {
                     price: parseInt(item.price) * parseInt(stock),
                     stock: stock,
                     locale: pickup_channel,
-                    vendor_id: item.user_id
+                    vendor_id: item.user_id,
+                    shipping_fee: shipping_fee
                 })
                 .then((result) => {
                     const response = result.data; // axios auto-parses JSON

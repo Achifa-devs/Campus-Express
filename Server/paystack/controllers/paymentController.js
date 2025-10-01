@@ -19,6 +19,8 @@ const handleWebhook = async (req, res) => {
         await toolHandler(event)
       }else if(type === 'promotion'){
         await promotionHandler(event)
+      }else if(type === 'checkout'){
+        await checkoutHandler(event)
       }
       
     } else {
@@ -155,6 +157,26 @@ async function promotionHandler(event) {
     console.log(`Updating existing payment status for reference: ${reference}`);
     await Payment.updatePromotion(user_id);
   }
+
+  return;
+
+}
+
+async function checkoutHandler(event) {
+  const { amount, reference, status, metadata, channel } = event.data;
+  const { user_id, order_id } = metadata;
+
+  // Validate required data
+  if (!reference || !amount || !status || !user_id || !order_id) {
+    console.error('Missing required payment data');
+    throw new Error("Invalid payment data");
+  }
+
+  console.log(`Updating existing order payment status for reference: ${reference}`);
+  await Payment.markOrderAsPaidAndUpdateStatus(order_id);
+  console.log(`Order marked as paid for order_id: ${order_id}`);
+  await Payment.createOrderTransaction({ reference, order_id, amount, user_id, payment_method: channel });
+  console.log(`Order payment record created for reference: ${reference}`);
 
   return;
 

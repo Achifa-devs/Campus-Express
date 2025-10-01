@@ -58,6 +58,45 @@ class Payment {
 
 
 
+  // pending → Order created, awaiting payment.
+  // paid (or processing) → Payment received, but item not yet shipped/delivered.
+  // shipped / out_for_delivery → Item is on its way (optional, if you want shipping tracking).
+  // delivered → Item has been marked as delivered by vendor/logistics.
+  // completed / confirmed → Customer has confirmed receipt.
+
+
+  static async markOrderAsPaidAndUpdateStatus(order_id) {
+    const query = `
+      UPDATE orders 
+      SET havePaid = $1, 
+        status = jsonb_set(status, '{state}', '"processing"') 
+      WHERE order_id = $2 
+      RETURNING *;
+    `;
+    
+    const result = await pool.query(query, [true, order_id]);
+    return result.rows[0];
+  }
+
+  static async createOrderTransaction({ reference, order_id, amount, user_id, payment_method }) {
+    const query = `
+      INSERT INTO transactions (
+        order_id,
+        user_id,
+        payment_method,
+        amount,
+        reference,
+        created_at,
+        updated_at
+      ) VALUES ($1, $2, $3, $4, $5, NOW(), NOW())
+      RETURNING *
+    `;
+
+    const values = [order_id, user_id, payment_method, amount, reference];
+    const result = await pool.query(query, values);
+    return result.rows[0];
+  }
+
 
 
 
