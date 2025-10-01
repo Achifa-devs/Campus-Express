@@ -37,7 +37,7 @@ export default function Nav() {
         fontWeight: 'bold '
       }}>
 
-      {/* <div  onClick={e => {
+      <div  onClick={e => {
         window.location.href=('/vendor/orders')
         // alert('Check back later')  
 
@@ -61,7 +61,7 @@ export default function Nav() {
         &nbsp;
         &nbsp;
         <span>Orders</span>
-      </div> */}
+      </div>
       <div onClick={e => window.location.href=('/vendor/listing')} style={{width: '33.3%', fontSize: 'x-small', color: '#000', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0px', flexDirection: 'column', borderBottom: active === 'listing' ? '#FF4500' : '#fff'}}>
         <svg width="20px" height="20px" viewBox="0 -0.5 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#FF4500">
   strokeLinejoin

@@ -211,7 +211,7 @@ function OrderCard({item}) {
                   </div>
 
                   <div className="stock">
-                    {item?.order?.stock} units bought
+                    {item?.order?.stock} units ordered
                   </div>
 
                   
@@ -263,9 +263,16 @@ function OrderInfo({item}) {
       <div className="new-order-info">
         <div className="new-order-info-cnt">
           <div className="left">
-            <h6 className="" style={{padding:'10px', margin: '0', borderBottom: '1px solid #efefef', height: '50px', width: '100%', background: '#fff', fontWeight: '600', display: 'flex', alignItems: 'center'}}>Payment information</h6>
+            <div className="w-full bg-white border-b border-gray-200 px-4 py-3">
+              <h2 className="text-lg font-semibold text-gray-900">Payment Information</h2>
+              <p className="text-sm text-gray-500 mt-1">
+                {item?.order?.havepaid 
+                  ? 'Here are the details of your payment.' 
+                  : 'You will view payment information after payment is made.'}
+              </p>
+            </div>
 
-            <div>
+            <div style={{filter: item?.order?.havepaid ? '' : 'blur(5px)', pointerEvents: 'none'}}>
               <ul style={{padding: '0', margin: '0'}}>
                 <li>
                   <span>Item Price</span>
@@ -279,11 +286,11 @@ function OrderInfo({item}) {
                 </li>
                 <li>
                   <span>Fee </span>
-                  <span>{0.1*(item?.product?.price*item?.order?.stock)}</span>
+                  <span>&#8358;{new Intl.NumberFormat('en-us').format(0.1*(item?.product?.price*item?.order?.stock))}</span>
                 </li>
                 <li>
                   <span>Amount to receive</span>
-                  <span>{0.9*(item?.product?.price*item?.order?.stock)}</span>
+                  <span>&#8358;{new Intl.NumberFormat('en-us').format(0.9*(item?.product?.price*item?.order?.stock))}</span>
                 </li>
               </ul>
             </div>
