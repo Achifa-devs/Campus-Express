@@ -28,11 +28,12 @@ const CheckoutSummary = ({ Total, Method, order_list, type }) => {
         reference: `${new Date().getTime()}-${Math.floor(Math.random() * 100000)}`,
         email: buyer_info?.email || "",
         amount: baseAmount * 100, // Convert to kobo
-        publicKey: "pk_live_13343a7bd4deeebc644070871efcdf8fdcf280f7"
     };
 
+    const publicKey = "pk_live_13343a7bd4deeebc644070871efcdf8fdcf280f7";
     const componentProps = {
         ...config,
+        publicKey,
         text: ` 
             Checkout ₦${new Intl.NumberFormat("en-us").format((parseInt(order_list?.product?.price) * parseInt(order_list?.order?.stock)) + parseInt(order_list?.order?.shipping_fee))}
             
