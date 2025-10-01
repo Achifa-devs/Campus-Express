@@ -14,7 +14,7 @@ export async function GET(req) {
     }
 
     const productResult = await pool.query(
-    `SELECT * FROM "products" WHERE user_id = $1`,
+    `SELECT * FROM "products" WHERE vendor_id = $1`,
       [user_id]
     )
 

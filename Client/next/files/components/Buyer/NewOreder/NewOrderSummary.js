@@ -28,7 +28,7 @@ export default function NewOrderSummary({item,stock,deliveryOpt,order_id}) {
                         "Content-Type": "Application/json"
                     },
                     body: JSON.stringify({
-                        user_id: user_id, product_id: item.product_id, price: parseInt(item.price)*parseInt(stock), stock: stock, locale: pickup_channel
+                        user_id: user_id, product_id: item.product_id, price: parseInt(item.price)*parseInt(stock), stock: stock, locale: pickup_channel, vendor_id: item.user_id
                     })
                 })
                 .then(async(result)=> {

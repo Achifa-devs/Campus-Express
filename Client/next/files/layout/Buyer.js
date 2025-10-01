@@ -78,28 +78,28 @@ const BuyerLayout = ({children}) => {
     useEffect(() => {
 
         if(user_id !== null){
-            fetch(`/api/store/customer?user_id=${user_id}`,
-            {
+
+            axios.get(`/api/store/customer`, {
+                params: { user_id }, // cleaner way to pass query params
                 headers: {
-                    'Content-Type': 'application/json'
+                    "Content-Type": "application/json"
                 }
-            
             })
-            .then(async(result) => {
-                let response = await result.json(); 
-                console.log(response?.data)
+            .then((result) => {
+                const response = result.data; // axios auto-parses JSON
+                console.log(response?.data);
+
                 if (response?.bool) {
                     dispatch(setBuyerInfoTo(response?.data));
                     // window.localStorage.removeItem('id_for_unknown_buyer')
-                    window.localStorage.setItem('CE_user_id', response?.data?.user_id)
-                    update_db_id_for_unknown_buyer_to_registered_id()
+                    window.localStorage.setItem('CE_user_id', response?.data?.user_id);
+                    // update_db_id_for_unknown_buyer_to_registered_id();
                 }
             })
             .catch((error) => {
-                console.log(error)
+                console.error(error);
+            });
 
-
-            })
         } else {
             let id_for_unknown_buyer = v4();
             window.localStorage.setItem('id_for_unknown_buyer', id_for_unknown_buyer);
