@@ -38,7 +38,7 @@ const CheckoutSummary = ({ Total, Method, order_list, type }) => {
             
         `,
         onSuccess: (reference) =>{
-            window.location.href = `/checkout/confirmation?ref=${reference}`
+            window.location.href = `/checkout/confirmation/${reference}`
         },
         onClose: () => {
             alert("Wait! You need this oil, don't go!!!!");
