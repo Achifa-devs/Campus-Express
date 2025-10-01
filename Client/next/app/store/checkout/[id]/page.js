@@ -55,9 +55,7 @@ const CheckOut = () => {
    
     return ( 
         <> 
-            <div className='checkout-card' style={{
-                background: '#fff',
-            }}>
+            <div className='checkout-card'>
                 <div className="checkout-card-cnt" style={{background: '#f9f9f9', margin: '0', justifyContent: 'flex-start', height: 'auto'}}>
                     <OrderedItem item={order_list?.product} order={order_list?.order} />
                     {/* <br /> */}
