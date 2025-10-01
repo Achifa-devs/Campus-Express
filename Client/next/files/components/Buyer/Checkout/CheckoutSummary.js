@@ -4,6 +4,9 @@ import { useSelector } from "react-redux";
 import { usePaystackPayment } from "react-paystack";
 import { open_notice } from "@/files/reusable.js/notice";
 import { buyer_overlay_setup } from "@/files/reusable.js/overlay-setup";
+import { PaystackButton } from 'react-paystack'
+
+
 
 const CheckoutSummary = ({ Total, Method, order_list, type }) => {
     const { buyer_info } = useSelector(s => s.buyer_info);
@@ -28,35 +31,25 @@ const CheckoutSummary = ({ Total, Method, order_list, type }) => {
         publicKey: "pk_live_13343a7bd4deeebc644070871efcdf8fdcf280f7"
     };
 
-   const onSuccess = (reference) => {
-        // reference will contain the transaction reference
-        console.log("Payment success, reference:", reference);
-
-        // ✅ Verify payment on your server (very important)
-        // fetch(`/api/verify-payment?reference=${reference.reference}`)
-        //     .then(res => res.json())
-        //     .then(data => {
-        //         if (data.success) {
-        //             open_notice(true, "Payment successful...");
-        //             window.location.href = `/store/order-tracking/${order_list?.product?.product_id}`;
-        //         } else {
-        //             open_notice(true, "Payment verification failed. Please contact support.");
-        //         }
-        //     })
-        //     .catch(err => {
-        //     console.error("Verification error:", err);
-        //         open_notice(true, "Could not verify payment. Please try again.");
-        //     });
-        // };
+    const componentProps = {
+        ...config,
+        text: ` 
+            Checkout ₦${new Intl.NumberFormat("en-us").format((parseInt(order_list?.product?.price) * parseInt(order_list?.order?.stock)) + parseInt(order_list?.order?.shipping_fee))}
+            
+        `,
+        onSuccess: (reference) =>{
+            window.location.href = `/checkout/confirmation?ref=${reference}`
+        },
+        onClose: () => {
+            alert("Wait! You need this oil, don't go!!!!");
+        },
     }
 
-    const onClose = () => {
-        console.log("Payment dialog closed by user");
-        open_notice(true, "Payment was not completed. Please try again.");
-    };
 
-
-    const initializePayment = usePaystackPayment(config);
+    useEffect(() => {
+        document.querySelector('.checkout-btn').children[0].style.width = '100%'
+        document.querySelector('.checkout-btn').children[0].style.height = '100%'
+    }, [])
 
     return (
         <>
@@ -87,8 +80,8 @@ const CheckoutSummary = ({ Total, Method, order_list, type }) => {
 
                         <br />
 
-                        <div style={{ height: "fit-content", width: "100%" }}>
-                            <button
+                        <div style={{ height: "fit-content", width: "100%" }} className="checkout-btn">
+                            {/* <button
                                 style={{ width: "100%", height: "50px", borderRadius: "5px" }}
                                 className="shadow-sm"
                                 onClick={(e) => {
@@ -102,7 +95,9 @@ const CheckoutSummary = ({ Total, Method, order_list, type }) => {
                                         parseInt(order_list?.product?.price * order_list?.order?.stock) + parseInt(order_list?.order?.shipping_fee)
                                     )})
                                 </span>
-                            </button>
+                            </button> */}
+
+                            <PaystackButton className="shadow-sm button"  {...componentProps} />
                         </div>
                     </div>
                 </div>
@@ -120,7 +115,7 @@ const CheckoutSummary = ({ Total, Method, order_list, type }) => {
                     alignItems: "center",
                     justifyContent: "center"
                 }}>
-                    <button
+                    {/* <button
                         style={{ position: "relative", background: "#FF4500", color: "#fff" }}
                         className="shadow-sm button"
                         onClick={(e) => {
@@ -134,7 +129,8 @@ const CheckoutSummary = ({ Total, Method, order_list, type }) => {
                                 (parseInt(order_list?.product?.price) * parseInt(order_list?.order?.stock)) + parseInt(order_list?.order?.shipping_fee)
                             )})
                         </span>
-                    </button>
+                    </button> */}
+                    <PaystackButton className="shadow-sm button" {...componentProps} />
                 </div>
             )}
         </>
