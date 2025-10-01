@@ -33,6 +33,7 @@
     "fs": "^0.0.1-security",
     "js-ago": "^2.1.1",
     "jsonwebtoken": "^9.0.2",
+    "lucide-react": "^0.544.0",
     "multer": "^1.4.5-lts.2",
     "next": "14.2.5",
     "next-cloudinary": "^6.16.0",
@@ -75,8 +76,7 @@
     "postcss": "^8.4.41",
     "tailwindcss": "^3.4.10"
   },
-    "engines": {
+  "engines": {
     "node": ">=22.0.0"
   }
-
 }

@@ -17,10 +17,13 @@ const handleWebhook = async (req, res) => {
         res.status(200).send('Webhook processed successfully');
       }else if(type === 'tools'){
         await toolHandler(event)
+        res.status(200).send('Webhook processed successfully');
       }else if(type === 'promotion'){
         await promotionHandler(event)
+        res.status(200).send('Webhook processed successfully');
       }else if(type === 'checkout'){
-        await checkoutHandler(event)
+        const ref = await checkoutHandler(event)
+        res.status(200).send({messg: 'Webhook processed successfully', reference: ref});
       }
       
     } else {
@@ -172,12 +175,20 @@ async function checkoutHandler(event) {
     throw new Error("Invalid payment data");
   }
 
+  const existingTx = await Payment.findTransactionByReference(reference);
+  
+  if (existingTx.length > 0) {
+    console.log(`Transaction already exists for ${reference}, skipping insert`);
+    return reference;
+  }
   console.log(`Updating existing order payment status for reference: ${reference}`);
   await Payment.markOrderAsPaidAndUpdateStatus(order_id);
   console.log(`Order marked as paid for order_id: ${order_id}`);
-  await Payment.createOrderTransaction({ reference, order_id, amount, user_id, payment_method: channel });
+
+  const new_status = JSON.stringify({ state: status });
+  await Payment.createOrderTransaction({ reference, order_id, amount, user_id, payment_method: channel, status: new_status });
   console.log(`Order payment record created for reference: ${reference}`);
 
-  return;
+  return reference;
 
 }

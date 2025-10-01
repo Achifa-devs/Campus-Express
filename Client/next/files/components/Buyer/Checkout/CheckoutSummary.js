@@ -7,7 +7,6 @@ import { buyer_overlay_setup } from "@/files/reusable.js/overlay-setup";
 
 const CheckoutSummary = ({ Total, Method, order_list, type }) => {
     const { buyer_info } = useSelector(s => s.buyer_info);
-    const pathname = usePathname();
     const screenWidth = typeof window !== "undefined" ? window.innerWidth : 0;
 
     const productPrice = parseInt(order_list?.product?.price) || 0;
@@ -29,14 +28,33 @@ const CheckoutSummary = ({ Total, Method, order_list, type }) => {
         publicKey: "pk_live_13343a7bd4deeebc644070871efcdf8fdcf280f7"
     };
 
-    const onSuccess = (reference) => {
-        console.log(reference);
-        window.location.href = `order-tracking/${order_list?.product?.product_id}`;
-        open_notice(true, "Payment successful...");
-        buyer_overlay_setup(false, "");
+   const onSuccess = (reference) => {
+        // reference will contain the transaction reference
+        console.log("Payment success, reference:", reference);
+
+        // ✅ Verify payment on your server (very important)
+        // fetch(`/api/verify-payment?reference=${reference.reference}`)
+        //     .then(res => res.json())
+        //     .then(data => {
+        //         if (data.success) {
+        //             open_notice(true, "Payment successful...");
+        //             window.location.href = `/store/order-tracking/${order_list?.product?.product_id}`;
+        //         } else {
+        //             open_notice(true, "Payment verification failed. Please contact support.");
+        //         }
+        //     })
+        //     .catch(err => {
+        //     console.error("Verification error:", err);
+        //         open_notice(true, "Could not verify payment. Please try again.");
+        //     });
+        // };
+    }
+
+    const onClose = () => {
+        console.log("Payment dialog closed by user");
+        open_notice(true, "Payment was not completed. Please try again.");
     };
 
-    const onClose = () => console.log("Payment dialog closed");
 
     const initializePayment = usePaystackPayment(config);
 

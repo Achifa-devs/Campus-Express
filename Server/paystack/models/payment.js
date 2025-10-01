@@ -78,13 +78,14 @@ class Payment {
     return result.rows[0];
   }
 
-  static async createOrderTransaction({ reference, order_id, amount, user_id, payment_method }) {
+  static async createOrderTransaction({ reference, order_id, amount, user_id, payment_method, status }) {
     const query = `
       INSERT INTO transactions (
         order_id,
         user_id,
         payment_method,
         amount,
+        status,
         reference,
         created_at,
         updated_at
@@ -92,11 +93,16 @@ class Payment {
       RETURNING *
     `;
 
-    const values = [order_id, user_id, payment_method, amount, reference];
+    const values = [order_id, user_id, payment_method, amount, status, reference];
     const result = await pool.query(query, values);
     return result.rows[0];
   }
 
+  static async findTransactionByReference(reference){
+    const query = 'SELECT * FROM transactions WHERE reference = $1';
+    const result = await pool.query(query, [reference]);
+    return result.rows;
+  }
 
 
 
