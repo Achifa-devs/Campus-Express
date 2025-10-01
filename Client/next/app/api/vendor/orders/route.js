@@ -13,29 +13,29 @@ export async function GET(req) {
       return NextResponse.json({ error: "user_id is required" }, { status: 400 });
     }
 
-    const productResult = await pool.query(
-    `SELECT * FROM "products" WHERE vendor_id = $1`,
+    const orderResult = await pool.query(
+    `SELECT * FROM "orders" WHERE vendor_id = $1`,
       [user_id]
     )
 
     
-    const products = productResult.rows;
+    const orders = orderResult.rows;
 
     // If no orders found
-    if (products.length === 0) {
+    if (orders.length === 0) {
       return NextResponse.json([]);
     }
 
-    // Fetch product details for each order
-    const productPromises = products.map(async (product) => {
-      const ordersResult = await pool.query(
-      `SELECT * FROM "orders" WHERE product_id = $1`,
-      [product?.product_id]
+    // Fetch order details for each order
+    const orderPromises = orders.map(async (order) => {
+      const productsResult = await pool.query(
+      `SELECT * FROM "products" WHERE product_id = $1`,
+      [order?.product_id]
       );
-      return { product, order: ordersResult.rows[0] || null };
+      return { order, product: productsResult.rows[0] || null };
     });
 
-    const response = await Promise.all(productPromises);
+    const response = await Promise.all(orderPromises);
 
     return NextResponse.json({data: response, success: true}, { status: 200 });
 
