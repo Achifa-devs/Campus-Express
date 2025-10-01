@@ -114,7 +114,7 @@ const CheckoutSummary = ({ Total, Method, order_list, type }) => {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center"
-                }}>
+                }} className="checkout-btn">
                     {/* <button
                         style={{ position: "relative", background: "#FF4500", color: "#fff" }}
                         className="shadow-sm button"
