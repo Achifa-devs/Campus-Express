@@ -27,7 +27,7 @@ export async function POST(req) {
     // ✅ Insert new order
     const orderStatus = {
       pending: {      // Order placed, waiting for payment
-        completed: false,
+        completed: true,
         completedAt: new Date(),
         outcome: 'success'
       },

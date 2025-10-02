@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 
 const Tracker = ({ orderId = 'ORD-7284-9163', currentStatus = 'processing', order, product }) => {
   // const [order, setOrder] = useState(null);
-  const [loading, setLoading] = useState(true);
 
   // Simulate API call to fetch order data
   // useEffect(() => {
@@ -38,18 +37,17 @@ const Tracker = ({ orderId = 'ORD-7284-9163', currentStatus = 'processing', orde
   //   fetchOrderData();
   // }, [orderId, currentStatus]);
 
-  const orderSteps = [
+  const initialOrderSteps = [
     {
       id: 'pending',
       title: 'Order Placed',
       description: 'Your order has been successfully received and confirmed.',
       icon: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" 
+            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       ),
-      completed: true,
-      timestamp: '2024-01-15T10:30:00Z'
     },
     {
       id: 'confirmed',
@@ -57,11 +55,10 @@ const Tracker = ({ orderId = 'ORD-7284-9163', currentStatus = 'processing', orde
       description: 'Payment verified and order is being processed.',
       icon: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" 
+            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
         </svg>
       ),
-      completed: true,
-      timestamp: '2024-01-15T10:35:00Z'
     },
     {
       id: 'processing',
@@ -69,12 +66,10 @@ const Tracker = ({ orderId = 'ORD-7284-9163', currentStatus = 'processing', orde
       description: 'Your items are being prepared for shipment.',
       icon: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" 
+            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
         </svg>
       ),
-      completed: currentStatus === 'processing',
-      active: currentStatus === 'processing',
-      timestamp: currentStatus === 'processing' ? '2024-01-15T14:20:00Z' : null
     },
     {
       id: 'shipped',
@@ -82,12 +77,10 @@ const Tracker = ({ orderId = 'ORD-7284-9163', currentStatus = 'processing', orde
       description: 'Your order has been shipped and is on its way.',
       icon: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" 
+            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
         </svg>
       ),
-      completed: currentStatus === 'shipped' || currentStatus === 'delivered',
-      active: currentStatus === 'shipped',
-      timestamp: (currentStatus === 'shipped' || currentStatus === 'delivered') ? '2024-01-16T09:15:00Z' : null
     },
     {
       id: 'delivered',
@@ -95,12 +88,10 @@ const Tracker = ({ orderId = 'ORD-7284-9163', currentStatus = 'processing', orde
       description: 'Your package has been delivered successfully.',
       icon: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" 
+            d="M5 13l4 4L19 7" />
         </svg>
       ),
-      completed: currentStatus === 'delivered',
-      active: currentStatus === 'delivered',
-      timestamp: currentStatus === 'delivered' ? '2024-01-18T14:45:00Z' : null
     },
     {
       id: 'completed',
@@ -108,14 +99,33 @@ const Tracker = ({ orderId = 'ORD-7284-9163', currentStatus = 'processing', orde
       description: 'Your package has been completed successfully.',
       icon: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" 
+            d="M5 13l4 4L19 7" />
         </svg>
       ),
-      completed: currentStatus === 'completed',
-      active: currentStatus === 'completed',
-      timestamp: currentStatus === 'completed' ? '2024-01-18T14:45:00Z' : null
-    }
+    },
   ];
+
+  const [steps, setSteps] = useState(initialOrderSteps);
+
+  useEffect(() => {
+    if (order && product) {
+      const updatedSteps = initialOrderSteps.map(step => {
+        const orderData = order.status[step.id];
+        if (orderData) {
+          return {
+            ...step,
+            completed: orderData.completed,
+            active: true,
+            timestamp: orderData.completedAt,
+          };
+        }
+        return step;
+      });
+      // console.log("updatedSteps: ", updatedSteps)
+      setSteps(updatedSteps);
+    }
+  }, [order, product]);
 
 
 
@@ -132,15 +142,8 @@ const Tracker = ({ orderId = 'ORD-7284-9163', currentStatus = 'processing', orde
   };
 
   const getStepStatus = (step) => {
-    order &&
-    Object.entries(order?.status).map(([key, value]) => {
-      if(key === step.id){
-        if(value.completed){
-          return 'completed'
-        }
-      }
-    })
-    // if (step.id === order.status) return 'completed';
+    // console.log("order checkmate", step.id, order?.status[step.id])
+    if (step.id && order?.status[step.id].completed) return 'completed';
     if (step.active) return 'active';
     return 'upcoming';
   };
@@ -217,7 +220,7 @@ const Tracker = ({ orderId = 'ORD-7284-9163', currentStatus = 'processing', orde
         <div className="order-tracker-content">
           <div className="timeline-container">
             <div className="timeline">
-              {orderSteps.map((step, index) => (
+              {steps.map((step, index) => (
                 <div
                   key={step.id}
                   className={`timeline-step ${getStepStatus(step)}`}
