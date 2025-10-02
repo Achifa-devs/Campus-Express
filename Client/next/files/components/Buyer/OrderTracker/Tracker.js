@@ -72,7 +72,7 @@ const Tracker = ({ orderId = 'ORD-7284-9163', currentStatus = 'processing', orde
       ),
     },
     {
-      id: 'shipped',
+      id: 'shipping',
       title: 'Out for Delivery / Shipped',
       description: 'Your order has been shipped and is on its way.',
       icon: (
