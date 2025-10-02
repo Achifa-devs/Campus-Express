@@ -40,7 +40,7 @@ const Tracker = ({ orderId = 'ORD-7284-9163', currentStatus = 'processing' }) =>
 
   const orderSteps = [
     {
-      id: 'ordered',
+      id: 'pending',
       title: 'Order Placed',
       description: 'Your order has been successfully received and confirmed.',
       icon: (
@@ -78,7 +78,7 @@ const Tracker = ({ orderId = 'ORD-7284-9163', currentStatus = 'processing' }) =>
     },
     {
       id: 'shipped',
-      title: 'Shipped',
+      title: 'Out for Delivery / Shipped',
       description: 'Your order has been shipped and is on its way.',
       icon: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -88,19 +88,6 @@ const Tracker = ({ orderId = 'ORD-7284-9163', currentStatus = 'processing' }) =>
       completed: currentStatus === 'shipped' || currentStatus === 'delivered',
       active: currentStatus === 'shipped',
       timestamp: (currentStatus === 'shipped' || currentStatus === 'delivered') ? '2024-01-16T09:15:00Z' : null
-    },
-    {
-      id: 'out-for-delivery',
-      title: 'Out for Delivery',
-      description: 'Your package is out for delivery today.',
-      icon: (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      ),
-      completed: currentStatus === 'delivered',
-      active: currentStatus === 'out-for-delivery',
-      timestamp: currentStatus === 'delivered' ? '2024-01-18T08:30:00Z' : null
     },
     {
       id: 'delivered',
@@ -114,8 +101,23 @@ const Tracker = ({ orderId = 'ORD-7284-9163', currentStatus = 'processing' }) =>
       completed: currentStatus === 'delivered',
       active: currentStatus === 'delivered',
       timestamp: currentStatus === 'delivered' ? '2024-01-18T14:45:00Z' : null
+    },
+    {
+      id: 'completed',
+      title: 'Completed',
+      description: 'Your package has been completed successfully.',
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+        </svg>
+      ),
+      completed: currentStatus === 'completed',
+      active: currentStatus === 'completed',
+      timestamp: currentStatus === 'completed' ? '2024-01-18T14:45:00Z' : null
     }
   ];
+
+
 
   const formatDate = (dateString) => {
     if (!dateString) return 'Pending';

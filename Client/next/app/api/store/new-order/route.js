@@ -25,13 +25,62 @@ export async function POST(req) {
     // ✅ Start transaction
 
     // ✅ Insert new order
+    const orderStatus = {
+      pending: {      // Order placed, waiting for payment
+        completed: false,
+        completedAt: new Date(),
+        outcome: 'success'
+      },
+      confirmed: {    // Payment confirmed
+        completed: false,
+        completedAt: null,
+        outcome: null
+      },
+      processing: {   // Preparing for shipment
+        completed: false,
+        completedAt: null,
+        outcome: null
+      },
+      shipped: {      // Order dispatched
+        completed: false,
+        completedAt: null,
+        outcome: null
+      },
+      delivered: {    // Order delivered
+        completed: false,
+        completedAt: null,
+        outcome: null
+      },
+      completed: {    // Order successfully closed
+        completed: false,
+        completedAt: null,
+        outcome: null
+      },
+      cancelled: {
+        completed: false,
+        completedAt: null,
+        outcome: null
+      },
+      refunded: {
+        completed: false,
+        completedAt: null,
+        outcome: null
+      },
+      returned: {
+        completed: false,
+        completedAt: null,
+        outcome: null
+      }
+    };
+
+
     const insertOrder = await pool.query(
       `INSERT INTO orders(
         id, order_id, product_id, status, date, stock, user_id, price, pick_up_channels, havePaid, vendor_id, shipping_fee
       ) VALUES (
         DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, false, $9, $10
       ) RETURNING id`,
-      [order_id, product_id, JSON.stringify({ state: 'pending' }), date, stock, user_id, price, JSON.stringify(locale), vendor_id, shipping_fee]
+      [order_id, product_id, JSON.stringify(orderStatus), date, stock, user_id, price, JSON.stringify(locale), vendor_id, shipping_fee]
     );
 
     if (insertOrder.rowCount === 0) {

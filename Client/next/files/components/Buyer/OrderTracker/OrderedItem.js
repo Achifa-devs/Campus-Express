@@ -25,13 +25,16 @@ export default function OrderedItem({ item, order }) {
             >
                 <div className="d-flex align-items-center">
                     <div 
-                        className="badge bg-warning text-dark me-2 d-flex align-items-center"
+                        className="badge me-2 d-flex align-items-center"
                         style={{
-                            fontSize: 'clamp(0.75rem, 1.5vw, 0.85rem)',
-                            padding: '0.4rem 0.8rem'
+                            fontSize: 'small',
+                            padding: '7px 7px',
+                            background: '#FF4500',
+                            color: '#fff',
+                            borderRadius: '5px'
                         }}
                     >
-                        <i className="bi bi-clock-history me-1"></i>
+                        <i className="bi bi-clock-history me-1" style={{color: '#fff'}}></i>
                         Order In Progress
                     </div>
                     

@@ -66,15 +66,25 @@ class Payment {
 
 
   static async markOrderAsPaidAndUpdateStatus(order_id) {
+    const status = {
+      outcome: "success",
+      completed: true,
+      completedAt: new Date()
+    }
     const query = `
       UPDATE orders 
-      SET havePaid = $1, 
-        status = jsonb_set(status, '{state}', '"processing"') 
+      SET status = jsonb_set(
+        status,
+        '{confirmed}', 
+        $3::jsonb,
+        true
+      ),
+      havepaid = $1
       WHERE order_id = $2 
       RETURNING *;
     `;
     
-    const result = await pool.query(query, [true, order_id]);
+    const result = await pool.query(query, [true, order_id, JSON.stringify(status)]);
     return result.rows[0];
   }
 

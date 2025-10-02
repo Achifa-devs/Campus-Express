@@ -73,7 +73,7 @@ export default function Favourite() {
 
           <div style={{justifyContent: 'flex-start', width: '100%', overflow: 'auto', alignItems: 'flex-start', height: '100%'}}>
             {
-              items.map((item,index) => <FavouriteItem key={index} index={index} item={item} deleteFavourite={deleteFavourite} /> )
+              items && items.map((item,index) => <FavouriteItem key={index} index={index} item={item} deleteFavourite={deleteFavourite} /> )
             }
           </div>
         </div>
