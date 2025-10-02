@@ -30,7 +30,8 @@ import Card from '@/files/components/Buyer/dashboard/Card'
 import SearchOutput from '@/files/components/Buyer/Header/SearchOutput'
 import Ads from '@/files/components/Buyer/dashboard/Ads'
 import {
-  usePathname
+  usePathname,
+  useSearchParams
 } from 'next/navigation'
 // import {
 //   // GetSavedItem
@@ -54,7 +55,6 @@ import {
 import axios from 'axios'
 import Carousel from '@/files/components/Buyer/dashboard/Carousel'
 import { fetch_saved_items } from '@/files/utils.js/wishlist'
-import { json } from 'react-router-dom'
 
 
 
@@ -233,9 +233,8 @@ const Dashboard = () => {
     };
 
   useEffect(() => {
-    setcategory(decodeURIComponent(pathname.split('/').slice(-1)[0]))
-    settype(decodeURIComponent(window.location.search.split('=')[1])) 
-  }, [])
+    setcategory(decodeURIComponent(pathname.split('/').splice(-1)[0]));
+  }, [pathname]);
 
   useEffect(() => {
       if (location.lat && location.lng) {
@@ -284,7 +283,6 @@ const Dashboard = () => {
 
 
   useEffect(() => {
-    // alert(category)
     let overlay = document.querySelector('.overlay');
     
     if(overlay){

@@ -103,11 +103,11 @@ const Product = ({ item, seller, order_list }) => {
                 
                 
 
-                window.location.href=(`/store/new-order/${item.product_id}`)
+                window.location.href=(`/store/orders/${item.product_id}/create`)
 
             }
         }else{
-            window.location.href=(`/store/checkout/${item.product_id}`)
+            window.location.href=(`/store/orders/${item.product_id}/checkout`)
         }
 
     }

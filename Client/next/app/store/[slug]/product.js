@@ -1,10 +1,10 @@
 "use client"
 import Head from 'next/head';
-import '@/app/store/product/styles/xx-large.css'
-import '@/app/store/product/styles/x-large.css'
-import '@/app/store/product/styles/large.css'
-import '@/app/store/product/styles/semi-medium.css'
-import '@/app/store/product/styles/medium.css'
+import '@/app/store/[slug]/styles/xx-large.css'
+import '@/app/store/[slug]/styles/x-large.css'
+import '@/app/store/[slug]/styles/large.css'
+import '@/app/store/[slug]/styles/semi-medium.css'
+import '@/app/store/[slug]/styles/medium.css'
 import Product from "@/files/components/Buyer/Product/Product";
 import { useEffect, useRef, useState } from "react";
 import Description from "@/files/components/Buyer/Product/Description";
@@ -151,10 +151,10 @@ const ProductPageClient = ({product, slug}) => {
             if(user_id === null || user_id === '' || user_id === 'null'){
                 window.location.href=(`/login`)
             }else{
-                window.location.href=(`/store/new-order/${product.product_id}`)
+                window.location.href=(`/store/orders/${product.product_id}/create`)
             }
         }else{
-            window.location.href=(`/store/checkout/${product.product_id}`)
+            window.location.href=(`/store/orders/${product.product_id}/checkout`)
         }
     }
 

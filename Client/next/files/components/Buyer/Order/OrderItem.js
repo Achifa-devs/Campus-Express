@@ -164,7 +164,7 @@ export default function OrderItem({item,order}) {
                             order?.status.state === 'completed'
                             ?
                             <>
-                                <button style={{opacity: '1', background: 'yellowgreen'}} onClick={e=>{window.location.href = `/store/new-return/${item?.product_id}`}}>
+                                <button style={{opacity: '1', background: 'yellowgreen'}} onClick={e=>{window.location.href = `/store/orders/${item?.product_id}/refund`}}>
                                     Return & refund
                                 </button>
                                 <button style={{height: 'auto', background: order?.status.state === 'completed' ? 'green' : '#FF4500'}} disabled>
@@ -211,7 +211,7 @@ export default function OrderItem({item,order}) {
                                         <small>Delete order</small>
                                     }
                                 </button>
-                                <button onClick={e=> order?.havepaid ? window.location.href=`/store/order-tracking/${item?.product_id}` : window.location.href=`/store/checkout/${item?.product_id}`}>
+                                <button onClick={e=> order?.havepaid ? window.location.href=`/store/orders/${item?.product_id}/tracker` : window.location.href=`/store/orders/${item?.product_id}/checkout`}>
                                     {
                                         order?.havepaid
                                         ?

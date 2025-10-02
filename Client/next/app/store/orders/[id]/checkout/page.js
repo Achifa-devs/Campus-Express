@@ -8,11 +8,11 @@ import PaymentMethod from '@/files/components/Buyer/Checkout/PaymentMethod';
 import CheckoutSummary from '@/files/components/Buyer/Checkout/CheckoutSummary';
 import { usePathname } from 'next/navigation';
 import Flw from '@/files/components/Payments/Flw';
-import '@/app/store/checkout/styles/xx-large.css'
-import '@/app/store/checkout/styles/x-large.css'
-import '@/app/store/checkout/styles/large.css'
-import '@/app/store/checkout/styles/medium.css'
-import '@/app/store/checkout/styles/small.css'
+import '@/app/store/orders/[id]/checkout/styles/xx-large.css'
+import '@/app/store/orders/[id]/checkout/styles/x-large.css'
+import '@/app/store/orders/[id]/checkout/styles/large.css'
+import '@/app/store/orders/[id]/checkout/styles/medium.css'
+import '@/app/store/orders/[id]/checkout/styles/small.css'
 import OrderedItem from '@/files/components/Buyer/Checkout/OrderedItem';
 import axios from 'axios';
 import {
@@ -34,7 +34,7 @@ const CheckOut = () => {
         if (user_id !== null && user_id !== 'null' && user_id !== undefined) {
             buyer_overlay_setup(true, 'Loading...')
             
-            axios.get('/api/store/order', {params: {user_id: user_id, product_id: pathname.split('/').splice(-1)[0]}})
+            axios.get('/api/store/order', {params: {user_id: user_id, product_id: pathname.split('/').splice(-2)[0]}})
             .then(({data})=>{
                 set_order_list(data?.data)
                 buyer_overlay_setup(false, '')

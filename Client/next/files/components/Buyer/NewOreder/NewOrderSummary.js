@@ -19,45 +19,6 @@ export default function NewOrderSummary({item,stock,deliveryOpt,order_id}) {
 
     useEffect(() => {
         console.log("deliveryOpt changed: ", deliveryOpt);
-        // if (!order_list) return;
-        // console.log("order_list: ", order_list);
-        // console.log(order_list?.product?.shipping_range);
-
-        // const shippingRange = order_list?.product?.shipping_range
-        //     ? JSON.parse(order_list.product.shipping_range)
-        //     : null;
-        
-        // const orderRange = order_list?.order?.pick_up_channels?.map(item =>
-        //     item?.locale?.split(",").slice(0, item.channel === "Custom Pickup Location" ? -2 : -4)
-        // ) ?? [];
-
-        // if (orderRange.length > 0) {
-        //     let state = orderRange[0]?.shift()?.trim();
-        //     let camp = orderRange[0]?.join(",")?.trim();
-            
-        //     if (order_list.product.campus === camp) {
-        //         set_price(shippingRange?.in_campus?.price || 0);
-        //     } else if (order_list.product.uni_state === state) {
-        //         set_price(shippingRange?.in_state?.price || 0);
-        //     } else {
-        //         set_price(shippingRange?.out_state?.price || 0);
-        //     }
-        // }
-
-        // {
-        //     "in_campus": {
-        //         "selected": true,
-        //         "price": "500"
-        //     },
-        //     "in_state": {
-        //         "selected": true,
-        //         "price": "1500"
-        //     },
-        //     "out_state": {
-        //         "selected": true,
-        //         "price": "4000"
-        //     }
-        // }
         let shipping_range = item?.shipping_range ? JSON.parse(item.shipping_range) : null;
         console.log("shipping_range: ", shipping_range);
         let accepted_range_price = []
@@ -115,7 +76,7 @@ export default function NewOrderSummary({item,stock,deliveryOpt,order_id}) {
                         // buyer_overlay_setup(false, '');
 
                         // window.location.replace(`/store/checkout/${item?.product_id}`)
-                        window.location.href = `/store/checkout/${item?.product_id}`;
+                        window.location.replace(`/store/orders/${item?.product_id}/checkout`);
                     } else {
                         open_notice(true, 'Error Occured, Please Try Again');
                         buyer_overlay_setup(false, '');
@@ -161,7 +122,7 @@ export default function NewOrderSummary({item,stock,deliveryOpt,order_id}) {
                 .then(async(result)=> {
                     let response = await result.json()
                     if(response.success){
-                        window.location.href=(`/store/checkout/${item?.product_id}`)
+                        window.location.replace(`/store/orders/${item?.product_id}/checkout`)
                     }else{
                         open_notice(true, 'Error Occured, Please Try Again...')
                     }

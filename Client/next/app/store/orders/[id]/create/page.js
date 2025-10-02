@@ -17,11 +17,11 @@ import {
     usePathname 
 } from 'next/navigation';
 import Carousel from '@/files/components/Buyer/dashboard/Carousel';
-import '@/app/store/new-order/styles/xx-large.css'
-import '@/app/store/new-order/styles/x-large.css'
-import '@/app/store/new-order/styles/large.css'
-import '@/app/store/new-order/styles/medium.css'
-import '@/app/store/new-order/styles/small.css'
+import '@/app/store/orders/[id]/create/styles/xx-large.css'
+import '@/app/store/orders/[id]/create/styles/x-large.css'
+import '@/app/store/orders/[id]/create/styles/large.css'
+import '@/app/store/orders/[id]/create/styles/medium.css'
+import '@/app/store/orders/[id]/create/styles/small.css'
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup';
@@ -60,7 +60,7 @@ export default function NewOrder() {
             let overlay = document.querySelector('.overlay');
             overlay.setAttribute('id', 'overlay');
 
-            fetch(`/api/store/products/details?slug=${pathname.split('/').splice(-1)[0]}`, {
+            fetch(`/api/store/products/details?slug=${pathname.split('/').splice(-2)[0]}`, {
                 headers: {
                     'Gender': window.localStorage.getItem('cs-gender') 
                 }
@@ -98,7 +98,7 @@ export default function NewOrder() {
         if (user_id !== '' && user_id !== null && order_id !== null) {
             
             
-            fetch(`/api/store/order?user_id=${user_id}&product_id=${pathname.split('/').splice(-1)[0]}`, {
+            fetch(`/api/store/order?user_id=${user_id}&product_id=${pathname.split('/').splice(-2)[0]}`, {
                 headers: {
                     'Gender': window.localStorage.getItem('cs-gender') 
                 }
@@ -126,9 +126,7 @@ export default function NewOrder() {
 
   return (
     <>
-        <div className='new-order-card' style={{
-            background: '#fff'
-        }}> 
+        <div className='new-order-card'> 
             <div className="new-order-card-cnt">
                 <OrderedItem item={item} updateStock={updateStock} />
                 <BuyerAddress />

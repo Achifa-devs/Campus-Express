@@ -8,11 +8,11 @@ import PaymentMethod from '@/files/components/Buyer/OrderConfirmation/PaymentMet
 import CheckoutSummary from '@/files/components/Buyer/OrderConfirmation/CheckoutSummary';
 import { usePathname } from 'next/navigation';
 import Flw from '@/files/components/Payments/Flw';
-import '@/app/store/order-confirmation/styles/xx-large.css'
-import '@/app/store/order-confirmation/styles/x-large.css'
-import '@/app/store/order-confirmation/styles/large.css'
-import '@/app/store/order-confirmation/styles/medium.css'
-import '@/app/store/order-confirmation/styles/small.css'
+import '@/app/store/orders/[id]/confirm/styles/xx-large.css'
+import '@/app/store/orders/[id]/confirm/styles/x-large.css'
+import '@/app/store/orders/[id]/confirm/styles/large.css'
+import '@/app/store/orders/[id]/confirm/styles/medium.css'
+import '@/app/store/orders/[id]/confirm/styles/small.css'
 import OrderedItem from '@/files/components/Buyer/OrderConfirmation/OrderedItem';
 import axios from 'axios';
 
@@ -29,7 +29,7 @@ const OrderConfirmation = () => {
 
     useEffect(() => {
         if(user_id !== null && user_id !== 'null' && user_id !== undefined){
-            axios.get('https://cs-node.vercel.app/order', {params: {user_id: user_id, product_id: pathname.split('/').splice(-1)[0]}})
+            axios.get('https://cs-node.vercel.app/order', {params: {user_id: user_id, product_id: pathname.split('/').splice(-2)[0]}})
             .then(({data})=>{
                 set_order_list(data[0])
                 // console.log(data)
