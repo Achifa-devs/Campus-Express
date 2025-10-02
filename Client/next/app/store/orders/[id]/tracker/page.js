@@ -256,7 +256,7 @@ export default function OrderTrackerPage() {
     
     
                     <div style={{width: '350px', marginRight: '10px'}}>
-                        <Tracker order={order_list?.order} updateJsx={updateJsx} activeJsx={activeJsx} />
+                        <Tracker order={order_list?.order} product={order_list?.product} updateJsx={updateJsx} activeJsx={activeJsx} />
                     </div>
                 </div>
 

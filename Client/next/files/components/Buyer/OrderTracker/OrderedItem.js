@@ -243,7 +243,7 @@ export default function OrderedItem({ item, order }) {
                     <div className="row text-center g-2">
                         <div className="col-4">
                             <div className="text-primary fw-semibold">Order ID</div>
-                            <div className="text-muted">#{order?.id?.slice(-8)}</div>
+                            <div className="text-muted">#{order?.order_id?.slice(-8)}</div>
                         </div>
                         <div className="col-4">
                             <div className="text-primary fw-semibold">Total</div>

@@ -1,42 +1,42 @@
 import { useEffect, useState } from "react";
 
-const Tracker = ({ orderId = 'ORD-7284-9163', currentStatus = 'processing' }) => {
-  const [order, setOrder] = useState(null);
+const Tracker = ({ orderId = 'ORD-7284-9163', currentStatus = 'processing', order, product }) => {
+  // const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
 
   // Simulate API call to fetch order data
-  useEffect(() => {
-    const fetchOrderData = async () => {
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+  // useEffect(() => {
+  //   const fetchOrderData = async () => {
+  //     // Simulate API delay
+  //     await new Promise(resolve => setTimeout(resolve, 1000));
       
-      const orderData = {
-        id: orderId,
-        status: currentStatus,
-        orderDate: '2024-01-15T10:30:00Z',
-        estimatedDelivery: '2024-01-20T18:00:00Z',
-        customer: {
-          name: 'John Doe',
-          email: 'john.doe@example.com'
-        },
-        shipping: {
-          address: '123 Main St, New York, NY 10001',
-          carrier: 'FedEx',
-          trackingNumber: '789012345678'
-        },
-        items: [
-          { name: 'Wireless Headphones', quantity: 1, price: 149.99 },
-          { name: 'Phone Case', quantity: 2, price: 19.99 }
-        ],
-        total: 189.97
-      };
+  //     const orderData = {
+  //       id: orderId,
+  //       status: currentStatus,
+  //       orderDate: '2024-01-15T10:30:00Z',
+  //       estimatedDelivery: '2024-01-20T18:00:00Z',
+  //       customer: {
+  //         name: 'John Doe',
+  //         email: 'john.doe@example.com'
+  //       },
+  //       shipping: {
+  //         address: '123 Main St, New York, NY 10001',
+  //         carrier: 'FedEx',
+  //         trackingNumber: '789012345678'
+  //       },
+  //       items: [
+  //         { name: 'Wireless Headphones', quantity: 1, price: 149.99 },
+  //         { name: 'Phone Case', quantity: 2, price: 19.99 }
+  //       ],
+  //       total: 189.97
+  //     };
       
-      setOrder(orderData);
-      setLoading(false);
-    };
+  //     setOrder(orderData);
+  //     setLoading(false);
+  //   };
 
-    fetchOrderData();
-  }, [orderId, currentStatus]);
+  //   fetchOrderData();
+  // }, [orderId, currentStatus]);
 
   const orderSteps = [
     {
@@ -132,30 +132,58 @@ const Tracker = ({ orderId = 'ORD-7284-9163', currentStatus = 'processing' }) =>
   };
 
   const getStepStatus = (step) => {
-    if (step.completed) return 'completed';
+    order &&
+    Object.entries(order?.status).map(([key, value]) => {
+      if(key === step.id){
+        if(value.completed){
+          return 'completed'
+        }
+      }
+    })
+    // if (step.id === order.status) return 'completed';
     if (step.active) return 'active';
     return 'upcoming';
   };
 
-  if (loading) {
-    return (
-      <div className="order-tracker">
-        <div className="order-tracker-container">
-          <div className="order-tracker-content" style={{ textAlign: 'center', padding: '4rem' }}>
-            <div style={{ 
-              width: '50px', 
-              height: '50px', 
-              border: '4px solid #f3f4f6', 
-              borderTop: '4px solid #3b82f6', 
-              borderRadius: '50%', 
-              animation: 'spin 1s linear infinite',
-              margin: '0 auto 1rem'
-            }}></div>
-            <p>Loading order details...</p>
-          </div>
-        </div>
-      </div>
-    );
+  // if (loading) {
+  //   return (
+  //     <div className="order-tracker">
+  //       <div className="order-tracker-container">
+  //         <div className="order-tracker-content" style={{ textAlign: 'center', padding: '4rem' }}>
+  //           <div style={{ 
+  //             width: '50px', 
+  //             height: '50px', 
+  //             border: '4px solid #f3f4f6', 
+  //             borderTop: '4px solid #3b82f6', 
+  //             borderRadius: '50%', 
+  //             animation: 'spin 1s linear infinite',
+  //             margin: '0 auto 1rem'
+  //           }}></div>
+  //           <p>Loading order details...</p>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   );
+  // }
+
+  function getEstimatedDeliveryDate(duration, orderDate) {
+      // Convert inputs to Date objects
+      // Ensure inputs are valid
+    const startDate = new Date(orderDate);
+    if (isNaN(startDate)) {
+      return new Date()
+      // throw new Error("Invalid order date");
+    }
+    if (typeof duration !== "number" || duration < 0) {
+      return new Date()
+      // throw new Error("Duration must be a positive integer");
+    }
+
+    // Add the duration (in days) to the order date
+    const estimatedDelivery = new Date(startDate);
+    estimatedDelivery.setDate(startDate.getDate() + duration);
+
+    return estimatedDelivery.toISOString().split("T")[0]; // YYYY-MM-DD format
   }
 
   return (
@@ -172,7 +200,7 @@ const Tracker = ({ orderId = 'ORD-7284-9163', currentStatus = 'processing' }) =>
                 Estimated Delivery
                 </h3>
                 <div className="delivery-estimate-date">
-                {new Date(order.estimatedDelivery).toLocaleDateString('en-US', {
+                {new Date(getEstimatedDeliveryDate(parseInt(product?.shipping_duration), (order?.date))).toLocaleDateString('en-US', {
                     weekday: 'long',
                     month: 'long',
                     day: 'numeric',
@@ -208,7 +236,20 @@ const Tracker = ({ orderId = 'ORD-7284-9163', currentStatus = 'processing' }) =>
                         {formatDate(step.timestamp)}
                       </div>
                       <div className="timeline-step-badge">
-                        {step.completed ? 'Completed' : step.active ? 'In Progress' : 'Upcoming'}
+                        {/* {step.completed ? 'Completed' : step.active ? 'In Progress' : 'Upcoming'} */}
+                        {
+                          order &&
+                          Object.entries(order.status).map(([key,value]) => {
+                            console.log(key, value.completed)
+                            if(key === step.id){
+                              if(value.completed){
+                                return 'Completed'
+                              }else{
+                                return 'Upcoming'
+                              }
+                            }
+                          })
+                        }
                       </div>
                     </div>
                   </div>
