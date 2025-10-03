@@ -30,6 +30,14 @@ export async function generateMetadata() {
   };
 }
 
+const productSchema = await fetch("https://www.campussphere.net/api/json-ld", {
+    next: { revalidate: 3600 },
+  })
+    .then(res => res.ok ? res.json() : null)
+    .then(data => data?.success ? data.data : null)
+    .catch(() => null);
+
+
 export default async function RootLayout({ children }) {
   const categories = [
     { uri: "/store/category/Lodge & Apartments", title: "Lodge & Accommodation" },
@@ -102,23 +110,7 @@ export default async function RootLayout({ children }) {
   //   })),
   // };
 
-  // ✅ Fetch product schema safely
-  async function getProductSchema() {
-    try {
-      const res = await fetch(`https://www.campussphere.net/api/json-ld`, {
-        next: { revalidate: 3600 },
-      });
   
-      if (res.ok && res.headers.get("content-type")?.includes("application/json")) {
-        const { bool, data } = await res.json();
-        if (bool) return data;
-      }
-    } catch (error) {
-      console.error("Error fetching product schema:", error.message);
-    }
-  }
-
-  const productSchema = await getProductSchema()
   return (
     <html lang="en">
       <head>
