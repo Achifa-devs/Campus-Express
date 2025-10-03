@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useSelect } from '@nextui-org/react';
-import { useSelector } from 'react-redux';
 import Image from 'next/image';
 
 const ConfirmationModal = ({ 
@@ -91,14 +89,14 @@ const ConfirmationModal = ({
               className="modal-header border-0 text-white text-center"
               style={{
                 background: 'linear-gradient(135deg, #FF4500 0%, #FF4500 100%)',
-                padding: '10px 15px'
+                padding: '20px 15px'
               }}
             >
               <div className="w-100">
                 <div 
                   style={{
                     fontSize: '3rem',
-                    marginBottom: '1rem',
+                    marginBottom: '10px',
                     width: '100%',
                     display: 'flex',
                     justifyContent: 'center'
@@ -120,7 +118,7 @@ const ConfirmationModal = ({
             </div>
 
             {/* Modal Body */}
-            <div className="modal-body text-center py-4 px-3">
+            <div className="modal-body text-center pt-4  pb-1 px-3">
               <h5 
                 className="fw-semibold text-dark mb-3"
                 style={{ fontSize: 'clamp(1.1rem, 2vw, 1.3rem)' }}
@@ -213,7 +211,7 @@ const ConfirmationModal = ({
                   </button>
                 </div>
                 
-                <div className="col-12 mt-3">
+                {/* <div className="col-12 mt-3">
                   <button
                     type="button"
                     className="btn btn-outline-secondary w-100 py-2"
@@ -226,7 +224,7 @@ const ConfirmationModal = ({
                   >
                     Cancel
                   </button>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
