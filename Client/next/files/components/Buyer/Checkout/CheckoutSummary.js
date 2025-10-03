@@ -5,6 +5,7 @@ import { usePaystackPayment } from "react-paystack";
 import { open_notice } from "@/files/reusable.js/notice";
 import { buyer_overlay_setup } from "@/files/reusable.js/overlay-setup";
 import { PaystackButton } from 'react-paystack'
+import { wp } from "@/files/utils.js/whatsapp";
 
 
 
@@ -38,8 +39,22 @@ const CheckoutSummary = ({ Total, Method, order_list, type }) => {
             Checkout ₦${new Intl.NumberFormat("en-us").format((parseInt(order_list?.product?.price) * parseInt(order_list?.order?.stock)) + parseInt(order_list?.order?.shipping_fee))}
             
         `,
-        onSuccess: (reference) =>{
-            window.location.href = `/store/orders/${order_list?.product?.product_id}/tracker`
+        onSuccess: async(reference) =>{
+            buyer_overlay_setup(true, 'Informing buyer now...')
+            await fetch("/api/mssg/pending", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    status: "pending",
+                    buyerName: buyer_info?.fname,
+                    order: order_list?.order,
+                    product: order_list?.product,
+                    // phone: `234${buyer_info?.phone}`,
+                    buyer_locale: `${buyer_info.campus} in ${buyer_info.state}`
+                }),
+            });
+            window.location.href = `/store/orders/${order_list?.product?.product_id}/tracker`;
+
         },
         onClose: () => {
             alert("Wait! You need this oil, don't go!!!!");
@@ -50,6 +65,7 @@ const CheckoutSummary = ({ Total, Method, order_list, type }) => {
     useEffect(() => {
         document.querySelector('.checkout-btn').children[0].style.width = '100%'
         document.querySelector('.checkout-btn').children[0].style.height = '100%'
+         
     }, [])
 
     return (

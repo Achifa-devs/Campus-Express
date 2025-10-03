@@ -4,6 +4,7 @@ import App from "./App";
 import './globals.css'; 
 import { cookies } from "next/headers";
 import StructuredData from './StructuredData'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export async function generateMetadata() {
   const imageUrl = 'https://www.campussphere.net/api/logo';

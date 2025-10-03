@@ -23,11 +23,16 @@ import Tracker from '@/files/components/Buyer/OrderTracker/Tracker'
 import Carousel from '@/files/components/Buyer/dashboard/Carousel'
 import Payment from '@/files/components/Buyer/OrderTracker/Payment'
 import Delivery from '@/files/components/Buyer/OrderTracker/Delivery'
+import { wp } from '@/files/utils.js/whatsapp'
+import ConfirmationModal from '@/files/components/Buyer/OrderConfirmation/ConfirmationModal'
 
 export default function OrderTrackerPage() {
     let {
         user_id
     }=useSelector(s=>s.user_id);
+    let {
+        buyer_info
+    }=useSelector(s=>s.buyer_info);
     let pathname = usePathname()
     let [screenWidth, setScreenWidth] = useState(0);
     let [order_list, set_order_list] = useState('');
@@ -118,6 +123,14 @@ export default function OrderTrackerPage() {
 
   return ( 
     <>
+
+        <ConfirmationModal 
+            show={true}
+            onClose={() => console.log('Closed')}
+            onConfirm={() => console.log('Confirmed')}
+            onReject={() => console.log('Rejected')}
+            itemName="Your Product Name" 
+        />
         <div 
             style={{
                 display: 'flex', 

@@ -41,7 +41,7 @@ export async function POST(req) {
         completedAt: null,
         outcome: null
       },
-      shipped: {      // Order dispatched
+      shipping: {      // Order dispatched
         completed: false,
         completedAt: null,
         outcome: null

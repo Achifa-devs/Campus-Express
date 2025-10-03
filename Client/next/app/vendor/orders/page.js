@@ -226,10 +226,10 @@ function OrderCard({ item, statusType, text }) {
 
   function update_order_status () {
     seller_overlay_setup(true, 'Processing ...')
-    axios.post(`/api/vendor/status/`, {order_id: item.order.order_id, statusType: statusType})
+    axios.post(`/api/vendor/status/`, {order_id: item.order.order_id, statusType: statusType, product_id: item.order.product_id})
     .then((res) => {
       if (res.data.success) {
-        window.location.reload()
+        // window.location.reload()
       }
     }).catch(err => {
       open_notice(true, "Error occured please try again...")
@@ -401,9 +401,24 @@ function OrderCard({ item, statusType, text }) {
               </div>
 
               {/* WhatsApp Button */}
-              <div className="mt-auto">
+              <div className="mt-auto d-flex flex-row justify-between">
                 <button 
-                  className={`btn w-100 d-flex align-items-center justify-content-center ${
+                  className={`btn w-48 d-flex align-items-center justify-content-center ${
+                    item?.order?.havepaid ? 'btn-danger' : 'btn-secondary'
+                  }`}
+                  // onClick={(e) => update_order_status()}
+                  style={{
+                    fontSize: 'clamp(0.8rem, 1.6vw, 0.9rem)',
+                    padding: '0.6rem 1rem'
+                  }}
+                >
+                  <i className="bi bi-whatsapp me-2" style={{ fontSize: '1.1rem' }}></i>
+                  {/* {item?.order?.havepaid ? 'Click here to start shipping now' : 'Awaiting Payment'} */}
+                  Cancel this order now
+                </button>
+
+                <button 
+                  className={`btn w-auto d-flex align-items-center justify-content-center ${
                     item?.order?.havepaid ? 'btn-success' : 'btn-secondary'
                   }`}
                   onClick={(e) => update_order_status()}
