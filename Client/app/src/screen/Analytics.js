@@ -303,7 +303,7 @@ const AnalyticsScreen = () => {
             },
             propsForDots: {
               r: '4',
-              strokeWidth: '2',
+              strokeLinecap: '2',
               stroke: '#FF4500',
             },
           }}

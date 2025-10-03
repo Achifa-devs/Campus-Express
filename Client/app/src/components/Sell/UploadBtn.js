@@ -49,14 +49,14 @@ function UploadIcon() {
       <Path
         d="M12 15V3M12 3L8 7M12 3L16 7"
         stroke="#fff"
-        strokeWidth={2}
+        strokeLinecap={2}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <Path
         d="M8 13H4V21H20V13H16"
         stroke="#fff"
-        strokeWidth={2}
+        strokeLinecap={2}
         strokeLinecap="round"
         strokeLinejoin="round"
       />

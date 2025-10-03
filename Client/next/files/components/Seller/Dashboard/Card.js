@@ -3,13 +3,13 @@ import '../../../styles/ocerview.css'
 const Card = ({title, summary}) => {
     return ( 
         <>
-            <div class="box-cnt shadow-sm">
+            <div className="box-cnt shadow-sm">
         
-                <div class="link">
+                <div className="link">
                     View
                 </div>
 
-                <div class="counter">
+                <div className="counter">
                     {title}
                 </div>
 

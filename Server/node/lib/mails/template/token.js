@@ -90,21 +90,21 @@ export function tokenTemplate(name, token, email) {
                 </head>
                 <body>
 
-                    <div class="container">
-                        <div class="header">
+                    <div className="container">
+                        <div className="header">
                             <h1>Campus Sphere Token Confirmation</h1>
                             <p>Secure your account with confidence</p>
                         </div>
-                        <div class="content">
+                        <div className="content">
                             <p>Hello <strong>${name}</strong>,</p>
                             <p>To complete your your email verification, please use the token below:</p>
 
-                            <div class="token-box">${token}</div>
+                            <div className="token-box">${token}</div>
                             <p>This token will expire in <strong>60 seconds</strong>. If you didn&apos;t make this request, you can safely ignore this email.</p>
 
                             <p>You can just use this link below to continue</p>
                             <button >
-                                <a class='continue-link' href='https://www.campussphere.net/vendor/reset-password?token=${token}&email=${email}'>
+                                <a className='continue-link' href='https://www.campussphere.net/vendor/reset-password?token=${token}&email=${email}'>
                                     Continue Here
                                 </a>
                             </button>
@@ -112,7 +112,7 @@ export function tokenTemplate(name, token, email) {
 
                             <p>Best regards,<br />The Campus Sphere Team</p>
                         </div>
-                        <div class="footer">
+                        <div className="footer">
                             <p>&copy; 2024 Campus Sphere. All rights reserved.</p>
                             <p>
                                 <a href="#">Privacy Policy</a> |
@@ -120,7 +120,7 @@ export function tokenTemplate(name, token, email) {
                                 <a href="#">Support</a>
                             </p>
 
-                            <div class="social-icons">
+                            <div className="social-icons">
                                 <a href="https://facebook.com/yourbrand">
                                 <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook">
                                 </a>

@@ -44,7 +44,7 @@ const Tracker = ({ orderId = 'ORD-7284-9163', currentStatus = 'processing', orde
       description: 'Your order has been successfully received and confirmed.',
       icon: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" 
+          <path strokeLinecap="round" strokeLinejoin="round" strokeLinecap="2" 
             d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       ),
@@ -55,7 +55,7 @@ const Tracker = ({ orderId = 'ORD-7284-9163', currentStatus = 'processing', orde
       description: 'Payment verified and order is being processed.',
       icon: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" 
+          <path strokeLinecap="round" strokeLinejoin="round" strokeLinecap="2" 
             d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
         </svg>
       ),
@@ -66,7 +66,7 @@ const Tracker = ({ orderId = 'ORD-7284-9163', currentStatus = 'processing', orde
       description: 'Your items are being prepared for shipment.',
       icon: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" 
+          <path strokeLinecap="round" strokeLinejoin="round" strokeLinecap="2" 
             d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
         </svg>
       ),
@@ -77,7 +77,7 @@ const Tracker = ({ orderId = 'ORD-7284-9163', currentStatus = 'processing', orde
       description: 'Your order has been shipped and is on its way.',
       icon: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" 
+          <path strokeLinecap="round" strokeLinejoin="round" strokeLinecap="2" 
             d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
         </svg>
       ),
@@ -88,7 +88,7 @@ const Tracker = ({ orderId = 'ORD-7284-9163', currentStatus = 'processing', orde
       description: 'Your package has been delivered successfully.',
       icon: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" 
+          <path strokeLinecap="round" strokeLinejoin="round" strokeLinecap="2" 
             d="M5 13l4 4L19 7" />
         </svg>
       ),
@@ -99,7 +99,7 @@ const Tracker = ({ orderId = 'ORD-7284-9163', currentStatus = 'processing', orde
       description: 'Your package has been completed successfully.',
       icon: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" 
+          <path strokeLinecap="round" strokeLinejoin="round" strokeLinecap="2" 
             d="M5 13l4 4L19 7" />
         </svg>
       ),
@@ -198,7 +198,7 @@ const Tracker = ({ orderId = 'ORD-7284-9163', currentStatus = 'processing', orde
             <div className="delivery-estimate" >
                 <h3 className="delivery-estimate-title">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeLinecap="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 Estimated Delivery
                 </h3>
@@ -234,7 +234,7 @@ const Tracker = ({ orderId = 'ORD-7284-9163', currentStatus = 'processing', orde
                     <div className="timeline-step-meta">
                       <div className="timeline-step-time">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeLinecap="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         {formatDate(step.timestamp)}
                       </div>
@@ -267,7 +267,7 @@ const Tracker = ({ orderId = 'ORD-7284-9163', currentStatus = 'processing', orde
           <div className="order-actions">
             <button className="order-action-button secondary">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeLinecap="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
               Contact Support
             </button>

@@ -36,50 +36,50 @@ export default function OrderTracker({item}) {
                       <div className="col-12 col-md-10 hh-grayBox pt45 pb20" style={{background: '#fff', padding: '10px'}}>
                         <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', textAlign: 'left'}} className="row justify-content-between">
 
-                          <div style={{padding: '0 0 0 10px', margin: '0 0 0 0px'}} class="order-tracking completed">
-                            <span class="is-complete"></span>
+                          <div style={{padding: '0 0 0 10px', margin: '0 0 0 0px'}} className="order-tracking completed">
+                            <span className="is-complete"></span>
                               <div style={{margin: '5px 0 0 22px'}}>
                                 <OrderPlaced /> 
                               </div> 
                             
                           </div>
-                          <div style={{padding: '0 0 0 10px', margin: '0 0 0 0px'}} class="order-tracking ">
-                            <span class="is-complete"></span>
+                          <div style={{padding: '0 0 0 10px', margin: '0 0 0 0px'}} className="order-tracking ">
+                            <span className="is-complete"></span>
                               <div style={{margin: '-25px 0 0 22px'}}>
                                 <OrderConfirmed />
                               </div>
                             
                           </div>
-                          <div style={{padding: '0 0 0 10px', margin: '0 0 0 0px'}} class="order-tracking ">
-                            <span class="is-complete"></span>
+                          <div style={{padding: '0 0 0 10px', margin: '0 0 0 0px'}} className="order-tracking ">
+                            <span className="is-complete"></span>
                               <div style={{margin: '-25px 0 0 22px'}}>
                                 <Shipped />
                               </div>
                             
                           </div>
-                          <div style={{padding: '0 0 0 10px', margin: '0 0 0 0px'}} class="order-tracking ">
-                            <span class="is-complete"></span>
+                          <div style={{padding: '0 0 0 10px', margin: '0 0 0 0px'}} className="order-tracking ">
+                            <span className="is-complete"></span>
                               <div style={{margin: '-25px 0 0 22px'}}>
                                 <ReadyForPickUp />
                               </div>
                             
                           </div>
-                          <div style={{padding: '0 0 0 10px', margin: '0 0 0 0px'}} class="order-tracking ">
-                            <span class="is-complete"></span>
+                          <div style={{padding: '0 0 0 10px', margin: '0 0 0 0px'}} className="order-tracking ">
+                            <span className="is-complete"></span>
                               <div style={{margin: '-25px 0 0 22px'}}>
                                 <PickedUp />
                               </div>
                             
                           </div>
-                          <div style={{padding: '0 0 0 10px', margin: '0 0 0 0px'}} class="order-tracking ">
-                            <span class="is-complete"></span>
+                          <div style={{padding: '0 0 0 10px', margin: '0 0 0 0px'}} className="order-tracking ">
+                            <span className="is-complete"></span>
                               <div style={{margin: '-25px 0 0 22px'}}>
                                 <Statement />
                               </div>
                             
                           </div>
-                          <div style={{padding: '0 0 0 10px', margin: '0 0 0 0px'}} class="order-tracking ">
-                            <span class="is-complete"></span>
+                          <div style={{padding: '0 0 0 10px', margin: '0 0 0 0px'}} className="order-tracking ">
+                            <span className="is-complete"></span>
                               <div style={{margin: '-25px 0 0 22px'}}>
                                 <Seal />
                             </div></
