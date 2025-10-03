@@ -31,60 +31,23 @@ export async function generateMetadata() {
 
 export default async function RootLayout({ children }) {
   const categories = [
-    { uri: "/store/category/Lodge & Accomodation", title: "Lodge & Accomodation" },
+    { uri: "/store/category/Lodge & Apartments", title: "Lodge & Accommodation" },
     { uri: "/store/category/Services", title: "Services" },
     { uri: "/store/category/Appliances", title: "Appliances" },
     { uri: "/store/category/Mobile Phones", title: "Mobile Phones" },
-    { uri: "/store/category/Laptops", title: "Laptops" },
-    { uri: "/store/category/Fashion & Clothing", title: "Fashion & Clothing" },
-    { uri: "/store/category/Study Materials", title: "Study Materials" },
+    { uri: "/store/category/Laptops & Desktops", title: "Laptops & Desktops" },
+    { uri: "/store/category/Fashion", title: "Fashion & Clothing" },
     { uri: "/store/", title: "Explore More" },
   ];
 
-  // Website schema
+  // ✅ WebSite + Navigation Schema
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "Campus Sphere",
     url: "https://www.campussphere.net/",
-    potentialAction: {
-      "@type": "SearchAction",
-      target: "https://www.campussphere.net/search?q={search_term_string}",
-      "query-input": "required name=search_term_string",
-    },
-  };
-
-  // Category schema
-  const categorySchema = {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    name: "Product Categories",
-    description: "Browse products by category on Campus Sphere",
-    url: "https://www.campussphere.net/store/",
-    numberOfItems: categories.length,
-    itemListElement: categories.map((category, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      item: {
-        "@type": "WebPage",
-        name: category.title,
-        url: `https://www.campussphere.net${category.uri}`,
-      },
-    })),
-  };
-
-  // Navigation Link Schema
-  const NavigationSchema = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Campus Sphere",
-    "url": "https://www.campussphere.net/",
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": "https://www.campussphere.net/search?q={search_term_string}",
-      "query-input": "required name=search_term_string"
-    },
-    "hasPart": [
+    description: "Sign up, sign in, sell your products, or buy the latest products on campus.",
+    hasPart: [
       {
         "@type": "SiteNavigationElement",
         "name": "Sign Up",
@@ -105,51 +68,40 @@ export default async function RootLayout({ children }) {
         "name": "Buy Latest Products",
         "url": "https://www.campussphere.net/store"
       },
-      {
+      // Add categories
+      ...categories.slice(0, 5).map(cat => ({
         "@type": "SiteNavigationElement",
-        "name": "Lodge & Accommodation",
-        "url": "https://www.campussphere.net/store/category/Lodge%20&%20Apartments"
-      },
-      {
-        "@type": "SiteNavigationElement",
-        "name": "Mobile Phones",
-        "url": "https://www.campussphere.net/store/category/Mobile%20Phones"
-      },
-      {
-        "@type": "SiteNavigationElement",
-        "name": "Mobile Phones",
-        "url": "https://www.campussphere.net/store/category/Laptops%20&%20Desktops"
-      },
-      {
-        "@type": "SiteNavigationElement",
-        "name": "Fashion & Clothing",
-        "url": "https://www.campussphere.net/store/category/Fashion"
-      },
-      {
-        "@type": "SiteNavigationElement",
-        "name": "Appliances",
-        "url": "https://www.campussphere.net/store/category/Appliances"
-      },
-      {
-        "@type": "SiteNavigationElement",
-        "name": "Appliances",
-        "url": "https://www.campussphere.net/store/category/Furnitures"
-      },
-      {
-        "@type": "SiteNavigationElement",
-        "name": "Appliances",
-        "url": "https://www.campussphere.net/store/category/Pets"
-      },
+        "name": cat.title,
+        "url": `https://www.campussphere.net${cat.uri}`
+      })),
       {
         "@type": "SiteNavigationElement",
         "name": "Explore More",
         "url": "https://www.campussphere.net/store/"
       }
     ]
-  }
+  };
 
+  // ✅ Category schema
+  const categorySchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Product Categories",
+    description: "Browse products by category on Campus Sphere",
+    url: "https://www.campussphere.net/store/",
+    numberOfItems: categories.length,
+    itemListElement: categories.map((category, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "WebPage",
+        name: category.title,
+        url: `https://www.campussphere.net${category.uri}`,
+      },
+    })),
+  };
 
-  // Fetch product schema safely
+  // ✅ Fetch product schema safely
   let productSchema = null;
   try {
     const res = await fetch(`https://www.campussphere.net/api/json-ld`, {
@@ -159,7 +111,6 @@ export default async function RootLayout({ children }) {
     if (res.ok && res.headers.get("content-type")?.includes("application/json")) {
       const { bool, data } = await res.json();
       if (bool) productSchema = data;
-      console.log(data)
     }
   } catch (error) {
     console.error("Error fetching product schema:", error.message);
@@ -173,7 +124,7 @@ export default async function RootLayout({ children }) {
         <meta name="theme-color" content="#ffffff" />
         <meta name="facebook-domain-verification" content="98x6w3kel0z4gmv2ofg7bcoybfckmg" />
 
-        {/* Bootstrap via CDN (pick one: CDN OR npm import, not both) */}
+        {/* Bootstrap via CDN */}
         <link
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
@@ -184,8 +135,6 @@ export default async function RootLayout({ children }) {
         {/* Structured Data */}
         <StructuredData data={websiteSchema} />
         <StructuredData data={categorySchema} />
-        <StructuredData data={NavigationSchema} />
-
         {productSchema && <StructuredData data={productSchema} />}
       </head>
       <body style={{ overflowX: "hidden", background: "#f9f9f9" }}>
