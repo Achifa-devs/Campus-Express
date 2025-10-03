@@ -47,7 +47,7 @@ const ConfirmationModal = ({
           top: 0,
           left: 0,
           width: '100vw',
-          height: '100vh',
+          height: '100%',
           backgroundColor: 'rgba(0, 0, 0, 0.5)',
           zIndex: 10040
         }}
@@ -91,18 +91,21 @@ const ConfirmationModal = ({
               className="modal-header border-0 text-white text-center"
               style={{
                 background: 'linear-gradient(135deg, #FF4500 0%, #FF4500 100%)',
-                padding: '2rem 1rem'
+                padding: '10px 15px'
               }}
             >
               <div className="w-100">
                 <div 
                   style={{
                     fontSize: '3rem',
-                    marginBottom: '1rem'
+                    marginBottom: '1rem',
+                    width: '100%',
+                    display: 'flex',
+                    justifyContent: 'center'
                   }}
                 >
                   {/* 📦 */}
-                  <Image src={prod.thumbnail_id} width={"45px"} height={"45px"} style={{height: '45px', width: '45px', borderRadius: '5px'}} />
+                  <Image src={prod.thumbnail_id} width={85} height={85} style={{height: '85px', width: '85px', borderRadius: '5px'}} />
                 </div>
                 <h4 
                   className="modal-title fw-bold mb-2"
@@ -216,8 +219,9 @@ const ConfirmationModal = ({
                     className="btn btn-outline-secondary w-100 py-2"
                     onClick={onClose}
                     style={{
-                      borderRadius: '0.75rem',
-                      transition: 'all 0.3s ease'
+                      borderRadius: '5px',
+                      transition: 'all 0.3s ease',
+                      height: '40px'
                     }}
                   >
                     Cancel
