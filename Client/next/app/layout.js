@@ -4,6 +4,7 @@ import App from "./App";
 import "./globals.css";
 import { headers } from "next/headers";
 import StructuredData from "./StructuredData";
+import axios from "axios";
 
 export async function generateMetadata() {
   const imageUrl = "https://www.campussphere.net/api/logo";
@@ -82,40 +83,42 @@ export default async function RootLayout({ children }) {
     ]
   };
 
-  // ✅ Category schema
-  const categorySchema = {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    name: "Product Categories",
-    description: "Browse products by category on Campus Sphere",
-    url: "https://www.campussphere.net/store/",
-    numberOfItems: categories.length,
-    itemListElement: categories.map((category, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      item: {
-        "@type": "WebPage",
-        name: category.title,
-        url: `https://www.campussphere.net${category.uri}`,
-      },
-    })),
-  };
+  // // ✅ Category schema
+  // const categorySchema = {
+  //   "@context": "https://schema.org",
+  //   "@type": "ItemList",
+  //   name: "Product Categories",
+  //   description: "Browse products by category on Campus Sphere",
+  //   url: "https://www.campussphere.net/store/",
+  //   numberOfItems: categories.length,
+  //   itemListElement: categories.map((category, index) => ({
+  //     "@type": "ListItem",
+  //     position: index + 1,
+  //     item: {
+  //       "@type": "WebPage",
+  //       name: category.title,
+  //       url: `https://www.campussphere.net${category.uri}`,
+  //     },
+  //   })),
+  // };
 
   // ✅ Fetch product schema safely
-  let productSchema = null;
-  try {
-    const res = await fetch(`https://www.campussphere.net/api/json-ld`, {
-      next: { revalidate: 3600 },
-    });
-
-    if (res.ok && res.headers.get("content-type")?.includes("application/json")) {
-      const { bool, data } = await res.json();
-      if (bool) productSchema = data;
+  async function getProductSchema() {
+    try {
+      const res = await fetch(`https://www.campussphere.net/api/json-ld`, {
+        next: { revalidate: 3600 },
+      });
+  
+      if (res.ok && res.headers.get("content-type")?.includes("application/json")) {
+        const { bool, data } = await res.json();
+        if (bool) return data;
+      }
+    } catch (error) {
+      console.error("Error fetching product schema:", error.message);
     }
-  } catch (error) {
-    console.error("Error fetching product schema:", error.message);
   }
 
+  const productSchema = await getProductSchema()
   return (
     <html lang="en">
       <head>
@@ -134,7 +137,6 @@ export default async function RootLayout({ children }) {
 
         {/* Structured Data */}
         <StructuredData data={websiteSchema} />
-        <StructuredData data={categorySchema} />
         {productSchema && <StructuredData data={productSchema} />}
       </head>
       <body style={{ overflowX: "hidden", background: "#f9f9f9" }}>
