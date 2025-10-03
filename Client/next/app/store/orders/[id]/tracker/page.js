@@ -124,13 +124,13 @@ export default function OrderTrackerPage() {
   return ( 
     <>
 
-        <ConfirmationModal 
+        {/* <ConfirmationModal 
             show={true}
             onClose={() => console.log('Closed')}
             onConfirm={() => console.log('Confirmed')}
             onReject={() => console.log('Rejected')}
             prod={order_list?.product}
-        />
+        /> */}
         <div 
             style={{
                 display: 'flex', 

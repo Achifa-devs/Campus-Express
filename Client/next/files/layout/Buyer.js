@@ -14,6 +14,7 @@ import { setBuyerInfoTo } from '@/redux/buyer_store/buyerInfo';
 import FilterAside from '../components/Buyer/dashboard/FilterAside'
 import { buyer_overlay_setup } from '../reusable.js/overlay-setup'
 import { setSaveTo } from '@/redux/buyer_store/Save'
+import ConfirmationModal from '../components/Buyer/OrderConfirmation/ConfirmationModal'
 
 const BuyerLayout = ({children}) => {
 
@@ -156,9 +157,47 @@ const BuyerLayout = ({children}) => {
     let {
         accessory
     } = useSelector(s => s.accessory)
-   
+
+    const {
+        buyer_info
+    } = useSelector(s => s.buyer_info)
+
+    const [product, set_product] = useState(null)
+
+    useEffect(() => {
+        if (buyer_info !== null && buyer_info !== 'null' && buyer_info !== undefined) {
+        const overlay = document.querySelector('.overlay');
+        overlay.setAttribute('id', 'overlay')
+        axios.get('/api/store/order/check-delivered', {params: {user_id: buyer_info?.user_id}})
+        .then(({ data }) => {
+            console.log(data)
+            overlay.removeAttribute('id')
+            if (data.success) {
+                set_product(data?.data)
+            }
+
+        })
+        .catch(error => {
+            overlay.removeAttribute('id')
+            console.log(error)
+        })
+            
+        }
+
+    }, [buyer_info]) 
+    
     return (
         <>
+
+            {
+                <ConfirmationModal
+                    show={product !== null ? true : false}
+                    onClose={() => console.log('Closed')}
+                    onConfirm={() => console.log('Confirmed')}
+                    onReject={() => console.log('Rejected')}
+                    prod={product}
+                />
+            }
             <div className="overlay" >
                 <div className="loader">
                 </div>
