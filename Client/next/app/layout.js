@@ -73,6 +73,82 @@ export default async function RootLayout({ children }) {
     })),
   };
 
+  // Navigation Link Schema
+  const NavigationSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Campus Sphere",
+    "url": "https://www.campussphere.net/",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://www.campussphere.net/search?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    },
+    "hasPart": [
+      {
+        "@type": "SiteNavigationElement",
+        "name": "Sign Up",
+        "url": "https://www.campussphere.net/signup"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "name": "Sign In",
+        "url": "https://www.campussphere.net/login"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "name": "Sell Your Products",
+        "url": "https://www.campussphere.net/vendor/shop"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "name": "Buy Latest Products",
+        "url": "https://www.campussphere.net/store"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "name": "Lodge & Accommodation",
+        "url": "https://www.campussphere.net/store/category/Lodge%20&%20Apartments"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "name": "Mobile Phones",
+        "url": "https://www.campussphere.net/store/category/Mobile%20Phones"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "name": "Mobile Phones",
+        "url": "https://www.campussphere.net/store/category/Laptops%20&%20Desktops"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "name": "Fashion & Clothing",
+        "url": "https://www.campussphere.net/store/category/Fashion"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "name": "Appliances",
+        "url": "https://www.campussphere.net/store/category/Appliances"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "name": "Appliances",
+        "url": "https://www.campussphere.net/store/category/Furnitures"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "name": "Appliances",
+        "url": "https://www.campussphere.net/store/category/Pets"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "name": "Explore More",
+        "url": "https://www.campussphere.net/store/"
+      }
+    ]
+  }
+
+
   // Fetch product schema safely
   let productSchema = null;
   try {
@@ -108,6 +184,8 @@ export default async function RootLayout({ children }) {
         {/* Structured Data */}
         <StructuredData data={websiteSchema} />
         <StructuredData data={categorySchema} />
+        <StructuredData data={NavigationSchema} />
+
         {productSchema && <StructuredData data={productSchema} />}
       </head>
       <body style={{ overflowX: "hidden", background: "#f9f9f9" }}>
