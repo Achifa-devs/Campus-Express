@@ -129,7 +129,7 @@ export default function OrderTrackerPage() {
             onClose={() => console.log('Closed')}
             onConfirm={() => console.log('Confirmed')}
             onReject={() => console.log('Rejected')}
-            itemName="Your Product Name" 
+            prod={order_list?.product}
         />
         <div 
             style={{

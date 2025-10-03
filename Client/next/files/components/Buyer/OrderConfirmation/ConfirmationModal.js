@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useSelect } from '@nextui-org/react';
 import { useSelector } from 'react-redux';
+import Image from 'next/image';
 
 const ConfirmationModal = ({ 
   show, 
   onClose, 
   onConfirm, 
   onReject, 
-  itemName = "the purchased item" 
+  prod={}
 }) => {
   // Handle escape key press
   let [screenWidth, setScreenWidth] = useState(0)
@@ -61,7 +62,7 @@ const ConfirmationModal = ({
           top: 0,
           left: 0,
           width: '100vw',
-          height: '100vh',
+          height: '100%',
           zIndex: 10050,
           overflowX: 'hidden',
           overflowY: 'auto'
@@ -100,7 +101,8 @@ const ConfirmationModal = ({
                     marginBottom: '1rem'
                   }}
                 >
-                  📦
+                  {/* 📦 */}
+                  <Image src={prod.thumbnail_id} width={"45px"} height={"45px"} style={{height: '45px', width: '45px', borderRadius: '5px'}} />
                 </div>
                 <h4 
                   className="modal-title fw-bold mb-2"
@@ -120,7 +122,7 @@ const ConfirmationModal = ({
                 className="fw-semibold text-dark mb-3"
                 style={{ fontSize: 'clamp(1.1rem, 2vw, 1.3rem)' }}
               >
-                "{itemName}"
+                "{prod?.title}"
               </h5>
               <p className="text-muted mb-4 lead">
                 Please inspect your item carefully before confirming
@@ -153,19 +155,20 @@ const ConfirmationModal = ({
             {/* Modal Footer */}
             <div 
               className="modal-footer border-0 bg-light"
-              style={{ padding: '1.5rem' }}
+              style={{ padding: '8px' }}
             >
               <div className="row w-100 g-2">
                 <div className="col-12 col-md-6">
                   <button
                     type="button"
-                    className="btn btn-success w-100 py-3 fw-semibold border-0"
+                    className="btn btn-success w-100 pb-8 fw-semibold border-0"
                     onClick={onConfirm}
                     style={{
                       background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)',
-                      borderRadius: '0.75rem',
+                      borderRadius: '5px',
                       fontSize: 'clamp(0.9rem, 1.5vw, 1rem)',
-                      transition: 'all 0.3s ease'
+                      transition: 'all 0.3s ease',
+                      height: 'auto'
                     }}
                     onMouseOver={(e) => {
                       e.target.style.transform = 'translateY(-2px)';
@@ -184,13 +187,14 @@ const ConfirmationModal = ({
                 <div className="col-12 col-md-6">
                   <button
                     type="button"
-                    className="btn btn-danger w-100 py-3 fw-semibold border-0"
+                    className="btn btn-danger w-100 pb-8 fw-semibold border-0"
                     onClick={onReject}
                     style={{
                       background: 'linear-gradient(135deg, #dc3545 0%, #e83e8c 100%)',
-                      borderRadius: '0.75rem',
+                      borderRadius: '5px',
                       fontSize: 'clamp(0.9rem, 1.5vw, 1rem)',
-                      transition: 'all 0.3s ease'
+                      transition: 'all 0.3s ease',
+                      height: 'auto'
                     }}
                     onMouseOver={(e) => {
                       e.target.style.transform = 'translateY(-2px)';
