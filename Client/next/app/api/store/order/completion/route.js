@@ -18,7 +18,7 @@ export async function POST(req) {
     // Update order with correct statusType key
     const query = `
       UPDATE orders 
-      SET status = jsonb_set(status, '{${statusType}}', $2::jsonb, true)
+      SET status = jsonb_set(status, '{completed}', $2::jsonb, true)
       WHERE product_id = $1
       AND user_id = $3
       RETURNING *;
