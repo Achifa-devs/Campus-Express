@@ -9,5 +9,6 @@ router.get('/health', (_req, res) => res.status(200).json({ ok: true, service: '
 
 // Webhook endpoint
 router.post('/payment', handleWebhook);
+router.post('/transfer', handleTransferWebhook);
 
 module.exports = router;
