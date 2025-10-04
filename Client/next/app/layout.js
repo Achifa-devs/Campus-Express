@@ -2,9 +2,7 @@
 
 import App from "./App";
 import "./globals.css";
-import { headers } from "next/headers";
 import StructuredData from "./StructuredData";
-import axios from "axios";
 
 export async function generateMetadata() {
   const imageUrl = "https://www.campussphere.net/api/logo";

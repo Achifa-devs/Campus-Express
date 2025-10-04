@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Image from 'next/image';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
 
 const ConfirmationModal = ({ 
   show, 
   onClose, 
-  onConfirm, 
-  onReject, 
+  // completeDelivery, 
   prod={}
 }) => {
   // Handle escape key press
@@ -32,6 +33,26 @@ const ConfirmationModal = ({
     };
    
   }, [show, onClose]);
+
+  const {
+    buyer_info
+  } = useSelector(s => s.buyer_info);
+
+  const completeDelivery = (statusType, user_id, product_id) => {
+    axios.post('/api/store/order/completion', {user_id: user_id, product_id: product_id, statusType: statusType})
+    .then(({ data }) => {
+      console.log(data)
+      overlay.removeAttribute('id')
+      if (data.success) {
+        set_product(data?.data)
+      }
+    })
+    .catch(error => {
+      overlay.removeAttribute('id')
+      console.log(error)
+    })
+  }
+  
 
   if (!show) return null;
 
@@ -163,7 +184,7 @@ const ConfirmationModal = ({
                   <button
                     type="button"
                     className="btn btn-success w-100 pb-8 fw-semibold border-0"
-                    onClick={onConfirm}
+                    onClick={()=>completeDelivery('completed', buyer_info?.user_id, prod.product_id)}
                     style={{
                       background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)',
                       borderRadius: '5px',
@@ -189,7 +210,7 @@ const ConfirmationModal = ({
                   <button
                     type="button"
                     className="btn btn-danger w-100 pb-8 fw-semibold border-0"
-                    onClick={onReject}
+                        onClick={()=>completeDelivery('rejected', buyer_info?.user_id, prod.product_id)}
                     style={{
                       background: 'linear-gradient(135deg, #dc3545 0%, #e83e8c 100%)',
                       borderRadius: '5px',

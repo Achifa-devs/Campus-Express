@@ -3,33 +3,33 @@
 export function generateBuyerMessage(status, buyerName, orderId) {
   switch (status.toLowerCase()) {
     case "pending":
-      return `Sup ${buyerName}: \n your order (ID: ${orderId}) has been placed successfully. Thank you for shopping with us!`;
+      return `Sup ${buyerName}: \nYour order (ID: ${orderId}) has been placed successfully. Thank you for shopping with us!`;
 
     case "confirmed":
-      return `Good news ${buyerName}: \n your order (ID: ${orderId}) has been confirmed. The vendor will begin processing it shortly.`;
+      return `Good news ${buyerName}: \nYour order (ID: ${orderId}) has been confirmed. The vendor will begin processing it shortly.`;
 
     case "processing":
-      return `Sup ${buyerName}: \n your order (ID: ${orderId}) is now being processed. We’ll notify you once it’s shipped.`;
+      return `Sup ${buyerName}: \nYour order (ID: ${orderId}) is now being processed. We’ll notify you once it’s shipped.`;
 
     case "shipping":
       return `Great news ${buyerName}! Your order (ID: ${orderId}) has been shipped. It’s on its way to you.`;
 
     case "delivered":
-      return `Hi ${buyerName}: \n your order (ID: ${orderId}) has been delivered successfully. We hope you enjoy your purchase!`;
+      return `Hi ${buyerName}: \nYour order (ID: ${orderId}) has been delivered successfully. We hope you enjoy your purchase!`;
 
     case "completed":
-      return `Sup ${buyerName}: \n your order (ID: ${orderId}) has been marked as completed. Thank you for shopping with us!`;
+      return `Sup ${buyerName}: \nYour order (ID: ${orderId}) has been marked as completed. Thank you for shopping with us!`;
 
-    case "reformed":
-      return `Sup ${buyerName}: \n your order (ID: ${orderId}) has been updated/reformed. Please check your order details for the latest status.`;
+    case "rejected":
+      return `Sup ${buyerName}: \nYour order (ID: ${orderId}) has been rejected. Your money will be refunded ASAP. Thanks for choosing Campus Sphere.`;
 
     default:
-      return `Sup ${buyerName}: \n there’s an update on your order (ID: ${orderId}): ${status}`;
+      return `Sup ${buyerName}: \nThere’s an update on your order (ID: ${orderId}): ${status}`;
   }
 }
 
 // 🔹 Messages for the Vendor
-export function generateVendorMessage(status, vendorName, orderId) {
+export function generateVendorMessage(status, vendorName, orderId, issue = "No issue specified") {
   switch (status.toLowerCase()) {
     case "pending":
       return `Hey ${vendorName}, a new order (ID: ${orderId}) has been placed. Please confirm it soon.`;
@@ -47,10 +47,10 @@ export function generateVendorMessage(status, vendorName, orderId) {
       return `Hey ${vendorName}, the buyer has received order (ID: ${orderId}). Please await confirmation of completion.`;
 
     case "completed":
-      return `Sup ${vendorName}, order (ID: ${orderId}) is now completed. Thank you for your service!`;
+      return `Sup ${vendorName}, order (ID: ${orderId}) is now completed. You will receive your payment shortly! Thanks for partnering with Campus Sphere.`;
 
-    case "reformed":
-      return `Hey ${vendorName}, order (ID: ${orderId}) has been updated/reformed. Please review the latest details.`;
+    case "rejected":
+      return `Hey ${vendorName}, order (ID: ${orderId}) has been rejected because the buyer complained of an issue with the product [issue: ${issue}].`;
 
     default:
       return `Sup ${vendorName}, order (ID: ${orderId}) has a new status: ${status}`;

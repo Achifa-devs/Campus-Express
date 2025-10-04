@@ -166,26 +166,28 @@ const BuyerLayout = ({children}) => {
 
     useEffect(() => {
         if (buyer_info !== null && buyer_info !== 'null' && buyer_info !== undefined) {
-        const overlay = document.querySelector('.overlay');
-        overlay.setAttribute('id', 'overlay')
-        axios.get('/api/store/order/check-delivered', {params: {user_id: buyer_info?.user_id}})
-        .then(({ data }) => {
-            console.log(data)
-            overlay.removeAttribute('id')
-            if (data.success) {
-                set_product(data?.data)
-            }
+            const overlay = document.querySelector('.overlay');
+            overlay.setAttribute('id', 'overlay')
+            axios.get('/api/store/order/check-delivered', {params: {user_id: buyer_info?.user_id}})
+            .then(({ data }) => {
+                console.log(data)
+                overlay.removeAttribute('id')
+                if (data.success) {
+                    set_product(data?.data)
+                }
 
-        })
-        .catch(error => {
-            overlay.removeAttribute('id')
-            console.log(error)
-        })
+            })
+            .catch(error => {
+                overlay.removeAttribute('id')
+                console.log(error)
+            })
             
         }
 
     }, [buyer_info]) 
-    
+
+   
+
     return (
         <>
 
@@ -193,8 +195,6 @@ const BuyerLayout = ({children}) => {
                 <ConfirmationModal
                     show={product !== null ? true : false}
                     onClose={() => console.log('Closed')}
-                    onConfirm={() => console.log('Confirmed')}
-                    onReject={() => console.log('Rejected')}
                     prod={product}
                 />
             }
