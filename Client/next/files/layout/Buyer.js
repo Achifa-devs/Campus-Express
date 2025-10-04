@@ -194,7 +194,7 @@ const BuyerLayout = ({children}) => {
             {
                 <ConfirmationModal
                     show={product !== null ? true : false}
-                    onClose={() => console.log('Closed')}
+                    onClose={() => set_product(null)}
                     prod={product}
                 />
             }

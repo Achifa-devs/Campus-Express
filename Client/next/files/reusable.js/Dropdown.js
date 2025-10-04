@@ -16,8 +16,7 @@ export default function Dropdown({list}) {
                             )
                         })
                     }
-                    <li><hr className="dropdown-divider" /></li>
-                    <li><a className="dropdown-item" href="#">Separated link</a></li>
+                   
                 </ul>
             </div>
         </>

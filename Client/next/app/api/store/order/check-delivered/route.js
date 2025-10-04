@@ -21,7 +21,8 @@ export async function GET(req) {
         WHERE user_id = $1
           AND (status->'delivered') IS NOT NULL
           AND (status->'delivered'->>'completed')::boolean = true
-          AND status->'delivered'->>'outcome' = 'success';
+          AND status->'delivered'->>'outcome' = 'success'
+          AND (status->'completed'->>'completed')::boolean = false 
       `,
       [user_id]
     );

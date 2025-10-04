@@ -70,14 +70,6 @@ export default function OrderedItem({ item, order }) {
                                     Cancel order
                                 </span>
                             )
-                        },
-                        {
-                            title: (
-                                <span className="d-flex align-items-center text-success">
-                                    <i className="bi bi-check-circle me-2"></i>
-                                    Confirm order
-                                </span>
-                            )
                         }
                     ]}
                 />

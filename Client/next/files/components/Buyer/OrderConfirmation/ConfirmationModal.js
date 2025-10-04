@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import { open_notice } from '@/files/reusable.js/notice';
 
 const ConfirmationModal = ({ 
   show, 
@@ -42,16 +43,20 @@ const ConfirmationModal = ({
     axios.post('/api/store/order/completion', {user_id: user_id, product_id: product_id, statusType: statusType})
     .then(({ data }) => {
       console.log(data)
-      overlay.removeAttribute('id')
+
+      // overlay.removeAttribute('id')
       if (data.success) {
-        set_product(data?.data)
+        open_notice(true, "Order status updated successfully.")
+        onClose()
+        window.location.href=`/store/orders/${data?.order?.order_id}/tracker`
       }
     })
     .catch(error => {
-      overlay.removeAttribute('id')
+      // overlay.removeAttribute('id')
       console.log(error)
+      open_notice(true, "Internal server error, please try again later.")
     })
-  }
+  } 
   
 
   if (!show) return null;
