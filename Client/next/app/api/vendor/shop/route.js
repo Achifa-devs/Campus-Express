@@ -1,34 +1,22 @@
 'use server'
-import { NextResponse } from 'next/server';
 import pool from '../../db';
+import { NextResponse } from 'next/server';
 
-export async function GET(req) {
+export async function POST(req) {
   try {
-    const { searchParams } = new URL(req.url, 'http://localhost:3000'); // fallback for local
-    const user_id = searchParams.get('user_id');
+    const body = await req.json();
+    const { user_id } = body;
+    console.log(user_id)
 
-    if (!user_id) {
-      return NextResponse.json(
-        { success: false, message: 'User ID is required' },
-        { status: 400 }
-      );
-    }
-
-    const res = await pool.query(
-      `SELECT * FROM shops WHERE user_id = $1`,
-      [user_id]
-    );
-
-    return NextResponse.json(
-      { success: res?.rows?.length > 0, shop: res?.rows[0] },
-      { status: 200 }
-    );
+    const res = await pool.query(`SELECT * FROM shops WHERE user_id='${user_id}'`);
+    return NextResponse.json({ success: res?.rows?.length > 0 ? true : false, shop: res?.rows[0] }, { status: 200 });
 
   } catch (err) {
     console.error('Error getting shop:', err);
-    return NextResponse.json(
-      { success: false, message: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, message: 'Something went wrong' }, { status: 500 });
   }
 }
+
+
+
+

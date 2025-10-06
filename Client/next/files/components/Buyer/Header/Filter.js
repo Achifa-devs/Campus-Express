@@ -13,8 +13,6 @@ import {
 } from "react-redux";
 import filterSvg from '../../../assets/filter-edit-svgrepo-com.svg'
 import closeSvg from '../../../assets/close-square-svgrepo-com (1).svg'
-// import RangeSlider from 'react-range-slider-input';
-// import 'react-range-slider-input/dist/style.css';
 import '../../../styles/Buyer/FilterAside.css'
 import { setCategoryTo } from '@/redux/buyer_store/Category';
 
@@ -27,14 +25,9 @@ export default function Filter({
     ChangeState,
     ChangeSubCategory,
     category,
-    // state
 }){
        
     let [school, setSchool] = useState([])
-
-
-
-    
     let [categoriesList, setCategoriesList] = useState([])
     let [typeList, setTypeList] = useState([])
 
@@ -49,7 +42,6 @@ export default function Filter({
     },[])
 
     useEffect(() => {
-        // alert(category)
         let type = categoriesList.filter(item => Object.keys(item)[0] === category)[0]
         if(type){
             setTypeList(type[category])
@@ -59,7 +51,6 @@ export default function Filter({
     let dispatch = useDispatch()
     let [minPrice, setMinPrice] = useState(0)
     let [maxPrice, setMaxPrice] = useState(0)
-    // let [state, setstate] = useState('')
 
     function setCampusListAfterStateSelect(state) {
         setSchool([])
@@ -68,7 +59,6 @@ export default function Filter({
         let campuses = Object.values(school_choices).reverse();
         index < 0 ? setSchool([]) : setSchool(campuses[index])
     }
-
 
     function handleOverlay(e) {
         let elem = document.querySelector('.buyer-overlay');
@@ -84,172 +74,198 @@ export default function Filter({
     let [price_checked, set_price_checked] = useState(false)
     let [location_checked, set_location_checked] = useState(false)
 
-    
+    function closeFilter() {
+        // Close filter logic here
+    }
 
     return ( 
         <>
-            <div className="buyer-filter shadow-sm" style={{
+            <div  style={{
                 height: '100%',
                 borderRadius: '2px'
-            }} onClick={e=>e.target === e.currentTarget ? closeFilter():''}>
-                {/* <br /> */}
-                <h5 style={{fontWeight: '500', color: 'orangered', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0px 0px 0px 0px'}}>Filter Section </h5>
-
-                <div className="buyer-filter-cnt" style={{overflow: 'auto', height: 'calc(80% - 70px)',  alignItems: 'flex-start', justifyContent: 'flex-start' }}>
-                    <div className="input-cnt" style={{height: 'fit-content'}}>
-                        <div style={{height: 'fit-content', color: '#fff', width: '100%', marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'left'}}>
-                            <input style={{height: '20px', cursor: 'pointer', width: '20px'}} onInput={e=> set_category_checked(!category_checked)} type="checkbox" name="" id="" />
-                            &nbsp;
-                            <label htmlFor="" style={{color: '#000', marginTop: '0px', fontWeight: '500', fontSize: 'small'}}>Category</label>
-                        </div>
-                        <select style={{height: '35px', width: '100%', float: 'left', padding: '5px'}} name="" onInput={e => ChangeCategory(e.target.value)} id="" >
-                            <option value={''}>Select A Category</option>
-
-                            {
-                                categoriesList.map((item, index) => 
-                                    
-
-                                    Object.keys(item)[0]?.toLowerCase() === category?.toLowerCase()
-                                    ?
-                                    <option key={index} selected value={Object.keys(item)[0]}>{Object.keys(item)[0]}</option>
-                                    :
-                                    <option key={index} value={Object.keys(item)[0]}>{Object.keys(item)[0]}</option>
-                                )
-                            }
-                        </select>
-
-                        <br /> 
-
-                        <select onInput={e => ChangeSubCategory(e.target.value)} style={{height: '35px', width: '100%', float: 'left', padding: '5px'}} name="" id="">
-                            <option value={''}>Select Product Type</option>
-
-                            {
-                                typeList.map((item, index) => 
-                                    <option key={index} value={item}>{item}</option>
-                                )
-                            }
-                        </select>
-                    </div>
-
-                    <div className="input-cnt" >
-                        <div style={{height: 'fit-content', color: '#fff', width: '100%', marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'left'}}>
-                            <input style={{height: '20px', cursor: 'pointer', width: '20px'}} onInput={e=> set_condition_checked(!condition_checked)} type="checkbox" name="" id="" />
-                            &nbsp;
-                            <label htmlFor="" style={{color: '#000', marginTop: '0px', fontWeight: '500', fontSize: 'small'}}>Condition</label>
-                        </div>
-                        <select style={{height: '35px', width: '100%', float: 'left', padding: '5px'}} onInput={e => ChangeCondition(e.target.value)} name="" id="">
-                            <option value={''}>Select Product Condition</option>
-
-                            {
-                                ["Brand New", "Fairly Used", "Refurbished","Used"].map((item, index) => 
-                                    <option key={index} value={item}>{item}</option>
-                                )
-                            }
-                        </select>
-                    </div>
-
-                    <div className="input-cnt" >
-                        <div style={{height: 'fit-content', color: '#fff', width: '100%', marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'left'}}>
-                            <input style={{height: '20px', cursor: 'pointer', width: '20px'}} onInput={e=> set_price_checked(!price_checked)} type="checkbox" name="" id="" />
-                            &nbsp;
-                            <label htmlFor="" style={{color: '#000', marginTop: '0px', fontWeight: '500', fontSize: 'small'}}>Price Range</label>
-                        </div>
-                        {/* <RangeSlider min={0} max={1000000000} step={1} onInput={e => {
-                            setMinPrice(e[0]); 
-                            setMaxPrice(e[1]);
-                            ChangePrice(e)
-                        }}/> */}
-                        {/* <br /> */}
-                        <div style={{
-                            display: 'flex',
-                            width: '100%',
-                            justifyContent: 'space-between',
-                            alignItems: 'center'
-                        }}>
-                            <input style={{height: '35px', width: '40%', float: 'left'}} placeholder="From..." type="number" name="" id="" onInput={e => {setMinPrice(parseInt(e.target.value)); ChangePrice([parseInt(e.target.value), maxPrice])}} defaultValue={new Intl.NumberFormat('en-us').format(minPrice)} />
-                            <input style={{height: '35px', width: '40%', float: 'right'}} placeholder="To..." type="number" name="" id=""  onInput={e => {setMaxPrice(parseInt(e.target.value)); ChangePrice([minPrice,parseInt(e.target.value)])}} defaultValue={new Intl.NumberFormat('en-us').format(maxPrice)} />
-                        </div>
-                    </div>
-
-                    <div className="input-cnt" >
-                        <div style={{height: 'fit-content', color: '#fff', width: '100%', marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'left'}}>
-                            <input style={{height: '20px', cursor: 'pointer', width: '20px'}} onInput={e=> set_location_checked(!location_checked)} type="checkbox" name="" id="" />
-                            &nbsp;
-                            <label htmlFor="" style={{color: '#000', marginTop: '0px', fontWeight: '500', fontSize: 'small'}}>Location</label>
-                        </div>
-                        <select style={{height: '35px', width: '100%', float: 'left', padding: '5px'}} name="" id="" onInput={e => {
-                            ChangeState(e.target.value)
-                            setCampusListAfterStateSelect(e.target.value)
-                        }}>
-                            <option value={''}>Select State</option>
-
-                            {
-                                data?.map((item, index) => 
-                                    <option key={index} value={item.label}>{item.label}</option>
-                                )
-                            }
-                        </select>
-                        <br />
-
-                        <select style={{height: '35px', width: '100%', float: 'left', padding: '5px'}} name="" id="" onInput={e => {
-                            ChangeCampus(e.target.value);
-                        }}>
-                            <option value={''}>Select Campus</option>
-
-                            {
-                                school.map((item, index) => 
-                                    <option key={index} value={item.text}>{item.text}</option>
-                                )
-                            }
-                        </select>
-                    </div>
-
-                    
+            }} className="buyer-filter card border-0 shadow-sm h-100" onClick={e => e.target === e.currentTarget ? closeFilter() : ''}>
+                {/* Header */}
+                <div className="card-header bg-white border-bottom py-3">
+                    <h5 className="mb-0 text-center fw-semibold" style={{color: '#FF4500'}}>
+                        Filter Section
+                    </h5>
                 </div>
 
-                <div className="buyer-filter-btn" style={{display: 'inline-block', height: '20%', width: '100%', justifyContent: 'space-between', padding: '10px'}}>
-                    <button onClick={e => {e.preventDefault(); handleOverlay()}} style={{
-                        height: '35px',
-                        width: '46%',
-                        float: 'left',
-                        borderRadius: '3px',
-                        outline: 'none',
-                        padding: '10px',
-                        border: 'none',
-                        textAlign: 'center',
-                        color: '#fff',
-                        display: 'flex', 
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        position: 'relative',
-                        fontSize: 'medium',
-                        fontWeight: '500',
-                        backgroundColor: 'orangered',
-                        margin: '0'
-                    }}>
-                        Cancel
-                    </button>
-                    <button onClick={e=> applyFilter(category_checked, price_checked, condition_checked, location_checked)} style={{
-                        height: '35px',
-                        width: '46%',
-                        float: 'right',
-                        borderRadius: '3px',
-                        outline: 'none',
-                        padding: '10px',
-                        border: 'none',
-                        textAlign: 'center',
-                        color: '#fff',
-                        display: 'flex', 
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        position: 'relative',
-                        fontSize: 'medium',
-                        fontWeight: '500',
-                        backgroundColor: 'orangered',
-                        margin: '0'
-                    }}>
-                        Apply
-                    </button>
+                {/* Filter Content */}
+                <div className="card-body p-3" style={{overflow: 'auto', height: 'calc(80% - 70px)'}}>
+                    
+                    {/* Category Filter */}
+                    <div className="mb-4">
+                        <div className="form-check d-flex align-items-center mb-2">
+                            <input 
+                                className="form-check-input me-2" 
+                                type="checkbox" 
+                                onChange={e => set_category_checked(!category_checked)}
+                                style={{cursor: 'pointer', width: '20px', height: '20px'}}
+                            />
+                            <label className="form-check-label fw-semibold text-dark small">
+                                Category
+                            </label>
+                        </div>
+                        <select 
+                            className="form-select form-select-sm mb-2" 
+                            onChange={e => ChangeCategory(e.target.value)}
+                        >
+                            <option value={''}>Select A Category</option>
+                            {categoriesList.map((item, index) => 
+                                Object.keys(item)[0]?.toLowerCase() === category?.toLowerCase() ?
+                                <option key={index} selected value={Object.keys(item)[0]}>
+                                    {Object.keys(item)[0]}
+                                </option>
+                                :
+                                <option key={index} value={Object.keys(item)[0]}>
+                                    {Object.keys(item)[0]}
+                                </option>
+                            )}
+                        </select>
+
+                        <select 
+                            className="form-select form-select-sm" 
+                            onChange={e => ChangeSubCategory(e.target.value)}
+                        >
+                            <option value={''}>Select Product Type</option>
+                            {typeList.map((item, index) => 
+                                <option key={index} value={item}>{item}</option>
+                            )}
+                        </select>
+                    </div>
+
+                    {/* Condition Filter */}
+                    <div className="mb-4">
+                        <div className="form-check d-flex align-items-center mb-2">
+                            <input 
+                                className="form-check-input me-2" 
+                                type="checkbox" 
+                                onChange={e => set_condition_checked(!condition_checked)}
+                                style={{cursor: 'pointer', width: '20px', height: '20px'}}
+                            />
+                            <label className="form-check-label fw-semibold text-dark small">
+                                Condition
+                            </label>
+                        </div>
+                        <select 
+                            className="form-select form-select-sm" 
+                            onChange={e => ChangeCondition(e.target.value)}
+                        >
+                            <option value={''}>Select Product Condition</option>
+                            {["Brand New", "Fairly Used", "Refurbished","Used"].map((item, index) => 
+                                <option key={index} value={item}>{item}</option>
+                            )}
+                        </select>
+                    </div>
+
+                    {/* Price Range Filter */}
+                    <div className="mb-4">
+                        <div className="form-check d-flex align-items-center mb-2">
+                            <input 
+                                className="form-check-input me-2" 
+                                type="checkbox" 
+                                onChange={e => set_price_checked(!price_checked)}
+                                style={{cursor: 'pointer', width: '20px', height: '20px'}}
+                            />
+                            <label className="form-check-label fw-semibold text-dark small">
+                                Price Range
+                            </label>
+                        </div>
+                        <div className="d-flex justify-content-between align-items-center gap-2">
+                            <input 
+                                type="number" 
+                                className="form-control form-control-sm" 
+                                placeholder="From..." 
+                                onChange={e => {
+                                    setMinPrice(parseInt(e.target.value)); 
+                                    ChangePrice([parseInt(e.target.value), maxPrice])
+                                }}
+                                defaultValue={new Intl.NumberFormat('en-us').format(minPrice)}
+                                style={{width: '48%'}}
+                            />
+                            <input 
+                                type="number" 
+                                className="form-control form-control-sm" 
+                                placeholder="To..." 
+                                onChange={e => {
+                                    setMaxPrice(parseInt(e.target.value)); 
+                                    ChangePrice([minPrice, parseInt(e.target.value)])
+                                }}
+                                defaultValue={new Intl.NumberFormat('en-us').format(maxPrice)}
+                                style={{width: '48%'}}
+                            />
+                        </div>
+                    </div>
+
+                    {/* Location Filter */}
+                    <div className="mb-4">
+                        <div className="form-check d-flex align-items-center mb-2">
+                            <input 
+                                className="form-check-input me-2" 
+                                type="checkbox" 
+                                onChange={e => set_location_checked(!location_checked)}
+                                style={{cursor: 'pointer', width: '20px', height: '20px'}}
+                            />
+                            <label className="form-check-label fw-semibold text-dark small">
+                                Location
+                            </label>
+                        </div>
+                        <select 
+                            className="form-select form-select-sm mb-2" 
+                            onChange={e => {
+                                ChangeState(e.target.value)
+                                setCampusListAfterStateSelect(e.target.value)
+                            }}
+                        >
+                            <option value={''}>Select State</option>
+                            {data?.map((item, index) => 
+                                <option key={index} value={item.label}>{item.label}</option>
+                            )}
+                        </select>
+
+                        <select 
+                            className="form-select form-select-sm" 
+                            onChange={e => ChangeCampus(e.target.value)}
+                        >
+                            <option value={''}>Select Campus</option>
+                            {school.map((item, index) => 
+                                <option key={index} value={item.text}>{item.text}</option>
+                            )}
+                        </select>
+                    </div>
+                </div>
+
+                {/* Footer Buttons */}
+                <div className="card-footer bg-white border-top p-3" style={{height: '20%'}}>
+                    <div className="row g-2">
+                        <div className="col-6">
+                            <button 
+                                className="btn w-100 fw-semibold"
+                                onClick={e => {e.preventDefault(); handleOverlay()}}
+                                style={{
+                                    backgroundColor: '#f8f9fa',
+                                    border: '1px solid #dee2e6',
+                                    color: '#6c757d'
+                                }}
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                        <div className="col-6">
+                            <button 
+                                className="btn w-100 fw-semibold"
+                                onClick={e => applyFilter(category_checked, price_checked, condition_checked, location_checked)}
+                                style={{
+                                    backgroundColor: '#FF4500',
+                                    border: '1px solid #FF4500',
+                                    color: 'white'
+                                }}
+                            >
+                                Apply
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </> 

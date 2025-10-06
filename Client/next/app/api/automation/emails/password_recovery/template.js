@@ -90,24 +90,24 @@ export function PWD_RESET_TEMPLATE(name,token) {
     </style>
 </head>
 <body>
-    <div className="container">
+    <div class="container">
         <!-- Logo -->
-        <div className="logo">
+        <div class="logo">
             <img src="https://res.cloudinary.com/daqbhghwq/image/upload/v1724852529/448223033_380994008307411_3052806854721458949_n_fbxqpk.jpg" alt="Campus Sphere">
         </div>
 
         <h1>Password Recovery</h1>
-        <div className="content">
+        <div class="content">
             <p>Hello, ${name}</p>
             <p>You requested a password reset. Use the token below or click the button to reset your password.</p>
-            <div className="token">${token}</div>
-            <a href="https://www.campussphere.net/new-password?token=123456" className="button">Reset Password</a>
+            <div class="token">${token}</div>
+            <a href="https://www.campussphere.net/new-password?token=123456" class="button">Reset Password</a>
             <p>If you did not request this, please ignore this email.</p>
         </div>
         
-        <div className="footer">
-            <p className="footer-text">Follow us on</p>
-            <div className="social-icons">
+        <div class="footer">
+            <p class="footer-text">Follow us on</p>
+            <div class="social-icons">
                 <a href="https://twitter.com/yourpage" target="_blank">
                     <img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="Twitter">
                 </a>
@@ -118,7 +118,7 @@ export function PWD_RESET_TEMPLATE(name,token) {
                     <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
                 </a>
             </div>
-            <p className="footer-text">&copy; 2025 Campus Sphere. All rights reserved.</p>
+            <p class="footer-text">&copy; 2025 Campus Sphere. All rights reserved.</p>
         </div>
     </div>
 </body>

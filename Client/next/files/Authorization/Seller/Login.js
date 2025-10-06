@@ -73,7 +73,7 @@ const SellerLogin = () => {
         let book = []
 
         function addErrMssg(err,pElem) {
-            // if(!err[0]success){
+            // if(!err[0].bool){
 
                 let check = pElem.querySelector('.err-mssg');
                 if(check){

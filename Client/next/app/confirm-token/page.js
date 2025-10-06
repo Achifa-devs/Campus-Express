@@ -59,7 +59,7 @@ export default function ConfirmToken() {
            
             e.target.disabled = true;
             buyer_overlay_setup(true, 'Veryfyng Token')
-            fetch('https://cs-node.vercel.app/verify-token', {
+            fetch('https://cs-server-olive.vercel.app/verify-token', {
                 method: 'post',
                 headers: {
                     "Content-Type": "Application/json"
@@ -140,7 +140,7 @@ export default function ConfirmToken() {
         let book = []
 
         function addErrMssg(err,pElem) {
-            // if(!err[0]success){
+            // if(!err[0].bool){
 
             let check = pElem.querySelector('.err-mssg');
             if(check){

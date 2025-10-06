@@ -19,8 +19,6 @@ import js_ago from 'js-ago'
 import Video from '../Video'
 import { setSaveTo } from '@/redux/buyer_store/Save'
 import { open_notice } from '@/files/reusable.js/notice'
-import axios from 'axios';
-import { save_item, unsave_item } from '@/files/utils.js/wishlist';
 // import { SaveItem } from '@/app/api/buyer/post'
 // import { UnSaveItem } from '@/app/api/buyer/delete'
 // import { GetOrders } from '@/app/api/buyer/get'
@@ -64,60 +62,51 @@ const Card = ({item, index}) => {
 
 
 
-    async function Saver(e,product_id,saved_id=null) {  
-        e.preventDefault();
-        let overlay = document.querySelector('.overlay')
+    // async function Saver(e,product_id) {  
+    //     if(buyer_info !== null){ 
+    //         let overlay = document.querySelector('.overlay')
+    //         overlay.setAttribute('id', 'overlay');
+    //         setBtnMode(btnMode) 
+    //         let saveList = savedItem;
+    //         let duplicateSearch = savedItem?.filter(data=> (data?.saved_item[0]?.product_id === product_id))
+    //         console.log('savedItem: ', savedItem.length > 0, savedItem)
 
-        try {
-            
-            if(buyer_info !== null){ 
-                let overlay = document.querySelector('.overlay')
-                overlay.setAttribute('id', 'overlay');
-                setBtnMode(btnMode) 
-                let saveList = savedItem;
-                let duplicateSearch = savedItem?.filter(data=> (data?.saved_item?.product_id === product_id))
-                console.log('savedItem: ', savedItem.length > 0, savedItem)
-    
-                if(savedItem.length > 0){
-                    console.log('duplicateSearch: ', duplicateSearch.length > 0)
-    
-                    if(duplicateSearch.length > 0){
+    //         if(savedItem.length > 0){
+    //             console.log('duplicateSearch: ', duplicateSearch.length > 0)
 
-                        let result = await unsave_item(data?.saved_item?.saveditems_id, buyer_info?.user_id);
-                        setBtnMode(!btnMode) 
-                        overlay.removeAttribute('id')
-                        dispatch(setSaveTo(result))
-                        open_notice(true, 'Item Was Unsaved Successfuly')
-        
-                    }else{
-                        
-                        let result = await save_item(buyer_info?.user_id, product_id)
-                        setBtnMode(!btnMode) 
-                        overlay.removeAttribute('id')
-                        dispatch(setSaveTo(result))
-                        open_notice(true,'Item Was Saved Successfuly')
-        
-                    }
-                }else{
-        
-                    let result = await save_item(buyer_info?.user_id, product_id)
-                    setBtnMode(!btnMode) 
-                    overlay.removeAttribute('id')
-                    dispatch(setSaveTo(result))
-                    open_notice(true,'Item Was Saved Successfuly')
+    //             if(duplicateSearch.length > 0){
     
-                }
-            }
-        } catch (error) {
-            overlay.removeAttribute('id');
-            open_notice(true, "Internal server error")
-        }
-    }
+    //                 let result = await UnSaveItem(product_id, buyer_info?.user_id);
+    //                 setBtnMode(!btnMode) 
+    //                 overlay.removeAttribute('id')
+    //                 dispatch(setSaveTo(result))
+    //                 open_notice('Item Was Successfuly Unsaved')
+    
+    //             }else{
+                    
+    //                 let result = await SaveItem(product_id, buyer_info?.user_id)
+    //                 setBtnMode(!btnMode) 
+    //                 overlay.removeAttribute('id')
+    //                 dispatch(setSaveTo(result))
+    //                 open_notice('Item Was Successfuly Saved')
+    
+    //             }
+    //         }else{
+    
+    //             let result = await SaveItem(product_id, buyer_info?.user_id)
+    //             setBtnMode(!btnMode) 
+    //             overlay.removeAttribute('id')
+    //             dispatch(setSaveTo(result))
+    //             open_notice('Item Was Successfuly Saved')
+
+    //         }
+    //     }
+    // }
 
     useEffect(() => {
-        console.log("savedItem", savedItem)
+        console.log(savedItem)
         if(savedItem){
-            let result = [...savedItem].filter(data=> (data.saved_item.product_id === item.product_id)).length > 0;
+            let result = savedItem.filter(data=> (data.saved_item[0].product_id === item.product_id)).length > 0 ? true : false
             setSaved(result);
         }
     }, [savedItem])
@@ -125,22 +114,19 @@ const Card = ({item, index}) => {
     
     
 
-    useEffect(() => {
-        // console.log(JSON.stringify(buyer_info))
-        if (buyer_info) {
-            axios.get('/api/store/orders', {
-                params: {
-                    user_id: buyer_info?.user_id
-                }
-            })
-            .then((res) => {
-                if(res.data.success){
-                    set_order_list(res.data.data)
-                }
-            })
-            .catch((err) => console.log(err))
-        }
-    }, [buyer_info]) 
+    // useEffect(() => {
+    //     // console.log(JSON.stringify(buyer_info))
+    //     if(buyer_info){
+    //         GetOrders(buyer_info?.user_id)
+    //         .then((result) => {
+    //             console.log(result)
+    //             if(result){
+    //                 set_order_list(result)
+    //             }
+    //         })
+    //         .catch((err) => console.log(err))
+    //     }
+    // }, [buyer_info]) 
  
     return ( 
         <> 
@@ -177,7 +163,7 @@ const Card = ({item, index}) => {
                                 WebkitLineClamp: '2',
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis'
-                            }} onClick={e => window.location.href=(`/store/${item.product_id}`)} >{item.title}</small>
+                            }} onClick={e => window.location.href=(`/store/product/${item.product_id}`)} >{item.title}</small>
                             : 
                             <small style={{
                                 fontSize: 'small',
@@ -191,7 +177,7 @@ const Card = ({item, index}) => {
                                 WebkitLineClamp: '2',
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis'
-                            }} onClick={e => window.location.href=(`/store/${item.product_id}`)} >{item.title}</small>
+                            }} onClick={e => window.location.href=(`/store/product/${item.product_id}`)} >{item.title}</small>
                         }
 
                       
@@ -199,30 +185,33 @@ const Card = ({item, index}) => {
                         {
                             screenWidth > 479
                             ?
-                            <h6 onClick={e => window.location.href=(`/store/${item.product_id}`)} style={{marginBottom: '10px', marginTop: '10px', fontWeight: '400', fontSize: 'small', color: '#000', fontFamily: 'sans-serif'}}>&#8358;{
+                            <h6 onClick={e => window.location.href=(`/store/product/${item.product_id}`)} style={{marginBottom: '10px', marginTop: '10px', fontWeight: '400', fontSize: 'small', color: '#000', fontFamily: 'sans-serif'}}>&#8358;{
                                 new Intl.NumberFormat('en-us').format(item.price)
                             }</h6>
                             : 
-                            <h6 onClick={e => window.location.href=(`/store/${item.product_id}`)} style={{marginBottom: '10px', fontWeight: '700', color: '#000'}}>&#8358;{new Intl.NumberFormat('en-us').format(item.price)}</h6>
+                            <h6 onClick={e => window.location.href=(`/store/product/${item.product_id}`)} style={{marginBottom: '10px', fontWeight: '700', color: '#000'}}>&#8358;{new Intl.NumberFormat('en-us').format(item.price)}</h6>
                         }
 
-                        <div onClick={e => window.location.href=(`/store/${item.product_id}`)} style={{display: 'flex',background: '#fff', color: 'orangered',  alignItems: 'center', justifyContent: 'left', padding: '0'}}>
-                            <span  style={{background: '#fff', color: '#000', borderRadius: '5px', top: '20px', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', left: '20px', padding: '5px 0 5px 0'}}>
-                                <span  style={{background: '#fff',color: 'orangered', padding: '0'}}>
+                        {
+                            item?.others?.condition &&
+                            <div onClick={e => window.location.href=(`/store/product/${item.product_id}`)} style={{display: 'flex',background: '#fff', color: 'orangered',  alignItems: 'center', justifyContent: 'left', padding: '0'}}>
+                                <span  style={{background: '#fff', color: '#000', borderRadius: '5px', top: '20px', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', left: '20px', padding: '5px 0 5px 0'}}>
+                                    <span  style={{background: '#fff',color: 'orangered', padding: '0'}}>
 
-                                    <img src={conditionSvg.src} style={{height: '20px', width: '20px', marginBottom: '5px'}} alt="" />
+                                        <img src={conditionSvg.src} style={{height: '20px', width: '20px', marginBottom: '5px'}} alt="" />
 
+                                    </span>
+                                    &nbsp;
+
+                                    <span  style={{background: '#fff',color: 'rgb(98, 98, 98)', padding: '0',  fontSize: 'x-small', fontWeight: '500'}}> 
+                                        {(item.others)?.condition}
+                                    </span>
                                 </span>
-                                &nbsp;
+                                
+                            </div>
+                        }
 
-                                <span  style={{background: '#fff',color: 'rgb(98, 98, 98)', padding: '0',  fontSize: 'x-small', fontWeight: '500'}}> 
-                                    {(item.others)?.condition}
-                                </span>
-                            </span>
-                            
-                        </div>
-
-                        <SaveButton data={item} Saver={Saver} isItemSaved={saved} />
+                        {/* <SaveButton data={item} Saver={Saver} isItemSaved={saved} /> */}
 
                     </div>
 
@@ -270,12 +259,12 @@ const Card = ({item, index}) => {
                         </div>
                     </div>
 
-                    <button style={BtnStyles} onClick={e => {
+                    {/* <button style={BtnStyles} onClick={e => {
                         order_list.filter((data) => data?.product?.product_id === item?.product_id && data?.order?.user_id === buyer_info?.user_id)?.length > 0
                         ?
-                        window.location.href = `/store/orders/${item?.product_id}/checkout`
+                        window.location.href = `/store/checkout/${item?.product_id}`
                         :
-                        window.location.href = `/store/orders/${item?.product_id}/create`
+                        window.location.href = `/store/new-order/${item?.product_id}`
 
                     }}>
 
@@ -293,7 +282,7 @@ const Card = ({item, index}) => {
                             :
                             'Place Order Now'
                         }</span>
-                    </button>
+                    </button> */}
 
                 </div>
             </div> 

@@ -22,8 +22,6 @@ export async function GET(req) {
       [user_id, product_id]
     );
     const order = ordersResult.rows;
-    // console.log(ordersResult)
-
 
     // If no orders found
     if (order.length === 0) {

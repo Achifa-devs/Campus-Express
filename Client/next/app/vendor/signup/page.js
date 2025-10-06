@@ -17,13 +17,12 @@ import { useSelector } from 'react-redux';
 const Signup = () => {
     let [screenWidth, setScreenWidth] = useState(0) 
     let {
-        user_id
-    }=useSelector(s=>s.user_id);
+        buyer_info
+    }=useSelector(s=>s.buyer_info);
 
     useEffect(() => {
         setScreenWidth(window.innerWidth)
-        console.log("user_id: ", user_id)
-    },[user_id])
+    },[])
 
 
     let [logo, setLogo] = useState('');
@@ -93,10 +92,10 @@ const Signup = () => {
         
 
         Validation();
-        console.log(book)
+        console.log("book: ", buyer_info)
         Object.values(book.current).filter(item => item !== true).length > 0 ? validation.current = false : validation.current = true;
 
-        if (validation.current) {
+        if (validation.current && buyer_info?.user_id) {
             e.target.disabled = true;
 
             let overlay = document.querySelector('.overlay')
@@ -106,7 +105,7 @@ const Signup = () => {
                 headers: {
                     "Content-Type": "Application/json"
                 },
-                body: JSON.stringify({name,logo,address1,address2,address3,summary,user_id})
+                body: JSON.stringify({name,logo,address1,address2,address3,summary,user_id: buyer_info?.user_id})
             })
             .then(async(result) => {
                 let response = await result.json();
@@ -209,7 +208,7 @@ const Signup = () => {
             formData.append('file', file); // Directly append the file object for web
             formData.append('productId', shortid.generate(10)); // Directly append the file object for web
     
-            const response = await axios.post('http://192.168.213.146:9090/upload', formData, {
+            const response = await axios.post('https://cs-node.vercel.app/upload', formData, {
                 headers: { 
                     'Content-Type': 'multipart/form-data',
                 },
@@ -238,7 +237,7 @@ const Signup = () => {
         overlay.setAttribute('id', 'overlay');
         try {
         //   setIsLoading(true);
-          const response = await axios.post('http://192.168.213.146:9090/delete', {
+          const response = await axios.post('https://cs-node.vercel.app/delete', {
             url
           });
     

@@ -106,7 +106,7 @@ export default function PasswordRecovery() {
            
             e.target.disabled = true;
             seller_overlay_setup(true, 'Veryfyng Token')
-            fetch('https://cs-node.vercel.app/seller.verify-token', {
+            fetch('https://cs-server-olive.vercel.app/seller.verify-token', {
                 method: 'post',
                 headers: {
                     "Content-Type": "Application/json"
@@ -188,7 +188,7 @@ export default function PasswordRecovery() {
           
             e.target.disabled = true;
             seller_overlay_setup(true, 'Resetting Password')
-            fetch('https://cs-node.vercel.app/seller.password-update', {
+            fetch('https://cs-server-olive.vercel.app/seller.password-update', {
                 method: 'post',
                 headers: {
                     "Content-Type": "Application/json"
@@ -260,7 +260,7 @@ export default function PasswordRecovery() {
         let book = []
 
         function addErrMssg(err,pElem) {
-            // if(!err[0]success){
+            // if(!err[0].bool){
 
             let check = pElem.querySelector('.err-mssg');
             if(check){

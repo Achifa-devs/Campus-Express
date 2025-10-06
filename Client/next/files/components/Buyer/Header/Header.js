@@ -164,7 +164,7 @@ const Header = () => {
         
           {txt:'Help Center', svg: helpSvg, uri: 'help-center'},
           // {txt:'Refund & Return', svg: refundSvg, uri: 'refund'},
-          {txt:'Manage Orders', svg: cancelSvg, uri: 'orders'},
+          // {txt:'Manage Orders', svg: cancelSvg, uri: 'orders'},
           // {txt:'Payment Option', svg: paySvg, uri: 'payments'},
           { txt: 'Terms Of Use', svg: termsSvg, uri: 'terms-of-use' },
           
@@ -235,10 +235,10 @@ const Header = () => {
       {
         let list = [
           {txt:'My Account', svg: acctSvg, uri: 'account-managements'},
-          {txt:'Orders', svg: orderSvg, uri: 'orders'},
+          // {txt:'Orders', svg: orderSvg, uri: 'orders'},
           {txt:'Inbox', svg: inboxSvg, uri: 'inbox'},
           {txt:'Favourite', svg: savedSvg, uri: 'favourites'},
-          // {txt:'Voucher', svg: '', uri: ''},
+          {txt:'Messages', svg: chatSvg, uri: 'chat'},
           {txt: 'Logout', svg: logoutSvg, uri: 'logout'}
         ]
         setList(list)
@@ -368,7 +368,7 @@ const Header = () => {
 
 
       <div style={{cursor: 'pointer'}} onClick={e => {
-        pathname.split('/').splice(-1)[0] !== '' || pathname.split('/').length === 1 ? '' : window.location.href = '/store'
+        pathname.split('/').splice(-1)[0] !== '' || pathname.split('/').length === 1 ? '' : '/store'
       }}>
         <Image
             src="https://res.cloudinary.com/daqbhghwq/image/upload/v1746402998/Untitled_design-removebg-preview_peqlme.png"

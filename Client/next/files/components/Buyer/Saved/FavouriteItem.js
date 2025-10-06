@@ -8,13 +8,10 @@ import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup';
 import { open_notice } from '@/files/reusable.js/notice';
 import { useSelector } from 'react-redux';
 
-export default function FavouriteItem({ item, index , deleteFavourite}) {
+export default function FavouriteItem({ item, index }) {
     let {
         user_id 
     } = useSelector(s => s.user_id);
-    let {
-        buyer_info 
-    } = useSelector(s => s.buyer_info);
     let [orders, set_orders] = useState([0]);
     let [ordered, set_ordered] = useState([0]);
    
@@ -22,12 +19,12 @@ export default function FavouriteItem({ item, index , deleteFavourite}) {
     useEffect(() => {setScreenWidth(window.innerWidth)},[]);
     useEffect(() => {
         if (user_id !== '' && user_id !== null) {
-            // buyer_overlay_setup(true, 'Loading')
+            buyer_overlay_setup(true, 'Loading')
             
-            axios.get('https://www.campussphere.net/api/store/orders', {params: {user_id: user_id.trim()}})
+            axios.get('https://cs-server-olive.vercel.app/orders', {params: {user_id: user_id.trim()}})
             .then(({data})=>{
                 console.log(data)
-                set_orders(data) 
+                set_orders(data)
                 buyer_overlay_setup(false, '')
 
             })
@@ -43,14 +40,12 @@ export default function FavouriteItem({ item, index , deleteFavourite}) {
     
     useEffect(() => {
         if (orders) {
-            if (orders.length > 0) {
-                let result = orders.filter((data) => data?.product?.product_id === item?.item?.product_id);
-                console.log(result)
-                if(result.length > 0){
-                    set_ordered(true)
-                } else {
-                    set_ordered(false)
-                }
+            let result = orders.filter((data) => data?.product?.product_id === item?.item?.product_id);
+            console.log(result)
+            if(result.length > 0){
+                set_ordered(true)
+            } else {
+                set_ordered(false)
             }
         }
     }, [orders])
@@ -62,11 +57,11 @@ export default function FavouriteItem({ item, index , deleteFavourite}) {
             <div className="favourite-card-data-cnt">
                 <div className='thumbnail-cnt' style={{height: '100%'}}>
                     {
-                        item?.product?.purpose === 'accomodation'
+                        item?.category === 'Lodge & Apartments'
                         ?
-                        <Video thumbnail_id={item?.product?.thumbnail_id} height={"100%"} />
+                        <Video thumbnail_id={item?.saved_item[0]?.thumbnail_id} height={"100%"} />
                         :
-                        <Thumbnail thumbnail_id={item?.product?.thumbnail_id} height={"100%"}/>
+                        <Thumbnail thumbnail_id={item?.saved_item[0]?.thumbnail_id} height={"100%"}/>
                     }
                 </div> 
 
@@ -81,12 +76,12 @@ export default function FavouriteItem({ item, index , deleteFavourite}) {
                                 whiteSpace: 'nowrap', /* Prevent text from wrapping */
                                 overflow: 'hidden',    /* Hide any overflow text */
                                 textOverflow: 'ellipsis'
-                            }}>{item?.product?.title}</p>
+                            }}>{item?.saved_item[0]?.title}</p>
                         </div>
 
                         <div className="price">
                             &#8358;&nbsp;{
-                            new Intl.NumberFormat('en-us').format(item?.product?.price)}
+                            new Intl.NumberFormat('en-us').format(item?.saved_item[0]?.price)}
                         </div>
                     </div>
                     
@@ -96,15 +91,31 @@ export default function FavouriteItem({ item, index , deleteFavourite}) {
                                 whiteSpace: 'nowrap', /* Prevent text from wrapping */
                                 overflow: 'hidden',    /* Hide any overflow text */
                                 textOverflow: 'ellipsis'
-                            }}>{item?.product?.campus} in <b>{item?.product?.uni_state} state</b></span>
+                            }}>Seller-id: {item?.saved_item[0]?.user_id}</span>
+                        </div>
+
+                        <div className="stock">
+                            {item?.stock}
                         </div>
                     </div>
                     
-                    <div className="body-cnt-btm"> 
-                        <button onClick={async(e) => { 
-                            buyer_overlay_setup(true, 'Unsaving item');
-                            await deleteFavourite(item?.saved_item?.saveditems_id, buyer_info?.user_id, item?.saved_item?.product_id);
-                           
+                    <div className="body-cnt-btm">
+                        <button onClick={e => {
+                            buyer_overlay_setup(true, 'Unsaving item')
+                            axios.delete('https://cs-server-olive.vercel.app/unsave-item', {params: {user_id: item?.item?.user_id, product_id: item?.saved_item[0]?.product_id}})
+                            .then(({data})=>{
+                                e.target.parentElement.parentElement.parentElement.parentElement.remove()
+                                // setItems(data)
+                                console.log(data)
+                                buyer_overlay_setup(false, '')
+                                open_notice(true, 'unsaved item successfully')
+                            })
+                            .catch(error=>{
+                                console.log(error)
+                                buyer_overlay_setup(false, '')
+                                open_notice(true, 'unsaved item successfully')
+
+                            })
                         }}>
                             Remove
                         </button>
@@ -112,9 +123,9 @@ export default function FavouriteItem({ item, index , deleteFavourite}) {
                         <button onClick={e => {
                             ordered
                             ?
-                                window.location.href=(`/orders?item=${item?.product?.product_id}`)
+                                window.location.href=(`/orders?item=${item?.item?.product_id}`)
                             :
-                                window.location.href=(`/new-order/${item?.product?.product_id}`)
+                                window.location.href=(`/new-order/${item?.item?.product_id}`)
                         }}>
                             {
                                 ordered

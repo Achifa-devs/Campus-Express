@@ -43,7 +43,7 @@ export async function POST(req) {
   
       const mssg_obj = get_mssg('new-order');
       await pool.query(
-        `INSERT INTO inbox (
+        `INSERT INTO buyer_inbox (
           id, message_content, subject, created_at, user_id, action_id
         ) VALUES (
           DEFAULT, $1, $2, $3, $4, $5

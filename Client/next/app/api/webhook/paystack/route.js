@@ -91,7 +91,7 @@ export async function POST(req) {
             );
 
             // If transaction saved successfully, update order
-            if (transactionresult.success) {
+            if (transactionResult.bool) {
                 await update_order(product_info.product_id, buyer_info.user_id);
             }
 

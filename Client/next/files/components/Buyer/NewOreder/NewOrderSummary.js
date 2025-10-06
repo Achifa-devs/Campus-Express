@@ -1,54 +1,18 @@
 "use client"
-import React, { use } from 'react'
+import React from 'react'
 import { useEffect, useState } from "react";
 import { useSelector } from 'react-redux';
 import { open_notice } from '@/files/reusable.js/notice';
 import { useParams } from 'next/navigation';
 import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup';
-import axios from 'axios';
 export default function NewOrderSummary({item,stock,deliveryOpt,order_id}) {
 
     let {pickup_channel} = useSelector(s=>s.pickup_channel)
     let {user_id}=useSelector(s=>s.user_id);
-    let {buyer_info}=useSelector(s=>s.buyer_info);
     useEffect(() => {let width = window.innerWidth;setScreenWidth(width)},[]);
 
     let [screenWidth, setScreenWidth] = useState(0);
-    let [shipping_fee, set_shipping_fee] = useState(0);
-
-
-    useEffect(() => {
-        console.log("deliveryOpt changed: ", deliveryOpt);
-        let shipping_range = item?.shipping_range ? JSON.parse(item.shipping_range) : null;
-        console.log("shipping_range: ", shipping_range);
-        let accepted_range_price = []
-        if (shipping_range) {
-            Object.entries(shipping_range).forEach(([key, value]) => {
-                if (value !== null && value.selected) {
-                    accepted_range_price.push({ range: key, price: parseInt(value.price) });
-                }
-            });
-        }
-
-        accepted_range_price.map(range_obj => {
-            if (range_obj.range === 'in_campus') {
-                if(item?.campus === buyer_info?.campus) {
-                    set_shipping_fee(range_obj.price);
-                }
-            } else if (range_obj.range === 'in_state') {
-                    if(item?.uni_state === buyer_info?.state) {
-                    set_shipping_fee(range_obj.price);
-                }
-            } else if (range_obj.range === 'out_state') {
-                if(item?.uni_state !== buyer_info?.state) {
-                    set_shipping_fee(range_obj.price);
-                }
-            }
-        });
-        
-    }, [item]);
-
-  
+    
     async function handleNewOrder() {
         // alert(stock)
 
@@ -58,36 +22,34 @@ export default function NewOrderSummary({item,stock,deliveryOpt,order_id}) {
         if (deliveryOpt !== -1) {
             if (deliveryOpt === 0 && check_2.length > 0 || deliveryOpt === 1 && check_1.length > 0) {
                 buyer_overlay_setup(true, 'Creating new order...')
-
-                axios.post("/api/store/new-order", {
-                    user_id: user_id,
-                    product_id: item.product_id,
-                    price: parseInt(item.price) * parseInt(stock),
-                    stock: stock,
-                    locale: pickup_channel,
-                    vendor_id: item.user_id,
-                    shipping_fee: shipping_fee
+                fetch('/api/store/new-order', {
+                    method: 'post',
+                    headers: {
+                        "Content-Type": "Application/json"
+                    },
+                    body: JSON.stringify({
+                        user_id: user_id, product_id: item.product_id, price: parseInt(item.price)*parseInt(stock), stock: stock, locale: pickup_channel
+                    })
                 })
-                .then((result) => {
-                    const response = result.data; // axios auto-parses JSON
-                    console.log(response)
-
+                .then(async(result)=> {
+                    let response = await result.json()
                     if (response.success) {
-                        // buyer_overlay_setup(false, '');
+                        buyer_overlay_setup(false, '')
 
                         // window.location.replace(`/store/checkout/${item?.product_id}`)
-                        window.location.replace(`/store/orders/${item?.product_id}/checkout`);
-                    } else {
-                        open_notice(true, 'Error Occured, Please Try Again');
-                        buyer_overlay_setup(false, '');
+                        window.location.href=(`/store/checkout/${item?.product_id}`, {replace: true})
+                    }else{
+                        open_notice(true, 'Error Occured, Please Try Again')
+                        buyer_overlay_setup(false, '')
+
                     }
                 })
                 .catch((err) => {
-                    open_notice(true, 'Error Occured, Please Try Again');
-                    buyer_overlay_setup(false, '');
-                    console.error(err);
-                });
-
+                    open_notice(true, 'Error Occured, Please Try Again')
+                    buyer_overlay_setup(false, '')
+                    console.log(err)
+                })
+                
             }else{ 
                 if(deliveryOpt === 1){
                     open_notice(true, 'Door Step Delivery Is Not Set!...')
@@ -122,7 +84,7 @@ export default function NewOrderSummary({item,stock,deliveryOpt,order_id}) {
                 .then(async(result)=> {
                     let response = await result.json()
                     if(response.success){
-                        window.location.replace(`/store/orders/${item?.product_id}/checkout`)
+                        window.location.href=(`/store/checkout/${item?.product_id}`)
                     }else{
                         open_notice(true, 'Error Occured, Please Try Again...')
                     }

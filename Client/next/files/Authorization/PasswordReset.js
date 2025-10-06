@@ -71,7 +71,7 @@ const PasswordReset = () => {
                 item.parentElement.append(err_comp)
             }
         })
-        let response = result.filter(item => itemsuccess === true)
+        let response = result.filter(item => item.bool === true)
         if(response.length > 1 ){
             ResetPwd(pwd)
         }

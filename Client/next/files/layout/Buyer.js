@@ -13,46 +13,13 @@ import { setBuyerIdTo } from '@/redux/buyer_store/buyer_data';
 import { setBuyerInfoTo } from '@/redux/buyer_store/buyerInfo';
 import FilterAside from '../components/Buyer/dashboard/FilterAside'
 import { buyer_overlay_setup } from '../reusable.js/overlay-setup'
-import { setSaveTo } from '@/redux/buyer_store/Save'
-import ConfirmationModal from '../components/Buyer/OrderConfirmation/ConfirmationModal'
 
 const BuyerLayout = ({children}) => {
 
     let dispatch = useDispatch()
     let [screenWidth, setScreenWidth] = useState(0) 
-      
-    let {
-        user_id
-    } = useSelector(s => s.user_id)
+   
 
-    useEffect(() => {
-        const currentPath = pathname.split('/').splice(-1)[0];
-        const excludedPaths = ['login', 'signup', 'password-recovery', ''];
-
-        if (!excludedPaths.includes(currentPath)) {
-            fetch('/api/store/auth', {
-            method: 'GET'
-            })
-            .then(async (res) => {
-                const data = await res.json();
-
-                if (data.success) {
-                    dispatch(setBuyerIdTo(data.id));
-                } else {
-                // Optionally redirect to login
-                    // window.location.href = '/login';
-                }
-            })
-            .catch((err) => {
-                
-                console.error('Auth Error:', err);
-                // window.location.href = '/login';
-            });
-        }
-        
-    }, [])
-
-    
     let [load_start, set_load_start] = useState(0);
 
     useEffect(() => {
@@ -76,62 +43,31 @@ const BuyerLayout = ({children}) => {
     //     setCookie(buyerData, 0) 
     // }, [buyerData])   
     
-    useEffect(() => {
 
-        if(user_id !== null){
 
-            axios.get(`/api/store/customer`, {
-                params: { user_id }, // cleaner way to pass query params
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            })
-            .then((result) => {
-                const response = result.data; // axios auto-parses JSON
-                console.log(response?.data);
-
-                if (response?.success) {
-                    dispatch(setBuyerInfoTo(response?.data));
-                    // window.localStorage.removeItem('id_for_unknown_buyer')
-                    window.localStorage.setItem('CE_user_id', response?.data?.user_id);
-                    // update_db_id_for_unknown_buyer_to_registered_id();
-                }
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-
-        } else {
-            let id_for_unknown_buyer = v4();
-            window.localStorage.setItem('id_for_unknown_buyer', id_for_unknown_buyer);
-
-        }
+    // function update_db_id_for_unknown_buyer_to_registered_id() {
+    //     fetch(`https://cs-server-olive.vercel.app/product-view-unknown-buyer-update`,{
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json'
+    //         },
+    //         body: JSON.stringify({
+    //             unknown_user_id: window.localStorage.getItem('id_for_unknown_buyer'),
+    //             registered_id: user_id
+    //         })
+    //     })
+    //     .then(async (result) => {
+    //         window.localStorage.removeItem('id_for_unknown_buyer')
+    //         let response = await result.json(); 
+    //         // dispatch(setBuyerInfoTo(response));
+    //         // window.localStorage.removeItem('id_for_unknown_buyer')
         
-    }, [user_id])
+    //     })
+    //     .catch((error) => {
+    //         console.log(error)
 
-    function update_db_id_for_unknown_buyer_to_registered_id() {
-        fetch(`https://cs-node.vercel.app/product-view-unknown-buyer-update`,{
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                unknown_user_id: window.localStorage.getItem('id_for_unknown_buyer'),
-                registered_id: user_id
-            })
-        })
-        .then(async (result) => {
-            window.localStorage.removeItem('id_for_unknown_buyer')
-            let response = await result.json(); 
-            // dispatch(setBuyerInfoTo(response));
-            // window.localStorage.removeItem('id_for_unknown_buyer')
-        
-        })
-        .catch((error) => {
-            console.log(error)
-
-        })
-    }
+    //     })
+    // }
 
     
 
@@ -157,79 +93,41 @@ const BuyerLayout = ({children}) => {
     let {
         accessory
     } = useSelector(s => s.accessory)
-
-    const {
-        buyer_info
-    } = useSelector(s => s.buyer_info)
-
-    const [product, set_product] = useState(null)
-
-    useEffect(() => {
-        if (buyer_info !== null && buyer_info !== 'null' && buyer_info !== undefined) {
-            const overlay = document.querySelector('.overlay');
-            overlay.setAttribute('id', 'overlay')
-            axios.get('/api/store/order/check-delivered', {params: {user_id: buyer_info?.user_id}})
-            .then(({ data }) => {
-                console.log(data)
-                overlay.removeAttribute('id')
-                if (data.success) {
-                    set_product(data?.data)
-                }
-
-            })
-            .catch(error => {
-                overlay.removeAttribute('id')
-                console.log(error)
-            })
-            
-        }
-
-    }, [buyer_info]) 
-
    
-
     return (
         <>
-
-            {
-                <ConfirmationModal
-                    show={product !== null ? true : false}
-                    onClose={() => set_product(null)}
-                    prod={product}
-                />
-            }
             <div className="overlay" >
                 <div className="loader">
                 </div>
             </div>
 
             <div className='buyer-overlay'>
-                <div className="gender-card">
-                <div className="large-svg-container">
+                <div class="gender-card">
+                <div class="large-svg-container">
                     <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 50 90"
-                    className="largemalesvg"
+                    class="largemalesvg"
                     height="90"
                     width="50"
                     >
-                    <circle strokeWidth="6" stroke="#76E3FE" r="22" cy="25" cx="25"></circle>
+                    <circle stroke-width="6" stroke="#76E3FE" r="22" cy="25" cx="25"></circle>
                     <path
-                        strokeLinecap="round"
-                        strokeWidth="6"
+                        stroke-linecap="round"
+                        stroke-width="6"
                         stroke="#76E3FE"
                         d="M25 47L25 87"
                     ></path>
                     <path
-                        strokeLinecap="round"
-                        strokeWidth="6"
+                        stroke-linecap="round"
+                        stroke-width="6"
                         stroke="#76E3FE"
                         d="M25 86.6958L38.6958 73"
                     ></path>
                     <path
-                        strokeLinecap="round"
-                        strokeWidth="6"
+                        stroke-linecap="round"
+                        stroke-width="6"
                         stroke="#76E3FE"
                         d="M11 73L24.6958 86.6958"
                     ></path>
@@ -239,68 +137,68 @@ const BuyerLayout = ({children}) => {
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 50 90"
-                    className="largefemalesvg"
+                    class="largefemalesvg"
                     height="90"
                     width="50"
                     >
-                    <circle strokeWidth="6" stroke="#F57CB3" r="22" cy="25" cx="25"></circle>
+                    <circle stroke-width="6" stroke="#F57CB3" r="22" cy="25" cx="25"></circle>
                     <path
-                        strokeLinecap="round"
-                        strokeWidth="6"
+                        stroke-linecap="round"
+                        stroke-width="6"
                         stroke="#F57CB3"
                         d="M25 47L25 87"
                     ></path>
                     <path
-                        strokeLinecap="round"
-                        strokeWidth="6"
+                        stroke-linecap="round"
+                        stroke-width="6"
                         stroke="#F57CB3"
                         d="M12 73H38"
                     ></path>
                     </svg>
                 </div>
                 <form action="#">
-                    <h3 className="heading">What's your gender?</h3>
-                    <div className="radio-wrapper">
+                    <h3 class="heading">What's your gender?</h3>
+                    <div class="radio-wrapper">
                     <input onInput={e=> {
                         window.localStorage.setItem('cs-gender', 'male')
                         window.location.reload()
                         document.querySelector('.buyer-overlay').removeAttribute('id')
                     }}
-                        className="gender-radio-buttons"
+                        class="gender-radio-buttons"
                         id="male"
                         value="male"
                         name="gender"
                         type="radio"
                     />
-                    <label className="genderlabel malebutton" htmlFor="male">
+                    <label class="genderlabel malebutton" for="male">
                         <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 50 90"
-                        className="smallsvg malesmallsvg"
+                        class="smallsvg malesmallsvg"
                         >
                         <circle
-                            strokeWidth="6"
+                            stroke-width="6"
                             stroke="#76E3FE"
                             r="22"
                             cy="25"
                             cx="25"
                         ></circle>
                         <path
-                            strokeLinecap="round"
-                            strokeWidth="6"
+                            stroke-linecap="round"
+                            stroke-width="6"
                             stroke="#76E3FE"
                             d="M25 47L25 87"
                         ></path>
                         <path
-                            strokeLinecap="round"
-                            strokeWidth="6"
+                            stroke-linecap="round"
+                            stroke-width="6"
                             stroke="#76E3FE"
                             d="M25 86.6958L38.6958 73"
                         ></path>
                         <path
-                            strokeLinecap="round"
-                            strokeWidth="6"
+                            stroke-linecap="round"
+                            stroke-width="6"
                             stroke="#76E3FE"
                             d="M11 73L24.6958 86.6958"
                         ></path></svg
@@ -308,7 +206,7 @@ const BuyerLayout = ({children}) => {
                     </label>
 
                     <input
-                        className="gender-radio-buttons"
+                        class="gender-radio-buttons"
                         id="female"
                         value="female"
                         name="gender"
@@ -320,29 +218,29 @@ const BuyerLayout = ({children}) => {
                             document.querySelector('.buyer-overlay').removeAttribute('id')
                         }}
                     />
-                    <label className="genderlabel femalebutton" htmlFor="female">
+                    <label class="genderlabel femalebutton" for="female">
                         <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 50 90"
-                        className="smallsvg"
+                        class="smallsvg"
                         >
                         <circle
-                            strokeWidth="6"
+                            stroke-width="6"
                             stroke="#F57CB3"
                             r="22"
                             cy="25"
                             cx="25"
                         ></circle>
                         <path
-                            strokeLinecap="round"
-                            strokeWidth="6"
+                            stroke-linecap="round"
+                            stroke-width="6"
                             stroke="#F57CB3"
                             d="M25 47L25 87"
                         ></path>
                         <path
-                            strokeLinecap="round"
-                            strokeWidth="6"
+                            stroke-linecap="round"
+                            stroke-width="6"
                             stroke="#F57CB3"
                             d="M12 73H38"
                         ></path></svg
@@ -350,7 +248,7 @@ const BuyerLayout = ({children}) => {
                     </label>
 
                     <input
-                        className="gender-radio-buttons"
+                        class="gender-radio-buttons"
                         id="other"
                         value="other"
                         name="gender"
@@ -400,6 +298,10 @@ const BuyerLayout = ({children}) => {
                     ''
                     :
                     pathname.split('/').splice(-1)[0] === 'terms-of-use'
+                    ?
+                    ''
+                    :
+                     pathname.split('/').length > 2 && pathname.split('/').splice(-1)[0] === 'chat'
                     ?
                     ''
                     :

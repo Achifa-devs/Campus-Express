@@ -42,24 +42,24 @@ export default function OrderItem({item,order}) {
     <>
         <div className="cancel-order-overlay" style={{padding: '20px'}} onClick={e => e.target === document.querySelector('.cancel-order-overlay') ? e.currentTarget.removeAttribute('id'): ''}>
             <div className="cancel-order-warning">
-                <div className="">
-                    <article className="modal-container" style={{width: '100%', borderRadius: '5px'}}>
-                        <header className="modal-container-header">
-                            <span className="modal-container-title">
+                <div class="">
+                    <article class="modal-container" style={{width: '100%', borderRadius: '5px'}}>
+                        <header class="modal-container-header">
+                            <span class="modal-container-title">
                                 <svg aria-hidden="true" height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M0 0h24v24H0z" fill="none"></path>
                                     <path d="M14 9V4H5v16h6.056c.328.417.724.785 1.18 1.085l1.39.915H3.993A.993.993 0 0 1 3 21.008V2.992C3 2.455 3.449 2 4.002 2h10.995L21 8v1h-7zm-2 2h9v5.949c0 .99-.501 1.916-1.336 2.465L16.5 21.498l-3.164-2.084A2.953 2.953 0 0 1 12 16.95V11zm2 5.949c0 .316.162.614.436.795l2.064 1.36 2.064-1.36a.954.954 0 0 0 .436-.795V13h-5v3.949z" fill="#FF4500"></path>
                                 </svg>
                                 Tips For Cancellation
                             </span>
-                            <button className="icon-button">
+                            <button class="icon-button">
                                 <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M0 0h24v24H0z" fill="none"></path>
                                     <path d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z" fill="currentColor"></path>
                                 </svg>
                             </button>
                         </header>
-                        <section className="modal-container-body rtf">
+                        <section class="modal-container-body rtf">
                         <h6>If you cancel this order:</h6>
                             <hr />
                             <br />
@@ -71,15 +71,15 @@ export default function OrderItem({item,order}) {
 
 
                         </section>
-                        <footer className="modal-container-footer" style={{justifyContent: 'space-between'}}>
-                            <button className="button is-ghost" style={{background: '#FF4500'}} onClick={e=> {
+                        <footer class="modal-container-footer" style={{justifyContent: 'space-between'}}>
+                            <button class="button is-ghost" style={{background: '#FF4500'}} onClick={e=> {
                                 document.querySelector('.cancel-order-overlay').removeAttribute('id')
                             }}>Decline</button>
                             {/* user_id,order_id,amount,reason */}
-                            <button className="button is-primary" onClick={e => {
+                            <button class="button is-primary" onClick={e => {
                                 buyer_overlay_setup(true, 'Cancelling Order')
 
-                                axios.post('https://cs-node.vercel.app/cancel-order', {user_id: user_id, order_id: order?.order_id, amount:order?.price, reason: 'cancelled', product_id: order?.product_id})
+                                axios.post('https://cs-server-olive.vercel.app/cancel-order', {user_id: user_id, order_id: order?.order_id, amount:order?.price, reason: 'cancelled', product_id: order?.product_id})
                                 .then(({data})=>{
                                     console.log(data)
                                     if(data){
@@ -131,19 +131,17 @@ export default function OrderItem({item,order}) {
                     </div>
                     
                     <div className="body-cnt-mid">
-                        <div className="stock">
-                            {order?.stock} unit ordered
-                        </div>
                         <div className="seller">
-                            <b style={{
+                            <span style={{
                                 whiteSpace: 'nowrap', /* Prevent text from wrapping */
                                 overflow: 'hidden',    /* Hide any overflow text */
-                                textOverflow: 'ellipsis',
-                                color: order?.havepaid ? 'green' : 'red'
-                            }}>{order?.havepaid ? 'Paid' : 'Unpaid'}</b>
+                                textOverflow: 'ellipsis'
+                            }}>Seller: {item?.user_id}</span>
                         </div>
 
-                       
+                        <div className="stock">
+                            {item?.stock} In stock
+                        </div>
                     </div>
                     
                     <div className="body-cnt-btm">
@@ -164,7 +162,7 @@ export default function OrderItem({item,order}) {
                             order?.status.state === 'completed'
                             ?
                             <>
-                                <button style={{opacity: '1', background: 'yellowgreen'}} onClick={e=>{window.location.href = `/store/orders/${item?.product_id}/refund`}}>
+                                <button style={{opacity: '1', background: 'yellowgreen'}} onClick={e=>{window.location.href = `/store/new-return/${item?.product_id}`}}>
                                     Return & refund
                                 </button>
                                 <button style={{height: 'auto', background: order?.status.state === 'completed' ? 'green' : '#FF4500'}} disabled>
@@ -186,7 +184,7 @@ export default function OrderItem({item,order}) {
                                     
                                         buyer_overlay_setup(true, `Deleting order`)
                                         
-                                        axios.post('https://cs-node.vercel.app/remove-order', {order_id: order?.order_id})
+                                        axios.post('https://cs-server-olive.vercel.app/remove-order', {order_id: order?.order_id})
                                         .then(({data})=>{
                                             console.log(data)
                                             if(data){
@@ -211,7 +209,7 @@ export default function OrderItem({item,order}) {
                                         <small>Delete order</small>
                                     }
                                 </button>
-                                <button onClick={e=> order?.havepaid ? window.location.href=`/store/orders/${item?.product_id}/tracker` : window.location.href=`/store/orders/${item?.product_id}/checkout`}>
+                                <button onClick={e=> order?.havepaid ? window.location.href=`/store/order-tracking/${item?.product_id}` : window.location.href=`/store/checkout/${item?.product_id}`}>
                                     {
                                         order?.havepaid
                                         ?

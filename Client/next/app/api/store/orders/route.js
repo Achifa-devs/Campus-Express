@@ -1,7 +1,7 @@
 'use server'
 
-import { NextResponse } from 'next/server';
 import pool from '../../db';
+import { NextResponse } from 'next/server';
 
 export async function GET(req) {
   try {

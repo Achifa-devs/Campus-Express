@@ -105,7 +105,7 @@ export default function Showcase({type}) {
         
     useEffect(() => {
         try {
-            fetch(`/api/products/category?category=${btoa('trends')}&limit=${limit}`, {
+            fetch(`https://www.campussphere.net/api/products/category?category=${btoa('trends')}&limit=${limit}`, {
                 headers: {
                     'Gender': window.localStorage.getItem('cs-gender') 
                 }
@@ -267,11 +267,11 @@ export default function Showcase({type}) {
                     <b>Lodge Deals</b>
                 </div>
                 <button onClick={e=> {
-                    window.location.href=`/store/category/Lodge & Apartments`
+                    window.location.href=`/store/category/Lodge`
                 }}   style={{padding: '3px 8px', borderRadius: '5px'}}>View more</button>
             </div>
             <div>
-                <Carousel category={btoa('Lodge & Apartments')} cards={cards} />
+                <Carousel category={btoa('Lodge')} cards={cards} />
             </div>
         </section>
         

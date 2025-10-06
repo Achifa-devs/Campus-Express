@@ -21,7 +21,6 @@ import { setSaveTo } from '@/redux/buyer_store/Save'
 // import { SaveItem } from '@/app/api/buyer/post'
 import { open_notice } from '@/files/reusable.js/notice'
 import Contact from './Contact'
-import Link from 'next/link'
 
 
 
@@ -103,11 +102,11 @@ const Product = ({ item, seller, order_list }) => {
                 
                 
 
-                window.location.href=(`/store/orders/${item.product_id}/create`)
+                window.location.href=(`/store/new-order/${item.product_id}`)
 
             }
         }else{
-            window.location.href=(`/store/orders/${item.product_id}/checkout`)
+            window.location.href=(`/store/checkout/${item.product_id}`)
         }
 
     }
@@ -216,16 +215,16 @@ const Product = ({ item, seller, order_list }) => {
                         screenWidth > 481
                         ?
                         <>
-                            {/* <Contact phone={item.phone} item={item} /> */}
-                            <button style={{borderRadius: '2.5px',border: 'none', outline: 'none', width: '100%'}} className='shadow' onClick={e=>handleOrder(item.product_id)}> 
-                                {
+                            <Contact phone={item.phone} item={item} />
+                            {/* <button style={{borderRadius: '2.5px',border: 'none', outline: 'none', width: '100%'}} className='shadow' onClick={e=>handleOrder(item.product_id)}> */}
+                                {/*
                                     order_list?.filter((data) => data?.product?.product_id === item?.product_id && data?.order?.user_id === user_id).length > 0
                                     ?
 
                                     'View Order'
                                     :
                                     'Place Order Now'
-                                }
+                                */}
                                 {/* <Link to={`tel:+234${phone}`} style={{height: '50px', width: '45%', borderRadius: '5px', display: 'flex', alignItems: 'center', cursor: 'pointer', justifyContent: 'space-evenly', fontSize: 'x-small', background: 'orangered', color: '#fff'}}>
                                     {
                                         
@@ -241,7 +240,7 @@ const Product = ({ item, seller, order_list }) => {
                                         
                                     }
                                 </Link> */}
-                            </button>
+                            {/* </button> */}
 
                             <br />
 

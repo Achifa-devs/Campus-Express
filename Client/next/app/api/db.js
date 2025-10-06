@@ -1,20 +1,15 @@
 // lib/db.js
 import { Pool } from 'pg';
 
-const DATABASE_URL = "postgresql://achifa.io.llc:cflV8XEbCO7h@ep-billowing-sunset-28191429-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require";
+const DATABASE_URL = "postgres://achifa.io.llc:cflV8XEbCO7h@ep-billowing-sunset-28191429-pooler.us-east-2.aws.neon.tech/neondb";
 
-let pool;
-
-if (!global.pgPool) {
-  global.pgPool = new Pool({
-    connectionString: DATABASE_URL,
-    ssl: { rejectUnauthorized: false }, // required by Neon
-    max: 10,
-    idleTimeoutMillis: 30000,
-    connectionTimeoutMillis: 10000,
-  });
-}
-
-pool = global.pgPool;
+const pool = new Pool({
+  connectionString: DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false, // required for Neon
+  },
+  connectionTimeoutMillis: 10000, // 10s to establish connection
+  idleTimeoutMillis: 10000        // close idle clients after 10s
+});
 
 export default pool;

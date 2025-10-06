@@ -130,7 +130,7 @@ export default function Card({item,index}) {
                     }
                 }} style={{cursor: 'pointer'}} name={item.product_id} id="" />
             </div>
-            <div className="top-section" style={{height: '100px', borderRadius: '10px', margin: '0'}}>
+            <div class="top-section" style={{height: '100px', borderRadius: '10px', margin: '0'}}>
                 <div onClick={handleListing} style={{height: '100px', borderRadius: '10px', margin: '0'}}>
                     {
                         item.category === 'Lodge/Apartments'
@@ -141,19 +141,19 @@ export default function Card({item,index}) {
                     }
                 </div>
             </div>
-            <div className="bottom-section" onClick={handleListing} style={{margin: '0'}}>
-                <span className="title" style={{fontSize: 'small', textAlign: 'left'}}>
+            <div class="bottom-section" onClick={handleListing} style={{margin: '0'}}>
+                <span class="title" style={{fontSize: 'small', textAlign: 'left'}}>
                     {item.title}
                 </span>
-                <div className="row row1" style={{margin: '8px 0 0 0', padding: '0px'}}>
+                <div class="row row1" style={{margin: '8px 0 0 0', padding: '0px'}}>
                     
-                    <div className="item">
-                    <span className="big-text">{item.views}</span>
-                    <span className="regular-text">Views</span>
+                    <div class="item">
+                    <span class="big-text">{item.views}</span>
+                    <span class="regular-text">Views</span>
                     </div>
-                    <div className="item">
-                    <span className="big-text">{item?.shares}</span>
-                    <span className="regular-text">Shares</span>
+                    <div class="item">
+                    <span class="big-text">{item?.shares}</span>
+                    <span class="regular-text">Shares</span>
                     </div>
                 </div>
                 <div style={{background: item.state.state === 'active' ? 'green' : 'red',padding: '8px', borderRadius: '6px'}}>

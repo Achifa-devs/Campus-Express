@@ -86,7 +86,7 @@ const Card = ({item, index}) => {
             <div className="cols" key={index} id={item.product_id} >
                 <div className="card" key={index} style={{height: 'auto', marginBottom: '10px', border: 'none', borderRadius: '0', padding: '5px', display: 'flex', width: '180px', flexDirection: 'column', flexShrink: '0'}}>
                       
-                    <div onClick={e => window.location.href=(`/store/${item.product_id}/`)}>
+                    <div onClick={e => window.location.href=(`/store/product/${item.product_id}`)}>
                         {
                             (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(item?.thumbnail_id?.split('.').pop().toLowerCase())) ? 
                             <Thumbnail thumbnail_id={item?.thumbnail_id} />
