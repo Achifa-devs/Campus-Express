@@ -8,7 +8,6 @@ import loginw from '@/public/loginw.svg'
 
 import savedSvg from '@/public/bookmark-outlined-saved-svgrepo-com.svg'
 import sellSvg1 from '@/public/sell-svgrepo-com (1).svg'
-// import inboxSvg from '@/public/inbox-in-svgrepo-com.svg'
 import logoutSvg from '@/public/logout-2-svgrepo-com.svg'
 
 import foodSvg from '@/public/food-market-purchasing-svgrepo-com.svg'
@@ -26,11 +25,11 @@ import phoneassSvg from '@/public/phone-repair-symbol-svgrepo-com.svg'
 import laptopassSvg from '@/public/laptop-fix-svgrepo-com.svg'
 import cosmeticsSvg from '@/public/medical-medicine-health-23-svgrepo-com.svg'
 import tabletsSvg from '@/public/tablet-svgrepo-com.svg'
+import chatSvg from '../../../assets/messages-1-svgrepo-com (1).svg'
 
 import helpSvg from '@/public/help-svgrepo-com.svg'
 import userSvg from '@/public/user-alt-1-svgrepo-com.svg'
 import contactSvg from '@/public/costumer-support-call-svgrepo-com.svg'
-
 
 import WhatsAppSvg from '@/public/whatsapp-whats-app-svgrepo-com.svg'
 import tweeterSvg from '@/public/twitter-svgrepo-com (2).svg'
@@ -51,8 +50,6 @@ const Aside = ({
     let {
         buyer_info
     } = useSelector(s => s.buyer_info)
-
-    
 
     let [categoriesList, setCategoriesList] = useState([])
 
@@ -80,196 +77,231 @@ const Aside = ({
     },[])
     let dispatch = useDispatch()
 
-    
-
     let list1 = [
-        // {text: 'Orders', svg: orderSvg.src, uri: 'orders'},
         {text: 'Inbox', svg: inboxSvg.src, uri: 'inbox'},
         {text: 'Favourites', svg: savedSvg.src, uri: 'favourites'},
-        // {text: 'Followed Sellers', svg: '', uri: 'following'},
-        // {text: 'Recently Viewed', svg: '', uri: 'history'},
-        // {text: 'Refunds', svg: '', uri: 'refunds'}
+        {text: 'Messages', svg: chatSvg.src, uri: 'chat'},
     ]
+
     let list2 = [
         {uri: 'account-managements',text: 'My Account', img: userSvg.src},
         {uri: 'faq',text: 'Help Center', img: helpSvg.src}, 
-        // {uri: '',text: 'Refund & Return', img: refundSvg.src}, 
-        // {uri: '',text: 'Cancel An Order', img: cancelSvg.src}, 
-        // {uri: 'customer-service',text: 'Contact Us', img: contactSvg.src}, 
         {uri: 'policy',text: 'Privacy Policy', img: contactSvg.src}, 
         {uri: 'logout',text: buyer_info?.fname ? 'Logout' : 'Login', img: buyer_info?.fname ? logoutSvg.src : login.src}
     ]
     
     let list3 = categoriesList
 
-    let CEservices = list1.map((item,i) => 
-        <li onClick={e => window.location.href=(`/store/${item.uri}`)} key={i} style={{display: 'flex', }}>
-            <span>
-                <img src={item.svg} style={{height: '20px', width: '20px', marginBottom: '5px'}} alt="" />
-            </span>
-            &nbsp;
-            &nbsp;
-            <span style={{fontSize: 'small'}}>{item.text}</span>
-        </li>
-    )
+    const handleNavigation = (uri) => {
+        if (uri === 'chat') {
+            window.open(`/store/${uri}`);
+        } else if (uri === 'logout') {
+            window.localStorage.removeItem('buyer_info');
+            alert('You are logged out.');
+            window.location.href = '/';
+        } else {
+            window.location.href = `/store/${uri}`;
+        }
+    };
 
-    let Help = list2.map((item, i) => 
-        <li onClick={e => i === list2.length - 1 ?  () => {window.localStorage.removeItem('buyer_info'); alert('You are logged out.')} : window.location.href=(`/store/${item.uri}`)} key={i} style={{display: 'flex', }}>
-            <span>
-                <img src={item.img} style={{height: '20px', width: '20px', marginBottom: '5px'}} alt="" />
-            </span>
-            &nbsp;
-            &nbsp;
-            <span style={{fontSize: 'small'}}>{item.text}</span>
-        </li>
-    )
-
-    let Categories = categories.map((item,i) => 
-        <li style={{display: 'flex', }} id={storedCategory.toLowerCase() === item[0].toLowerCase() ? 'aside-list-active' : ''} data-category={item[0]} onClick={e => {window.location.href=(`/store/category/${item[0]}`); dispatch(setCategoryTo(item[0]))}} key={i}>
-            <span>
-            
-                <img src={(item[1])} style={{height: '20px', width: '20px', marginBottom: '5px'}} alt="" />
-            </span>
-            &nbsp;
-            &nbsp;
-            <span style={{fontSize: 'small'}}>{(item[0])}</span>
-        </li>
-    )
+    const handleCategoryClick = (category) => {
+        window.location.href = `/store/category/${category}`;
+        dispatch(setCategoryTo(category));
+    };
 
     function closeAside() {
-        document.querySelector('.aside-overlay').removeAttribute('id')
-    
+        document.querySelector('.aside-overlay').removeAttribute('id');
     }
- 
 
     return ( 
         <>
-
-            <div className="aside-overlay" style={{zIndex: '11000'}} onClick={e=>e.target === e.currentTarget ? closeAside():''}>
-
-                <div onClick={closeAside} className="aside-close">
-                    <img src={closeSvg.src} style={{height: '30px', width: '30px'}} alt="" />
+            <div className="aside-overlay" style={{zIndex: '11000'}} onClick={e => e.target === e.currentTarget ? closeAside() : ''}>
+                {/* Close Button */}
+                <div className="position-absolute top-0 end-0 p-3">
+                    <button 
+                        className="btn btn-sm p-0 border-0" 
+                        onClick={closeAside}
+                        style={{background: 'transparent'}}
+                    >
+                        <img src={closeSvg.src} style={{height: '30px', width: '30px'}} alt="Close" />
+                    </button>
                 </div>
-                <div className="aside-cnt" style={{position: 'relative', overflow: 'hidden', padding: '0'}}>
-                    <div style={{textAlign: 'left', width: '100%', height: 'fit-content', fontWeight: '500', display: 'flex', flexDirection: 'column', fontSize: 'large', marginTop: '0', padding: '10px', color: '#fff', background: 'orangered'}}>
-                        <span style={{borderRadius: '50%', background: '#fff4e0', width: '50px', height: '50px', color: 'orangered', display: 'flex', alignItems: 'center', marginBottom: '10px', justifyContent: 'center'}}><h6 style={{padding: '0', margin: '0'}}>{
-                            buyer_info?.fname ? buyer_info?.fname.split('')[0] + buyer_info?.lname.split('')[0] : '?'
-                        }</h6></span>
-                        <span>
-                            {
-                                buyer_info?.fname 
-                                ?  
-                                buyer_info?.fname + " " + buyer_info?.lname 
-                                : 
-                                <>
-                                <span onClick={e => window.location.href=('/login')} style={{cursor: 'pointer'}}>
-                                    <img src={loginw.src} style={{height: '20px', transform: 'rotate(180deg)', color: '#fff', width: '20px', marginBottom: '5px', }} alt="" />
-                                </span>
-                                &nbsp;
-                                {/* &nbsp; */}
-                                <span onClick={e => window.location.href=('/login')} style={{fontSize: 'small', cursor: 'pointer'}}>Login</span>
-                                </>
-                            }
-                        </span>
+
+                {/* Main Content */}
+                <div className="aside-cnt h-100 bg-white">
+                    {/* User Header Section */}
+                    <div className="p-3 text-white" style={{background: '#FF4500'}}>
+                        <div className="d-flex align-items-center mb-3">
+                            <div 
+                                className="rounded-circle d-flex align-items-center justify-content-center me-3"
+                                style={{
+                                    background: '#fff4e0', 
+                                    width: '50px', 
+                                    height: '50px', 
+                                    color: '#FF4500'
+                                }}
+                            >
+                                <h6 className="mb-0 fw-bold">
+                                    {buyer_info?.fname ? 
+                                        buyer_info.fname.split('')[0] + buyer_info.lname.split('')[0] : 
+                                        '?'
+                                    }
+                                </h6>
+                            </div>
+                            <div>
+                                {buyer_info?.fname ? (
+                                    <span className="fw-semibold">
+                                        {buyer_info.fname + " " + buyer_info.lname}
+                                    </span>
+                                ) : (
+                                    <button 
+                                        className="btn btn-link p-0 text-white text-decoration-none d-flex align-items-center"
+                                        onClick={() => window.location.href = '/login'}
+                                    >
+                                        <img 
+                                            src={loginw.src} 
+                                            style={{
+                                                height: '20px', 
+                                                width: '20px', 
+                                                transform: 'rotate(180deg)'
+                                            }} 
+                                            alt="Login" 
+                                        />
+                                        <span className="ms-2 small">Login</span>
+                                    </button>
+                                )}
+                            </div>
+                        </div>
                     </div>
 
-                    <div style={{height: 'calc(100% - 100px)', overflow: 'auto'}}>
+                    {/* Scrollable Content */}
+                    <div className="h-100" style={{overflow: 'auto', height: 'calc(100% - 100px)'}}>
+                        <div className="p-3">
+                            {/* Services Section */}
+                            <div className="mb-4">
+                                <h6 className="fw-semibold mb-3" style={{color: '#FF4500'}}>
+                                    Services
+                                </h6>
+                                <ul className="list-unstyled">
+                                    {list1.map((item, i) => (
+                                        <li 
+                                            key={i}
+                                            className="d-flex align-items-center py-2 px-2 rounded hover-cursor"
+                                            style={{transition: 'all 0.2s ease'}}
+                                            onClick={() => handleNavigation(item.uri)}
+                                        >
+                                            <img 
+                                                src={item.svg} 
+                                                style={{height: '20px', width: '20px'}} 
+                                                alt={item.text} 
+                                            />
+                                            <span className="ms-3 small">{item.text}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
 
-                        <ul style={{overflowX: 'hidden', padding: '10px'}}>
-                            {
-                                
-                                <>
-                                    {/* <hr /> */}
-                                    
-                                    <p style={{textAlign: 'left', width: '100%', fontWeight: '400', fontSize: 'medium', marginTop: '10px', color: 'orangered', fontWeight: '500'}}>Services</p>
-                                    {
-                                        CEservices
-                                    }
+                            {/* Categories Section */}
+                            <div className="mb-4">
+                                <h6 className="fw-semibold mb-3" style={{color: '#FF4500'}}>
+                                    Categories
+                                </h6>
+                                <ul className="list-unstyled">
+                                    {categories.map((item, i) => (
+                                        <li 
+                                            key={i}
+                                            className={`d-flex align-items-center py-2 px-2 rounded hover-cursor ${
+                                                storedCategory?.toLowerCase() === item[0].toLowerCase() ? 
+                                                'active-category' : ''
+                                            }`}
+                                            style={{transition: 'all 0.2s ease'}}
+                                            onClick={() => handleCategoryClick(item[0])}
+                                        >
+                                            <img 
+                                                src={item[1]} 
+                                                style={{height: '20px', width: '20px'}} 
+                                                alt={item[0]} 
+                                            />
+                                            <span className="ms-3 small">{item[0]}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
 
-                                    {/* <hr /> */}
-                                    <p style={{textAlign: 'left', width: '100%', fontWeight: '400', fontSize: 'medium', marginTop: '10px', color: 'orangered', fontWeight: '500'}}>Categories</p>
-                                    {
-                                        Categories
-                                    }
+                            {/* Help Center Section */}
+                            <div className="mb-4">
+                                <h6 className="fw-semibold mb-3" style={{color: '#FF4500'}}>
+                                    Help Center
+                                </h6>
+                                <ul className="list-unstyled">
+                                    {list2.map((item, i) => (
+                                        <li 
+                                            key={i}
+                                            className="d-flex align-items-center py-2 px-2 rounded hover-cursor"
+                                            style={{transition: 'all 0.2s ease'}}
+                                            onClick={() => handleNavigation(item.uri)}
+                                        >
+                                            <img 
+                                                src={item.img} 
+                                                style={{height: '20px', width: '20px'}} 
+                                                alt={item.text} 
+                                            />
+                                            <span className="ms-3 small">{item.text}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
 
-                                    {/* <hr /> */}
-                                    <p style={{textAlign: 'left', width: '100%', fontWeight: '400', fontSize: 'medium', marginTop: '10px', color: 'orangered', fontWeight: '500'}}>Help Center</p>
-
-                                    {
-                                        Help
-                                    }
-                                </>
-                                
-                            }
-                        </ul>
-
-                        <div style={{padding: '20px'}}>
-                            <div style={{color: '#FF4500'}}><b>Contact Us</b></div>
-                            <ul style={{display: 'flex', padding: '10px', flexDirection: 'row', justifyContent: 'space-between', }}>
-                                <li onClick={e => {
-                                    const url = window.location.href;
-                                    // window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(item.title)}&description=${encodeURIComponent(item.description)}&picture=${encodeURIComponent(activeImg)}`, '_blank');
-                                }} style={{border: 'none', padding: '0',cursor: 'pointer',display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', }}>
-                                    <img src={fbSvg.src} style={{height: '25px', width: '25px', position: 'relative', margin: '0'}} alt="" />
-                                    &nbsp;
-                                    &nbsp;
-                                    
-                                    <small>Facebook</small>
-                                </li>
-
-                                <li onClick={e => {
-                                    const url = window.location.href;
-                                    // const twitterUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(item.title)}&image=${metaImg}`;
-                                    // window.open(twitterUrl, '_blank');
-                                }} style={{border: 'none', padding: '0',cursor: 'pointer', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', }}>
-                                    <img src={tweeterSvg.src} style={{height: '25px', width: '25px', position: 'relative', margin: '0'}} alt="" />
-                                    
-                                    &nbsp;
-                                    &nbsp;
-                                    
-                                    <small>Twitter</small>
-                                </li>
-
-                                <li onClick={e => {
-                                    const url = window.location.href;
-                                    const shareBase64ImageToWhatsApp = (base64ImageData, title, description) => {
-                // Convert Base64 image data to a Blob
-                                        const byteCharacters = atob(base64ImageData.split(',')[1]);
-                                        const byteArrays = [];
-                                        for (let offset = 0; offset < byteCharacters.length; offset += 512) {
-                                            const slice = byteCharacters.slice(offset, offset + 512);
-                                            const byteNumbers = new Array(slice.length);
-                                            for (let i = 0; i < slice.length; i++) {
-                                            byteNumbers[i] = slice.charCodeAt(i);
+                            {/* Contact Us Section */}
+                            <div className="p-3 border-top">
+                                <h6 className="fw-semibold mb-3" style={{color: '#FF4500'}}>
+                                    Contact Us
+                                </h6>
+                                <div className="d-flex justify-content-between">
+                                    {[
+                                        { 
+                                            name: 'Facebook', 
+                                            icon: fbSvg.src, 
+                                            onClick: () => {
+                                                const url = window.location.href;
+                                                // window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
                                             }
-                                            const byteArray = new Uint8Array(byteNumbers);
-                                            byteArrays.push(byteArray);
+                                        },
+                                        { 
+                                            name: 'Twitter', 
+                                            icon: tweeterSvg.src, 
+                                            onClick: () => {
+                                                const url = window.location.href;
+                                                // const twitterUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}`;
+                                                // window.open(twitterUrl, '_blank');
+                                            }
+                                        },
+                                        { 
+                                            name: 'WhatsApp', 
+                                            icon: WhatsAppSvg.src, 
+                                            onClick: () => {
+                                                const url = window.location.href;
+                                                // WhatsApp sharing logic here
+                                            }
                                         }
-                                        const blob = new Blob(byteArrays, { type: 'image/jpeg' });
-                                        const message = description.length > 0 ? `${title}\n\nDescription:  \n${description} \n ${url}` : `${title} \n ${url}`;
-                                        const encodedMessage = encodeURIComponent(message);
-                                        const imageUrl = URL.createObjectURL(blob);
-                                        console.log(imageUrl)
-                                        // const whatsappUrl = `whatsapp://send?text=${encodedMessage}%20${`https://ce-app-server.vercel.app/share-image?product_id=${item.product_id}`}`;
-
-                                        // Open WhatsApp with the share URL
-                                        // window.open(whatsappUrl, '_blank');
-
-
-                                    }
-                                    // shareBase64ImageToWhatsApp(activeImg, item.title, item.description)
-
-
-                                
-                                }} style={{border: 'none', padding: '0',cursor: 'pointer', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', }}>
-                                    <img src={WhatsAppSvg.src} style={{height: '25px', width: '25px', position: 'relative', margin: '0'}} alt="" />
-                                    &nbsp;
-                                    &nbsp;
-                                    <small>WhatsApp</small>
-                                </li>
-                            </ul>
+                                    ].map((social, index) => (
+                                        <button
+                                            key={index}
+                                            className="btn btn-link text-decoration-none p-0 d-flex flex-column align-items-center"
+                                            onClick={social.onClick}
+                                            style={{color: '#6c757d'}}
+                                        >
+                                            <img 
+                                                src={social.icon} 
+                                                style={{height: '25px', width: '25px'}} 
+                                                alt={social.name} 
+                                            />
+                                            <small className="mt-1">{social.name}</small>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -277,4 +309,4 @@ const Aside = ({
      );
 }
  
-export default Aside;  
+export default Aside;
