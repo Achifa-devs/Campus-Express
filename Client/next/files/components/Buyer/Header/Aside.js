@@ -128,7 +128,7 @@ const Aside = ({
                 </div>
 
                 {/* Main Content */}
-                <div className="aside-cnt h-100 bg-white">
+                <div className="aside-cnt h-100 bg-white" style={{padding: 0}}>
                     {/* User Header Section */}
                     <div className="p-3 text-white" style={{background: '#FF4500'}}>
                         <div className="d-flex align-items-center mb-3">

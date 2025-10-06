@@ -10,6 +10,7 @@ import '@/app/store/chat/styles/small.css'
 
 import { usePathname } from 'next/navigation'
 import Aside from '@/files/components/Buyer/Message/LargeScreen/Aside'
+import ChatRoom from '@/files/components/Buyer/Message/LargeScreen/ChatRoom'
 export default function Chat() {
     let [screenWidth, setScreenWidth] = useState(0)
 
@@ -95,8 +96,10 @@ export default function Chat() {
                 screenWidth > 760 &&
                 <>
                     <Aside />
+                    <ChatRoom />
                 </>
             }
+
         </>
     )
 }
