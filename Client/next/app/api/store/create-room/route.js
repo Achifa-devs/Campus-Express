@@ -10,7 +10,7 @@ import shortId from 'shortid'
 export async function POST(req) {
   try {
     const body = await req.json()
-    const { user_id, receiver_id, content, message_type, media_url } = body
+    const { user_id, receiver_id, content, message_type, media_url, date } = body
     const mssg_id = shortId.generate(10);
     const conversation_id = await generateConversationId(user_id, receiver_id);
    
@@ -38,7 +38,7 @@ export async function POST(req) {
         content,
         message_type,
         media_url,
-        new Date(),
+        date,
         status,
     ]
     );

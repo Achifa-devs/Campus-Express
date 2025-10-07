@@ -88,22 +88,12 @@ io.on('connection', async(socket) => {
         created_at
       });
 
-      // const newMessage = {
-      //   sender_id: senderId,
-      //   receiver_id,
-      //   message: content,
-      //   conversation_id,
-      //   message_type: message_type || "text",
-      //   media_url: media_url || null,
-      //   created_at
-      // }
-
       // ✅ Make sure both users are in the conversation room
       socket.join(conversation_id);
       console.log('conversation_id: ', conversation_id)
 
       // ✅ Emit to ALL clients in the room (sender + receiver if connected)
-      io.to(conversation_id).emit("new_message", newMessage);
+      io.to(conversation_id).emit("message", newMessage);
 
       // ✅ Send ACK back only to the sender
       if (callback) callback({ success: true});

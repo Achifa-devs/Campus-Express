@@ -73,10 +73,23 @@ export default function ChatRoom() {
         console.log("Socket instance in Aside:", socket);
     
         if (partner) {
+            socket.emit('join_room', { otherUserId: partner.user_id });
             get_chats()
         };
         socket.on("message", (msg) => {
-          console.log("New message:", msg);
+            if (msg.sender_id === partner.user_id) {
+                const newMsg = {
+                    id: message.length + 1,
+                    type: 'received',
+                    // seen: ' sending...',
+                    text: msg.content,
+                    timestamp: new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                };
+                setMessage(prevArr => [...prevArr, newMsg]);
+                // setNewMessage('');
+                const chatBody = document.querySelector('.chat-room-body');
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }
         });
     
     
@@ -121,7 +134,7 @@ export default function ChatRoom() {
             // receiver_id, content, media_url, message_type, created_at
             socket.emit('send_message', { receiver_id: partner.user_id, content: newMsg.text, media_url: null, message_type: 'text', created_at: new Date() }, (response) => {
                 if (response.success) {
-                    console.log("Message sent successfully:", response.message);
+                    // console.log("Message sent successfully:", response.message);
                     setMessage(prevArr => {
                         const updatedArr = [...prevArr];
                         updatedArr[updatedArr.length - 1].seen = ' ✓';

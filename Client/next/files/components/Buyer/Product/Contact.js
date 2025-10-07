@@ -39,7 +39,8 @@ export default function Contact({phone,item}) {
                         receiver_id: item?.user_id, 
                         content: "I need more enquiries on your offer now!", 
                         message_type: "enquire", 
-                        media_url:  item.product_id
+                        media_url:  item.product_id,
+                        date: new Date(),
                         
                     }).then(res => {
                         if(res.data.success){
