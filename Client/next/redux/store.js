@@ -20,6 +20,7 @@ import buyer_data from './buyer_store/buyer_data';
 import buyerInfo from './buyer_store/buyerInfo';
 import accessory from './buyer_store/Aceessories';
 import gender from './buyer_store/gender';
+import partner from './chat_room';
 
 
 let store = configureStore({
@@ -42,6 +43,7 @@ let store = configureStore({
     menu: menuSlice,
     sellerData: sellerData,
     delete_list: delete_list,
+    partner: partner,
     bankBeneficiary: bankBeneficiary
 
 

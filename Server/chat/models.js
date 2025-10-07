@@ -7,7 +7,7 @@ class Chat {
       const result = await pool.query(
         `SELECT * FROM messages
          WHERE conversation_id = $1
-         ORDER BY timestamp ASC`,
+         ORDER BY created_at ASC`,
         [conversation_id]
       );
       return result.rows;
@@ -186,7 +186,7 @@ class Chat {
   static async getUser({ user_id }) {
     try {
       const result = await pool.query(
-        `SELECT fname, lname, email, phone, photo, state, campus FROM users WHERE user_id = $1`,
+        `SELECT fname, lname, email, phone, user_id, photo, state, campus FROM users WHERE user_id = $1`,
         [user_id]
       );
       return result.rows[0];

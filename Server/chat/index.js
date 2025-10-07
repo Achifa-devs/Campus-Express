@@ -115,17 +115,18 @@ io.on('connection', async(socket) => {
     }
   });
 
-  // socket.on("get_room_messages", async(data, callback) => {
-  //   const { receiver_id } = data;
-  //   const conversation_id = generateConversationId(userId, receiver_id);
-  //   Chat.getRoomMessages({ conversation_id })
-  //   .then((result) => {
-  //     io.to().emit('room_messages', result);
-  //   }).catch(err => {
-  //     console.error("room_messages error:", err);
-  //     if (callback) callback({ success: false, error: "internal_error" });
-  //   });
-  // })
+  socket.on("get_room_messages", async(data, callback) => {
+    const { receiver_id } = data;
+    const conversation_id = generateConversationId(userId, receiver_id);
+    Chat.getRoomMessages({ conversation_id })
+    .then((result) => {
+      // io.to().emit('room_messages', result);
+      callback({ success: true, messages: result });
+    }).catch(err => {
+      console.error("room_messages error:", err);
+      if (callback) callback({ success: false, error: "internal_error" });
+    });
+  })
 
 
   socket.on("get_all_messages", async (data, callback) => {

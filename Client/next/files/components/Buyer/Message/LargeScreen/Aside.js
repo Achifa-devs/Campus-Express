@@ -1,10 +1,11 @@
-import React, { use, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './style.css'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useSocket } from '@/socket_context';
 import js_ago from 'js-ago';
 import userSvg from '@/files/assets/user-rounded-svgrepo-com.svg'
 import Image from 'next/image';
+import { set_partner_to } from '@/redux/chat_room';
 
 export default function Aside() {
 
@@ -44,6 +45,8 @@ export default function Aside() {
 
   }
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
     if (!socket) return;
 
@@ -78,26 +81,33 @@ export default function Aside() {
           
 
           {
-            chatList && chatList.map((item, index) => 
+            chatList.map((item, index) => 
             
-              <li id='chat-head' key={index}>
-                <div id='left' style={{padding: '10px', borderRadius: '50%', background: '#fff4e0', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                  <Image src={
-                    item.partner?.photo ? item.partner?.photo : userSvg.src
-                  } width={35} height={35} style={{objectFit: 'cover', borderRadius: '50%'}} alt='Placeholder' />
-                </div>
-                
-                <div id='right'>
-                  <div className='top'>
-                    <span style={{width: '70%', fontSize: 'small', fontWeight: 'bold'}}>{item.partner?.fname} {item.partner?.lname}</span>
-                    <span style={{width: 'auto', fontSize: 'small', color:'#000'}}>{js_ago(new Date(item.lastMessage.created_at))}</span>
+              {
+                return(item.partner  ?
+                <li id='chat-head' key={index} onClick={() => {
+                  // setCurrentChat(item);
+                  dispatch(set_partner_to(item.partner));
+                }}>
+                  <div id='left' style={{padding: '10px', borderRadius: '50%', background: '#fff4e0', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                    <Image src={
+                      item.partner?.photo ? item.partner?.photo : userSvg.src
+                    } width={35} height={35} style={{objectFit: 'cover', borderRadius: '50%'}} alt='Placeholder' />
                   </div>
-                  <div className='btm'>
-                    <span style={{width: '70%', fontSize: 'smaller'}}>{item.lastMessage.sender_id === buyer_info?.user_id ? 'You: ' : ''}{item.lastMessage?.content}</span>
-                    <span style={{width: 'fit-content', padding: '2.5px 8px', height: 'fit-content', fontSize: 'small', background: '#FF4500', borderRadius: '10px', color: '#fff'}}>5</span>
+                  
+                  <div id='right'>
+                    <div className='top'>
+                      <span style={{width: '70%', fontSize: 'small', fontWeight: 'bold'}}>{item.partner?.fname} {item.partner?.lname}</span>
+                      <span style={{width: 'auto', fontSize: 'small', color:'#000'}}>{js_ago(new Date(item.lastMessage.created_at))}</span>
+                    </div>
+                    <div className='btm'>
+                      <span style={{width: '70%', fontSize: 'smaller'}}>{item.lastMessage.sender_id === buyer_info?.user_id ? 'You: ' : ''}{item.lastMessage?.content}</span>
+                      <span style={{width: 'fit-content', padding: '2.5px 8px', height: 'fit-content', fontSize: 'small', background: '#FF4500', borderRadius: '10px', color: '#fff'}}>5</span>
+                    </div>
                   </div>
-                </div>
-              </li>
+                </li>
+                : <></>)
+              }
             
             )
           }
