@@ -35,23 +35,23 @@ export default function Chat() {
 
     useEffect(() => {
 
-        try {
-            async function getData() {
-                let result = await GetChatRooms(window.localStorage.getItem('CE_user_id'))
-                setRoom(result)
-                // console.log(result)
+        // try {
+        //     async function getData() {
+        //         let result = await GetChatRooms(window.localStorage.getItem('CE_user_id'))
+        //         setRoom(result)
+        //         // console.log(result)
 
-                let path = location.pathname.split('/').splice(-1)[0].split('-')[0] === 'CE'
-                if (path) {
-                    let response = result.filter(item => item?.buyer_data?.user_id === location.pathname.split('/').splice(-1)[0]);
-                    setRoomData(response[0]?.mssg?.mssg_id);
-                    setActiveRoom(response[0]);
-                }
-            }
-            getData()
-        } catch (error) {
-            console.log(error)
-        }
+        //         let path = location.pathname.split('/').splice(-1)[0].split('-')[0] === 'CE'
+        //         if (path) {
+        //             let response = result.filter(item => item?.buyer_data?.user_id === location.pathname.split('/').splice(-1)[0]);
+        //             setRoomData(response[0]?.mssg?.mssg_id);
+        //             setActiveRoom(response[0]);
+        //         }
+        //     }
+        //     getData()
+        // } catch (error) {
+        //     console.log(error)
+        // }
 
 
     }, [])
@@ -62,22 +62,22 @@ export default function Chat() {
     let [selected_head, set_selected_head] = useState()
 
     useEffect(() => {
-        let searchParams = new URLSearchParams(location.search)
-        try {
-            async function getData() {
-                let result = await GetChat(searchParams.get('room'))
-                let chat_box = result;
-                let heads = []
-                console.log(chat_box)
-                chat_box.map(item => heads.push({ id: item.user_id, name: item.buyer_name }))
-                setChatHead(heads)
-                setChatList(chat_box)
-            }
+        // let searchParams = new URLSearchParams(location.search)
+        // try {
+        //     async function getData() {
+        //         let result = await GetChat(searchParams.get('room'))
+        //         let chat_box = result;
+        //         let heads = []
+        //         console.log(chat_box)
+        //         chat_box.map(item => heads.push({ id: item.user_id, name: item.buyer_name }))
+        //         setChatHead(heads)
+        //         setChatList(chat_box)
+        //     }
 
-            getData()
-        } catch (error) {
-            console.log(error)
-        }
+        //     getData()
+        // } catch (error) {
+        //     console.log(error)
+        // }
     }, [])
 
     useEffect(() => {

@@ -20,23 +20,23 @@ const BuyerLayout = ({children}) => {
     let [screenWidth, setScreenWidth] = useState(0) 
    
 
-    let [load_start, set_load_start] = useState(0);
+    // let [load_start, set_load_start] = useState(0);
 
-    useEffect(() => {
-        // Ensure this code only runs on the client side
-        if (typeof window !== 'undefined') {
-            set_load_start(load_start + 1);
+    // useEffect(() => {
+    //     // Ensure this code only runs on the client side
+    //     if (typeof window !== 'undefined') {
+    //         set_load_start(load_start + 1);
 
-            if (load_start === 2) {
-                // Check if localStorage item exists
-                if (window.localStorage.getItem('cs-gender') === null) {
-                    document.querySelector('.buyer-overlay').setAttribute('id', 'buyer-overlay');
-                } else {
-                    document.querySelector('.buyer-overlay').removeAttribute('id');
-                }
-            }
-        }
-    }, [load_start]); // Add load_start to the dependency array to trigger the effect when it changes
+    //         if (load_start === 2) {
+    //             // Check if localStorage item exists
+    //             if (window.localStorage.getItem('cs-gender') === null) {
+    //                 document.querySelector('.buyer-overlay').setAttribute('id', 'buyer-overlay');
+    //             } else {
+    //                 document.querySelector('.buyer-overlay').removeAttribute('id');
+    //             }
+    //         }
+    //     }
+    // }, [load_start]); // Add load_start to the dependency array to trigger the effect when it changes
     
 
     // useEffect(() => {

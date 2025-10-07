@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "dev": "node server.js",
+    "start": "NODE_ENV=production node server.js"
   },
   "dependencies": {
     "@cloudinary/react": "^1.13.0",
@@ -58,7 +58,8 @@
     "redux-toolkit": "^1.1.2",
     "sharp": "^0.33.4",
     "shortid": "^2.2.17",
-    "socket.io-client": "^4.7.5",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
     "streamifier": "^0.1.1",
@@ -75,8 +76,7 @@
     "postcss": "^8.4.41",
     "tailwindcss": "^3.4.10"
   },
-    "engines": {
+  "engines": {
     "node": ">=22.0.0"
   }
-
 }

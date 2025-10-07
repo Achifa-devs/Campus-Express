@@ -10,6 +10,8 @@ import { v4 as uuidv4 } from 'uuid'
 import { setBuyerIdTo } from '@/redux/buyer_store/buyer_data'
 import { setBuyerInfoTo } from '@/redux/buyer_store/buyerInfo'
 import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup'
+import { SocketProvider } from '@/socket_context'
+// import { SocketProvider } from './utils/socket'
 
 export default function App({children}) {
   return (
@@ -82,10 +84,14 @@ function Auth({children}) {
 
   // ✅ FIX: return JSX, not object
   return pathname.split('/').splice(-2)[0] === 'vendor' ? (
-    <IsClientCtxProvider>
-      <SellerLayout>{children}</SellerLayout>
-    </IsClientCtxProvider>
+    <SocketProvider>
+      <IsClientCtxProvider>
+        <SellerLayout>{children}</SellerLayout>
+      </IsClientCtxProvider>
+    </SocketProvider>
   ) : (
-    <BuyerLayout>{children}</BuyerLayout>
+    <SocketProvider>
+      <BuyerLayout>{children}</BuyerLayout>
+    </SocketProvider>
   )
 }

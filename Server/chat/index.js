@@ -31,13 +31,13 @@ const onlineUsers = new Map(); // userId -> Set of socketIds
 
 io.use(async(socket, next) => {
   try {
-    // const token = socket.handshake.auth?.token;
+    const token = socket.handshake.auth?.token || socket.handshake.headers.cookie.split('=')[1];
 
-    // if (!token) return next(new Error('Authentication error'));
+    if (!token) return next(new Error('Authentication error'));
 
-    // const payload = jwt.verify(token, process.env.JWT_SECRET); 
-    // socket.user = { id: payload.id };  
-    // console.log(socket.handshake.query)
+    const payload = jwt.verify(token, 'kdiU$28Fs!9shF&2xZpD3Q#1gLx@R7TkWzPq'); 
+    socket.user = { id: payload.id };  
+    console.log("handshake", socket.handshake.query)
     socket.user = { id: socket.handshake.query?.user_id };  
 
     return next();
@@ -127,17 +127,44 @@ io.on('connection', async(socket) => {
   //   });
   // })
 
-  socket.on("get_all_messages", async(data, callback) => {
-    const { user_id } = data
-    Chat.getChatList({ user_id })
-    .then((result) => {
-      // io.to().emit('all_messages', result);
-      callback({ success: true, messages: result });
-    }).catch(err => {
+
+  socket.on("get_all_messages", async (data, callback) => {
+    console.log("get_all_messages data:", data);
+    const { user_id } = data;
+
+    try {
+      const result = await Chat.getChatList({ user_id });
+      const entries = Object.entries(result);
+
+      const refinedMssg = await Promise.all(
+        entries.map(async ([key, value]) => {
+          // Extract the other user's ID
+          const partner_id = key.split('_').find(id => id !== user_id);
+
+          // Fetch partner details
+          const partner = await Chat.getUser({ user_id: partner_id });
+
+          // Sort messages by date (descending)
+          const mssgs = value.messages.sort(
+            (a, b) => new Date(b.created_at) - new Date(a.created_at)
+          );
+
+          const lastMessage = mssgs[0];
+
+          return {
+            key,
+            partner,
+            lastMessage,
+          };
+        })
+      );
+
+      callback({ success: true, messages: refinedMssg });
+    } catch (err) {
       console.error("all_messages error:", err);
-      if (callback) callback({ success: false, error: "internal_error" });
-    });
-  })
+      callback({ success: false, error: "internal_error" });
+    }
+  });
 
   socket.on('join_room', (data, callback) => {
     try {

@@ -183,6 +183,19 @@ class Chat {
     }
   }
 
+  static async getUser({ user_id }) {
+    try {
+      const result = await pool.query(
+        `SELECT fname, lname, email, phone, photo, state, campus FROM users WHERE user_id = $1`,
+        [user_id]
+      );
+      return result.rows[0];
+    } catch (error) {
+      console.error("❌ Error fetching user:", error);
+      throw error;
+    }
+  }
+
 }
 
 module.exports = Chat;
