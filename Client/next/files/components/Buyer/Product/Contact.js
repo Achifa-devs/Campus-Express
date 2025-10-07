@@ -1,7 +1,14 @@
 import React from 'react'
 import phn from '../../../assets/phone-rounded-svgrepo-com.svg'
 import mssg from '../../../assets/whatsapp-whats-app-svgrepo-com.svg'
+import axios from 'axios'
+import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup'
+import { open_notice } from '@/files/reusable.js/notice'
+import { useSelector } from 'react-redux'
 export default function Contact({phone,item}) {
+    const {
+        buyer_info
+    } = useSelector(s => s?.buyer_info)
   return (
     <>
       <div style={{
@@ -24,6 +31,29 @@ export default function Contact({phone,item}) {
         }}>
             <button style={{height: '50px', width: '100%', borderRadius: '5px', display: 'flex', alignItems: 'center', cursor: 'pointer',fontSize: 'x-small', justifyContent: 'center', background: '#FF4500', color: '#fff', fontWeight: 'bold'}}  onClick={async e => {
                 // Chat vendor now on our mobile app
+                if (buyer_info?.user_id !== item?.user_id) {
+                    buyer_overlay_setup(true, 'Loading Chat...');
+
+                    axios.post('/api/store/create-room', {
+                        user_id: buyer_info?.user_id,
+                        receiver_id: item?.user_id, 
+                        content: "I need more enquiries on your offer now!", 
+                        message_type: "enquire", 
+                        media_url:  item.product_id
+                        
+                    }).then(res => {
+                        if(res.data.success){
+                            window.location.href = `/store/chat`;
+                        }
+                    }).catch(err => {
+                        buyer_overlay_setup(false, '');
+                        open_notice(true, "Internal Server Error, try again later")
+                        console.log(err)
+                    })
+                    
+                }else{
+                    open_notice(true, "You cannot chat yourself", 'error')
+                }
             }}>
                 Chat Vendor Now
             </button>

@@ -54,7 +54,7 @@ const Card = ({product_id}) => {
     return ( 
         <> 
 
-            <div className="cols" id={item?.product_id} style={{width: '250px', height: 'fit-content'
+            <div className="cols" id={item?.product_id} style={{width: '250px', height: 'fit-content', cursor: 'pointer'
             }} >
                 <div className="card shadow-md" style={{height: 'auto', marginBottom: '10px', borderRadius: '4px'}}>
                     
@@ -87,7 +87,9 @@ const Card = ({product_id}) => {
                                 WebkitLineClamp: '2',
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis'
-                            }} onClick={e => window.location.href=(`/store/product/${item?.product_id}`)} >{item?.title}</small>
+                            }} onClick={e => window.open(
+                                `/store/product/${item?.product_id}`
+                            )} >{item?.title}</small>
                             : 
                             <small style={{
                                 fontSize: 'small',
@@ -101,7 +103,9 @@ const Card = ({product_id}) => {
                                 WebkitLineClamp: '2',
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis'
-                            }} onClick={e => window.location.href=(`/store/product/${item?.product_id}`)} >{item?.title}</small>
+                            }} onClick={e => window.open(
+                                `/store/product/${item?.product_id}`
+                            )} >{item?.title}</small>
                         }
 
                       
@@ -109,11 +113,15 @@ const Card = ({product_id}) => {
                         {
                             screenWidth > 479
                             ?
-                            <h6 onClick={e => window.location.href=(`/store/product/${item?.product_id}`)} style={{marginBottom: '10px', marginTop: '10px', fontWeight: 'bold', fontSize: 'small', color: 'green', fontFamily: 'sans-serif'}}>&#8358;{
+                            <h6 onClick={e => window.open(
+                                `/store/product/${item?.product_id}`
+                            )} style={{marginBottom: '10px', marginTop: '10px', fontWeight: 'bold', fontSize: 'small', color: 'green', fontFamily: 'sans-serif'}}>&#8358;{
                                 new Intl.NumberFormat('en-us').format(item?.price)
                             }</h6>
                             : 
-                            <h6 onClick={e => window.location.href=(`/store/product/${item?.product_id}`)} style={{marginBottom: '10px', fontWeight: 'bold', color: 'green'}}>&#8358;{new Intl.NumberFormat('en-us').format(item?.price)}</h6>
+                            <h6 onClick={e => window.open(
+                                `/store/product/${item?.product_id}`
+                            )} style={{marginBottom: '10px', fontWeight: 'bold', color: 'green'}}>&#8358;{new Intl.NumberFormat('en-us').format(item?.price)}</h6>
                         }
 
                      
