@@ -78,17 +78,7 @@ io.on('connection', async(socket) => {
       const conversation_id = generateConversationId(senderId, receiver_id);
 
       // Save message to DB
-      // const newMessage = await Chat.createNewMessage({
-      //   sender_id: senderId,
-      //   receiver_id,
-      //   message: content,
-      //   conversation_id,
-      //   message_type: message_type || "text",
-      //   media_url: media_url || null,
-      //   created_at
-      // });
-
-      const newMessage = {
+      const newMessage = await Chat.createNewMessage({
         sender_id: senderId,
         receiver_id,
         message: content,
@@ -96,7 +86,17 @@ io.on('connection', async(socket) => {
         message_type: message_type || "text",
         media_url: media_url || null,
         created_at
-      }
+      });
+
+      // const newMessage = {
+      //   sender_id: senderId,
+      //   receiver_id,
+      //   message: content,
+      //   conversation_id,
+      //   message_type: message_type || "text",
+      //   media_url: media_url || null,
+      //   created_at
+      // }
 
       // ✅ Make sure both users are in the conversation room
       socket.join(conversation_id);
@@ -106,7 +106,7 @@ io.on('connection', async(socket) => {
       io.to(conversation_id).emit("new_message", newMessage);
 
       // ✅ Send ACK back only to the sender
-      if (callback) callback({ success: true, message: newMessage });
+      if (callback) callback({ success: true});
 
       console.log(`📨 Message from ${senderId} to ${receiver_id}: ${content}`);
     } catch (err) {

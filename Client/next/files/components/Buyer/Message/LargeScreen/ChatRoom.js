@@ -6,16 +6,13 @@ import { useSelector } from 'react-redux';
 import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup';
 import userSvg from '@/files/assets/user-rounded-svgrepo-com.svg'
 import Image from 'next/image';
+import Card from '../Card';
 
 export default function ChatRoom() {
 
     const socket = useSocket();
 
     const { partner } = useSelector(s => s?.partner);
-
-
-
-
 
     const [message, setMessage] = React.useState([])
     const [newMessage, setNewMessage] = React.useState('');
@@ -42,11 +39,14 @@ export default function ChatRoom() {
                     if (msg.sender_id === partner.user_id) {
                         new_mssg.type = 'received';
                         new_mssg.text = msg.content;
+                        new_mssg.product_id = msg.media_url;
                         const date = new Date(msg.created_at);
                         new_mssg.timestamp = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                     } else {
                         new_mssg.type = 'sent';
                         new_mssg.text = msg.content;
+                        new_mssg.product_id = msg.media_url;
+                        new_mssg.seen = msg.status.status === 'seen' ? ' ✓✓' : msg.status.status === 'sent' ? ' ✓' : '';
                         const date = new Date(msg.created_at);
                         new_mssg.timestamp = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                     }
@@ -107,18 +107,34 @@ export default function ChatRoom() {
     
     }, [socket, partner]);
 
-    // function handleNewMessage() {
-    //     if (newMessage.trim() !== '') {
-    //         const newMsg = {
-    //             id: message.length + 1,
-    //             type: 'sent',
-    //             text: newMessage,
-    //             timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    //         };
-    //         setMessage(prevArr => [...prevArr, newMsg]);
-    //         setNewMessage('');
-    //     }
-    // }
+    function handleNewMessage() {
+        if (newMessage.trim() !== '') {
+            const newMsg = {
+                id: message.length + 1,
+                type: 'sent',
+                seen: ' sending...',
+                text: newMessage,
+                timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            };
+            setMessage(prevArr => [...prevArr, newMsg]);
+            setNewMessage('');
+            // receiver_id, content, media_url, message_type, created_at
+            socket.emit('send_message', { receiver_id: partner.user_id, content: newMsg.text, media_url: null, message_type: 'text', created_at: new Date() }, (response) => {
+                if (response.success) {
+                    console.log("Message sent successfully:", response.message);
+                    setMessage(prevArr => {
+                        const updatedArr = [...prevArr];
+                        updatedArr[updatedArr.length - 1].seen = ' ✓';
+                        return updatedArr;
+                    });
+                } else {
+                    console.error("Failed to send message:", response.error);
+                }
+            });
+            const chatBody = document.querySelector('.chat-room-body');
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+    }
 
     return (
         <>
@@ -147,10 +163,21 @@ export default function ChatRoom() {
 
                         <div className='chat-room-body'>
                             {message && message.map((msg) => (
-                                <div key={msg.id} className={`${msg.type} `}>
-                                    <p>{msg.text}</p>
-                                    <span>{msg.timestamp}</span>
-                                </div>
+                                    !msg.product_id ?
+                                    (
+                                        <div key={msg.id} className={`${msg.type} `}>
+                                            <p>{msg.text}</p>
+                                            <span>{msg.timestamp}{msg?.seen}</span>
+                                        </div>
+                                    )
+                                    : 
+                                    (
+                                        <div key={msg.id} className={`${msg.type} `} style={{borderRadius: '4px'}}>
+                                            <Card product_id={msg.product_id} />
+                                            <p>{msg.text}</p>
+                                            <span>{msg.timestamp}{msg?.seen}</span>
+                                        </div>
+                                    )
                             ))}
                         </div>
 
@@ -164,7 +191,18 @@ export default function ChatRoom() {
                     
                 }
 
+                {
+                    !partner && <NoChatSelected />
+                }
+
             </div>
         </>
     )
 }
+
+
+const NoChatSelected = () => {
+    return (
+        <></>
+    );
+};
