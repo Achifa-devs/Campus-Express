@@ -37,7 +37,7 @@ export default function ChatRoom() {
     useEffect(() => {
         if (socket && partner) {
             message.map(msg => {
-                if (msg.type === 'received' && msg.seen !== ' ✓✓') {
+                if (msg.type === 'received' && msg.seen !== '  ✓✓') {
                     socket.emit('message_seen', { conversation_id: msg.room_id });
                 }
             })
@@ -65,7 +65,7 @@ export default function ChatRoom() {
                         new_mssg.type = 'sent';
                         new_mssg.text = msg.content;
                         new_mssg.product_id = msg.media_url;
-                        new_mssg.seen = msg.status.status === 'seen' ? ' ✓✓' : msg.status.status === 'sent' ? ' ✓' : '';
+                        new_mssg.seen = msg.status.status === 'seen' ? '  ✓✓' : msg.status.status === 'sent' ? ' ✓' : '';
                         const date = new Date(msg.created_at);
                         new_mssg.timestamp = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                         new_mssg.room_id = msg.conversation_id;
@@ -136,7 +136,7 @@ export default function ChatRoom() {
             if (buyer_info.user_id === result.sender_id) {
                 setMessage(prevArr => {
                     const updatedArr = [...prevArr];
-                    updatedArr[updatedArr.length - 1].seen = ' ✓✓';
+                    updatedArr[updatedArr.length - 1].seen = '  ✓✓';
                     return updatedArr;
                 });
             }
