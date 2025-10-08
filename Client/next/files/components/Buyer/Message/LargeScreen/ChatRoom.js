@@ -1,4 +1,4 @@
-import React, { use, useEffect } from 'react'
+import React, { use, useEffect, useState } from 'react'
 import './style.css'
 import sendSvg from '@/files/assets/send-message-svgrepo-com.svg'
 import { useSocket } from '@/socket_context'
@@ -13,6 +13,7 @@ export default function ChatRoom() {
     const socket = useSocket();
 
     const { partner } = useSelector(s => s?.partner);
+    const { buyer_info } = useSelector(s => s?.buyer_info);
 
     const [message, setMessage] = React.useState([])
     const [newMessage, setNewMessage] = React.useState('');
@@ -25,6 +26,15 @@ export default function ChatRoom() {
     }, [message]);
 
 
+    useEffect(() => {
+        if (socket && partner) {
+            message.map(msg => {
+                if (msg.type === 'received' && msg.seen !== ' ✓✓') {
+                    socket.emit('message_seen', { conversation_id: msg.room_id });
+                }
+            })
+        }
+    }, [partner, socket, message]);
 
     function get_chats () {
 
@@ -42,6 +52,7 @@ export default function ChatRoom() {
                         new_mssg.product_id = msg.media_url;
                         const date = new Date(msg.created_at);
                         new_mssg.timestamp = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                        new_mssg.room_id = msg.conversation_id;
                     } else {
                         new_mssg.type = 'sent';
                         new_mssg.text = msg.content;
@@ -49,6 +60,8 @@ export default function ChatRoom() {
                         new_mssg.seen = msg.status.status === 'seen' ? ' ✓✓' : msg.status.status === 'sent' ? ' ✓' : '';
                         const date = new Date(msg.created_at);
                         new_mssg.timestamp = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                        new_mssg.room_id = msg.conversation_id;
+
                     }
 
                     return new_mssg;
@@ -66,6 +79,8 @@ export default function ChatRoom() {
 
     }
 
+    const [isTyping, setIsTyping] = useState(false)
+
     useEffect(() => {
     
         if (!socket) return;
@@ -76,6 +91,17 @@ export default function ChatRoom() {
             socket.emit('join_room', { otherUserId: partner.user_id });
             get_chats()
         };
+
+        socket.on('is_typing', (user_id) => {
+            if (partner.user_id === user_id) {
+                setIsTyping(true)
+            }
+        })
+        socket.on('not_typing', (user_id) => {
+            if (partner.user_id === user_id) {
+                setIsTyping(false)
+            }
+        })
         socket.on("message", (msg) => {
             if (msg.sender_id === partner.user_id) {
                 const newMsg = {
@@ -89,8 +115,20 @@ export default function ChatRoom() {
                 // setNewMessage('');
                 const chatBody = document.querySelector('.chat-room-body');
                 chatBody.scrollTop = chatBody.scrollHeight;
+
+                socket.emit('message_seen', { conversation_id: msg.conversation_id });
             }
         });
+
+        socket.on('message_seen', ({ result }) => {
+            if (buyer_info.user_id === result.sender_id) {
+                setMessage(prevArr => {
+                    const updatedArr = [...prevArr];
+                    updatedArr[updatedArr.length - 1].seen = ' ✓✓';
+                    return updatedArr;
+                });
+            }
+        })
     
     
         return () => socket.off("message");
@@ -163,10 +201,19 @@ export default function ChatRoom() {
                                     <span style={{padding: '10px', borderRadius: '50%', background: '#fff4e0', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                                         <Image height={25} width={25} src={partner.photo ? partner.photo : userSvg.src} style={{objectFit: 'cover', borderRadius: '50%'}} alt='Placeholder' />
                                     </span>
-                                    <div style={{display: 'flex', flexDirection: 'column', marginLeft: '10px', color: '#fff'}}>
-                                        <span>{partner.fname} {partner.lname}</span>
-                                        <span style={{fontSize: 'small'}}>Active 2hrs ago</span>
-                                    </div>
+                                    {
+                                        isTyping && <div style={{display: 'flex', flexDirection: 'column', marginLeft: '10px', color: '#fff'}}>
+                                            <span>{partner.fname} {partner.lname}</span>
+                                            <span style={{fontSize: 'small'}}>Typing ...</span>
+                                        </div>
+                                    }
+                                    {
+                                        !isTyping &&
+                                        <div style={{display: 'flex', flexDirection: 'column', marginLeft: '10px', color: '#fff'}}>
+                                            <span>{partner.fname} {partner.lname}</span>
+                                            <span style={{fontSize: 'small'}}>Active 2hrs ago</span>
+                                        </div>
+                                    }
                                 </div>
 
                                 <div id='right'>
@@ -195,7 +242,13 @@ export default function ChatRoom() {
                         </div>
 
                         <div className='chat-room-footer expanded'>
-                            <textarea placeholder='Type a message...' value={newMessage} onChange={(e) => setNewMessage(e.target.value)}></textarea>
+                            <textarea placeholder='Type a message...' value={newMessage} 
+                            onFocus={e => {
+                                socket.emit('is_typing', {partner_id:  partner.user_id, isTyping: true})
+                            }} 
+                            onBlur={e => {
+                                socket.emit('not_typing', {partner_id:  partner.user_id, isTyping: false})
+                            }} onChange={(e) => setNewMessage(e.target.value)}></textarea>
                             <button className='send-button' onClick={() => handleNewMessage()}>
                                 <img src={sendSvg.src} alt='Send' style={{height: '20px', width: '20px', objectFit: 'contain'}} />
                             </button>

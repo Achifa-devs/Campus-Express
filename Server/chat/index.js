@@ -188,11 +188,11 @@ io.on('connection', async(socket) => {
   })
 
   socket.on('message_seen', (data, callback) => {
-    const { conversation_id, receiver_id } = data;
+    const { conversation_id } = data;
     try {
-      Chat.markAsSeen({ conversation_id, receiver_id })
+      Chat.markAsSeen({ conversation_id, userId })
       .then((result) => {
-        io.to(conversation_id).emit('message_seen', result);
+        io.to(conversation_id).emit('message_seen', { result });
       }).catch(err => {
         console.error("message_seen error:", err);
         if (callback) callback({ success: false, error: "internal_error" });
@@ -213,9 +213,21 @@ io.on('connection', async(socket) => {
   })
 
   socket.on('is_typing', (data, callback) => {
-    const { conversation_id, isTyping } = data;
+    const { partner_id, isTyping } = data;
+    const conversation_id = generateConversationId(socket.user.id, partner_id);
     try {
-      io.to(conversation_id).emit("is_typing", isTyping);
+      io.to(conversation_id).emit("is_typing", { user_id: socket.user.id });
+    } catch (error) {
+      console.error("typing error:", err);
+      if (callback) callback({ success: false, error: "internal_error" });
+    }
+  })
+
+  socket.on('not_typing', (data, callback) => {
+    const { partner_id, isTyping } = data;
+    const conversation_id = generateConversationId(socket.user.id, partner_id);
+    try {
+      io.to(conversation_id).emit("not_typing", { user_id: socket.user.id });
     } catch (error) {
       console.error("typing error:", err);
       if (callback) callback({ success: false, error: "internal_error" });

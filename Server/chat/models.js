@@ -164,7 +164,7 @@ class Chat {
     }
   }
 
-  static async markAsSeen({ conversation_id, receiver_id }) {
+  static async markAsSeen({ conversation_id, userId }) {
     try {
       const result = await pool.query(
         `UPDATE messages
@@ -173,10 +173,10 @@ class Chat {
           AND receiver_id = $2
           AND status->>'status' IN ('sent','delivered')  -- ✅ override both
         RETURNING *`,
-        [conversation_id, receiver_id]
+        [conversation_id, userId]
       );
 
-      return result.rows;
+      return result.rows[0];
     } catch (error) {
       console.error("❌ Error marking as seen:", error);
       throw error;
