@@ -12,7 +12,7 @@ export default function Aside() {
 
   const socket = useSocket();
 
-  const {
+  const { 
     buyer_info
   } = useSelector(s => s?.buyer_info)
 
@@ -55,6 +55,10 @@ export default function Aside() {
 
   useEffect(() => {
     if (!socket) return;
+
+    socket.on('message', (msg) => {
+      get_chat_heads();
+    })
 
     socket.on("connect", () => {
       get_chat_heads()

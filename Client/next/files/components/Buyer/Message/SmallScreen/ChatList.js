@@ -62,6 +62,10 @@ export default function ChatList() {
       get_chat_heads()
     });
 
+    socket.on("message", (msg) => {
+      get_chat_heads();
+    });
+
     socket.on("disconnect", () => {
       console.log("Socket disconnected");
     });
@@ -116,7 +120,7 @@ export default function ChatList() {
                       item?.unread === 0 ? ''
                       :
                       <>
-                        <span style={{width: 'fit-content', padding: '2.5px 8px', height: 'fit-content', fontSize: 'small', background: '#FF4500', borderRadius: '10px', color: '#fff'}}>5</span>
+                        <span style={{width: 'fit-content', padding: '2.5px 8px', height: 'fit-content', fontSize: 'small', background: '#FF4500', borderRadius: '10px', color: '#fff'}}>{item.unread}</span>
                       </>
                      }
                     </div>
