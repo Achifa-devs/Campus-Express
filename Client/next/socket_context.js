@@ -16,14 +16,18 @@ export function SocketProvider({ children }) {
   useEffect(() => {
     if (!buyer_info?.user_id) return;
 
-    const SOCKET_URL = 'https://campus-express-production.up.railway.app';
+    const SOCKET_URL = 'http://localhost:2020';
+    // const SOCKET_URL = 'https://campus-express-production.up.railway.app';
 
     // Only connect if not already connected
     if (!socketRef.current) {
+
+      const token = window.localStorage.getItem('token');
+      // alert(token)
       const socketInstance = io(SOCKET_URL, {
         transports: ['websocket'],
         withCredentials: true,
-        query: { user_id: buyer_info.user_id, token: window.localStorage.getItem('token') },
+        query: { user_id: buyer_info.user_id, token: (token) },
       });
 
       socketRef.current = socketInstance;
