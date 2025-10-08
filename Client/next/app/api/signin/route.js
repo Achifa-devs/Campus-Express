@@ -49,7 +49,7 @@ export async function POST(req) {
     cookies().set('user_secret', token, {
       httpOnly: true,
       secure: true,
-      sameSite: 'strict',
+      sameSite: 'none',
       path: '/',
       maxAge: 7 * 24 * 60 * 60 // 7 days
     });
