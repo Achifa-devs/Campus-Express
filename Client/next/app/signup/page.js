@@ -122,6 +122,8 @@ const Signup = () => {
                 if(data.success){
                     // dispatch(setBuyerTo(data.cookie))
                     // buyer_overlay_setup(false, '')
+                    window.localStorage.setItem('token', data.cookie)
+
                     window.location.href = '/store'
                 }else{
                     

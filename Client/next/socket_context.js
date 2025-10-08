@@ -16,14 +16,14 @@ export function SocketProvider({ children }) {
   useEffect(() => {
     if (!buyer_info?.user_id) return;
 
-    const SOCKET_URL = 'https://campus-express-production.up.railway.app/';
+    const SOCKET_URL = 'https://campus-express-production.up.railway.app';
 
     // Only connect if not already connected
     if (!socketRef.current) {
       const socketInstance = io(SOCKET_URL, {
         transports: ['websocket'],
         withCredentials: true,
-        query: { user_id: buyer_info.user_id },
+        query: { user_id: buyer_info.user_id, token: window.localStorage.getItem('token') },
       });
 
       socketRef.current = socketInstance;

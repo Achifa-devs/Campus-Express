@@ -37,7 +37,7 @@ const onlineUsers = new Map(); // userId -> Set of socketIds
 io.use(async(socket, next) => {
   try {
     // console.log("handshake", socket.handshake);
-    const token = socket.handshake.auth?.token || socket.handshake.headers.cookie.split('=')[1];
+    const token = socket.handshake.auth?.token || socket.handshake.query;
 
     if (!token) return next(new Error('Authentication error'));
 

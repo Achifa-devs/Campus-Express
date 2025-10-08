@@ -49,7 +49,9 @@ export default function Login() {
                     
                     // alert(response.cookie)
                     // dispatch(setBuyerTo(response.cookie))
+                    window.localStorage.setItem('token', response.cookie)
                     window.location.href = '/store'
+
                     // buyer_overlay_setup(false, '')
                 }else{
                     buyer_overlay_setup(false, '')
