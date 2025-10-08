@@ -48,7 +48,9 @@ export default function StoreTab({navigation}) {
     
 
     React.useEffect(() => {
-      if(nested_navsuccessean){
+      // nested_nav.data
+      console.log(nested_nav)
+      if(nested_nav.boolean){
         setTabBarStyle('flex')
       }else{
         setTabBarStyle('none')

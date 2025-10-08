@@ -68,7 +68,7 @@ const Search = ({ route, navigation }) => {
     
 
     function handleSearchSubmit(params) {
-        fetch(`https://cs-node.vercel.app/search?word=${query}&campus=${campus==='All campus'? 'null':campus}&purpose=${option === 'Products' ? 'product' : option === 'Lodges' ? 'accomodation' : 'service'}&user_id=${user ? user?.user_id: id}`, {
+        fetch(`http://10.81.21.3:9090/search?word=${query}&campus=${campus==='All campus'? 'null':campus}&purpose=${option === 'Products' ? 'product' : option === 'Lodges' ? 'accomodation' : 'service'}&user_id=${user ? user?.user_id: id}`, {
           headers: {
             "Content-Type": "Application/json" 
           }

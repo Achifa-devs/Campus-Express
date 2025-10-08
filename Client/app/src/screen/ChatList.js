@@ -21,6 +21,8 @@ import { Chat } from '../api/chat';
 import { useDispatch, useSelector } from 'react-redux';
 import { set_unread } from '../../redux/info/unread_chats';
 import { getSocket, initSocket } from '../services/socket';
+import Memory from '../utils/memoryHandler';
+import { set_chat } from '../../redux/info/chat';
 const ChatList = ({ navigation }) => {
   const [chatRooms, setChatRooms] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -36,27 +38,32 @@ const ChatList = ({ navigation }) => {
     try {
       // await initSocket(user?.user_id);
       let socket_client = getSocket();
-
-      socket_client.emit("get_all_messages", { user_id: user?.user_id }, cb => {
-        const { messages, success } = cb;
-        if (success) {
-          let chat_list = Object.entries(messages);
-          Memory.store('chat_list', chat_list);
-          dispatch(set_chat(chat_list));
-          // dispatch(set_chat({...mssg, messages}));
-        } else {
-          // Alert.alert("Error", "Could not fetch messages");
-        }
-      })
+      fetchChatList(socket_client);
+      
 
     } catch (error) {
       console.error('Error initializing socket:', error);
     }
   }
 
+  function fetchChatList(socket_client) {
+    socket_client.emit("get_all_messages", { user_id: user?.user_id }, cb => {
+      const { messages, success } = cb;
+      if (success) {
+        console.log("Fetched messages:", messages);
+        Memory.store('chat_list', messages);
+        dispatch(set_chat(messages));
+        // dispatch(set_chat({...mssg, messages}));
+      } else {
+        // Alert.alert("Error", "Could not fetch messages");
+      }
+    })
+  }
+
   useEffect(() => {
     setChatRooms(chat)
     setFilteredRooms(chat);
+    setLoading(false);
   }, [chat])
 
   useEffect(() => {
@@ -77,14 +84,10 @@ const ChatList = ({ navigation }) => {
     // Accumulate unread messages from all rooms
     let totalUnread = 0;
 
-    chatRooms.forEach(([convId, convData]) => {
-      const unreadCount = convData.messages.filter(
-        (msg) =>
-          msg.status.id === user.user_id &&
-          msg.status.status === "sent"
-      ).length;
+    chatRooms.forEach((data) => {
+      
 
-      totalUnread += unreadCount;
+      totalUnread += data.unread;
     });
 
     // ✅ Update Redux state once with the total unread count
@@ -137,18 +140,18 @@ const ChatList = ({ navigation }) => {
       <TouchableOpacity
         style={styles.chatRoomItem}
         onPress={() => handleChatRoomPress(item)}
-        activeOpacity={0.7} key={item[0]}
+        activeOpacity={0.7} key={item.key}
       >
         <View style={styles.avatarContainer}>
          {
-          !item[1].recipient.photo
+          !item.partner || !item.partner.photo
           ?
           <View style={[styles.avatar, {display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff4e0'}]}>
             <Ionicons name={"person-circle-outline"} size={40} color={"#FF4500"} />
           </View>
           :
           <Image
-            source={{ uri: item[1].recipient.photo }}
+            source={{ uri: item.partner.photo }}
             style={styles.avatar}
             resizeMode="cover"
           />
@@ -159,11 +162,11 @@ const ChatList = ({ navigation }) => {
         <View style={styles.chatContent}>
           <View style={styles.chatHeader}>
             <Text style={styles.chatName} numberOfLines={1}>
-              {item[1].recipient.fname} {item[1].recipient.lname}
+              {item.partner.fname} {item.partner.lname}
             </Text>
             <Text style={styles.chatTime}>
               {
-                js_ago(new Date(getLastMessage(item[1].messages, 'time')))
+                js_ago(new Date(item.lastMessage.created_at))
               }
             </Text>
           </View>
@@ -176,33 +179,17 @@ const ChatList = ({ navigation }) => {
               ]}
               numberOfLines={1}
             >
-              {
-                getLastMessage(item[1].messages, 'mssg').isSender
-                ?
-                'You: '
-                :
-                ''
-              }
-              {
-                getLastMessage(item[1].messages, 'mssg').mssg
-              }
+              {item.lastMessage.sender_id === user?.user_id ? 'You: ' : ''}{item.lastMessage?.content}
             </Text>
             
             {
               (() => {
                 
-                const unreadCount = item[1].messages.filter(
-                  msg =>
-                    msg.status.id === user.user_id && // not sent by current user
-                    msg.status.status === "sent"      // still marked as sent
-                ).length;
-                
-
-                return (
-                  unreadCount > 0 && (
+                return (  
+                  item.unread > 0 && (
                     <View style={styles.unreadBadge}>
                       <Text style={styles.unreadCount}>
-                        {unreadCount > 99 ? "99+" : unreadCount}
+                        {item.unread > 99 ? "99+" : item.unread}
                       </Text>
                     </View>
                   )
@@ -256,7 +243,7 @@ const ChatList = ({ navigation }) => {
           </View>
         ) : (
           <FlatList
-            data={filteredRooms}
+            data={filteredRooms.filter(room => room.partner)} // Ensure partner exists
             renderItem={renderChatRoomItem}
             keyExtractor={item => item.id}
             contentContainerStyle={styles.listContent}

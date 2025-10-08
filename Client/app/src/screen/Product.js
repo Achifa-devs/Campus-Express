@@ -66,7 +66,7 @@ export default function Product() {
   async function AddContactClick() {
     setLoading(true)
     try {
-      let request = await axios.post('https://cs-node.vercel.app/contact-click', {product_id: data?.product_id, user_id: user?.user_id})
+      let request = await axios.post('http://10.81.21.3:9090/contact-click', {product_id: data?.product_id, user_id: user?.user_id})
       let res = request?.data;
       
       return res;
@@ -79,7 +79,7 @@ export default function Product() {
   async function UpdateConnections() {
     setLoading(true)
     try {
-      let request = await axios.post('https://cs-node.vercel.app/minus-connect', {user_id: user?.user_id})
+      let request = await axios.post('http://10.81.21.3:9090/minus-connect', {user_id: user?.user_id})
       let res = request?.data;
       
       if(res.success){
@@ -96,7 +96,7 @@ export default function Product() {
     let id = await Tools.getDeviceId()
     setLoading(true)
     try {
-      let request = await axios.post('https://cs-node.vercel.app/share', {product_id: data?.product_id, user_id: user ? user.user_id : id})
+      let request = await axios.post('http://10.81.21.3:9090/share', {product_id: data?.product_id, user_id: user ? user.user_id : id})
       let res = request?.data;
       
       return res;
@@ -108,7 +108,7 @@ export default function Product() {
 
   useEffect(() => {
     try {
-      fetch(`https://cs-node.vercel.app/image-folder?folderName=${data?.product_id}`, {
+      fetch(`http://10.81.21.3:9090/image-folder?folderName=${data?.product_id}`, {
         headers: { 
           "Content-Type": "Application/json" 
         } 

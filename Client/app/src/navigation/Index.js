@@ -29,7 +29,6 @@ import { set_sponsored_modal } from "../../redux/modal/disruptor";
 import { set_nested_nav } from "../../redux/nested_navigation";
 import Tools from "../utils/generalHandler";
 import { getSocket, initSocket } from "../services/socket";
-import { set_chat } from "../../redux/info/chat";
 
 function NavigationHandler() {
 
@@ -59,7 +58,7 @@ function NavigationHandler() {
           //   console.log(cb)
           // });
 
-          socket_client.on("new_message", async(data) => {
+          socket_client.on("message", async(data) => {
             Alert.alert("New message", "You have a new message");
            
             // socket.emit("message_delivered", { conversation_id: data.conversation_id, receiver_id: user.user_id }, cb => {
@@ -118,7 +117,7 @@ function NavigationHandler() {
 
   const reqHandler = async () => {
     try {
-      const response = await axios.get("https://cs-node.vercel.app/plans");
+      const response = await axios.get("http://10.81.21.3:9090/plans");
 
       // Save different parts separately
       await Memory.store("promo_plan", (response.data.promo_plans));
@@ -152,7 +151,7 @@ function NavigationHandler() {
   useEffect(() => {
     const fetchSponsors = async () => {
       try {
-        const resp = await axios.get('https://cs-node.vercel.app/sponsorship', {
+        const resp = await axios.get('http://10.81.21.3:9090/sponsorship', {
           params: { campus: user?.campus },
         });
 

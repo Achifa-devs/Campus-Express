@@ -208,7 +208,7 @@ const Signup = () => {
             formData.append('file', file); // Directly append the file object for web
             formData.append('productId', shortid.generate(10)); // Directly append the file object for web
     
-            const response = await axios.post('https://cs-node.vercel.app/upload', formData, {
+            const response = await axios.post('http://10.81.21.3:9090/upload', formData, {
                 headers: { 
                     'Content-Type': 'multipart/form-data',
                 },
@@ -237,7 +237,7 @@ const Signup = () => {
         overlay.setAttribute('id', 'overlay');
         try {
         //   setIsLoading(true);
-          const response = await axios.post('https://cs-node.vercel.app/delete', {
+          const response = await axios.post('http://10.81.21.3:9090/delete', {
             url
           });
     

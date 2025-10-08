@@ -243,7 +243,7 @@ export default function TypeProducts() {
     try {
       setRefreshing(true);
       const result = await fetch(
-        `https://cs-node.vercel.app/products-type?category=${category}&type=${type}&purpose=${option === 'Products' ? 'product' : option === 'Lodges' ? 'accomodation' : 'service'}`,
+        `http://10.81.21.3:9090/products-type?category=${category}&type=${type}&purpose=${option === 'Products' ? 'product' : option === 'Lodges' ? 'accomodation' : 'service'}`,
         { headers: { 'Content-Type': 'application/json' } }
       );
 

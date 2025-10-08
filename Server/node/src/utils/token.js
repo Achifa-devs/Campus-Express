@@ -4,13 +4,13 @@ import jwt from "jsonwebtoken";
 dotenv.config()
 
 export const generateCustomerJwtToken = (id) => {
-    return jwt.sign({ id }, process.env.BUYER_SECRET, {
+    return jwt.sign({ id }, 'kdiU$28Fs!9shF&2xZpD3Q#1gLx@R7TkWzPq', {
        expiresIn: maxAge
     });
 };
 
 export const generateVendorJwtToken = (id) => {
-    return jwt.sign({ id }, process.env.SELLER_SECRET, {
+    return jwt.sign({ id }, 'kdiU$28Fs!9shF&2xZpD3Q#1gLx@R7TkWzPq', {
        expiresIn: maxAge
     });
 };

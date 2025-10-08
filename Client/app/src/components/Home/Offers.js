@@ -12,7 +12,7 @@ const ITEM_WIDTH = (width - 40) / 3; // Account for padding
 const navItems = [
   { name: 'cart-outline', activeName: 'cart', label: 'Products' },
   { name: 'bed-outline', activeName: 'bed', label: 'Lodges' },
-  { name: 'construct-outline', activeName: 'construct', label: 'Services'},
+  // { name: 'construct-outline', activeName: 'construct', label: 'Services'},
   // { name: 'newspaper-outline', activeName: 'newspaper', label: 'News'},
   
 ];

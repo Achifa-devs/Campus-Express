@@ -42,7 +42,7 @@ export function SellStackScreen() {
     
     useEffect(() => {
       if (!shop) {
-        axios.get(`https://cs-node.vercel.app/details?user_id=${user?.user_id}`, {
+        axios.get(`http://10.81.21.3:9090/details?user_id=${user?.user_id}`, {
           headers: {
             'Content-Type': 'application/json'
           }

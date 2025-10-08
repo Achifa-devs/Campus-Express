@@ -21,15 +21,17 @@ const server = CHAT.listen(process.env.PORT, () => {
 });
 
 CHAT.use(cors({
-  origin: "https://campus-express-production.up.railway.app", // your frontend dev origin
-  credentials: true,
+  origin: '*',
+  // origin: "https://campus-express-production.up.railway.app", // your frontend dev origin
+  // credentials: true,
 }));
 
 const io = new Server(server, {
   cors: {
-    origin: "https://campus-express-production.up.railway.app",   // or your client URL
+    origin: '*',
+    // origin: "https://campus-express-production.up.railway.app",   // or your client URL
     methods: ["GET", "POST"],
-    credentials: true
+    // credentials: true
   }
 });
 const onlineUsers = new Map(); // userId -> Set of socketIds
@@ -38,6 +40,7 @@ io.use(async(socket, next) => {
   try {
     const token = socket.handshake.auth?.token || socket.handshake.query.token;
 
+    console.log("Socket token:", token);
     if (!token) return next(new Error('Authentication error'));
 
     const payload = jwt.verify(token, 'kdiU$28Fs!9shF&2xZpD3Q#1gLx@R7TkWzPq'); 

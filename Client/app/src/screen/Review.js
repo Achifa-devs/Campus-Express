@@ -52,7 +52,7 @@ const ReviewSubmissionScreen = ({ navigation }) => {
 
     setIsSubmitting(true);
     
-    fetch(`https://cs-node.vercel.app/review`, {
+    fetch(`http://10.81.21.3:9090/review`, {
       method: 'post',
 
       headers: {

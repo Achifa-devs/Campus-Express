@@ -31,7 +31,7 @@ const PromotedAdDetails = () => {
   useEffect(() => {
     async function getMetrics() {
       try {
-        const response = await axios.get('https://cs-node.vercel.app/promo', {
+        const response = await axios.get('http://10.81.21.3:9090/promo', {
           params: { product_id: data?.product_id }
         });
         const result = response.data;

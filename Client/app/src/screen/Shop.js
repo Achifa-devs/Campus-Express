@@ -29,7 +29,7 @@ export default function Shop() {
     let [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-      axios.get(`https://cs-node.vercel.app/vendor/shop-reviews?shop_id=${shop?.shop_id}`)
+      axios.get(`http://10.81.21.3:9090/vendor/shop-reviews?shop_id=${shop?.shop_id}`)
       .then((res) => {
         const response = res.data.data;
         if (res.data) {
@@ -59,7 +59,7 @@ export default function Shop() {
 
         if (list.filter(item => item !== '' && item !== undefined).length === list.length) {
             setIsLoading(true)
-            axios.post(`https://cs-node.vercel.app/vendor/update-shop`, {
+            axios.post(`http://10.81.21.3:9090/vendor/update-shop`, {
                 title,
                 description,
                 user_id: user?.user_id,
@@ -116,7 +116,7 @@ export default function Shop() {
             type: image.type || 'image/jpeg',
         });
 
-        const response = await axios.post('https://cs-node.vercel.app/upload', formData, {
+        const response = await axios.post('http://10.81.21.3:9090/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         });
 
@@ -137,7 +137,7 @@ export default function Shop() {
     const deleteFromServer = async (url) => {
         try {
             setIsLoading(true);
-            const response = await axios.post('https://cs-node.vercel.app/delete', {
+            const response = await axios.post('http://10.81.21.3:9090/delete', {
                 url
             });
 
