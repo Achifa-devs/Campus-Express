@@ -54,7 +54,7 @@ const Card = ({product_id}) => {
     return ( 
         <> 
 
-            <div className="cols" id={item?.product_id} style={{width: '250px', height: 'fit-content', cursor: 'pointer'
+            <div className="cols" id={item?.product_id} style={{width: '180px', height: 'auto', cursor: 'pointer'
             }} >
                 <div className="card shadow-md" style={{height: 'auto', marginBottom: '10px', borderRadius: '4px'}}>
                     
@@ -63,51 +63,30 @@ const Card = ({product_id}) => {
                     {
                         
                         (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(item?.thumbnail_id?.split('.').pop().toLowerCase())) ? 
-                        <Thumbnail thumbnail_id={item?.thumbnail_id}/>
+                        <Thumbnail height={'100px'} thumbnail_id={item?.thumbnail_id}/>
                         :
-                        <Video thumbnail_id={item?.thumbnail_id} />
+                        <Video height={'100px'} thumbnail_id={item?.thumbnail_id} />
                         
                         
                     }
 
-                    <div className="card-body" style={{position: 'relative'}}>
+                    <div className="card-body" style={{position: 'relative', padding: '10px'}}>
                         
-                        {
-                            screenWidth > 479
-                            ?
-                            <small style={{
-                                fontSize: 'small',
-                                fontWeight: '500',
-                                fontFamily: 'sans-serif',
+                       <small 
+                            className="d-block text-dark fw-medium font-sans-serif cursor-pointer"
+                            style={{
+                                fontSize: '0.875rem',
                                 maxHeight: '36px',
                                 lineHeight: '18px',
-                                color: '#000',
-                                display: 'webkitBox',
+                                display: '-webkit-box',
                                 WebkitBoxOrient: 'vertical',
                                 WebkitLineClamp: '2',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis'
-                            }} onClick={e => window.open(
-                                `/store/product/${item?.product_id}`
-                            )} >{item?.title}</small>
-                            : 
-                            <small style={{
-                                fontSize: 'small',
-                                fontWeight: '500',
-                                fontFamily: 'sans-serif',
-                                maxHeight: '36px',
-                                lineHeight: '18px',
-                                color: '#000',
-
-                                WebkitBoxOrient: 'vertical',
-                                WebkitLineClamp: '2',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis'
-                            }} onClick={e => window.open(
-                                `/store/product/${item?.product_id}`
-                            )} >{item?.title}</small>
-                        }
-
+                                overflow: 'hidden'
+                            }}
+                            onClick={() => window.open(`/store/product/${item?.product_id}`)}
+                        >
+                            {item?.title}
+                        </small>
                       
                         
                         {
@@ -136,3 +115,10 @@ const Card = ({product_id}) => {
 }
  
 export default Card;
+
+
+
+// npm install -g pm2
+//     pm2 start npm --name "next-app" -- run start
+//     pm2 save
+//     pm2 startup

@@ -8,7 +8,7 @@ import Image from 'next/image';
 import { set_partner_to } from '@/redux/chat_room';
 import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup';
 
-export default function Aside() {
+export default function ChatList() {
 
   const socket = useSocket();
 
@@ -36,16 +36,17 @@ export default function Aside() {
 
   function get_chat_heads () {
     buyer_overlay_setup(true, "Fetching chats...")
+    
     socket.emit('get_all_messages', { user_id: buyer_info?.user_id }, (response) => {
       if (response.success) {
         console.log("Chat list received:", response.messages);
         setChatList(response.messages);
         buyer_overlay_setup(false, "Fetching chats...")
-
+        
       } else {
         console.error("Failed to fetch chat list:", response.error);
         buyer_overlay_setup(false, "Fetching chats...")
-
+        
       }
     });
 
@@ -76,13 +77,6 @@ export default function Aside() {
 
   }, [socket]);
 
-  let [screenWidth, setScreenWidth] = useState(0)
-  
-  useEffect(() => {
-    let width = window.innerWidth;
-    setScreenWidth(width)
-  }, [])
-  
   return (
     <>
       <div className='chat-aside-cnt'>
@@ -100,7 +94,8 @@ export default function Aside() {
                 return(item.partner  ?
                 <li id='chat-head' key={index} onClick={() => {
                   // setCurrentChat(item);
-                  dispatch(set_partner_to(item.partner));
+                  window.localStorage.setItem('partner', JSON.stringify(item.partner))
+                  window.location.href = `/store/chat/room/`;
                   
                 }}>
                   <div id='left' style={{padding: '10px', borderRadius: '50%', background: '#fff4e0', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>

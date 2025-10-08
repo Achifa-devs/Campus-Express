@@ -305,6 +305,10 @@ const BuyerLayout = ({children}) => {
                     ?
                     ''
                     :
+                     pathname.split('/').length > 2 && pathname.split('/').splice(-1)[0] === 'room'
+                    ?
+                    ''
+                    :
                     <Header />
             }
 

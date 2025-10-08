@@ -86,7 +86,7 @@
     // window.localStorage.setItem("userId", id);
     // console.log("User ID:", id);
     const userId = window.localStorage.getItem("userId");
-    const socket = io("http://10.132.215.146:8080", {
+    const socket = io("http://10.132.215.146:2020", {
       query: { user_id: userId }
     });
 
