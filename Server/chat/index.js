@@ -145,12 +145,15 @@ io.on('connection', async(socket) => {
             (a, b) => new Date(b.created_at) - new Date(a.created_at)
           );
 
+          const unread = [...value].messages.filter(msgs => msgs.status.status === 'sent').length;
+
           const lastMessage = mssgs[0];
 
           return {
             key,
             partner,
             lastMessage,
+            unread
           };
         })
       );

@@ -217,7 +217,7 @@ export default function ChatRoom() {
                     <>
                         <div className='chat-room-header'>
                                 <div id='left'>
-                                    <span style={{padding: '10px', borderRadius: '50%', background: '#fff4e0', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                                    <span style={{padding: partner.photo ? '0px' : '10px', borderRadius: '50%', background: '#fff4e0', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                                         <Image height={25} width={25} src={partner.photo ? partner.photo : userSvg.src} style={{objectFit: 'cover', borderRadius: '50%'}} alt='Placeholder' />
                                     </span>
                                     {
@@ -252,7 +252,7 @@ export default function ChatRoom() {
                                     (
                                         <div key={msg.id} className={`${msg.type} `}>
                                             <p>{msg.text}</p>
-                                            <span>{msg.timestamp}{msg?.seen}</span>
+                                            <span style={{fontSize: 'x-small'}}>{msg.timestamp}{msg?.seen}</span>
                                         </div>
                                     )
                                     : 
@@ -260,7 +260,7 @@ export default function ChatRoom() {
                                         <div key={msg.id} className={`${msg.type} `} style={{borderRadius: '4px'}}>
                                             <Card product_id={msg.product_id} />
                                             <p>{msg.text}</p>
-                                            <span>{msg.timestamp}{msg?.seen}</span>
+                                            <span style={{fontSize: 'x-small'}}>{msg.timestamp}{msg?.seen}</span>
                                         </div>
                                     )
                             ))}
