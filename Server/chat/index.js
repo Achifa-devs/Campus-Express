@@ -148,7 +148,7 @@ io.on('connection', async(socket) => {
             (a, b) => new Date(b.created_at) - new Date(a.created_at)
           );
 
-          const unread = value.messages.filter(msgs => msgs.status.status === 'sent').length;
+          const unread = value.messages.filter(msgs => msgs.status.status === 'sent' && msgs.status.id === userId).length;
 
           const lastMessage = mssgs[0];
 

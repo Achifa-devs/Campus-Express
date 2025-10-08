@@ -189,7 +189,7 @@ const ChatList = ({ navigation }) => {
                   item.unread > 0 && (
                     <View style={styles.unreadBadge}>
                       <Text style={styles.unreadCount}>
-                        {item.unread > 99 ? "99+" : item.unread}
+                        {item.unread > 99 ? "99+" : item.unread}  
                       </Text>
                     </View>
                   )
