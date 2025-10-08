@@ -7,6 +7,7 @@ import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup';
 import userSvg from '@/files/assets/user-rounded-svgrepo-com.svg'
 import Image from 'next/image';
 import Card from '../Card';
+import { open_notice } from '@/files/reusable.js/notice';
 
 export default function ChatRoom() {
 
@@ -17,6 +18,12 @@ export default function ChatRoom() {
 
     const [message, setMessage] = React.useState([])
     const [newMessage, setNewMessage] = React.useState('');
+
+    function containsPhoneNumber(text) {
+        // Match any sequence of 10 or 11 digits, not part of a longer number
+        const phoneRegex = /\b\d{10,11}\b/;
+        return phoneRegex.test(text);
+    }
 
     useEffect(() => {
         if (partner) {
@@ -103,6 +110,9 @@ export default function ChatRoom() {
                 setIsTyping(false)
             }
         })
+
+        
+
         socket.on("message", (msg) => {
             if (msg.sender_id === partner.user_id) {
                 const newMsg = {
@@ -160,31 +170,39 @@ export default function ChatRoom() {
     }, [socket, partner]);
 
     function handleNewMessage() {
-        if (newMessage.trim() !== '') {
-            const newMsg = {
-                id: message.length + 1,
-                type: 'sent',
-                seen: ' sending...',
-                text: newMessage,
-                timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-            };
-            setMessage(prevArr => [...prevArr, newMsg]);
-            setNewMessage('');
-            // receiver_id, content, media_url, message_type, created_at
-            socket.emit('send_message', { receiver_id: partner.user_id, content: newMsg.text, media_url: null, message_type: 'text', created_at: new Date() }, (response) => {
-                if (response.success) {
-                    // console.log("Message sent successfully:", response.message);
-                    setMessage(prevArr => {
-                        const updatedArr = [...prevArr];
-                        updatedArr[updatedArr.length - 1].seen = ' ✓';
-                        return updatedArr;
-                    });
-                } else {
-                    console.error("Failed to send message:", response.error);
-                }
-            });
-            const chatBody = document.querySelector('.chat-room-body');
-            chatBody.scrollTop = chatBody.scrollHeight;
+        const isValidText = containsPhoneNumber(newMessage)
+        if (!isValidText) {
+            if (newMessage.trim() !== '') {
+                const newMsg = {
+                    id: message.length + 1,
+                    type: 'sent',
+                    seen: ' sending...',
+                    text: newMessage,
+                    timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                };
+                setMessage(prevArr => [...prevArr, newMsg]);
+                setNewMessage('');
+                // receiver_id, content, media_url, message_type, created_at
+                socket.emit('send_message', { receiver_id: partner.user_id, content: newMsg.text, media_url: null, message_type: 'text', created_at: new Date() }, (response) => {
+                    if (response.success) {
+                        // console.log("Message sent successfully:", response.message);
+                        setMessage(prevArr => {
+                            const updatedArr = [...prevArr];
+                            updatedArr[updatedArr.length - 1].seen = ' ✓';
+                            return updatedArr;
+                        });
+                    } else {
+                        console.error("Failed to send message:", response.error);
+                    }
+                });
+                const chatBody = document.querySelector('.chat-room-body');
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }
+        }else{
+            open_notice(true, "Your message contains a phone number which is not allowed.");
+            setTimeout(() => {
+                open_notice(true, "All business-related communications must take place within this chat, in accordance with platform policy.");
+            }, 6200);
         }
     }
 
@@ -223,6 +241,12 @@ export default function ChatRoom() {
                         </div>
 
                         <div className='chat-room-body'>
+                            <div style={{textAlign: 'center', marginBottom: '10px', fontSize: 'small', color: '#000', padding: '10px', background: '#FFA50', borderRadius: '5px', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                                <p>
+                                    ⚠️ <br />
+                                    Hey there! To keep our community safe, we monitor all chat messages for security reasons. Please don’t share your phone number or personal contact info — it helps protect everyone from scams and fraud. Let’s keep all conversations right here on the platform for your safety!
+                                </p>
+                            </div>
                             {message && message.map((msg) => (
                                     !msg.product_id ?
                                     (
