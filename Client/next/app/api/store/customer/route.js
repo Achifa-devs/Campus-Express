@@ -18,9 +18,10 @@ export async function GET(req) {
     return NextResponse.json({data: result.rows[0], success: true}, { status: 200 });
 
   } catch (error) {
+
     return NextResponse.json({
       Mssg: "An error occurred ",
-      success: false
+      success: false,
     }, { status: 500 });
   }
 }

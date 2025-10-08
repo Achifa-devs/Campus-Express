@@ -16,7 +16,7 @@ export function SocketProvider({ children }) {
   useEffect(() => {
     if (!buyer_info?.user_id) return;
 
-    const SOCKET_URL = 'https://campus-express-kzo2.onrender.com';
+    const SOCKET_URL = 'https://campus-express-production.up.railway.app/';
 
     // Only connect if not already connected
     if (!socketRef.current) {
