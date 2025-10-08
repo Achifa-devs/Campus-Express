@@ -216,7 +216,7 @@ io.on('connection', async(socket) => {
     const { partner_id, isTyping } = data;
     const conversation_id = generateConversationId(socket.user.id, partner_id);
     try {
-      io.to(conversation_id).emit("is_typing", { user_id: socket.user.id });
+      io.to(conversation_id).emit("is_typing", { user_id: userId });
     } catch (error) {
       console.error("typing error:", err);
       if (callback) callback({ success: false, error: "internal_error" });

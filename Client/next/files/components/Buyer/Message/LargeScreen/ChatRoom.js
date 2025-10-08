@@ -92,13 +92,14 @@ export default function ChatRoom() {
             get_chats()
         };
 
-        socket.on('is_typing', (user_id) => {
-            if (partner.user_id === user_id) {
+        socket.on('is_typing', ({user_id}) => {
+            // alert(JSON.stringify(user_id))
+            if (buyer_info.user_id !== user_id) {
                 setIsTyping(true)
             }
         })
-        socket.on('not_typing', (user_id) => {
-            if (partner.user_id === user_id) {
+        socket.on('not_typing', ({user_id}) => {
+            if (buyer_info.user_id !== user_id) {
                 setIsTyping(false)
             }
         })
