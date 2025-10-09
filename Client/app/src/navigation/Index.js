@@ -55,58 +55,65 @@ function NavigationHandler() {
         try {
           await initSocket(user?.user_id);
           let socket_client = getSocket();
-          socket_client.on("message", async(data) => {
-
-            let {
+          socket_client.on("message", async (data) => {
+            const {
               sender_id,
               receiver_id,
               message,
               conversation_id,
               message_type,
               media_url,
-              created_at
+              created_at,
             } = data;
-            let getChatSibling = [...chat].filter((item) => item.key === data.conversation_id);
-            if(getChatSibling.length > 0){
-              let updatedChatListItem = [...chat].map((item) => {
-                if(data.conversation_id === item.key){
-                  item.lastMessage = {
-                    sender_id,
-                    receiver_id,
-                    message,
-                    conversation_id,
-                    message_type,
-                    media_url,
-                    created_at
-                  }
-                  item.unread = chat.filter(item => data.conversation_id === item.key)[0].unread + 1;
-                }
-                return item;
-              })
-              let updatedChatList = [
-                ...updatedChatListItem,
-                ...chat.filter(item => data.conversation_id !== item.key)
-              ]
-              dispatch(set_chat(updatedChatList))
-            }else{
-              let newChatListItem = {
-                key: data.conversation_id,
-                partner: data.sender_id,
-                lastMessage: {},
-                unread: 1
-              }
-              dispatch(set_chat([...chat, newChatListItem]))
-            }
-            // socket.emit("message_delivered", { conversation_id: data.conversation_id, receiver_id: user.user_id }, cb => {
-            //   console.log(cb)
-            // });
 
-            // console.log("New message received:", data);
-            // let prevMssg = await Memory.get('messages');
-            // let updatedMssg = [data, ...prevMssg];
-            // Memory.store('messages', updatedMssg);
-            // dispatch(set_mssg({...mssg, messages: updatedMssg}));
+            // Create a shallow copy of chat array
+            const updatedChatList = [...chat];
+            
+            // Find the chat index
+            const index = updatedChatList.findIndex(
+              (item) => item.key === conversation_id
+            );
+
+            if (index !== -1) {
+              // Clone the chat item to avoid mutating state
+              const chatItem = { ...updatedChatList[index] };
+
+              chatItem.lastMessage = {
+                sender_id,
+                receiver_id,
+                message,
+                conversation_id,
+                message_type,
+                media_url,
+                created_at,
+              };
+
+              chatItem.unread = (chatItem.unread || 0) + 1;
+
+              // Replace the old item in the same array position
+              updatedChatList[index] = chatItem;
+            } else {
+              // Add new chat if conversation doesn't exist
+              updatedChatList.push({
+                key: conversation_id,
+                partner: sender_id,
+                lastMessage: {
+                  sender_id,
+                  receiver_id,
+                  message,
+                  conversation_id,
+                  message_type,
+                  media_url,
+                  created_at,
+                },
+                unread: 1,
+              });
+            }
+
+              // Dispatch updated list
+            dispatch(set_chat(updatedChatList));
           });
+
 
           
 
@@ -153,7 +160,7 @@ function NavigationHandler() {
 
   const reqHandler = async () => {
     try {
-      const response = await axios.get("http://10.81.21.3:9090/plans");
+      const response = await axios.get("https://cs-node.vercel.app/plans");
 
       // Save different parts separately
       await Memory.store("promo_plan", (response.data.promo_plans));
@@ -187,7 +194,7 @@ function NavigationHandler() {
   useEffect(() => {
     const fetchSponsors = async () => {
       try {
-        const resp = await axios.get('http://10.81.21.3:9090/sponsorship', {
+        const resp = await axios.get('https://cs-node.vercel.app/sponsorship', {
           params: { campus: user?.campus },
         });
 

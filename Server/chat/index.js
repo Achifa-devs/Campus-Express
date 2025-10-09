@@ -96,6 +96,8 @@ io.on('connection', async(socket) => {
         created_at
       });
 
+      const partner = await Chat.getUser({ user_id: partner_id });
+
       // ✅ Make sure both users are in the conversation room
       socket.join(conversation_id);
       console.log('conversation_id: ', conversation_id)
@@ -104,7 +106,7 @@ io.on('connection', async(socket) => {
       io.to(conversation_id).emit("message", newMessage);
 
       // ✅ Send ACK back only to the sender
-      if (callback) callback({ success: true});
+      if (callback) callback({ success: true, partner });
 
       console.log(`📨 Message from ${senderId} to ${receiver_id}: ${content}`);
     } catch (err) {

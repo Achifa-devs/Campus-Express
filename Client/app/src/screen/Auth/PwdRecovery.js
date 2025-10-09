@@ -57,7 +57,7 @@ const PasswordScreen = ({ route, navigation }) => {
 
   function ConfirmToken() {
     setLoading(true)
-    axios.post("http://10.81.21.3:9090/verify-token", {
+    axios.post("https://cs-node.vercel.app/verify-token", {
       email,
       token,
     })
@@ -97,7 +97,7 @@ const PasswordScreen = ({ route, navigation }) => {
     setLoading(true)
 
 
-    axios.post("http://10.81.21.3:9090/reset-password", {
+    axios.post("https://cs-node.vercel.app/reset-password", {
       email,
       password: password,
     })

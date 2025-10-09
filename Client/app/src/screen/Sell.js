@@ -62,7 +62,7 @@ const ShopScreen = () => {
   let [review, set_review] = useState([])
 
   useEffect(() => {
-    axios.get(`http://10.81.21.3:9090/vendor/shop-reviews?shop_id=${shop?.shop_id}`)
+    axios.get(`https://cs-node.vercel.app/vendor/shop-reviews?shop_id=${shop?.shop_id}`)
     .then((res) => {
       set_review(res?.data?.data)
     }).catch(err=>console.log(err))
@@ -70,7 +70,7 @@ const ShopScreen = () => {
 
   const get_list_data = useCallback((id) => {
     setRefreshing(true)
-    fetch(`http://10.81.21.3:9090/vendor/products?user_id=${user?.user_id}`, {
+    fetch(`https://cs-node.vercel.app/vendor/products?user_id=${user?.user_id}`, {
       headers: {
         "Content-Type": "Application/json"
       }
@@ -110,7 +110,7 @@ const ShopScreen = () => {
   // Simulate checking if shop exists in DB
   useEffect(() => {
     (async function getUser(params) {
-      let res = await fetch(`http://10.81.21.3:9090/vendor/shop?user_id=${user?.user_id}`)
+      let res = await fetch(`https://cs-node.vercel.app/vendor/shop?user_id=${user?.user_id}`)
       handleInputChange('user_id', user?.user_id)
       let response = await res.json()
       if (response?.success) {
@@ -159,7 +159,7 @@ const ShopScreen = () => {
         type: image.type || 'image/jpeg',
       });
 
-      const response = await axios.post('http://10.81.21.3:9090/upload', formData, {
+      const response = await axios.post('https://cs-node.vercel.app/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
@@ -180,7 +180,7 @@ const ShopScreen = () => {
   const deleteFromServer = async (url) => {
     try {
       setIsLoading(true);
-      const response = await axios.post('http://10.81.21.3:9090/delete', {
+      const response = await axios.post('https://cs-node.vercel.app/delete', {
         url
       });
 
@@ -223,7 +223,7 @@ const ShopScreen = () => {
     if (!validateForm()) return;
 
     setIsLoading(true)
-    fetch(`http://10.81.21.3:9090/vendor/create-shop`, {
+    fetch(`https://cs-node.vercel.app/vendor/create-shop`, {
       method: 'post',
       headers: {
         "Content-Type": "Application/json"

@@ -21,7 +21,7 @@ export default function Btm({ updateUser, user_id, navigation, product_id, updat
     let showLogInAlert = useLogInAlert()
 
     function fetchReviews() {
-        fetch(`http://10.81.21.3:9090/reviews?shop_id=${shop?.shop_id}`, {
+        fetch(`https://cs-node.vercel.app/reviews?shop_id=${shop?.shop_id}`, {
             headers: {
             "Content-Type": "Application/json" 
             }
@@ -42,7 +42,7 @@ export default function Btm({ updateUser, user_id, navigation, product_id, updat
     
     useEffect(() => {
         if (user_id) {
-            fetch(`http://10.81.21.3:9090/owner?user_id=${user_id}`, {
+            fetch(`https://cs-node.vercel.app/owner?user_id=${user_id}`, {
                 headers: {
                 "Content-Type": "Application/json" 
                 }
@@ -62,7 +62,7 @@ export default function Btm({ updateUser, user_id, navigation, product_id, updat
             });
 
             
-            fetch(`http://10.81.21.3:9090/details?user_id=${user_id}`, {
+            fetch(`https://cs-node.vercel.app/details?user_id=${user_id}`, {
                 headers: {
                 "Content-Type": "Application/json" 
                 }

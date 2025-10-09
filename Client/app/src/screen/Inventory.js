@@ -37,7 +37,7 @@ const Inventory = () => {
   const onDelete = async (item, type='image') => {
     setIsLoading(true)
     try {
-      const response = await axios.get('http://10.81.21.3:9090/vendor/delete-product', {params: {product_id: item.product_id, type: type}});
+      const response = await axios.get('https://cs-node.vercel.app/vendor/delete-product', {params: {product_id: item.product_id, type: type}});
   
       const result = await response.data;
       if(result.success){

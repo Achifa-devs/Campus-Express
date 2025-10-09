@@ -1,5 +1,5 @@
 // ChatRoomScreen.js
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   View,
   Text,
@@ -19,16 +19,12 @@ import {
   Alert
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Memory from '../utils/memoryHandler';
-import js_ago from 'js-ago';
 import { useSelector } from 'react-redux';
 import { getSocket } from '../services/socket';
 import axios from 'axios';
 
 const ChatRoom = ({ route }) => {
-  const { 
-    room,
-  } = route.params;
+  const { room } = route.params;
   const navigation = useNavigation();
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
@@ -36,305 +32,317 @@ const ChatRoom = ({ route }) => {
   const [showOptionsModal, setShowOptionsModal] = useState(false);
   const flatListRef = useRef(null);
   const { user } = useSelector(s => s?.user);
-  const [socket, setSocket] = useState(undefined);
+  const [socket, setSocket] = useState(null);
+  const [isAtBottom, setIsAtBottom] = useState(true);
+  const messageIdCounter = useRef(0);
+  const socketRef = useRef(null);
 
-  useEffect(() => {
-    Memory.get(`room-${room.lastMessage.conversation_id}`).then(res => setMessages(res)).catch("Error occured: ", err)
-  }, []);
+  // Generate unique message ID
+  const generateMessageId = () => {
+    messageIdCounter.current += 1;
+    return `${Date.now()}_${messageIdCounter.current}_${Math.random().toString(36).substr(2, 9)}`;
+  };
 
+  // Socket connection and cleanup
   useEffect(() => {
-    Memory.store(`room-${room.lastMessage.conversation_id}`, messages)
-  }, [messages])
+    if (!user) return;
 
-  useEffect(() => {
-    // Scroll to bottom whenever messages change
-    flatListRef.current?.scrollToEnd({ animated: true });
-  }, [messages]);
-  useEffect(() => {
-    if (user) {
-      let s = getSocket()
-      setSocket(s)
-    }
-  }, [user])
+    const s = getSocket();
+    setSocket(s);
+    socketRef.current = s;
 
-  function containsPhoneNumber(text) {
-    // Match any sequence of 10 or 11 digits, not part of a longer number
-    const phoneRegex = /\b\d{10,11}\b/;
-    return phoneRegex.test(text);
-  } 
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.off('message');
+        socketRef.current.off('is_typing');
+        socketRef.current.off('not_typing');
+        socketRef.current.off('message_seen');
+        socketRef.current.disconnect();
+      }
+    };
+  }, [user]);
 
+  // Room joining and message fetching
   useEffect(() => {
-    if (socket && room.partner) {
-      messages.map(msg => {
-        if (msg.type === 'received' && msg.seen !== '  ✓✓') {
+    if (!socket || !room?.partner) return;
+
+    // Join room and get messages
+    socket.emit('join_room', { otherUserId: room.partner.user_id });
+    get_chats(socket, room.partner);
+
+    // Socket event listeners
+    const handleTyping = ({ user_id }) => {
+      if (user.user_id !== user_id) {
+        setIsTyping(true);
+      }
+    };
+
+    const handleNotTyping = ({ user_id }) => {
+      if (user.user_id !== user_id) {
+        setIsTyping(false);
+      }
+    };
+
+    const handleNewMessage = (msg) => {
+      if (msg.sender_id === room.partner.user_id) {
+        const newMsg = {
+          id: generateMessageId(),
+          type: 'received',
+          text: msg.content,
+          timestamp: new Date(msg.created_at).toLocaleTimeString([], { 
+            hour: '2-digit', 
+            minute: '2-digit' 
+          }),
+          room_id: msg.conversation_id
+        };
+        
+        setMessages(prev => {
+          // Check for duplicates before adding
+          const exists = prev.find(m => 
+            m.id === newMsg.id || 
+            (m.text === newMsg.text && Math.abs(new Date(m.timestamp) - new Date(msg.created_at)) < 1000)
+          );
+          return exists ? prev : [...prev, newMsg];
+        });
+
+        // Mark as seen
+        socket.emit('message_seen', { conversation_id: msg.conversation_id });
+      }
+    };
+
+    const handleMessageSeen = ({ result }) => {
+      if (result && user.user_id === result.sender_id) {
+        setMessages(prev => {
+          if (prev.length === 0) return prev;
+
+          const lastIndex = prev.length - 1;
+          const lastMessage = prev[lastIndex];
+
+          if (lastMessage.seen === '✓✓') return prev;
+
+          const updatedMessage = { ...lastMessage, seen: '✓✓' };
+
+          return [
+            ...prev.slice(0, lastIndex),
+            updatedMessage,
+          ];
+        });
+      }
+    };
+
+    // Attach event listeners
+    socket.on('is_typing', handleTyping);
+    socket.on('not_typing', handleNotTyping);
+    socket.on('message', handleNewMessage);
+    socket.on('message_seen', handleMessageSeen);
+
+    // Cleanup function
+    return () => {
+      socket.off('is_typing', handleTyping);
+      socket.off('not_typing', handleNotTyping);
+      socket.off('message', handleNewMessage);
+      socket.off('message_seen', handleMessageSeen);
+    };
+  }, [socket, room?.partner, user]);
+
+  // Mark messages as seen when they become visible
+  useEffect(() => {
+    if (!socket || !room?.partner) return;
+
+    const unseenMessages = messages.filter(msg => 
+      msg.type === 'received' && msg.seen !== '✓✓'
+    );
+
+    if (unseenMessages.length > 0) {
+      unseenMessages.forEach(msg => {
+        if (msg.room_id) {
           socket.emit('message_seen', { conversation_id: msg.room_id });
         }
-      })
-    }
-  }, [room, socket, messages]);
-  useEffect(() => {
-    if(user){
-
-      if(!socket)return
-
-      if (room.partner) {
-        socket.emit('join_room', { otherUserId: room.partner.user_id });
-        get_chats(socket, room.partner)
-      };
-
-      socket.on('is_typing', ({user_id}) => {
-        if (user.user_id !== user_id) {
-          setIsTyping(true)
-        }
-      })
-      socket.on('not_typing', ({user_id}) => {
-        if (user.user_id !== user_id) {
-          setIsTyping(false)
-        }
-      })
-
-      
-
-      socket.on("message", (msg) => {
-        if (msg.sender_id === room.partner.user_id) {
-          const newMsg = {
-            id: messages.length + 1,
-            type: 'received',
-            // seen: ' sending...',
-            text: msg.content,
-            timestamp: new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-          };
-          setMessages(prevArr => [...prevArr, newMsg]);
-          socket.emit('message_seen', { conversation_id: msg.conversation_id });
-        }
       });
+    }
+  }, [messages, socket, room?.partner]);
 
-      socket.on('message_seen', ({ result }) => {
-        if (user.user_id === result?.sender_id) {
-          setMessages(prevArr => {
-            const updatedArr = [...prevArr];
-            updatedArr[updatedArr.length - 1].seen = '  ✓✓';
-            return updatedArr;
-          });
-        }
+  // Scroll handling
+  const handleScroll = (event) => {
+    const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
+    const distanceFromBottom = contentSize.height - (layoutMeasurement.height + contentOffset.y);
+    setIsAtBottom(distanceFromBottom < 50);
+  };
+
+  // Auto-scroll to bottom when new messages arrive and user is at bottom
+  useEffect(() => {
+    if (isAtBottom && messages.length > 0) {
+      const timer = setTimeout(() => {
+        flatListRef.current?.scrollToEnd({ animated: true });
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [messages, isAtBottom]);
+
+  // Phone number validation
+  const containsPhoneNumber = (text) => {
+    const phoneRegex = /\b\d{10,11}\b/;
+    return phoneRegex.test(text);
+  };
+
+  // Send message function
+  const handleNewMessage = () => {
+    if (containsPhoneNumber(newMessage)) {
+      Alert.alert("Security Alert", "Your message contains a phone number which is not allowed.");
+      return;
+    }
+
+    if (newMessage.trim() === '') return;
+
+    const newMsg = {
+      id: generateMessageId(),
+      type: 'sent',
+      seen: 'sending...',
+      text: newMessage.trim(),
+      timestamp: new Date().toLocaleTimeString([], { 
+        hour: '2-digit', 
+        minute: '2-digit' 
       })
-    }
+    };
 
-    return () => socket.off("message");
-  }, [room, socket]);
+    // Optimistically add message to UI
+    setMessages(prev => [...prev, newMsg]);
+    setNewMessage('');
 
+    // Send via socket
+    socket.emit('send_message', { 
+      receiver_id: room.partner.user_id, 
+      content: newMsg.text, 
+      media_url: null, 
+      message_type: 'text', 
+      created_at: new Date() 
+    }, (response) => {
+      if (response && response.success) {
+        // Update message status
+        setMessages(prev => {
+          const lastIndex = prev.length - 1;
+          if (lastIndex < 0) return prev;
 
-     function handleNewMessage() {
-        const isValidText = containsPhoneNumber(newMessage)
-        if (!isValidText) {
-          if (newMessage.trim() !== '') {
-            const newMsg = {
-              id: messages.length + 1,
-              type: 'sent',
-              seen: ' sending...',
-              text: newMessage,
-              timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-            };
-            setMessages(prevArr => [...prevArr, newMsg]);
-            setNewMessage('');
-            // receiver_id, content, media_url, message_type, created_at
-            socket.emit('send_message', { receiver_id: room.partner.user_id, content: newMsg.text, media_url: null, message_type: 'text', created_at: new Date() }, (response) => {
-              if (response.success) {
-                // console.log("Message sent successfully:", response.message);
-                setMessages(prevArr => {
-                  const updatedArr = [...prevArr];
-                  updatedArr[updatedArr.length - 1].seen = ' ✓';
-                  return updatedArr;
-                });
-              } else {
-                console.error("Failed to send message:", response.error);
-              }
-            });
-           
-          }
-        }else{
-            // open_notice(true, "All business-related communications must take place within this chat, in accordance with platform policy.");
-            Alert.alert("Your message contains a phone number which is not allowed.")
-        }
-    }
+          const lastMessage = prev[lastIndex];
+          if (lastMessage.seen === '✓') return prev;
 
-  // useEffect(() => {
-    
-  //   if(from === 'product'){
-  //     Chat.sendMessage({ 
-  //       receiver_id: data?.user_id, 
-  //       content: "I need more enquiries on your offer now!", 
-  //       message_type: "enquire", 
-  //       media_url:  data.product_id
-  //     })
-  //   }
+          // Find the exact message by ID to avoid updating wrong message
+          const messageIndex = prev.findIndex(m => m.id === newMsg.id);
+          if (messageIndex === -1) return prev;
 
+          const updatedMessage = {
+            ...prev[messageIndex],
+            seen: '✓',
+          };
 
-  //   Chat.onMessage((data) => {
-  //     console.log('socket message', data)
-  //   })
-  // }, [room, session_id]);
-
-  // Primary color and complementary color
-  
-  
-  
-  const PRIMARY_COLOR = '#FF4500';
-  const COMPLEMENTARY_COLOR = '#00BFFF';
-  const LIGHT_ORANGE = '#FFE4D6';
-  const LIGHT_BLUE = '#E6F4FF';
-
-  // useEffect(() => {
-  //   setMessages(room[1].messages);
-  //   Chat.joinConversation(room[0])
-  // }, [room, navigation]);
-
-  // useEffect(() => {
-  //   if(messages.length>0){
-  //     Chat.markAsRead(room[0], user?.user_id, (data) => {
-  //       console.log('conversation read')
-  //     })
-
-  //     Chat.socket.on("message_status_update", ({ conversation_id, user_id, status }) => {
-  //       console.log("📩 Status update:", { conversation_id, user_id, status });
-
-  //       // TODO: update Redux or state so UI reflects 'seen'
-  //     });
-
-  //   }
-
-
-  // }, [messages])
-
-  // const sendMessage = () => {
-
-
-  //   const receiver_id = room[0].split('_').filter(item => item !== user?.user_id)[0]
-
-  //   Chat.sendMessage(
-  //     {
-  //       receiver_id,
-  //       content: newMessage.trim(),
-  //       message_type: "text",
-  //       media_url: "",
-  //       created_at: new Date()
-  //     },
-  //     ({message}) => {
-  //       console.log("✅ Sent message:", message);
-
-  //       setMessages((prevMessages) => {
-  //         // Keep only valid ones (with real IDs)
-  //         const authentic = prevMessages.filter(
-  //           (item) => item?.mssg_id && item?.id
-  //         );
-
-  //         return [...authentic, message]; // append new one
-  //       });
-  //     }
-  //   );
-
-
-  //   if (newMessage.trim()) {
-  //     const newMsg = {
-  //       id: '',
-  //       mssg_id: '',
-  //       conversation_id: room[0],
-  //       sender_id: user?.user_id,
-  //       receiver_id: receiver_id,
-  //       content: newMessage.trim(),
-  //       message_type: 'text',
-  //       media_url: '',
-  //       created_at: new Date(),
-  //       status: {
-  //         "id": receiver_id,
-  //         "status": "sending"
-  //       }
-  //     };
-      
-  //     setMessages(prev => [...prev, newMsg]);
-  //     setNewMessage('');
-      
-  //     // Simulate typing indicator
-  //     // setIsTyping(true);
-      
-  //   }
-  // };
-
-  function get_chats (socket, partner) {
-
-    socket.emit('get_room_messages', { receiver_id: partner.user_id }, (response) => {
-      if (response.success) {
-        console.log("Chat room received:", response.messages);
-
-        const msg = response.messages.map((msg) => {
-
-          const new_mssg = {};
-          if (msg.sender_id === partner.user_id) {
-            new_mssg.type = 'received';
-            new_mssg.text = msg.content;
-            new_mssg.product_id = msg.media_url;
-            const date = new Date(msg.created_at);
-            new_mssg.timestamp = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            new_mssg.room_id = msg.conversation_id;
-          } else {
-            new_mssg.type = 'sent';
-            new_mssg.text = msg.content;
-            new_mssg.product_id = msg.media_url;
-            new_mssg.seen = msg.status.status === 'seen' ? '  ✓✓' : msg.status.status === 'sent' ? ' ✓' : '';
-            const date = new Date(msg.created_at);
-            new_mssg.timestamp = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            new_mssg.room_id = msg.conversation_id;
-
-          }
-
-          return new_mssg;
-        })
-        Memory.store(`room-${msg.room_id}`, msg);
-        setMessages(msg);
+          return [
+            ...prev.slice(0, messageIndex),
+            updatedMessage,
+            ...prev.slice(messageIndex + 1),
+          ];
+        });
       } else {
-        console.error("Failed to fetch chat room:", response.error);
+        // Handle send failure
+        Alert.alert("Send Failed", "Message failed to send. Please try again.");
+        console.error("Failed to send message:", response?.error);
+        
+        // Remove the optimistic message if send failed
+        setMessages(prev => prev.filter(m => m.id !== newMsg.id));
       }
     });
+  };
 
-  }
-  const renderMessage = ({ item }) => (
-    <View style={[
-      styles.messageContainer,
-      item.type === 'sent' ? styles.myMessageContainer : styles.otherMessageContainer
-    ]}>
-      {/* CARD */}
-      
-      <View style={[
-        styles.messageBubble,
-        item.type === 'sent' ? styles.myMessageBubble : styles.otherMessageBubble
-      ]}>
-        {
-          item.product_id && <Card product_id={item.product_id} />
-        }
-        <Text style={[
-          styles.messageText,
-          item.type === 'sent' ? styles.myMessageText : styles.otherMessageText
-        ]}>
+  // Fetch chat messages
+  const get_chats = (socket, partner) => {
+    if (!socket || !partner) return;
+
+    socket.emit('get_room_messages', { receiver_id: partner.user_id }, (response) => {
+      if (response && response.success) {
+        console.log("Chat room received:", response.messages);
+
+        const formattedMessages = response.messages.map((msg, index) => {
+          const isReceived = msg.sender_id === partner.user_id;
+          
+          return {
+            id: `${msg.conversation_id}_${msg.created_at}_${index}_${msg.sender_id}`,
+            type: isReceived ? 'received' : 'sent',
+            text: msg.content,
+            product_id: msg.media_url,
+            timestamp: new Date(msg.created_at).toLocaleTimeString([], { 
+              hour: '2-digit', 
+              minute: '2-digit' 
+            }),
+            room_id: msg.conversation_id,
+            seen: !isReceived ? (msg.status?.status === 'seen' ? '✓✓' : msg.status?.status === 'sent' ? '✓' : '') : undefined
+          };
+        });
+
+        setMessages(formattedMessages);
+      } else {
+        console.error("Failed to fetch chat room:", response?.error);
+        Alert.alert("Error", "Failed to load messages");
+      }
+    });
+  };
+
+  // Message item component
+  const MessageItem = React.memo(({ item }) => (
+    <View
+      style={[
+        styles.messageContainer,
+        item.type === 'sent'
+          ? styles.myMessageContainer
+          : styles.otherMessageContainer,
+      ]}
+    >
+      <View
+        style={[
+          styles.messageBubble,
+          item.type === 'sent'
+            ? styles.myMessageBubble
+            : styles.otherMessageBubble,
+        ]}
+      >
+        {item.product_id && <Card product_id={item.product_id} />}
+
+        <Text
+          style={[
+            styles.messageText,
+            item.type === 'sent'
+              ? styles.myMessageText
+              : styles.otherMessageText,
+          ]}
+        >
           {item.text}
         </Text>
+
         <View style={styles.messageTimeContainer}>
-          <Text style={[
-            styles.messageTime,
-            item.type === 'sent' ? styles.myMessageTime : styles.otherMessageTime
-          ]}>
-            {((item.timestamp))}
+          <Text
+            style={[
+              styles.messageTime,
+              item.type === 'sent'
+                ? styles.myMessageTime
+                : styles.otherMessageTime,
+            ]}
+          >
+            {item.timestamp}
           </Text>
-          {item.type === 'sent' && (
+
+          {item.type === 'sent' && item.seen && (
             <Text style={styles.messageStatus}>
-              {item.seen}{'🕒'}
+              {item.seen}
             </Text>
           )}
-          
         </View>
       </View>
     </View>
-  );
+  ));
 
+  const renderMessage = useCallback(({ item }) => (
+    <MessageItem item={item} />
+  ), []);
+
+  // Typing indicator
   const renderTypingIndicator = () => {
     if (!isTyping) return null;
     
@@ -405,37 +413,46 @@ const ChatRoom = ({ route }) => {
     </Modal>
   );
 
+  if (!room?.partner) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>Chat room not available</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor={PRIMARY_COLOR} />
       
       {/* Custom Header */}
       <View style={styles.customHeader}>
-        <TouchableOpacity style={styles.headerUserInfo}>
+        <TouchableOpacity 
+          style={styles.headerUserInfo}
+          onPress={() => navigation.goBack()}
+        >
           <View style={styles.headerAvatar}>
-            <Text style={styles.headerAvatarText}>👤</Text>
+            <Text style={styles.headerAvatarText}>
+              {room.partner.photo ? '👤' : '👤'}
+            </Text>
           </View>
           <View style={styles.headerUserDetails}>
-            <Text style={styles.headerUserName}>{room.partner.fname}.{room.partner.lname[0]}</Text>
-            {
-              isTyping && <Text style={styles.headerUserStatus}>is typing...</Text>
-            }
-            {
-              !isTyping && <Text style={styles.headerUserStatus}>Active 2hrs ago</Text>
-            }
+            <Text style={styles.headerUserName}>
+              {room.partner.fname}.{room.partner.lname?.[0] || ''}
+            </Text>
+            <Text style={styles.headerUserStatus}>
+              {isTyping ? 'is typing...' : 'Active 2hrs ago'}
+            </Text>
           </View>
         </TouchableOpacity>
 
         <View style={styles.headerRightSection}>
           <TouchableOpacity style={styles.locationButton}>
-            <Text style={styles.locationText}>▼ {room.partner.campus}, {room.partner.state}</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity 
-            style={styles.optionsButton}
-            onPress={() => setShowOptionsModal(true)}
-          >
-            <Text style={styles.optionsIcon}>⋯</Text>
+            <Text style={styles.locationText}>
+              ▼ {room.partner.campus}, {room.partner.state}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -443,30 +460,37 @@ const ChatRoom = ({ route }) => {
       <KeyboardAvoidingView
         style={styles.keyboardAvoidingView}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 120 : 0}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 120 : 35}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.content}>
-            {/* Messages List */}
             <FlatList
               ref={flatListRef}
               data={messages}
               renderItem={renderMessage}
               keyExtractor={item => item.id}
-
               contentContainerStyle={styles.messagesList}
               showsVerticalScrollIndicator={false}
-              onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
-              onLayout={() => flatListRef.current?.scrollToEnd({ animated: true })}
               ListFooterComponent={renderTypingIndicator}
+              onScroll={handleScroll}
+              scrollEventThrottle={16}
+              onContentSizeChange={() => {
+                if (isAtBottom && messages.length > 0) {
+                  setTimeout(() => {
+                    flatListRef.current?.scrollToEnd({ animated: true });
+                  }, 100);
+                }
+              }}
+              onLayout={() => {
+                if (messages.length > 0) {
+                  setTimeout(() => {
+                    flatListRef.current?.scrollToEnd({ animated: false });
+                  }, 100);
+                }
+              }}
             />
 
-            {/* Input Container */}
             <View style={styles.inputContainer}>
-              <TouchableOpacity style={styles.attachmentButton}>
-                <Text style={[styles.attachmentIcon, { color: PRIMARY_COLOR }]}>📎</Text>
-              </TouchableOpacity>
-              
               <TextInput
                 style={styles.textInput}
                 placeholder="Type a message..."
@@ -474,32 +498,110 @@ const ChatRoom = ({ route }) => {
                 onChangeText={setNewMessage}
                 multiline
                 maxLength={500}
-                onFocus={e => {
-                  socket.emit('is_typing', {partner_id:  room.partner.user_id, isTyping: true})
+                onFocus={() => {
+                  socket?.emit('is_typing', {
+                    partner_id: room.partner.user_id, 
+                    isTyping: true
+                  });
                 }} 
-                onBlur={e => {
-                  socket.emit('not_typing', {partner_id:  room.partner.user_id, isTyping: false})
+                onBlur={() => {
+                  socket?.emit('not_typing', {
+                    partner_id: room.partner.user_id, 
+                    isTyping: false
+                  });
                 }}
                 placeholderTextColor="#999"
               />
               
               <TouchableOpacity 
-                style={[styles.sendButton, !newMessage.trim() && styles.sendButtonDisabled]}
-                onPress={e => handleNewMessage()}
+                style={[
+                  styles.sendButton, 
+                  !newMessage.trim() && styles.sendButtonDisabled
+                ]}
+                onPress={handleNewMessage}
                 disabled={!newMessage.trim()}
               >
-                <Text style={styles.sendIcon}>
-                  {newMessage.trim() ? '➤' : '🎤'}
-                </Text>
+                <Text style={styles.sendIcon}>➤</Text>
               </TouchableOpacity>
             </View>
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
 
-      {/* Options Modal */}
       {renderOptionsModal()}
     </SafeAreaView>
+  );
+};
+
+// Card component with fixes
+const Card = ({ product_id }) => {
+  const [item, setItem] = useState(null);
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    let mounted = true;
+
+    const fetchProduct = async () => {
+      try {
+        const { data } = await axios.get('https://cs-node.vercel.app/product', {
+          params: { product_id }
+        });
+        
+        if (mounted && data.data && data.data[0]) {
+          setItem(data.data[0]);
+        }
+      } catch (error) {
+        console.log('Error fetching product:', error);
+      }
+    };
+
+    if (product_id) {
+      fetchProduct();
+    }
+
+    return () => {
+      mounted = false;
+    };
+  }, [product_id]);
+
+  if (!item) return null;
+
+  const formatNumber = (num) => {
+    if (!num) return '0';
+    return new Intl.NumberFormat('en-US').format(num);
+  };
+
+  const getPriceText = () => {
+    switch (item.purpose) {
+      case 'product':
+        return `₦${formatNumber(item.price)}`;
+      case 'accomodation':
+        return `₦${formatNumber(item.price)} to pay ₦${formatNumber(item.others?.lodge_data?.upfront_pay || 0)}`;
+      default:
+        return '';
+    }
+  };
+
+  return (
+    <TouchableOpacity 
+      style={styles.adCard}
+      onPress={() => navigation.navigate('product', { data: item })}
+    >
+      <Image
+        style={styles.adImage}
+        source={{ uri: item.thumbnail_id }}
+        resizeMode="cover"
+        onError={(error) => console.log('Image load error:', error)}
+      />
+      <View style={styles.adContent}>
+        <Text style={styles.adTitle} numberOfLines={2}>
+          {item.title || 'No Title'}
+        </Text>
+        <Text style={styles.adPrice}>
+          {getPriceText()}
+        </Text>
+      </View>
+    </TouchableOpacity>
   );
 };
 
@@ -522,6 +624,15 @@ const styles = StyleSheet.create({
   messagesList: {
     padding: 16,
     paddingBottom: 8,
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  errorText: {
+    fontSize: 18,
+    color: '#666',
   },
 
   // Custom Header Styles
@@ -700,7 +811,7 @@ const styles = StyleSheet.create({
     borderColor: PRIMARY_COLOR + '40',
   },
   sendButton: {
-    padding: 12,
+    padding: 0,
     marginLeft: 8,
     backgroundColor: PRIMARY_COLOR,
     borderRadius: 24,
@@ -719,6 +830,7 @@ const styles = StyleSheet.create({
   },
   sendIcon: {
     fontSize: 18,
+    marginTop: -4,
     fontWeight: 'bold',
     color: '#fff',
   },
@@ -803,7 +915,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-    adCard: {
+  adCard: {
     backgroundColor: '#FFF',
     borderRadius: 4,
     overflow: 'hidden',
@@ -860,80 +972,3 @@ const styles = StyleSheet.create({
 });
 
 export default ChatRoom;
-
-
-
-function Card ({product_id}) {
-  
-
-  
-  const [item, setItem] = useState('');
-  useEffect(() => {
-    try {
-      (async () => {
-        const { data } = await axios.get('http://10.81.21.3:9090/product', {
-          params: {
-            product_id
-          }
-        })
-        setItem(data.data[0])
-      })();
-    } catch (error) {
-      console.log(error)
-    }
-  }, [item])
-  const navigation = useNavigation()
-  return (
-    <>
-      <TouchableOpacity 
-      style={styles.adCard}
-      onPress={() => navigation.navigate('product', {data: item})}
-    >
-      {item?.purpose !== 'accomodation' ? (
-        <TouchableOpacity onPress={e=>handlePromotePress(item)}>
-          <Image
-            style={styles.adImage}
-            source={{ uri: item?.thumbnail_id }}
-          />
-        </TouchableOpacity>
-      ) : (
-        <TouchableOpacity onPress={e=>handlePromotePress(item)} style={{
-          height: 100,          // ✅ explicit height (same as Image for consistency)
-          width: 100,
-          backgroundColor: '#000',
-          // borderRadius: 5,
-          overflow: 'hidden', 
-        
-        }}>
-          <Video
-            source={{ uri: item?.thumbnail_id }}
-            style={styles.adImage}
-            resizeMode="cover"
-            muted={true}
-            paused
-          />
-        </TouchableOpacity>
-      )}
-
-      <View style={styles.adContent}>
-        <Text style={styles.adTitle} numberOfLines={2}>{item.title}</Text>
-        <Text style={styles.adPrice}>
-          {
-            item?.purpose === 'product'
-            ?
-            '₦' + new Intl.NumberFormat('en-us').format(item?.price)
-            :
-            item?.purpose === 'accomodation'
-            ?
-            '₦' + Tools.formatNumber(item?.price) + ' to pay ₦' + Tools.formatNumber(item?.others?.lodge_data?.upfront_pay) 
-            : 
-            ''
-          }
-        </Text>
-      </View>
-    </TouchableOpacity>
-    </>
-  )
-}
-
-

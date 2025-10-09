@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://10.81.21.3:9090/", 
+  baseURL: "https://cs-node.vercel.app/", 
   timeout: 10000,
 });
 

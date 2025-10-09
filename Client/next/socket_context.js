@@ -16,8 +16,8 @@ export function SocketProvider({ children }) {
   useEffect(() => {
     if (!buyer_info?.user_id) return;
 
-    // const SOCKET_URL = 'https://campus-express-production.up.railway.app';
-    const SOCKET_URL = 'http://localhost:2020';
+    const SOCKET_URL = 'https://campus-express-production.up.railway.app';
+    // const SOCKET_URL = 'http://localhost:2020';
 
     // Only connect if not already connected
     if (!socketRef.current) {

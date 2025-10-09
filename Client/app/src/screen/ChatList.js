@@ -31,9 +31,9 @@ const ChatList = ({ navigation }) => {
   const { chat } = useSelector(s => s?.chat);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    Memory.get('chat_list').then(res => dispatch(set_chat(res))).catch(err => Alert.alert("Error occured: ", err))
-  }, [])
+  // useEffect(() => {
+  //   Memory.get('chat_list').then(res => dispatch(set_chat(res))).catch(err => Alert.alert("Error occured: ", err))
+  // }, [])
 
 
   const initializeSocket = async () => {
@@ -56,7 +56,7 @@ const ChatList = ({ navigation }) => {
           (a, b) => new Date(b.lastMessage.created_at) - new Date(a.lastMessage.created_at)
         );
         dispatch(set_chat(sortedMsgs));
-        Memory.store('chat_list', sortedMsgs);
+        // Memory.store('chat_list', sortedMsgs);
 
       } 
     })
@@ -66,6 +66,7 @@ const ChatList = ({ navigation }) => {
     setChatRooms(chat)
     setFilteredRooms(chat);
     setLoading(false);
+    setRefreshing(false)
   }, [chat])
 
   useEffect(() => {
@@ -89,7 +90,7 @@ const ChatList = ({ navigation }) => {
 
     // ✅ Update Redux state once with the total unread count
     dispatch(set_unread(totalUnread));
-  }, [chatRooms, user.user_id, dispatch]);
+  }, [chatRooms, user.user_id, dispatch, chat]);
 
   
 
@@ -227,7 +228,7 @@ const ChatList = ({ navigation }) => {
           </View>
         ) : (
           <FlatList
-            data={filteredRooms.filter(room => room.partner)} // Ensure partner exists
+            data={Array.isArray(filteredRooms)&&filteredRooms.filter(room => room.partner)} // Ensure partner exists
             renderItem={renderChatRoomItem}
             keyExtractor={item => item.id}
             contentContainerStyle={styles.listContent}
