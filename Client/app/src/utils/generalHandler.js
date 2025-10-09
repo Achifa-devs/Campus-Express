@@ -64,7 +64,7 @@ class Tools {
     }
 
     static generateConversationId(userA, userB) {
-        console.log(userA, userB)
+        // console.log(userA, userB)
         if (userA === userB) {
         throw new Error("Conversation requires two different users");
         }

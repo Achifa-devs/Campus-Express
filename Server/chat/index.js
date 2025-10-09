@@ -96,7 +96,7 @@ io.on('connection', async(socket) => {
         created_at
       });
 
-      const partner = await Chat.getUser({ user_id: partner_id });
+      const partner = await Chat.getUser({ user_id: receiver_id });
 
       // ✅ Make sure both users are in the conversation room
       socket.join(conversation_id);

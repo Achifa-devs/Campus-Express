@@ -493,11 +493,10 @@ export default function Product() {
                     const room = Tools.generateConversationId(user?.user_id, data?.user_id);
                     let socket = getSocket();
 
-                    // let data = { receiver_id, content, media_url, message_type, created_at } 
-
                     socket.emit('send-message', {
                       receiver_id: data.user_id, content: "I need more enquiries about this Offer", media_url: data.product_id, message_type: "product", created_at: new Date()
                     }, (response) => {
+                      console.log("response:", response)
                       if(response.success){
                         navigation.navigate('chat-room', {
                           room: {
