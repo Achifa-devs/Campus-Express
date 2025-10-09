@@ -29,6 +29,7 @@ import { set_sponsored_modal } from "../../redux/modal/disruptor";
 import { set_nested_nav } from "../../redux/nested_navigation";
 import Tools from "../utils/generalHandler";
 import { getSocket, initSocket } from "../services/socket";
+import { set_chat } from "../../redux/info/chat";
 
 function NavigationHandler() {
 
@@ -43,6 +44,7 @@ function NavigationHandler() {
   const { user } = useSelector(s => s?.user);
   
   const dispatch = useDispatch();
+  const { chat } = useSelector(s => s?.chat);
 
 
 
@@ -53,14 +55,48 @@ function NavigationHandler() {
         try {
           await initSocket(user?.user_id);
           let socket_client = getSocket();
-
-          // socket_client.emit("join_room", { otherUserId: 'CE-729d06' }, cb => {
-          //   console.log(cb)
-          // });
-
           socket_client.on("message", async(data) => {
-            Alert.alert("New message", "You have a new message");
-           
+
+            let {
+              sender_id,
+              receiver_id,
+              message,
+              conversation_id,
+              message_type,
+              media_url,
+              created_at
+            } = data;
+            let getChatSibling = [...chat].filter((item) => item.key === data.conversation_id);
+            if(getChatSibling.length > 0){
+              let updatedChatListItem = [...chat].map((item) => {
+                if(data.conversation_id === item.key){
+                  item.lastMessage = {
+                    sender_id,
+                    receiver_id,
+                    message,
+                    conversation_id,
+                    message_type,
+                    media_url,
+                    created_at
+                  }
+                  item.unread = chat.filter(item => data.conversation_id === item.key)[0].unread + 1;
+                }
+                return item;
+              })
+              let updatedChatList = [
+                ...updatedChatListItem,
+                ...chat.filter(item => data.conversation_id !== item.key)
+              ]
+              dispatch(set_chat(updatedChatList))
+            }else{
+              let newChatListItem = {
+                key: data.conversation_id,
+                partner: data.sender_id,
+                lastMessage: {},
+                unread: 1
+              }
+              dispatch(set_chat([...chat, newChatListItem]))
+            }
             // socket.emit("message_delivered", { conversation_id: data.conversation_id, receiver_id: user.user_id }, cb => {
             //   console.log(cb)
             // });

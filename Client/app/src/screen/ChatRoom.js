@@ -36,7 +36,16 @@ const ChatRoom = ({ route }) => {
   const [showOptionsModal, setShowOptionsModal] = useState(false);
   const flatListRef = useRef(null);
   const { user } = useSelector(s => s?.user);
-  const [socket, setSocket] = useState(undefined)
+  const [socket, setSocket] = useState(undefined);
+
+  useEffect(() => {
+    Memory.get(`room-${room.lastMessage.conversation_id}`).then(res => setMessages(res)).catch("Error occured: ", err)
+  }, []);
+
+  useEffect(() => {
+    Memory.store(`room-${room.lastMessage.conversation_id}`, messages)
+  }, [messages])
+
   useEffect(() => {
     // Scroll to bottom whenever messages change
     flatListRef.current?.scrollToEnd({ animated: true });
@@ -67,7 +76,6 @@ const ChatRoom = ({ route }) => {
     if(user){
 
       if(!socket)return
-      // get_chats(socket, room.partner);
 
       if (room.partner) {
         socket.emit('join_room', { otherUserId: room.partner.user_id });
@@ -75,7 +83,6 @@ const ChatRoom = ({ route }) => {
       };
 
       socket.on('is_typing', ({user_id}) => {
-        // alert(JSON.stringify(user_id))
         if (user.user_id !== user_id) {
           setIsTyping(true)
         }
@@ -98,11 +105,8 @@ const ChatRoom = ({ route }) => {
             timestamp: new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
           };
           setMessages(prevArr => [...prevArr, newMsg]);
-          // setNewMessage('');
-         
-
           socket.emit('message_seen', { conversation_id: msg.conversation_id });
-          }
+        }
       });
 
       socket.on('message_seen', ({ result }) => {
@@ -285,12 +289,10 @@ const ChatRoom = ({ route }) => {
 
           return new_mssg;
         })
-
-        console.log("Refined messages:", msg);
+        Memory.store(`room-${msg.room_id}`, msg);
         setMessages(msg);
       } else {
         console.error("Failed to fetch chat room:", response.error);
-
       }
     });
 

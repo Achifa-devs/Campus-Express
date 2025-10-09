@@ -11,13 +11,11 @@ import {
   SafeAreaView,
   StatusBar,
   RefreshControl,
-  TextInput
+  TextInput,
+  Alert
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
-import chatList from '../json/chat/chat.json'
 import js_ago from 'js-ago';
-import { Chat } from '../api/chat';
 import { useDispatch, useSelector } from 'react-redux';
 import { set_unread } from '../../redux/info/unread_chats';
 import { getSocket, initSocket } from '../services/socket';
@@ -32,6 +30,10 @@ const ChatList = ({ navigation }) => {
   const { user } = useSelector(s => s?.user);
   const { chat } = useSelector(s => s?.chat);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    Memory.get('chat_list').then(res => dispatch(set_chat(res))).catch(err => Alert.alert("Error occured: ", err))
+  }, [])
 
 
   const initializeSocket = async () => {
@@ -50,13 +52,13 @@ const ChatList = ({ navigation }) => {
     socket_client.emit("get_all_messages", { user_id: user?.user_id }, cb => {
       const { messages, success } = cb;
       if (success) {
-        console.log("Fetched messages:", messages);
-        Memory.store('chat_list', messages);
-        dispatch(set_chat(messages));
-        // dispatch(set_chat({...mssg, messages}));
-      } else {
-        // Alert.alert("Error", "Could not fetch messages");
-      }
+        let sortedMsgs = [...messages].sort(
+          (a, b) => new Date(b.lastMessage.created_at) - new Date(a.lastMessage.created_at)
+        );
+        dispatch(set_chat(sortedMsgs));
+        Memory.store('chat_list', sortedMsgs);
+
+      } 
     })
   }
 
@@ -67,12 +69,9 @@ const ChatList = ({ navigation }) => {
   }, [chat])
 
   useEffect(() => {
-
     if(user){
-      
       initializeSocket()
     }
-    
   }, [user])
 
 
@@ -85,8 +84,6 @@ const ChatList = ({ navigation }) => {
     let totalUnread = 0;
 
     chatRooms.forEach((data) => {
-      
-
       totalUnread += data.unread;
     });
 
@@ -116,19 +113,6 @@ const ChatList = ({ navigation }) => {
   const handleChatRoomPress = (room) => {
     navigation.navigate('chat-room', { room });
   };
-
-  function getLastMessage(mssgsArr, type) {
-    if (!mssgsArr || mssgsArr.length === 0) return null;
-
-    // Sort messages by created_at (latest last)
-    const sorted = mssgsArr.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
-
-    // Return the last message
-    const response = type === 'mssg' ? {mssg: sorted[sorted.length - 1].content, isSender: sorted[sorted.length - 1].sender_id === user?.user_id}: sorted[sorted.length - 1].created_at
-    return response;
-  }
-    
-  
 
 
   const renderChatRoomItem = ({ item }) => {
