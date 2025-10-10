@@ -5,6 +5,7 @@ import chat from './info/chat';
 import mode from './info/mode';
 import unread from './info/unread_chats';
 import shop from './info/shop';
+import is_active from './info/is_active';
 import campus from './info/campus'; 
 import locale_modal from './modal/locale';
 import option from './info/option';
@@ -21,6 +22,7 @@ const store = configureStore({
     nested_nav: nested_nav,
     socket_client,
     unread,
+    is_active,
     chat,
     user,
     mode,

@@ -26,6 +26,24 @@ export function ChatStackScreen() {
     const { user } = useSelector(s => s.user);
     const { nested_nav } = useSelector(s => s.nested_nav);
     const navigation = useNavigation();
+    const route = useRoute()
+
+    const resource = route?.params
+    
+    useEffect(() => {
+    if (resource) {
+        const {
+        from,
+        room
+        } = resource;
+        if(from === 'product'){
+        navigation.navigate('chat-room', {
+            room
+        })
+        }
+    }
+    }, [resource])
+    
 
     return (
         <ChatStack.Navigator>

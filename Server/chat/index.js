@@ -64,19 +64,19 @@ io.on('connection', async(socket) => {
   onlineUsers.get(userId).add(socket.id);
   console.log(`User ${userId} connected via socket ${socket.id}. Online count: ${onlineUsers.get(userId).size}`);
   // After adding user socket (inside io.on('connection'))
-  // if (onlineUsers.get(userId).size === 1) {
-  //   // User just came online (first active socket)
-  //   const result = await Chat.getConversationPartner({ user_id: userId });
-  //   const partners = result.rows.map(r => r.partner_id);
+  if (onlineUsers.get(userId).size === 1) {
+    // User just came online (first active socket)
+    const partners = await Chat.getConversationPartner({ user_id: userId });
 
-  //   partners.forEach(partnerId => {
-  //     if (onlineUsers.has(partnerId)) {
-  //       for (const socketId of onlineUsers.get(partnerId)) {
-  //         io.to(socketId).emit("partner_online", { userId });
-  //       }
-  //     }
-  //   });
-  // }
+    partners.forEach(async(partnerId) => {
+      if (onlineUsers.has(partnerId)) {
+        for (const socketId of onlineUsers.get(partnerId)) {
+          await Chat.updateUserStatus({lastseen: 'now', userId})
+          io.to(socketId).emit("partner_online", { partnerId });
+        }
+      }
+    });
+  }
 
 
   socket.on("send_message", async (data, callback) => {
@@ -249,31 +249,44 @@ io.on('connection', async(socket) => {
 
   socket.on("disconnect", async () => {
     console.log("❌ Socket disconnected:", socket.id);
+    
+    try {
 
-    const userId = socket.user.id;
-    if (!onlineUsers.has(userId)) return;
+      const userId = socket.user.id;
+      if (!onlineUsers.has(userId)) return;
 
-    const userSockets = onlineUsers.get(userId);
-    userSockets.delete(socket.id);
+      const userSockets = onlineUsers.get(userId);
+      userSockets.delete(socket.id);
 
-    if (userSockets.size === 0) {
+      const now = new Date();
+      const lagosISO = now.toLocaleString('sv-SE', { timeZone: 'Africa/Lagos' }); 
+      const lagosDate = new Date(lagosISO.replace(' ', 'T')).toString(); // ISO-like format
+
+      console.log(lagosDate)
+      // if (userSockets.size === 0) {
       onlineUsers.delete(userId);
 
       // Get partners
-      const result = await Chat.getConversationPartner({ user_id: userId });
-      const partners = result.rows.map(r => r.partner_id);
+      const partners = await Chat.getConversationPartner({ user_id: userId });
 
-      partners.forEach(partnerId => {
+      partners.forEach(async(partnerId) => {
+        // console.log(partnerId, onlineUsers.has(partnerId))
         if (onlineUsers.has(partnerId)) {
           for (const socketId of onlineUsers.get(partnerId)) {
-            io.to(socketId).emit("partner_offline", { userId });
+            await Chat.updateUserStatus({lastseen: lagosDate, userId})
+            io.to(socketId).emit("partner_offline", { partnerId, lagosDate });
           }
         }
       });
 
       console.log(`User ${userId} is now fully offline`);
+      // }
+      
+    } catch (error) {
+      console.log(error)
     }
-  });
+  })
+
 
 });
 

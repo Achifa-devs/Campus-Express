@@ -38,6 +38,8 @@ export function SocketProvider({ children }) {
       });
 
       socketInstance.on('disconnect', () => {
+        // alert('')
+        socket.emit("disconnect", {})
         console.log('❌ Socket disconnected');
       });
 

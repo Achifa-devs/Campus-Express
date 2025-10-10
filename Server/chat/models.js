@@ -186,13 +186,23 @@ class Chat {
   static async getUser({ user_id }) {
     try {
       const result = await pool.query(
-        `SELECT fname, lname, email, phone, user_id, photo, state, campus FROM users WHERE user_id = $1`,
+        `SELECT fname, lname, email, phone, user_id, photo, state, campus, lastseen FROM users WHERE user_id = $1`,
         [user_id]
       );
       return result.rows[0];
     } catch (error) {
       console.error("❌ Error fetching user:", error);
       throw error;
+    }
+  }
+
+  static async updateUserStatus({lastseen,userId}){
+    try {
+      pool.query(
+        `UPDATE users SET lastseen = $1 WHERE user_id = $2`, [lastseen, userId]
+      )
+    } catch (error) {
+      
     }
   }
 

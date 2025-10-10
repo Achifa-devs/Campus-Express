@@ -43,6 +43,7 @@ import useInsufficientConnectAlert from '../utils/useZeroConnectAlert.js';
 import { set_user } from '../../redux/info/user.js';
 import { Chat } from '../api/chat.js';
 import { getSocket } from '../services/socket.js';
+import { Screen } from 'react-native-screens';
 
 export default function Product() {
   const route = useRoute();
@@ -57,6 +58,7 @@ export default function Product() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [files, set_files] = useState([]);
   const [favLoading, setFavLoading] = useState(true);
+  
   const dispatch = useDispatch()
   const onScroll = (event) => {
     const slideIndex = Math.round(event.nativeEvent.contentOffset.x / width);
@@ -493,28 +495,18 @@ export default function Product() {
                     const room = Tools.generateConversationId(user?.user_id, data?.user_id);
                     let socket = getSocket();
 
-                    socket.emit('send-message', {
+                    socket.emit('send_message', {
                       receiver_id: data.user_id, content: "I need more enquiries about this Offer", media_url: data.product_id, message_type: "product", created_at: new Date()
                     }, (response) => {
-                      console.log("response:", response)
                       if(response.success){
-                        navigation.navigate('chat-room', {
-                          room: {
-                            key: room,
-                            partner: response.partner,
-                          }
-                        })
+                        navigation.navigate('Chat', {
+                          from: 'product', 
+                          room: { key: room, partner: response.partner },
+                          id: Tools.generateId(0)
+                        });
                       }
                     })
-                    // navigation.navigate('Chat', {
-                    //   screen: 'chat-room',
-                    //   params: {
-                    //     data, 
-                    //     from: 'product',
-                    //     room: [room],
-                    //     session_id: Tools.generateId()
-                    //   },
-                    // });
+                    
                   } else {
                     Alert.alert('This offer is from your inventory')
                   }

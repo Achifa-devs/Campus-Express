@@ -10,6 +10,8 @@ export const initSocket = async (userId) => {
   const token = await Memory.get("token");
 
   socket = io("https://campus-express-production.up.railway.app", {
+  // socket = io("http://10.81.21.3:2020", {
+
     transports: ["websocket"],
     query: { user_id: userId },   // ✅ keep consistent naming with server
     auth: { token },
@@ -20,6 +22,7 @@ export const initSocket = async (userId) => {
   });
 
   socket.on("disconnect", () => {
+    socket.emit("disconnect", {userId, date: new Date()})
     console.log("❌ Socket disconnected");
   });
 

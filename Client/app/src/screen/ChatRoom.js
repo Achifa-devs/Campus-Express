@@ -22,6 +22,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { getSocket } from '../services/socket';
 import axios from 'axios';
+import js_ago from 'js-ago';
 
 const ChatRoom = ({ route }) => {
   const { room } = route.params;
@@ -36,6 +37,7 @@ const ChatRoom = ({ route }) => {
   const [isAtBottom, setIsAtBottom] = useState(true);
   const messageIdCounter = useRef(0);
   const socketRef = useRef(null);
+  const { is_active } = useSelector(s => s?.is_active);
 
   // Generate unique message ID
   const generateMessageId = () => {
@@ -144,6 +146,19 @@ const ChatRoom = ({ route }) => {
       socket.off('message_seen', handleMessageSeen);
     };
   }, [socket, room?.partner, user]);
+
+  const [isOnline, setIsOnline] = useState({b: false, date: room.partner.lastseen})
+  useEffect(() => {
+
+    if (is_active.online) {
+      if(is_active.user_id !== user.user_id)return;
+      setIsOnline({b: is_active.online, date: is_active.date})
+    }else{
+      if(!is_active.date)return;
+      setIsOnline({b: is_active.online, date: is_active.date})
+    }
+    
+  }, [is_active])
 
   // Mark messages as seen when they become visible
   useEffect(() => {
@@ -443,7 +458,14 @@ const ChatRoom = ({ route }) => {
               {room.partner.fname}.{room.partner.lname?.[0] || ''}
             </Text>
             <Text style={styles.headerUserStatus}>
-              {isTyping ? 'is typing...' : 'Active 2hrs ago'}
+              {
+                isTyping ? 'is typing...' :  
+                  isOnline.b ? 
+                  'Online' : 
+                  js_ago(new Date(isOnline.date)).trim().split(' ')[0] === 'NaN' ?
+                  'Offline' :
+                  `Active ${js_ago(new Date(isOnline.date))}`
+              }
             </Text>
           </View>
         </TouchableOpacity>

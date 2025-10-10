@@ -30,6 +30,7 @@ import { set_nested_nav } from "../../redux/nested_navigation";
 import Tools from "../utils/generalHandler";
 import { getSocket, initSocket } from "../services/socket";
 import { set_chat } from "../../redux/info/chat";
+import { set_is_active } from "../../redux/info/is_active";
 
 function NavigationHandler() {
 
@@ -114,7 +115,13 @@ function NavigationHandler() {
             dispatch(set_chat(updatedChatList));
           });
 
+          socket_client.on("partner_offline", async({partnerId, date}) => {
+            dispatch(set_is_active({online: false, user_id: partnerId, date, id: Tools.generateId(10)}))
+          })
 
+          socket_client.on("partner_online", async({partnerId}) => {
+            dispatch(set_is_active({online: true, user_id: partnerId, id: Tools.generateId(10)}))
+          })
           
 
 

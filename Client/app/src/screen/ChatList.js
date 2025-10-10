@@ -21,6 +21,7 @@ import { set_unread } from '../../redux/info/unread_chats';
 import { getSocket, initSocket } from '../services/socket';
 import Memory from '../utils/memoryHandler';
 import { set_chat } from '../../redux/info/chat';
+import { useRoute } from '@react-navigation/native';
 const ChatList = ({ navigation }) => {
   const [chatRooms, setChatRooms] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -29,8 +30,9 @@ const ChatList = ({ navigation }) => {
   const [filteredRooms, setFilteredRooms] = useState([]);
   const { user } = useSelector(s => s?.user);
   const { chat } = useSelector(s => s?.chat);
-  const dispatch = useDispatch();
 
+  const dispatch = useDispatch();
+  
   // useEffect(() => {
   //   Memory.get('chat_list').then(res => dispatch(set_chat(res))).catch(err => Alert.alert("Error occured: ", err))
   // }, [])
@@ -40,6 +42,7 @@ const ChatList = ({ navigation }) => {
     try {
       // await initSocket(user?.user_id);
       let socket_client = getSocket();
+      if(!socket_client)return
       fetchChatList(socket_client);
       
 
