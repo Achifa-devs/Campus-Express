@@ -27,7 +27,7 @@ const ChatList = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filteredRooms, setFilteredRooms] = useState([]);
+  const [filteredRooms, setFilteredRooms] = useState(null);
   const { user } = useSelector(s => s?.user);
   const { chat } = useSelector(s => s?.chat);
 
@@ -42,7 +42,7 @@ const ChatList = ({ navigation }) => {
     try {
       // await initSocket(user?.user_id);
       let socket_client = getSocket();
-      if(!socket_client)return
+      if(!socket_client)return;
       fetchChatList(socket_client);
       
 
@@ -66,11 +66,12 @@ const ChatList = ({ navigation }) => {
   }
 
   useEffect(() => {
+    if(!chat) return;
     setChatRooms(chat)
     setFilteredRooms(chat);
     setLoading(false);
     setRefreshing(false)
-  }, [chat])
+  }, [chat, user])
 
   useEffect(() => {
     if(user){
@@ -98,6 +99,7 @@ const ChatList = ({ navigation }) => {
   
 
   useEffect(() => {
+    if(!chatRooms) return;
     if (searchQuery.trim() === '') {
       setFilteredRooms(chatRooms);
     } else {
@@ -204,7 +206,6 @@ const ChatList = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* <StatusBar barStyle="dark-content" /> */}
       
       {/* Header */}
       <View style={styles.header}>

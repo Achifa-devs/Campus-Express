@@ -103,7 +103,7 @@ io.on('connection', async(socket) => {
       console.log('conversation_id: ', conversation_id)
 
       // ✅ Emit to ALL clients in the room (sender + receiver if connected)
-      io.to(conversation_id).emit("message", newMessage);
+      io.to(conversation_id).emit("message", {newMessage, partner});
 
       // ✅ Send ACK back only to the sender
       if (callback) callback({ success: true, partner });
@@ -247,7 +247,7 @@ io.on('connection', async(socket) => {
     }
   })
 
-  socket.on("disconnect", async () => {
+  socket.on("disconnected", async () => {
     console.log("❌ Socket disconnected:", socket.id);
     
     try {

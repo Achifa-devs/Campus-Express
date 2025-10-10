@@ -22,7 +22,7 @@ export const initSocket = async (userId) => {
   });
 
   socket.on("disconnect", () => {
-    socket.emit("disconnect", {userId, date: new Date()})
+    socket.emit("disconnected", {userId, date: new Date()})
     console.log("❌ Socket disconnected");
   });
 

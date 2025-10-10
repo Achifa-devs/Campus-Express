@@ -5,6 +5,7 @@ import { set_user } from "../../redux/info/user";
 import GetStartedScreen from "./Intro";
 import AuthStackScreen from "./Auth";
 import Main from "./Tab";
+import Sound from 'react-native-sound';
 import WelcomeScreen from "./Welcome";
 import { set_mode } from "../../redux/info/mode";
 import { getFocusedRouteNameFromRoute, NavigationContainer, useNavigation } from "@react-navigation/native";
@@ -31,6 +32,7 @@ import Tools from "../utils/generalHandler";
 import { getSocket, initSocket } from "../services/socket";
 import { set_chat } from "../../redux/info/chat";
 import { set_is_active } from "../../redux/info/is_active";
+import { set_unread } from "../../redux/info/unread_chats";
 
 function NavigationHandler() {
 
@@ -43,11 +45,48 @@ function NavigationHandler() {
   const { connect_purchase_modal } = useSelector(s => s.connect_purchase_modal);
   const { mode } = useSelector((s) => s.mode);
   const { user } = useSelector(s => s?.user);
-  
+  const [socket, setSocket] = useState(null)
   const dispatch = useDispatch();
   const { chat } = useSelector(s => s?.chat);
 
+  function fetchChatList() {
 
+    if(!socket) return;
+
+    socket.emit("get_all_messages", { user_id: user?.user_id }, cb => {
+      const { messages, success } = cb;
+      if (success) {
+        
+        let sortedMsgs = [...messages].sort(
+          (a, b) => new Date(b.lastMessage.created_at) - new Date(a.lastMessage.created_at)
+        );
+        dispatch(set_chat(sortedMsgs)); 
+        // Memory.store('chat_list', sortedMsgs);
+
+      } 
+    })
+  }
+
+  useEffect(() => {
+    if(!chat && !socket) return;
+    chat && chat.map(room => {
+      room.partner && socket.emit('join_room', { otherUserId: room.partner.user_id });
+    })
+  }, [chat, socket])
+
+  useEffect(() => {
+    if (!chat) return;
+
+    // Accumulate unread messages from all rooms
+    let totalUnread = 0;
+
+    chat.forEach((data) => {
+      totalUnread += data.unread;
+    });
+
+    // ✅ Update Redux state once with the total unread count
+    dispatch(set_unread(totalUnread));
+  }, [dispatch, chat]);
 
   useEffect(() => {
 
@@ -56,7 +95,12 @@ function NavigationHandler() {
         try {
           await initSocket(user?.user_id);
           let socket_client = getSocket();
-          socket_client.on("message", async (data) => {
+          setSocket(socket_client)
+
+          
+          socket_client.on("message", async ({newMessage, partner}) => {
+
+
             const {
               sender_id,
               receiver_id,
@@ -65,40 +109,24 @@ function NavigationHandler() {
               message_type,
               media_url,
               created_at,
-            } = data;
+            } = newMessage;
 
-            // Create a shallow copy of chat array
-            const updatedChatList = [...chat];
-            
-            // Find the chat index
-            const index = updatedChatList.findIndex(
-              (item) => item.key === conversation_id
-            );
+            console.log("data: ", data);
 
-            if (index !== -1) {
-              // Clone the chat item to avoid mutating state
-              const chatItem = { ...updatedChatList[index] };
-
-              chatItem.lastMessage = {
-                sender_id,
-                receiver_id,
-                message,
-                conversation_id,
-                message_type,
-                media_url,
-                created_at,
-              };
-
-              chatItem.unread = (chatItem.unread || 0) + 1;
-
-              // Replace the old item in the same array position
-              updatedChatList[index] = chatItem;
-            } else {
-              // Add new chat if conversation doesn't exist
-              updatedChatList.push({
-                key: conversation_id,
-                partner: sender_id,
-                lastMessage: {
+            if (Array.isArray(chat)) {
+              // Create a shallow copy of chat array
+              const updatedChatList = [...chat];
+              
+              // Find the chat index
+              const index = updatedChatList.findIndex(
+                (item) => item.key === conversation_id
+              );
+  
+              if (index !== -1) {
+                // Clone the chat item to avoid mutating state
+                const chatItem = { ...updatedChatList[index] };
+  
+                chatItem.lastMessage = {
                   sender_id,
                   receiver_id,
                   message,
@@ -106,13 +134,36 @@ function NavigationHandler() {
                   message_type,
                   media_url,
                   created_at,
-                },
-                unread: 1,
-              });
+                };
+  
+                chatItem.unread = (chatItem.unread || 0) + 1;
+  
+                // Replace the old item in the same array position
+                updatedChatList[index] = chatItem;
+              } else {
+                // Add new chat if conversation doesn't exist
+                updatedChatList.push({
+                  key: conversation_id,
+                  partner: partner,
+                  lastMessage: {
+                    sender_id,
+                    receiver_id,
+                    message,
+                    conversation_id,
+                    message_type,
+                    media_url,
+                    created_at,
+                  },
+                  unread: 1,
+                });
+              }
+                const ding = new Sound(require('../assets/sound.wav'), (error) => {
+                  if (!error) ding.play();
+                });
+  
+                // Dispatch updated list
+              dispatch(set_chat(updatedChatList));
             }
-
-              // Dispatch updated list
-            dispatch(set_chat(updatedChatList));
           });
 
           socket_client.on("partner_offline", async({partnerId, date}) => {
@@ -134,6 +185,11 @@ function NavigationHandler() {
     
   }, [user])
 
+
+  useEffect(() => {
+    if(!socket) return;
+    fetchChatList();
+  }, [socket])
   
 
   useEffect(() => {

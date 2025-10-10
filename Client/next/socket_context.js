@@ -39,7 +39,7 @@ export function SocketProvider({ children }) {
 
       socketInstance.on('disconnect', () => {
         // alert('')
-        socket.emit("disconnect", {})
+        socket.emit("disconnected", {})
         console.log('❌ Socket disconnected');
       });
 

@@ -1,4 +1,4 @@
-// ChatRoomScreen.js
+/// ChatRoomScreen.js
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   View,
@@ -34,7 +34,7 @@ const ChatRoom = ({ route }) => {
   const flatListRef = useRef(null);
   const { user } = useSelector(s => s?.user);
   const [socket, setSocket] = useState(null);
-  const [isAtBottom, setIsAtBottom] = useState(true);
+  const [isAtTop, setIsAtTop] = useState(true);
   const messageIdCounter = useRef(0);
   const socketRef = useRef(null);
   const { is_active } = useSelector(s => s?.is_active);
@@ -104,7 +104,8 @@ const ChatRoom = ({ route }) => {
             m.id === newMsg.id || 
             (m.text === newMsg.text && Math.abs(new Date(m.timestamp) - new Date(msg.created_at)) < 1000)
           );
-          return exists ? prev : [...prev, newMsg];
+          // Add to beginning for inverted list
+          return exists ? prev : [newMsg, ...prev];
         });
 
         // Mark as seen
@@ -117,16 +118,16 @@ const ChatRoom = ({ route }) => {
         setMessages(prev => {
           if (prev.length === 0) return prev;
 
-          const lastIndex = prev.length - 1;
-          const lastMessage = prev[lastIndex];
+          const firstIndex = 0; // For inverted list, first message is the latest
+          const firstMessage = prev[firstIndex];
 
-          if (lastMessage.seen === '✓✓') return prev;
+          if (firstMessage.seen === '✓✓') return prev;
 
-          const updatedMessage = { ...lastMessage, seen: '✓✓' };
+          const updatedMessage = { ...firstMessage, seen: '✓✓' };
 
           return [
-            ...prev.slice(0, lastIndex),
             updatedMessage,
+            ...prev.slice(firstIndex + 1),
           ];
         });
       }
@@ -177,22 +178,22 @@ const ChatRoom = ({ route }) => {
     }
   }, [messages, socket, room?.partner]);
 
-  // Scroll handling
+  // Scroll handling for inverted list
   const handleScroll = (event) => {
     const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
-    const distanceFromBottom = contentSize.height - (layoutMeasurement.height + contentOffset.y);
-    setIsAtBottom(distanceFromBottom < 50);
+    const distanceFromTop = contentOffset.y;
+    setIsAtTop(distanceFromTop < 50);
   };
 
-  // Auto-scroll to bottom when new messages arrive and user is at bottom
+  // Auto-scroll to top (which is the bottom in inverted list) when new messages arrive and user is at top
   useEffect(() => {
-    if (isAtBottom && messages.length > 0) {
+    if (isAtTop && messages.length > 0) {
       const timer = setTimeout(() => {
-        flatListRef.current?.scrollToEnd({ animated: true });
+        flatListRef.current?.scrollToOffset({ offset: 0, animated: true });
       }, 100);
       return () => clearTimeout(timer);
     }
-  }, [messages, isAtBottom]);
+  }, [messages, isAtTop]);
 
   // Phone number validation
   const containsPhoneNumber = (text) => {
@@ -200,7 +201,7 @@ const ChatRoom = ({ route }) => {
     return phoneRegex.test(text);
   };
 
-  // Send message function
+  // Send message function for inverted list
   const handleNewMessage = () => {
     if (containsPhoneNumber(newMessage)) {
       Alert.alert("Security Alert", "Your message contains a phone number which is not allowed.");
@@ -220,8 +221,8 @@ const ChatRoom = ({ route }) => {
       })
     };
 
-    // Optimistically add message to UI
-    setMessages(prev => [...prev, newMsg]);
+    // Optimistically add message to UI (at the beginning for inverted list)
+    setMessages(prev => [newMsg, ...prev]);
     setNewMessage('');
 
     // Send via socket
@@ -235,11 +236,11 @@ const ChatRoom = ({ route }) => {
       if (response && response.success) {
         // Update message status
         setMessages(prev => {
-          const lastIndex = prev.length - 1;
-          if (lastIndex < 0) return prev;
+          const firstIndex = 0; // For inverted list, first message is the latest
+          if (firstIndex < 0) return prev;
 
-          const lastMessage = prev[lastIndex];
-          if (lastMessage.seen === '✓') return prev;
+          const firstMessage = prev[firstIndex];
+          if (firstMessage.seen === '✓') return prev;
 
           // Find the exact message by ID to avoid updating wrong message
           const messageIndex = prev.findIndex(m => m.id === newMsg.id);
@@ -267,7 +268,7 @@ const ChatRoom = ({ route }) => {
     });
   };
 
-  // Fetch chat messages
+  // Fetch chat messages for inverted list
   const get_chats = (socket, partner) => {
     if (!socket || !partner) return;
 
@@ -292,7 +293,8 @@ const ChatRoom = ({ route }) => {
           };
         });
 
-        setMessages(formattedMessages);
+        // Reverse the messages for inverted FlatList (newest first at top)
+        setMessages(formattedMessages.reverse());
       } else {
         console.error("Failed to fetch chat room:", response?.error);
         Alert.alert("Error", "Failed to load messages");
@@ -300,7 +302,7 @@ const ChatRoom = ({ route }) => {
     });
   };
 
-  // Message item component
+  // Message item component (no changes needed for inverted list)
   const MessageItem = React.memo(({ item }) => (
     <View
       style={[
@@ -357,7 +359,7 @@ const ChatRoom = ({ route }) => {
     <MessageItem item={item} />
   ), []);
 
-  // Typing indicator
+  // Typing indicator for inverted list (appears at the bottom, which is the top in inverted)
   const renderTypingIndicator = () => {
     if (!isTyping) return null;
     
@@ -493,23 +495,29 @@ const ChatRoom = ({ route }) => {
               keyExtractor={item => item.id}
               contentContainerStyle={styles.messagesList}
               showsVerticalScrollIndicator={false}
-              ListFooterComponent={renderTypingIndicator}
+              ListHeaderComponent={renderTypingIndicator} // Changed from ListFooterComponent
               onScroll={handleScroll}
               scrollEventThrottle={16}
+              inverted={true} // Enable inverted mode
               onContentSizeChange={() => {
-                if (isAtBottom && messages.length > 0) {
+                if (isAtTop && messages.length > 0) {
                   setTimeout(() => {
-                    flatListRef.current?.scrollToEnd({ animated: true });
+                    flatListRef.current?.scrollToOffset({ offset: 0, animated: true });
                   }, 100);
                 }
               }}
               onLayout={() => {
                 if (messages.length > 0) {
                   setTimeout(() => {
-                    flatListRef.current?.scrollToEnd({ animated: false });
+                    flatListRef.current?.scrollToOffset({ offset: 0, animated: false });
                   }, 100);
                 }
               }}
+              // Additional props for better inverted list performance
+              removeClippedSubviews={true}
+              initialNumToRender={20}
+              maxToRenderPerBatch={10}
+              windowSize={21}
             />
 
             <View style={styles.inputContainer}>
@@ -555,7 +563,7 @@ const ChatRoom = ({ route }) => {
   );
 };
 
-// Card component with fixes
+// Card component with fixes (no changes needed)
 const Card = ({ product_id }) => {
   const [item, setItem] = useState(null);
   const navigation = useNavigation();

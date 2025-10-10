@@ -46,11 +46,12 @@ import { getSocket } from '../services/socket.js';
 import { Screen } from 'react-native-screens';
 
 export default function Product() {
+  let socket = getSocket();
   const route = useRoute();
   const { data } = route.params;
   const { user } = useSelector(s => s?.user);
   const [seller, setSeller] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [saved, setSaved] = useState(false);
   const navigation = useNavigation();
   const fadeAnim = new Animated.Value(1);
@@ -65,6 +66,10 @@ export default function Product() {
     setCurrentIndex(slideIndex);
   };
 
+  useEffect(() => {
+    if(!user) return;
+    setLoading(false)
+  }, [user])
 
   async function AddContactClick() {
     setLoading(true)
@@ -493,17 +498,24 @@ export default function Product() {
                   // )
                   if (user.user_id !== data.user_id) {
                     const room = Tools.generateConversationId(user?.user_id, data?.user_id);
-                    let socket = getSocket();
+                    
+                    if(!socket) return;
+                    setLoading(true)
 
                     socket.emit('send_message', {
                       receiver_id: data.user_id, content: "I need more enquiries about this Offer", media_url: data.product_id, message_type: "product", created_at: new Date()
                     }, (response) => {
                       if(response.success){
+                      setLoading(false)
+
                         navigation.navigate('Chat', {
                           from: 'product', 
                           room: { key: room, partner: response.partner },
                           id: Tools.generateId(0)
                         });
+                      }else{
+                        setLoading(false)
+                        Alert.alert('Error, please try again')
                       }
                     })
                     
