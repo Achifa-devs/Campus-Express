@@ -7,19 +7,19 @@ import { errorHandler } from "../../utils/erroHandler.js";
 
 
 // Create new Vendor
-export async function createVendor({ fname, lname, user_id, email, phone, hashedPwd, state, campus, gender, deviceId }) {
+export async function createVendor({ fname, lname, user_id, email, phone, hashedPwd, state, campus, gender, deviceId, fcm }) {
   const result = await pool.query(
     `INSERT INTO users (
     id, fname, lname, user_id, email, phone, password, state,
     campus, isActive, isVerified, isEmailVerified, isPhoneVerified,
-    date, lastseen, gender, deviceid, photo
+    date, lastseen, gender, deviceid, photo, connects, status, fcm
     ) VALUES (
     DEFAULT, $1, $2, $3, $4, $5, $6, $7,
-    $8, $9, $10, $11, $12, $13, $14, $15, $16, $17
+    $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20
     )`,
     [
       fname, lname, user_id, email, phone, hashedPwd, state, campus,
-      false, false, false, false, `${new Date()}`, `${new Date()}`, null, deviceId, null
+      false, false, false, false, `${new Date()}`, `${new Date()}`, null, deviceId, null, 0, null, fcm
     ]
   );
   let response = await errorHandler(result?.rowCount);

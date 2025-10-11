@@ -29,7 +29,7 @@ export const getVendor = async (payload) => {
 };
 
 export const postNewVendor = async (payload) => {
-  const { fname, lname, email, phone, pwd, state, campus, deviceId } = payload;
+  const { fname, lname, email, phone, pwd, state, campus, deviceId, fcm } = payload;
 
   console.log(deviceId._j);
 
@@ -58,7 +58,8 @@ export const postNewVendor = async (payload) => {
     state,
     campus,
     gender: null,
-    deviceId: deviceId._j
+    deviceId: deviceId._j,
+    fcm
   });
 
   // Insert subscription for this new user

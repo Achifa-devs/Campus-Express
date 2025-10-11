@@ -5,7 +5,7 @@ import morgan from "morgan"
 import dotenv from "dotenv";
 import { CUSTOMER_ROUTE } from "./src/routes/shop.js";
 import { VENDOR_ROUTE } from "./src/routes/vendor.js";
-// import sendNotification from "./src/utils/FCM.js";
+import { sendNoticeForNewMsg } from "./src/utils/FCM.js";
 import multer from "multer";
 import { v2 } from 'cloudinary'
 import pool from "./src/config/db.js";
@@ -33,11 +33,37 @@ CAMPUSSPHERE_SERVER.use(cors({
 }));
 
 // Firebase notification endpoint
-// CAMPUSSPHERE_SERVER.post('/notify', (req, res) => {
-//   const { token, title, body, media, price, product_id } = req.body;
-//   sendNotification(token, title, body, media, price, product_id);
-//   res.send({ status: 'Notification sent!' });
-// });
+CAMPUSSPHERE_SERVER.post('/notify', (req, res) => {
+  console.log(req.body)
+  // const { token, title, body, media, price, product_id } = req.body;
+  const { token, data } = req.body;
+  const {title, body } = data
+
+  sendNoticeForNewMsg(token, title, body);
+  res.send({ status: 'Notification sent!', success: true});
+});
+
+CAMPUSSPHERE_SERVER.post('/update-fcm', async(req, res) => {
+  console.log(req.body)
+
+  const {
+    fcm, user_id
+  } = req.body;
+  try {
+    const result = await pool.query(
+      `UPDATE users SET fcm = $1 WHERE user_id = $2
+       RETURNING *`,
+      [fcm, user_id]
+    );
+
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error('Error inserting notification:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+
 
 CAMPUSSPHERE_SERVER.use(CUSTOMER_ROUTE);
 CAMPUSSPHERE_SERVER.use(VENDOR_ROUTE);
@@ -660,6 +686,7 @@ CAMPUSSPHERE_SERVER.get('/boosted-metrics', parser, async (req, res) => {
 
 
 import cron from "node-cron";
+import { fcm } from "googleapis/build/src/apis/fcm/index.js";
 
 async function checkAndUpdatePromotions() {
   try {

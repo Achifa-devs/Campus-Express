@@ -12,7 +12,8 @@ import {
     TouchableOpacity,
     View 
 } from 'react-native';
-
+import AppBadge from 'react-native-app-badge';
+import PushNotification from 'react-native-push-notification';
 import {  
     createBottomTabNavigator 
 } from "@react-navigation/bottom-tabs";
@@ -33,7 +34,7 @@ const Tab = createBottomTabNavigator();
 
 export default function StoreTab({navigation}) {
     
-    const navigationState = useNavigationState(state => state);
+    // const navigationState = useNavigationState(state => state);
     const { nested_nav } = useSelector(s => s?.nested_nav);
     
 
@@ -45,6 +46,21 @@ export default function StoreTab({navigation}) {
       setTabBarStyle(data)
     }
     const {unread} = useSelector(s => s.unread)
+
+    // React.useEffect(() => {
+    //   if (unread > 0) {
+    //     // AppBadge.setBadge(unread);
+    //     PushNotification.localNotification({
+    //       channelId: "messages",
+    //       title: "New messages",
+    //       message: `You have ${unread} unread messages!`,
+    //       number: unread, // 🔥 helps badge sync
+    //     });
+    //   }else{
+    //     // AppBadge.clearBadge();
+    //     PushNotification.cancelAllLocalNotifications();
+    //   }
+    // }, [unread])
     
 
     React.useEffect(() => {

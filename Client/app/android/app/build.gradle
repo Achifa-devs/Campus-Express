@@ -91,17 +91,17 @@ android {
                 keyPassword MYAPP_UPLOAD_KEY_PASSWORD
             }
         }
-        debug {
-            storeFile file('debug.keystore')
-            storePassword 'android'
-            keyAlias 'androiddebugkey'
-            keyPassword 'android'
-        }
+        // debug {
+        //     storeFile file('debug.keystore')
+        //     storePassword 'android'
+        //     keyAlias 'androiddebugkey'
+        //     keyPassword 'android'
+        // }
     }
     buildTypes {
-        debug {
-            signingConfig signingConfigs.debug
-        }
+        // debug {
+        //     signingConfig signingConfigs.debug
+        // }
         release {
             shrinkResources true
             minifyEnabled enableProguardInReleaseBuilds
@@ -115,18 +115,20 @@ android {
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
-    // implementation platform('com.google.firebase:firebase-bom:33.13.0')
+    implementation platform('com.google.firebase:firebase-bom:33.13.0')
+    implementation('me.leolin:ShortcutBadger:1.1.22@aar')
 
     // Add the Firebase modules you need
-    // implementation 'com.google.firebase:firebase-analytics'
-    // implementation 'com.google.firebase:firebase-messaging' // 🔔 For push notifications
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-messaging' // 🔔 For push notifications
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
     } else {
         implementation jscFlavor
     }
+
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
-// apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.gms.google-services'

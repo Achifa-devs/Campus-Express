@@ -38,7 +38,16 @@ const ChatRoom = ({ route }) => {
   const messageIdCounter = useRef(0);
   const socketRef = useRef(null);
   const { is_active } = useSelector(s => s?.is_active);
+  const { is_connected } = useSelector(s => s?.is_connected);
 
+  useEffect(() => {
+    if(!socket){
+      if(is_connected){
+        let socket = getSocket();
+        setSocket(socket)
+      }
+    }
+  }, [is_connected, socket])
   // Generate unique message ID
   const generateMessageId = () => {
     messageIdCounter.current += 1;
@@ -85,7 +94,8 @@ const ChatRoom = ({ route }) => {
       }
     };
 
-    const handleNewMessage = (msg) => {
+    const handleIncomingMssg = ({newMessage}) => {
+      const msg = newMessage;
       if (msg.sender_id === room.partner.user_id) {
         const newMsg = {
           id: generateMessageId(),
@@ -136,14 +146,14 @@ const ChatRoom = ({ route }) => {
     // Attach event listeners
     socket.on('is_typing', handleTyping);
     socket.on('not_typing', handleNotTyping);
-    socket.on('message', handleNewMessage);
+    socket.on('message', handleIncomingMssg);
     socket.on('message_seen', handleMessageSeen);
 
     // Cleanup function
     return () => {
       socket.off('is_typing', handleTyping);
       socket.off('not_typing', handleNotTyping);
-      socket.off('message', handleNewMessage);
+      socket.off('message', handleIncomingMssg);
       socket.off('message_seen', handleMessageSeen);
     };
   }, [socket, room?.partner, user]);
@@ -159,14 +169,14 @@ const ChatRoom = ({ route }) => {
       setIsOnline({b: is_active.online, date: is_active.date})
     }
     
-  }, [is_active])
+  }, [is_active, socket, room, user])
 
   // Mark messages as seen when they become visible
   useEffect(() => {
     if (!socket || !room?.partner) return;
 
     const unseenMessages = messages.filter(msg => 
-      msg.type === 'received' && msg.seen !== '✓✓'
+      msg.type === 'received' && msg.seen !== ' ✓✓'
     );
 
     if (unseenMessages.length > 0) {
@@ -185,7 +195,6 @@ const ChatRoom = ({ route }) => {
     setIsAtTop(distanceFromTop < 50);
   };
 
-  // Auto-scroll to top (which is the bottom in inverted list) when new messages arrive and user is at top
   useEffect(() => {
     if (isAtTop && messages.length > 0) {
       const timer = setTimeout(() => {
@@ -201,6 +210,21 @@ const ChatRoom = ({ route }) => {
     return phoneRegex.test(text);
   };
 
+  // const handleIncomingMssg = ({newMessage}) => {
+  //   let msg = newMessage;
+  //   if (msg.sender_id === room.partner.user_id) {
+  //     const newMsg = {
+  //       id: messages.length + 1,
+  //       type: 'received',
+  //       // seen: ' sending...',
+  //       text: msg.content,
+  //       timestamp: new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  //     };
+  //     setMessages(prevArr => [newMsg, ...prevArr]);
+  //     socket.emit('message_seen', { conversation_id: msg.conversation_id });
+  //   }
+  // }
+
   // Send message function for inverted list
   const handleNewMessage = () => {
     if (containsPhoneNumber(newMessage)) {
@@ -209,6 +233,7 @@ const ChatRoom = ({ route }) => {
     }
 
     if (newMessage.trim() === '') return;
+    console.log(newMessage)
 
     const newMsg = {
       id: generateMessageId(),
@@ -240,7 +265,7 @@ const ChatRoom = ({ route }) => {
           if (firstIndex < 0) return prev;
 
           const firstMessage = prev[firstIndex];
-          if (firstMessage.seen === '✓') return prev;
+          if (firstMessage.seen === ' ✓') return prev;
 
           // Find the exact message by ID to avoid updating wrong message
           const messageIndex = prev.findIndex(m => m.id === newMsg.id);
@@ -248,7 +273,7 @@ const ChatRoom = ({ route }) => {
 
           const updatedMessage = {
             ...prev[messageIndex],
-            seen: '✓',
+            seen: ' ✓',
           };
 
           return [
@@ -289,7 +314,7 @@ const ChatRoom = ({ route }) => {
               minute: '2-digit' 
             }),
             room_id: msg.conversation_id,
-            seen: !isReceived ? (msg.status?.status === 'seen' ? '✓✓' : msg.status?.status === 'sent' ? '✓' : '') : undefined
+            seen: !isReceived ? (msg.status?.status === 'seen' ? ' ✓✓' : msg.status?.status === 'sent' ? ' ✓' : '') : undefined
           };
         });
 

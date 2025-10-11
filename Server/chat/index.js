@@ -105,8 +105,33 @@ io.on('connection', async(socket) => {
       // ✅ Emit to ALL clients in the room (sender + receiver if connected)
       io.to(conversation_id).emit("message", {newMessage, partner});
 
-      // ✅ Send ACK back only to the sender
-      if (callback) callback({ success: true, partner });
+      try {
+        const req = await fetch('https://cs-node.vercel.app/notify', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            token: partner.fcm,
+            data: {
+              title: `New message from ${partner.fname}.${partner.lname[0]}`,
+              body: content,
+            },
+          }),
+        });
+
+        const response = await req.json();
+
+        if (response.success) {
+          if (callback) callback({ success: true, partner });
+        } else {
+          console.error('Notification failed:', response);
+        }
+      } catch (err) {
+        console.error('Error sending notification:', err);
+      }
+
+      
 
       console.log(`📨 Message from ${senderId} to ${receiver_id}: ${content}`);
     } catch (err) {
@@ -247,7 +272,7 @@ io.on('connection', async(socket) => {
     }
   })
 
-  socket.on("disconnected", async () => {
+  socket.on("offline", async () => {
     console.log("❌ Socket disconnected:", socket.id);
     
     try {

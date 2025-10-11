@@ -113,7 +113,10 @@ export default function ChatRoom() {
 
         
 
-        socket.on("message", (msg) => {
+        socket.on("message", ({newMessage, partner}) => {
+            // console.log(newMessage, partner)
+            let msg = newMessage;
+            alert(msg.sender_id)
             if (msg.sender_id === partner.user_id) {
                 const newMsg = {
                     id: message.length + 1,
@@ -132,6 +135,7 @@ export default function ChatRoom() {
         });
 
         socket.on('message_seen', ({ result }) => {
+            if(!result)return;
             if (buyer_info.user_id === result.sender_id) {
                 setMessage(prevArr => {
                     const updatedArr = [...prevArr];

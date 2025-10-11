@@ -35,11 +35,11 @@ export function SocketProvider({ children }) {
 
       socketInstance.on('connect', () => {
         console.log('✅ Socket connected:', socketInstance.id);
+        socketInstance.disconnect()
       });
 
       socketInstance.on('disconnect', () => {
-        // alert('')
-        socket.emit("disconnected", {})
+        socketInstance.emit("offline", {})
         console.log('❌ Socket disconnected');
       });
 

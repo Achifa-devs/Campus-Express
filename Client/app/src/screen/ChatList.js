@@ -30,8 +30,19 @@ const ChatList = ({ navigation }) => {
   const [filteredRooms, setFilteredRooms] = useState(null);
   const { user } = useSelector(s => s?.user);
   const { chat } = useSelector(s => s?.chat);
-
+  const { is_connected } = useSelector(s => s?.is_connected);
+  const [socket, setSocket] = useState(null);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if(!socket){
+      if(is_connected){
+        let socket = getSocket();
+        setSocket(socket)
+      }
+    }
+    
+  }, [is_connected, socket])
   
   // useEffect(() => {
   //   Memory.get('chat_list').then(res => dispatch(set_chat(res))).catch(err => Alert.alert("Error occured: ", err))
@@ -40,19 +51,21 @@ const ChatList = ({ navigation }) => {
 
   const initializeSocket = async () => {
     try {
-      // await initSocket(user?.user_id);
+      await initSocket(user?.user_id);
       let socket_client = getSocket();
+
       if(!socket_client)return;
-      fetchChatList(socket_client);
-      
+      setSocket(socket_client);
+
+      fetchChatList();
 
     } catch (error) {
       console.error('Error initializing socket:', error);
     }
   }
 
-  function fetchChatList(socket_client) {
-    socket_client.emit("get_all_messages", { user_id: user?.user_id }, cb => {
+  function fetchChatList() {
+    socket.emit("get_all_messages", { user_id: user?.user_id }, cb => {
       const { messages, success } = cb;
       if (success) {
         let sortedMsgs = [...messages].sort(
@@ -61,6 +74,8 @@ const ChatList = ({ navigation }) => {
         dispatch(set_chat(sortedMsgs));
         // Memory.store('chat_list', sortedMsgs);
 
+      }else{
+        dispatch(set_chat(null))
       } 
     })
   }
@@ -194,14 +209,16 @@ const ChatList = ({ navigation }) => {
     );
   }
   const renderEmptyState = () => (
-    <View style={styles.emptyState}>
-      <Text style={styles.emptyStateText}>
-        {searchQuery ? 'No chats found' : 'No chats yet'}
-      </Text>
+    <TouchableOpacity style={styles.emptyState} onPress={e => navigation.navigate('Home')}>
+      <>
+        <Text style={styles.emptyStateText}>
+          {searchQuery ? 'No chats found' : 'No chats yet'}
+        </Text>
+      </>
       <Text style={styles.emptyStateSubtext}>
         {searchQuery ? 'Try a different search term' : 'Start a conversation to begin chatting'}
       </Text>
-    </View>
+    </TouchableOpacity>
   );
 
   return (

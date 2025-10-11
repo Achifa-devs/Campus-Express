@@ -4,11 +4,73 @@ import store from './redux/store'
 import NavigationHandler from './src/navigation/Index'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { AppState, Linking } from 'react-native'
+import messaging from '@react-native-firebase/messaging';
+import firebase from '@react-native-firebase/app';
+import notifee, { AndroidImportance } from '@notifee/react-native';
+import Memory from './src/utils/memoryHandler'
 
 export default function App() {
 
 
   const [resumeTick, setResumeTick] = useState(0);
+
+ 
+  async function setupNotifee() {
+    await notifee.requestPermission();
+    await messaging().requestPermission();
+
+    // Create notification channel (Android only)
+    await notifee.createChannel({
+      id: 'default',
+      name: 'Default Channel',
+      importance: AndroidImportance.HIGH,
+    });
+  }
+
+  useEffect(() => {
+    setupNotifee(); 
+
+    // Request permission
+    const requestPermission = async () => {
+      const authStatus = await messaging().requestPermission();
+      const enabled =
+        authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+      if (enabled) {
+        console.log('Authorization status:', authStatus);
+      }
+    };
+    requestPermission();
+
+    // Get and log FCM token
+    messaging()
+      .getToken()
+      .then(token => {
+        console.log('Device FCM Token:', token);
+        Memory.store('fcm', token)
+      });
+
+    // Foreground listener
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      console.log(remoteMessage)
+      // Show local notification with Notifee
+      await notifee.displayNotification({
+        title: remoteMessage.data?.title || 'New message',
+        body: remoteMessage.data?.mssg || 'You have a new message!',
+        android: {
+          channelId: 'default',
+          importance: AndroidImportance.HIGH,
+          smallIcon: 'ic_notification', // make sure this icon exists in android/app/src/main/res/
+          color: '#FF4500'
+        },
+      });
+    });
+
+    return unsubscribe;
+  }, []);
+
+
 
   // Listen for app returning from background and deep link events
   useEffect(() => {
@@ -39,6 +101,8 @@ export default function App() {
       linkingSubscription.remove();
     };
   }, []);
+
+  
   return (
     <>
       <SafeAreaView style={{ flex: 1 }}>

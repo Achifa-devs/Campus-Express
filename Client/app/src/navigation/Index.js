@@ -33,7 +33,9 @@ import { getSocket, initSocket } from "../services/socket";
 import { set_chat } from "../../redux/info/chat";
 import { set_is_active } from "../../redux/info/is_active";
 import { set_unread } from "../../redux/info/unread_chats";
-
+import NetInfo from '@react-native-community/netinfo';
+import { set_is_connected } from "../../redux/info/is_connected";
+Sound.setCategory("Playback"); // ensure sound plays even in silent mode (iOS)
 function NavigationHandler() {
 
   const { locale_modal } = useSelector(s => s.locale_modal);
@@ -46,13 +48,51 @@ function NavigationHandler() {
   const { mode } = useSelector((s) => s.mode);
   const { user } = useSelector(s => s?.user);
   const [socket, setSocket] = useState(null)
+  const [chatBool, setChatBool] = useState(false)
   const dispatch = useDispatch();
   const { chat } = useSelector(s => s?.chat);
+  const { is_connected } = useSelector(s => s?.is_connected);
+  const [newMessage, setNewMessage] = useState({})
 
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener(state => {
+      dispatch(set_is_connected(state.isConnected))
+    });
+
+    return () => unsubscribe(); // clean up
+  }, []);
+
+  useEffect(() => {
+    if(!socket){
+      if(is_connected){
+        let socket = getSocket();
+        setSocket(socket); 
+      }
+    }
+  }, [socket, is_connected])
+
+  useEffect(() => {
+   async function getFcm () {
+     if(!user) return;
+     if(user.fcm) return;
+     let fcm = await Memory.get('fcm');
+     
+     axios.post('https://cs-node.vercel.app/update-fcm', {
+       user_id: user?.user_id,
+       fcm: fcm
+     })
+     .then((res) => {
+       console.log(res.data)
+     })
+     .catch(err => {
+       console.log(err)
+     })
+   }
+   getFcm()
+  }, [user])
   function fetchChatList() {
 
     if(!socket) return;
-
     socket.emit("get_all_messages", { user_id: user?.user_id }, cb => {
       const { messages, success } = cb;
       if (success) {
@@ -62,10 +102,33 @@ function NavigationHandler() {
         );
         dispatch(set_chat(sortedMsgs)); 
         // Memory.store('chat_list', sortedMsgs);
-
+  
       } 
     })
   }
+
+  useEffect(() => {
+    if(chatBool){
+      const {
+        sender_id,
+        receiver_id,
+        content,
+        conversation_id,
+        message_type,
+        media_url,
+        created_at,
+      } = newMessage;
+      updateChat({
+        sender_id,
+        receiver_id,
+        content,
+        conversation_id,
+        message_type,
+        media_url,
+        created_at,
+      })
+    }
+  }, [chat])
 
   useEffect(() => {
     if(!chat && !socket) return;
@@ -88,6 +151,136 @@ function NavigationHandler() {
     dispatch(set_unread(totalUnread));
   }, [dispatch, chat]);
 
+  
+
+  function updateChat ({
+    sender_id,
+    receiver_id,
+    content,
+    conversation_id,
+    message_type,
+    media_url,
+    created_at,
+  }) {
+    if (user.user_id === receiver_id) {
+      // Create a shallow copy of chat array
+      const updatedChatList = [...chat];
+      // Find the chat index
+      const index = updatedChatList.findIndex(
+        (item) => item.key === conversation_id
+      );
+      if (index !== -1) {
+        // Clone the chat item to avoid mutating state
+        const chatItem = { ...updatedChatList[index] };
+  
+        chatItem.lastMessage = {
+          sender_id,
+          receiver_id,
+          content,
+          conversation_id,
+          message_type,
+          media_url,
+          created_at,
+        };
+  
+        chatItem.unread = (chatItem.unread || 0) + 1;
+        updatedChatList[index] = chatItem;
+      } else {
+        updatedChatList.push({
+          key: conversation_id,
+          partner: partner,
+          lastMessage: {
+            sender_id,
+            receiver_id,
+            content,
+            conversation_id,
+            message_type,
+            media_url,
+            created_at,
+          },
+          unread: 1,
+        });
+      }
+      dispatch(set_chat(updatedChatList));
+      setChatBool(false);
+      // ✅ Play notification sound
+      const ding = new Sound("sound.wav", Sound.MAIN_BUNDLE, (error) => {
+        if (error) {
+          console.log("Failed to load the sound", error);
+          return;
+        }
+        ding.play((success) => {
+          if (!success) {
+            console.log("Playback failed due to audio decoding errors");
+          }
+          ding.release(); // free memory after playback
+        });
+      });
+      // Dispatch updated chat
+    }
+  }
+
+
+  useEffect(() => {
+    if(!socket)return;
+    socket.on("message", async ({ newMessage, partner }) => {
+      const {
+        sender_id,
+        receiver_id,
+        content,
+        conversation_id,
+        message_type,
+        media_url,
+        created_at,
+      } = newMessage;
+
+      setNewMessage({
+        sender_id,
+        receiver_id,
+        content,
+        conversation_id,
+        message_type,
+        media_url,
+        created_at,
+      })
+      try {
+        if (Array.isArray(chat)) {
+          const {
+            sender_id,
+            receiver_id,
+            content,
+            conversation_id,
+            message_type,
+            media_url,
+            created_at,
+          } = newMessage
+          updateChat({
+            sender_id,
+            receiver_id,
+            content,
+            conversation_id,
+            message_type,
+            media_url,
+            created_at,
+          });
+        }else{
+          setChatBool(true)
+          fetchChatList()
+        }
+      } catch (error) {
+        console.log("Error: ", error)
+      }
+    });
+
+    socket.on("partner_offline", async({partnerId, date}) => {
+      dispatch(set_is_active({online: false, user_id: partnerId, date, id: Tools.generateId(10)}))
+    })
+
+    socket.on("partner_online", async({partnerId}) => {
+      dispatch(set_is_active({online: true, user_id: partnerId, id: Tools.generateId(10)}))
+    })
+  }, [socket])
+
   useEffect(() => {
 
     if(user){
@@ -96,86 +289,6 @@ function NavigationHandler() {
           await initSocket(user?.user_id);
           let socket_client = getSocket();
           setSocket(socket_client)
-
-          
-          socket_client.on("message", async ({newMessage, partner}) => {
-
-
-            const {
-              sender_id,
-              receiver_id,
-              message,
-              conversation_id,
-              message_type,
-              media_url,
-              created_at,
-            } = newMessage;
-
-            console.log("data: ", data);
-
-            if (Array.isArray(chat)) {
-              // Create a shallow copy of chat array
-              const updatedChatList = [...chat];
-              
-              // Find the chat index
-              const index = updatedChatList.findIndex(
-                (item) => item.key === conversation_id
-              );
-  
-              if (index !== -1) {
-                // Clone the chat item to avoid mutating state
-                const chatItem = { ...updatedChatList[index] };
-  
-                chatItem.lastMessage = {
-                  sender_id,
-                  receiver_id,
-                  message,
-                  conversation_id,
-                  message_type,
-                  media_url,
-                  created_at,
-                };
-  
-                chatItem.unread = (chatItem.unread || 0) + 1;
-  
-                // Replace the old item in the same array position
-                updatedChatList[index] = chatItem;
-              } else {
-                // Add new chat if conversation doesn't exist
-                updatedChatList.push({
-                  key: conversation_id,
-                  partner: partner,
-                  lastMessage: {
-                    sender_id,
-                    receiver_id,
-                    message,
-                    conversation_id,
-                    message_type,
-                    media_url,
-                    created_at,
-                  },
-                  unread: 1,
-                });
-              }
-                const ding = new Sound(require('../assets/sound.wav'), (error) => {
-                  if (!error) ding.play();
-                });
-  
-                // Dispatch updated list
-              dispatch(set_chat(updatedChatList));
-            }
-          });
-
-          socket_client.on("partner_offline", async({partnerId, date}) => {
-            dispatch(set_is_active({online: false, user_id: partnerId, date, id: Tools.generateId(10)}))
-          })
-
-          socket_client.on("partner_online", async({partnerId}) => {
-            dispatch(set_is_active({online: true, user_id: partnerId, id: Tools.generateId(10)}))
-          })
-          
-
-
         } catch (error) {
           console.error('Error initializing socket:', error);
         }
@@ -185,13 +298,11 @@ function NavigationHandler() {
     
   }, [user])
 
-
   useEffect(() => {
     if(!socket) return;
     fetchChatList();
-  }, [socket])
+  }, [socket, is_connected])
   
-
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {

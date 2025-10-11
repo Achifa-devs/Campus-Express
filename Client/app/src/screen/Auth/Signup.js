@@ -33,8 +33,23 @@ const Signup = () => {
     state: '',
     campus: '',
     pwd: '',
-    deviceId: Tools.getDeviceId().then(result => result)
+    deviceId: '',
+    fcm: ''
   });
+
+  useEffect(() => {
+    const loadAsyncData = async () => {
+      const fcm = await Memory.get('fcm');
+      const deviceId = await Tools.getDeviceId();
+
+      setFormData(prev => ({
+        ...prev,
+        deviceId,
+        fcm,
+      }));
+    };
+    loadAsyncData();
+  }, []);
   const [errors, setErrors] = useState({
     fname: '',
     lname: '',
@@ -118,6 +133,7 @@ const Signup = () => {
   const dispatch = useDispatch();
 
   const handleSignup = useCallback(async () => {
+    console.log(serverErr)
     setServerErr('');
     if (!validateForm()) {
       Vibration.vibrate(300);
@@ -132,7 +148,6 @@ const Signup = () => {
         body: JSON.stringify(formData)
       });
       const data = await response.json();
-      console.log(data);
        
       if (data.success) {
         await Memory.store('user', (data.data.user));
