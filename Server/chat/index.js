@@ -121,6 +121,7 @@ io.on('connection', async(socket) => {
         });
 
         const response = await req.json();
+        console.log("response: ", response)
 
         if (response.success) {
           if (callback) callback({ success: true, partner });
