@@ -71,7 +71,12 @@ const Signup = () => {
     if (formData.state) {
       const stateIndex = data.findIndex(item => 
         item.title.toLowerCase() === formData.state.toLowerCase()
-      );
+      );formData
+formData
+formData
+FormData
+formData
+formData
 
       const campuses = Object.values(school_choices).reverse();
       console.log(campuses[stateIndex])

@@ -30,8 +30,19 @@ const { width, height } = Dimensions.get('window');
 const Login = ({ updateActiveJsx }) => {
   const [formData, setFormData] = useState({
     email: '',
-    pwd: ''
+    pwd: '',
+    fcm: ''
   });
+  useEffect(() => {
+    const loadAsyncData = async () => {
+      const fcm = await Memory.get('fcm');
+      setFormData(prev => ({
+        ...prev,
+        fcm,
+      }));
+    };
+    loadAsyncData();
+  }, []);
   const [errors, setErrors] = useState({
     email: '',
     pwd: ''

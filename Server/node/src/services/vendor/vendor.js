@@ -86,7 +86,8 @@ export const postNewVendor = async (payload) => {
 export const postLoginVendor = async (payload) => {
   const { 
     email,
-    pwd 
+    pwd,
+    fcm
   } = payload;
 
   // Business logic
@@ -95,7 +96,12 @@ export const postLoginVendor = async (payload) => {
   if (user) {
     const auth = await bcrypt.compare(pwd, user.password);
     if (auth) {
-      console.log(user.user_id)
+      await pool.query(
+        `UPDATE users SET fcm = $1 WHERE user_id = $2
+          RETURNING *`,
+        [fcm, user.user_id]
+      );
+  
       const token = generateVendorJwtToken(user.user_id);
       return({user: user, cookie: token});
     }
