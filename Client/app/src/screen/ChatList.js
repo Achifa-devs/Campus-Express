@@ -73,7 +73,6 @@ const ChatList = ({ navigation }) => {
         );
         dispatch(set_chat(sortedMsgs));
         // Memory.store('chat_list', sortedMsgs);
-
       }else{
         dispatch(set_chat(null))
       } 

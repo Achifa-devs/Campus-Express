@@ -56,11 +56,31 @@ function NavigationHandler() {
 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener(state => {
-      dispatch(set_is_connected(state.isConnected))
+      dispatch(set_is_connected(!!(state.isConnected && state.isInternetReachable)));
     });
 
-    return () => unsubscribe(); // clean up
-  }, []);
+    return () => unsubscribe(); // clean up properly
+  }, [dispatch]);
+
+  useEffect(() => {
+    const checkInternet = async () => {
+      try {
+        const res = await fetch("https://clients3.google.com/generate_204", {
+          method: "HEAD",
+          cache: "no-store",
+        });
+        dispatch(set_is_connected(res.ok));
+      } catch {
+        dispatch(set_is_connected(false));
+      }
+    };
+
+    checkInternet(); // run once immediately
+    const interval = setInterval(checkInternet, 5000); // check every 5s
+
+    return () => clearInterval(interval); // clean up
+  }, [dispatch]);
+
 
   useEffect(() => {
     if(!socket){

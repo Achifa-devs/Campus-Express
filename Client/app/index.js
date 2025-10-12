@@ -16,7 +16,7 @@ async function createNotificationChannel() {
     importance: AndroidImportance.HIGH,
     visibility: AndroidVisibility.PUBLIC,
     sound: 'default',
-    vibration: true,
+    vibration: true
   });
 }
 
@@ -45,7 +45,7 @@ messaging().setBackgroundMessageHandler(async remoteMessage => {
       color: '#FF4500', // 🔥 optional custom color (orange-red)
       importance: AndroidImportance.HIGH,
       visibility: AndroidVisibility.PUBLIC,
-      sound: 'default',
+      sound: 'default'
     },
   });
 });

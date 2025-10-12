@@ -34,7 +34,6 @@ CAMPUSSPHERE_SERVER.use(cors({
 
 // Firebase notification endpoint
 CAMPUSSPHERE_SERVER.post('/notify', (req, res) => {
-  console.log(req.body)
   // const { token, title, body, media, price, product_id } = req.body;
   const { token, data } = req.body;
   const {title, body } = data

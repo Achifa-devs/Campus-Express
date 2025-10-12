@@ -61,6 +61,7 @@ export default function Product() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [files, set_files] = useState([]);
   const [favLoading, setFavLoading] = useState(true);
+  const { is_connected } = useSelector(s => s?.is_connected);
   
   const dispatch = useDispatch()
   const onScroll = (event) => {
@@ -78,7 +79,7 @@ export default function Product() {
       let socket = getSocket();
       setSocket(socket)
     }
-  }, [socket])
+  }, [socket, is_connected])
 
   useEffect(() => {
     if(!user) return;
