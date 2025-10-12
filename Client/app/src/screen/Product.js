@@ -46,7 +46,9 @@ import { getSocket } from '../services/socket.js';
 import { Screen } from 'react-native-screens';
 
 export default function Product() {
-  let socket = getSocket();
+
+  const [socket, setSocket] = useState(null);
+
   const route = useRoute();
   const { data } = route.params;
   const { user } = useSelector(s => s?.user);
@@ -65,6 +67,18 @@ export default function Product() {
     const slideIndex = Math.round(event.nativeEvent.contentOffset.x / width);
     setCurrentIndex(slideIndex);
   };
+
+  useEffect(() => {
+    let socket = getSocket();
+    setSocket(socket)
+  }, [user])
+
+  useEffect(() => {
+    if(!socket){
+      let socket = getSocket();
+      setSocket(socket)
+    }
+  }, [socket])
 
   useEffect(() => {
     if(!user) return;
