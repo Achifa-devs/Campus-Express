@@ -85,6 +85,7 @@ io.on('connection', async(socket) => {
       const { receiver_id, content, media_url, message_type, created_at } = data;
       const conversation_id = generateConversationId(senderId, receiver_id);
 
+
       // Save message to DB
       const newMessage = await Chat.createNewMessage({
         sender_id: senderId,
@@ -100,37 +101,34 @@ io.on('connection', async(socket) => {
 
       // ✅ Make sure both users are in the conversation room
       socket.join(conversation_id);
-      console.log('conversation_id: ', conversation_id)
 
       // ✅ Emit to ALL clients in the room (sender + receiver if connected)
       io.to(conversation_id).emit("message", {newMessage, partner});
 
-      try {
-        const req = await fetch('https://cs-node.vercel.app/notify', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
+      const req = await fetch('https://cs-node.vercel.app/notify', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          token: partner.fcm,
+          data: {
+            title: `New message from ${partner?.fname || ''}.${partner?.lname?.[0] || ''}`,
+            body: content,
           },
-          body: JSON.stringify({
-            token: partner.fcm,
-            data: {
-              title: `New message from ${partner.fname}.${partner.lname[0]}`,
-              body: content,
-            },
-          }),
-        });
+        }),
+      });
 
-        const response = await req.json();
-        console.log("response: ", response)
-
-        if (response.success) {
-          if (callback) callback({ success: true, partner });
-        } else {
-          console.error('Notification failed:', response);
-        }
-      } catch (err) {
-        console.error('Error sending notification:', err);
+      let resText = await req.text(); // read raw response
+      let resData;
+      try {
+        resData = JSON.parse(resText);
+      } catch {
+        console.warn('⚠️ notify endpoint did not return valid JSON:', resText.slice(0, 100));
       }
+
+      if (typeof callback === 'function') callback({ success: true, partner, resData });
+
 
       
 
@@ -315,7 +313,6 @@ io.on('connection', async(socket) => {
 
 
 });
-
 
 
 process.on('unhandledRejection', (reason, promise) => {
