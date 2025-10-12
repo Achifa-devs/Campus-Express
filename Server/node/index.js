@@ -64,7 +64,6 @@ CAMPUSSPHERE_SERVER.post('/update-fcm', async(req, res) => {
 });
 
 
-
 CAMPUSSPHERE_SERVER.use(CUSTOMER_ROUTE);
 CAMPUSSPHERE_SERVER.use(VENDOR_ROUTE);
 

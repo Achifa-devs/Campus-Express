@@ -491,7 +491,7 @@ export default function Product() {
                   <CallSvg height={18} width={18} fill="#FFF" />
                   <Text style={styles.callText}>Call</Text>
                 </TouchableOpacity> */}
-                <TouchableOpacity style={styles.callButton} onPress={() => {
+                <TouchableOpacity style={styles.callButton} onPress={async() => {
                   // Chat.sendMessage(
                   //   data?.user_id,
                   //   `I need more details about this offer, ${JSON.stringify(data)}`
@@ -506,8 +506,7 @@ export default function Product() {
                       receiver_id: data.user_id, content: "I need more enquiries about this Offer", media_url: data.product_id, message_type: "product", created_at: new Date()
                     }, (response) => {
                       if(response.success){
-                      setLoading(false)
-
+                        setLoading(false)
                         navigation.navigate('Chat', {
                           from: 'product', 
                           room: { key: room, partner: response.partner },

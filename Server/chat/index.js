@@ -5,7 +5,7 @@ const Chat = require('./models');
 const cors = require('cors');
 const { generateConversationId } = require('./utils');
 require('dotenv').config();
-
+const axios = require('axios')
 const CHAT = express();
 
 CHAT.use(cors({
@@ -105,38 +105,39 @@ io.on('connection', async(socket) => {
       // ✅ Emit to ALL clients in the room (sender + receiver if connected)
       io.to(conversation_id).emit("message", {newMessage, partner});
 
-      const req = await fetch('https://cs-node.vercel.app/notify', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+
+      const response = await axios.post(
+        "https://cs-node.vercel.app/notify",
+        {
           token: partner.fcm,
           data: {
-            title: `New message from ${partner?.fname || ''}.${partner?.lname?.[0] || ''}`,
+            title: `New message from ${partner?.fname || ""}.${partner?.lname?.[0] || ""}`,
             body: content,
           },
-        }),
-      });
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+          // prevent Axios from throwing if response is not JSON
+          validateStatus: () => true,
+          transformResponse: [
+            (data) => {
+              try {
+                return JSON.parse(data);
+              } catch {
+                console.warn("⚠️ notify endpoint did not return valid JSON:", data?.slice(0, 100));
+                return data;
+              }
+            },
+          ],
+        }
+      );
 
-      let resText = await req.text(); // read raw response
-      let resData;
-      try {
-        resData = JSON.parse(resText);
-      } catch {
-        console.warn('⚠️ notify endpoint did not return valid JSON:', resText.slice(0, 100));
-      }
-
-      if (typeof callback === 'function') callback({ success: true, partner, resData });
-
-
-      
-
-      console.log(`📨 Message from ${senderId} to ${receiver_id}: ${content}`);
+      const resData = response.success;
+      if (callback) callback({ success: true, partner, resData });
     } catch (err) {
-      console.error("send_message error:", err);
-      if (callback) callback({ success: false, error: "internal_error" });
+      console.error("Error sending notification:", err);
     }
+
   });
 
   socket.on("get_room_messages", async(data, callback) => {
