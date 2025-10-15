@@ -86,19 +86,21 @@ const ChatList = ({ navigation }) => {
 
 
   function fetchChatList() {
-
-    if(!socket) return;
-    socket.emit("get_all_messages", { user_id: user?.user_id }, cb => {
-      const { messages, success } = cb;
-      if (success) {
-        
-        let sortedMsgs = [...messages].sort(
-          (a, b) => new Date(b.lastMessage.created_at) - new Date(a.lastMessage.created_at)
-        );
-        dispatch(set_chat(sortedMsgs)); 
-        // Memory.store('chat_list', sortedMsgs);
-  
-      } 
+    axios.get('https://campus-express-production.up.railway.app/chat/list', {
+      params: {
+        userId: user.user_id
+      }
+    })
+    .then(({success, messages}) => {
+      if(success){
+        dispatch(set_chat(messages))
+      }else{
+        Alert.alert("Error retrieving messages")
+      }
+    })
+    .catch(err => {
+      Alert.alert("Error retrieving messages")
+      console.log(err)
     })
   }
   
@@ -121,23 +123,8 @@ const ChatList = ({ navigation }) => {
   
   useEffect(() => {
     if(!user)return;
-    axios.get('campus-express-production.up.railway.app/chat/list', {
-      params: {
-        userId: user.user_id
-      }
-    })
-    .then(({success, messages}) => {
-      if(success){
-        dispatch(set_chat(messages))
-      }else{
-        Alert.alert("Error retrieving messages")
-      }
-    })
-    .catch(err => {
-      Alert.alert("Error retrieving messages")
-      console.log(err)
-    })
-  }, [user])
+    fetchChatList()
+  }, [user, socket, is_connected, dispatch])
 
   useEffect(() => {
     if(!chatRooms) return;
@@ -154,6 +141,7 @@ const ChatList = ({ navigation }) => {
 
   const handleRefresh = () => {
     setRefreshing(true);
+    fetchChatList();
     initializeSocket();
   };
 

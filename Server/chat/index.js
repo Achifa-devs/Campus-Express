@@ -316,8 +316,8 @@ io.on('connection', async(socket) => {
 });
 
 CHAT.get('/chat/list', async(req,res) => {
-  const userId = req.query;
-  console.log("get_all_messages data:", data);
+  const { userId } = req.query;
+  // console.log("get_all_messages data:", data);
   // const { user_id } = data;
   const user_id = userId;
 
