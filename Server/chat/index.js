@@ -105,35 +105,38 @@ io.on('connection', async(socket) => {
       io.to(conversation_id).emit("message", {newMessage, partner});
 
 
-      if (partner?.fcm) {
-        const response = await axios.post(
-          "https://cs-node.vercel.app/notify",
-          {
-            token: partner.fcm,
-            data: {
-              title: `New message from ${partner?.fname || ""}.${partner?.lname?.[0] || ""}`,
-              body: content,
-            },
-          },
-          {
-            headers: { "Content-Type": "application/json" },
-            // prevent Axios from throwing if response is not JSON
-            validateStatus: () => true,
-            transformResponse: [
-              (data) => {
-                try {
-                  return JSON.parse(data);
-                } catch {
-                  console.warn("⚠️ notify endpoint did not return valid JSON:", data?.slice(0, 100));
-                  return data;
-                }
-              },
-            ],
-          }
-        );
+     
+      if(!partner.fcm || partner.fcm === '' || partner.fcm === null || partner.fcm === undefined || partner.fcm === 'null' || partner.fcm === 'undefined'){
+        if (callback) callback({ success: true, partner, resData });
+        return;
       }
-
+      const response = await axios.post(
+        "https://cs-node.vercel.app/notify",
+        {
+          token: partner.fcm,
+          data: {
+            title: `New message from ${partner?.fname || ""}.${partner?.lname?.[0] || ""}`,
+            body: content,
+          },
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+          // prevent Axios from throwing if response is not JSON
+          validateStatus: () => true,
+          transformResponse: [
+            (data) => {
+              try {
+                return JSON.parse(data);
+              } catch {
+                console.warn("⚠️ notify endpoint did not return valid JSON:", data?.slice(0, 100));
+                return data;
+              }
+            },
+          ],
+        }
+      );
       const resData = response.success;
+
       if (callback) callback({ success: true, partner, resData });
     } catch (err) {
       console.error("Error sending notification:", err);
