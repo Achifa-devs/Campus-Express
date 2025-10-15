@@ -33,8 +33,8 @@ export function ChatStackScreen() {
     useEffect(() => {
     if (resource) {
         const {
-        from,
-        room
+            from,
+            room
         } = resource;
         if(from === 'product'|| from === 'notifee'){
         navigation.navigate('chat-room', {
