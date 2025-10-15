@@ -60,7 +60,7 @@ export default function App() {
       // Show local notification with Notifee
       await notifee.displayNotification({
         title: remoteMessage.data?.title || 'New message',
-        body: remoteMessage.data?.mssg || 'You have a new message!',
+        body: remoteMessage.data?.body || 'You have a new message!',
         android: {
           channelId: 'default',
           importance: AndroidImportance.HIGH,
@@ -118,8 +118,12 @@ export default function App() {
     async function checkInitialNotification() {
       const initialNotification = await notifee.getInitialNotification();
       if (initialNotification?.notification?.data) {
-        const { chatId, partnerId } = initialNotification.notification.data;
-        navigate('chat-room', { chatId, partnerId });
+        const { room } = initialNotification.notification.data;
+        navigate('Chat', { 
+          room,
+          from: 'notifee',
+          id: Tools.generateId(10) 
+        });
       }
     }
     checkInitialNotification();

@@ -26,6 +26,7 @@ async function createNotificationChannel() {
 notifee.onBackgroundEvent(async ({ type, detail }) => {
   if (type === EventType.PRESS && detail.notification?.data) {
     const { room } = detail.notification.data;
+    
     // Save to some global or handle when app starts
     navigate('Chat', { 
       room,
@@ -35,13 +36,13 @@ notifee.onBackgroundEvent(async ({ type, detail }) => {
   }
 });
 
-// from: 'notifee', 
-// room: { key: room, partner: response.partner },
-// id: Tools.generateId(0)
 
 notifee.onForegroundEvent(({ type, detail }) => {
   if (type === EventType.PRESS && detail.notification?.data) {
+
     const { room } = detail.notification.data;
+    
+
     navigate('Chat', { 
       room,
       from: 'notifee',

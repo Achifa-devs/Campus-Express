@@ -36,9 +36,9 @@ CAMPUSSPHERE_SERVER.use(cors({
 CAMPUSSPHERE_SERVER.post('/notify', async(req, res) => {
   // const { token, title, body, media, price, product_id } = req.body;
   const { token, data } = req.body;
-  const {title, body } = data
+  const {title, body, room } = data
 
-  let result = await sendNoticeForNewMsg(token, title, body);
+  let result = await sendNoticeForNewMsg(token, title, body, room);
   if (result.success) {
     res.send({ status: 'Notification sent!', success: true});
   }else{

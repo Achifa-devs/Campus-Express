@@ -42,11 +42,11 @@ export function sendNotification(token, title, body, media, price, product_id) {
 }
 
 
-export async function sendNoticeForNewMsg(token, title, body) {
+export async function sendNoticeForNewMsg(token, title, body, room) {
   const message = {
     token,
-    data: { title, body },
-    notification: { title, body },
+    data: { title, body, room },
+    notification: { title, body, room },
   };
 
   try {
