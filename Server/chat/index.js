@@ -105,31 +105,33 @@ io.on('connection', async(socket) => {
       io.to(conversation_id).emit("message", {newMessage, partner});
 
 
-      const response = await axios.post(
-        "https://cs-node.vercel.app/notify",
-        {
-          token: partner.fcm,
-          data: {
-            title: `New message from ${partner?.fname || ""}.${partner?.lname?.[0] || ""}`,
-            body: content,
-          },
-        },
-        {
-          headers: { "Content-Type": "application/json" },
-          // prevent Axios from throwing if response is not JSON
-          validateStatus: () => true,
-          transformResponse: [
-            (data) => {
-              try {
-                return JSON.parse(data);
-              } catch {
-                console.warn("⚠️ notify endpoint did not return valid JSON:", data?.slice(0, 100));
-                return data;
-              }
+      if (partner?.fcm) {
+        const response = await axios.post(
+          "https://cs-node.vercel.app/notify",
+          {
+            token: partner.fcm,
+            data: {
+              title: `New message from ${partner?.fname || ""}.${partner?.lname?.[0] || ""}`,
+              body: content,
             },
-          ],
-        }
-      );
+          },
+          {
+            headers: { "Content-Type": "application/json" },
+            // prevent Axios from throwing if response is not JSON
+            validateStatus: () => true,
+            transformResponse: [
+              (data) => {
+                try {
+                  return JSON.parse(data);
+                } catch {
+                  console.warn("⚠️ notify endpoint did not return valid JSON:", data?.slice(0, 100));
+                  return data;
+                }
+              },
+            ],
+          }
+        );
+      }
 
       const resData = response.success;
       if (callback) callback({ success: true, partner, resData });
@@ -314,50 +316,6 @@ io.on('connection', async(socket) => {
 
 
 });
-
-CHAT.get('/chat/list', async(req,res) => {
-  const { userId } = req.query;
-  // console.log("get_all_messages data:", data);
-  // const { user_id } = data;
-  const user_id = userId;
-
-  try {
-    const result = await Chat.getChatList({ user_id });
-    const entries = Object.entries(result);
-
-    const refinedMssg = await Promise.all(
-      entries.map(async ([key, value]) => {
-        // Extract the other user's ID
-        const partner_id = key.split('_').find(id => id !== user_id);
-
-        // Fetch partner details
-        const partner = await Chat.getUser({ user_id: partner_id });
-
-        // Sort messages by date (descending)
-        const mssgs = value.messages.sort(
-          (a, b) => new Date(b.created_at) - new Date(a.created_at)
-        );
-
-        const unread = value.messages.filter(msgs => msgs.status.status === 'sent' && msgs.status.id === userId).length;
-
-        const lastMessage = mssgs[0];
-
-        return {
-          key,
-          partner,
-          lastMessage,
-          unread
-        };
-      })
-    );
-
-    res.send({ success: true, messages: refinedMssg });
-  } catch (err) {
-    console.error("all_messages error:", err);
-    res.send({ success: false, error: "internal_error" });
-  }
-})
-
 
 process.on('unhandledRejection', (reason, promise) => {
   console.log('Unhandled Rejection at:', reason.stack || reason)

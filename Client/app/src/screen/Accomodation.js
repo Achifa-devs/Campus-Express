@@ -24,27 +24,44 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Btm from '../components/Product/Btm.js';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { set_connect_modal } from '../../redux/modal/connect.js';
 import { Favourite } from '../api/wishlist.js';
 import Memory from '../utils/memoryHandler.js';
 import useLogInAlert from '../utils/useLoginAlert.js';
 import Tools from '../utils/generalHandler.js';
 import useInsufficientConnectAlert from '../utils/useZeroConnectAlert.js';
+import { getSocket } from '../services/socket.js';
 
 const Accommodation = ({ route, navigation }) => {
+  const [socket, setSocket] = useState(null);
   const { data } = useRoute().params;
   const [files, setFiles] = useState([]);
   const {user} = useSelector(s => s?.user)
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [socketLoader, setSocketLoader] = useState(false)
   const [favLoading, setFavLoading] = useState(true);
   const [saved, setSaved] = useState(false);
   const [seller, setSeller] = useState('')
   const { width } = Dimensions.get('window');
   const fadeAnim = new Animated.Value(1);
   const [loading, setLoading] = useState(false);
+  const { is_connected } = useSelector(s => s?.is_connected);
 
   let showLogInAlert = useLogInAlert()
+
+
+  useEffect(() => {
+    let socket = getSocket();
+    setSocket(socket)
+  }, [user])
+
+  useEffect(() => {
+    if(!socket){
+      let socket = getSocket();
+      setSocket(socket)
+    }
+  }, [socket, is_connected])
   
   async function UpdateConnections() {
     setLoading(true)
@@ -333,6 +350,23 @@ const Accommodation = ({ route, navigation }) => {
       
   return (
     <SafeAreaView style={styles.safeArea}>
+      {socketLoader&&
+        <View style={{
+          height: '100%', 
+          width: '100%',
+          position: 'absolute',
+          top: 1,
+          left: 0,
+          zIndex: 1000,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: '#FFF8F6',
+          opacity: .5
+        }}>
+          <ActivityIndicator size={'large'} color={'#FF4500'}></ActivityIndicator>
+        </View>
+      }
       <View style={styles.header}>
         <TouchableOpacity 
           style={styles.backButton}
@@ -342,7 +376,7 @@ const Accommodation = ({ route, navigation }) => {
         </TouchableOpacity>
       </View>
 
-      {user&&<TouchableOpacity style={styles.connectionCnt} onPress={e => {
+      {/* {user&&<TouchableOpacity style={styles.connectionCnt} onPress={e => {
         dispatch(set_connect_modal(1))
       }}>
         <View style={styles.connection}>
@@ -352,7 +386,7 @@ const Accommodation = ({ route, navigation }) => {
             {user?.connects} vendor connections
           </Text>
         </View>
-      </TouchableOpacity>}
+      </TouchableOpacity>} */}
       
       <Animated.ScrollView 
         style={{ opacity: fadeAnim }}
@@ -416,12 +450,12 @@ const Accommodation = ({ route, navigation }) => {
             </TouchableOpacity>
           </View>
 
-          {isPromoted && (
+          {/* {isPromoted && (
             <View style={styles.boostBadge}>
               <Icon name="rocket" size={12} color="#FFF" />
               <Text style={styles.boostBadgeText}>  Boosted</Text>
             </View>
-          )} 
+          )}  */}
         </View>
 
         {/* Content */}
@@ -449,15 +483,55 @@ const Accommodation = ({ route, navigation }) => {
           </View>
 
           {/* Action Buttons */}
-          <View style={styles.actionRow}>
-            <TouchableOpacity style={styles.wpButton} onPress={handleWhatsAppChat}>
-              <WpSvg height={20} width={20} fill="#FFF" />
-              <Text style={styles.wpText}>Chat</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.callButton} onPress={handlePhoneCall}>
-              <CallSvg height={18} width={18} fill="#FFF" />
-              <Text style={styles.callText}>Call</Text>
-            </TouchableOpacity>
+          <View style={styles.priceContainer}>
+            <View style={styles.actionRow}>
+
+              {/* <TouchableOpacity style={styles.wpButton} onPress={handleWhatsAppChat}>
+                <WpSvg height={20} width={20} fill="#FFF" />
+                <Text style={styles.wpText}>Chat</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.callButton} onPress={handlePhoneCall}>
+                <CallSvg height={18} width={18} fill="#FFF" />
+                <Text style={styles.callText}>Call</Text>
+              </TouchableOpacity> */}
+              <TouchableOpacity style={styles.callButton} onPress={async() => {
+                // Chat.sendMessage(
+                //   data?.user_id,
+                //   `I need more details about this offer, ${JSON.stringify(data)}`
+                // )
+                if (user.user_id !== data.user_id) {
+                  const room = Tools.generateConversationId(user?.user_id, data?.user_id);
+                  
+                  if(!socket) return;
+                  setSocketLoader(true);
+
+                  socket.emit('send_message', {
+                    receiver_id: data.user_id, content: "I need more enquiries about this Offer", media_url: data.product_id, message_type: "product", created_at: new Date()
+                  }, (response) => {
+                    Alert.alert('success!', response.success)
+                    if(response.success){
+                      setSocketLoader(false)
+                      navigation.navigate('Chat', {
+                        from: 'product', 
+                        room: { key: room, partner: response.partner },
+                        id: Tools.generateId(0)
+                      });
+                    }else{
+                      setSocketLoader(false)
+                      Alert.alert('Error, please try again')
+                    }
+                  })
+                  
+                } else {
+                  Alert.alert('This offer is from your inventory')
+                }
+
+              }}>
+                <Ionicons name={"chatbubble"} size={18} color="#FFF" />
+                <Text style={styles.callText}>Chat Vendor</Text>
+              </TouchableOpacity>
+
+            </View>
           </View>
 
           {/* Description */}

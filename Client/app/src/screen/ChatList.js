@@ -52,23 +52,6 @@ const ChatList = ({ navigation }) => {
   }
 
   useEffect(() => {
-    if(user){
-      initializeSocket()
-    }
-  }, [user])
-
-  useEffect(() => {
-    if(!is_connected){
-      Alert.alert("You are not connected to the internet.")
-    }else{
-      if (user) {
-        initializeSocket()
-      }
-    }
-    
-  }, [is_connected, user])
-
-  useEffect(() => {
     if (Array.isArray(chat)) {
       setChatRooms(chat)
       setFilteredRooms(chat);
@@ -83,27 +66,6 @@ const ChatList = ({ navigation }) => {
       initializeSocket();
     }
   }, []);
-
-
-  function fetchChatList() {
-    axios.get('https://campus-express-production.up.railway.app/chat/list', {
-      params: {
-        userId: user.user_id
-      }
-    })
-    .then(({success, messages}) => {
-      if(success){
-        dispatch(set_chat(messages))
-      }else{
-        Alert.alert("Error retrieving messages")
-      }
-    })
-    .catch(err => {
-      Alert.alert("Error retrieving messages")
-      console.log(err)
-    })
-  }
-  
 
 
   // useEffect(() => {
@@ -121,11 +83,21 @@ const ChatList = ({ navigation }) => {
   // }, [chatRooms, user.user_id, dispatch, chat]);
 
   
-  useEffect(() => {
-    if(!user)return;
-    fetchChatList()
-  }, [user, socket, is_connected, dispatch])
-
+  function fetchChatList() {
+    if(!socket) return;
+    socket.emit("get_all_messages", { user_id: user?.user_id }, cb => {
+      const { messages, success } = cb;
+      if (success) {
+        
+        let sortedMsgs = [...messages].sort(
+          (a, b) => new Date(b.lastMessage.created_at) - new Date(a.lastMessage.created_at)
+        );
+        dispatch(set_chat(sortedMsgs)); 
+        // Memory.store('chat_list', sortedMsgs);
+  
+      } 
+    })
+  }
   useEffect(() => {
     if(!chatRooms) return;
     if (searchQuery.trim() === '') {
@@ -139,10 +111,11 @@ const ChatList = ({ navigation }) => {
     }
   }, [searchQuery, chatRooms]);
 
-  const handleRefresh = () => {
+  const handleRefresh = async() => {
     setRefreshing(true);
+    await initializeSocket();
     fetchChatList();
-    initializeSocket();
+
   };
 
   const handleChatRoomPress = (room) => {
