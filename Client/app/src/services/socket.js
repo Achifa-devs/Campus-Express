@@ -9,8 +9,8 @@ export const initSocket = async (userId) => {
 
   const token = await Memory.get("token");
 
-  // socket = io("http://10.238.202.3:2020", {
-  socket = io("https://campus-express-production.up.railway.app", {
+  socket = io("http://10.165.31.3:2020", {
+  // socket = io("https://campus-express-production.up.railway.app", {
     transports: ["websocket"],
     query: { user_id: userId },   // ✅ keep consistent naming with server
     auth: { token },

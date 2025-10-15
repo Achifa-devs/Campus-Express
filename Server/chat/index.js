@@ -97,6 +97,7 @@ io.on('connection', async(socket) => {
       });
 
       const partner = await Chat.getUser({ user_id: receiver_id });
+      console.log(receiver_id)
 
       // ✅ Make sure both users are in the conversation room
       socket.join(conversation_id);
@@ -105,9 +106,12 @@ io.on('connection', async(socket) => {
       io.to(conversation_id).emit("message", {newMessage, partner});
 
 
-     
-      if(!partner.fcm || partner.fcm === '' || partner.fcm === null || partner.fcm === undefined || partner.fcm === 'null' || partner.fcm === 'undefined'){
-        if (callback) callback({ success: true, partner, resData });
+      if(!partner){
+        if (callback) callback({ success: false, err: "Vendor no longer exist!"});
+        return;
+      }
+      if(!partner?.fcm){
+        if (callback) callback({ success: true, partner});
         return;
       }
       const response = await axios.post(

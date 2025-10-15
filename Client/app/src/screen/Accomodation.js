@@ -508,7 +508,6 @@ const Accommodation = ({ route, navigation }) => {
                   socket.emit('send_message', {
                     receiver_id: data.user_id, content: "I need more enquiries about this Offer", media_url: data.product_id, message_type: "product", created_at: new Date()
                   }, (response) => {
-                    Alert.alert('success!', response.success)
                     if(response.success){
                       setSocketLoader(false)
                       navigation.navigate('Chat', {
@@ -517,6 +516,11 @@ const Accommodation = ({ route, navigation }) => {
                         id: Tools.generateId(0)
                       });
                     }else{
+                      if(response?.err){
+                        Alert.alert(response.err);
+                        setSocketLoader(false)
+                        return;
+                      }
                       setSocketLoader(false)
                       Alert.alert('Error, please try again')
                     }
