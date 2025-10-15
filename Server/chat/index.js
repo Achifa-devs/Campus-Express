@@ -121,6 +121,7 @@ io.on('connection', async(socket) => {
           data: {
             title: `New message from ${partner?.fname || ""}.${partner?.lname?.[0] || ""}`,
             body: content,
+            room: generateConversationId(userId, partner.user_id)
           },
         },
         {

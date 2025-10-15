@@ -7,6 +7,7 @@ import notifee, {
   AndroidVisibility,
 } from '@notifee/react-native';
 import messaging from '@react-native-firebase/messaging';
+import { navigate } from './src/navigation/root_nav';
 
 // ✅ Create notification channel (for both foreground and background)
 async function createNotificationChannel() {
@@ -19,6 +20,21 @@ async function createNotificationChannel() {
     vibration: true
   });
 }
+
+notifee.onBackgroundEvent(async ({ type, detail }) => {
+  if (type === EventType.PRESS && detail.notification?.data) {
+    const { room } = detail.notification.data;
+    // Save to some global or handle when app starts
+    navigate('chat-room', { room });
+  }
+});
+
+notifee.onForegroundEvent(({ type, detail }) => {
+  if (type === EventType.PRESS && detail.notification?.data) {
+    const { room } = detail.notification.data;
+    navigate('chat-room', { room });
+  }
+});
 
 // ✅ Background message handler (must be top-level)
 messaging().setBackgroundMessageHandler(async remoteMessage => {

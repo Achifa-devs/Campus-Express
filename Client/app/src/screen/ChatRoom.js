@@ -23,6 +23,8 @@ import { useSelector } from 'react-redux';
 import { getSocket, initSocket } from '../services/socket';
 import axios from 'axios';
 import js_ago from 'js-ago';
+import Video from 'react-native-video';
+import Tools from '../utils/generalHandler';
 
 const ChatRoom = ({ route }) => {
   const { room } = route.params;
@@ -648,9 +650,9 @@ const Card = ({ product_id }) => {
   const getPriceText = () => {
     switch (item.purpose) {
       case 'product':
-        return `₦${formatNumber(item.price)}`;
+        return `₦${Tools.formatNumber(item.price)}`;
       case 'accomodation':
-        return `₦${formatNumber(item.price)} to pay ₦${formatNumber(item.others?.lodge_data?.upfront_pay || 0)}`;
+        return `₦${Tools.formatNumber(item.price)} to pay ₦${Tools.formatNumber(item.others?.lodge_data?.upfront_pay || 0)}`;
       default:
         return '';
     }
@@ -661,18 +663,32 @@ const Card = ({ product_id }) => {
       style={styles.adCard}
       onPress={() => navigation.navigate('product', { data: item })}
     >
-      <Image
-        style={styles.adImage}
-        source={{ uri: item.thumbnail_id }}
-        resizeMode="cover"
-        onError={(error) => console.log('Image load error:', error)}
-      />
+      {
+        item.purpose !== 'product' ?
+        <Video
+          style={styles.adImage}
+          source={{ uri: item.thumbnail_id }}
+          resizeMode="cover"
+          paused
+          onError={(error) => console.log('Image load error:', error)}
+        />
+        :
+        <Image
+          style={styles.adImage}
+          source={{ uri: item.thumbnail_id }}
+          resizeMode="cover"
+          onError={(error) => console.log('Image load error:', error)}
+        />
+      }
       <View style={styles.adContent}>
         <Text style={styles.adTitle} numberOfLines={2}>
           {item.title || 'No Title'}
         </Text>
         <Text style={styles.adPrice}>
           {getPriceText()}
+        </Text>
+         <Text style={{position: 'absolute', left: 10, bottom: 5, fontSize: 10, color: '#FFA500'}}>
+          {item.purpose !== 'product' ? 'Accomodation' : ''}
         </Text>
       </View>
     </TouchableOpacity>
@@ -1021,7 +1037,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     color: '#FF4500',
-    marginBottom: 8,
+    marginBottom: 12,
   },
   adStats: {
     flexDirection: 'row',

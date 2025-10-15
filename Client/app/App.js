@@ -9,6 +9,7 @@ import firebase from '@react-native-firebase/app';
 import notifee, { AndroidImportance } from '@notifee/react-native';
 import Memory from './src/utils/memoryHandler'
 import axios from 'axios'
+import { navigate } from './src/navigation/root_nav'
 
 export default function App() {
 
@@ -113,7 +114,16 @@ export default function App() {
     }
   }, []);
 
-  
+  useEffect(() => {
+    async function checkInitialNotification() {
+      const initialNotification = await notifee.getInitialNotification();
+      if (initialNotification?.notification?.data) {
+        const { chatId, partnerId } = initialNotification.notification.data;
+        navigate('chat-room', { chatId, partnerId });
+      }
+    }
+    checkInitialNotification();
+  }, []);
   return (
     <>
       <SafeAreaView style={{ flex: 1 }}>

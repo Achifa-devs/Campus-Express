@@ -104,7 +104,8 @@ const ShopScreen = () => {
   )
   
   const onRefresh = () => {
-    setRefreshing(true);
+    // setRefreshing(true); 
+    navigation.navigate('Sell', { refresh: Date.now() });
   };
   
   // Simulate checking if shop exists in DB
@@ -124,6 +125,8 @@ const ShopScreen = () => {
       }
     })()
   }, []);
+
+ 
 
   const handleInputChange = (field, value) => {
     setShopForm(prev => ({ ...prev, [field]: value }));
