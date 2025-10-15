@@ -20,7 +20,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
-import { getSocket } from '../services/socket';
+import { getSocket, initSocket } from '../services/socket';
 import axios from 'axios';
 import js_ago from 'js-ago';
 
@@ -40,14 +40,28 @@ const ChatRoom = ({ route }) => {
   const { is_active } = useSelector(s => s?.is_active);
   const { is_connected } = useSelector(s => s?.is_connected);
 
+
   useEffect(() => {
     if(!socket){
       if(is_connected){
-        let socket = getSocket();
-        setSocket(socket)
+        if(user){
+          const initializeSocket = async () => {
+            try {
+              await initSocket(user?.user_id);
+              let socket_client = getSocket();
+              setSocket(socket_client)
+            } catch (error) {
+              console.error('Error initializing socket:', error);
+            }
+          }
+          initializeSocket()
+        }
+      }else{
+        Alert.alert('Chat cannot load because you have no internet connection!')
       }
     }
-  }, [is_connected, socket])
+    
+  }, [socket])
   // Generate unique message ID
   const generateMessageId = () => {
     messageIdCounter.current += 1;
@@ -68,7 +82,7 @@ const ChatRoom = ({ route }) => {
         socketRef.current.off('is_typing');
         socketRef.current.off('not_typing');
         socketRef.current.off('message_seen');
-        socketRef.current.disconnect();
+        // socketRef.current.disconnect();
       }
     };
   }, [user]);
@@ -79,7 +93,7 @@ const ChatRoom = ({ route }) => {
 
     // Join room and get messages
     socket.emit('join_room', { otherUserId: room.partner.user_id });
-    get_chats(socket, room.partner);
+    get_chats(room.partner);
 
     // Socket event listeners
     const handleTyping = ({ user_id }) => {
@@ -156,18 +170,21 @@ const ChatRoom = ({ route }) => {
       socket.off('message', handleIncomingMssg);
       socket.off('message_seen', handleMessageSeen);
     };
-  }, [socket, room?.partner, user]);
+  }, [socket, room, user]);
 
   const [isOnline, setIsOnline] = useState({b: false, date: room.partner.lastseen})
   useEffect(() => {
 
-    if (is_active.online) {
-      if(is_active.user_id !== user.user_id)return;
-      setIsOnline({b: is_active.online, date: is_active.date})
-    }else{
-      if(!is_active.date)return;
-      setIsOnline({b: is_active.online, date: is_active.date})
-    }
+    // Alert.alert(JSON.stringify(is_active))
+    if (is_active && is_active.user_id === room.partner.user_id) {
+      if (is_active.online) {
+        if(is_active.user_id !== user.user_id)return;
+        setIsOnline({b: is_active.online, date: is_active.date})
+      }else{
+        if(!is_active.date)return;
+        setIsOnline({b: is_active.online, date: is_active.date})
+      }
+    } 
     
   }, [is_active, socket, room, user])
 
@@ -186,7 +203,7 @@ const ChatRoom = ({ route }) => {
         }
       });
     }
-  }, [messages, socket, room?.partner]);
+  }, [messages, socket, room]);
 
   // Scroll handling for inverted list
   const handleScroll = (event) => {
@@ -294,10 +311,12 @@ const ChatRoom = ({ route }) => {
   };
 
   // Fetch chat messages for inverted list
-  const get_chats = (socket, partner) => {
+  const get_chats = (partner) => {
     if (!socket || !partner) return;
 
     socket.emit('get_room_messages', { receiver_id: partner.user_id }, (response) => {
+      // Alert.alert('getting socket: ', JSON.stringify(response))
+      
       if (response && response.success) {
         console.log("Chat room received:", response.messages);
 
@@ -467,7 +486,7 @@ const ChatRoom = ({ route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor={PRIMARY_COLOR} />
+      <StatusBar barStyle="dark-content" backgroundColor={PRIMARY_COLOR} />
       
       {/* Custom Header */}
       <View style={styles.customHeader}>
@@ -487,11 +506,11 @@ const ChatRoom = ({ route }) => {
             <Text style={styles.headerUserStatus}>
               {
                 isTyping ? 'is typing...' :  
-                  isOnline.b ? 
-                  'Online' : 
-                  js_ago(new Date(isOnline.date)).trim().split(' ')[0] === 'NaN' ?
-                  'Offline' :
-                  `Active ${js_ago(new Date(isOnline.date))}`
+                isOnline.b ? 
+                'Online' : 
+                js_ago(new Date(isOnline.date)).trim().split(' ')[0] === 'NaN' ?
+                'Offline' :
+                `Active ${js_ago(new Date(isOnline.date))}`
               }
             </Text>
           </View>

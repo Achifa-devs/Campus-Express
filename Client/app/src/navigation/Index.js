@@ -9,7 +9,7 @@ import Sound from 'react-native-sound';
 import WelcomeScreen from "./Welcome";
 import { set_mode } from "../../redux/info/mode";
 import { getFocusedRouteNameFromRoute, NavigationContainer, useNavigation } from "@react-navigation/native";
-import { Alert, SafeAreaView, StatusBar, StyleSheet } from "react-native";
+import { Alert, AppState, SafeAreaView, StatusBar, StyleSheet } from "react-native";
 import { set_campus } from "../../redux/info/campus";
 import { PaystackProvider } from 'react-native-paystack-webview';
 import { CampusSelection } from "../modals/Campus";
@@ -35,6 +35,7 @@ import { set_is_active } from "../../redux/info/is_active";
 import { set_unread } from "../../redux/info/unread_chats";
 import NetInfo from '@react-native-community/netinfo';
 import { set_is_connected } from "../../redux/info/is_connected";
+import { getMessaging } from "@react-native-firebase/messaging";
 Sound.setCategory("Playback"); // ensure sound plays even in silent mode (iOS)
 function NavigationHandler() {
 
@@ -83,15 +84,6 @@ function NavigationHandler() {
 
 
   useEffect(() => {
-    if(!socket){
-      if(is_connected){
-        let socket = getSocket();
-        setSocket(socket); 
-      }
-    }
-  }, [socket, is_connected])
-
-  useEffect(() => {
    async function getFcm () {
      if(!user) return;
      if(user.fcm) return;
@@ -109,7 +101,25 @@ function NavigationHandler() {
      })
    }
    getFcm()
-  }, [user])
+  }, [user]);
+
+  useEffect(() => {
+    getMessaging().onTokenRefresh(token => {
+      // Send new token to your backend
+      // updateUserFcmToken(token);
+      axios.post('https://cs-node.vercel.app/update-fcm', {
+        user_id: user?.user_id,
+        fcm: token
+      })
+      .then((res) => {
+        console.log(res.data)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    });
+  }, [])
+
   function fetchChatList() {
 
     if(!socket) return;
@@ -299,10 +309,10 @@ function NavigationHandler() {
     socket.on("partner_online", async({partnerId}) => {
       dispatch(set_is_active({online: true, user_id: partnerId, id: Tools.generateId(10)}))
     })
+
   }, [socket])
 
   useEffect(() => {
-
     if(user){
       const initializeSocket = async () => {
         try {
@@ -318,6 +328,37 @@ function NavigationHandler() {
     
   }, [user])
 
+
+  useEffect(() => {
+    if (user) {
+      const subscription = AppState.addEventListener('change', nextState => {
+        console.log('App state changed to:', nextState);
+        // setAppState(nextState);
+  
+        if (nextState === 'background') {
+          console.log('🌓 User minimized or exited the app');
+          // let socket_client = getSocket();
+          async function initializeSocket () {
+            try {
+              await initSocket(user?.user_id);
+              let socket_client = getSocket();
+              socket_client.emit('offline', {})
+            } catch (error) {
+              console.error('Error initializing socket:', error);
+            }
+          }
+          initializeSocket()
+          // You can save data, update status to offline, etc.
+        }
+  
+        if (nextState === 'active') {
+          console.log('☀️ User opened or returned to the app');
+        }
+      });
+  
+      return () => subscription.remove();
+    }
+  }, [user]);
   useEffect(() => {
     if(!socket) return;
     fetchChatList();
@@ -327,14 +368,16 @@ function NavigationHandler() {
     const checkAuthStatus = async () => {
       try {
         const user = await Memory.get("user");
-        if (user) {
+
+        if (user && user?.campus) {
           dispatch(set_user(user));
           dispatch(set_mode("main"));
-          dispatch(set_campus(user?.campus))
+          dispatch(set_campus(user.campus));
           return;
         }
 
         const anon = await Memory.get("anon");
+
         if (anon) {
           dispatch(set_mode("auth"));
         } else {
@@ -346,9 +389,8 @@ function NavigationHandler() {
       }
     };
 
-    setTimeout(() => {
-      checkAuthStatus();
-    }, 3000);
+    const timer = setTimeout(() => checkAuthStatus(), 3000);
+    return () => clearTimeout(timer);
   }, []);
 
 
@@ -412,7 +454,7 @@ function NavigationHandler() {
     <>
 
       <SafeAreaView style={styles.container}>
-        <StatusBar barStyle="light-content" backgroundColor={"#FF4500"} />
+        <StatusBar barStyle="dark-content" backgroundColor={"#FF4500"} translucent={false} /> 
 
         <PaystackProvider publicKey={'pk_live_13343a7bd4deeebc644070871efcdf8fdcf280f7'} defaultChannels={["card", "bank", "ussd", "bank_transfer"]} debug={true}>
           <NavigationContainer 
@@ -511,7 +553,7 @@ function NavigationHandler() {
 
           </NavigationContainer>
         </PaystackProvider>
-      </SafeAreaView>
+      </SafeAreaView> 
 
 
     </>

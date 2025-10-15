@@ -47,13 +47,21 @@ export function ProfileStackScreen() {
                         <View
                             style={{
                             width: '100%',
-                            height: 100,
-                            backgroundColor: '#FF4500',
+                            height: 50,
+                            backgroundColor: '#FFF',
                             paddingHorizontal: 15,
                             paddingTop: 10,
                             flexDirection: 'row',
                             alignItems: 'center',
                             justifyContent: 'space-between',
+                            shadowColor: '#000',
+                            shadowOffset: {
+                            width: 0,
+                            height: 2,
+                            },
+                            shadowOpacity: 0.05,
+                            shadowRadius: 3.84,
+                            elevation: 5,
                             }}
                         >
                             
@@ -65,22 +73,22 @@ export function ProfileStackScreen() {
                                     <Image
                                         source={{ uri: user.photo }}
                                         style={{
-                                            width: 80,
-                                            height: 80,
+                                            width: 40,
+                                            height: 40,
                                             borderRadius: 50,
-                                            marginBottom: 16,
+                                            marginBottom: 12,
                                             borderWidth: 3,
                                             borderColor: '#FF4500',
                                         }}
                                         onError={() => console.log('Error loading image')}
                                     />
                                     :
-                                    <View style={{height: 60, width: 60}}>
-                                        <Ionicons name={"person-circle"} size={60} color={"#fff"} />
+                                    <View style={{height: 40, width: 40}}>
+                                        <Ionicons name={"person-circle"} size={40} color={"#fff"} />
                                     </View> 
                                 }
                                 <View>
-                                    <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>
+                                    <Text style={{ color: '#000', fontWeight: 'bold', fontSize: 16 }}>
                                         {user && user?.fname}{user && '.'}{user && user?.lname[0]}
                                     
                                     </Text>

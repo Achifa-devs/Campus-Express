@@ -34,15 +34,7 @@ const ChatList = ({ navigation }) => {
   const [socket, setSocket] = useState(null);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if(!socket){
-      if(is_connected){
-        let socket = getSocket();
-        setSocket(socket)
-      }
-    }
-    
-  }, [is_connected, socket])
+  
   
   // useEffect(() => {
   //   Memory.get('chat_list').then(res => dispatch(set_chat(res))).catch(err => Alert.alert("Error occured: ", err))
@@ -61,17 +53,31 @@ const ChatList = ({ navigation }) => {
 
     } catch (error) {
       console.error('Error initializing socket:', error);
+      // dispatch(set_chat(null));/
+      setSocket(null);
     }
   }
 
+  useEffect(() => {
+    if(socket){
+      if(is_connected && user?.user_id){
+        initializeSocket()
+      }else{
+        Alert.alert("You are not connected to the internet.")
+      }
+    }
+    
+  }, [is_connected, socket])
+
   function fetchChatList() {
-    socket.emit("get_all_messages", { user_id: user?.user_id }, cb => {
+    socket.emit("get_all_messages", { }, cb => {
       const { messages, success } = cb;
       if (success) {
         let sortedMsgs = [...messages].sort(
           (a, b) => new Date(b.lastMessage.created_at) - new Date(a.lastMessage.created_at)
         );
         dispatch(set_chat(sortedMsgs));
+        console.log(sortedMsgs)
         // Memory.store('chat_list', sortedMsgs);
       }else{
         dispatch(set_chat(null))
@@ -80,35 +86,34 @@ const ChatList = ({ navigation }) => {
   }
 
   useEffect(() => {
-    if(!chat) return;
-    setChatRooms(chat)
-    setFilteredRooms(chat);
-    setLoading(false);
-    setRefreshing(false)
-  }, [chat, user])
-
-  useEffect(() => {
-    if(user){
-      initializeSocket()
+    if(!Array.isArray(chat)){
+      if (!socket) {
+        initializeSocket()
+      }else{
+        fetchChatList()
+      }
+    }else{
+      setLoading(false);
+      setRefreshing(false)
+      setChatRooms(chat)
+      setFilteredRooms(chat);
     }
-  }, [user])
-
-
+  }, [chat, socket])
 
  
-  useEffect(() => {
-    if (!chatRooms) return;
+  // useEffect(() => {
+  //   if (!chatRooms) return;
 
-    // Accumulate unread messages from all rooms
-    let totalUnread = 0;
+  //   // Accumulate unread messages from all rooms
+  //   let totalUnread = 0;
 
-    chatRooms.forEach((data) => {
-      totalUnread += data.unread;
-    });
+  //   chatRooms.forEach((data) => {
+  //     totalUnread += data.unread;
+  //   });
 
-    // ✅ Update Redux state once with the total unread count
-    dispatch(set_unread(totalUnread));
-  }, [chatRooms, user.user_id, dispatch, chat]);
+  //   // ✅ Update Redux state once with the total unread count
+  //   dispatch(set_unread(totalUnread));
+  // }, [chatRooms, user.user_id, dispatch, chat]);
 
   
 
@@ -229,7 +234,7 @@ const ChatList = ({ navigation }) => {
       </View>
 
       {/* Search Bar */}
-      <View style={styles.searchContainer}>
+      {/* <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
           placeholder="Search chats..."
@@ -237,7 +242,7 @@ const ChatList = ({ navigation }) => {
           onChangeText={setSearchQuery}
           placeholderTextColor="#999"
         />
-      </View>
+      </View> */}
 
       {/* Chat Rooms List */}
       <View style={styles.listContainer}>
@@ -275,10 +280,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   header: {
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    padding: 16, 
+    // borderBottomWidth: 1,
+    // borderBottomColor: '#f0f0f0',
+    marginBottom: 2.5, 
     backgroundColor: '#ffffff',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   headerTitle: {
     fontSize: 24,

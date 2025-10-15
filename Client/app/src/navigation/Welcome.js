@@ -46,7 +46,7 @@ const WelcomeScreen = () => {
 
   return (
     <SafeAreaView style={styles.safeContainer}>
-      <StatusBar barStyle="light-content" backgroundColor={"#FF4500"} />
+      <StatusBar barStyle="dark-content" backgroundColor={"#FF4500"} />
      
       <View style={styles.container}>
         <View
@@ -56,9 +56,7 @@ const WelcomeScreen = () => {
           <View style={[styles.logoContainer, { width: screenWidth * 0.35, height: screenWidth * 0.35, borderRadius: (screenWidth * 0.35) / 2 }]}>
             <Image
               style={styles.logo}
-              source={{
-                uri: 'https://res.cloudinary.com/daqbhghwq/image/upload/e_background_removal/f_png/v1750632165/20250622_233137_0000_lq4yjm.png',
-              }}
+              source={require('../assets/logo.png')}
             />
           </View>
 

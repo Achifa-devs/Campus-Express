@@ -188,7 +188,7 @@ const Login = ({ updateActiveJsx }) => {
               <View style={styles.logoContainer}>
                 <Image 
                   style={styles.logo} 
-                  source={{ uri: 'https://res.cloudinary.com/daqbhghwq/image/upload/v1746402998/Untitled_design-removebg-preview_peqlme.png' }} 
+                  source={require('../../assets/lite_img.png')}
                 />
               </View>
               <Text style={styles.title}>Welcome Back</Text>

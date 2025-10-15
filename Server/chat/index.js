@@ -155,7 +155,8 @@ io.on('connection', async(socket) => {
 
   socket.on("get_all_messages", async (data, callback) => {
     console.log("get_all_messages data:", data);
-    const { user_id } = data;
+    // const { user_id } = data;
+    const user_id = userId;
 
     try {
       const result = await Chat.getChatList({ user_id });

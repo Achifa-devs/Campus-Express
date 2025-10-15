@@ -21,7 +21,6 @@ class MainActivity : ReactActivity() {
         // Add these lines for status bar customization
         WindowCompat.setDecorFitsSystemWindows(window, false)
         
-        
         // Set status bar color (works best with setDecorFitsSystemWindows)
     }
 }

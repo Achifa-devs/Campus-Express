@@ -103,7 +103,7 @@ const Search = ({ route, navigation }) => {
   const renderResultItem = ({ item }) => (
     <TouchableOpacity
       style={styles.resultItem}
-      onPress={() => navigation.navigate('Detail', { item })}
+      onPress={() => navigation.navigate('product', { data: item })}
     >
       {
         item.purpose === 'product'

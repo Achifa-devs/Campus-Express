@@ -218,7 +218,7 @@ const AccomodationOffer = ({ data = [], loading }) => {
             </View>
 
             <Text style={styles.stats}>
-              {item?.views ?? 0} {parseInt(item?.views ?? 0) > 1 ? 'views' : 'view'} • {jsAgo(new Date(item?.date))}
+              {/* {item?.views ?? 0} {parseInt(item?.views ?? 0) > 1 ? 'views' : 'view'} • {jsAgo(new Date(item?.date))} */}
             </Text>
           </View>
         </TouchableOpacity>

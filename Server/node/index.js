@@ -33,13 +33,18 @@ CAMPUSSPHERE_SERVER.use(cors({
 }));
 
 // Firebase notification endpoint
-CAMPUSSPHERE_SERVER.post('/notify', (req, res) => {
+CAMPUSSPHERE_SERVER.post('/notify', async(req, res) => {
   // const { token, title, body, media, price, product_id } = req.body;
   const { token, data } = req.body;
   const {title, body } = data
 
-  sendNoticeForNewMsg(token, title, body);
-  res.send({ status: 'Notification sent!', success: true});
+  let result = await sendNoticeForNewMsg(token, title, body);
+  if (result.success) {
+    res.send({ status: 'Notification sent!', success: true});
+  }else{
+    console.log(result)
+    res.status(500).send({err: result.error})
+  }
 });
 
 CAMPUSSPHERE_SERVER.post('/update-fcm', async(req, res) => {

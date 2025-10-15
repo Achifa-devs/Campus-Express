@@ -16,6 +16,7 @@ import { useDispatch } from 'react-redux';
 import { set_mode } from '../../redux/info/mode';
 import Memory from '../utils/memoryHandler';
 import Tools from '../utils/generalHandler';
+import Video from 'react-native-video';
 
 const { width, height } = Dimensions.get('window');
 
@@ -26,20 +27,23 @@ const GetStartedScreen = ({ navigation }) => {
   const slides = [
     {
       id: 1,
+      img: require('../assets/catt.png'),
       title: 'Discover Unique Items',
-      description: 'Find handmade, vintage, and custom products from sellers worldwide.',
+      description: 'Find handmade, vintage, and custom products from campus vendors near you.',
       backgroundColor: '#FFF',
     },
     {
       id: 2,
+      img: require('../assets/bag.png'),
       title: 'Safe & Secure Shopping',
       description: 'Shop with confidence with our buyer protection and secure payment system.',
       backgroundColor: '#FFF',
     },
     {
       id: 3,
+      img: require('../assets/fashion.png'),
       title: 'Sell Your Creations',
-      description: 'Turn your passion into profit by selling your unique items to global buyers.',
+      description: 'Turn your passion into profit by selling your unique items to campus buyers.',
       backgroundColor: '#FFF',
     },
   ];
@@ -86,7 +90,7 @@ const GetStartedScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor={"#FF4500"} />
+      <StatusBar barStyle="dark-content" backgroundColor={"#FF4500"} />
 
       {/* Top Section */}
       <View style={styles.topBar}>
@@ -106,11 +110,7 @@ const GetStartedScreen = ({ navigation }) => {
           {slides.map((slide) => (
             <View key={slide.id} style={[styles.page, { backgroundColor: slide.backgroundColor }]}>
               <View style={styles.content}>
-                <Image
-                  source={{ uri: '' }}
-                  style={styles.image}
-                  resizeMode="contain"
-                />
+                {<Image source={slide.img} style={styles.image} resizeMode="contain" />}
                 <Text style={styles.title}>{slide.title}</Text>
                 <Text style={styles.description}>{slide.description}</Text>
               </View>

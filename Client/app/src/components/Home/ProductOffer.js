@@ -185,8 +185,8 @@ const ItemCard = React.memo(({ item, onPress }) => {
           </View>
 
           <View style={styles.viewsContainer}>
-            <Icon name="eye-outline" size={12} color="#637381" />
-            <Text style={styles.viewsText}>{item?.views || 0}</Text>
+            {/* <Icon name="eye-outline" size={12} color="#637381" />
+            <Text style={styles.viewsText}>{item?.views || 0}</Text> */}
           </View>
         </View>
       </View>
