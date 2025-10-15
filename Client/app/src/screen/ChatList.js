@@ -22,6 +22,7 @@ import { getSocket, initSocket } from '../services/socket';
 import Memory from '../utils/memoryHandler';
 import { set_chat } from '../../redux/info/chat';
 import { useRoute } from '@react-navigation/native';
+import axios from 'axios';
 const ChatList = ({ navigation }) => {
   const [chatRooms, setChatRooms] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -40,67 +41,69 @@ const ChatList = ({ navigation }) => {
   //   Memory.get('chat_list').then(res => dispatch(set_chat(res))).catch(err => Alert.alert("Error occured: ", err))
   // }, [])
 
-
   const initializeSocket = async () => {
     try {
       await initSocket(user?.user_id);
       let socket_client = getSocket();
-
-      if(!socket_client)return;
-      setSocket(socket_client);
-
-      fetchChatList();
-
+      setSocket(socket_client)
     } catch (error) {
       console.error('Error initializing socket:', error);
-      // dispatch(set_chat(null));/
-      setSocket(null);
     }
   }
 
   useEffect(() => {
-    if(socket){
-      if(is_connected && user?.user_id){
+    if(user){
+      initializeSocket()
+    }
+  }, [user])
+
+  useEffect(() => {
+    if(!is_connected){
+      Alert.alert("You are not connected to the internet.")
+    }else{
+      if (user) {
         initializeSocket()
-      }else{
-        Alert.alert("You are not connected to the internet.")
       }
     }
     
-  }, [is_connected, socket])
+  }, [is_connected, user])
+
+  useEffect(() => {
+    if (Array.isArray(chat)) {
+      setChatRooms(chat)
+      setFilteredRooms(chat);
+      setLoading(false);
+      setRefreshing(false)
+    }
+  }, [chat])
+
+  useEffect(() => {
+    // 1️⃣ Initialize socket on mount
+    if (!socket) {
+      initializeSocket();
+    }
+  }, []);
+
 
   function fetchChatList() {
-    socket.emit("get_all_messages", { }, cb => {
+
+    if(!socket) return;
+    socket.emit("get_all_messages", { user_id: user?.user_id }, cb => {
       const { messages, success } = cb;
       if (success) {
+        
         let sortedMsgs = [...messages].sort(
           (a, b) => new Date(b.lastMessage.created_at) - new Date(a.lastMessage.created_at)
         );
-        dispatch(set_chat(sortedMsgs));
-        console.log(sortedMsgs)
+        dispatch(set_chat(sortedMsgs)); 
         // Memory.store('chat_list', sortedMsgs);
-      }else{
-        dispatch(set_chat(null))
+  
       } 
     })
   }
+  
 
-  useEffect(() => {
-    if(!Array.isArray(chat)){
-      if (!socket) {
-        initializeSocket()
-      }else{
-        fetchChatList()
-      }
-    }else{
-      setLoading(false);
-      setRefreshing(false)
-      setChatRooms(chat)
-      setFilteredRooms(chat);
-    }
-  }, [chat, socket])
 
- 
   // useEffect(() => {
   //   if (!chatRooms) return;
 
@@ -116,6 +119,25 @@ const ChatList = ({ navigation }) => {
   // }, [chatRooms, user.user_id, dispatch, chat]);
 
   
+  useEffect(() => {
+    if(!user)return;
+    axios.get('campus-express-production.up.railway.app/chat/list', {
+      params: {
+        userId: user.user_id
+      }
+    })
+    .then(({success, messages}) => {
+      if(success){
+        dispatch(set_chat(messages))
+      }else{
+        Alert.alert("Error retrieving messages")
+      }
+    })
+    .catch(err => {
+      Alert.alert("Error retrieving messages")
+      console.log(err)
+    })
+  }, [user])
 
   useEffect(() => {
     if(!chatRooms) return;

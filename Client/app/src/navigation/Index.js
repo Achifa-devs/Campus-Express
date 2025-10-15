@@ -553,7 +553,7 @@ function NavigationHandler() {
 
           </NavigationContainer>
         </PaystackProvider>
-      </SafeAreaView> 
+      </SafeAreaView>
 
 
     </>

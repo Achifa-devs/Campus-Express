@@ -315,6 +315,49 @@ io.on('connection', async(socket) => {
 
 });
 
+CHAT.get('chat/list', (req,res) => {
+  const userId = req.query;
+  console.log("get_all_messages data:", data);
+  // const { user_id } = data;
+  const user_id = userId;
+
+  try {
+    const result = await Chat.getChatList({ user_id });
+    const entries = Object.entries(result);
+
+    const refinedMssg = await Promise.all(
+      entries.map(async ([key, value]) => {
+        // Extract the other user's ID
+        const partner_id = key.split('_').find(id => id !== user_id);
+
+        // Fetch partner details
+        const partner = await Chat.getUser({ user_id: partner_id });
+
+        // Sort messages by date (descending)
+        const mssgs = value.messages.sort(
+          (a, b) => new Date(b.created_at) - new Date(a.created_at)
+        );
+
+        const unread = value.messages.filter(msgs => msgs.status.status === 'sent' && msgs.status.id === userId).length;
+
+        const lastMessage = mssgs[0];
+
+        return {
+          key,
+          partner,
+          lastMessage,
+          unread
+        };
+      })
+    );
+
+    res.send({ success: true, messages: refinedMssg });
+  } catch (err) {
+    console.error("all_messages error:", err);
+    res.send({ success: false, error: "internal_error" });
+  }
+})
+
 
 process.on('unhandledRejection', (reason, promise) => {
   console.log('Unhandled Rejection at:', reason.stack || reason)
