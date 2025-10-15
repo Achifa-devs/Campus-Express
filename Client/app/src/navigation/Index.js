@@ -36,6 +36,7 @@ import { set_unread } from "../../redux/info/unread_chats";
 import NetInfo from '@react-native-community/netinfo';
 import { set_is_connected } from "../../redux/info/is_connected";
 import { getMessaging } from "@react-native-firebase/messaging";
+import { navigationRef, notifeeNavigationRef } from "./root_nav";
 Sound.setCategory("Playback"); // ensure sound plays even in silent mode (iOS)
 function NavigationHandler() {
 
@@ -447,7 +448,7 @@ function NavigationHandler() {
   }, [user]); // runs whenever campus changes
 
   const routeNameRef = useRef();
-  const navigationRef = useRef(); 
+  // const navigationRef = useRef(); 
 
   return (
 
@@ -457,7 +458,7 @@ function NavigationHandler() {
         <StatusBar barStyle="dark-content" backgroundColor={"#FF4500"} translucent={false} /> 
 
         <PaystackProvider publicKey={'pk_live_13343a7bd4deeebc644070871efcdf8fdcf280f7'} defaultChannels={["card", "bank", "ussd", "bank_transfer"]} debug={true}>
-          <NavigationContainer  
+          <NavigationContainer 
             ref={navigationRef}
             onReady={() =>
               (routeNameRef.current = navigationRef.current.getCurrentRoute()?.name)

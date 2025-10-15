@@ -5,9 +5,11 @@ import notifee, {
   AndroidImportance,
   AndroidStyle,
   AndroidVisibility,
+  EventType,
 } from '@notifee/react-native';
 import messaging from '@react-native-firebase/messaging';
 import { navigate } from './src/navigation/root_nav';
+import Tools from './src/utils/generalHandler';
 
 // ✅ Create notification channel (for both foreground and background)
 async function createNotificationChannel() {
@@ -25,14 +27,26 @@ notifee.onBackgroundEvent(async ({ type, detail }) => {
   if (type === EventType.PRESS && detail.notification?.data) {
     const { room } = detail.notification.data;
     // Save to some global or handle when app starts
-    navigate('chat-room', { room });
+    navigate('Chat', { 
+      room,
+      from: 'notifee',
+      id: Tools.generateId(10) 
+    });
   }
 });
+
+// from: 'notifee', 
+// room: { key: room, partner: response.partner },
+// id: Tools.generateId(0)
 
 notifee.onForegroundEvent(({ type, detail }) => {
   if (type === EventType.PRESS && detail.notification?.data) {
     const { room } = detail.notification.data;
-    navigate('chat-room', { room });
+    navigate('Chat', { 
+      room,
+      from: 'notifee',
+      id: Tools.generateId(10) 
+    });
   }
 });
 

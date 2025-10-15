@@ -36,7 +36,7 @@ export function ChatStackScreen() {
         from,
         room
         } = resource;
-        if(from === 'product'){
+        if(from === 'product'|| from === 'notifee'){
         navigation.navigate('chat-room', {
             room
         })
