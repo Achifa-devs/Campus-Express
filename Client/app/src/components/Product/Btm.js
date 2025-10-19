@@ -139,8 +139,8 @@ export default function Btm({ updateUser, user_id, navigation, product_id, updat
                                   </View>
                               )}
                               <View style={styles.onlineStatus}>
-                                  <Ionicons name="ellipse" size={8} color="#00FF00" />
-                                  <Text style={styles.onlineText}>Online {js_ago(new Date(data?.lastseen))}</Text>
+                                  {/* <Ionicons name="ellipse" size={8} color="#00FF00" /> */}
+                                  {/* <Text style={styles.onlineText}>Online {js_ago(new Date(data?.lastseen))}</Text> */}
                               </View>
                           </View>
                       </View>

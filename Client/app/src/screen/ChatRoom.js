@@ -16,7 +16,8 @@ import {
   TouchableWithoutFeedback,
   Modal,
   ScrollView,
-  Alert
+  Alert,
+  ActivityIndicator
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
@@ -25,11 +26,13 @@ import axios from 'axios';
 import js_ago from 'js-ago';
 import Video from 'react-native-video';
 import Tools from '../utils/generalHandler';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const ChatRoom = ({ route }) => {
   const { room } = route.params;
   const navigation = useNavigation();
   const [messages, setMessages] = useState([]);
+  const [chatLoading, setChatLoading] = useState(true);
   const [newMessage, setNewMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [showOptionsModal, setShowOptionsModal] = useState(false);
@@ -341,9 +344,11 @@ const ChatRoom = ({ route }) => {
 
         // Reverse the messages for inverted FlatList (newest first at top)
         setMessages(formattedMessages.reverse());
+        setChatLoading(false)
       } else {
         console.error("Failed to fetch chat room:", response?.error);
         Alert.alert("Error", "Failed to load messages");
+        setChatLoading(false)
       }
     });
   };
@@ -490,30 +495,72 @@ const ChatRoom = ({ route }) => {
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={PRIMARY_COLOR} />
       
+      {chatLoading> 0 &&
+        <View style={{
+          height: '100%', 
+          width: '100%',
+          position: 'absolute',
+          top: 1,
+          left: 0,
+          zIndex: 1000,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: '#FFF8F6',
+          opacity: .5
+        }}>
+          <ActivityIndicator size={'large'} color={'#FF4500'}></ActivityIndicator>
+        </View>
+      }
       {/* Custom Header */}
       <View style={styles.customHeader}>
         <TouchableOpacity 
           style={styles.headerUserInfo}
           onPress={() => navigation.goBack()}
         >
-          <View style={styles.headerAvatar}>
-            <Text style={styles.headerAvatarText}>
-              {room.partner.photo ? '👤' : '👤'}
-            </Text>
+          <View style={styles.avatarContainer}>
+            {
+            !room.partner || !room.partner.photo
+            ?
+            <View style={[styles.avatar, {display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff4e0'}]}>
+              <Ionicons name={"person-circle-outline"} size={45} color={"#FF4500"} />
+            </View>
+            :
+            <Image
+              source={{ uri: room.partner.photo }}
+              style={styles.avatar}
+              resizeMode="cover"
+            />
+            }
+            {/* {item.isOnline && <View style={styles.onlineIndicator} />} */}
           </View>
           <View style={styles.headerUserDetails}>
             <Text style={styles.headerUserName}>
               {room.partner.fname}.{room.partner.lname?.[0] || ''}
             </Text>
             <Text style={styles.headerUserStatus}>
-              {
-                isTyping ? 'is typing...' :  
-                isOnline.b ? 
-                'Online' : 
-                js_ago(new Date(isOnline.date)).trim().split(' ')[0] === 'NaN' ?
-                'Offline' :
-                `Active ${js_ago(new Date(isOnline.date))}`
+             {
+                isTyping
+                  ? 'is typing...'
+                  : room?.partner?.lastseen === 'now'
+                    ? 'Active now'
+                    : (() => {
+                        const lastSeenDate = new Date(room?.partner?.lastseen);
+                        const now = new Date();
+
+                        if (!room?.partner?.lastseen || isNaN(lastSeenDate.getTime())) {
+                          return 'Offline';
+                        }
+
+                        // Prevent js_ago() from crashing on future dates
+                        if (lastSeenDate > now) {
+                          return 'Active now';
+                        }
+
+                        return `Active ${js_ago(lastSeenDate)}`;
+                      })()
               }
+
             </Text>
           </View>
         </TouchableOpacity>
@@ -758,10 +805,22 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 255, 255, 0.3)',
     marginRight: 12,
   },
+    avatarContainer: {
+    position: 'relative',
+    marginRight: 16,
+  },
+  avatar: {
+    width: 45,
+    height: 45,
+    borderRadius: 30,
+  },
   headerAvatarText: {
     color: '#FFFFFF',
     fontSize: 20,
     fontWeight: 'bold',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   headerUserDetails: {
     flex: 1,

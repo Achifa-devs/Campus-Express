@@ -44,7 +44,7 @@ notifee.onForegroundEvent(({ type, detail }) => {
 
     const { room, partner } = detail.notification.data;
     
-
+    // console.log("room",JSON.parse(partner))
     navigate('Chat', { 
       room: {
         conversation_id: room, partner: JSON.parse(partner)
