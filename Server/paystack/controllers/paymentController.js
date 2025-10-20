@@ -167,28 +167,46 @@ async function promotionHandler(event) {
 
 async function checkoutHandler(event) {
   const { amount, reference, status, metadata, channel } = event.data;
-  const { user_id, order_id } = metadata;
+  const { user_id, order_data } = metadata;
 
-  // Validate required data
-  if (!reference || !amount || !status || !user_id || !order_id) {
+  console.log(reference , amount , status , user_id , order_data)
+
+  if (!reference || !amount || !status || !user_id || !order_data) {
     console.error('Missing required payment data');
     throw new Error("Invalid payment data");
   }
 
+  // Check for duplicate transaction
   const existingTx = await Payment.findTransactionByReference(reference);
-  
   if (existingTx.length > 0) {
     console.log(`Transaction already exists for ${reference}, skipping insert`);
     return reference;
   }
-  console.log(`Updating existing order payment status for reference: ${reference}`);
-  await Payment.markOrderAsPaidAndUpdateStatus(order_id);
-  console.log(`Order marked as paid for order_id: ${order_id}`);
 
+  console.log(`Creating orders for reference: ${reference}`);
+
+  // Create all orders and collect their IDs
+  const orderResults = await Promise.all(
+    order_data.map(async (data) => {
+      const order = await Payment.createOrder(data);
+      console.log(`Order created with order_id: ${order.order_id}`);
+      return order.order_id;
+    })
+  );
+
+  // Create transaction record
   const new_status = JSON.stringify({ state: status });
-  await Payment.createOrderTransaction({ reference, order_id, amount, user_id, payment_method: channel, status: new_status });
-  console.log(`Order payment record created for reference: ${reference}`);
+  await Payment.createOrderTransaction({
+    reference,
+    order_id: JSON.stringify(orderResults), // store all order IDs as JSON array
+    amount,
+    user_id,
+    payment_method: channel,
+    status: new_status
+  });
+
+  console.log(`Transaction created for reference: ${reference} (orders: ${orderResults.join(', ')})`);
 
   return reference;
-
 }
+

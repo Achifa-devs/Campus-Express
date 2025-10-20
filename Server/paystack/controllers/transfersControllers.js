@@ -20,3 +20,7 @@ function handleTransferWebhook (req, res) {
     Transfer.initiateTransfer(amount, recipient, reason, reference);
 
 }
+
+module.exports = {
+  handleTransferWebhook,
+};

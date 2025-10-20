@@ -57,7 +57,7 @@ const LodgeCard = ({ item, state='private', onDelete, onPromote }) => {
     const onShare = async (item) => {
       try {
         // Build URL with price as the reference
-        const url = `https://www.campussphere.net/store/product/${item.product_id}`;
+        const url = `https://www.campussphere.net/store/${item.product_id}`;
   
         const result = await Share.share({
           message: `Check out this lodge for ₦${item.price} on Campus Sphere: ${url}`,

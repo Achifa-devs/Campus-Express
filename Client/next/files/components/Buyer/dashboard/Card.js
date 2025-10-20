@@ -9,7 +9,8 @@ import {
     useState
 } from 'react'
 import imgSvg from '../../../assets/image-svgrepo-com (4).svg'; 
-
+import cartSvg from '../../../assets/add-to-the-cart-svgrepo-com.svg'
+import ytCartSvg from '../../../assets/add-to-cart-yt.svg'
 import orderSvg from '@/public/order-completed-svgrepo-com.svg'
 import Thumbnail from '../Thumbnail'
 import conditionSvg from '@/public/condition-point-svgrepo-com.svg'
@@ -21,6 +22,8 @@ import { setSaveTo } from '@/redux/buyer_store/Save'
 import { open_notice } from '@/files/reusable.js/notice'
 import axios from 'axios';
 import { save_item, unsave_item } from '@/files/utils.js/wishlist';
+import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup';
+import { setCartTo } from '@/redux/buyer_store/Cart';
 // import { SaveItem } from '@/app/api/buyer/post'
 // import { UnSaveItem } from '@/app/api/buyer/delete'
 // import { GetOrders } from '@/app/api/buyer/get'
@@ -141,6 +144,55 @@ const Card = ({item, index}) => {
             .catch((err) => console.log(err))
         }
     }, [buyer_info]) 
+
+    let {Cart} = useSelector(s => s.Cart);
+    const [is_carted, set_is_carted] = useState(false);
+    useEffect(() => {
+        let filter = Cart.filter(cart_item => cart_item.product_id === item.product_id)
+        set_is_carted(filter.length > 0)
+    }, [Cart])
+
+
+    function cartHandler () {
+        buyer_overlay_setup(true, 'Processing')
+        if (!is_carted) {
+            axios.post('/api/store/cart/create', {
+                product_id: item.product_id,
+                user_id: buyer_info.user_id
+            }).then((response) => {
+                buyer_overlay_setup(false, '...')
+
+                if(response.data.success){
+                    dispatch(setCartTo([...Cart, response.data.cart_item]))
+                    open_notice(true, "Item was  added to cart successfully")
+                }else{
+                    open_notice(true, "Item was not added to cart due to error")
+                }
+            }).catch(err => {
+                console.log(err);
+                buyer_overlay_setup(false, '...')
+                open_notice(true, "Item was not added to cart due to error")
+            })
+        }else{
+            let id = Cart.filter(d => d.product_id === item.product_id)[0].cart_id
+            axios.post('/api/store/cart/delete', {
+                cart_id: id
+            }).then((response) => {
+                buyer_overlay_setup(false, '...')
+
+                if(response.data.success){
+                    dispatch(setCartTo(Cart.filter(d => d.cart_id !== id)))
+                    open_notice(true, "Item was  deleted from cart successfully")
+                }else{
+                    open_notice(true, "Item was not deleted from cart due to error")
+                }
+            }).catch(err => {
+                console.log(err);
+                buyer_overlay_setup(false, '...')
+                open_notice(true, "Item was not deleted from cart due to error")
+            })
+        }
+    }
  
     return ( 
         <> 
@@ -159,6 +211,32 @@ const Card = ({item, index}) => {
                         
                         
                     }
+
+                    <button style={{
+                        position: 'absolute',
+                        top: '15px',
+                        right: '15px',
+                        width: 'fit-content',
+                        height: 'fit-content',
+                        borderRadius: '50%',
+                        padding: '3px',
+                        background: is_carted ? '#FF4500' : 'rgba(0,0,0,.5)',
+                        // border: '1px solid #FF4500',
+                        zIndex: '100'
+                    }} onClick={e => {
+                        cartHandler()
+                    }}
+                        disabled={
+                            order_list?.filter((data) => data?.product?.product_id === item?.product_id && data?.order?.user_id === buyer_info.user_id).length > 0
+                        }
+                    >
+                        {
+                           
+                            <img src={ytCartSvg.src} style={{height: '22px', width: '22px'}} alt="" />
+                            
+                        }
+                    </button>
+
 
                     <div className="card-body" style={{position: 'relative'}}>
                         
@@ -291,7 +369,7 @@ const Card = ({item, index}) => {
 
                             'View Order'
                             :
-                            'Place Order Now'
+                            'Pay Now'
                         }</span>
                     </button>
 

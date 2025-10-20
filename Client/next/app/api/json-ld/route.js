@@ -43,7 +43,7 @@ export async function GET() {
         "@type": "Product",
         "name": item.title,
         "image": `https://cdn.campussphere.net/images/${item.thumbnail_id}`,
-        "url": `https://www.campussphere.net/store/product/${item.product_id}`,
+        "url": `https://www.campussphere.net/store/${item.product_id}`,
         "offers": {
           "@type": "Offer",
           "price": item.price,

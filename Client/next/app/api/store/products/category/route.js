@@ -33,8 +33,8 @@ export async function GET(req) {
       query = `SELECT * FROM products WHERE state->>'state' = 'active' AND others->>'gender' = $1 LIMIT $2`;
       queryParams = [capGender, limit];
     } else if (['fashion', 'lodge & apartments'].includes(category.toLowerCase())) {
-      query = `SELECT * FROM products WHERE category = $1 AND state->>'state' = 'active' AND others->>'gender' = $2 LIMIT $3`;
-      queryParams = [category, capGender, limit];
+      query = `SELECT * FROM products WHERE category = $1 AND state->>'state' = 'active' AND (others->>'gender' = $2 OR others->>'gender' = $4) LIMIT $3`;
+      queryParams = [category, capGender, limit, 'Unisex'];
     } else if (category !== '') {
       query = `SELECT * FROM products WHERE category = $1 AND state->>'state' = 'active' LIMIT $2`;
       queryParams = [category, limit];

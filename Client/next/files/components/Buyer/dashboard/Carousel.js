@@ -110,7 +110,7 @@ const Card = ({item, index}) => {
                                 color: '#000',
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
-                            }} onClick={e => window.location.href=(`/store/product/${item.product_id}`)} >{item.title}</small>
+                            }} onClick={e => window.location.href=(`/store/${item.product_id}`)} >{item.title}</small>
                             : 
                             <small style={{
                                 display: 'block',
@@ -122,7 +122,7 @@ const Card = ({item, index}) => {
                                 color: '#000',
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
-                            }} onClick={e => window.location.href=(`/store/product/${item.product_id}`)} >{item.title}</small>
+                            }} onClick={e => window.location.href=(`/store/${item.product_id}`)} >{item.title}</small>
                         }
 
                       
@@ -131,11 +131,11 @@ const Card = ({item, index}) => {
                             {
                                 screenWidth > 479
                                 ?
-                                <h6 onClick={e => window.location.href=(`/store/product/${item.product_id}`)} style={{marginBottom: '10px', marginTop: '10px', fontWeight: '500', fontSize: 'small', color: '#000', fontFamily: 'sans-serif'}}>&#8358;{
+                                <h6 onClick={e => window.location.href=(`/store/${item.product_id}`)} style={{marginBottom: '10px', marginTop: '10px', fontWeight: '500', fontSize: 'small', color: '#000', fontFamily: 'sans-serif'}}>&#8358;{
                                     new Intl.NumberFormat('en-us').format(item.price)
                                 }</h6>
                                 : 
-                                <h6 onClick={e => window.location.href=(`/store/product/${item.product_id}`)} style={{marginBottom: '10px', fontWeight: '500', color: '#000'}}>&#8358;{new Intl.NumberFormat('en-us').format(item.price)}</h6>
+                                <h6 onClick={e => window.location.href=(`/store/${item.product_id}`)} style={{marginBottom: '10px', fontWeight: '500', color: '#000'}}>&#8358;{new Intl.NumberFormat('en-us').format(item.price)}</h6>
                             }
 
                             <div style={{

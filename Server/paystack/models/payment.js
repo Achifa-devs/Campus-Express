@@ -28,9 +28,6 @@ class Payment {
   }
 
 
-
-
-
   static async createTool(paymentData) {
     const { amount, plan, reference, user_id, start_date, end_date } = paymentData;
     const query = `
@@ -65,27 +62,76 @@ class Payment {
   // completed / confirmed → Customer has confirmed receipt.
 
 
-  static async markOrderAsPaidAndUpdateStatus(order_id) {
-    const status = {
-      outcome: "success",
-      completed: true,
-      completedAt: new Date()
-    }
-    const query = `
-      UPDATE orders 
-      SET status = jsonb_set(
-        status,
-        '{confirmed}', 
-        $3::jsonb,
-        true
-      ),
-      havepaid = $1
-      WHERE order_id = $2 
-      RETURNING *;
-    `;
-    
-    const result = await pool.query(query, [true, order_id, JSON.stringify(status)]);
-    return result.rows[0];
+  static async createOrder(order_data) {
+    const {
+      user_id,
+      product_id,
+      price,
+      stock,
+      locale,
+      vendor_id,
+      order_id,
+      shipping_fee,
+      date
+    }= order_data
+    const orderStatus = {
+      pending: {      // Order placed, waiting for payment
+        completed: true,
+        completedAt: new Date(),
+        outcome: 'success'
+      },
+      confirmed: {    // Payment confirmed
+        completed: true,
+        completedAt: new Date(),
+        outcome: 'success'
+      },
+      processing: {   // Preparing for shipment
+        completed: false,
+        completedAt: null,
+        outcome: null
+      },
+      shipping: {      // Order dispatched
+        completed: false,
+        completedAt: null,
+        outcome: null
+      },
+      delivered: {    // Order delivered
+        completed: false,
+        completedAt: null,
+        outcome: null
+      },
+      completed: {    // Order successfully closed
+        completed: false,
+        completedAt: null,
+        outcome: null
+      },
+      cancelled: {
+        completed: false,
+        completedAt: null,
+        outcome: null
+      },
+      refunded: {
+        completed: false,
+        completedAt: null,
+        outcome: null
+      },
+      returned: {
+        completed: false,
+        completedAt: null,
+        outcome: null
+      }
+    };
+
+    const insertOrder = await pool.query(
+      `INSERT INTO orders(
+        id, order_id, product_id, status, date, stock, user_id, price, pick_up_channels, havePaid, vendor_id, shipping_fee
+      ) VALUES (
+        DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, true, $9, $10
+      ) RETURNING id`,
+      [order_id, product_id, JSON.stringify(orderStatus), date, stock, user_id, price, JSON.stringify(locale), vendor_id, shipping_fee]
+    );
+
+    return insertOrder.rows[0];
   }
 
   static async createOrderTransaction({ reference, order_id, amount, user_id, payment_method, status }) {

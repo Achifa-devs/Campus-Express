@@ -1,5 +1,6 @@
 import { 
-    useDispatch 
+    useDispatch, 
+    useSelector
 } from "react-redux";
 import { 
     useEffect, 
@@ -13,133 +14,130 @@ import {
 import { 
     useNavigate 
 } from "react-router-dom";
-import Thumbnail from "./Thumbnail";
 // import { 
 //     GetProductThumbnail 
 // } from "@/app/api/buyer/get";
-import { 
-    UpdateCartUnit 
-} from "@/app/api/buyer/update";
-import { DeleteItemFromCart } from "@/app/api/buyer/delete";
+// import { 
+//     UpdateCartUnit 
+// } from "@/app/api/buyer/update";
+// import { DeleteItemFromCart } from "@/app/api/buyer/delete";
 import { setCartTo } from "@/redux/buyer_store/Cart";
-import { GetProductThumbnail } from "@/app/api/buyer/get";
+// import { GetProductThumbnail } from "@/app/api/buyer/get";
+import Thumbnail from "../Thumbnail";
+import axios from "axios";
+import { buyer_overlay_setup } from "@/files/reusable.js/overlay-setup";
+import { open_notice } from "@/files/reusable.js/notice";
 
-const Card = ({item,index,unit,getTotalPrice, product_id}) => {
+const Card = ({item,index,unit,getTotalPrice}) => {
 
-    // let [isLoggedIn, setIsLoggedIn] = useState(false)
-    // useEffect(() => {
-    //     setIsLoggedIn(isBuyerLoggedIn)
-    // },[])
     let dispatch = useDispatch()
+    let {Cart} = useSelector(s => s.Cart)
+    
 
-    function UpdateCart(type,item) {
-        let oldUnit = unit.filter(data => data.product_id === item.item.product_id)[0].unit;
-                    
-                   
-        
-        function Handler(params) {
-            try {
-                let result = UpdateCartUnit(type,window.localStorage.getItem('CE_user_id'),item.item.product_id)
-                if(type === 'add'){
-                    let oldUnit = unit.filter(data => data.product_id === item.item.product_id)[0].unit;
-                    
-                    if(oldUnit < JSON.parse(item.item.others).stock){
-                        //unit.filter(data => data.product_id === item.item.product_id).item.unit = oldUnit + 1;
-        
-                        document.querySelector(`#ce${item.item.product_id}`).innerHTML = unit.filter(data => data.product_id === item.item.product_id)[0].unit = oldUnit + 1;
-                        getTotalPrice()
-                    }
-        
-                }else{
-                    let oldUnit = unit.filter(data => data.product_id === item.item.product_id)[0].unit;
-        
-                    if(oldUnit > 1){
-                        //unit.filter(data => data.product_id === item.item.product_id).item.unit = oldUnit + 1;
-                        document.querySelector(`#ce${item.item.product_id}`).innerHTML = unit.filter(data => data.product_id === item.item.product_id)[0].unit = oldUnit - 1;
-                        getTotalPrice()
-                    }
-                    
-                }
-            } catch (error) {
-                console.log(error)
-            }
-        }
 
-        if(type === 'add'){
-            if(oldUnit < JSON.parse(item.item.others).stock){
-                Handler()
-            }
-        }else{
-            if(oldUnit > 1){
-                Handler()
-            }
-        }
- 
-    }
 
-    function AddToCart(e,product_id) {
+    function RmFromCart(e) {
         e.target.disabled = true;
-
         try {
-            let result = DeleteItemFromCart(product_id, window.localStorage.getItem('CE_user_id'))
-            dispatch(setCartTo(result))
-            e.target.disabled = false;
-            e.target.parentElement.remove()
-            getTotalPrice(); 
+            cartHandler(e);
+           
         } catch (error) {
             console.log(error)
         }
     }
 
-    let [img, set_img] = useState(imgSvg);
-  
-    useEffect(() => {
-        try {
-            let result = GetProductThumbnail(item.product_id)
-            set_img(result.file)
-        } catch (error) {
-            console.log(error)
-        }
-    },[])
+    function cartHandler (e) {
+        buyer_overlay_setup(true, 'Processing')
+        let id = Cart.filter(d => d.product_id === item.product_id)[0].cart_id
+        axios.post('/api/store/cart/delete', {
+            cart_id: id
+        }).then((response) => {
+            buyer_overlay_setup(false, '...')
+            e.target.disabled = true;
+            if(response.data.success){
+                getTotalPrice(); 
+                dispatch(setCartTo(Cart.filter(d => d.cart_id !== id)))
+                open_notice(true, "Item was  deleted from cart successfully")
+            }else{
+                open_notice(true, "Item was not deleted from cart due to error")
+            }
+        }).catch(err => {
+            console.log(err);
+            e.target.disabled = true;
+            buyer_overlay_setup(false, '...')
+            open_notice(true, "Item was not deleted from cart due to error")
+        })
+    }
 
+
+    function updateHandler (type) {
+        buyer_overlay_setup(true, 'Processing')
+        let id = Cart.filter(d => d.product_id === item.product_id)[0].cart_id
+        axios.post(`/api/store/cart/update`, {
+            cart_id: id,
+            type
+        }).then((response) => {
+            buyer_overlay_setup(false, '...')
+
+            if(response.data.success){
+                dispatch(setCartTo(
+                    Cart.map(item =>
+                        item.cart_id === id
+                        ? { ...item, unit: type === 'add' ? parseInt(item.unit)+1 : parseInt(item.unit)-1}
+                        : item
+                    )
+                ))
+                open_notice(true, "Item was  deleted from cart successfully")
+            }else{
+                open_notice(true, "Item was not deleted from cart due to error")
+            }
+        }).catch(err => {
+            console.log(err);
+            buyer_overlay_setup(false, '...')
+            open_notice(true, "Item was not deleted from cart due to error")
+        })
+    }
+
+    useEffect(() => {
+       getTotalPrice(); 
+    }, [Cart])
+  
     return ( 
         <>
             <div key={index} className="buyer-cart-card shadow-sm">
-                <Thumbnail product_id={product_id} />
-                <button  className="buyer-cart-remove-btn" style={{background: 'orangered'}} onClick={e => AddToCart(e,item.item.product_id)}>
+                <div className='thumbnail-cnt'>
+                    <Thumbnail  thumbnail_id={item?.thumbnail_id} height={'100%'} />
+                </div> 
+                <button  className="buyer-cart-remove-btn" style={{background: 'orangered'}} onClick={e => RmFromCart(e)}>
                     Remove
                 </button>
 
                 <div className="buyer-cart-body">
 
                     <div className='buyer-item-title' style={{fontWeight: '500', fontSize: 'medium'}}>
-                        <p>{item.item.title}</p>
-                    </div>
-
-                    <div style={{fontWeight: '500', fontSize: 'small'}} className='buyer-item-seller'>
-                        <span>Seller: Jason.N.N</span>
+                        <p>{item.title}</p>
                     </div>
 
                     <div className="buyer-item-price"> 
-                        <span style={{fontWeight: 'bold'}}>&#8358;{new Intl.NumberFormat('en-us').format(item.item.price)} </span>
+                        <span style={{fontWeight: 'bold'}}>&#8358;{new Intl.NumberFormat('en-us').format(item.price)} </span>
                     </div>
 
                     <div className="buyer-item-units">
-                        <span>{JSON.parse(item.item.others).stock} units Available</span>
+                        <span>{item.stock} units Available</span>
                     </div>
 
                     <div className="buyer-item-spec">
                         
                     </div>
 
-                    <div className="buyer-items-stock" data-price={item.item.price}>
-                        <button onClick={e => UpdateCart('minus',item)} data-id={item.item.product_id} disabled={unit < 2 ? true : false}>-</button>
+                    <div className="buyer-items-stock" data-price={item.price}>
+                        <button onClick={e => updateHandler('reduce')} data-id={item.product_id} disabled={unit.unit < 2 ? true : false}>-</button>
 
-                        <div id={`ce${item.item.product_id}`}>
-                            {item.cart.unit}
+                        <div id={`ce${item.product_id}`}>
+                            {item.unit}
                         </div>
 
-                        <button onClick={e => UpdateCart('add',item)} disabled={JSON.parse(item.item.others).stock > 1 && unit.filter(data => data.product_id === item.item.product_id)[0].unit <= JSON.parse(item.item.others).stock ? false : true}>+</button>
+                        <button onClick={e => updateHandler('add')} disabled={unit.unit == item.stock ? true : false}>+</button>
                     </div>
                 </div>
             </div>

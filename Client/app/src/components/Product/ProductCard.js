@@ -38,7 +38,7 @@ const ProductCard = ({ item, state='private', onDelete, onStatusChange, onPromot
   const onShare = async (item) => {
     try {
       // Build URL with price as the reference
-      const url = `https://www.campussphere.net/store/product/${item.product_id}`;
+      const url = `https://www.campussphere.net/store/${item.product_id}`;
 
       const result = await Share.share({
         message: `Check out this product for ₦${item.price} Campus Sphere: ${url}`,

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import items from '../../../items.json'
-import { GetItems } from "../../../api/buyer";
 import { useDispatch, useSelector } from "react-redux";
 import { setCategoryTo } from "../../../redux/buyer/Category";
 

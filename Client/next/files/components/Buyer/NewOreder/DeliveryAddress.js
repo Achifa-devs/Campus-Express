@@ -8,7 +8,7 @@ import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup';
 import { data, school_choices } from './location';
 import { usePathname } from 'next/navigation';
 
-export default function DeliveryAddress({ item, order_id, order, updateDeliveryOpt }) {
+export default function DeliveryAddress({ item, updateDeliveryOpt }) {
   let {
           user_id
       }=useSelector(s=>s.user_id);
@@ -44,7 +44,8 @@ export default function DeliveryAddress({ item, order_id, order, updateDeliveryO
     }
     function deleteLocation(data) {
         let newLocaleList = locale.filter(item => item.index !== data)
-        setLocale(newLocaleList)
+        setLocale(newLocaleList);
+        // setdeliveryOpt(-1)
     }
     function updateLocation(data) {
       if(data.locale.split(',')[0]!=='' && data.locale.split(',')[1]!=='' && data.locale.split(',')[2]!=='' && data.locale.split(',')[3]!=='' && data.date.mth !== '' && data.date.day !== null){
@@ -85,18 +86,18 @@ export default function DeliveryAddress({ item, order_id, order, updateDeliveryO
     // let [order_list, set_order_list] = useState('');
 
 
-    useEffect(() => {
-      if(order !== ''){
-        if(order[0]?.order?.pick_up_channels[0]?.channel === 'Custom Pickup Location'){
-          document.querySelector('.delivery-0').checked = true;
-        }else{
-          document.querySelector('.delivery-1').checked = true;
-        }
-        setLocale([{channel: order[0]?.order?.pick_up_channels[0]?.channel, locale: order[0]?.order?.pick_up_channels[0]?.locale, date: order[0]?.order?.pick_up_channels[0]?.date, index: locale.length}])
-        setpickUpChannel(order[0]?.order?.pick_up_channels[0]?.channel)
-        setdeliveryOpt(order[0]?.order?.pick_up_channels[0]?.channel === 'Custom Pickup Location' ? 0 : 1)
-      }
-    }, [order])
+    // useEffect(() => {
+    //   if(order !== ''){
+    //     if(order[0]?.order?.pick_up_channels[0]?.channel === 'Custom Pickup Location'){
+    //       document.querySelector('.delivery-0').checked = true;
+    //     }else{
+    //       document.querySelector('.delivery-1').checked = true;
+    //     }
+    //     setLocale([{channel: order[0]?.order?.pick_up_channels[0]?.channel, locale: order[0]?.order?.pick_up_channels[0]?.locale, date: order[0]?.order?.pick_up_channels[0]?.date, index: locale.length}])
+    //     setpickUpChannel(order[0]?.order?.pick_up_channels[0]?.channel)
+    //     setdeliveryOpt(order[0]?.order?.pick_up_channels[0]?.channel === 'Custom Pickup Location' ? 0 : 1)
+    //   }
+    // }, [order])
   
   // Custom Location Pickup
 
@@ -259,7 +260,7 @@ export default function DeliveryAddress({ item, order_id, order, updateDeliveryO
 }
 
 
-function PickupChannel({updateLocation,title,edit,order_data,item}) {
+function PickupChannel({updateLocation,title,edit,item}) {
     // let [state, setState] = useState('')
   let [campus, setCampus] = useState('')
   // alert(title)
@@ -267,7 +268,6 @@ function PickupChannel({updateLocation,title,edit,order_data,item}) {
 
    
     const [campusLocaleList, setCampusLocaleList] = useState([]);
-    let {buyerData} = useSelector(s=>s.buyerData)
     useEffect(() => {
         setSelectedMonth(parseInt(edit?.date?.mth));
         setDay(edit?.date?.dy);
@@ -436,28 +436,12 @@ function PickupChannel({updateLocation,title,edit,order_data,item}) {
                     <select style={{width: '100%'}} name='state' onInput={e => {setState(e.target.value)}} placeholder="" id="" >
                       <option value="">Select State</option>
                       {
-                        item
-                        ?
-                          JSON.parse(item?.shipping_range)?.out_state?.selected 
-                          ?
-                          
-                          data.map((state,index) => {
-                            return(
-                              
-                              <option key={index} value={state.label}>{item.label}</option>
-                            )
-                          })
-                          :
-                          
-                          data.filter(filt => filt?.label?.toLowerCase() === item?.uni_state?.toLowerCase()).map((filtered_state,index) => {
-                           
-                            return(
-                             <option selected key={index} value={filtered_state?.label}>{filtered_state?.label}</option>
-                            )
-                          })
-                          
-                        :
-                        ''
+                        data.map((state,index) => {
+                          return(
+                            
+                            <option key={index} value={state.label}>{state.label}</option>
+                          )
+                        })
                         
                       }
                     </select>
@@ -468,19 +452,9 @@ function PickupChannel({updateLocation,title,edit,order_data,item}) {
                     <select style={{width: '100%'}} name='town' placeholder="" id="" onInput={e => {setCity(e.target.value)}}>
                       <option value="">Select University</option>
                       {
-                        item
-                        ?
-                          inCampusSelected && !inStateSelected && !outStateSelected ? (
-                            
-                            <option selected value={selectedCampus}>{selectedCampus}</option>
-                          ) : (
-                            campusLocaleList.map((uni, index) => (
-                              <option key={index} value={uni.text}>{uni.text}</option>
-                            ))
-                          )
-                                                  
-                        :
-                        ''
+                        campusLocaleList.map((uni, index) => (
+                          <option key={index} value={uni.text}>{uni.text}</option>
+                        ))
                         
                       }
                     </select>

@@ -1,5 +1,6 @@
 const express = require('express');
 const { handleWebhook } = require('../controllers/paymentController');
+const { handleTransferWebhook } = require('../controllers/transfersControllers');
 
 const router = express.Router();
 

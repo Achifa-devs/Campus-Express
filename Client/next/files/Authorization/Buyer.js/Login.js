@@ -7,7 +7,7 @@ import {
     useNavigate, useRoutes 
 } from "react-router-dom";
 import '../../styles/Buyer/login.css'
-import { LogBuyerIn } from "@/app/api/buyer/post";
+// import { LogBuyerIn } from "@/app/api/buyer/post";
 
 
 
@@ -46,7 +46,8 @@ const BuyerLogin = ({query}) => {
             )
             e.target.disabled = true;
 
-            let response = await LogBuyerIn(email,pwd)
+            // let response = await LogBuyerIn(email,pwd)
+            let response ;
             if(response.success){
                 window.localStorage.setItem("CE_user_id", response.id)
                 // window.localStorage.setItem("CE_buyer_name_initial", result.name)

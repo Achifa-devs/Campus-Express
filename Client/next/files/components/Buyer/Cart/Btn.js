@@ -6,8 +6,9 @@ const Btn = ({subTotal,url}) => {
     return ( 
         <>
             <button className="shadow-sm" onClick={e => window.location.href(`/checkout/${url}/${btoa(subTotal)}`)}>
-                <span>Checkout SubTotal&nbsp; </span>
-                <span><small>(&#8358;</small>{new Intl.NumberFormat('en-us').format(subTotal)})</span>
+                <span>Proceed with Payment</span>
+                <br />
+                {/* <span><small>(&#8358;</small>{new Intl.NumberFormat('en-us').format(subTotal)})</span> */}
             </button>
         </>
      );

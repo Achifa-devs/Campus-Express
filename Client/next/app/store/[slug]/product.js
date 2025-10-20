@@ -10,9 +10,10 @@ import { useEffect, useRef, useState } from "react";
 import Description from "@/files/components/Buyer/Product/Description";
 // import { AddView } from "../../api/buyer/post";
 import { useSelector } from "react-redux";
-
+import cartSvg from '@/files/assets/add-to-the-cart-svgrepo-com.svg'  
+import ytCartSvg from '@/files/assets/add-to-cart-yt.svg'
 import imgSvg from '@/files/assets/image-svgrepo-com (4).svg'; 
-
+  
 import Aside from "@/files/components/Buyer/Product/Aside";
 import { usePathname } from "next/navigation";
 // import { GetSeller } from "@/app/storeapi/seller/get";
@@ -23,7 +24,7 @@ import { open_notice } from '@/files/reusable.js/notice';
 import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup';
 import Share from '@/files/components/Buyer/Product/Share';
 import { useParams } from 'next/navigation';
-import Contact from '@/files/components/Buyer/Product/Contact';
+import Contact from '@/files/components/Buyer/Product/Contact'; 
 
 const ProductPageClient = ({product, slug}) => {
     let pathname = usePathname()
@@ -208,6 +209,56 @@ const ProductPageClient = ({product, slug}) => {
    
     }
   };
+
+    let {Cart} = useSelector(s => s.Cart);
+    const [is_carted, set_is_carted] = useState(false);
+    useEffect(() => {
+        let filter = Cart.filter(cart_item => cart_item.product_id === item.product_id)
+        set_is_carted(filter.length > 0)
+    }, [Cart])
+
+
+    function cartHandler () {
+        buyer_overlay_setup(true, 'Processing')
+        if (!is_carted) {
+            axios.post('/api/store/cart/create', {
+                product_id: item.product_id,
+                user_id: buyer_info.user_id
+            }).then((response) => {
+                buyer_overlay_setup(false, '...')
+
+                if(response.data.success){
+                    dispatch(setCartTo([...Cart, response.data.cart_item]))
+                    open_notice(true, "Item was  added to cart successfully")
+                }else{
+                    open_notice(true, "Item was not added to cart due to error")
+                }
+            }).catch(err => {
+                console.log(err);
+                buyer_overlay_setup(false, '...')
+                open_notice(true, "Item was not added to cart due to error")
+            })
+        }else{
+            let id = Cart.filter(d => d.product_id === item.product_id)[0].cart_id
+            axios.post('/api/store/cart/delete', {
+                cart_id: id
+            }).then((response) => {
+                buyer_overlay_setup(false, '...')
+
+                if(response.data.success){
+                    dispatch(setCartTo(Cart.filter(d => d.cart_id !== id)))
+                    open_notice(true, "Item was  deleted from cart successfully")
+                }else{
+                    open_notice(true, "Item was not deleted from cart due to error")
+                }
+            }).catch(err => {
+                console.log(err);
+                buyer_overlay_setup(false, '...')
+                open_notice(true, "Item was not deleted from cart due to error")
+            })
+        }
+    }
+    
    
     return ( 
         <>
@@ -222,7 +273,7 @@ const ProductPageClient = ({product, slug}) => {
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
             />
             <div className='buyer-product'>
-                <div className="buyer-product-cnt">
+                <div className="buyer-product-cnt" style={{position: 'relative'}}>
 
                     
                     <Product order_list={order_list} item={product} seller={seller} />
@@ -235,14 +286,42 @@ const ProductPageClient = ({product, slug}) => {
                         <>
                             {/* <Contact phone={seller?.phone} item={product}  /> */}
                             <br /> 
-                            <button style={{marginBottom: '15px', background: '#FF4500', color: '#fff', border: 'none', outline: 'none',borderRadius: '2.5px'}} className='shadow-sm' onClick={handleOrder}>{
-                                order_list.filter((data) => data.product.product_id === product.product_id && data.order.user_id === user_id).length > 0
-                                ?
+                            <button style={{
+                                position: 'absolute',
+                                bottom: '145px',
+                                right: '10px',
+                                width: 'fit-content',
+                                height: 'fit-content',
+                                borderRadius: '6px',
+                                background: is_carted ? '#FF4500' : 'transparent',
+                                border: '1px solid #FF4500'
+                            }} onClick={e => {
+                                cartHandler()
+                            }}
+                                disabled={
+                                    order_list?.filter((data) => data?.product?.product_id === item?.product_id && data?.order?.user_id === user_id).length > 0
+                                }
+                            >
+                                {
+                                    is_carted
+                                    ?
+                                    <img src={ytCartSvg.src} style={{height: '22px', width: '22px'}} alt="" />
+                                    :
+                                    <img src={cartSvg.src} style={{height: '22px', width: '22px'}} alt="" />
+                                    
+                                }
+                            </button>
+                            <button style={{borderRadius: '2.5px',border: 'none', outline: 'none', width: '100%'}} className='shadow' onClick={e=>handleOrder(item.product_id)}> 
+                                {
+                                    order_list?.filter((data) => data?.product?.product_id === item?.product_id && data?.order?.user_id === user_id).length > 0
+                                    ?
 
-                                'View Order'
-                                :
-                                'Place Order Now'
-                            }</button>
+                                    'Track Order'
+                                    :
+                                    'Pay Now'
+                                }
+                             
+                            </button>
                         </>
                     }
 

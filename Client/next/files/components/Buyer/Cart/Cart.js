@@ -16,14 +16,18 @@ import {
 // } from 'react-router-dom';
 import Card from './CartCard';
 import Btn from './Btn';
-import { GetCartItems } from '@/app/api/buyer/get';
+import axios from 'axios';
+// import { GetCartItems } from '@/app/api/buyer/get';
 
 
-const Cart = () => { 
+const CartComp = () => { 
     let [Items, setItems] = useState([])
     let [unit, setUnit] = useState([])
     let [url, setUrl] = useState('')
-    let [subTotal, setSubTotal] = useState('0.00')
+    let [subTotal, setSubTotal] = useState('0.00');
+
+    let {Cart} = useSelector(s => s.Cart)
+
 
     function getTotalPrice() {
         let list = [...document.querySelectorAll(".buyer-items-stock")];
@@ -43,28 +47,20 @@ const Cart = () => {
         // Calling method recursively
         return sum(arr, n-1 ) + arr[n-1];
     }
+ 
     useEffect(() => {
-        
-        try {
-            let result = GetCartItems(window.localStorage.getItem('CE_user_id'))
+       if(Cart){
+            setItems(Cart);
+            let prices = []
+            let unitList = []
 
-            if(result){
-                setItems(result);
-                let prices = []
-                let unitList = []
-
-                result.map((item) => prices.push(parseInt(item.item.price)))
-                result.forEach((product) => unitList.push({product_id: product.item.product_id, unit: parseInt(product.cart.unit)}))
-                setUnit(unitList)
-                let s = sum(prices, prices.length);
-                setSubTotal(s)
-            }
-        } catch (error) {
-            console.log(error)
+            Cart.map((item) => prices.push(parseInt(item.price)))
+            Cart.forEach((product) => unitList.push({product_id: product.product_id, unit: parseInt(product.unit)}))
+            setUnit(unitList)
+            let s = sum(prices, prices.length);
+            setSubTotal(s)
         }
-        
-        
-    }, [])
+    }, [Cart])
 
     // function StockChange(type,item) {
     //     if(type === 'add'){
@@ -111,7 +107,7 @@ const Cart = () => {
                {
                 Items?.map((item, index) => {
                     return(
-                        <Card product_id={item.item.product_id} unit={unit} getTotalPrice={getTotalPrice} item={item} index={index} />
+                        <Card product_id={item.product_id} unit={unit} getTotalPrice={getTotalPrice} item={item} index={index} />
                     )
                 })
                }
@@ -154,4 +150,4 @@ const Cart = () => {
 
 
  
-export default Cart;
+export { CartComp as Cart };

@@ -51,6 +51,8 @@ import sellSvg from '../../../assets/sell-svgrepo-com (1).svg'
 import logoutSvg from '../../../assets/logout-2-svgrepo-com.svg'
 import Filter from "./Filter";
 import Image from "next/image";
+import { setCartTo } from "@/redux/buyer_store/Cart";
+import axios from "axios";
 
 const Header = () => {
 
@@ -65,10 +67,11 @@ const Header = () => {
   let pathname = usePathname()
 
 
-  let [cartList,setCartList] = useState(0)
   let [searchChar, setSearchChar] = useState('')
   let [screenWidth, setScreenWidth] = useState(0)
   let [searchRes, setSearchRes] = useState([])
+
+  
 
   let [getSelectedOption, setgetSelectedOption]  =useState('')
   let [list, setList] = useState([])
@@ -85,13 +88,22 @@ const Header = () => {
     setScreenWidth(width)
   }, [])
 
-  // useEffect(() => {
-  //   setCartList([...Cart].length)
-  //   console.log([...Cart]) 
-  // }, [Cart])
-
   let [width, setWidth] = useState(0)
 
+  useEffect(() => {
+          
+    if (buyer_info) {
+      try {
+        axios.get('/api/store/cart', {params: {user_id: buyer_info.user_id}})
+        .then((result) => {
+          dispatch(setCartTo(result.data.data))
+        }).catch(err => console.log(err))
+
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  }, [buyer_info])
   
   
   useEffect(() => {
@@ -451,15 +463,15 @@ const Header = () => {
           <ul style={{
             width: 'fit-content',
           }}>
-            {/* <li onClick={e => navigate('/buyer.message')}>  
+            <li onClick={e => window.location.href=('/store/cart')}>  
               <img src={cartSvg.src} style={{height: '25px', width: '25px'}} alt="" />
               
               <span style={{height: 'fit-content', marginTop: '-19px', borderRadius: '50%', width: '20px', fontSize: 'small', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'orangered', color: '#fff'}}>
                 { 
-                  cartList
+                  Cart.length
                 }
               </span>
-            </li>  */}
+            </li> 
 
               {
                 screenWidth < 480
