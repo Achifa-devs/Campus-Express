@@ -95,10 +95,10 @@ function NavigationHandler() {
        fcm: fcm
      })
      .then((res) => {
-       console.log(res.data)
+      //  console.log(res.data)
      })
      .catch(err => {
-       console.log(err)
+      //  console.log(err)
      })
    }
    getFcm()
@@ -113,10 +113,10 @@ function NavigationHandler() {
         fcm: token
       })
       .then((res) => {
-        console.log(res.data)
+        // console.log(res.data)
       })
       .catch(err => {
-        console.log(err)
+        // console.log(err)
       })
     });
   }, [])
