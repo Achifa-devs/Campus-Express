@@ -1,26 +1,27 @@
-const countEmail = require("../models/users");
-const countPhone = require("../models/users");
-const findUserByEmail = require("../models/users");
-const findUserById = require("../models/users");
-const updateUserFcm = require("../models/users");
-const truncateUser = require("../models/users");
-const updateUserPhotoById = require("../models/users");
-const countToken = require("../models/users");
-const createNewToken = require("../models/users");
+const {
+  countEmail,
+  countPhone,
+  findUserByEmail,
+  findUserById,
+  updateUserFcm,
+  truncateUser,
+  updateUserPhotoById,
+  countToken,
+  createNewToken,
+  createUser,
+  updateUserEmailById,
+  updateUserPasswordById,
+  updateUserPhoneById,
+  updateUserProfileById,
+} = require("../models/users");
 
 
 const bcrypt = require("bcryptjs");
 const shortId = require("short-id");
-
-const  createUser  = require("../models/users");
-const  updateUserEmailById  = require("../models/users");
-const  updateUserPasswordById  = require("../models/users");
-const  updateUserPhoneById  = require("../models/users");
-const  updateUserProfileById  = require("../models/users");
 const tools = require("../utils/tools");
 
 
-module.exports = async function createToken (payload) {
+exports.createToken = async function  (payload) {
   const { token, date, user_id } = payload;
 
   try {
@@ -32,7 +33,7 @@ module.exports = async function createToken (payload) {
   }
 };
 
-module.exports = async function verifyToken (payload) {
+exports.verifyToken = async function  (payload) {
   const { token } = payload;
 
   try {
@@ -43,7 +44,7 @@ module.exports = async function verifyToken (payload) {
     console.log("error: ", error)
   }
 };
-module.exports = async function getUser (payload) {
+exports.getUser = async function  (payload) {
   const { user_id } = payload;
 
   try {
@@ -55,7 +56,7 @@ module.exports = async function getUser (payload) {
   }
 };
 
-module.exports = async function registerUser (payload) {
+exports.registerUser = async function  (payload) {
     const { 
         fname, 
         lname, 
@@ -110,7 +111,7 @@ module.exports = async function registerUser (payload) {
 
 };
 
-module.exports = async function loginUser (payload) {
+exports.loginUser = async function  (payload) {
     const { 
         email,
         pwd,
@@ -136,7 +137,7 @@ module.exports = async function loginUser (payload) {
 
 };
 
-module.exports = async function deleteUser (payload) {
+exports.deleteUser = async function  (payload) {
     const { 
         user_id
     } = payload;
@@ -153,7 +154,7 @@ module.exports = async function deleteUser (payload) {
 
 };
 
-module.exports = async function updateUserEmail (payload) {
+exports.updateUserEmail = async function  (payload) {
   const { email, user_id } = payload;
 
   // Business logic
@@ -162,7 +163,7 @@ module.exports = async function updateUserEmail (payload) {
   return response;
 };
 
-module.exports = async function updateUserPhoto (payload) {
+exports.updateUserPhoto = async function  (payload) {
   const { photo, user_id } = payload;
 
   // Business logic
@@ -171,7 +172,7 @@ module.exports = async function updateUserPhoto (payload) {
   return response;
 };
 
-module.exports = async function updateUserPhone (payload) {
+exports.updateUserPhone = async function  (payload) {
   const { phone, user_id } = payload;
 
   // Business logic
@@ -180,7 +181,7 @@ module.exports = async function updateUserPhone (payload) {
   return response;
 };
 
-module.exports = async function updateUserProfile (payload) {
+exports.updateUserProfile = async function  (payload) {
   const { user_id, fname, lname, gender } = payload;
   // Business logic
   const response = await updateUserProfileById ({ user_id, fname, lname, gender:  gender.toLowerCase() === 'male' ? 1 : 0 });
@@ -188,7 +189,7 @@ module.exports = async function updateUserProfile (payload) {
   return response;
 };
 
-module.exports = async function updateUserPassword (payload) {
+exports.updateUserPassword = async function  (payload) {
   const { user_id, pwd } = payload;
 
   // Business logic

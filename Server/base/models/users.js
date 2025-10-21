@@ -4,7 +4,7 @@ const pool = require('../config/database')
 
 
 // Create new Vendor
-module.exports =  async function createUser({ fname, lname, user_id, email, phone, hashedPwd, state, campus, gender, deviceId, fcm }) {
+exports.createUser =  async function ({ fname, lname, user_id, email, phone, hashedPwd, state, campus, gender, deviceId, fcm }) {
   const { rowCount } = await pool.query(
     `INSERT INTO users (
     id, fname, lname, user_id, email, phone, password, state,
@@ -23,12 +23,12 @@ module.exports =  async function createUser({ fname, lname, user_id, email, phon
   return response;
 };
 
-module.exports =  async function truncateUser({user_id}) {
+exports.truncateUser =  async function ({user_id}) {
     // Code here
     return null
 }
 
-module.exports =  async function updateUserPhotoById({photo, user_id}) {
+exports.updateUserPhotoById =  async function ({photo, user_id}) {
     const result = await pool.query(
     `UPDATE users set photo = $1 WHERE user_id = $2`,
     [photo, user_id]
@@ -36,7 +36,7 @@ module.exports =  async function updateUserPhotoById({photo, user_id}) {
   return result.rows[0];
 }
 
-module.exports =  async function createNewToken ({ token, date, user_id }) {
+exports.createNewToken =  async function  ({ token, date, user_id }) {
   
     const { rows } = await pool.query(`
         INSERT INTO token (id, token, expires_at, user_id)
@@ -49,7 +49,7 @@ module.exports =  async function createNewToken ({ token, date, user_id }) {
 
 }
 
-module.exports =  async function countToken ({ token, user_id }) {
+exports.countToken =  async function  ({ token, user_id }) {
   
   const result = await pool.query(`
     SELECT COUNT(*) as count
@@ -60,7 +60,7 @@ module.exports =  async function countToken ({ token, user_id }) {
 }
 
 // Check Vendor email
-module.exports =  async function countEmail ({ email }) {
+exports.countEmail =  async function  ({ email }) {
   
   const result = await pool.query(`
     SELECT COUNT(*) as count
@@ -71,7 +71,7 @@ module.exports =  async function countEmail ({ email }) {
 }
 
 // Check Vendor phone
-module.exports =  async function countPhone ({ phone }) {
+exports.countPhone =  async function  ({ phone }) {
   const result = await pool.query(`
     SELECT COUNT(*) as count
     FROM users
@@ -82,7 +82,7 @@ module.exports =  async function countPhone ({ phone }) {
 }
 
 // Find user by ID
-module.exports =  async function findUserById({user_id}) {
+exports.findUserById =  async function ({user_id}) {
   const result = await pool.query(
     `SELECT * FROM users WHERE user_id = $1`,
     [user_id]
@@ -90,7 +90,7 @@ module.exports =  async function findUserById({user_id}) {
   return result.rows[0];
 };
 
-module.exports =  async function findUserByEmail({ email }) {
+exports.findUserByEmail =  async function ({ email }) {
   
   const result = await pool.query(
     `SELECT * FROM users WHERE email = $1`,
@@ -99,7 +99,7 @@ module.exports =  async function findUserByEmail({ email }) {
   return result.rows[0];
 };
 
-module.exports =  async function findUserByPhone({ phone }) {
+exports.findUserByPhone =  async function ({ phone }) {
   
   const result = await pool.query(
     `SELECT * FROM users WHERE phone = $1`,
@@ -108,7 +108,7 @@ module.exports =  async function findUserByPhone({ phone }) {
   return result.rows[0];
 };
 
-module.exports =  async function updateUserPhoneById({ user_id, phone }) {
+exports.updateUserPhoneById =  async function ({ user_id, phone }) {
   
   const result = await pool.query(
     `UPDATE users set phone = $1 WHERE user_id = $2`,
@@ -117,7 +117,7 @@ module.exports =  async function updateUserPhoneById({ user_id, phone }) {
   return result.rows[0];
 };
 
-module.exports =  async function updateUserEmailById({ user_id, email }) {
+exports.updateUserEmailById =  async function ({ user_id, email }) {
   
   const result = await pool.query(
     `UPDATE users set email = $1 WHERE user_id = $2`,
@@ -126,7 +126,7 @@ module.exports =  async function updateUserEmailById({ user_id, email }) {
   return result.rows[0];
 };
 
-module.exports =  async function updateUserProfileById({ user_id, fname, lname, gender }) {
+exports.updateUserProfileById =  async function ({ user_id, fname, lname, gender }) {
   
   const result = await pool.query(
     `UPDATE users set fname=$1, lname=$2, gender=$3 WHERE user_id = $4`,
@@ -135,7 +135,7 @@ module.exports =  async function updateUserProfileById({ user_id, fname, lname, 
   return result.rows[0];
 };
 
-module.exports =  async function updateUserPasswordById({ user_id, pwd }) {
+exports.updateUserPasswordById =  async function ({ user_id, pwd }) {
   
   const result = await pool.query(
     `UPDATE users set password=$1 WHERE user_id = $2`,
@@ -144,7 +144,7 @@ module.exports =  async function updateUserPasswordById({ user_id, pwd }) {
   return result.rows[0];
 };
 
-module.exports =  async function updateUserFcm({ fcm, user_id }) {
+exports.updateUserFcm =  async function ({ fcm, user_id }) {
   
   const result = await pool.query(
     `UPDATE users SET fcm = $1 WHERE user_id = $2

@@ -1,15 +1,17 @@
 const express = require('express');
-const registerUserHandler = require('../controllers/users'); 
-const getUserHandler = require('../controllers/users'); 
-const loginUserHandler = require('../controllers/users'); 
-const updateUserEmailHandler = require('../controllers/users'); 
-const updateUserPhoneHandler = require('../controllers/users'); 
-const updateUserProfileHandler = require('../controllers/users'); 
-const updateUserPasswordHandler = require('../controllers/users'); 
-const deleteUserHandler = require('../controllers/users');
-const updateUserPhotoHandler = require('../controllers/users');
-const createTokenHandler = require('../controllers/users');
-const verifyTokenHandler = require('../controllers/users');
+const {
+    registerUserHandler,
+    getUserHandler,
+    loginUserHandler,
+    updateUserEmailHandler,
+    updateUserPhoneHandler,
+    updateUserProfileHandler,
+    updateUserPasswordHandler,
+    deleteUserHandler,
+    updateUserPhotoHandler,
+    createTokenHandler,
+    verifyTokenHandler
+ } = require('../controllers/users');
 const userRouter = express.Router();
 const parser = require('body-parser').json({ limit: '1024mb' });
 
