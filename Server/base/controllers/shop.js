@@ -1,30 +1,28 @@
-// import {
-//     getShopContent, 
-//     getShopDetails, 
-//     getShopOwner, 
-//     getShopReviews, 
-//     postShopReview, 
-//     // postShopVisit
-// } from "../../services/shop/shop.js";
-// import { postNewShop, postUpdateShop } from "../../services/vendor/shop.js";
+const { 
+    getShop,
+    getShopReviews,
+    createShop,
+    updateShop,
+    getProduct,
+    getProducts,
+    createProduct,
+    updateProduct,
+    deleteProduct,
+    getShopAnalytics,
+} = require('../services/shop')
 
-
-module.exports =  async function getShopHandler(req, res) {
+exports.getShopHandler =  async function (req, res) {
     try {
         const respomse = await getShop(req.query);
-        console.log(respomse)
-
         res.status(201).json({ success: true, data: respomse });
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });
     }
 }
 
-module.exports =  async function getShopReviewsHandler(req, res) {
+exports.getShopReviewsHandler =  async function (req, res) {
     try {
         const respomse = await getShopReviews(req.query);
-        console.log(respomse)
-
         res.status(201).json({ success: true, data: respomse });
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });
@@ -33,7 +31,7 @@ module.exports =  async function getShopReviewsHandler(req, res) {
 
 
 
-// module.exports =  async function GET_SHOP_DETAILS(req, res) {
+// exports. =  async function GET_SHOP_DETAILS(req, res) {
 //     try {
 //         const shop_details = await getShopDetails(req.query);
 //         res.status(201).json({ success: true, data: shop_details });
@@ -42,19 +40,18 @@ module.exports =  async function getShopReviewsHandler(req, res) {
 //     }
 // }
 
-module.exports =  async function createShopHandler(req, res) {
+exports.createShopHandler =  async function (req, res) {
     try {
-        const response= await createShop(req.body);
+        const response = await createShop(req.body);
         res.status(201).json({ success: true, data: response});
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });
     }
 }
 
-module.exports =  async function updateShopHandler(req, res) {
+exports.updateShopHandler =  async function (req, res) {
     try {
         const response = await updateShop(req.body);
-
         res.status(201).json({ success: true, data: response });
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });
@@ -62,7 +59,7 @@ module.exports =  async function updateShopHandler(req, res) {
 }
 
 
-module.exports =  async function getProductHandler(req, res) {
+exports.getProductHandler =  async function (req, res) {
     
     try {
         const response = await getProduct(req.query);
@@ -72,7 +69,7 @@ module.exports =  async function getProductHandler(req, res) {
     }
 }
 
-module.exports =  async function getProductsHandler(req, res) {
+exports.getProductsHandler =  async function (req, res) {
     try {
         const response = await getProducts(req.query);
         res.status(201).json({ success: true, data: response });
@@ -81,16 +78,16 @@ module.exports =  async function getProductsHandler(req, res) {
     }
 }
 
-module.exports =  async function getProductThumbnailHandler(req, res) {
+exports.getShopAnalyticsHandler =  async function (req, res) {
     try {
-        const response = await getProductThumbnail(req.query);
+        const response = await getShopAnalytics(req.query);
         res.status(201).json({ success: true, data: response });
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });
     }
 }
 
-module.exports =  async function createProductHandler(req, res) {
+exports.createProductHandler =  async function (req, res) {
     try {
         const response = await createProduct(req.body);
         res.status(201).json({ success: true, data: response });
@@ -99,7 +96,7 @@ module.exports =  async function createProductHandler(req, res) {
     }
 }
 
-module.exports =  async function updateProductHandler(req, res) {
+exports.updateProductHandler =  async function (req, res) {
     try {
         const response = await updateProduct(req.body);
         res.status(201).json({ success: true, data: response });
@@ -108,7 +105,7 @@ module.exports =  async function updateProductHandler(req, res) {
     }
 }
 
-module.exports =  async function deleteProductHandler(req, res) {
+exports.deleteProductHandler =  async function (req, res) {
     try {
         const response = await deleteProduct(req.query);
         res.status(201).json({ success: true, data: response });

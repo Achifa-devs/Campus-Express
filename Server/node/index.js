@@ -667,10 +667,7 @@ CAMPUSSPHERE_SERVER.get('/boosted-metrics', parser, async (req, res) => {
       `,
       [product_id]
     );
-
-
     // Return combined data 
-    console.log(result.rows)
     const list = result.rows; // no need for await here
 
     res.status(200).json({
