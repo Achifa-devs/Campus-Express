@@ -25,7 +25,7 @@ exports.updateFirebaseTokenHandler =  async function (req, res) {
     }
 }
 
-exports.sendFirebaseNotificationHandler =  async function sendFirebaseNotificationHandler(req, res) {
+exports.sendFirebaseNotificationHandler =  async function (req, res) {
     try {
         const response = await sendFirebaseNotification(req.body);
         res.status(201).json({ success: true, data: response});
@@ -34,7 +34,7 @@ exports.sendFirebaseNotificationHandler =  async function sendFirebaseNotificati
     }
 }
 
-exports.getMediaFolderFromCloudinaryHandler =  async function getMediaFolderFromCloudinaryHandler(req, res) {
+exports.getMediaFolderFromCloudinaryHandler =  async function (req, res) {
     try {
         const response = await getMediaFolderFromCloudinary(req.query);
         res.status(201).json({ success: true, data: response });
@@ -44,7 +44,7 @@ exports.getMediaFolderFromCloudinaryHandler =  async function getMediaFolderFrom
 }
 
 
-exports.uploadMediaToCloudinaryHandler =  async function uploadMediaToCloudinaryHandler(req, res) {
+exports.uploadMediaToCloudinaryHandler =  async function (req, res) {
     
     try {
         const response = await uploadMediaToCloudinary({...req.body, ...req.file});
@@ -54,7 +54,7 @@ exports.uploadMediaToCloudinaryHandler =  async function uploadMediaToCloudinary
     }
 }
 
-exports.deleteMediaFromCloudinaryHandler =  async function deleteMediaFromCloudinaryHandler(req, res) {
+exports.deleteMediaFromCloudinaryHandler =  async function (req, res) {
     try {
         const response = await deleteMediaFromCloudinary(req.body);
         res.status(201).json({ success: true, data: response });

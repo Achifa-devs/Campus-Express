@@ -1,7 +1,15 @@
 const express = require('express');
-const actionRouter = express.Router();
+const { 
+    getProductHandler, 
+    getProductsHandler, 
+    getProductTypeHandler, 
+    getProductSearchQueryHandler 
+} = require('../controllers/products');
+const productRouter = express.Router();
 
-actionRouter.get('/action/product', );
-actionRouter.get('/action/trends', );
-actionRouter.get('/action/products-type', );
-actionRouter.get('/action/search', );
+productRouter.get('/product', getProductHandler);
+productRouter.get('/products', getProductsHandler);
+productRouter.get('/product/type', getProductTypeHandler);
+productRouter.get('/product/search', getProductSearchQueryHandler);
+
+module.exports = productRouter;

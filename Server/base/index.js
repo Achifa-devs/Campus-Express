@@ -8,6 +8,7 @@ const { v2 } = require('cloudinary');
 const userRouter = require('./routes/user');
 const shopRouter = require('./routes/shop');
 const generalRouter = require('./routes/general');
+const productRouter = require('./routes/product');
 const app = express();
 
 app.use(morgan('dev'));
@@ -22,6 +23,7 @@ app.use(cors({
 app.use(userRouter)
 app.use(shopRouter)
 app.use(generalRouter)
+app.use(productRouter)
 
 require('dotenv').config()
 
