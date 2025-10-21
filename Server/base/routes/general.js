@@ -7,9 +7,11 @@ const {
     uploadMediaToCloudinaryHandler, 
     deleteMediaFromCloudinaryHandler 
 } = require('../controllers/general');
+const multer = require('multer')
 const generalRouter = express.Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
+const parser = require('body-parser').json({ limit: '1024mb' });
 
 
 generalRouter.get('/version/check', checkVersionHandler)
@@ -25,3 +27,4 @@ generalRouter.post('/firebase/update', parser, updateFirebaseTokenHandler) /** /
 generalRouter.post('/upload/media', upload.single('file'), uploadMediaToCloudinaryHandler) /** upload file to cloudinary */
 generalRouter.post('/delete/media', parser, deleteMediaFromCloudinaryHandler) /** delete file from cloudinary */
 
+module.exports = generalRouter

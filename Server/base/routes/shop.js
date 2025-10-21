@@ -1,17 +1,17 @@
 const express = require('express');
 const shopRouter = express.Router();
 const parser = require('body-parser').json({ limit: '1024mb' });
- const {
-    getShopHandler,
-    getShopReviewsHandler,
-    createShopHandler,
-    updateShopHandler,
-    getProductHandler,
-    getProductsHandler,
-    createProductHandler,
-    updateProductHandler,
-    deleteProductHandler,
-    getShopAnalyticsHandler,
+const {
+   getShopHandler,
+   getShopReviewsHandler,
+   createShopHandler,
+   updateShopHandler,
+   getProductHandler,
+   getProductsHandler,
+   createProductHandler,
+   updateProductHandler,
+   deleteProductHandler,
+   getShopAnalyticsHandler,
  }  = require('../controllers/shop')
 
 shopRouter.get('/shop', getShopHandler)

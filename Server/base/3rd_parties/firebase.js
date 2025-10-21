@@ -1,7 +1,5 @@
-import dotenv from 'dotenv';
-dotenv.config(); // ✅ must come first!
-
-import admin from 'firebase-admin';
+require('dotenv').config(); // ✅ must come first!
+const admin = require('firebase-admin')
 
 // Initialize Firebase Admin
 if (!admin.apps.length) {
