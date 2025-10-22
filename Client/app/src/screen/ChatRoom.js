@@ -371,7 +371,7 @@ const ChatRoom = ({ route }) => {
             : styles.otherMessageBubble,
         ]}
       >
-        {item.product_id && <Card product_id={item.product_id} />}
+        
 
         <Text
           style={[
@@ -572,8 +572,14 @@ const ChatRoom = ({ route }) => {
             </Text>
           </TouchableOpacity>
         </View>
-      </View>
 
+        
+      </View>
+      {<Card product_id={
+        messages.length > 0
+        &&
+        messages.filter(item => item.product_id)[0].product_id
+      } />}
       <KeyboardAvoidingView
         style={styles.keyboardAvoidingView}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -728,7 +734,7 @@ const Card = ({ product_id }) => {
         />
       }
       <View style={styles.adContent}>
-        <Text style={styles.adTitle} numberOfLines={2}>
+        <Text style={styles.adTitle} numberOfLines={1}>
           {item.title || 'No Title'}
         </Text>
         <Text style={styles.adPrice}>
@@ -1067,9 +1073,13 @@ const styles = StyleSheet.create({
   adCard: {
     backgroundColor: '#FFF',
     borderRadius: 4,
+    width: '100%',
+    height: 60,
+    alignItems: 'center',
+    paddingLeft: 8, 
+    paddingRight: 8, 
     overflow: 'hidden',
     flexDirection: 'row',
-    marginBottom: 4,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -1077,20 +1087,23 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   adImage: {
-    width: 100,
-    height: 100,
+    width: 45,
+    height: 45,
+    borderRadius: 4,
     backgroundColor: '#F0F0F0',
   },
   adContent: {
     flex: 1,
     padding: 12,
+    paddingTop: 18,
     justifyContent: 'space-between',
+    
   },
   adTitle: {
-    fontSize: 14,
-    fontWeight: '600',
+    fontSize: 12,
+    fontWeight: '500',
     color: '#1A1A1A',
-    marginBottom: 4,
+    // marginBottom: 4,
   },
   adPrice: {
     fontSize: 16,

@@ -28,7 +28,6 @@ actionRouter.get('/action/favourites', getFavouritesHandler);
 actionRouter.post('/action/favourite', createFavouriteHandler);
 actionRouter.delete('/action/favourite', deleteFavourite);
 
-
 // HANDLES CUSTOMER REACTIONS
 actionRouter.post('/action/shop/view', parser, createShopViewHandler);
 actionRouter.post('/action/share', parser, createShareHander);

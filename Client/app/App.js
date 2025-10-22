@@ -3,12 +3,10 @@ import { Provider } from 'react-redux'
 import store from './redux/store'
 import NavigationHandler from './src/navigation/Index'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { AppState, Linking, StatusBar } from 'react-native'
+import { AppState, Linking } from 'react-native'
 import messaging from '@react-native-firebase/messaging';
-import firebase from '@react-native-firebase/app';
 import notifee, { AndroidImportance } from '@notifee/react-native';
 import Memory from './src/utils/memoryHandler'
-import axios from 'axios'
 import { navigate } from './src/navigation/root_nav'
 
 export default function App() {
@@ -104,15 +102,6 @@ export default function App() {
       appStateSubscription.remove();
       linkingSubscription.remove();
     };
-  }, []);
-
-  useEffect(() => {
-    StatusBar.setBackgroundColor('#FF4500'); // orange-red
-    StatusBar.setBarStyle('dark-content');  // white text/icons
-
-    if (Platform.OS === 'android') {
-      StatusBar.setTranslucent(false);
-    }
   }, []);
 
   useEffect(() => {

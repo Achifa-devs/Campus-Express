@@ -2,13 +2,14 @@ const express = require('express');
 const mocha = require('mocha');
 const cors = require('cors');
 const morgan = require('morgan');
-const cookieparser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const { v2 } = require('cloudinary');
 const userRouter = require('./routes/user');
 const shopRouter = require('./routes/shop');
 const generalRouter = require('./routes/general');
 const productRouter = require('./routes/product');
+const tools = require('./utils/tools');
+const { tokenTemplate } = require('../node/src/mails/template/token');
 const app = express();
 
 app.use(morgan('dev'));
@@ -35,3 +36,6 @@ process.on('unhandledRejection', (reason, promise) => {
   console.log('Unhandled Rejection at:', reason.stack || reason)
 });
 
+
+let mail = tokenTemplate('Akpulu.F', '4500', 'akpulufabian@gmail.com'); 
+let res = tools.send_email('Email Update', mail, 'akpulufabian@gmail.com').then(res => console.log(res))

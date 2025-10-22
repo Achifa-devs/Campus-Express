@@ -12,8 +12,7 @@ import {
     TouchableOpacity,
     View 
 } from 'react-native';
-import AppBadge from 'react-native-app-badge';
-import PushNotification from 'react-native-push-notification';
+
 import {  
     createBottomTabNavigator 
 } from "@react-navigation/bottom-tabs";

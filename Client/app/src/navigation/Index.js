@@ -8,8 +8,8 @@ import Main from "./Tab";
 import Sound from 'react-native-sound';
 import WelcomeScreen from "./Welcome";
 import { set_mode } from "../../redux/info/mode";
-import { getFocusedRouteNameFromRoute, NavigationContainer, useNavigation } from "@react-navigation/native";
-import { Alert, AppState, SafeAreaView, StatusBar, StyleSheet } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { AppState, SafeAreaView, StatusBar, StyleSheet } from "react-native";
 import { set_campus } from "../../redux/info/campus";
 import { PaystackProvider } from 'react-native-paystack-webview';
 import { CampusSelection } from "../modals/Campus";
@@ -60,7 +60,6 @@ function NavigationHandler() {
     const unsubscribe = NetInfo.addEventListener(state => {
       dispatch(set_is_connected(!!(state.isConnected && state.isInternetReachable)));
     });
-
     return () => unsubscribe(); // clean up properly
   }, [dispatch]);
 
@@ -381,7 +380,7 @@ function NavigationHandler() {
 
         if (anon) {
           dispatch(set_mode("auth"));
-        } else {
+        } else { 
           dispatch(set_mode("intro"));
         }
       } catch (error) {

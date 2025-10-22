@@ -1,5 +1,7 @@
-// GetStartedScreen.js
-import React, { useState, useRef } from 'react';
+import React, { 
+  useState, 
+  useRef 
+} from 'react';
 import {
   View,
   Text,
@@ -11,16 +13,23 @@ import {
   Image,
 } from 'react-native';
 import ViewPager from '@react-native-community/viewpager';
-import Svg, { Circle } from 'react-native-svg';
-import { useDispatch } from 'react-redux';
-import { set_mode } from '../../redux/info/mode';
+import Svg, { 
+  Circle 
+} from 'react-native-svg';
+import { 
+  useDispatch 
+} from 'react-redux';
+import { 
+  set_mode 
+} from '../../redux/info/mode';
 import Memory from '../utils/memoryHandler';
 import Tools from '../utils/generalHandler';
-import Video from 'react-native-video';
+const { 
+  width, 
+  height 
+} = Dimensions.get('window');
 
-const { width, height } = Dimensions.get('window');
-
-const GetStartedScreen = ({ navigation }) => {
+const GetStartedScreen = ({  }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const viewPagerRef = useRef(null);
 

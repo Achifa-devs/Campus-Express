@@ -51,7 +51,6 @@ async function getFavouritesService(payload) {
     throw new Error(error);
   }
 }
-
 async function createFavouriteService(payload) {
   const { product_id, user_id } = payload;
   try {
@@ -61,7 +60,6 @@ async function createFavouriteService(payload) {
     console.log(error);
   }
 }
-
 async function deleteFavouriteService(payload) {
   const { product_id, user_id } = payload;
   try {
@@ -90,7 +88,6 @@ async function createShopViewService(payload) {
     throw new Error("Error occurred while updating view");
   }
 }
-
 // 🟢 CONTACT CLICKS
 async function createContactClickService(payload) {
   const { product_id, user_id } = payload;
@@ -107,7 +104,6 @@ async function createContactClickService(payload) {
     throw new Error("Error occurred while updating view");
   }
 }
-
 // 🟢 SHARES
 async function createShareService(payload) {
   const { product_id, user_id } = payload;

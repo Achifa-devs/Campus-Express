@@ -1,0 +1,252 @@
+{
+  "buyer_flow": {
+    "accommodation": {
+      "title": "Accommodation Inquiry",
+      "questions": [
+        {
+          "id": "interest",
+          "question": "Are you interested in renting this accommodation?",
+          "type": "options",
+          "options": ["Yes", "Not interested"],
+          "responses": {
+            "Yes": "Yes, I'm interested in renting this accommodation.",
+            "Not interested": "No, I'm not interested in this accommodation."
+          },
+          "next_step": {
+            "Yes": "meeting_location",
+            "Not interested": "end_conversation"
+          }
+        },
+        {
+          "id": "meeting_location",
+          "question": "Where would you prefer to meet the agent for inspection?",
+          "type": "options",
+          "options": ["At the property location", "At a public place first"],
+          "responses": {
+            "At the property location": "I would prefer to meet at the property location.",
+            "At a public place first": "I would prefer to meet at a public place first."
+          },
+          "next_step": "meeting_time"
+        },
+        {
+          "id": "meeting_time",
+          "question": "When would you be available for the meeting or inspection?",
+          "type": "datetime",
+          "response_template": "I'll be available on {value}.",
+          "next_step": "number_of_persons"
+        },
+        {
+          "id": "number_of_persons",
+          "question": "How many people will be coming with you for the inspection?",
+          "type": "integer",
+          "optional": true,
+          "response_template": "{value} people will be coming with me for the inspection.",
+          "next_step": "inspection_confirmation"
+        },
+        {
+          "id": "inspection_confirmation",
+          "question": "Do you confirm to meet the agent on {meeting_date} at {meeting_location} for the accommodation inspection?",
+          "type": "options",
+          "options": ["Confirm and schedule", "Cancel"],
+          "responses": {
+            "Confirm and schedule": "I confirm and would like to schedule the inspection.",
+            "Cancel": "I want to cancel the inspection."
+          },
+          "next_step": "end_conversation"
+        }
+      ]
+    },
+    "product": {
+      "title": "Product Inquiry",
+      "questions": [
+        {
+          "id": "interest",
+          "question": "Are you interested in buying this product?",
+          "type": "options",
+          "options": ["Yes", "Not interested"],
+          "responses": {
+            "Yes": "Yes, I'm interested in buying this product.",
+            "Not interested": "No, I'm not interested in this product."
+          },
+          "next_step": {
+            "Yes": "quantity",
+            "Not interested": "end_conversation"
+          }
+        },
+        {
+          "id": "quantity",
+          "question": "How many units would you like to purchase?",
+          "type": "integer",
+          "response_template": "I would like to purchase {value} unit(s).",
+          "next_step": "delivery_method"
+        },
+        {
+          "id": "delivery_method",
+          "question": "What delivery method do you prefer? (NB: delivery charges may vary)",
+          "type": "options",
+          "options": ["Doorstep delivery", "Pickup at public location"],
+          "responses": {
+            "Doorstep delivery": "I prefer doorstep delivery.",
+            "Pickup at public location": "I prefer to pick up at a public location."
+          },
+          "next_step": "delivery_address"
+        },
+        {
+          "id": "delivery_address",
+          "question": "Provide the full address or pickup location for delivery.",
+          "type": "text",
+          "required": true,
+          "response_template": "The delivery address is {value}.",
+          "next_step": "delivery_duration"
+        },
+        {
+          "id": "delivery_duration",
+          "question": "When would you like the delivery to be made?",
+          "type": "duration",
+          "response_template": "I'd like the delivery to be made in {value}.",
+          "next_step": "confirmation"
+        },
+        {
+          "id": "confirmation",
+          "question": "You agreed to pay ₦{price} for {quantity} unit(s) of '{item_name}' to be delivered by {delivery_date}. Do you confirm?",
+          "type": "options",
+          "options": ["Confirm and pay", "Cancel order"],
+          "responses": {
+            "Confirm and pay": "I confirm and would like to proceed with the payment.",
+            "Cancel order": "I want to cancel this order."
+          },
+          "next_step": "end_conversation"
+        }
+      ]
+    }
+  },
+  "seller_flow": {
+    "accommodation": {
+      "title": "Accommodation Response",
+      "questions": [
+        {
+          "id": "availability",
+          "question": "A buyer is interested in renting your accommodation listing '{accommodation_title}'. Would you like to respond?",
+          "type": "options",
+          "options": ["Yes, available", "No, already rented"],
+          "responses": {
+            "Yes, available": "Yes, the accommodation is available.",
+            "No, already rented": "No, the accommodation has already been rented out."
+          },
+          "next_step": {
+            "Yes, available": "meeting_confirmation",
+            "No, already rented": "end_conversation"
+          }
+        },
+        {
+          "id": "meeting_confirmation",
+          "question": "The buyer prefers to meet {meeting_location}. Can you meet there?",
+          "type": "options",
+          "options": ["Yes, that works", "Suggest another location"],
+          "responses": {
+            "Yes, that works": "Yes, that meeting location works for me.",
+            "Suggest another location": "I'd prefer a different meeting location."
+          },
+          "next_step": {
+            "Yes, that works": "meeting_time_confirmation",
+            "Suggest another location": "alternate_meeting_location"
+          }
+        },
+        {
+          "id": "alternate_meeting_location",
+          "question": "Please provide your preferred meeting location.",
+          "type": "text",
+          "response_template": "My preferred meeting location is {value}.",
+          "next_step": "meeting_time_confirmation"
+        },
+        {
+          "id": "meeting_time_confirmation",
+          "question": "The buyer suggested meeting on {meeting_date}. Can you make that time?",
+          "type": "options",
+          "options": ["Yes, I'll be available", "No, suggest another time"],
+          "responses": {
+            "Yes, I'll be available": "Yes, I'll be available at that time.",
+            "No, suggest another time": "No, I'd like to suggest another time."
+          },
+          "next_step": {
+            "Yes, I'll be available": "inspection_final_confirmation",
+            "No, suggest another time": "alternate_meeting_time"
+          }
+        },
+        {
+          "id": "alternate_meeting_time",
+          "question": "Please suggest a new meeting date and time.",
+          "type": "datetime",
+          "response_template": "I'd prefer to meet on {value}.",
+          "next_step": "inspection_final_confirmation"
+        },
+        {
+          "id": "inspection_final_confirmation",
+          "question": "Confirm meeting details: {meeting_date} at {meeting_location} for property inspection.",
+          "type": "options",
+          "options": ["Confirm and notify buyer", "Cancel appointment"],
+          "responses": {
+            "Confirm and notify buyer": "I confirm and will notify the buyer.",
+            "Cancel appointment": "I want to cancel the inspection appointment."
+          },
+          "next_step": "end_conversation"
+        }
+      ]
+    },
+    "product": {
+      "title": "Product Response",
+      "questions": [
+        {
+          "id": "availability",
+          "question": "A buyer is interested in your product '{item_name}'. Would you like to proceed?",
+          "type": "options",
+          "options": ["Yes, available", "No, out of stock"],
+          "responses": {
+            "Yes, available": "Yes, the product is available.",
+            "No, out of stock": "No, the product is currently out of stock."
+          },
+          "next_step": {
+            "Yes, available": "stock_quantity",
+            "No, out of stock": "end_conversation"
+          }
+        },
+        {
+          "id": "stock_quantity",
+          "question": "How many units of this product are currently available?",
+          "type": "integer",
+          "response_template": "There are {value} unit(s) currently available.",
+          "next_step": "delivery_confirmation"
+        },
+        {
+          "id": "delivery_confirmation",
+          "question": "The buyer prefers {delivery_method} to {buyer_delivery_location}. Can you deliver?",
+          "type": "options",
+          "options": ["Yes, I can deliver", "No, buyer must pick up"],
+          "responses": {
+            "Yes, I can deliver": "Yes, I can deliver to the buyer's preferred location.",
+            "No, buyer must pick up": "No, the buyer will need to pick up the item."
+          },
+          "next_step": "delivery_time"
+        },
+        {
+          "id": "delivery_time",
+          "question": "In how many days/hours can you deliver the order?",
+          "type": "duration",
+          "response_template": "I can deliver the order in {value}.",
+          "next_step": "final_confirmation"
+        },
+        {
+          "id": "final_confirmation",
+          "question": "Confirm sale of {quantity} unit(s) at ₦{final_price} each, to be delivered by {delivery_date}. Proceed?",
+          "type": "options",
+          "options": ["Confirm sale", "Cancel transaction"],
+          "responses": {
+            "Confirm sale": "I have confirmed this sale.",
+            "Cancel transaction": "I want to cancel this transaction."
+          },
+          "next_step": "end_conversation"
+        }
+      ]
+    }
+  }
+}
