@@ -28,6 +28,7 @@ import Shop from "../screen/ExploreShop";
 import Service from "../screen/Service";
 import Accommodation from "../screen/Accomodation";
 import Search from "../screen/Search";
+import Watchline from "../screen/Watchline";
 const HomeStack = createNativeStackNavigator();
 export function HomeStackScreen() {
    
@@ -156,6 +157,16 @@ export function HomeStackScreen() {
           ), 
           // headerShown: false,  
         }}  name="product" component={Product} />
+
+        <HomeStack.Screen  options={{
+          header: ({navigation}) =>
+          (
+            <View style={{ height: 45, display: 'none', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px'}}>
+
+            </View>
+          ), 
+          // headerShown: false,  
+        }}  name="watchline" component={Watchline} />
 
         <HomeStack.Screen  options={{
           header: ({navigation}) =>

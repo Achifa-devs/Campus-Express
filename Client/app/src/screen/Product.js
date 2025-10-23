@@ -511,31 +511,35 @@ export default function Product() {
                   //   data?.user_id,
                   //   `I need more details about this offer, ${JSON.stringify(data)}`
                   // )
-                  if (user.user_id !== data.user_id) {
-                    const room = Tools.generateConversationId(user?.user_id, data?.user_id);
+                  // if (user.user_id !== data.user_id) {
+                  //   const room = Tools.generateConversationId(user?.user_id, data?.user_id);
                     
-                    if(!socket) return;
-                    setLoading(true)
+                  //   if(!socket) return;
+                  //   setLoading(true)
 
-                    socket.emit('send_message', {
-                      receiver_id: data.user_id, content: "I need more enquiries about this Offer", media_url: data.product_id, message_type: "product", created_at: new Date()
-                    }, (response) => {
-                      if(response.success){
-                        setLoading(false)
-                        navigation.navigate('Chat', {
-                          from: 'product', 
-                          room: { key: room, partner: response.partner },
-                          id: Tools.generateId(0)
-                        });
-                      }else{
-                        setLoading(false)
-                        Alert.alert('Error, please try again')
-                      }
-                    })
+                  //   socket.emit('send_message', {
+                  //     receiver_id: data.user_id, content: "I need more enquiries about this Offer", media_url: data.product_id, message_type: "product", created_at: new Date()
+                  //   }, (response) => {
+                  //     if(response.success){
+                  //       setLoading(false)
+                  //       navigation.navigate('Chat', {
+                  //         from: 'product', 
+                  //         room: { key: room, partner: response.partner },
+                  //         id: Tools.generateId(0)
+                  //       });
+                  //     }else{
+                  //       setLoading(false)
+                  //       Alert.alert('Error, please try again')
+                  //     }
+                  //   })
                     
-                  } else {
-                    Alert.alert('This offer is from your inventory')
-                  }
+                  // } else {
+                  //   Alert.alert('This offer is from your inventory')
+                  // }
+
+                  navigation.navigate('watchline', {
+                    data: data
+                  })
 
                 }}>
                   <Ionicons name={"chatbubble"} size={18} color="#FFF" />
@@ -630,7 +634,7 @@ export default function Product() {
           
           <TouchableOpacity
             style={styles.shareButton}
-            onPress={async() => {
+            onPress={async() => {Product
 
               const isShareSaved = await AddShare()
               if(!isShareSaved){

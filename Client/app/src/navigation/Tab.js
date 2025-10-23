@@ -146,6 +146,10 @@ export default function StoreTab({navigation}) {
             tabBarBadge: unread > 0 ? (unread > 99 ? "99+" : unread) : undefined,
           }}
           component={ChatStackScreen} />
+        {/* <Tab.Screen 
+          name="Deals"  
+          component={SellStackScreen} /> */}
+
         <Tab.Screen 
           name="Sell"  
           component={SellStackScreen} />
