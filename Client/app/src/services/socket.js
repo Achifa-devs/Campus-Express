@@ -21,7 +21,7 @@ export const initSocket = async (userId) => {
   });
 
   socket.on("disconnect", () => {
-    socket.emit("offline", {})
+    socket?.emit("offline", {})
     console.log("❌ Socket disconnected");
   });
 

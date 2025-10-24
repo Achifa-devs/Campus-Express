@@ -5,10 +5,10 @@ const shortId =  require('short-id')
 exports.findDealsById = async function ({ user_id }) {
   const { rows } = await pool.query(
     `
-      SELECT o.*, p.*
-      FROM orders o
-      JOIN products p ON o.product_id = p.product_id
-      WHERE o.user_id = $1;
+        SELECT o.*, p.*
+        FROM orders o
+        JOIN products p ON o.product_id = p.product_id
+        WHERE o.user_id = $1 OR o.vendor_id = $1
     `,
     [user_id]
   );
@@ -116,6 +116,71 @@ exports.updateDealById = async function ({ order_id,status,stock,price,pick_up_c
     return rows[0]; // return inserted record
 }
 
+
+
+
+
+
+// Find refund by ID
+// export async function findRefundById({ refund_id }) {
+//     const result = await pool.query(
+//     `SELECT * FROM refunds WHERE refund_id = $1`,
+//     [refund_id]
+//     );
+//   return result.rows;
+// };
+
+// // Find refunds
+// export async function findRefunds({ user_id }) {
+//   const result = await pool.query(
+//     `SELECT * FROM refunds WHERE user_id = $1`,
+//     [user_id]
+//   );
+//   return result.rows;
+// };
+
+// // Create refund
+// export async function createRefund({ user_id, order_id, amount, reason }) {
+//   const result = await pool.query(
+//     `INSERT INTO refunds(
+//         id, user_id, order_id, amount, reason, status, created_at
+//     ) VALUES (
+//         DEFAULT, $1, $2, $3, $4, $5, $6
+//     )`,
+//     [user_id, order_id, amount, reason, 'pending', `${new Date()}`]
+//     );
+    
+//   let response = await errorHandler(result?.rowCount);
+//   return response;
+// };
+
+// // Delete refund
+// export async function deleteRefundById({ refund_id }) {
+//   const result = await pool.query(
+//     `DELETE FROM refunds WHERE refund_id=$1`,
+//     [refund_id]
+//   );
+//   let response = await errorHandler(result?.rowCount);
+//   return response;
+// };
+
+// // Confirm refund
+// export async function confirmRefund({ refund_id }) {
+//   const result = await pool.query(
+//     `UPDATE refunds set status="completed" WHERE refund_id=$1`,
+//     [refund_id]
+//   );
+//   return result.rows;
+// };
+
+// // cancel order
+// export async function cancelRefund({ refund_id }) {
+//   const result = await pool.query(
+//     `UPDATE refunds set status="cancelled" WHERE refund_id=$1`,
+//     [refund_id]
+//   );
+//   return result.rows;
+// };
 
 
 

@@ -16,6 +16,8 @@ import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/nativ
 import React, { useCallback, useEffect } from "react";
 import Profile from "../screen/Profile";
 import { set_mode } from "../../redux/info/mode";
+import Deals from "../screen/Deals";
+import Deal from "../screen/Deal";
 // import ChatList from "../screen/ChatList";
 // import ChatRoom from "../screen/ChatRoom";
 
@@ -34,13 +36,83 @@ export function DealStackScreen() {
             <DealStack.Screen
                 options={{
                     header: ({ navigation }) => (
-                        <View style={{ display: 'none'}}
-                        >
+                        <View style={{
+                            height: 60,
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            backgroundColor: '#FFF',
+                            paddingHorizontal: 16,
+                            paddingVertical: 8,
+                            borderBottomWidth: 1,
+                            borderBottomColor: '#F0F0F0',
+                            shadowColor: '#000',
+                            shadowOffset: {
+                                width: 0,
+                                height: 2,
+                            },
+                            shadowOpacity: 0.05,
+                            shadowRadius: 3.84,
+                            elevation: 2,
+                            ...Platform.select({
+                                ios: {
+                                    paddingTop: 10,
+                                },
+                            })
+                        }}>
+                            <Text style={{
+                                fontSize: 20,
+                                fontWeight: 'bold', 
+                                color: '#111',
+                            }}>
+                                Deals
+                            </Text>
                         </View>
                     ),
                 }}
                 
-                // name="chat" component={ChatList}
+                name="deals" component={Deals}
+            />
+
+                        <DealStack.Screen
+                options={{
+                    header: ({ navigation }) => (
+                        <View style={{
+                            height: 60,
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            backgroundColor: '#FFF',
+                            paddingHorizontal: 16,
+                            paddingVertical: 8,
+                            borderBottomWidth: 1,
+                            borderBottomColor: '#F0F0F0',
+                            shadowColor: '#000',
+                            shadowOffset: {
+                                width: 0,
+                                height: 2,
+                            },
+                            shadowOpacity: 0.05,
+                            shadowRadius: 3.84,
+                            elevation: 2,
+                            ...Platform.select({
+                                ios: {
+                                    paddingTop: 10,
+                                },
+                            })
+                        }}>
+                            <Text style={{
+                                fontSize: 20,
+                                fontWeight: 'bold', 
+                                color: '#111',
+                            }}>
+                                Deal
+                            </Text>
+                        </View>
+                    ),
+                }}
+                
+                name="deal" component={Deal}
             />
 
           

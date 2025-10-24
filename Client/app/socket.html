@@ -90,7 +90,7 @@
       query: { user_id: userId }
     });
 
-    socket.emit("join_room", { otherUserId: 'CE-4e8ff6' });
+    socket?.emit("join_room", { otherUserId: 'CE-4e8ff6' });
 
     const chat = document.getElementById("chat");
     const form = document.getElementById("form");
@@ -116,7 +116,7 @@
         };
 
         // Emit message to server
-        socket.emit("send_message", msg, (event, savedMsg) => {
+        socket?.emit("send_message", msg, (event, savedMsg) => {
           addMessage(msg.content, "me");
         });
 

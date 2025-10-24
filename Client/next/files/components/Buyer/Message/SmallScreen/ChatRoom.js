@@ -38,7 +38,7 @@ export default function ChatRoom() {
         if (socket && partner) {
             message.map(msg => {
                 if (msg.type === 'received' && msg.seen !== '  ✓✓') {
-                    socket.emit('message_seen', { conversation_id: msg.room_id });
+                    socket?.emit('message_seen', { conversation_id: msg.room_id });
                 }
             })
         }
@@ -47,7 +47,7 @@ export default function ChatRoom() {
     function get_chats () {
 
         buyer_overlay_setup(true, "Loading chats...");
-        socket.emit('get_room_messages', { receiver_id: partner.user_id }, (response) => {
+        socket?.emit('get_room_messages', { receiver_id: partner.user_id }, (response) => {
             if (response.success) {
                 console.log("Chat room received:", response.messages);
 
@@ -96,7 +96,7 @@ export default function ChatRoom() {
         console.log("Socket instance in Aside:", socket);
     
         if (partner) {
-            socket.emit('join_room', { otherUserId: partner.user_id });
+            socket?.emit('join_room', { otherUserId: partner.user_id });
             get_chats()
         };
 
@@ -129,7 +129,7 @@ export default function ChatRoom() {
                 const chatBody = document.querySelector('.chat-room-body');
                 chatBody.scrollTop = chatBody.scrollHeight;
 
-                socket.emit('message_seen', { conversation_id: msg.conversation_id });
+                socket?.emit('message_seen', { conversation_id: msg.conversation_id });
             }
         });
 
@@ -187,7 +187,7 @@ export default function ChatRoom() {
                 setMessage(prevArr => [...prevArr, newMsg]);
                 setNewMessage('');
                 // receiver_id, content, media_url, message_type, created_at
-                socket.emit('send_message', { receiver_id: partner.user_id, content: newMsg.text, media_url: null, message_type: 'text', created_at: new Date() }, (response) => {
+                socket?.emit('send_message', { receiver_id: partner.user_id, content: newMsg.text, media_url: null, message_type: 'text', created_at: new Date() }, (response) => {
                     if (response.success) {
                         // console.log("Message sent successfully:", response.message);
                         setMessage(prevArr => {
@@ -282,10 +282,10 @@ export default function ChatRoom() {
                         <div className='chat-room-footer expanded'>
                             <textarea placeholder='Type a message...' value={newMessage} 
                             onFocus={e => {
-                                socket.emit('is_typing', {partner_id:  partner.user_id, isTyping: true})
+                                socket?.emit('is_typing', {partner_id:  partner.user_id, isTyping: true})
                             }} 
                             onBlur={e => {
-                                socket.emit('not_typing', {partner_id:  partner.user_id, isTyping: false})
+                                socket?.emit('not_typing', {partner_id:  partner.user_id, isTyping: false})
                             }} onChange={(e) => setNewMessage(e.target.value)}></textarea>
                             <button className='send-button' onClick={() => handleNewMessage()}>
                                 <img src={sendSvg.src} alt='Send' style={{height: '20px', width: '20px', objectFit: 'contain'}} />

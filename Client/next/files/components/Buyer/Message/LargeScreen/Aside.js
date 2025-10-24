@@ -36,7 +36,7 @@ export default function Aside() {
 
   function get_chat_heads () {
     buyer_overlay_setup(true, "Fetching chats...")
-    socket.emit('get_all_messages', { user_id: buyer_info?.user_id }, (response) => {
+    socket?.emit('get_all_messages', { user_id: buyer_info?.user_id }, (response) => {
       if (response.success) {
         console.log("Chat list received:", response.messages);
         setChatList(response.messages);

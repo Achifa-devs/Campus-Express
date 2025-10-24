@@ -123,7 +123,7 @@ function NavigationHandler() {
   function fetchChatList() {
 
     if(!socket) return;
-    socket.emit("get_all_messages", { user_id: user?.user_id }, cb => {
+    socket?.emit("get_all_messages", { user_id: user?.user_id }, cb => {
       const { messages, success } = cb;
       if (success) {
         
@@ -163,7 +163,7 @@ function NavigationHandler() {
   useEffect(() => {
     if(!chat && !socket) return;
     chat && chat.map(room => {
-      room.partner && socket.emit('join_room', { otherUserId: room.partner.user_id });
+      room.partner && socket?.emit('join_room', { otherUserId: room.partner.user_id });
     })
   }, [chat, socket])
 
@@ -469,7 +469,7 @@ function NavigationHandler() {
               if (name) {
                 console.log('📍 Current screen:', name);
 
-                if (name === 'home' || name === 'sell' || name === 'profile' || name === 'chat') {
+                if (name === 'home' || name === 'sell' || name === 'profile' || name === 'chat' || name === 'deals') {
                   dispatch(set_nested_nav({ boolean: true, id: Tools.generateId() }));
                 } else {
                   dispatch(set_nested_nav({ boolean: false, id: Tools.generateId() }));

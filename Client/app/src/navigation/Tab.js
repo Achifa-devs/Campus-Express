@@ -29,6 +29,7 @@ import { ProfileStackScreen } from '../stacks/Profile';
 import { ChatStackScreen } from '../stacks/Chat';
 import { getSocket, initSocket } from '../services/socket';
 import { set_chat } from '../../redux/info/chat';
+import { DealStackScreen } from '../stacks/Deals';
 
 
 const Tab = createBottomTabNavigator();
@@ -69,7 +70,7 @@ export default function StoreTab({navigation}) {
     function fetchChatList(socket) {
   
       if(!socket) return;
-      socket.emit("get_all_messages", { user_id: user?.user_id }, cb => {
+      socket?.emit("get_all_messages", { user_id: user?.user_id }, cb => {
         const { messages, success } = cb;
         if (success) {
           
@@ -122,6 +123,8 @@ export default function StoreTab({navigation}) {
               iconName = focused ? 'person-circle' : 'person-circle-outline';
             }else if (route.name === 'Chat') {
               iconName = focused ? 'chatbubble' : 'chatbubble-outline';
+            }else if(route.name === 'Deals'){
+              iconName = focused ? 'pricetag' : 'pricetag-outline'
             }
             return <Ionicons  name={iconName} size={size} color={color} />;
             // console.log('Icon name: ', iconName);
@@ -139,6 +142,14 @@ export default function StoreTab({navigation}) {
         <Tab.Screen 
           name="Home" 
           component={HomeStackScreen} /> 
+        
+        <Tab.Screen 
+          name="Deals"  
+          component={DealStackScreen} />
+
+        <Tab.Screen 
+          name="Sell"  
+          component={SellStackScreen} />
         <Tab.Screen 
           name="Chat"  
           options={{
@@ -146,13 +157,6 @@ export default function StoreTab({navigation}) {
             tabBarBadge: unread > 0 ? (unread > 99 ? "99+" : unread) : undefined,
           }}
           component={ChatStackScreen} />
-        {/* <Tab.Screen 
-          name="Deals"  
-          component={SellStackScreen} /> */}
-
-        <Tab.Screen 
-          name="Sell"  
-          component={SellStackScreen} />
         <Tab.Screen 
           name="Profile" 
           component={ProfileStackScreen} />

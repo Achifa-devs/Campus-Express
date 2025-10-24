@@ -97,7 +97,7 @@ const ChatRoom = ({ route }) => {
     if (!socket || !room?.partner) return;
 
     // Join room and get messages
-    socket.emit('join_room', { otherUserId: room.partner.user_id });
+    socket?.emit('join_room', { otherUserId: room.partner.user_id });
     get_chats(room.partner);
 
     // Socket event listeners
@@ -138,7 +138,7 @@ const ChatRoom = ({ route }) => {
         });
 
         // Mark as seen
-        socket.emit('message_seen', { conversation_id: msg.conversation_id });
+        socket?.emit('message_seen', { conversation_id: msg.conversation_id });
       }
     };
 
@@ -204,7 +204,7 @@ const ChatRoom = ({ route }) => {
     if (unseenMessages.length > 0) {
       unseenMessages.forEach(msg => {
         if (msg.room_id) {
-          socket.emit('message_seen', { conversation_id: msg.room_id });
+          socket?.emit('message_seen', { conversation_id: msg.room_id });
         }
       });
     }
@@ -243,7 +243,7 @@ const ChatRoom = ({ route }) => {
   //       timestamp: new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
   //     };
   //     setMessages(prevArr => [newMsg, ...prevArr]);
-  //     socket.emit('message_seen', { conversation_id: msg.conversation_id });
+  //     socket?.emit('message_seen', { conversation_id: msg.conversation_id });
   //   }
   // }
 
@@ -273,7 +273,7 @@ const ChatRoom = ({ route }) => {
     setNewMessage('');
 
     // Send via socket
-    socket.emit('send_message', { 
+    socket?.emit('send_message', { 
       receiver_id: room.partner.user_id, 
       content: newMsg.text, 
       media_url: null, 
@@ -319,7 +319,7 @@ const ChatRoom = ({ route }) => {
   const get_chats = (partner) => {
     if (!socket || !partner) return;
 
-    socket.emit('get_room_messages', { receiver_id: partner.user_id }, (response) => {
+    socket?.emit('get_room_messages', { receiver_id: partner.user_id }, (response) => {
       // Alert.alert('getting socket: ', JSON.stringify(response))
       
       if (response && response.success) {

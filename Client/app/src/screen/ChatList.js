@@ -85,7 +85,7 @@ const ChatList = ({ navigation }) => {
   
   function fetchChatList() {
     if(!socket) return;
-    socket.emit("get_all_messages", { user_id: user?.user_id }, cb => {
+    socket?.emit("get_all_messages", { user_id: user?.user_id }, cb => {
       const { messages, success } = cb;
       if (success) {
         

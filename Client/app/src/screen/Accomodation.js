@@ -505,7 +505,7 @@ const Accommodation = ({ route, navigation }) => {
                   if(!socket) return;
                   setSocketLoader(true);
 
-                  socket.emit('send_message', {
+                  socket?.emit('send_message', {
                     receiver_id: data.user_id, content: "I need more enquiries about this Offer", media_url: data.product_id, message_type: "product", created_at: new Date()
                   }, (response) => {
                     if(response.success){

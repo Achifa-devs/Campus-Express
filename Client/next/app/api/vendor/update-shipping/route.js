@@ -7,7 +7,7 @@ export async function POST(req) {
     const body = await req.json();
     const { user_id, data } = body;
     let {
-        shippingZone
+      shippingZone
     } = data
 
     let {
@@ -37,7 +37,7 @@ export async function POST(req) {
       return NextResponse.json({ success: res?.rowCount > 0 ? true : false }, { status: 200 });
     } else {
       const res = await pool.query(`INSERT INTO shipping(
-        id,address1, address2, address3, address4, town, state, country,user_id
+        id, address1, address2, address3, address4, town, state, country,user_id
       ) VALUES(
         DEFAULT,$1,$2,$3,$4,$5,$6,$7,$8
       )`, [Address1, Address2, Address3, Address4, City, State, Country, user_id]);
