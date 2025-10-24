@@ -37,7 +37,7 @@ export default function Deals() {
     const navigation = useNavigation()
 
     const renderDealsCard = useCallback(({item}) => (
-        <TouchableOpacity activeOpacity={.9} onPress={e => navigation.navigate('deal', {
+        <TouchableOpacity activeOpacity={.9} onPress={e => navigation.navigate(user.user_id === item.vendor_id ? 'deal_vendor' : 'deal_buyer', {
             deal: item
         })}>
             <Card item={item} />

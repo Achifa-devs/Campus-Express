@@ -15,6 +15,18 @@ exports.findDealsById = async function ({ user_id }) {
   return rows;
 };
 
+exports.findPartnerById = async function ({ user_id }) {
+  const { rows } = await pool.query(
+    `
+        SELECT *
+        FROM users
+        WHERE user_id = $1
+    `,
+    [user_id]
+  );
+  return rows[0];
+};
+
 // Find a deal for user
 exports.findDealById = async function ({ product_id }) {
     const { rows } = await pool.query(

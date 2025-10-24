@@ -13,11 +13,13 @@ import {
   Alert,
   Animated
 } from 'react-native'
+import { useSelector } from 'react-redux'
 // import { LinearGradient } from 'expo-linear-gradient'
 
-export default function Deal() {
+export default function DealForBuyer() {
   const navigation = useNavigation()
   const { deal } = useRoute()?.params
+  const { user } = useSelector(s=> s.user)
   const [activeTab, setActiveTab] = useState('details')
   
   const fadeAnim = new Animated.Value(0)
@@ -179,7 +181,9 @@ export default function Deal() {
             onPress={() => setActiveTab('tracking')}
           >
             <Text style={[styles.tabText, activeTab === 'tracking' && styles.activeTabText]}>
-              Tracking
+              {
+                deal.vendor_id === user.user_id  ? 'Manage Order' : 'Tracking'
+              }
             </Text>
           </TouchableOpacity>
           <TouchableOpacity 
@@ -206,17 +210,18 @@ export default function Deal() {
               <InfoCard 
                 icon="🏁" 
                 title="End Date" 
-                value={deal.endDate || '20 Feb 2024'} 
+                value={deal.endDate || 'Present'} 
               />
               <InfoCard 
                 icon="⏱️" 
                 title="Duration" 
-                value="5 days" 
+                value="5 days & Counting" 
               />
               <InfoCard 
                 icon="📦" 
                 title="Type" 
-                value={deal.type || 'Accommodation'} 
+                value={`${deal?.purpose[0].toUpperCase()}${deal?.purpose.slice(1)}` || 'Accommodation'}
+
               />
             </View>
 
@@ -356,7 +361,7 @@ const styles = StyleSheet.create({
   productCard: {
     backgroundColor: '#fff',
     margin: 16,
-    borderRadius: 8,
+    borderRadius: 4,
     overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: {
@@ -450,7 +455,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginHorizontal: 16,
     backgroundColor: '#fff',
-    borderRadius: 8,
+    borderRadius: 4,
     padding: 4,
     marginBottom: 16,
     shadowColor: '#000',
@@ -466,7 +471,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 12,
     alignItems: 'center',
-    borderRadius: 8,
+    borderRadius: 4,
   },
   activeTab: {
     backgroundColor: '#3b82f6',
@@ -499,7 +504,7 @@ const styles = StyleSheet.create({
     width: '48%',
     backgroundColor: '#fff',
     padding: 16,
-    borderRadius: 12,
+    borderRadius: 4,
     marginBottom: 12,
     alignItems: 'center',
     shadowColor: '#000',
@@ -531,7 +536,7 @@ const styles = StyleSheet.create({
   descriptionCard: {
     backgroundColor: '#fff',
     padding: 20,
-    borderRadius: 12,
+    borderRadius: 4,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -635,7 +640,7 @@ const styles = StyleSheet.create({
     width: '48%',
     backgroundColor: '#fff',
     padding: 20,
-    borderRadius: 12,
+    borderRadius: 4,
     alignItems: 'center',
     marginBottom: 12,
     shadowColor: '#000',

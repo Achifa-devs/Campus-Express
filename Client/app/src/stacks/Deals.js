@@ -17,7 +17,8 @@ import React, { useCallback, useEffect } from "react";
 import Profile from "../screen/Profile";
 import { set_mode } from "../../redux/info/mode";
 import Deals from "../screen/Deals";
-import Deal from "../screen/Deal";
+import DealForBuyer from "../screen/DealForBuyer";
+import DealForVendor from "../screen/DealForVendor";
 // import ChatList from "../screen/ChatList";
 // import ChatRoom from "../screen/ChatRoom";
 
@@ -74,7 +75,7 @@ export function DealStackScreen() {
                 name="deals" component={Deals}
             />
 
-                        <DealStack.Screen
+            <DealStack.Screen
                 options={{
                     header: ({ navigation }) => (
                         <View style={{
@@ -112,7 +113,48 @@ export function DealStackScreen() {
                     ),
                 }}
                 
-                name="deal" component={Deal}
+                name="deal_buyer" component={DealForBuyer}
+            />
+
+            <DealStack.Screen
+                options={{
+                    header: ({ navigation }) => (
+                        <View style={{
+                            height: 60,
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            backgroundColor: '#FFF',
+                            paddingHorizontal: 16,
+                            paddingVertical: 8,
+                            borderBottomWidth: 1,
+                            borderBottomColor: '#F0F0F0',
+                            shadowColor: '#000',
+                            shadowOffset: {
+                                width: 0,
+                                height: 2,
+                            },
+                            shadowOpacity: 0.05,
+                            shadowRadius: 3.84,
+                            elevation: 2,
+                            ...Platform.select({
+                                ios: {
+                                    paddingTop: 10,
+                                },
+                            })
+                        }}>
+                            <Text style={{
+                                fontSize: 20,
+                                fontWeight: 'bold', 
+                                color: '#111',
+                            }}>
+                                Deal
+                            </Text>
+                        </View>
+                    ),
+                }}
+                
+                name="deal_vendor" component={DealForVendor}
             />
 
           

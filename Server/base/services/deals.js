@@ -2,7 +2,8 @@ const {
     findDealById,
     findDealsById,
     createNewDeal,
-    updateDealById 
+    updateDealById, 
+    findPartnerById
 } = require("../models/deals");
 
 
@@ -15,8 +16,23 @@ exports.getDeal = async function (payload) {
 exports.getDeals = async function (payload) {
   const { user_id } = payload; 
   const response = await findDealsById({ user_id });
-  return response;
+
+  const business = response.map(async (item) => {
+    let partner;
+
+    if (item.vendor_id === user_id) {
+      partner = await findPartnerById({ user_id: item.user_id });
+    } else if (item.user_id === user_id) {
+      partner = await findPartnerById({ user_id: item.vendor_id });
+    }
+
+    return { ...item, partner };
+  });
+
+  const result = (await Promise.all(business)).filter(Boolean);
+  return result;
 };
+
 
 exports.updateDeal = async function (payload) {
   const { order_id,status,stock,price,pick_up_channels } = payload;
