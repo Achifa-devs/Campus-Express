@@ -120,17 +120,6 @@ class Payment {
     return result.rows;
   }
 
-
-
-
-
-
-
-
-
-
-
-
   static async createPromotion(paymentData) {
     const { reference, product_id, duration, plan, amount, user_id, start_date, end_date } = paymentData;
     const query = `

@@ -1,45 +1,54 @@
-export class Transfer {
+module.exports = class Transfer {
 
     static async createRecipient(name, account_number, bank_code) {
-    
-        const https = require('https')
+        const https = require('https');
 
         const params = JSON.stringify({
-            "type": "nuban",
-            "name": name,
-            "account_number": account_number,
-            "bank_code": bank_code,
-            "currency": "NGN"
-        })
+            type: "nuban",
+            name,
+            account_number,
+            bank_code,
+            currency: "NGN"
+        });
 
         const options = {
-            hostname: 'api.paystack.co',
+            hostname: "api.paystack.co",
             port: 443,
-            path: '/transferrecipient',
-            method: 'POST',
+            path: "/transferrecipient",
+            method: "POST",
             headers: {
-                Authorization: `Bearer ${process.env.paystack_secret_key}`,
-                'Content-Type': 'application/json'
+            Authorization: `Bearer ${process.env.paystack_secret_key}`,
+            "Content-Type": "application/json"
             }
-        }
+        };
 
-        const req = https.request(options, res => {
-            let data = ''
+        return new Promise((resolve, reject) => {
+            const req = https.request(options, (res) => {
+            let data = "";
 
-            res.on('data', (chunk) => {
-                data += chunk
+            res.on("data", (chunk) => {
+                data += chunk;
             });
 
-            res.on('end', () => {
-                console.log(JSON.parse(data))
-            })
-        }).on('error', error => {
-            console.error(error)
-        })
+            res.on("end", () => {
+                try {
+                const parsed = JSON.parse(data);
+                resolve(parsed);
+                } catch (err) {
+                reject(new Error("Invalid JSON response from Paystack"));
+                }
+            });
+            });
 
-        req.write(params)
-        req.end()
+            req.on("error", (error) => {
+            reject(error);
+            });
+
+            req.write(params);
+            req.end();
+        });
     }
+
 
     static async initiateTransfer(amount, recipient, reason, reference) {
         const https = require('https')
@@ -80,5 +89,14 @@ export class Transfer {
         req.write(params)
         req.end()
     }
+
+
+
+    static generateRefId(prefix = 'REF') {
+        const timestamp = Date.now().toString(36).toUpperCase(); // Encodes current time
+        const randomPart = Math.random().toString(36).substring(2, 8).toUpperCase(); // Random string
+        return `${prefix}-${timestamp}-${randomPart}`;
+    }
+
 
 }

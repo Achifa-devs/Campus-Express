@@ -1,14 +1,13 @@
 const express = require('express');
 const paymentRoutes = require('./routes/paymentRoutes');
+const transferRoutes = require('./routes/transferRoutes');
 const pool = require('./config/database');
 require('dotenv').config();
 
 const app = express();
-
-// Middleware
 app.use(express.json());
 
-// DB health check (useful to diagnose timeouts/connectivity)
+// Database health check
 app.get('/db/health', async (_req, res) => {
   try {
     const r = await pool.query('SELECT 1 AS ok');
@@ -20,15 +19,10 @@ app.get('/db/health', async (_req, res) => {
 });
 
 // Routes
-app.use('/', paymentRoutes);
+app.use(paymentRoutes);
+app.use(transferRoutes);
 
-// Export for Vercel
-module.exports = app;
-
-// For local development
-if (require.main === module) {
-  const PORT = process.env.PORT || 3000;
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-}
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
