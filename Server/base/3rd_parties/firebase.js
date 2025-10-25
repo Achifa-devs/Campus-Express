@@ -60,3 +60,24 @@ exports.sendNoticeForNewMsg = async function (token, title, body, room, partner)
   }
 }
 
+exports.sendPushOnNewDeal = async function (token,title,body,media,order_id) {
+  const message = {
+    token,
+    data: {
+      title,
+      body,
+      media,
+      order_id
+    },
+  };
+
+  admin
+  .messaging()
+  .send(message)
+  .then((response) => {
+    console.log('Successfully sent:', response);
+  })
+  .catch((error) => {
+    console.error('Error sending:', error.message || error);
+  });
+}

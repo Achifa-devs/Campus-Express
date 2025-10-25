@@ -1,5 +1,5 @@
 const { getCurrentVersion, updateFirebaseTokenByid } = require('../models/general');
-const sendNoticeForNewMsg = require('../3rd_parties/firebase');
+const { sendNoticeForNewMsg, sendPushOnNewDeal } = require('../3rd_parties/firebase');
 const initializeCloudinary = require('../config/cloudinary');
 const v2 = initializeCloudinary();
 const shortId = require('short-id');
@@ -20,11 +20,24 @@ async function updateFirebaseToken(payload) {
 // ✅ Function 3: Send Firebase Notification
 async function sendFirebaseNotification(payload) {
   const { token, data } = payload;
-  const { title, body, room, partner } = data;
+  const { type } = data;
+  if(type === 'deal'){
+    const { token, title, body, media, order_id } = data;
+    const result = await sendPushOnNewDeal(token, title, body, media, order_id);
+    if (result.success) return result.success;
+    else throw new Error("Error sending firebase notification: " + result.error);
+  }else if(type === 'chat'){
+    const { title, body, room, partner } = data;
+    const result = await sendNoticeForNewMsg(token, title, body, room, partner);
+    if (result.success) return result.success;
+    else throw new Error("Error sending firebase notification: " + result.error);
+  }else{
 
-  const result = await sendNoticeForNewMsg(token, title, body, room, partner);
-  if (result.success) return result.success;
-  else throw new Error("Error sending firebase notification: " + result.error);
+  }
+
+  
+
+  
 }
 
 // ✅ Function 4: Get media folder from Cloudinary

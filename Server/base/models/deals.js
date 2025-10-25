@@ -105,21 +105,17 @@ exports.createNewDeal = async function ({ buyer, product_id, stock, price, local
 };
 
 // Update new deal
-exports.updateDealById = async function ({ order_id,status,stock,price,pick_up_channels }) {
+exports.updateDealById = async function ({ order_id,status,pick_up_channels }) {    
     const { rows } = pool.query(
         `   UPDATE orders 
             SET 
             status = $1,
-            stock = $2,
-            price = $3,
-            pick_up_channels = $4
-            WHERE order_id = $5
+            pick_up_channels = $2
+            WHERE order_id = $3
             RETURNING *;
         `,
         [
             status,
-            stock,
-            price,
             pick_up_channels,
             order_id
         ]

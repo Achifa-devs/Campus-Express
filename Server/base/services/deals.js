@@ -35,8 +35,8 @@ exports.getDeals = async function (payload) {
 
 
 exports.updateDeal = async function (payload) {
-  const { order_id,status,stock,price,pick_up_channels } = payload;
-  const response = await updateDealById({ order_id,status,stock,price,pick_up_channels });
+  const { order_id,status,pick_up_channels } = payload;
+  const response = await updateDealById({ order_id,status,pick_up_channels });
   return response;
 };
 

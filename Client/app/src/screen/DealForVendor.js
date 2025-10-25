@@ -72,7 +72,7 @@ export default function DealForVendor() {
     )
   }
 
-  const handleUpdateTracking = () => {
+  const handleUploadEvidence = () => {
     Alert.alert(
       "Update Tracking",
       "Enter tracking information",
@@ -349,9 +349,9 @@ export default function DealForVendor() {
               />
               
               <VendorActionButton
-                title="Update Tracking"
-                icon="📦"
-                onPress={handleUpdateTracking}
+                title="Upload Evidence"
+                icon="🗂️"
+                onPress={handleUploadEvidence}
                 variant="secondary"
                 disabled={orderStatus === 'pending'}
               />
@@ -365,12 +365,12 @@ export default function DealForVendor() {
               />
               
               <VendorActionButton
-                title="Contact Customer"
-                icon="📞"
+                title="Claim Payment"
+                icon="🧾"
                 onPress={handleContactCustomer}
                 variant="secondary"
               />
-            </View>
+            </View>        
 
             {/* Customer Information */}
             <View style={styles.customerCard}>
