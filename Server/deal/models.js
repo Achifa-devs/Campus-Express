@@ -42,92 +42,42 @@ exports.findDealById = async function ({ product_id }) {
 
   return rows;
 }
-
-// Create new deal
-exports.createNewDeal = async function ({ buyer, product_id, stock, price, locale, vendor_id, shipping_fee, date }) {
-    
-  try {
-    let status = {
-      returned: {
-        outcome: null,
-        completed: false,
-        completedAt: null
-      },
-      shipping: {
-        outcome: null,
-        completed: false,
-        completedAt: null
-      },
-      cancelled: {
-        outcome: null,
-        completed: false,
-        completedAt: null
-      },
-      completed: {
-        outcome: null,
-        completed: false,
-        completedAt: null
-      },
-      delivered: {
-        outcome: null,
-        completed: false,
-        completedAt: null
-      },
-      processing: {
-        outcome: "success",
-        completed: true,
-        completedAt: date
-      }
-    }
-    const { rows } = await pool.query(
-      `
-        INSERT INTO orders (
-          id, order_id, product_id, status, date, stock, user_id, price, pick_up_channels, havePaid, vendor_id, shipping_fee
-        )
-        VALUES (
-          DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11
-        )
-        RETURNING *;
-      `,
-      [
-        shortId.generate(),              // order_id
-        product_id,                      // product_id
-        JSON.stringify(status),            // status (should be JSONB column)
-        date,                      // date
-        stock,                           // stock
-        buyer,                           // user_id
-        price,                           // price
-        locale,                          // pick_up_channels (if JSONB)
-        false,                           // havePaid
-        vendor_id,                       // vendor_id
-        shipping_fee                     // shipping_fee
-      ]
-    );
-    return rows[0]; // return inserted record
-  } catch (error) {
-    throw new Error("Internal server error:", error);
+// Update deal by stage
+exports.updateDealById = async function ({ order, new_stage, date, userId }) {
+  let newStatus;
+  if(new_stage === 'completed'){
+    newStatus = {
+      outcome: "success",
+      completed: true,
+      completedAt: date,
+      buyer: order.user_id === userId ? true: false,
+      vendor: order.vendor_id === userId ? true: false
+    };
+  }else{
+    newStatus = {
+      outcome: "success",
+      completed: true,
+      completedAt: date,
+    };
   }
+
+  const query = `
+    UPDATE orders 
+    SET 
+      status = jsonb_set(
+        status,
+        '{${new_stage}}',           
+        $1::jsonb,              
+        true
+      ),
+      stage = $2
+    WHERE order_id = $3
+    RETURNING *;
+  `;
+
+  const values = [JSON.stringify(newStatus), stage, order.order_id];
+
+  const { rows } = await pool.query(query, values);
+
+  return rows?.[0] || null;
 };
-
-// Update new deal
-exports.updateDealById = async function ({ order_id,status }) {    
-  const { rows } = pool.query(
-    `   
-      UPDATE orders 
-      SET 
-      status = $1,
-      WHERE order_id = $2
-      RETURNING *;
-    `,
-    [
-      status,
-      order_id
-    ]
-  )
-
-  return rows[0]; // return inserted record
-}
-
-
-
-

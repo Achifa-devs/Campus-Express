@@ -72,6 +72,50 @@ class Tools {
         return [userA, userB].sort((a, b) => (a < b ? -1 : a > b ? 1 : 0)).join('_');
     }
 
+    static generateDealStatusAfterPurchase(){
+        return(
+            {
+                refunded: {
+                    outcome: null,
+                    completed: false,
+                    completedAt: null,
+                },
+                shipping: {
+                    outcome: null,
+                    completed: false,
+                    completedAt: null,
+                },
+                cancelled: {
+                    outcome: null,
+                    completed: false,
+                    completedAt: null,
+                },
+                completed: {
+                    outcome: null,
+                    completed: false,
+                    completedAt: null,
+                    buyer: false,
+                    vendor: false
+                },
+                confirmed: {
+                    outcome: null,
+                    completed: false,
+                    completedAt: null,
+                },
+                delivered: {
+                    outcome: null,
+                    completed: false,
+                    completedAt: null,
+                },
+                purchased: {
+                    outcome: "success",
+                    completed: true,
+                    completedAt: new Date(),
+                },
+            }
+        )
+    }
+
 }
 
 

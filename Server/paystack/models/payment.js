@@ -65,27 +65,33 @@ class Payment {
   // completed / confirmed → Customer has confirmed receipt.
 
 
-  static async markOrderAsPaidAndUpdateStatus(order_id) {
-    const status = {
-      outcome: "success",
-      completed: true,
-      completedAt: new Date()
-    }
-    const query = `
-      UPDATE orders 
-      SET status = jsonb_set(
-        status,
-        '{confirmed}', 
-        $3::jsonb,
-        true
-      ),
-      havepaid = $1
-      WHERE order_id = $2 
-      RETURNING *;
-    `;
-    
-    const result = await pool.query(query, [true, order_id, JSON.stringify(status)]);
-    return result.rows[0];
+  static async createNewOrder({ user_id, product_id, stock, price, locale, vendor_id, shipping_fee, date, json_status, type }) {
+    const { rows } = await pool.query(
+      `
+        INSERT INTO orders (
+          id, order_id, product_id, status, date, stock, user_id, price, pick_up_channels, havePaid, vendor_id, shipping_fee, type
+        )
+        VALUES (
+          DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11
+        )
+        RETURNING *;
+      `,
+      [
+        shortId.generate(),              // order_id
+        product_id,                      // product_id
+        JSON.stringify(json_status),            // status (should be JSONB column)
+        date,                      // date
+        stock,                           // stock
+        user_id,                           // user_id
+        price,                           // price
+        locale,                          // pick_up_channels (if JSONB)
+        false,                           // havePaid
+        vendor_id,                       // vendor_id
+        shipping_fee,                     // shipping_fee
+        type
+      ]
+    );
+    return rows[0]; // return inserted record
   }
 
   static async createOrderTransaction({ reference, order_id, amount, user_id, payment_method, status }) {

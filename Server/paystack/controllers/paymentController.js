@@ -167,10 +167,11 @@ async function promotionHandler(event) {
 
 async function checkoutHandler(event) {
   const { amount, reference, status, metadata, channel } = event.data;
-  const { user_id, order_id } = metadata;
+  const { user_id, order } = metadata;
 
+  const { product_id, stock, price, locale, vendor_id, shipping_fee, date, json_status, type } = order
   // Validate required data
-  if (!reference || !amount || !status || !user_id || !order_id) {
+  if (!reference || !amount || !status || !user_id || !order) {
     console.error('Missing required payment data');
     throw new Error("Invalid payment data");
   }
@@ -181,12 +182,12 @@ async function checkoutHandler(event) {
     console.log(`Transaction already exists for ${reference}, skipping insert`);
     return reference;
   }
-  console.log(`Updating existing order payment status for reference: ${reference}`);
-  await Payment.markOrderAsPaidAndUpdateStatus(order_id);
+  console.log(`Creating new order payment status for reference: ${reference}`);
+  await Payment.createNewOrder({ user_id, product_id, stock, price, locale, vendor_id, shipping_fee, date, json_status, type });
   console.log(`Order marked as paid for order_id: ${order_id}`);
 
   const new_status = JSON.stringify({ state: status });
-  await Payment.createOrderTransaction({ reference, order_id, amount, user_id, payment_method: channel, status: new_status });
+  await Payment.createOrderTransaction({ reference, order_id: order.order_id, amount, user_id, payment_method: channel, status: new_status });
   console.log(`Order payment record created for reference: ${reference}`);
 
   return reference;

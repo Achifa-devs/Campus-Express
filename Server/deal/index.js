@@ -6,7 +6,7 @@ const cors = require('cors');
 require('dotenv').config();
 const axios = require('axios');
 const { createNewDeal, findPartnerById, updateDealById } = require('./models');
-const { sendNotification, generateConversationId } = require('./utils');
+const { sendNotification, generateConversationId, sendNotificationForDealUpdateFromVendorToBuyer, sendNotificationForDealUpdateFromBuyerToVendor } = require('./utils');
 const Deal = express();
 
 Deal.use(cors({
@@ -94,31 +94,28 @@ io.on('connection', async(socket) => {
     });
 
 
-    socket.on('/deal/create', async (data, callback) => {
+    socket.on('/deal/created', async (data, callback) => {
         try {
-            const { buyer, product_id, stock, price, locale, vendor_id, shipping_fee, date } = data;
+            const { user_id, product_id, stock, price, locale, vendor_id, shipping_fee, date, order_id, type } = data;
 
-            // 1️⃣ Create the deal
-            const response = await createNewDeal({ buyer, product_id, stock, price, locale, vendor_id, shipping_fee, date });
-
-            if (!response) {
+            if (!data) {
                 if (callback) callback({ success: false, message: 'Failed to create deal.' });
                 return;
             }
 
             // 2️⃣ Fetch both partners
-            const partner = await findPartnerById({ user_id: response.vendor_id });
-            const customer = await findPartnerById({ user_id: response.buyer });
+            const partner = await findPartnerById({ user_id: vendor_id });
+            const customer = await findPartnerById({ user_id });
 
             // 3️⃣ Generate room ID (consistent for both)
             const room_id = generateConversationId(partner.user_id, customer.user_id);
 
             // 4️⃣ Send notification
-            const result = await sendNotification({ customer, partner, order: response, room_id });
+            const result = await sendNotification({ customer, partner, order: data, room_id });
 
             // 5️⃣ Emit the deal to that room if success
             if (result?.success) {
-                io.to(room_id).emit('/deal/create', { deal: response });
+                io.to(room_id).emit('/deal/create', { deal: data });
             } else {
                 console.warn('⚠️ Notification failed for room:', room_id);
             }
@@ -134,29 +131,71 @@ io.on('connection', async(socket) => {
         }
     });
 
-    socket.on('/deal/update', async(data, callback) => {
+    socket.on('/deal/update', async (data, callback) => {
         try {
-            const { order_id,status } = data;
+            const { order, new_stage, date, userId, room_id } = data;
 
-            const response = await updateDealById({ order_id,status });
-            if(response){
+            // 1️⃣ Update the deal record
+            const response = await updateDealById({ order, new_stage, date, userId });
+            if (!response) return callback({ success: false, data: '' });
 
+            // 2️⃣ Get both parties
+            const partner = await findPartnerById({ user_id: order.vendor_id });
+            const customer = await findPartnerById({ user_id: order.user_id });
+
+            // 3️⃣ Helper to emit and callback
+            const handleResult = (result) => {
+                if (result.success) {
+                    io.to(room_id).emit('/deal/update', { data: response });
+                    callback?.({ success: true, data: response });
+                } else {
+                    callback?.({ success: false, data: '' });
+                }
+            };
+
+            // 4️⃣ Determine direction and send notification
+            let result;
+
+            // Vendor → Buyer updates
+            if (
+                ['shipping', 'delivered'].includes(new_stage) ||
+                (new_stage === 'cancelled' && userId === order.vendor_id) ||
+                (userId === order.vendor_id && !['confirmed'].includes(new_stage))
+            ) {
+                result = await sendNotificationForDealUpdateFromVendorToBuyer({
+                    customer,
+                    order,
+                    room_id,
+                    new_stage,
+                    role: 'vendor',
+                });
             }
+
+            // Buyer → Vendor updates
+            else if (
+                new_stage === 'confirmed' ||
+                (new_stage === 'cancelled' && userId !== order.vendor_id) ||
+                (userId !== order.vendor_id && !['shipping', 'delivered'].includes(new_stage))
+            ) {
+                result = await sendNotificationForDealUpdateFromBuyerToVendor({
+                    partner,
+                    order,
+                    room_id,
+                    new_stage,
+                    role: 'buyer',
+                });
+            }
+
+            // 5️⃣ Emit event and callback
+            handleResult(result || { success: false });
         } catch (error) {
-            
+            console.error('❌ Error in /deal/update:', error);
+            callback?.({ success: false, error: error.message });
         }
-    })
-
-    socket.on('/deal/payment/claim', (data) => {
-
-    })
-
-    socket.on('/deal/payment/release', (data) => {
-
-    })
+    });
 
     socket.on('/deal/complaint', (data) => {
-
+        
     })
 
 
@@ -206,3 +245,5 @@ io.on('connection', async(socket) => {
 process.on('unhandledRejection', (reason, promise) => {
   console.log('Unhandled Rejection at:', reason.stack || reason)
 });
+
+
