@@ -53,15 +53,20 @@ exports.handleTransferWebhook = async function (req, res) {
     })
 }
 
-exports.handleTransferConfirmation = function (req, res) {
+exports.handleTransferConfirmation = async function (req, res) {
     const {
         data
     } = req.body;
-    console.log(data)
+    console.log(
+        data.status,
+        data.reference,
+        data.createdAt
+    )
 
-    const response = Transact.updateTransferStatus({
-        status: data.data.status,
-        ref: data.data.reference
+    const response = await Transact.updateTransferStatus({
+        status: data.status,
+        ref: data.reference,
+        date: data.createdAt
     })
 
     res.status(200).send({
@@ -70,54 +75,3 @@ exports.handleTransferConfirmation = function (req, res) {
     })
 }
 
-
-{
-  integration: 1247127,
-  domain: 'live',
-  user: null,
-  source_ip: '102.90.101.75',
-  details: {
-    headers: {
-      'x-forwarded-for': '102.90.101.75, 141.101.99.135, 172.31.62.52',
-      'x-forwarded-proto': 'https',
-      'x-forwarded-port': '443',
-      'x-pstk-authorizer-headers': '{}',
-      tag: '6dbbc179-8a7d-4c95-8512-ead427ec8ea0',
-      'accept-encoding': 'gzip',
-      'content-type': 'application/json',
-      'x-geo-city': 'Port Harcourt',
-      'x-geo-region': 'Rivers State',
-      'user-agent': 'AmazonAPIGateway_7m0e2gppol'
-    },
-    body: {
-      source: 'balance',
-      reason: 'Deal sealed',
-      amount: 20000,
-      recipient: 'RCP_0yfujp98mi4u1td',
-      reference: 'campus_sphere4e8ff6-MH6EI4MP-OONJA3'
-    },
-    query: {},
-    endpoint: '/transfer'
-  },
-  transfers: [
-    {
-      amount: 20000,
-      createdAt: '2025-10-25T14:54:39.000Z',
-      currency: 'NGN',
-      domain: 'live',
-      failures: null,
-      id: 904737672,
-      integration: 1247127,
-      reason: 'Deal sealed',
-      reference: 'campus_sphere4e8ff6-MH6EI4MP-OONJA3',
-      source: 'balance',
-      source_details: null,
-      status: 'received',
-      titan_code: null,
-      transfer_code: 'TRF_evgv7lz3majwgws9',
-      transferred_at: null,
-      updatedAt: '2025-10-25T14:54:39.000Z',
-      recipient: [Object]
-    }
-  ]
-}

@@ -7,7 +7,7 @@ require('dotenv').config();
 const app = express();
 app.use(express.json());
 
-// Database health check
+// 🩺 Database health check
 app.get('/db/health', async (_req, res) => {
   try {
     const r = await pool.query('SELECT 1 AS ok');
@@ -18,11 +18,26 @@ app.get('/db/health', async (_req, res) => {
   }
 });
 
-// Routes
-app.use(paymentRoutes);
-app.use(transferRoutes);
+// 🔀 Conditional rerouting middleware
+app.use((req, res, next) => {
+  const { body } = req;
 
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+  if (body?.event?.startsWith('transfer.')) {
+    console.log('➡️ Rerouting internally to /transfer');
+    req.url = '/transfer/confirmation';
+  } 
+  else if (body?.event?.startsWith('payment.')) {
+    console.log('➡️ Rerouting internally to /payment');
+    req.url = '/payment';
+  }
+
+  next();
 });
+
+// 🧩 Route handlers
+app.use('/payment', paymentRoutes);
+app.use('/transfer', transferRoutes);
+
+// 🚀 Start server
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));

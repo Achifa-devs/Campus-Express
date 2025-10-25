@@ -4,6 +4,7 @@ const Payment = require('../models/payment');
 const handleWebhook = async (req, res) => {
   try {
     const event = req.body;
+    
     const { metadata } = event.data;
     const { type } = metadata;
 

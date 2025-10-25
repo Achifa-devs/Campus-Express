@@ -3,13 +3,13 @@ const pool = require("../config/database");
 module.exports = class Transact{
 
   static async createTransfer({
-      ref,
-      status,
-      created_at = new Date(),
-      updated_at = new Date(),
-      amount,
-      user_id
-    }) {
+    ref,
+    status,
+    created_at = new Date(),
+    updated_at = new Date(),
+    amount,
+    user_id
+  }) {
     const query = `
       INSERT INTO transfers (
         ref,
@@ -27,16 +27,25 @@ module.exports = class Transact{
     return result.rows[0];
   }
 
-  static async updateTransferStatus({ status, ref }) {
-    const query = `
-      UPDATE transfers
-      SET status = $1, updated_at = NOW()
-      WHERE ref = $2
-      RETURNING *
-    `;
-    const values = [status, ref];
-    const result = await pool.query(query, values);
-    return result.rows[0];
+  static async updateTransferStatus({ status, ref, createdAt = new Date() }) {
+    try {
+      const query = `
+        UPDATE transfers
+        SET status = $1,
+            updated_at = $2
+        WHERE ref = $3
+        RETURNING *;
+      `;
+
+      const values = [status, createdAt, ref];
+      const result = await pool.query(query, values);
+
+      // Return the updated row or null if no match found
+      return result.rows?.[0] || null;
+    } catch (error) {
+      console.error('❌ Error updating transfer status:', error.message);
+      throw error; // rethrow for higher-level handling
+    }
   }
 
 }
