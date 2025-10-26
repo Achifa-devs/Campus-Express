@@ -1,7 +1,6 @@
 import DeviceInfo from 'react-native-device-info';
 import { Product } from '../api';
 import Memory from './memoryHandler';
-import { Alert } from 'react-native';
 
 class Tools {
     static async getDeviceId(){

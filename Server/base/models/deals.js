@@ -2,18 +2,30 @@ const pool =  require('../config/database')
 const shortId =  require('short-id')
 
 // Find all deals for user
-exports.findDealsById = async function ({ user_id }) {
+exports.findDealsByUserId = async function ({ user_id }) {
   const { rows } = await pool.query(
     `
-        SELECT o.*, p.*
-        FROM orders o
-        JOIN products p ON o.product_id = p.product_id
-        WHERE o.user_id = $1 OR o.vendor_id = $1
+      SELECT *
+      FROM orders 
+      WHERE user_id = $1 
     `,
     [user_id]
   );
   return rows;
 };
+
+exports.findDealsByVendorId = async function ({ user_id }) {
+  const { rows } = await pool.query(
+    `
+      SELECT *
+      FROM orders 
+      WHERE vendor_id = $1 
+    `,
+    [user_id]
+  );
+  return rows;
+};
+
 
 exports.findPartnerById = async function ({ user_id }) {
   const { rows } = await pool.query(

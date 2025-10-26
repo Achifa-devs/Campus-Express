@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import user from './info/user';
 import socket_client from './socket';
 import chat from './info/chat';
+import deal from './info/deal';
 import mode from './info/mode';
 import unread from './info/unread_chats';
 import shop from './info/shop';
@@ -26,6 +27,7 @@ const store = configureStore({
     is_connected,
     is_active,
     chat,
+    deal,
     user,
     mode,
     shop,

@@ -1,6 +1,6 @@
 import { useRoute, useNavigation } from '@react-navigation/native'
 import js_ago from 'js-ago'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { 
   Dimensions, 
   Image, 
@@ -14,13 +14,31 @@ import {
   Alert,
   Animated
 } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
+import { set_deal } from '../../redux/info/deal'
+import Tools from '../utils/generalHandler'
 
 export default function DealForVendor() {
   const navigation = useNavigation()
   const { deal } = useRoute()?.params
   const [activeTab, setActiveTab] = useState('details')
   const [orderStatus, setOrderStatus] = useState(deal.orderStatus || 'pending') // pending, shipping, delivered
+  const dispatch = useDispatch()
+  const {
+    user
+  } = useSelector(s => s.user)
   
+  useEffect(() => {
+    if(!deal) return;
+    // console.log(user?.user_id, deal?.partner?.user_id, deal?.partner?.vendor_id)
+    console.log(deal)
+    dispatch(set_deal(
+      {
+        room: Tools.generateConversationId(user?.user_id, deal?.partner?.user_id),
+        partner: deal.partner
+      }
+    ))
+  }, [deal])
   const fadeAnim = new Animated.Value(0)
 
   React.useEffect(() => {
@@ -151,22 +169,22 @@ export default function DealForVendor() {
         <View style={styles.productCard}>
           <View style={styles.imageContainer}>
             <Image
-              source={{ uri: deal.thumbnail_id || 'https://via.placeholder.com/300' }}
+              source={{ uri: deal.product.thumbnail_id || 'https://via.placeholder.com/300' }}
               style={styles.productImage}
             />
             <View style={styles.statusBadge}>
               <Text style={styles.statusText}>
-                {orderStatus.toUpperCase()}
+                {deal?.order?.stage?.toUpperCase()}
               </Text>
             </View>
           </View>
 
           <View style={styles.productInfo}>
             <Text style={styles.productTitle}>
-              {deal.title || 'Product Title'}
+              {deal.product.title || 'Product Title'}
             </Text>
             <Text style={styles.productPrice}>
-              ₦{new Intl.NumberFormat('en-US').format(deal.price || 0)}
+              ₦{new Intl.NumberFormat('en-US').format(deal?.order?.price || 0)}
             </Text>
             
             <View style={styles.partnerSection}>
@@ -239,7 +257,7 @@ export default function DealForVendor() {
               <InfoCard 
                 icon="📅" 
                 title="Start Date" 
-                value={deal.startDate || '15 Feb 2024'} 
+                value={deal.order.startDate || '15 Feb 2024'} 
               />
               <InfoCard 
                 icon="🏁" 
@@ -254,7 +272,7 @@ export default function DealForVendor() {
               <InfoCard 
                 icon="📦" 
                 title="Type" 
-                value={`${deal?.purpose[0].toUpperCase()}${deal?.purpose.slice(1)}` || 'Accommodation'}
+                value={`${deal?.product?.purpose[0].toUpperCase()}${deal?.product?.purpose.slice(1)}` || 'Accommodation'}
 
               />
             </View>
@@ -262,7 +280,7 @@ export default function DealForVendor() {
             <View style={styles.descriptionCard}>
               <Text style={styles.descriptionTitle}>Description</Text>
               <Text style={styles.descriptionText}>
-                {deal.description || 'This is a detailed description of the product or accommodation. It includes all the features and benefits that the user should know about.'}
+                {deal?.product?.description || 'This is a detailed description of the product or accommodation. It includes all the features and benefits that the user should know about.'}
               </Text>
             </View>
           </View>
@@ -399,6 +417,22 @@ export default function DealForVendor() {
           </View>
         )}
       </Animated.ScrollView>
+      {/* Fixed Bottom Bar */}
+      <View style={styles.bottomBar}>
+        {/* <TouchableOpacity 
+          style={[styles.bottomButton, styles.cancelButton]}
+          onPress={handleCancel}
+        >
+          <Text style={styles.cancelButtonText}>Cancel Deal</Text>
+        </TouchableOpacity> */}
+        
+        <TouchableOpacity
+          style={[styles.bottomButton, styles.confirmButton]}
+          // onPress={handleConfirm}
+        >
+          <Text style={styles.confirmButtonText}>Cancel Deal</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   )
 }
@@ -440,6 +474,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
+    marginBottom: 80
   },
   productCard: {
     backgroundColor: '#fff',
@@ -889,5 +924,50 @@ const styles = StyleSheet.create({
     color: '#1e293b',
     flex: 1,
     lineHeight: 20,
+  },
+  bottomBar: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    padding: 16,
+    backgroundColor: '#fff',
+    borderTopWidth: 1,
+    borderTopColor: '#e2e8f0',
+    paddingBottom: 10,
+  },
+  bottomButton: {
+    flex: 1,
+    paddingVertical: 16,
+    borderRadius: 4,
+    alignItems: 'center',
+    marginHorizontal: 6,
+  },
+  cancelButton: {
+    backgroundColor: '#fff',
+    borderWidth: 2,
+    borderColor: '#dc2626',
+  },
+  confirmButton: {
+    backgroundColor: '#dc2626',
+    shadowColor: '#dc2626',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  cancelButtonText: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#dc2626',
+  },
+  confirmButtonText: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#fff',
   },
 })

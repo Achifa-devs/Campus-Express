@@ -1,10 +1,12 @@
 const { 
     findDealById,
-    findDealsById,
     createNewDeal,
     updateDealById, 
-    findPartnerById
+    findPartnerById,
+    findDealsByUserId,
+    findDealsByVendorId
 } = require("../models/deals");
+const { findProductById } = require("../models/product");
 
 
 exports.getDeal = async function (payload) {
@@ -14,22 +16,43 @@ exports.getDeal = async function (payload) {
 };
 
 exports.getDeals = async function (payload) {
-  const { user_id } = payload; 
-  const response = await findDealsById({ user_id });
+  const { user_id } = payload;
 
-  const business = response.map(async (item) => {
-    let partner;
+  // Find deals where user is the buyer
+  const user_as_buyer = await findDealsByUserId({ user_id });
 
-    if (item.vendor_id === user_id) {
-      partner = await findPartnerById({ user_id: item.user_id });
-    } else if (item.user_id === user_id) {
-      partner = await findPartnerById({ user_id: item.vendor_id });
-    }
+  // Find deals where user is the vendor
+  const user_as_vendor = await findDealsByVendorId({ user_id });
 
-    return { ...item, partner };
-  });
+  // Deals where user is the buyer (partner = vendor)
+  const deals_from_user_as_buyer = await Promise.all(
+    user_as_buyer.map(async (deal) => {
+      const partner = await findPartnerById({ user_id: deal.vendor_id });
+      const product = await findProductById({ product_id: deal.product_id }); // optional
+      return {
+        order: deal,
+        partner,
+        product: product[0]
+      };
+    })
+  );
 
-  const result = (await Promise.all(business)).filter(Boolean);
+  // Deals where user is the vendor (partner = buyer)
+  const deals_from_user_as_vendor = await Promise.all(
+    user_as_vendor.map(async (deal) => {
+      const partner = await findPartnerById({ user_id: deal.user_id });
+      const product = await findProductById({ product_id: deal.product_id }); // optional
+      return {
+        order: deal,
+        partner,
+        product: product[0]
+      };
+    })
+  );
+
+  // Combine both
+  const result = [...deals_from_user_as_buyer, ...deals_from_user_as_vendor];
+
   return result;
 };
 

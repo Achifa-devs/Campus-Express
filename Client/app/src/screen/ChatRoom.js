@@ -177,7 +177,7 @@ const ChatRoom = ({ route }) => {
     };
   }, [socket, room, user]);
 
-  const [isOnline, setIsOnline] = useState({b: false, date: room.partner.lastseen})
+  const [isOnline, setIsOnline] = useState({b: false, date: room?.partner?.lastseen})
   useEffect(() => {
 
     // Alert.alert(JSON.stringify(is_active))

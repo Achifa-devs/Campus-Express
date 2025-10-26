@@ -37,7 +37,7 @@ export default function Deals() {
     const navigation = useNavigation()
 
     const renderDealsCard = useCallback(({item}) => (
-        <TouchableOpacity activeOpacity={.9} onPress={e => navigation.navigate(user.user_id === item.vendor_id ? 'deal_vendor' : 'deal_buyer', {
+        <TouchableOpacity activeOpacity={.9} onPress={e => navigation.navigate(user.user_id === item.order.vendor_id ? 'deal_vendor' : 'deal_buyer', {
             deal: item
         })}>
             <Card item={item} />
@@ -48,17 +48,16 @@ export default function Deals() {
     const handleRefresh = async() => {
         setRefreshing(true);
         await initializeSocket();
-        fetchChatList();
-
+        getDeals();
     };
 
     function getDeals () {
-        axios.get('http://10.253.129.3:5432/deals', {params: {user_id: user?.user_id}}).then(({data}) => {
+        axios.get('https://base-three-opal.vercel.app/deals', {params: {user_id: user?.user_id}}).then(({data}) => {
             const res = data.data;
             setDeals((prev) => {
-                const newActive = res.filter(item => item.iscompleted === 'pending');
-                const newCompleted = res.filter(item => item.iscompleted === 'completed');
-                const newCancelled = res.filter(item => item.iscompleted === 'cancelled');
+                const newActive = res.filter(item => item.order.stage.toLowerCase() === 'shipping');
+                const newCompleted = res.filter(item => item.order.stage.toLowerCase() === 'completed');
+                const newCancelled = res.filter(item => item.order.stage.toLowerCase() === 'cancelled');
                 return {
                     ...prev,
                     active: newActive,

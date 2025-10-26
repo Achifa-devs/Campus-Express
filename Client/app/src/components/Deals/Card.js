@@ -17,14 +17,14 @@ export default function Card({ item }) {
   };
 
   const getTransactionType = () => {
-    return item.vendor_id === user.user_id ? 'Selling' : 'Buying';
+    return item.order.vendor_id === user.user_id ? 'Selling' : 'Buying';
   };
 
   const getStatusColor = () => {
-    const status = item?.stage?.toLowerCase();
+    const status = item?.order?.stage?.toLowerCase();
     if (status?.includes('completed')) return '#10B981';
     if (status?.includes('progress')) return '#3B82F6';
-    if (status?.includes('pending')) return '#F59E0B';
+    if (status?.includes('shipping')) return '#F59E0B';
     return '#6B7280';
   };
 
@@ -36,11 +36,11 @@ export default function Card({ item }) {
           <View style={[styles.statusBadge, { backgroundColor: getStatusColor() + '15' }]}>
             <View style={[styles.statusDot, { backgroundColor: getStatusColor() }]} />
             <Text style={[styles.statusText, { color: getStatusColor() }]}>
-              {item?.stage}
+              {item?.order?.stage}
             </Text>
           </View>
           <Text style={styles.date}>
-            {formatDate(item?.date)}
+            {formatDate(item?.order?.date)}
           </Text>
         </View>
 
@@ -50,7 +50,7 @@ export default function Card({ item }) {
           <View style={styles.imageContainer}>
             <Image 
               style={styles.mainImage}
-              source={{ uri: item?.thumbnail_id }}
+              source={{ uri: item?.product?.thumbnail_id }}
             />
             <View style={styles.typeIndicator}>
               <Text style={styles.typeText}>
@@ -62,10 +62,10 @@ export default function Card({ item }) {
           {/* Product details */}
           <View style={styles.details}>
             <Text style={styles.title} numberOfLines={2}>
-              {item?.title}
+              {item?.product?.title}
             </Text>
             <Text style={styles.price}>
-              {formatPrice(item?.price)}
+              {formatPrice(item?.product?.price)}
             </Text>
             
             {/* Progress bar */}
@@ -90,13 +90,13 @@ export default function Card({ item }) {
             <View style={styles.timeline}>
               <View style={styles.timelineItem}>
                 <Text style={styles.timelineLabel}>Start</Text>
-                <Text style={styles.timelineDate}>{formatDate(item?.date)}</Text>
+                <Text style={styles.timelineDate}>{formatDate(item?.order?.date)}</Text>
               </View>
               <View style={styles.timelineDivider} />
               <View style={styles.timelineItem}>
                 <Text style={styles.timelineLabel}>Est. Delivery</Text>
                 <Text style={styles.timelineDate}>
-                  {item.iscompleted === 'pending' ? 'In progress' : formatDate(item?.date)}
+                  {item.iscompleted === 'shipping' ? 'In progress' : formatDate(item?.date)}
                 </Text>
               </View>
             </View>

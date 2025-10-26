@@ -19,6 +19,7 @@ import { set_mode } from "../../redux/info/mode";
 import Deals from "../screen/Deals";
 import DealForBuyer from "../screen/DealForBuyer";
 import DealForVendor from "../screen/DealForVendor";
+import Tools from "../utils/generalHandler";
 // import ChatList from "../screen/ChatList";
 // import ChatRoom from "../screen/ChatRoom";
 
@@ -27,7 +28,7 @@ export function DealStackScreen() {
   const dispatch = useDispatch()
 
     const { user } = useSelector(s => s.user);
-    const { nested_nav } = useSelector(s => s.nested_nav);
+    const { deal } = useSelector(s => s.deal);
     const navigation = useNavigation();
     const route = useRoute()
 
@@ -109,6 +110,17 @@ export function DealStackScreen() {
                             }}>
                                 Deal
                             </Text>
+
+
+                            <TouchableOpacity onPress={e => {
+                                navigation.navigate('Chat', {
+                                    from: 'product', 
+                                    room: { ...deal },
+                                    id: Tools.generateId(0)
+                                });
+                            }}>
+                                <Ionicons name={'chatbubbles-outline'} color={'#FF4500'} size={25} />
+                            </TouchableOpacity>
                         </View>
                     ),
                 }}
@@ -150,6 +162,16 @@ export function DealStackScreen() {
                             }}>
                                 Deal
                             </Text>
+
+                            <TouchableOpacity onPress={e => {
+                                navigation.navigate('Chat', {
+                                    from: 'product', 
+                                    room: { ...deal },
+                                    id: Tools.generateId(0)
+                                });
+                            }}>
+                                <Ionicons name={'chatbubbles-outline'} color={'#FF4500'} size={25} />
+                            </TouchableOpacity>
                         </View>
                     ),
                 }}

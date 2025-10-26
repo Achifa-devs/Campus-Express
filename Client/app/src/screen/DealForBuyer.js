@@ -1,5 +1,5 @@
 import { useRoute, useNavigation } from '@react-navigation/native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { 
   Dimensions, 
   Image, 
@@ -13,14 +13,30 @@ import {
   Alert,
   Animated
 } from 'react-native'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { set_deal } from '../../redux/info/deal'
+import Tools from '../utils/generalHandler'
+import js_ago from 'js-ago'
 // import { LinearGradient } from 'expo-linear-gradient'
 
 export default function DealForBuyer() {
   const navigation = useNavigation()
   const { deal } = useRoute()?.params
-  const { user } = useSelector(s=> s.user)
   const [activeTab, setActiveTab] = useState('details')
+  const dispatch = useDispatch()
+  const {
+    user
+  } = useSelector(s => s.user)
+  
+  useEffect(() => {
+    if(!deal) return;
+    dispatch(set_deal(
+      {
+        room: Tools.generateConversationId(user?.user_id, deal?.partner?.user_id),
+        partner: deal?.partner
+      }
+    ))
+  }, [deal])
   
   const fadeAnim = new Animated.Value(0)
 
@@ -127,7 +143,7 @@ export default function DealForBuyer() {
         <View style={styles.productCard}>
           <View style={styles.imageContainer}>
             <Image
-              source={{ uri: deal.thumbnail_id || 'https://via.placeholder.com/300' }}
+              source={{ uri: deal.product.thumbnail_id || 'https://via.placeholder.com/300' }}
               style={styles.productImage}
             />
             {/* <LinearGradient
@@ -136,31 +152,47 @@ export default function DealForBuyer() {
             /> */}
             <View style={styles.statusBadge}>
               <Text style={styles.statusText}>
-                {deal.status?.toUpperCase() || 'PENDING'}
+                {deal.order.stage?.toUpperCase() || 'PENDING'}
               </Text>
             </View>
           </View>
 
           <View style={styles.productInfo}>
             <Text style={styles.productTitle}>
-              {deal.title || 'Product Title'}
+              {deal.product.title || 'Product Title'}
             </Text>
             <Text style={styles.productPrice}>
-              ₦{new Intl.NumberFormat('en-US').format(deal.price || 0)}
+              ₦{new Intl.NumberFormat('en-US').format(deal.product.price || 0)}
             </Text>
             
             {/* Partner Info */}
             <View style={styles.partnerSection}>
-              <View style={styles.partnerAvatar}>
-                <Text style={styles.partnerInitials}>
-                  {(deal.partnerName || 'SS').split(' ').map(n => n[0]).join('')}
-                </Text>
-              </View>
+              {
+                !deal?.partner?.photo?
+                <View style={styles.partnerAvatar}>
+                  <Text style={styles.partnerInitials}>
+                    {
+                      (deal?.partner?.fname[0]+'.'+deal?.partner?.lname[0] || 'SS').split(' ').map(n => n[0]).join('')
+                    }
+                  </Text>
+                </View>
+                :
+                <Image 
+                  source={{uri: deal.partner.photo}}
+                  style={{
+                    height: 44,
+                    width: 44,
+                    borderRadius: 50,
+                    marginHorizontal: 9
+                }} />
+              }
               <View style={styles.partnerInfo}>
                 <Text style={styles.partnerName}>
-                  {deal.partnerName || 'Seller Name'}
+                  {deal?.partner?.fname+' '+deal?.partner?.lname || 'Customer Name'}
                 </Text>
-                <Text style={styles.partnerRating}>⭐ 4.8 (120 reviews)</Text>
+                <Text style={styles.partnerRating}>{
+                  deal.partner.lastseen === 'now' ? '🟢 Online' : `🔴 Active ${js_ago(new Date(deal.partner.lastseen))}`  
+                }</Text>
               </View>
             </View>
           </View>
@@ -181,9 +213,7 @@ export default function DealForBuyer() {
             onPress={() => setActiveTab('tracking')}
           >
             <Text style={[styles.tabText, activeTab === 'tracking' && styles.activeTabText]}>
-              {
-                deal.vendor_id === user.user_id  ? 'Manage Order' : 'Tracking'
-              }
+              Tracking
             </Text>
           </TouchableOpacity>
           <TouchableOpacity 
@@ -205,7 +235,7 @@ export default function DealForBuyer() {
               <InfoCard 
                 icon="📅" 
                 title="Start Date" 
-                value={deal.startDate || '15 Feb 2024'} 
+                value={deal.order.date || '15 Feb 2024'} 
               />
               <InfoCard 
                 icon="🏁" 
@@ -220,7 +250,7 @@ export default function DealForBuyer() {
               <InfoCard 
                 icon="📦" 
                 title="Type" 
-                value={`${deal?.purpose[0].toUpperCase()}${deal?.purpose.slice(1)}` || 'Accommodation'}
+                value={`${deal?.product?.purpose[0].toUpperCase()}${deal?.product?.purpose.slice(1)}` || 'Accommodation'}
 
               />
             </View>
@@ -228,7 +258,7 @@ export default function DealForBuyer() {
             <View style={styles.descriptionCard}>
               <Text style={styles.descriptionTitle}>Description</Text>
               <Text style={styles.descriptionText}>
-                {deal.description || 'This is a detailed description of the product or accommodation. It includes all the features and benefits that the user should know about.'}
+                {deal?.product?.description || 'This is a detailed description of the product or accommodation. It includes all the features and benefits that the user should know about.'}
               </Text>
             </View>
           </View>
