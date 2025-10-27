@@ -16,11 +16,14 @@ class MainActivity : ReactActivity() {
         DefaultReactActivityDelegate(this, mainComponentName, fabricEnabled)
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        // ❗ Prevent Android from restoring fragments automatically
+        super.onCreate(null)
         
-        // Add these lines for status bar customization
+        // Optional UI setup
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        
-        // Set status bar color (works best with setDecorFitsSystemWindows)
+
+        // If you want to customize status bar appearance, you can add:
+        // val controller = WindowInsetsControllerCompat(window, window.decorView)
+        // controller.isAppearanceLightStatusBars = true
     }
 }

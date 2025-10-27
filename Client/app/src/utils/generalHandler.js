@@ -1,6 +1,7 @@
 import DeviceInfo from 'react-native-device-info';
 import { Product } from '../api';
 import Memory from './memoryHandler';
+import { PermissionsAndroid, Platform } from 'react-native';
 
 class Tools {
     static async getDeviceId(){
@@ -117,6 +118,22 @@ class Tools {
 
     static capitalize = str => str ? str.charAt(0).toUpperCase() + str.slice(1) : '';
     static lower_case = str => str ? str.charAt(0).toLowerCase() + str.slice(1) : '';
+
+    static requestCameraPermission = async () => {
+        if (Platform.OS === 'android') {
+            const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.CAMERA,
+            {
+                title: 'Camera Permission',
+                message: 'App needs camera access to take photos.',
+                buttonPositive: 'OK',
+            },
+            );
+
+            return granted === PermissionsAndroid.RESULTS.GRANTED;
+        }
+        return true; // iOS handles via Info.plist
+    };
 
 }
 

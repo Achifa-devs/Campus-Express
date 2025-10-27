@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -10,44 +10,102 @@ import {
   ScrollView,
   Platform
 } from 'react-native';
-import { launchImageLibrary } from 'react-native-image-picker';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import DropdownComp from '../../reusables/Dropdown';
+import Tools from '../../utils/generalHandler';
 
 const ProofOfDeliveryUpload = () => {
   const [uploadedImages, setUploadedImages] = useState([]);
   const [description, setDescription] = useState('');
 
-  const pickImage = () => {
-    // Check if already have max images
-    if (uploadedImages.length >= 2) {
-      Alert.alert('Maximum reached', 'You can only upload up to 2 images.');
-      return;
-    }
+    const pickImage = async() => {
+        const hasPermission = await Tools.requestCameraPermission();
 
-    const options = {
-      mediaType: 'photo',
-      quality: 0.8,
-      maxWidth: 800,
-      maxHeight: 800,
+        if (!hasPermission) {
+            Alert.alert('Permission Denied', 'You need to allow camera access.');
+            return;
+        }
+        if (uploadedImages.length >= 2) {
+            Alert.alert('Maximum reached', 'You can only upload up to 2 images.');
+            return;
+        }
+        Alert.alert(
+            'Upload Image',
+            'Choose an option',
+            [
+                {
+                    text: 'Take Photo',
+                    onPress: () => handleLaunchCamera(),
+                },
+                {
+                    text: 'Choose from Gallery',
+                    onPress: () => handleLaunchGallery(),
+                },
+                {
+                    text: 'Cancel',
+                    style: 'cancel',
+                },
+            ],
+            { cancelable: true }
+        );
+    };
+    const handleLaunchCamera = () => {
+        const options = {
+            mediaType: 'photo',
+            quality: 0.8,
+            maxWidth: 800,
+            maxHeight: 800,
+            saveToPhotos: true, // optional: saves taken photo to gallery
+        };
+
+        launchCamera(options, (response) => {
+            handleImageResponse(response);
+        });
     };
 
-    launchImageLibrary(options, (response) => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        Alert.alert('Error', 'Failed to pick image: ' + response.error);
-      } else if (response.assets && response.assets[0]) {
-        const newImage = {
-          uri: response.assets[0].uri,
-          id: Date.now().toString(),
+    const handleLaunchGallery = () => {
+        const options = {
+            mediaType: 'photo',
+            quality: 0.8,
+            maxWidth: 800,
+            maxHeight: 800,
         };
-        setUploadedImages(prev => [...prev, newImage]);
-      }
-    });
-  };
+
+        launchImageLibrary(options, (response) => {
+            handleImageResponse(response);
+        });
+    };
+
+    const handleImageResponse = (response) => {
+        if (response.didCancel) {
+            console.log('User cancelled image picker');
+        } else if (response.errorCode) {
+            Alert.alert('Error', 'Failed to pick image: ' + response.errorMessage);
+        } else if (response.assets && response.assets[0]) {
+            const newImage = {
+            uri: response.assets[0].uri,
+            id: Date.now().toString(),
+            };
+            setUploadedImages(prev => [...prev, newImage]);
+        }
+    };
 
   const removeImage = (imageId) => {
     setUploadedImages(prev => prev.filter(img => img.id !== imageId));
   };
+
+    // launchCamera(options, (response) => {
+    //     if (!response || response.didCancel) return;
+    //     if (response.errorCode) {
+    //         console.warn('Camera Error:', response.errorMessage);
+    //         return;
+    //     }
+    //     const asset = response.assets?.[0];
+    //     if (!asset?.uri) return;
+
+    //     setUploadedImages(prev => [...prev, { uri: asset.uri, id: Date.now().toString() }]);
+    // });
+
 
   const handleSubmit = () => {
     if (uploadedImages.length === 0) {
@@ -69,117 +127,226 @@ const ProofOfDeliveryUpload = () => {
     });
   };
 
+    const [method, set_method] = useState(null);
+    const [location, set_location] = useState(null);
+
+    const [location_list, set_location_list] = useState([])
+
+    const updateData = (data, input_name) => {
+        if (input_name === 'location') {
+            set_method(data)
+        }else{
+            set_location(data)
+        }
+    }
+
+    useEffect(() => {
+        if (!method) return;
+
+        const matchedCategory = deliveryCategories.find(item => item.label === method);
+        
+        if (matchedCategory) {
+            set_location_list(
+            matchedCategory.examples.map(example => ({ label: example }))
+            );
+        } else {
+            set_location_list([]); // fallback if no match found
+        }
+    }, [method]);
+
+
+    const deliveryCategories = [
+        {
+            label: "Lodge/Dorm Delivery",
+            examples: [
+                "Customer’s doorstep",
+                "Customer’s residence",
+                "Apartment reception",
+            ],
+            description: "Direct drop-off at or near the customer’s home."
+        },
+        {
+            label: "Pickup Location",
+            examples: [
+                "Vendor’s shop",
+            ],
+            description: "Customer travels to pick up the item from the vendor or a designated collection point."
+        },
+        {
+            label: "Public Meet Point",
+            examples: [
+                "Campus gate",
+                "Bus terminal",
+                "Market junction",
+            ],
+            description: "A neutral, safe public location where both vendor and customer meet for the exchange."
+        }
+    ];
+ 
+
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {/* Header Section */}
-      <View style={styles.header}>
-        <Text style={styles.title}>Proof of Delivery Evidence</Text>
-        <Text style={styles.subtitle}>
-          Upload visual evidence that the delivery was completed successfully. 
-          This helps verify delivery completion and resolve any customer disputes.
-        </Text>
-      </View>
-
-      {/* Description Input */}
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>Delivery Description *</Text>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Describe the delivery location, condition, or any special notes..."
-          placeholderTextColor="#999"
-          multiline
-          numberOfLines={3}
-          value={description}
-          onChangeText={setDescription}
-        />
-        <Text style={styles.helperText}>
-          Example: "Package delivered at front door, recipient confirmed receipt"
-        </Text>
-      </View>
-
-      {/* Upload Section */}
-      <View style={styles.uploadSection}>
-        <Text style={styles.label}>
-          Upload Evidence Images ({uploadedImages.length}/2) *
-        </Text>
-        <Text style={styles.helperText}>
-          Upload 1-2 clear photos showing the delivered items at the destination
-        </Text>
-
-        {/* Image Preview Grid */}
-        <View style={styles.imageGrid}>
-          {uploadedImages.map((image) => (
-            <View key={image.id} style={styles.imageContainer}>
-              <Image source={{ uri: image.uri }} style={styles.image} />
-              <TouchableOpacity 
-                style={styles.removeButton}
-                onPress={() => removeImage(image.id)}
-              >
-                <Text style={styles.removeText}>×</Text>
-              </TouchableOpacity>
+    <>
+        <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+            {/* Summary Section */}
+            <View style={styles.summary}>
+                <Text style={styles.summaryTitle}>What is Proof of Delivery Evidence?</Text>
+                <Text style={styles.summaryText}>
+                Proof of Delivery (POD) evidence includes photos or documents that verify 
+                successful delivery of goods to the correct recipient. This serves as:
+                </Text>
+                <View style={styles.bulletContainer}>
+                <Text style={styles.summaryBullet}>• Visual confirmation of delivery completion</Text>
+                <Text style={styles.summaryBullet}>• Protection against false "not delivered" claims</Text>
+                <Text style={styles.summaryBullet}>• Quality assurance for delivery standards</Text>
+                <Text style={styles.summaryBullet}>• Legal evidence in case of disputes</Text>
+                </View>
             </View>
-          ))}
-          
-          {/* Upload Button - Show if less than 2 images */}
-          {uploadedImages.length < 2 && (
-            <TouchableOpacity style={styles.uploadButton} onPress={pickImage}>
-              <View style={styles.uploadIconContainer}>
-                <Text style={styles.uploadIcon}>+</Text>
-              </View>
-              <Text style={styles.uploadText}>Add Image</Text>
+
+            {/* Description Input */}
+            <View style={styles.inputContainer}>
+                <Text style={styles.label}>Delivery Method *</Text>
+                <DropdownComp 
+                    dropdownData={
+                        deliveryCategories
+                    }
+                    updateData={updateData}
+                    fieldName={'label'} 
+                    input_name={'location'}
+                    placeholder={'Select delivery method'}
+                />
+                <Text style={styles.helperText}>
+                    {deliveryCategories.filter(item => item.label === location)[0]?.description || ''}
+                </Text>
+            </View>
+
+            {/* Description Input */}
+            <View style={styles.inputContainer}>
+                <Text style={styles.label}>Delivery Location*</Text>
+                <DropdownComp 
+                    dropdownData={
+                        location_list
+                    }
+                    fieldName={'label'} 
+                    input_name={'location_list'}
+                    updateData={updateData}
+                    placeholder={'Select delivery location'}
+                />
+                <Text style={styles.helperText}>
+                    {/* {deliveryCategories.filter(item => item.label === location)[0]?.description || ''} */}
+                </Text>
+            </View>
+
+            {/* Description Input */}
+            <View style={styles.inputContainer}>
+                <Text style={styles.label}>Delivery Description *</Text>
+                <TextInput
+                style={styles.textInput}
+                placeholder="Describe the delivery location, condition, or any special notes..."
+                placeholderTextColor="#999"
+                multiline
+                numberOfLines={3}
+                value={description}
+                onChangeText={setDescription}
+                />
+                <Text style={styles.helperText}>
+                Example: "Package delivered at front door, recipient confirmed receipt"
+                </Text>
+            </View>
+
+            {/* Upload Section */}
+            <View style={styles.uploadSection}>
+                <Text style={styles.label}>
+                Upload Evidence Images ({uploadedImages.length}/2) *
+                </Text>
+                <Text style={styles.helperText}>
+                Upload 1-2 clear photos showing the delivered items at the destination
+                </Text>
+
+                {/* Image Preview Grid */}
+                <View style={styles.imageGrid}>
+                {uploadedImages.map((image) => (
+                    <View key={image.id} style={styles.imageContainer}>
+                    <Image source={{ uri: image.uri }} style={styles.image} />
+                    <TouchableOpacity 
+                        style={styles.removeButton}
+                        onPress={() => removeImage(image.id)}
+                    >
+                        <Text style={styles.removeText}>×</Text>
+                    </TouchableOpacity>
+                    </View>
+                ))}
+                
+                {/* Upload Button - Show if less than 2 images */}
+                {uploadedImages.length < 2 && (
+                    <TouchableOpacity style={styles.uploadButton} onPress={pickImage}>
+                    <View style={styles.uploadIconContainer}>
+                        <Text style={styles.uploadIcon}>+</Text>
+                    </View>
+                    <Text style={styles.uploadText}>Add Image</Text>
+                    </TouchableOpacity>
+                )}
+                </View>
+
+                {/* Validation Message */}
+                {uploadedImages.length === 0 && (
+                <Text style={styles.errorText}>At least one image is required</Text>
+                )}
+            </View>
+
+
+           
+        </ScrollView>
+        {/* Submit Button */}
+        <View style={styles.bottomBar}>
+            <TouchableOpacity
+                style={[
+                styles.submitButton,
+                styles.bottomBtn,
+                (uploadedImages.length === 0 || !description.trim()) && styles.submitButtonDisabled
+                ]}
+                onPress={handleSubmit}
+                disabled={uploadedImages.length === 0 || !description.trim()}
+            >
+                <Text style={styles.submitButtonText}>
+                Submit Proof of Delivery
+                </Text>
             </TouchableOpacity>
-          )}
         </View>
-
-        {/* Validation Message */}
-        {uploadedImages.length === 0 && (
-          <Text style={styles.errorText}>At least one image is required</Text>
-        )}
-      </View>
-
-      {/* Submit Button */}
-      <TouchableOpacity 
-        style={[
-          styles.submitButton,
-          (uploadedImages.length === 0 || !description.trim()) && styles.submitButtonDisabled
-        ]}
-        onPress={handleSubmit}
-        disabled={uploadedImages.length === 0 || !description.trim()}
-      >
-        <Text style={styles.submitButtonText}>
-          Submit Proof of Delivery
-        </Text>
-      </TouchableOpacity>
-
-      {/* Summary Section */}
-      <View style={styles.summary}>
-        <Text style={styles.summaryTitle}>What is Proof of Delivery Evidence?</Text>
-        <Text style={styles.summaryText}>
-          Proof of Delivery (POD) evidence includes photos or documents that verify 
-          successful delivery of goods to the correct recipient. This serves as:
-        </Text>
-        <View style={styles.bulletContainer}>
-          <Text style={styles.summaryBullet}>• Visual confirmation of delivery completion</Text>
-          <Text style={styles.summaryBullet}>• Protection against false "not delivered" claims</Text>
-          <Text style={styles.summaryBullet}>• Quality assurance for delivery standards</Text>
-          <Text style={styles.summaryBullet}>• Legal evidence in case of disputes</Text>
-        </View>
-      </View>
-    </ScrollView>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
+    bottomBtn: {
+        flex: 1,
+        paddingVertical: 16,
+        borderRadius: 4,
+        alignItems: 'center',
+        marginHorizontal: 6,
+    },
+   bottomBar: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        flexDirection: 'row',
+        padding: 16,
+        backgroundColor: '#fff',
+        borderTopWidth: 1,
+        borderTopColor: '#e2e8f0',
+        paddingBottom: 10,
+    },
   container: {
     flex: 1,
-    padding: 20,
+    padding: 8,
+    marginBottom: 90,
     backgroundColor: '#f8f9fa',
   },
   header: {
-    marginBottom: 24,
+    marginBottom: 12,
     padding: 16,
     backgroundColor: 'white',
-    borderRadius: 8,
+    borderRadius: 4,
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -204,10 +371,10 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   inputContainer: {
-    marginBottom: 24,
+    marginBottom: 12,
     padding: 16,
     backgroundColor: 'white',
-    borderRadius: 8,
+    borderRadius: 4,
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -229,7 +396,7 @@ const styles = StyleSheet.create({
   textInput: {
     borderWidth: 1,
     borderColor: '#ddd',
-    borderRadius: 8,
+    borderRadius: 4,
     padding: 12,
     fontSize: 14,
     backgroundColor: 'white',
@@ -243,10 +410,10 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
   },
   uploadSection: {
-    marginBottom: 24,
+    marginBottom: 12,
     padding: 16,
     backgroundColor: 'white',
-    borderRadius: 8,
+    borderRadius: 4,
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -274,7 +441,7 @@ const styles = StyleSheet.create({
   image: {
     width: 100,
     height: 100,
-    borderRadius: 8,
+    borderRadius: 4,
     borderWidth: 1,
     borderColor: '#ddd',
   },
@@ -301,9 +468,9 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderWidth: 2,
-    borderColor: '#007AFF',
+    borderColor: '#FF4500',
     borderStyle: 'dashed',
-    borderRadius: 8,
+    borderRadius: 4,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#f8f9fa',
@@ -312,7 +479,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#007AFF',
+    backgroundColor: '#FF4500',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8,
@@ -324,7 +491,7 @@ const styles = StyleSheet.create({
   },
   uploadText: {
     fontSize: 12,
-    color: '#007AFF',
+    color: '#FF4500',
     fontWeight: '500',
     textAlign: 'center',
   },
@@ -335,11 +502,12 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   submitButton: {
+
     backgroundColor: '#007AFF',
     paddingVertical: 16,
-    borderRadius: 8,
+    borderRadius: 4,
     alignItems: 'center',
-    marginBottom: 24,
+    marginBottom: 12,
     ...Platform.select({
       ios: {
         shadowColor: '#007AFF',
@@ -372,16 +540,17 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   summary: {
-    backgroundColor: '#e8f4fd',
+    backgroundColor: '#fff4e0',
     padding: 16,
-    borderRadius: 8,
+    borderRadius: 4,
+    marginBottom: 10,
     borderLeftWidth: 4,
-    borderLeftColor: '#007AFF',
+    borderLeftColor: '#FF4500',
   },
   summaryTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#0066cc',
+    color: '#FF4500',
     marginBottom: 8,
   },
   summaryText: {

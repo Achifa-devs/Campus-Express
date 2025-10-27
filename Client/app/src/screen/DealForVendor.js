@@ -170,13 +170,10 @@ export default function DealForVendor() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <BottomModal visible={true} onClose={toggleModal}>
-        {/* Modal Component */}
-         <ProofOfDeliveryUpload />
-      </BottomModal>
+      
       <StatusBar barStyle="dark-content" />
       {loading &&
-        <View style={{
+        <View style={{  
           height: '100%', 
           width: '100%',
           position: 'absolute',
@@ -394,7 +391,9 @@ export default function DealForVendor() {
               <VendorActionButton
                 title="Upload Evidence"
                 icon="🗂️"
-                onPress={handleUploadEvidence}
+                onPress={e => navigation.navigate('deal_proof', {
+                  deal: deal
+                })}
                 variant="trust"
                 disabled={orderStatus !== 'evidence'}
               />
