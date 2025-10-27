@@ -132,7 +132,6 @@ io.on('connection', async(socket) => {
     });
 
     socket.on('deal_update', async (data, callback) => {
-        console.log(data)
         try {
             const { order, new_stage, date, userId, room_id, nxt_stage } = data;
 

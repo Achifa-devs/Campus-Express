@@ -30,10 +30,11 @@ export default function DealForVendor() {
   } = useRoute()?.params
   const [activeTab, setActiveTab] = useState('details')
   const [loading, setLoading] = useState(false)
+  const [cancelled, setCancelled] = useState(false)
   const [socket, setSocket] = useState(null)
   const [orderStatus, setOrderStatus] = useState(deal.orderStatus || 'shipping') // pending, shipping, delivered
   const dispatch = useDispatch()
-  const { 
+  const {  
     is_connected 
   } = useSelector(s => s?.is_connected);
   const { 
@@ -45,8 +46,8 @@ export default function DealForVendor() {
 
   useEffect(() => {
     let new_deal = deals.filter(item => item.order.order_id === deal.order.order_id)[0];
-    deal = new_deal;
-  }, [deals])
+    setCancelled(new_deal.order.status.cancelled.completed);
+  }, [deals, deal])
 
   useEffect(() => {
     if (!deal || !user) return;
@@ -340,164 +341,199 @@ export default function DealForVendor() {
           </TouchableOpacity>
         </View>
 
-        {/* Tab Content */}
-        {activeTab === 'details' && (
-          <View style={styles.tabContent}>
-            <Text style={styles.sectionTitle}>Deal Information</Text>
-            
-            <View style={styles.infoGrid}>
-              <InfoCard 
-                icon="📅" 
-                title="Start Date" 
-                value={(formatDealDate((deal.order.date).toLocaleString())) || 'Loading'} 
-              />
-              <InfoCard 
-                icon="🏁" 
-                title="End Date" 
-                value={deal.endDate || 'Present'} 
-              />
-              <InfoCard 
-                icon="⏱️" 
-                title="Duration" 
-                value={getTimeAgo(deal.order.date)}
-              />
-              <InfoCard 
-                icon="📦" 
-                title="Type" 
-                value={`${Tools.capitalize(deal?.product?.purpose)}` || 'Loading...'}
-
-              />
-            </View>
-
-            {
-              deal?.product?.description && 
-              <View style={styles.descriptionCard}>
-                <Text style={styles.descriptionTitle}>Description</Text>
-                <Text style={styles.descriptionText}>
-                  {deal?.product?.description || 'This is a detailed description of the product or accommodation. It includes all the features and benefits that the user should know about.'}
-                </Text>
+        <View style={{
+          display: cancelled ? 'flex' : 'none',
+        }}>
+          {/* Tab Content */}
+          {activeTab === 'details' && (
+            <View style={styles.tabContent}>
+              <Text style={styles.sectionTitle}>Deal Information</Text>
+          
+              <View style={styles.infoGrid}>
+                <InfoCard
+                  icon="📅"
+                  title="Start Date"
+                  value={(formatDealDate((deal.order.date).toLocaleString())) || 'Loading'}
+                />
+                <InfoCard
+                  icon="🏁"
+                  title="End Date"
+                  value={(deal.order.end_date) || 'Present'}
+                />
+                <InfoCard
+                  icon="⏱️"
+                  title="Duration"
+                  value={getTimeAgo(deal.order.date)}
+                />
+                <InfoCard
+                  icon="📦"
+                  title="Type"
+                  value={`${Tools.capitalize(deal?.product?.purpose)}` || 'Loading...'}
+                />
               </View>
-            }
-          </View>
-        )}
-
-        {activeTab === 'tracking' && (
-          <View style={styles.tabContent}>
-            <Text style={styles.sectionTitle}>Deal Timeline</Text>
-            
-            {/* Deal Timeline */}
-            <View style={styles.timelineCard}>
-              {/* <Text style={styles.timelineTitle}>Deal Timeline</Text> */}
-            
-              {GetTimeline(deal.order.status).map(item => 
-                <View style={styles.timelineItem}>
-                  <View style={styles.timelineDot} />
-                  <View style={styles.timelineContent}>
-                    <Text style={styles.timelineEvent}>Order {item.label}</Text>
-                    <Text style={styles.timelineTime}>
-                      {js_ago(new Date(item.date))}
-                    </Text>
-                  </View>
+              {
+                deal?.product?.description &&
+                <View style={styles.descriptionCard}>
+                  <Text style={styles.descriptionTitle}>Description</Text>
+                  <Text style={styles.descriptionText}>
+                    {deal?.product?.description || 'This is a detailed description of the product or accommodation. It includes all the features and benefits that the user should know about.'}
+                  </Text>
                 </View>
-              )}
-
+              }
             </View>
-          </View>
-        )}
-
-        {activeTab === 'manage' && (
-          <View style={styles.tabContent}>
-            <Text style={styles.sectionTitle}>Deal Management</Text>
-            
-            {/* Action Buttons Grid */}
-            <View style={styles.vendorActionsGrid}>
-              <VendorActionButton
-                title="Start Shipping"
-                icon="🚚"
-                onPress={handleStartShipping}
-                variant="primary"
-                disabled={orderStatus !== 'shipping'}
-              />
-              
-              <VendorActionButton
-                title="Upload Evidence"
-                icon="🗂️"
-                onPress={() => navigation.navigate('deal_proof', {
-                  deal,
-                  onReturn: (updatedDeal) => {
-                    // This runs when you come back from deal_proof
-                    deal = (updatedDeal);
-                  },
-                })}
-
-                variant="trust"
-                disabled={orderStatus !== 'evidence'}
-              />
-              
-              <VendorActionButton
-                title="Confirm Delivery"
-                icon="✅"
-                onPress={handleConfirmDelivery}
-                variant="secondary"
-                disabled={orderStatus !== 'delivered'}
-              />
-              
-              <VendorActionButton
-                title="Claim Payment"
-                icon="🧾"
-                onPress={handleClaimPayment}
-                variant="success"
-                disabled={orderStatus !== 'payment'}
-              />
-            </View>        
-
-            {/* Customer Information */}
-            <View style={styles.customerCard}>
-              <Text style={styles.customerCardTitle}>Customer Details</Text>
-              
-              <View style={styles.customerInfoRow}>
-                <Text style={styles.customerInfoLabel}>Name:</Text>
-                <Text style={styles.customerInfoValue}>{`${deal.partner.fname} ${deal.partner.lname}` || 'Customer Name'}</Text>
-              </View>
-              
-              
-              <View style={styles.customerInfoRow}>
-                <Text style={styles.customerInfoLabel}>Delivery Method:</Text>
-                <Text style={styles.customerInfoValue}>
-                  {
-                    deal.order.pick_up_channels[0].channel
-                  }
-                </Text>
-              </View>
-              <View style={styles.customerInfoRow}>
-                <Text style={styles.customerInfoLabel}>Delivery Address:</Text>
-                <Text style={styles.customerInfoValue}>
-                  
-                  {
-                    deal.order.pick_up_channels[0].locale
-                  }
-                  
-                </Text>
+          )}
+          {activeTab === 'tracking' && (
+            <View style={styles.tabContent}>
+              <Text style={styles.sectionTitle}>Deal Timeline</Text>
+          
+              {/* Deal Timeline */}
+              <View style={styles.timelineCard}>
+                {/* <Text style={styles.timelineTitle}>Deal Timeline</Text> */}
+          
+                {GetTimeline(deal.order.status).map(item =>
+                  <View style={styles.timelineItem}>
+                    <View style={styles.timelineDot} />
+                    <View style={styles.timelineContent}>
+                      <Text style={styles.timelineEvent}>Order {item.label}</Text>
+                      <Text style={styles.timelineTime}>
+                        {js_ago(new Date(item.date))}
+                      </Text>
+                    </View>
+                  </View>
+                )}
               </View>
             </View>
-          </View>
-        )}
+          )}
+          {activeTab === 'manage' && (
+            <View style={styles.tabContent}>
+              <Text style={styles.sectionTitle}>Deal Management</Text>
+          
+              {/* Action Buttons Grid */}
+              <View style={styles.vendorActionsGrid}>
+                <VendorActionButton
+                  title="Start Shipping"
+                  icon="🚚"
+                  onPress={handleStartShipping}
+                  variant="primary"
+                  disabled={orderStatus !== 'shipping'}
+                />
+          
+                <VendorActionButton
+                  title="Upload Evidence"
+                  icon="🗂️"
+                  onPress={() => navigation.navigate('deal_proof', {
+                    deal,
+                    onReturn: (updatedDeal) => {
+                      // This runs when you come back from deal_proof
+                      deal = (updatedDeal);
+                    },
+                  })}
+                  variant="trust"
+                  disabled={orderStatus !== 'evidence'}
+                />
+          
+                <VendorActionButton
+                  title="Confirm Delivery"
+                  icon="✅"
+                  onPress={handleConfirmDelivery}
+                  variant="secondary"
+                  disabled={orderStatus !== 'delivered'}
+                />
+          
+                <VendorActionButton
+                  title="Claim Payment"
+                  icon="🧾"
+                  onPress={handleClaimPayment}
+                  variant="success"
+                  disabled={orderStatus !== 'payment'}
+                />
+              </View>
+              {/* Customer Information */}
+              <View style={styles.customerCard}>
+                <Text style={styles.customerCardTitle}>Customer Details</Text>
+          
+                <View style={styles.customerInfoRow}>
+                  <Text style={styles.customerInfoLabel}>Name:</Text>
+                  <Text style={styles.customerInfoValue}>{`${deal.partner.fname} ${deal.partner.lname}` || 'Customer Name'}</Text>
+                </View>
+          
+          
+                <View style={styles.customerInfoRow}>
+                  <Text style={styles.customerInfoLabel}>Delivery Method:</Text>
+                  <Text style={styles.customerInfoValue}>
+                    {
+                      deal.order.pick_up_channels[0].channel
+                    }
+                  </Text>
+                </View>
+                <View style={styles.customerInfoRow}>
+                  <Text style={styles.customerInfoLabel}>Delivery Address:</Text>
+                  <Text style={styles.customerInfoValue}>
+          
+                    {
+                      deal.order.pick_up_channels[0].locale
+                    }
+          
+                  </Text>
+                </View>
+              </View>
+            </View>
+          )}
+        </View> 
       </Animated.ScrollView>
       {/* Fixed Bottom Bar */}
       <View style={styles.bottomBar}>
-        <TouchableOpacity 
-          style={[styles.bottomButton, styles.cancelButton]}
-          onPress={''}
-        >
-          <Text style={styles.cancelButtonText}>Cancel Deal</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity
-          style={[styles.bottomButton, styles.confirmButton]}
-          // onPress={handleConfirm}
-        >
-          <Text style={styles.confirmButtonText}>Create dispute</Text>
-        </TouchableOpacity>
+        { !cancelled &&
+          <>
+            <TouchableOpacity 
+              style={[styles.bottomButton, styles.cancelButton]}
+              onPress={e => {
+                socket.emit('deal_update', {
+                  order: deal.order, 
+                  new_stage: 'cancelled', 
+                  userId: user.user_id, 
+                  room_id: Tools.generateConversationId(user.user_id, deal.partner.user_id), 
+                  nxt_stage: '', 
+                  date: new Date() 
+                }, callback => {
+                  const {
+                    data, success
+                  } = callback;
+                  if (success) {
+                    dispatch(set_deals(
+                      deals.map(item =>
+                        item.order.order_id === data.order_id
+                        ? { ...item, order: data }
+                        : item
+                      )
+                    )) 
+                  }else{
+                    Alert.alert("Internal server error.", "Please try again!")
+                  }
+                })
+              }}
+            >
+              <Text style={styles.cancelButtonText}>Cancel Deal</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity
+              style={[styles.bottomButton, styles.confirmButton]}
+              // onPress={handleConfirm}
+            >
+              <Text style={styles.confirmButtonText}>Create dispute</Text>
+            </TouchableOpacity>
+          </>
+        }
+
+        {
+          cancelled &&
+          <TouchableOpacity
+            style={[styles.bottomButton, styles.confirmButton]}
+            // onPress={handleConfirm}
+          >
+            <Text style={styles.confirmButtonText}>This Deal Was Cancelled {deal.order.status.cancelled.initiator === user.user_id ? 'By You' : 'By The Customer'}</Text>
+          </TouchableOpacity>
+        }
       </View>
     </SafeAreaView>
   )

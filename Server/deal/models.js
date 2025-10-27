@@ -53,6 +53,13 @@ exports.updateDealById = async function ({ order, new_stage, date, userId, nxt_s
       buyer: order.user_id === userId ? true: false,
       vendor: order.vendor_id === userId ? true: false
     };
+  }else if(new_stage === 'cancelled'){
+    newStatus = {
+      outcome: "success",
+      completed: true,
+      completedAt: date,
+      initiator: userId
+    };
   }else{
     newStatus = {
       outcome: "success",

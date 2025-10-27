@@ -15,12 +15,28 @@ class MainActivity : ReactActivity() {
     override fun createReactActivityDelegate(): ReactActivityDelegate =
         DefaultReactActivityDelegate(this, mainComponentName, fabricEnabled)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        
-        // Add these lines for status bar customization
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-        
-        // Set status bar color (works best with setDecorFitsSystemWindows)
+    override fun onLowMemory() {
+        super.onLowMemory()
+        System.gc()
     }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        // 🔧 Fix for react-native-screens crash when restoring fragments
+        try {
+            savedInstanceState?.clear() // Prevents restoring old fragments
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        super.onCreate(savedInstanceState)
+
+        // ✅ Status bar customization
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        // ✅ Optional: Limit memory-heavy background restoration
+        // Prevents app restart after returning from camera
+        intent?.addFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP)
+    }
+
+
 }
