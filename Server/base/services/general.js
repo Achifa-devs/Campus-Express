@@ -1,8 +1,8 @@
-const { getCurrentVersion, updateFirebaseTokenByid } = require('../models/general');
 const { sendNoticeForNewMsg, sendPushOnNewDeal } = require('../3rd_parties/firebase');
 const initializeCloudinary = require('../config/cloudinary');
 const v2 = initializeCloudinary();
 const shortId = require('short-id');
+const { getVendorPromo, updateFirebaseTokenById, getCurrentVersion } = require('../models/general');
 
 // ✅ Function 1: Check app version
 async function checkVersion() {
@@ -10,10 +10,16 @@ async function checkVersion() {
   return response;
 }
 
+// ✅ Function 1: Check vendor promo
+async function checkVendorPromo() {
+  const response = await getVendorPromo({});
+  return response;
+}
+
 // ✅ Function 2: Update Firebase Token
 async function updateFirebaseToken(payload) {
   const { fcm, user_id } = payload;
-  const response = await updateFirebaseTokenByid({ fcm, user_id });
+  const response = await updateFirebaseTokenById({ fcm, user_id });
   return response;
 }
 
@@ -151,4 +157,5 @@ module.exports = {
   getMediaFolderFromCloudinary,
   uploadMediaToCloudinary,
   deleteMediaFromCloudinary,
+  checkVendorPromo
 };

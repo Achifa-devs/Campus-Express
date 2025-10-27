@@ -77,6 +77,7 @@ export function SellStackScreen() {
                 style={styles.logo}
                 // resizeMode="contain"
               /> 
+              
               <Text numberOfLines={1} style={{
                 fontSize: 11,
                 fontWeight: 'bold',
@@ -85,7 +86,7 @@ export function SellStackScreen() {
                 flexShrink: 1,
                 marginBottom: 5
               }}>
-                {shop && shop?.title}
+                &nbsp;&nbsp;{shop && shop?.title}
               </Text>
             </TouchableOpacity>
 
@@ -338,7 +339,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
-    width: 80,
+    width: 120,
     
   },
   logo: {

@@ -4,7 +4,7 @@ import { useTheme } from '@react-navigation/native';
 import Svg, { Path } from 'react-native-svg';
 import { useDispatch, useSelector } from 'react-redux';
 
-export default function UploadBtn({ navigation, toggleModal }) {
+export default function UploadBtn({ navigation, toggleModal, is_promo_active }) {
   const { colors } = useTheme();
   const dispatch = useDispatch()
 
@@ -16,7 +16,7 @@ export default function UploadBtn({ navigation, toggleModal }) {
     <View style={styles.container}>
       {/* Product Upload Button */}
       <UploadOption 
-        title="Upload Offerings"
+        title={`Upload Offerings${is_promo_active ? ' and Earn Now' : ''}`}
         description="Publish your accommodations, products, or services available for sale or rent."
         icon={<UploadIcon />}
         color="#FF4500"

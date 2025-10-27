@@ -4,12 +4,22 @@ const {
     sendFirebaseNotification, 
     getMediaFolderFromCloudinary, 
     uploadMediaToCloudinary, 
-    deleteMediaFromCloudinary 
+    deleteMediaFromCloudinary, 
+    checkVendorPromo
 } = require("../services/general");
 
 exports.checkVersionHandler =  async function (req, res) {
     try {
         const respomse = await checkVersion(req.query);
+        res.status(201).json({ success: true, data: respomse });
+    } catch (error) {
+        res.status(400).json({ success: false, message: error.message });
+    }
+}
+
+exports.checkVendorPromoHandler =  async function (req, res) {
+    try {
+        const respomse = await checkVendorPromo(req.query);
         res.status(201).json({ success: true, data: respomse });
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });

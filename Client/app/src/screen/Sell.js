@@ -32,6 +32,7 @@ import { set_products } from '../../redux/info/products';
 import { set_sub_modal } from '../../redux/modal/sub';
 import { set_shop } from '../../redux/info/shop';
 import Tools from '../utils/generalHandler';
+import Promo from '../components/Sell/Promo';
 const { width } = Dimensions.get('window');
 
 const ShopScreen = () => {
@@ -60,6 +61,18 @@ const ShopScreen = () => {
   });
 
   let [review, set_review] = useState([])
+  let [is_promo_active, set_is_promo_active] = useState(false)
+
+  useEffect(() => {
+    axios.get('http://10.253.129.3:5432/vendor/promo').then(({
+      data
+    }) => {
+    if(data.success && data.data){
+      console.log(data.data.is_active === 'true')
+      set_is_promo_active((data.data.is_active === "true" ? true : false))
+    }
+    }).catch(err => console.log(err))
+  }, [])
 
   useEffect(() => {
     axios.get(`https://cs-node.vercel.app/vendor/shop-reviews?shop_id=${shop?.shop_id}`)
@@ -616,20 +629,34 @@ const ShopScreen = () => {
       >
         
         {/* Publish Ad Button */}
-        <UploadBtn navigation={navigation} toggleModal={toggleModal}/>
+        <UploadBtn navigation={navigation} toggleModal={toggleModal} is_promo_active={is_promo_active}/>
 
         {/* Performance Metrics */}
-        <View style={styles.performanceSection}>
-          <Text style={styles.sectionTitle}>Performance Overview</Text>
-          <TouchableOpacity style={styles.metricsGrid} activeOpacity={.8} onPress={e => {
-            navigation.navigate('shop')
+        {
+          !is_promo_active &&
+          <View style={styles.performanceSection}>
+            <Text style={styles.sectionTitle}>Performance Overview</Text>
+            <TouchableOpacity style={styles.metricsGrid} activeOpacity={.8} onPress={e => {
+              navigation.navigate('shop')
+            }}>
+              {renderPerformanceMetric('eye', userAds.reduce((sum, item) => sum + parseInt(item.views), 0), 'Total Views')}
+              {renderPerformanceMetric('stats-chart', userAds.reduce((sum, item) => sum + parseInt(item.impression), 0), 'Total Impression')}
+              {renderPerformanceMetric('star-half', review.length, 'Total Reviews')}
+              {renderPerformanceMetric('cube', userAds.length, 'Total Ads')}
+            </TouchableOpacity>
+          </View>
+        }
+        {
+          is_promo_active &&
+          <View style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'row'
           }}>
-            {renderPerformanceMetric('eye', userAds.reduce((sum, item) => sum + parseInt(item.views), 0), 'Total Views')}
-            {renderPerformanceMetric('stats-chart', userAds.reduce((sum, item) => sum + parseInt(item.impression), 0), 'Total Impression')}
-            {renderPerformanceMetric('star-half', review.length, 'Total Reviews')}
-            {renderPerformanceMetric('cube', userAds.length, 'Total Ads')}
-          </TouchableOpacity>
-        </View>
+            <Promo />
+          </View>
+        }
  
         {/* Your Ads Section */}
         <View style={styles.adsSection}>

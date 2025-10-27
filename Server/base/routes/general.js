@@ -5,7 +5,8 @@ const {
     sendFirebaseNotificationHandler, 
     updateFirebaseTokenHandler, 
     uploadMediaToCloudinaryHandler, 
-    deleteMediaFromCloudinaryHandler 
+    deleteMediaFromCloudinaryHandler, 
+    checkVendorPromoHandler
 } = require('../controllers/general');
 const multer = require('multer')
 const generalRouter = express.Router();
@@ -15,6 +16,7 @@ const parser = require('body-parser').json({ limit: '1024mb' });
 
 
 generalRouter.get('/version/check', checkVersionHandler)
+generalRouter.get('/vendor/promo', checkVendorPromoHandler)
 generalRouter.get('/media/folder', getMediaFolderFromCloudinaryHandler)/** /image-folder */
 // generalRouter.get('/plans', )
 // generalRouter.get('/sponsorship', )
