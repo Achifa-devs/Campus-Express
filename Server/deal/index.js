@@ -5,7 +5,7 @@ const cors = require('cors');
 // const { generateDealId } = require('./utils');
 require('dotenv').config();
 const axios = require('axios');
-const { createNewDeal, findPartnerById, updateDealById, updateUserStatus, getConversationPartner } = require('./models');
+const { createNewDeal, findPartnerById, updateDealById, updateUserStatus, getConversationPartner, createNewProof } = require('./models');
 const { sendNotification, generateConversationId, sendNotificationForDealUpdateFromVendorToBuyer, sendNotificationForDealUpdateFromBuyerToVendor } = require('./utils');
 const Deal = express();
 
@@ -197,10 +197,58 @@ io.on('connection', async(socket) => {
     });
 
     
+    
 
-    socket.on('/deal/complaint', (data) => {
-        
-    })
+ 
+    socket.on('deal_proof', async (data, callback) => {
+        try {
+            const {
+                method,
+                location,
+                description,
+                uploadedImages,
+                deal,
+                date
+            } = data;
+
+            console.log('deal: ', deal)
+
+            // ✅ Create the proof record
+            const proof = await createNewProof({
+                order: deal,
+                method,
+                location,
+                description,
+                files: JSON.stringify(uploadedImages),
+                date,
+            });
+
+            // ✅ Update the deal stage
+            const updatedDeal = await updateDealById({
+                order: deal,
+                new_stage: 'evidence',
+                date,
+                userId: deal.vendor_id, // or from deal data if available
+                nxt_stage: 'payment',
+            });
+
+            // ✅ Return success response
+            callback({
+                success: true,
+                data: {
+                    proof,
+                    updatedDeal,
+                }
+            });
+
+        } catch (error) {
+            console.error('Error in deal_proof event:', error);
+            callback({
+                success: false,
+                error: error.message,
+            });
+        }
+    });
 
 
     socket.on("offline", async () => {

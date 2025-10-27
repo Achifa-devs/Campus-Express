@@ -8,60 +8,31 @@ import {
   StyleSheet,
   TextInput,
   ScrollView,
-  Platform
+  Platform,
+  ActivityIndicator
 } from 'react-native';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import DropdownComp from '../../reusables/Dropdown';
 import Tools from '../../utils/generalHandler';
+import axios from 'axios';
+import { getSocket } from '../../services/socket';
+import { useDispatch, useSelector } from 'react-redux';
+import { set_deals } from '../../../redux/info/deals';
+import { useNavigation, useRoute } from '@react-navigation/native';
+const socket = getSocket(); 
 
 const ProofOfDeliveryUpload = () => {
-  const [uploadedImages, setUploadedImages] = useState([]);
-  const [description, setDescription] = useState('');
-
-    const pickImage = async() => {
-        const hasPermission = await Tools.requestCameraPermission();
-
-        if (!hasPermission) {
-            Alert.alert('Permission Denied', 'You need to allow camera access.');
-            return;
-        }
-        if (uploadedImages.length >= 2) {
-            Alert.alert('Maximum reached', 'You can only upload up to 2 images.');
-            return;
-        }
-        Alert.alert(
-            'Upload Image',
-            'Choose an option',
-            [
-                {
-                    text: 'Take Photo',
-                    onPress: () => handleLaunchCamera(),
-                },
-                {
-                    text: 'Choose from Gallery',
-                    onPress: () => handleLaunchGallery(),
-                },
-                {
-                    text: 'Cancel',
-                    style: 'cancel',
-                },
-            ],
-            { cancelable: true }
-        );
-    };
-    const handleLaunchCamera = () => {
-        const options = {
-            mediaType: 'photo',
-            quality: 0.8,
-            maxWidth: 800,
-            maxHeight: 800,
-            saveToPhotos: true, // optional: saves taken photo to gallery
-        };
-
-        launchCamera(options, (response) => {
-            handleImageResponse(response);
-        });
-    };
+    const [uploadedImages, setUploadedImages] = useState([]);
+    const [description, setDescription] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const dispatch = useDispatch()    
+    const {
+        deals
+    } = useSelector(s => s.deals)
+    const { 
+        deal
+    } = useRoute()?.params
+    
 
     const handleLaunchGallery = () => {
         const options = {
@@ -76,60 +47,131 @@ const ProofOfDeliveryUpload = () => {
         });
     };
 
-    const handleImageResponse = (response) => {
+    const handleImageResponse = async(response) => {
         if (response.didCancel) {
             console.log('User cancelled image picker');
         } else if (response.errorCode) {
             Alert.alert('Error', 'Failed to pick image: ' + response.errorMessage);
         } else if (response.assets && response.assets[0]) {
-            const newImage = {
-            uri: response.assets[0].uri,
-            id: Date.now().toString(),
-            };
-            setUploadedImages(prev => [...prev, newImage]);
+            const image = response.assets[0];
+            await uploadToServer(image);
         }
     };
 
-  const removeImage = (imageId) => {
-    setUploadedImages(prev => prev.filter(img => img.id !== imageId));
-  };
+    const navigation = useNavigation()
 
-    // launchCamera(options, (response) => {
-    //     if (!response || response.didCancel) return;
-    //     if (response.errorCode) {
-    //         console.warn('Camera Error:', response.errorMessage);
-    //         return;
-    //     }
-    //     const asset = response.assets?.[0];
-    //     if (!asset?.uri) return;
+    const handleSubmit = () => {
 
-    //     setUploadedImages(prev => [...prev, { uri: asset.uri, id: Date.now().toString() }]);
-    // });
+        // setIsLoading(true); 
+        if (uploadedImages.length === 0) {
+            Alert.alert('Image required', 'Please upload at least one image as proof of delivery.');
+            return;
+        }
+        
+        if (!description.trim()) {
+            Alert.alert('Description required', 'Please provide a description for this delivery evidence.');
+            return;
+        }
+        
+        try {
+            if(!socket)return;
+            socket.emit('deal_proof', {
+                method,
+                location,
+                description,
+                uploadedImages,
+                deal: deal.order,
+                date: new Date()
+            }, cb => {
+                const {
+                    data, success
+                } = cb;
 
+                console.log(data, success)
 
-  const handleSubmit = () => {
-    if (uploadedImages.length === 0) {
-      Alert.alert('Image required', 'Please upload at least one image as proof of delivery.');
-      return;
-    }
+                if (success) {
+                    const {
+                        proof,
+                        updatedDeal,
+                    } = data;
+    
+                    dispatch(set_deals(
+                        deals.map(item =>
+                            item.order.order_id === updatedDeal.order_id
+                            ? { ...item, order: updatedDeal }
+                            : item
+                        )
+                    )) 
+                    if (route.params?.onReturn) {
+                        route.params.onReturn(updatedDeal);
+                    }
+                    navigation.goBack({deal: updatedDeal})
+                }else{
+                    throw new Error("Internal server error", "Please try again!");
+                    
+                }
+            })
+        } catch (error) {
+            console.log(error);
+            Alert.alert("Internal server error", "Please try again!")
+        }
+        
+    };
 
-    if (!description.trim()) {
-      Alert.alert('Description required', 'Please provide a description for this delivery evidence.');
-      return;
-    }
+    const uploadToServer = async (image) => {
+        try {
+            setIsLoading(true); // Correct loading state
+            const formData = new FormData();
+            formData.append('file', {
+                uri: image.uri,
+                name: image.fileName || `photo_${Date.now()}.jpg`,
+                type: image.type || 'image/jpeg',
+            });
 
-    // Submit logic here
-    Alert.alert('Success', 'Proof of delivery submitted successfully!');
-    console.log('Submitted:', { 
-      images: uploadedImages, 
-      description,
-      timestamp: new Date().toISOString()
-    });
-  };
+            const response = await axios.post('https://cs-node.vercel.app/upload', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' },
+            });
+
+            const result = response.data;
+            console.log(result.data.url);
+
+            if (result.success && result.data.url) {
+                // handleInputChange('logo', result.data.url);
+                setUploadedImages(prev => [...prev, result.data.url]);
+            }
+        } catch (err) {
+            console.error('Upload failed:', err.message);
+        } finally {
+            setIsLoading(false); // Correct loading state
+        }
+    };
+
+    const deleteFromServer = async (url) => {
+        try {
+            setIsLoading(true);
+            const response = await axios.post('https://cs-node.vercel.app/delete', {
+                url
+            });
+
+            if (response.data && response.data.data.result === "ok") {
+                
+                if (uploadedImages.length > 1) {
+                    let old_img = uploadedImages.filter(item => (item !== url))
+                    setUploadedImages(old_img);
+                }else{
+                    setUploadedImages([])
+                }
+            }
+        } catch (err) {
+            console.error('Upload failed:', err.message);
+
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     const [method, set_method] = useState(null);
     const [location, set_location] = useState(null);
-
     const [location_list, set_location_list] = useState([])
 
     const updateData = (data, input_name) => {
@@ -183,10 +225,27 @@ const ProofOfDeliveryUpload = () => {
         }
     ];
  
-
   return (
     <>
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+            {
+                isLoading &&
+                <View style={{  
+                    height: '100%', 
+                    width: '100%',
+                    position: 'absolute',
+                    top: 1,
+                    left: 0,
+                    zIndex: 1000,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: '#FFF8F6',
+                    opacity: .5
+                }}>
+                    <ActivityIndicator size={'large'} color={'#FF4500'}></ActivityIndicator>
+                </View>
+            }
             {/* Summary Section */}
             <View style={styles.summary}>
                 <Text style={styles.summaryTitle}>What is Proof of Delivery Evidence?</Text>
@@ -249,7 +308,7 @@ const ProofOfDeliveryUpload = () => {
                 onChangeText={setDescription}
                 />
                 <Text style={styles.helperText}>
-                Example: "Package delivered at front door, recipient confirmed receipt"
+                    Example: "Package delivered at front door, recipient confirmed receipt"
                 </Text>
             </View>
 
@@ -264,12 +323,12 @@ const ProofOfDeliveryUpload = () => {
 
                 {/* Image Preview Grid */}
                 <View style={styles.imageGrid}>
-                {uploadedImages.map((image) => (
+                {uploadedImages.map((image, index) => (
                     <View key={image.id} style={styles.imageContainer}>
-                    <Image source={{ uri: image.uri }} style={styles.image} />
+                    <Image source={{ uri: image || '' }} style={styles.image} />
                     <TouchableOpacity 
                         style={styles.removeButton}
-                        onPress={() => removeImage(image.id)}
+                        onPress={() => deleteFromServer(uploadedImages[index])}
                     >
                         <Text style={styles.removeText}>×</Text>
                     </TouchableOpacity>
@@ -278,7 +337,7 @@ const ProofOfDeliveryUpload = () => {
                 
                 {/* Upload Button - Show if less than 2 images */}
                 {uploadedImages.length < 2 && (
-                    <TouchableOpacity style={styles.uploadButton} onPress={pickImage}>
+                    <TouchableOpacity style={styles.uploadButton} onPress={handleLaunchGallery}>
                     <View style={styles.uploadIconContainer}>
                         <Text style={styles.uploadIcon}>+</Text>
                     </View>
@@ -305,7 +364,7 @@ const ProofOfDeliveryUpload = () => {
                 (uploadedImages.length === 0 || !description.trim()) && styles.submitButtonDisabled
                 ]}
                 onPress={handleSubmit}
-                disabled={uploadedImages.length === 0 || !description.trim()}
+                disabled={uploadedImages.length === 0 || !description.trim() || !method || !location}
             >
                 <Text style={styles.submitButtonText}>
                 Submit Proof of Delivery
@@ -343,7 +402,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8f9fa',
   },
   header: {
-    marginBottom: 12,
+    marginBottom: 8,
     padding: 16,
     backgroundColor: 'white',
     borderRadius: 4,
@@ -371,7 +430,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   inputContainer: {
-    marginBottom: 12,
+    marginBottom: 8,
     padding: 16,
     backgroundColor: 'white',
     borderRadius: 4,
@@ -410,7 +469,7 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
   },
   uploadSection: {
-    marginBottom: 12,
+    marginBottom: 8,
     padding: 16,
     backgroundColor: 'white',
     borderRadius: 4,
@@ -435,7 +494,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     marginRight: 12,
-    marginBottom: 12,
+    marginBottom: 8,
     position: 'relative',
   },
   image: {
@@ -507,7 +566,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     borderRadius: 4,
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 8,
     ...Platform.select({
       ios: {
         shadowColor: '#007AFF',

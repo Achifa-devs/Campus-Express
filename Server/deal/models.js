@@ -110,3 +110,14 @@ exports.updateDealById = async function ({ order, new_stage, date, userId, nxt_s
       
     }
   }
+
+  exports.createNewProof = async ({ order, method, location, description, files, date }) => {
+    const { rows } = await pool.query(
+      `INSERT INTO proofs (order_id, method, location, description, files, date)
+      VALUES ($1, $2, $3, $4, $5, $6)
+      RETURNING *`,
+      [order, method, location, description, files, date]
+    );
+
+    return rows[0]; // returns the inserted record
+  };

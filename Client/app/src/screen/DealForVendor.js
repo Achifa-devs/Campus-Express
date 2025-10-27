@@ -25,7 +25,7 @@ import BottomModal from '../reusables/BtmModal'
 // SMA-Lp3t-ZC3c-v4aKL
 export default function DealForVendor() {
   const navigation = useNavigation();
-  const { 
+  let { 
     deal
   } = useRoute()?.params
   const [activeTab, setActiveTab] = useState('details')
@@ -42,6 +42,11 @@ export default function DealForVendor() {
   const {
     user
   } = useSelector(s => s.user)
+
+  useEffect(() => {
+    let new_deal = deals.filter(item => item.order.order_id === deal.order.order_id)[0];
+    deal = new_deal;
+  }, [deals])
 
   useEffect(() => {
     if (!deal || !user) return;
@@ -391,9 +396,14 @@ export default function DealForVendor() {
               <VendorActionButton
                 title="Upload Evidence"
                 icon="🗂️"
-                onPress={e => navigation.navigate('deal_proof', {
-                  deal: deal
+                onPress={() => navigation.navigate('deal_proof', {
+                  deal,
+                  onReturn: (updatedDeal) => {
+                    // This runs when you come back from deal_proof
+                    deal = (updatedDeal);
+                  },
                 })}
+
                 variant="trust"
                 disabled={orderStatus !== 'evidence'}
               />
