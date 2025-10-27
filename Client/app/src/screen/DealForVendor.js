@@ -154,24 +154,80 @@ export default function DealForVendor() {
     </TouchableOpacity>
   )
 
-  const GetCompletedStatus = (status) => {
-    let stats = []
-    for(x in status){
-      if(status[x].completed){
-        // stats.push(x)
-        stats.push(
-        <View style={[
-          styles.statusIndicator,
-          styles.progress,
-        ]}>
-          <Text style={styles.statusIndicatorText}>
-            {Tools.capitalize(x)}
-          </Text>
-        </View>)
-      }
+  const getTimeAgo = (pastDate) => {
+    if (!pastDate) return '';
+
+    const now = new Date();
+    const past = new Date(pastDate);
+    const diffMs = now - past; // difference in milliseconds
+
+    // Convert to seconds, minutes, hours, days
+    const seconds = Math.floor(diffMs / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    if (days >= 1) {
+      return `${days} day${days > 1 ? 's' : ''} & Counting`;
+    } else if (hours >= 1) {
+      return `${hours} hour${hours > 1 ? 's' : ''} & Counting`;
+    } else if (minutes >= 1) {
+      return `${minutes} minute${minutes > 1 ? 's' : ''} & Counting`;
+    } else {
+      return `${seconds} second${seconds !== 1 ? 's' : ''} & Counting`;
     }
+  };
+
+
+  const formatDealDate = (dateString) => {
+    if (!dateString) return '';
+
+    const date = new Date(dateString);
+
+    // Get date parts
+    const day = date.getDate();
+    const month = date.toLocaleString('default', { month: 'long' });
+    const year = date.getFullYear();
+
+    // Add ordinal suffix (st, nd, rd, th)
+    const getOrdinal = (n) => {
+      const s = ['th', 'st', 'nd', 'rd'];
+      const v = n % 100;
+      return s[(v - 20) % 10] || s[v] || s[0];
+    };
+
+    const hours = date.getHours();
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const hour12 = hours % 12 || 12;
+
+    return `${day}${getOrdinal(day)} ${month} ${year} by ${hour12}:${minutes}${ampm}`;
+  };
+
+  const GetTimeline = (status = {}) => {
+    const labelMap = {
+      confirmed: 'Purchased',
+      shipping: 'Shipped',
+      delivered: 'Delivered',
+      evidence: 'Trust Created',
+    };
+
+    // Define the desired order
+    const order = ['Purchased', 'Shipped', 'Delivered', 'Trust Created'];
+
+    const stats = Object.entries(status)
+      .filter(([_, value]) => value?.completed)
+      .map(([key, value]) => ({
+        label: labelMap[key.toLowerCase()] || key,
+        date: value.completedAt || null,
+      }))
+      // Sort according to the desired order
+      .sort((a, b) => order.indexOf(a.label) - order.indexOf(b.label));
+
     return stats;
-  }
+  };
+
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -293,7 +349,7 @@ export default function DealForVendor() {
               <InfoCard 
                 icon="📅" 
                 title="Start Date" 
-                value={deal.order.startDate || '15 Feb 2024'} 
+                value={(formatDealDate((deal.order.date).toLocaleString())) || 'Loading'} 
               />
               <InfoCard 
                 icon="🏁" 
@@ -303,22 +359,25 @@ export default function DealForVendor() {
               <InfoCard 
                 icon="⏱️" 
                 title="Duration" 
-                value="5 days & Counting" 
+                value={getTimeAgo(deal.order.date)}
               />
               <InfoCard 
                 icon="📦" 
                 title="Type" 
-                value={`${deal?.product?.purpose[0].toUpperCase()}${deal?.product?.purpose.slice(1)}` || 'Accommodation'}
+                value={`${Tools.capitalize(deal?.product?.purpose)}` || 'Loading...'}
 
               />
             </View>
 
-            <View style={styles.descriptionCard}>
-              <Text style={styles.descriptionTitle}>Description</Text>
-              <Text style={styles.descriptionText}>
-                {deal?.product?.description || 'This is a detailed description of the product or accommodation. It includes all the features and benefits that the user should know about.'}
-              </Text>
-            </View>
+            {
+              deal?.product?.description && 
+              <View style={styles.descriptionCard}>
+                <Text style={styles.descriptionTitle}>Description</Text>
+                <Text style={styles.descriptionText}>
+                  {deal?.product?.description || 'This is a detailed description of the product or accommodation. It includes all the features and benefits that the user should know about.'}
+                </Text>
+              </View>
+            }
           </View>
         )}
 
@@ -329,44 +388,19 @@ export default function DealForVendor() {
             {/* Deal Timeline */}
             <View style={styles.timelineCard}>
               {/* <Text style={styles.timelineTitle}>Deal Timeline</Text> */}
-              
-              <View style={styles.timelineItem}>
-                <View style={styles.timelineDot} />
-                <View style={styles.timelineContent}>
-                  <Text style={styles.timelineEvent}>Deal Placed</Text>
-                  <Text style={styles.timelineTime}>Today, 10:30 AM</Text>
-                </View>
-              </View>
-
-              <View style={styles.timelineItem}>
-                <View style={styles.timelineDot} />
-                <View style={styles.timelineContent}>
-                  <Text style={styles.timelineEvent}>Payment Confirmed</Text>
-                  <Text style={styles.timelineTime}>Today, 10:35 AM</Text>
-                </View>
-              </View>
-
-              {orderStatus !== 'shipping' && (
+            
+              {GetTimeline(deal.order.status).map(item => 
                 <View style={styles.timelineItem}>
                   <View style={styles.timelineDot} />
                   <View style={styles.timelineContent}>
-                    <Text style={styles.timelineEvent}>Order Shipped</Text>
+                    <Text style={styles.timelineEvent}>Order {item.label}</Text>
                     <Text style={styles.timelineTime}>
-                      {orderStatus === 'shipping' ? 'Today, 11:00 AM' : 'Yesterday, 2:30 PM'}
+                      {js_ago(new Date(item.date))}
                     </Text>
                   </View>
                 </View>
               )}
 
-              {orderStatus === 'delivered' && (
-                <View style={styles.timelineItem}>
-                  <View style={styles.timelineDot} />
-                  <View style={styles.timelineContent}>
-                    <Text style={styles.timelineEvent}>Order Delivered</Text>
-                    <Text style={styles.timelineTime}>Today, 3:15 PM</Text>
-                  </View>
-                </View>
-              )}
             </View>
           </View>
         )}
@@ -375,14 +409,6 @@ export default function DealForVendor() {
           <View style={styles.tabContent}>
             <Text style={styles.sectionTitle}>Deal Management</Text>
             
-            {/* Current Status Card */}
-            <View style={styles.statusCard}>
-              <Text style={styles.statusCardTitle}>Completed Stages</Text>
-              {
-                GetCompletedStatus(deal.order.status)
-              }
-            </View>
-
             {/* Action Buttons Grid */}
             <View style={styles.vendorActionsGrid}>
               <VendorActionButton
@@ -434,18 +460,23 @@ export default function DealForVendor() {
                 <Text style={styles.customerInfoValue}>{`${deal.partner.fname} ${deal.partner.lname}` || 'Customer Name'}</Text>
               </View>
               
+              
+              <View style={styles.customerInfoRow}>
+                <Text style={styles.customerInfoLabel}>Delivery Method:</Text>
+                <Text style={styles.customerInfoValue}>
+                  {
+                    deal.order.pick_up_channels[0].channel
+                  }
+                </Text>
+              </View>
               <View style={styles.customerInfoRow}>
                 <Text style={styles.customerInfoLabel}>Delivery Address:</Text>
                 <Text style={styles.customerInfoValue}>
-                  123 Customer Street, Apartment 4B{'\n'}
-                  Lagos, Nigeria
-                </Text>
-              </View>
-              
-              <View style={styles.customerInfoRow}>
-                <Text style={styles.customerInfoLabel}>Special Instructions:</Text>
-                <Text style={styles.customerInfoValue}>
-                  Leave at front door if not home
+                  
+                  {
+                    deal.order.pick_up_channels[0].locale
+                  }
+                  
                 </Text>
               </View>
             </View>
@@ -454,18 +485,18 @@ export default function DealForVendor() {
       </Animated.ScrollView>
       {/* Fixed Bottom Bar */}
       <View style={styles.bottomBar}>
-        {/* <TouchableOpacity 
+        <TouchableOpacity 
           style={[styles.bottomButton, styles.cancelButton]}
-          onPress={handleCancel}
+          onPress={''}
         >
           <Text style={styles.cancelButtonText}>Cancel Deal</Text>
-        </TouchableOpacity> */}
+        </TouchableOpacity>
         
         <TouchableOpacity
           style={[styles.bottomButton, styles.confirmButton]}
           // onPress={handleConfirm}
         >
-          <Text style={styles.confirmButtonText}>Cancel Deal</Text>
+          <Text style={styles.confirmButtonText}>Create dispute</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -620,7 +651,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   activeTab: {
-    backgroundColor: '#3b82f6',
+    backgroundColor: '#FF4500',
   },
   tabText: {
     fontSize: 14,
@@ -809,12 +840,12 @@ const styles = StyleSheet.create({
   statusIndicator: {
     paddingHorizontal: 16,
     paddingVertical: 8,
-    borderRadius: 10,
+    borderRadius: 4,
     margin: 6,
     alignSelf: 'flex-start',
   },
   progress: {
-    backgroundColor: 'lightgreen',
+    backgroundColor: '#FF4500',
     color: '#FFF'
   },
   statusIndicatorText: {
@@ -922,7 +953,7 @@ const styles = StyleSheet.create({
     width: 12,
     height: 12,
     borderRadius: 6,
-    backgroundColor: '#3b82f6',
+    backgroundColor: '#FF4500',
     marginRight: 12,
     marginTop: 4,
   },

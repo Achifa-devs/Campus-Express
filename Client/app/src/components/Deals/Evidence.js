@@ -31,7 +31,7 @@ const ProofOfDeliveryUpload = () => {
     } = useSelector(s => s.deals)
     const { 
         deal
-    } = useRoute()?.params
+    } = useRoute()?.params;
     
 
     const handleLaunchGallery = () => {
@@ -87,7 +87,6 @@ const ProofOfDeliveryUpload = () => {
                     data, success
                 } = cb;
 
-                console.log(data, success)
 
                 if (success) {
                     const {
@@ -102,10 +101,7 @@ const ProofOfDeliveryUpload = () => {
                             : item
                         )
                     )) 
-                    if (route.params?.onReturn) {
-                        route.params.onReturn(updatedDeal);
-                    }
-                    navigation.goBack({deal: updatedDeal})
+                    navigation.navigate('deal_vendor', {deal: {...deal, order: updatedDeal}})
                 }else{
                     throw new Error("Internal server error", "Please try again!");
                     
