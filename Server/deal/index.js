@@ -5,7 +5,7 @@ const cors = require('cors');
 // const { generateDealId } = require('./utils');
 require('dotenv').config();
 const axios = require('axios');
-const { createNewDeal, findPartnerById, updateDealById } = require('./models');
+const { createNewDeal, findPartnerById, updateDealById, updateUserStatus, getConversationPartner } = require('./models');
 const { sendNotification, generateConversationId, sendNotificationForDealUpdateFromVendorToBuyer, sendNotificationForDealUpdateFromBuyerToVendor } = require('./utils');
 const Deal = express();
 
@@ -67,12 +67,12 @@ io.on('connection', async(socket) => {
     // After adding user socket (inside io.on('connection'))
     if (onlineUsers.get(userId).size === 1) {
         // User just came online (first active socket)
-        const partners = await Chat.getConversationPartner({ user_id: userId });
+        const partners = await getConversationPartner({ user_id: userId });
 
         partners.forEach(async(partnerId) => {
         if (onlineUsers.has(partnerId)) {
             for (const socketId of onlineUsers.get(partnerId)) {
-            await Chat.updateUserStatus({lastseen: 'now', userId})
+            await updateUserStatus({lastseen: 'now', userId})
             io.to(socketId).emit("partner_online", { partnerId });
             }
         }
@@ -131,12 +131,13 @@ io.on('connection', async(socket) => {
         }
     });
 
-    socket.on('/deal/update', async (data, callback) => {
+    socket.on('deal_update', async (data, callback) => {
+        console.log(data)
         try {
-            const { order, new_stage, date, userId, room_id } = data;
+            const { order, new_stage, date, userId, room_id, nxt_stage } = data;
 
             // 1️⃣ Update the deal record
-            const response = await updateDealById({ order, new_stage, date, userId });
+            const response = await updateDealById({ order, new_stage, date, userId, nxt_stage });
             if (!response) return callback({ success: false, data: '' });
 
             // 2️⃣ Get both parties
@@ -146,7 +147,7 @@ io.on('connection', async(socket) => {
             // 3️⃣ Helper to emit and callback
             const handleResult = (result) => {
                 if (result.success) {
-                    io.to(room_id).emit('/deal/update', { data: response });
+                    io.to(room_id).emit('deal_update', { data: response });
                     callback?.({ success: true, data: response });
                 } else {
                     callback?.({ success: false, data: '' });
@@ -158,7 +159,7 @@ io.on('connection', async(socket) => {
 
             // Vendor → Buyer updates
             if (
-                ['shipping', 'delivered'].includes(new_stage) ||
+                ['shipping', 'delivered', 'evidence', 'payment'].includes(new_stage) ||
                 (new_stage === 'cancelled' && userId === order.vendor_id) ||
                 (userId === order.vendor_id && !['confirmed'].includes(new_stage))
             ) {
@@ -186,6 +187,7 @@ io.on('connection', async(socket) => {
                 });
             }
 
+
             // 5️⃣ Emit event and callback
             handleResult(result || { success: false });
         } catch (error) {
@@ -193,6 +195,8 @@ io.on('connection', async(socket) => {
             callback?.({ success: false, error: error.message });
         }
     });
+
+    
 
     socket.on('/deal/complaint', (data) => {
         
@@ -219,13 +223,13 @@ io.on('connection', async(socket) => {
         onlineUsers.delete(userId);
 
         // Get partners
-        const partners = await Chat.getConversationPartner({ user_id: userId });
+        const partners = await getConversationPartner({ user_id: userId });
 
         partners.forEach(async(partnerId) => {
             // console.log(partnerId, onlineUsers.has(partnerId))
             if (onlineUsers.has(partnerId)) {
             for (const socketId of onlineUsers.get(partnerId)) {
-                await Chat.updateUserStatus({lastseen: lagosDate, userId})
+                await updateUserStatus({lastseen: lagosDate, userId})
                 io.to(socketId).emit("partner_offline", { partnerId, lagosDate });
             }
             }

@@ -13,6 +13,7 @@ class Memory {
   static async get(key) {
     try {
       const value = await AsyncStorage.getItem(key);
+      if(!value)return false;
       if (value !== null) {
         return JSON.parse(value); // return stored value
       } else {

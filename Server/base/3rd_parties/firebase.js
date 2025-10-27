@@ -61,6 +61,7 @@ exports.sendNoticeForNewMsg = async function (token, title, body, room, partner)
 }
 
 exports.sendPushOnNewDeal = async function (token,title,body,media,order_id) {
+  // console.log('fcm data: ', token, title)
   const message = {
     token,
     data: {
@@ -81,3 +82,29 @@ exports.sendPushOnNewDeal = async function (token,title,body,media,order_id) {
     console.error('Error sending:', error.message || error);
   });
 }
+
+exports.sendPushOnNewDeal = async function (token, title, body, media, order_id) {
+  if (!token) {
+    console.error("❌ Missing FCM token — cannot send notification.");
+    return false;
+  }
+
+  const message = {
+    token,
+    data: {
+      title,
+      body,
+      media,
+      order_id,
+    },
+  };
+
+  try {
+    const response = await admin.messaging().send(message);
+    console.log("✅ Successfully sent:", response);
+    return {success: true, message: response};
+  } catch (error) {
+    console.error("❌ Error sending:", error.message || error);
+    return {success: false, error: error.message || error};;
+  }
+};

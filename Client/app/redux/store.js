@@ -3,6 +3,7 @@ import user from './info/user';
 import socket_client from './socket';
 import chat from './info/chat';
 import deal from './info/deal';
+import deals from './info/deals';
 import mode from './info/mode';
 import unread from './info/unread_chats';
 import shop from './info/shop';
@@ -28,6 +29,7 @@ const store = configureStore({
     is_active,
     chat,
     deal,
+    deals,
     user,
     mode,
     shop,

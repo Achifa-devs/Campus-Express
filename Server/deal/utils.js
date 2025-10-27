@@ -1,3 +1,5 @@
+const { default: axios } = require("axios");
+
 exports.generateConversationId =  function (userA, userB) {
   console.log(userA, userB)
   if (userA === userB) {
@@ -18,7 +20,7 @@ exports.sendNotification = async ({ customer, partner, order, room_id }) => {
 
   try {
     const response = await axios.post(
-      "https://cs-node.vercel.app/firebase/notification",
+      "http://10.253.129.3:5432/firebase/notification",
       {
         token: partner.fcm,
         data: {
@@ -63,7 +65,7 @@ exports.sendNotificationForDealUpdateFromVendorToBuyer = async ({ customer, orde
     console.warn("⚠️ No FCM token found for customer:", customer?.id || "unknown");
     return { success: false, message: "Missing FCM token" };
   }
-
+  // console.log('fcm data: --',customer.fcm)
   let newTitle = generateTitle(new_stage, role)
   let newBody = generateBody(new_stage, role)
 
@@ -72,7 +74,7 @@ exports.sendNotificationForDealUpdateFromVendorToBuyer = async ({ customer, orde
 
   try {
     const response = await axios.post(
-      "https://cs-node.vercel.app/firebase/notification",
+      "http://10.253.129.3:5432/firebase/notification",
       {
         token: customer.fcm,
         data: {
@@ -90,6 +92,7 @@ exports.sendNotificationForDealUpdateFromVendorToBuyer = async ({ customer, orde
         transformResponse: [
           (data) => {
             try {
+              console.log("data from axios:", data)
               return JSON.parse(data);
             } catch {
               console.warn("⚠️ notify endpoint did not return valid JSON:", data?.slice(0, 100));
@@ -125,7 +128,7 @@ exports.sendNotificationForDealUpdateFromBuyerToVendor = async ({ partner, order
 
   try {
     const response = await axios.post(
-      "https://cs-node.vercel.app/firebase/notification",
+      "http://10.253.129.3:5432/firebase/notification",
       {
         token: partner.fcm,
         data: {

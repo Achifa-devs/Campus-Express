@@ -12,121 +12,113 @@ import {
   SafeAreaView,
   StatusBar,
   Alert,
-  Animated
+  Animated,
+  ActivityIndicator
 } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { set_deal } from '../../redux/info/deal'
 import Tools from '../utils/generalHandler'
-
+import { getSocket } from '../services/socket'
+import { set_deals } from '../../redux/info/deals'
+import ProofOfDeliveryUpload from '../components/Deals/Evidence'
+import BottomModal from '../reusables/BtmModal'
+// SMA-Lp3t-ZC3c-v4aKL
 export default function DealForVendor() {
-  const navigation = useNavigation()
-  const { deal } = useRoute()?.params
+  const navigation = useNavigation();
+  const { 
+    deal
+  } = useRoute()?.params
   const [activeTab, setActiveTab] = useState('details')
-  const [orderStatus, setOrderStatus] = useState(deal.orderStatus || 'pending') // pending, shipping, delivered
+  const [loading, setLoading] = useState(false)
+  const [socket, setSocket] = useState(null)
+  const [orderStatus, setOrderStatus] = useState(deal.orderStatus || 'shipping') // pending, shipping, delivered
   const dispatch = useDispatch()
+  const { 
+    is_connected 
+  } = useSelector(s => s?.is_connected);
+  const { 
+    deals 
+  } = useSelector(s => s?.deals);
   const {
     user
   } = useSelector(s => s.user)
-  
+
   useEffect(() => {
-    if(!deal) return;
-    // console.log(user?.user_id, deal?.partner?.user_id, deal?.partner?.vendor_id)
-    console.log(deal)
-    dispatch(set_deal(
-      {
-        room: Tools.generateConversationId(user?.user_id, deal?.partner?.user_id),
-        partner: deal.partner
-      }
-    ))
-  }, [deal])
-  const fadeAnim = new Animated.Value(0)
+    if (!deal || !user) return;
+    setOrderStatus(Tools.lower_case(deal.order.stage));
+    dispatch(set_deal({
+      room: Tools.generateConversationId(user?.user_id, deal?.partner?.user_id),
+      partner: deal.partner
+    }));
+  }, [deal, user]);
 
-  React.useEffect(() => {
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 500,
-      useNativeDriver: true,
-    }).start()
-  }, [])
-
-  // Vendor Actions
-  const handleStartShipping = () => {
-    Alert.alert(
-      "Start Shipping",
-      "Mark this order as shipped?",
+  useEffect(() => {
+    if(!user)return;
+    const socket = getSocket();
+    setSocket(socket)   
+  }, [is_connected, user])
+  
+  const handleOrderAction = (title, message, event, newStatus) => {
+    if(!socket){
+      Alert.alert('Failed to update!')
+      return; 
+    }; 
+    Alert.alert( 
+      title,
+      message,
       [
-        {
-          text: "Cancel",
-          style: "cancel"
-        },
+        { text: "Cancel", style: "cancel" },
         { 
-          text: "Start Shipping", 
+          text: "Confirm",
           onPress: () => {
-            setOrderStatus('shipping')
-            Alert.alert("Success", "Order marked as shipped!")
-          }
-        }
+            setLoading(true);
+            socket.emit(
+              'deal_update',
+              {
+                room_id: Tools.generateConversationId(user.user_id, deal.partner.user_id),
+                order: deal.order,
+                userId: user.user_id,
+                date: new Date(),
+                new_stage: event.split('_')[1],
+                nxt_stage: newStatus
+              },
+              callback => { 
+                const { success, data } = callback;   
+                if (success) {
+                  dispatch(set_deals(  
+                    deals.map(item =>
+                      item.order.order_id === data.order_id
+                        ? { ...item, order: data }
+                        : item
+                    )
+                  ));
+                  setOrderStatus(newStatus);
+                  setLoading(false)  
+                } else {
+                  setLoading(false)              
+                  Alert.alert("Error", "Unable to update this deal. Please try again.");
+                }
+              }     
+            );
+          },
+        },
       ]
-    )
-  }
+    );
+  };
 
-  const handleConfirmDelivery = () => {
-    Alert.alert(
-      "Confirm Delivery",
-      "Has this order been delivered to the customer?",
-      [
-        {
-          text: "Not Yet",
-          style: "cancel"
-        },
-        { 
-          text: "Confirm Delivery", 
-          onPress: () => {
-            setOrderStatus('delivered')
-            Alert.alert("Success", "Delivery confirmed! Order completed.")
-          }
-        }
-      ]
-    )
-  }
+  // Usage  
+  const handleStartShipping = () =>
+    handleOrderAction("Start Shipping", "Mark this order as 'Shipped'?", "deal_shipping", "delivered");
 
-  const handleUploadEvidence = () => {
-    Alert.alert(
-      "Update Tracking",
-      "Enter tracking information",
-      [
-        {
-          text: "Cancel",
-          style: "cancel"
-        },
-        { 
-          text: "Update", 
-          onPress: () => {
-            Alert.alert("Success", "Tracking information updated!")
-          }
-        }
-      ]
-    )
-  }
+  const handleConfirmDelivery = () =>
+    handleOrderAction("Confirm Delivery", "Has the customer received the order?", "deal_delivered", "evidence");
 
-  const handleContactCustomer = () => {
-    Alert.alert(
-      "Contact Customer",
-      `Contact ${deal.partnerName || 'customer'} about this order?`,
-      [
-        {
-          text: "Cancel",
-          style: "cancel"
-        },
-        { 
-          text: "Contact", 
-          onPress: () => {
-            // Implement contact logic
-          }
-        }
-      ]
-    )
-  }
+  const handleUploadEvidence = () =>
+    handleOrderAction("Upload Evidence", "Provide tracking or delivery details.", "deal_evidence", "payment");
+
+  const handleClaimPayment = () =>
+    handleOrderAction("Claim Payment", "Would you like to claim payment for this order?", "deal_payment", "completed");
+
 
   const InfoCard = ({ icon, title, value }) => (
     <View style={styles.infoCard}>
@@ -157,15 +149,55 @@ export default function DealForVendor() {
     </TouchableOpacity>
   )
 
+  const GetCompletedStatus = (status) => {
+    let stats = []
+    for(x in status){
+      if(status[x].completed){
+        // stats.push(x)
+        stats.push(
+        <View style={[
+          styles.statusIndicator,
+          styles.progress,
+        ]}>
+          <Text style={styles.statusIndicatorText}>
+            {Tools.capitalize(x)}
+          </Text>
+        </View>)
+      }
+    }
+    return stats;
+  }
+
   return (
     <SafeAreaView style={styles.container}>
+      <BottomModal visible={true} onClose={toggleModal}>
+        {/* Modal Component */}
+         <ProofOfDeliveryUpload />
+      </BottomModal>
       <StatusBar barStyle="dark-content" />
+      {loading &&
+        <View style={{
+          height: '100%', 
+          width: '100%',
+          position: 'absolute',
+          top: 1,
+          left: 0,
+          zIndex: 1000,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: '#FFF8F6',
+          opacity: .5
+        }}>
+          <ActivityIndicator size={'large'} color={'#FF4500'}></ActivityIndicator>
+        </View>
+      }
       
       <Animated.ScrollView 
-        style={[styles.scrollView, { opacity: fadeAnim }]}
+        style={[styles.scrollView]}
         showsVerticalScrollIndicator={false}
       >
-        {/* Product Card - Remains the same */}
+        {/* Product Card - Remains the same */} 
         <View style={styles.productCard}>
           <View style={styles.imageContainer}>
             <Image
@@ -174,7 +206,9 @@ export default function DealForVendor() {
             />
             <View style={styles.statusBadge}>
               <Text style={styles.statusText}>
-                {deal?.order?.stage?.toUpperCase()}
+                {
+                  Tools.capitalize(deal.order.stage)
+                }
               </Text>
             </View>
           </View>
@@ -236,7 +270,7 @@ export default function DealForVendor() {
           >
             <Text style={[styles.tabText, activeTab === 'manage' && styles.activeTabText]}>
               Logistics
-            </Text>
+            </Text> 
           </TouchableOpacity>
           <TouchableOpacity 
             style={[styles.tab, activeTab === 'tracking' && styles.activeTab]}
@@ -310,7 +344,7 @@ export default function DealForVendor() {
                 </View>
               </View>
 
-              {orderStatus !== 'pending' && (
+              {orderStatus !== 'shipping' && (
                 <View style={styles.timelineItem}>
                   <View style={styles.timelineDot} />
                   <View style={styles.timelineContent}>
@@ -341,19 +375,10 @@ export default function DealForVendor() {
             
             {/* Current Status Card */}
             <View style={styles.statusCard}>
-              <Text style={styles.statusCardTitle}>Current Status</Text>
-              <View style={[
-                styles.statusIndicator,
-                orderStatus === 'pending' && styles.statusPending,
-                orderStatus === 'shipping' && styles.statusShipping,
-                orderStatus === 'delivered' && styles.statusDelivered
-              ]}>
-                <Text style={styles.statusIndicatorText}>
-                  {orderStatus === 'pending' && '🔄 Processing'}
-                  {orderStatus === 'shipping' && '🚚 Shipping'}
-                  {orderStatus === 'delivered' && '✅ Delivered'}
-                </Text>
-              </View>
+              <Text style={styles.statusCardTitle}>Completed Stages</Text>
+              {
+                GetCompletedStatus(deal.order.status)
+              }
             </View>
 
             {/* Action Buttons Grid */}
@@ -363,30 +388,31 @@ export default function DealForVendor() {
                 icon="🚚"
                 onPress={handleStartShipping}
                 variant="primary"
-                disabled={orderStatus !== 'pending'}
+                disabled={orderStatus !== 'shipping'}
               />
               
               <VendorActionButton
                 title="Upload Evidence"
                 icon="🗂️"
                 onPress={handleUploadEvidence}
-                variant="secondary"
-                disabled={orderStatus === 'pending'}
+                variant="trust"
+                disabled={orderStatus !== 'evidence'}
               />
               
               <VendorActionButton
                 title="Confirm Delivery"
                 icon="✅"
                 onPress={handleConfirmDelivery}
-                variant="success"
-                disabled={orderStatus !== 'shipping'}
+                variant="secondary"
+                disabled={orderStatus !== 'delivered'}
               />
               
               <VendorActionButton
                 title="Claim Payment"
                 icon="🧾"
-                onPress={handleContactCustomer}
-                variant="secondary"
+                onPress={handleClaimPayment}
+                variant="success"
+                disabled={orderStatus !== 'payment'}
               />
             </View>        
 
@@ -751,6 +777,8 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     marginBottom: 16,
     shadowColor: '#000',
+    flexWrap: 'wrap',
+    flexDirection: 'row',
     shadowOffset: {
       width: 0,
       height: 1,
@@ -762,26 +790,27 @@ const styles = StyleSheet.create({
   statusCardTitle: {
     fontSize: 16,
     fontWeight: '700',
+    width: '100%',
     color: '#1e293b',
-    marginBottom: 12,
+    marginBottom: 21,
+    borderBottomColor: '#efefef',
+    borderBottomWidth: 1,
+    // borderBo
   },
   statusIndicator: {
     paddingHorizontal: 16,
     paddingVertical: 8,
-    borderRadius: 20,
+    borderRadius: 10,
+    margin: 6,
     alignSelf: 'flex-start',
   },
-  statusPending: {
-    backgroundColor: '#fef3c7',
-  },
-  statusShipping: {
-    backgroundColor: '#dbeafe',
-  },
-  statusDelivered: {
-    backgroundColor: '#d1fae5',
+  progress: {
+    backgroundColor: 'lightgreen',
+    color: '#FFF'
   },
   statusIndicatorText: {
     fontSize: 14,
+    color: '#FFF',
     fontWeight: '700',
   },
   vendorActionsGrid: {
@@ -808,16 +837,24 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   primaryVendorActionButton: {
-    borderColor: '#3b82f6',
+    color: '#fff',
+    // borderColor: '#3b82f6',
     backgroundColor: '#3b82f6',
   },
   secondaryVendorActionButton: {
-    borderColor: '#64748b',
-    backgroundColor: '#fff',
+    color: '#fff',
+    // borderColor: '#64748b',
+    backgroundColor: '#26A69A',
+  },
+  trustVendorActionButton: {
+    color: '#fff',
+    // borderColor: '#10b981',
+    backgroundColor: '#00BFA6',
   },
   successVendorActionButton: {
-    borderColor: '#10b981',
-    backgroundColor: '#10b981',
+    color: '#fff',
+    // borderColor: '#10b981',
+    backgroundColor: '#2ECC71',
   },
   disabledVendorActionButton: {
     borderColor: '#e2e8f0',
@@ -837,7 +874,10 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   secondaryVendorActionText: {
-    color: '#64748b',
+    color: '#fff',
+  },
+  trustVendorActionText: {
+    color: '#fff',
   },
   successVendorActionText: {
     color: '#fff',

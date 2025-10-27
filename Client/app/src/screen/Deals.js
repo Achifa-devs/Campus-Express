@@ -5,13 +5,14 @@ import Card from '../components/Deals/Card';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { set_deals } from '../../redux/info/deals';
 
 export default function Deals() {
 
     const [activeStatus, setActiveStatus] = useState('Active');
     const [List, setList] = useState([]);
-    const [deals, setDeals] = useState({
+    const [dealList, setDealList] = useState({
         active: [],
         completed: [],
         cancelled: []
@@ -19,13 +20,13 @@ export default function Deals() {
 
     useEffect(() => {
         if(activeStatus === 'Active'){
-            setList(deals.active)
+            setList(dealList.active)
         }else if(activeStatus === 'Completed'){
-            setList(deals.completed)
+            setList(dealList.completed)
         }else{
-            setList(deals.cancelled)
+            setList(dealList.cancelled)
         }
-    }, [activeStatus, deals]);
+    }, [activeStatus, dealList]);
 
     const [refreshing, setRefreshing] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -47,24 +48,14 @@ export default function Deals() {
 
     const handleRefresh = async() => {
         setRefreshing(true);
-        await initializeSocket();
         getDeals();
     };
-
+ 
+    const dispatch = useDispatch()
     function getDeals () {
         axios.get('https://base-three-opal.vercel.app/deals', {params: {user_id: user?.user_id}}).then(({data}) => {
             const res = data.data;
-            setDeals((prev) => {
-                const newActive = res.filter(item => item.order.stage.toLowerCase() === 'shipping');
-                const newCompleted = res.filter(item => item.order.stage.toLowerCase() === 'completed');
-                const newCancelled = res.filter(item => item.order.stage.toLowerCase() === 'cancelled');
-                return {
-                    ...prev,
-                    active: newActive,
-                    completed: newCompleted,
-                    cancelled: newCancelled
-                };
-            });
+            dispatch(set_deals(res))
             setRefreshing(false);
             setLoading(false)
         }).catch(err => {
@@ -92,7 +83,26 @@ export default function Deals() {
         if(!user) return;
         getDeals();
     }, [user])
+
+    const {
+        deals
+    } = useSelector(s => s.deals)
     
+    useEffect(() => {
+        if(!deals && !Array.isArray(deals))return;
+        // console.log("deals: ", deals);
+        setDealList((prev) => {
+            const newActive = deals.filter(item => item.order.stage.toLowerCase() !== 'completed' && item.order.stage.toLowerCase() !== 'cancelled');
+            const newCompleted = deals.filter(item => item.order.stage.toLowerCase() === 'completed');
+            const newCancelled = deals.filter(item => item.order.stage.toLowerCase() === 'cancelled');
+            return {
+                ...prev,
+                active: newActive,
+                completed: newCompleted,
+                cancelled: newCancelled
+            };
+        });
+    }, [deals])
     
     const handleDataFromChild = (data) => {
         setActiveStatus(data)

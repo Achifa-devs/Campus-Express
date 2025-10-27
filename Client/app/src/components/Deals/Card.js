@@ -1,6 +1,7 @@
 import React from 'react';
 import { Image, Text, View, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
+import Tools from '../../utils/generalHandler';
 
 export default function Card({ item }) {
   const { user } = useSelector(state => state.user);
@@ -36,7 +37,7 @@ export default function Card({ item }) {
           <View style={[styles.statusBadge, { backgroundColor: getStatusColor() + '15' }]}>
             <View style={[styles.statusDot, { backgroundColor: getStatusColor() }]} />
             <Text style={[styles.statusText, { color: getStatusColor() }]}>
-              {item?.order?.stage}
+              {Tools.capitalize(item?.order?.stage)}
             </Text>
           </View>
           <Text style={styles.date}>

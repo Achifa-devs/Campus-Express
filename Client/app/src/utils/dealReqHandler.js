@@ -7,7 +7,7 @@ class Deal{
         })
     }
 
-    static async uploadEvidence(socket){
+    static async uploadEvidence(socket, data){
         socket.emit('/deal/update', {
 
         })

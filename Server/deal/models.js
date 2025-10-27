@@ -43,7 +43,7 @@ exports.findDealById = async function ({ product_id }) {
   return rows;
 }
 // Update deal by stage
-exports.updateDealById = async function ({ order, new_stage, date, userId }) {
+exports.updateDealById = async function ({ order, new_stage, date, userId, nxt_stage }) {
   let newStatus;
   if(new_stage === 'completed'){
     newStatus = {
@@ -70,14 +70,43 @@ exports.updateDealById = async function ({ order, new_stage, date, userId }) {
         $1::jsonb,              
         true
       ),
-      stage = $2
-    WHERE order_id = $3
+      stage = $3
+    WHERE order_id = $2
     RETURNING *;
   `;
 
-  const values = [JSON.stringify(newStatus), stage, order.order_id];
+  const values = [JSON.stringify(newStatus), order.order_id, nxt_stage];
 
   const { rows } = await pool.query(query, values);
 
   return rows?.[0] || null;
 };
+
+  exports.getConversationPartner = async({ user_id }) => {
+    try {
+      const result = await pool.query(
+        `SELECT DISTINCT
+           CASE
+             WHEN sender_id = $1 THEN receiver_id
+             ELSE sender_id
+           END AS partner_id
+         FROM messages
+         WHERE sender_id = $1 OR receiver_id = $1`,
+        [user_id]
+      );
+      return result.rows.map(row => row.partner_id);
+    } catch (error) {
+      console.error("❌ Error fetching conversation partners:", error);
+      throw error;
+    }
+  }
+
+  exports.updateUserStatus = async({lastseen,userId}) => {
+    try {
+      pool.query(
+        `UPDATE users SET lastseen = $1 WHERE user_id = $2`, [lastseen, userId]
+      )
+    } catch (error) {
+      
+    }
+  }

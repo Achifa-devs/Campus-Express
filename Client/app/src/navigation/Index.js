@@ -9,7 +9,7 @@ import Sound from 'react-native-sound';
 import WelcomeScreen from "./Welcome";
 import { set_mode } from "../../redux/info/mode";
 import { NavigationContainer } from "@react-navigation/native";
-import { AppState, SafeAreaView, StatusBar, StyleSheet } from "react-native";
+import { AppState, Dimensions, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { set_campus } from "../../redux/info/campus";
 import { PaystackProvider } from 'react-native-paystack-webview';
 import { CampusSelection } from "../modals/Campus";
@@ -37,6 +37,7 @@ import NetInfo from '@react-native-community/netinfo';
 import { set_is_connected } from "../../redux/info/is_connected";
 import { getMessaging } from "@react-native-firebase/messaging";
 import { navigationRef, notifeeNavigationRef } from "./root_nav";
+import NetworkCard from "../components/NetworkCard";
 Sound.setCategory("Playback"); // ensure sound plays even in silent mode (iOS)
 function NavigationHandler() {
 
@@ -63,22 +64,21 @@ function NavigationHandler() {
     return () => unsubscribe(); // clean up properly
   }, [dispatch]);
 
-  useEffect(() => {
-    const checkInternet = async () => {
-      try {
-        const res = await fetch("https://clients3.google.com/generate_204", {
-          method: "HEAD",
-          cache: "no-store",
-        });
-        dispatch(set_is_connected(res.ok));
-      } catch {
-        dispatch(set_is_connected(false));
-      }
-    };
+  const checkInternet = async () => {
+    try {
+      const res = await fetch("https://clients3.google.com/generate_204", {
+        method: "HEAD",
+        cache: "no-store",
+      });
+      dispatch(set_is_connected(res.ok));
+    } catch {
+      dispatch(set_is_connected(false));
+    }
+  };
 
+  useEffect(() => {
     checkInternet(); // run once immediately
     const interval = setInterval(checkInternet, 5000); // check every 5s
-
     return () => clearInterval(interval); // clean up
   }, [dispatch]);
 
@@ -553,9 +553,12 @@ function NavigationHandler() {
 
           </NavigationContainer>
         </PaystackProvider>
+        {
+          !is_connected && <NetworkCard checkInternet={checkInternet} /> 
+        }
       </SafeAreaView>
 
-
+ 
     </>
     
   );

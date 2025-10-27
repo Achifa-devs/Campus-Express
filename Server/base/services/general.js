@@ -22,14 +22,14 @@ async function sendFirebaseNotification(payload) {
   const { token, data } = payload;
   const { type } = data;
   if(type === 'deal'){
-    const { token, title, body, media, order_id } = data;
+    const { title, body, media, order_id } = data;
     const result = await sendPushOnNewDeal(token, title, body, media, order_id);
-    if (result.success) return result.success;
-    else throw new Error("Error sending firebase notification: " + result.error);
-  }else if(type === 'chat'){
+    if (result.success) return result;
+    else throw new Error("Error sending firebase notification: " + result.message);
+  }else if(type /** Chat */){
     const { title, body, room, partner } = data;
     const result = await sendNoticeForNewMsg(token, title, body, room, partner);
-    if (result.success) return result.success;
+    if (result.success) return result;
     else throw new Error("Error sending firebase notification: " + result.error);
   }else{
 
