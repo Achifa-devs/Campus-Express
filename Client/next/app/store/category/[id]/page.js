@@ -256,21 +256,21 @@ const Dashboard = () => {
     }, [pathname]);
 
     useEffect(() => {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-        position => {
-            setGeoLocation({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-            });
-        },
-        error => {
-            console.error('Error fetching location', error);
-        }
-        );
-    } else {
-        console.error('Geolocation is not supported by this browser');
-    }
+      if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+          position => {
+              setGeoLocation({
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+              });
+          },
+          error => {
+              console.error('Error fetching location', error);
+          }
+          );
+      } else {
+          console.error('Geolocation is not supported by this browser');
+      }
     }, []);
 
     useEffect(() => {

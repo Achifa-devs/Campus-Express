@@ -2,6 +2,7 @@ import DeviceInfo from 'react-native-device-info';
 import { Product } from '../api';
 import Memory from './memoryHandler';
 import { Alert, PermissionsAndroid, Platform } from 'react-native';
+import Geolocation from '@react-native-community/geolocation';
 
 class Tools {
     static async getDeviceId(){
@@ -184,9 +185,77 @@ class Tools {
     
         return `${day}${getOrdinal(day)} ${month} ${year} by ${hour12}:${minutes}${ampm}`;
     }
+
+    static async requestLocationPermission() {
+        if (Platform.OS === 'ios') {
+            return true;
+        }
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+            );
+            return granted === PermissionsAndroid.RESULTS.GRANTED;
+        } catch (err) {
+            console.warn(err);
+            return false;
+        }
+    }
     
+    static  async getUserLocation () {
+        
+        try {
+            const position = await new Promise((resolve, reject) => {
+                Geolocation.getCurrentPosition(
+                    (pos) => resolve(pos),
+                    (error) => reject(error),
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 15000,
+                        maximumAge: 10000
+                    },
+                );
+            });
+
+            const { latitude, longitude } = position.coords;
+            console.log('coords:', latitude, longitude);
+
+            return { latitude, longitude };
+        } catch (error) {
+            console.log('Error getting location:', error.message);
+            return null;
+        }
+    }; 
+
+    static async getAddressFromCoordinates(latitude, longitude) {
+        console.log(latitude, longitude)
+        try {
+            const response = await fetch(
+                `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`,
+                {
+                    headers: {
+                        'User-Agent': 'campussphere/1.0 (akpulufabian@gmail.com)', // <-- Important
+                    },
+                }
+            );
+
+            const data = await response.json();
+            console.log('Nominatim Response:', data); // <-- Add this to inspect
+
+            if (data && data.display_name) {
+                return data;
+            } else {
+                console.log('No address found in response');
+                return null;
+            }
+        } catch (error) {
+            console.error('Error in reverse geocoding:', error);
+            return null;
+        }
+    }   
+
 
 }
 
 
 export default Tools
+

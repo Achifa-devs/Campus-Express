@@ -12,19 +12,38 @@ import {
   Dimensions,
   Platform,
   KeyboardAvoidingView,
+  ActivityIndicator,
 } from 'react-native';
 import DropdownComp from "../reusables/Dropdown";
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Tools from '../utils/generalHandler';
+import { useDispatch, useSelector } from 'react-redux';
+import { useRoute } from '@react-navigation/native';
+import { set_deals } from '../../redux/info/deals';
 
 const { width: screenWidth } = Dimensions.get('window');
 
 const Shipping = () => {
+
+  const {
+    user
+  } = useSelector(s => s.user)
+  const {
+    deals
+  } = useSelector(s => s.deals)
+  const {
+    deal
+  } = useRoute?.parms;
+  const [loading, setLoading] = useState(false)
+  
+
+  const dispatch = useDispatch()
+
   const [formData, setFormData] = useState({
     deliveryMethod: '',
     courierType: '',
     currentLocation: '',
-    deliveryTime: '',
-    deliveryRoute: '',
+    deliveryTime: ''
   });
 
 
@@ -43,6 +62,7 @@ const Shipping = () => {
   ];
 
   const timeOptions = [
+    { label: 'Half an hour', value: '30 mins' },
     { label: 'Within 1 hour', value: '1h' },
     { label: '1-3 hours', value: '3h' },
     { label: '3-6 hours', value: '6h' },
@@ -66,26 +86,6 @@ const Shipping = () => {
     }
   };
 
-  const handleLocationDetection = () => {
-    Alert.alert(
-      'Detect Location',
-      'Allow Campus Sphere to access your location to automatically fill your current address?',
-      [
-        { text: 'Not Now', style: 'cancel' },
-        { 
-          text: 'Allow', 
-          onPress: () => {
-            // Simulate location detection 
-            setTimeout(() => {
-              handleInputChange('currentLocation', 'Miracle Junction, Ifite, Awka');
-              Alert.alert('Success', 'Location detected successfully!');
-            }, 1000);
-          }
-        },
-      ]
-    );
-  };
-
   const validateForm = () => {
     const newErrors = {};
 
@@ -105,23 +105,52 @@ const Shipping = () => {
       newErrors.deliveryTime = 'Please select estimated delivery time';
     }
 
-    if (!formData.deliveryRoute.trim()) {
-      newErrors.deliveryRoute = 'Please specify the delivery route';
-    }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = () => {
     if (validateForm()) {
-      Alert.alert(
-        'Shipping Details Saved',
-        'Your shipping information has been updated successfully.',
-        [{ text: 'OK' }]
+      setLoading(true);
+      socket.emit(
+        'deal_update',
+        {
+          room_id: Tools.generateConversationId(user.user_id, deal.partner.user_id),
+          order: deal.order,
+          userId: user.user_id,
+          date: new Date(),
+          new_stage: "shipping",
+          nxt_stage: "delivered"
+        },
+        callback => { 
+          const { success, data } = callback;   
+          if (success) {
+            dispatch(set_deals(  
+              deals.map(item =>
+                item.order.order_id === data.order_id
+                  ? { ...item, order: data }
+                  : item
+              )
+            ));
+            Alert.alert( 
+              "Uploa",
+              message,
+              [
+                { text: "Cancel", style: "cancel" },
+                { 
+                  text: "Confirm",
+                  onPress: () => {
+                    
+                  },
+                },
+              ]
+            );
+          } else {
+            setLoading(false)              
+            Alert.alert("Error", "Unable to update this deal. Please try again.");
+          }
+        }     
       );
-      // Handle form submission here
-      console.log('Form data:', formData);
     }
   };
 
@@ -130,6 +159,8 @@ const Shipping = () => {
       setFormData(prev => ({...prev, deliveryMethod: value}))
     }else if(name === 'courier_type'){
       setFormData(prev => ({...prev, courierType: value}))
+    }else if(name == 'delivery_time'){
+      setFormData(prev => ({...prev, deliveryTime: value}))
     }
   }
 
@@ -137,9 +168,7 @@ const Shipping = () => {
   
   const isFormValid = formData.deliveryMethod && 
   (formData.deliveryMethod !== 'courier' || formData.courierType) && 
-  formData.currentLocation.trim() && 
-  formData.deliveryTime && 
-  formData.deliveryRoute.trim();
+  formData.currentLocation.trim() && formData.deliveryTime;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -155,6 +184,23 @@ const Shipping = () => {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.scrollContent}
           >
+            {loading &&
+              <View style={{  
+                height: '100%', 
+                width: '100%',
+                position: 'absolute',
+                top: 1,
+                left: 0,
+                zIndex: 1000,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: '#FFF8F6',
+                opacity: .5
+              }}>
+                <ActivityIndicator size={'large'} color={'#FF4500'}></ActivityIndicator>
+              </View>
+            }
             {/* Additional Information */}
             <View style={styles.infoCard}>
               <Ionicons name="information-circle" size={20} color="#FF4500" />
@@ -183,6 +229,7 @@ const Shipping = () => {
                 placeholder="Select who will deliver this item"
                 fieldName={"label"}
                 input_name={"delivery_src"}
+                dropdownPosition={'top'}
                 updateData={updateData}
                 isValueField={true}
               />
@@ -194,7 +241,7 @@ const Shipping = () => {
             {formData.deliveryMethod === 'courier' && (
               <View style={styles.section}>
                 <View style={styles.sectionHeader}>
-                  <Ionicons name="business-outline" size={20} color="#8B5CF6" />
+                  <Ionicons name="business-outline" size={20} color="#FF4500" />
                   <Text style={styles.sectionTitle}>Courier Service Type</Text>
                 </View>
                 <Text style={styles.sectionDescription}>
@@ -206,6 +253,7 @@ const Shipping = () => {
                   placeholder="Choose courier type"
                   fieldName={"label"}
                   input_name={"courier_type"}
+                  dropdownPosition={'top'}
                   isValueField={true}
                   updateData={updateData}
                 />
@@ -237,18 +285,27 @@ const Shipping = () => {
                   onChangeText={(text) => handleInputChange('currentLocation', text)}
                   multiline
                 />
-                <TouchableOpacity
+                {/* <TouchableOpacity
                   style={styles.locationButton}
-                  onPress={handleLocationDetection}
+                  onPress={async(e) => {
+                    const hasPermission = await Tools.requestLocationPermission();
+                    if (!hasPermission) {
+                      console.log('Permission not granted');
+                      return;
+                    }
+                    const { latitude, longitude } = await Tools.getUserLocation()
+                    const location = await Tools.getAddressFromCoordinates(latitude, longitude); 
+                    console.log("location: ", location)
+                  }}
                 >
                   <Ionicons name="locate" size={20} color="#FF4500" />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </View>
               {errors.currentLocation ? (
                 <Text style={styles.errorText}>{errors.currentLocation}</Text>
               ) : null}
               <Text style={styles.helperText}>
-                Be specific to help the delivery person locate the item easily
+                This helps builds trust with the customer.
               </Text>
             </View>
             {/* Delivery Time Section */}
@@ -264,8 +321,11 @@ const Shipping = () => {
               <DropdownComp
                 dropdownData={timeOptions}
                 placeholder="Select estimated delivery time"
-                onSelect={(value) => handleInputChange('deliveryTime', value)}
-                error={errors.deliveryTime}
+                fieldName={"label"}
+                input_name={"delivery_time"}
+                isValueField={true}
+                dropdownPosition={'top'}
+                updateData={updateData}
               />
               {errors.deliveryTime ? (
                 <Text style={styles.errorText}>{errors.deliveryTime}</Text>
@@ -274,37 +334,7 @@ const Shipping = () => {
                 This helps set customer expectations for delivery
               </Text>
             </View>
-            {/* Delivery Route Section */}
-            <View style={styles.section}>
-              <View style={styles.sectionHeader}>
-                <Ionicons name="map-outline" size={20} color="#10B981" />
-                <Text style={styles.sectionTitle}>Delivery Route</Text>
-              </View>
-              <Text style={styles.sectionDescription}>
-                Specify the route you'll follow for delivery
-              </Text>
           
-              <TextInput
-                style={[
-                  styles.textInput,
-                  styles.textArea,
-                  errors.deliveryRoute && styles.inputError
-                ]}
-                placeholder="Describe the delivery route (e.g., Ifite Road → Aroma Junction → UNIZIK Temp Site)"
-                placeholderTextColor="#9CA3AF"
-                value={formData.deliveryRoute}
-                onChangeText={(text) => handleInputChange('deliveryRoute', text)}
-                multiline
-                numberOfLines={3}
-                textAlignVertical="top"
-              />
-              {errors.deliveryRoute ? (
-                <Text style={styles.errorText}>{errors.deliveryRoute}</Text>
-              ) : null}
-              <Text style={styles.helperText}>
-                Include major landmarks and roads for better navigation
-              </Text>
-            </View>
           </ScrollView>
           {/* Fixed Submit Button */}
           <View style={styles.footer}>

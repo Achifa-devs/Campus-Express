@@ -112,13 +112,6 @@ export default function DealForVendor() {
     );
   };
 
-  // Usage  
-  const handleStartShipping = () =>
-    handleOrderAction("Start Shipping", "Mark this order as 'Shipped'?", "deal_shipping", "delivered");
-
-  const handleUploadEvidence = () =>
-    handleOrderAction("Upload Evidence", "Provide tracking or delivery details.", "deal_evidence", "payment");
-
   const handleClaimPayment = () =>
     handleOrderAction("Claim Payment", "Would you like to claim payment for this order?", "deal_payment", "completed");
 
