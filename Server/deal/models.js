@@ -43,7 +43,7 @@ exports.findDealById = async function ({ product_id }) {
   return rows;
 }
 // Update deal by stage
-exports.updateDealById = async function ({ order, new_stage, date, userId, nxt_stage }) {
+exports.updateDealById = async function ({ order, new_stage, date, userId, nxt_stage, formData=null}) {
   let newStatus;
   if(new_stage === 'completed'){
     newStatus = {
@@ -67,6 +67,13 @@ exports.updateDealById = async function ({ order, new_stage, date, userId, nxt_s
       completedAt: date,
       buyer: order.user_id === userId ? true: false,
       vendor: order.vendor_id === userId ? true: false
+    };
+  }else if(new_stage === 'shipping'){
+    newStatus = {
+      outcome: "success",
+      completed: true,
+      completedAt: date,
+      shipping_data: formData
     };
   }else{
     newStatus = {

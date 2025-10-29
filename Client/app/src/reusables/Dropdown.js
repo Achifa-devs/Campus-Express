@@ -10,7 +10,8 @@ export default function DropdownComp({
   placeholder,
   updateData,
   dropdownPosition,
-  isValueField
+  isValueField,
+  customField
 }) {
   const [value, setValue] = useState(null);
 
@@ -38,7 +39,7 @@ export default function DropdownComp({
         value={value} // ✅ this should be the raw value, not an object
         onChange={item => {
           setValue(item[isValueField ? 'value' : fieldName || "title"]); // ✅ set the value
-          updateData(item[fieldName || "title"], input_name, item["value"]);
+          updateData(item[fieldName || "title"], input_name, item["value"], item[customField]);
         }}
       />
     </View> 

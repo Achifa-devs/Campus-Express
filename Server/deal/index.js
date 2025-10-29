@@ -133,10 +133,10 @@ io.on('connection', async(socket) => {
 
     socket.on('deal_update', async (data, callback) => {
         try {
-            const { order, new_stage, date, userId, room_id, nxt_stage } = data;
+            const { order, new_stage, date, userId, room_id, nxt_stage, formData=null } = data;
 
             // 1️⃣ Update the deal record
-            const response = await updateDealById({ order, new_stage, date, userId, nxt_stage });
+            const response = await updateDealById({ order, new_stage, date, userId, nxt_stage, formData });
             if (!response) return callback({ success: false, data: '' });
 
             // 2️⃣ Get both parties

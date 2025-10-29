@@ -6,7 +6,8 @@ const {
     updateFirebaseTokenHandler, 
     uploadMediaToCloudinaryHandler, 
     deleteMediaFromCloudinaryHandler, 
-    checkVendorPromoHandler
+    checkVendorPromoHandler,
+    bankVerification
 } = require('../controllers/general');
 const multer = require('multer')
 const generalRouter = express.Router();
@@ -23,7 +24,7 @@ generalRouter.get('/media/folder', getMediaFolderFromCloudinaryHandler)/** /imag
 // generalRouter.get('/promo', )
 // generalRouter.get('/subscription', )
 // generalRouter.get('/packages', )
-
+generalRouter.post('/bank/verification', parser, bankVerification)
 generalRouter.post('/firebase/notification', parser, sendFirebaseNotificationHandler) /** n/otify */
 generalRouter.post('/firebase/update', parser, updateFirebaseTokenHandler) /** /update-fcm */
 generalRouter.post('/upload/media', upload.single('file'), uploadMediaToCloudinaryHandler) /** upload file to cloudinary */

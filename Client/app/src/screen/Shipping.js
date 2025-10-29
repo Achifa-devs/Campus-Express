@@ -18,8 +18,9 @@ import DropdownComp from "../reusables/Dropdown";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Tools from '../utils/generalHandler';
 import { useDispatch, useSelector } from 'react-redux';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { set_deals } from '../../redux/info/deals';
+import { getSocket } from '../services/socket';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -31,36 +32,36 @@ const Shipping = () => {
   const {
     deals
   } = useSelector(s => s.deals)
-  const {
+  let { 
     deal
-  } = useRoute?.parms;
+  } = useRoute()?.params
   const [loading, setLoading] = useState(false)
-  
-
   const dispatch = useDispatch()
-
+  const navigation = useNavigation()
   const [formData, setFormData] = useState({
     deliveryMethod: '',
     courierType: '',
     currentLocation: '',
     deliveryTime: ''
   });
-
-
   const [errors, setErrors] = useState({});
 
+  const [socket, setSocket] = useState(null)
+
+  useEffect(() => {
+    const socket = getSocket();
+    setSocket(socket);
+  }, [deal]);
   const deliveryOptions = [
     { label: 'I will deliver it myself', value: 'self' },
     { label: 'Use a courier service (3rd party logistics)', value: 'courier' },
   ];
-
   const courierTypeOptions = [
     { label: '🚴 Bike Delivery', value: 'bike' },
     { label: '🚗 Car Delivery', value: 'car' },
     { label: '🚚 Van/Truck', value: 'truck' },
     { label: '📦 Way Bill (Pick up from park)', value: 'waybill' },
   ];
-
   const timeOptions = [
     { label: 'Half an hour', value: '30 mins' },
     { label: 'Within 1 hour', value: '1h' },
@@ -71,7 +72,6 @@ const Shipping = () => {
     { label: '2-3 days', value: '2-3d' },
     { label: '3-5 days', value: '3-5d' },
   ];
-
   const handleInputChange = (field, value) => {
     setFormData(prev => ({
       ...prev,
@@ -108,7 +108,6 @@ const Shipping = () => {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
   const handleSubmit = () => {
     if (validateForm()) {
       setLoading(true);
@@ -120,27 +119,29 @@ const Shipping = () => {
           userId: user.user_id,
           date: new Date(),
           new_stage: "shipping",
-          nxt_stage: "delivered"
+          nxt_stage: "delivered",
+          formData
         },
         callback => { 
           const { success, data } = callback;   
           if (success) {
+           
             dispatch(set_deals(  
               deals.map(item =>
                 item.order.order_id === data.order_id
                   ? { ...item, order: data }
-                  : item
+                  : item 
               )
             ));
             Alert.alert( 
-              "Uploa",
-              message,
+              "Delivery started successfully",
+              "Your customer has been notified that you have started the delivery.",
               [
-                { text: "Cancel", style: "cancel" },
+                // { text: "Cancel", style: "cancel" },
                 { 
-                  text: "Confirm",
+                  text: "Continue",
                   onPress: () => {
-                    
+                    navigation.navigate('deal_vendor', {deal: {...deal, order: data}})
                   },
                 },
               ]
@@ -173,7 +174,23 @@ const Shipping = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#F8FAFC" />
-      
+        {loading &&
+          <View style={{  
+            height: '100%', 
+            width: '100%',
+            position: 'absolute',
+            top: 1,
+            left: 0,
+            zIndex: 1000,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#FFF8F6',
+            opacity: .5
+          }}>
+            <ActivityIndicator size={'large'} color={'#FF4500'}></ActivityIndicator>
+          </View>
+        }
         <KeyboardAvoidingView 
           style={styles.keyboardAvoidingView}
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -184,23 +201,7 @@ const Shipping = () => {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.scrollContent}
           >
-            {loading &&
-              <View style={{  
-                height: '100%', 
-                width: '100%',
-                position: 'absolute',
-                top: 1,
-                left: 0,
-                zIndex: 1000,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: '#FFF8F6',
-                opacity: .5
-              }}>
-                <ActivityIndicator size={'large'} color={'#FF4500'}></ActivityIndicator>
-              </View>
-            }
+            
             {/* Additional Information */}
             <View style={styles.infoCard}>
               <Ionicons name="information-circle" size={20} color="#FF4500" />

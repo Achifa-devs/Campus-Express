@@ -125,7 +125,7 @@ export default function DealForVendor() {
   )
 
   const VendorActionCard = ({ title, icon, description, onPress, variant = 'primary', disabled = false, completed = false }) => (
-    <TouchableOpacity 
+    <TouchableOpacity activeOpacity={.8}
       style={[
         styles.vendorActionCard,
         styles[`${variant}VendorActionCard`],
@@ -390,12 +390,7 @@ export default function DealForVendor() {
                   title="Start Shipping"
                   icon="🚚"
                   description="Mark the order as dispatched provide tracking information to the buyer"
-                  onPress={() => navigation.navigate('deal_shipping', {
-                    deal,
-                    onReturn: (updatedDeal) => {
-                      deal = (updatedDeal);
-                    },
-                  })}
+                  onPress={() => navigation.navigate('deal_shipping', {deal})} 
                   variant="primary"
                   disabled={orderStatus !== 'shipping'}
                   completed={deal.order.status.shipping?.completed}
@@ -420,7 +415,12 @@ export default function DealForVendor() {
                   title="Claim Payment"
                   icon="🧾"
                   description="Request payment release after successful delivery confirmation"
-                  onPress={handleClaimPayment}
+                  // onPress={handleClaimPayment}
+                  onPress={e => {
+                    navigation.navigate('deal_payment', {
+                      deal
+                    })
+                  }}   
                   variant="success"
                   disabled={orderStatus !== 'payment'}
                   completed={deal.order.status.payment?.completed}

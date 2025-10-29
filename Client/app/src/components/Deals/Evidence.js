@@ -9,7 +9,8 @@ import {
   TextInput,
   ScrollView,
   Platform,
-  ActivityIndicator
+  ActivityIndicator,
+  KeyboardAvoidingView
 } from 'react-native';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import DropdownComp from '../../reusables/Dropdown';
@@ -19,12 +20,12 @@ import { getSocket } from '../../services/socket';
 import { useDispatch, useSelector } from 'react-redux';
 import { set_deals } from '../../../redux/info/deals';
 import { useNavigation, useRoute } from '@react-navigation/native';
-const socket = getSocket(); 
 
 const ProofOfDeliveryUpload = () => {
     const [uploadedImages, setUploadedImages] = useState([]);
     const [description, setDescription] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [socket, setSocket] = useState(null);
     const dispatch = useDispatch()    
     const {
       deals
@@ -35,6 +36,11 @@ const ProofOfDeliveryUpload = () => {
     const { 
       deal
     } = useRoute()?.params;
+
+    useEffect(() => {
+      const socket = getSocket(); 
+       setSocket(socket)
+    }, [deal])
     
 
     const handleLaunchGallery = () => {
@@ -114,34 +120,44 @@ const ProofOfDeliveryUpload = () => {
       try {
         if(!socket)return;
         socket.emit('deal_proof', {
-            method,
-            location,
-            description,
-            uploadedImages,
-            deal: deal.order,
-            date: new Date()
+          method,
+          location,
+          description,
+          uploadedImages,
+          deal: deal.order,
+          date: new Date()
         }, cb => {
             const {
-                data, success
+              data, success
             } = cb;
-
-
             if (success) {
                 const {
-                    proof,
-                    updatedDeal,
+                  proof,
+                  updatedDeal,
                 } = data;
 
                 dispatch(set_deals(
                     deals.map(item =>
-                        item.order.order_id === updatedDeal.order_id
+                      item.order.order_id === updatedDeal.order_id
                         ? { ...item, order: updatedDeal }
                         : item
                     )
                 )) 
-                navigation.navigate('deal_vendor', {deal: {...deal, order: updatedDeal}})
+                Alert.alert( 
+                  "Delivery Successfully Completed",
+                  "Your customer has been notified that you have delivered the item.",
+                  [
+                    // { text: "Cancel", style: "cancel" },
+                    { 
+                      text: "Continue",
+                      onPress: () => {
+                        navigation.navigate('deal_vendor', {deal: {...deal, order: updatedDeal}})
+                      },
+                    },
+                  ]
+                );
             }else{
-                throw new Error("Internal server error", "Please try again!");
+              throw new Error("Internal server error", "Please try again!");
                 
             }
         })
@@ -209,11 +225,11 @@ const ProofOfDeliveryUpload = () => {
     const [location_list, set_location_list] = useState([])
 
     const updateData = (data, input_name) => {
-        if (input_name === 'location') {
-            set_method(data)
-        }else{
-            set_location(data)
-        }
+      if (input_name === 'location') {
+        set_method(data)
+      }else{
+        set_location(data)
+      }
     }
 
     useEffect(() => {
@@ -261,25 +277,30 @@ const ProofOfDeliveryUpload = () => {
  
   return (
     <>
+      {
+        isLoading &&
+        <View style={{  
+            height: '100%', 
+            width: '100%',
+            position: 'absolute',
+            top: 1,
+            left: 0,
+            zIndex: 1000,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#FFF8F6',
+            opacity: .5
+        }}>
+            <ActivityIndicator size={'large'} color={'#FF4500'}></ActivityIndicator>
+        </View>
+      }
+      <KeyboardAvoidingView 
+        style={{flex: 1}}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 120 : 35}
+      >
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-            {
-                isLoading &&
-                <View style={{  
-                    height: '100%', 
-                    width: '100%',
-                    position: 'absolute',
-                    top: 1,
-                    left: 0,
-                    zIndex: 1000,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    backgroundColor: '#FFF8F6',
-                    opacity: .5
-                }}>
-                    <ActivityIndicator size={'large'} color={'#FF4500'}></ActivityIndicator>
-                </View>
-            }
             {/* Summary Section */}
             <View style={styles.summary}>
                 <Text style={styles.summaryTitle}>What is Proof of Delivery Evidence?</Text>
@@ -387,7 +408,7 @@ const ProofOfDeliveryUpload = () => {
             </View>
 
 
-           
+            
         </ScrollView>
         {/* Submit Button */}
         <View style={styles.bottomBar}>
@@ -407,6 +428,7 @@ const ProofOfDeliveryUpload = () => {
                 </Text>
             </TouchableOpacity>
         </View>
+      </KeyboardAvoidingView>
     </>
   );
 };
