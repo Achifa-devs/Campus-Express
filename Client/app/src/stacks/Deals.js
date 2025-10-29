@@ -22,6 +22,7 @@ import DealForVendor from "../screen/DealForVendor";
 import Tools from "../utils/generalHandler";
 import ProofOfDeliveryUpload from "../components/Deals/Evidence";
 import Satisfaction from "../screen/Satisfaction";
+import Shipping from "../screen/Shipping";
 // import ChatList from "../screen/ChatList";
 // import ChatRoom from "../screen/ChatRoom";
 
@@ -263,6 +264,48 @@ export function DealStackScreen() {
                 }}
                 
                 name="deal_satisfaction" component={Satisfaction}
+            />
+
+            <DealStack.Screen
+                options={{
+                    header: ({ navigation }) => (
+                        <View style={{
+                            height: 60,
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            backgroundColor: '#FFF',
+                            paddingHorizontal: 16,
+                            paddingVertical: 8,
+                            borderBottomWidth: 1,
+                            borderBottomColor: '#F0F0F0',
+                            shadowColor: '#000',
+                            shadowOffset: {
+                                width: 0,
+                                height: 2,
+                            },
+                            shadowOpacity: 0.05,
+                            shadowRadius: 3.84,
+                            elevation: 2,
+                            ...Platform.select({
+                                ios: {
+                                    paddingTop: 10,
+                                },
+                            })
+                        }}>
+                            <Text style={{
+                                fontSize: 20,
+                                fontWeight: 'bold', 
+                                color: '#111',
+                            }}>
+                                Delivery Configuration
+                            </Text>
+
+                        </View>
+                    ),
+                }}
+                
+                name="deal_shipping" component={Shipping}
             />
 
           

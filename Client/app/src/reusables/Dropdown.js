@@ -9,7 +9,8 @@ export default function DropdownComp({
   input_name,
   placeholder,
   updateData,
-  dropdownPosition
+  dropdownPosition,
+  isValueField
 }) {
   const [value, setValue] = useState(null);
 
@@ -31,16 +32,16 @@ export default function DropdownComp({
         dropdownPosition={dropdownPosition || 'bottom'}
         maxHeight={300}
         labelField={fieldName || "title"}
-        valueField={fieldName || "title"}
+        valueField={isValueField ? 'value' : fieldName || "title"}
         placeholder={placeholder}
         searchPlaceholder="Search..."
         value={value} // ✅ this should be the raw value, not an object
         onChange={item => {
-          setValue(item[fieldName || "title"]); // ✅ set the value
-          updateData(item[fieldName || "title"], input_name);
+          setValue(item[isValueField ? 'value' : fieldName || "title"]); // ✅ set the value
+          updateData(item[fieldName || "title"], input_name, item["value"]);
         }}
       />
-    </View>
+    </View> 
   );
 }
 

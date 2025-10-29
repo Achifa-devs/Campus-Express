@@ -396,8 +396,13 @@ export default function DealForVendor() {
                 <VendorActionCard
                   title="Start Shipping"
                   icon="🚚"
-                  description="Mark the order as shipped and provide tracking information to the buyer"
-                  onPress={handleStartShipping}
+                  description="Mark the order as dispatched provide tracking information to the buyer"
+                  onPress={() => navigation.navigate('deal_shipping', {
+                    deal,
+                    onReturn: (updatedDeal) => {
+                      deal = (updatedDeal);
+                    },
+                  })}
                   variant="primary"
                   disabled={orderStatus !== 'shipping'}
                   completed={deal.order.status.shipping?.completed}

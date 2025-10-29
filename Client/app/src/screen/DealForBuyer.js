@@ -338,7 +338,7 @@ export default function DealForBuyer() {
                   if(!isDeliveredConfirmedByVendor){  
                     Alert.alert(
                       "Pending Delivery",
-                      "The vendor has not confirmed delivery yet. Kindly wait while the delivery is completed." 
+                      "The vendor has not confirmed delivery yet. Kindly wait while the delivery is completed."  
                     );
                   }else{
                     navigation.navigate('deal_satisfaction', {deal})
