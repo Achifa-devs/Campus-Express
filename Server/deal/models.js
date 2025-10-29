@@ -60,6 +60,14 @@ exports.updateDealById = async function ({ order, new_stage, date, userId, nxt_s
       completedAt: date,
       initiator: userId
     };
+  }else if(new_stage === 'delivered'){
+    newStatus = {
+      outcome: "success",
+      completed: true,
+      completedAt: date,
+      buyer: order.user_id === userId ? true: false,
+      vendor: order.vendor_id === userId ? true: false
+    };
   }else{
     newStatus = {
       outcome: "success",

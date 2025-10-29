@@ -1,7 +1,7 @@
 import DeviceInfo from 'react-native-device-info';
 import { Product } from '../api';
 import Memory from './memoryHandler';
-import { PermissionsAndroid, Platform } from 'react-native';
+import { Alert, PermissionsAndroid, Platform } from 'react-native';
 
 class Tools {
     static async getDeviceId(){
@@ -134,6 +134,57 @@ class Tools {
         }
         return true; // iOS handles via Info.plist
     };
+
+    static getTimeAgo = (pastDate) => {
+        if (!pastDate) return '';
+    
+        const now = new Date();
+        const past = new Date(pastDate);
+        const diffMs = now - past; // difference in milliseconds
+    
+        // Convert to seconds, minutes, hours, days
+        const seconds = Math.floor(diffMs / 1000);
+        const minutes = Math.floor(seconds / 60);
+        const hours = Math.floor(minutes / 60);
+        const days = Math.floor(hours / 24);
+    
+        if (days >= 1) {
+          return `${days} day${days > 1 ? 's' : ''} & Counting`;
+        } else if (hours >= 1) {
+          return `${hours} hour${hours > 1 ? 's' : ''} & Counting`;
+        } else if (minutes >= 1) {
+          return `${minutes} minute${minutes > 1 ? 's' : ''} & Counting`;
+        } else {
+          return `${seconds} second${seconds !== 1 ? 's' : ''} & Counting`;
+        }
+      };
+    
+    
+    static formatDealDate = (dateString) => {
+        if (!dateString) return '';
+    
+        const date = new Date(dateString);
+    
+        // Get date parts
+        const day = date.getDate();
+        const month = date.toLocaleString('default', { month: 'long' });
+        const year = date.getFullYear();
+    
+        // Add ordinal suffix (st, nd, rd, th)
+        const getOrdinal = (n) => {
+          const s = ['th', 'st', 'nd', 'rd'];
+          const v = n % 100;
+          return s[(v - 20) % 10] || s[v] || s[0];
+        };
+    
+        const hours = date.getHours();
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        const hour12 = hours % 12 || 12;
+    
+        return `${day}${getOrdinal(day)} ${month} ${year} by ${hour12}:${minutes}${ampm}`;
+    }
+    
 
 }
 

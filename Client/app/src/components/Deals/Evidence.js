@@ -27,10 +27,13 @@ const ProofOfDeliveryUpload = () => {
     const [isLoading, setIsLoading] = useState(false);
     const dispatch = useDispatch()    
     const {
-        deals
+      deals
     } = useSelector(s => s.deals)
+    const {
+      user
+    } = useSelector(s => s.user)
     const { 
-        deal
+      deal
     } = useRoute()?.params;
     
 
@@ -58,59 +61,94 @@ const ProofOfDeliveryUpload = () => {
         }
     };
 
+    const handleOrderAction = (event, newStatus) => {
+      if (uploadedImages.length === 0) {
+        Alert.alert('Image required', 'Please upload at least one image as proof of delivery.');
+        return;
+      }
+      
+      if (!description.trim()) {
+        Alert.alert('Description required', 'Please provide a description for this delivery evidence.');
+        return;
+      }
+      if(!socket){
+        Alert.alert('Failed to update!')
+        return; 
+      }; 
+      setIsLoading(true)
+      socket.emit(
+        'deal_update',
+        {
+          room_id: Tools.generateConversationId(user.user_id, deal.partner.user_id),
+          order: deal.order,
+          userId: user.user_id,
+          date: new Date(),
+          new_stage: event.split('_')[1],
+          nxt_stage: newStatus
+        },
+        callback => { 
+          const { success, data } = callback;   
+          if (success) {
+            dispatch(set_deals(  
+              deals.map(item =>
+                item.order.order_id === data.order_id
+                  ? { ...item, order: data }
+                  : item
+              )
+            ));
+            handleSubmit()
+            // setOrderStatus(newStatus);
+            // setLoading(false)  
+          } else {
+            // setLoading(false)              
+            Alert.alert("Error", "Unable to update this deal. Please try again.");
+          }
+        }     
+      );
+    };
+
     const navigation = useNavigation()
 
     const handleSubmit = () => {
+     
+      try {
+        if(!socket)return;
+        socket.emit('deal_proof', {
+            method,
+            location,
+            description,
+            uploadedImages,
+            deal: deal.order,
+            date: new Date()
+        }, cb => {
+            const {
+                data, success
+            } = cb;
 
-        // setIsLoading(true); 
-        if (uploadedImages.length === 0) {
-            Alert.alert('Image required', 'Please upload at least one image as proof of delivery.');
-            return;
-        }
-        
-        if (!description.trim()) {
-            Alert.alert('Description required', 'Please provide a description for this delivery evidence.');
-            return;
-        }
-        
-        try {
-            if(!socket)return;
-            socket.emit('deal_proof', {
-                method,
-                location,
-                description,
-                uploadedImages,
-                deal: deal.order,
-                date: new Date()
-            }, cb => {
+
+            if (success) {
                 const {
-                    data, success
-                } = cb;
+                    proof,
+                    updatedDeal,
+                } = data;
 
-
-                if (success) {
-                    const {
-                        proof,
-                        updatedDeal,
-                    } = data;
-    
-                    dispatch(set_deals(
-                        deals.map(item =>
-                            item.order.order_id === updatedDeal.order_id
-                            ? { ...item, order: updatedDeal }
-                            : item
-                        )
-                    )) 
-                    navigation.navigate('deal_vendor', {deal: {...deal, order: updatedDeal}})
-                }else{
-                    throw new Error("Internal server error", "Please try again!");
-                    
-                }
-            })
-        } catch (error) {
-            console.log(error);
-            Alert.alert("Internal server error", "Please try again!")
-        }
+                dispatch(set_deals(
+                    deals.map(item =>
+                        item.order.order_id === updatedDeal.order_id
+                        ? { ...item, order: updatedDeal }
+                        : item
+                    )
+                )) 
+                navigation.navigate('deal_vendor', {deal: {...deal, order: updatedDeal}})
+            }else{
+                throw new Error("Internal server error", "Please try again!");
+                
+            }
+        })
+      } catch (error) {
+        console.log(error);
+        Alert.alert("Internal server error", "Please try again!")
+      }
         
     };
 
@@ -359,7 +397,9 @@ const ProofOfDeliveryUpload = () => {
                 styles.bottomBtn,
                 (uploadedImages.length === 0 || !description.trim()) && styles.submitButtonDisabled
                 ]}
-                onPress={handleSubmit}
+                onPress={e => {
+                  handleOrderAction("deal_delivered", "evidence")
+                }}
                 disabled={uploadedImages.length === 0 || !description.trim() || !method || !location}
             >
                 <Text style={styles.submitButtonText}>
@@ -558,14 +598,14 @@ const styles = StyleSheet.create({
   },
   submitButton: {
 
-    backgroundColor: '#007AFF',
+    backgroundColor: '#FF4500',
     paddingVertical: 16,
     borderRadius: 4,
     alignItems: 'center',
     marginBottom: 8,
     ...Platform.select({
       ios: {
-        shadowColor: '#007AFF',
+        shadowColor: '#FF4500',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,
         shadowRadius: 4,

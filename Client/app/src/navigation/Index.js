@@ -38,6 +38,7 @@ import { set_is_connected } from "../../redux/info/is_connected";
 import { getMessaging } from "@react-native-firebase/messaging";
 import { navigationRef, notifeeNavigationRef } from "./root_nav";
 import NetworkCard from "../components/NetworkCard";
+import { set_deals } from "../../redux/info/deals";
 Sound.setCategory("Playback"); // ensure sound plays even in silent mode (iOS)
 function NavigationHandler() {
 
@@ -54,6 +55,7 @@ function NavigationHandler() {
   const [chatBool, setChatBool] = useState(false)
   const dispatch = useDispatch();
   const { chat } = useSelector(s => s?.chat);
+  const { deals } = useSelector(s => s?.deals);
   const { is_connected } = useSelector(s => s?.is_connected);
   const [newMessage, setNewMessage] = useState({})
 
@@ -310,6 +312,19 @@ function NavigationHandler() {
       dispatch(set_is_active({online: true, user_id: partnerId, id: Tools.generateId(10)}))
     })
 
+    socket.on('deal_update', async({
+      success, data
+    }) => {
+      if (success) {
+        dispatch(set_deals(
+          deals.map(item =>
+            item.order.order_id === data.order_id
+              ? { ...item, order: data }
+              : item
+          )
+        ))
+      }
+    })
   }, [socket])
 
   useEffect(() => {

@@ -7,7 +7,9 @@ import {
   Dimensions
 } from 'react-native';
 
-const { width: screenWidth } = Dimensions.get('window');
+const { 
+  width: screenWidth 
+} = Dimensions.get('window');
 
 export default function Promo({ length = 0 }) {
   const totalRequired = 10;

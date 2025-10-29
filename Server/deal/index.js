@@ -195,10 +195,6 @@ io.on('connection', async(socket) => {
         }
     });
 
-    
-    
-
- 
     socket.on('deal_proof', async (data, callback) => {
         try {
             const {

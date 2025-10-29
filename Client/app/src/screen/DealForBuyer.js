@@ -17,17 +17,37 @@ import { useDispatch, useSelector } from 'react-redux'
 import { set_deal } from '../../redux/info/deal'
 import Tools from '../utils/generalHandler'
 import js_ago from 'js-ago'
-// import { LinearGradient } from 'expo-linear-gradient'
-
+import { getSocket } from '../services/socket'
 export default function DealForBuyer() {
   const navigation = useNavigation()
-  const { deal } = useRoute()?.params
+  const { params } = useRoute();
   const [activeTab, setActiveTab] = useState('details')
-  const dispatch = useDispatch()
+  const [deal, setDeal] = useState(params?.deal || null);
+  const dispatch = useDispatch();
+  const [socket, setSocket] = useState(null);
   const {
     user
   } = useSelector(s => s.user)
-  
+  const {
+    deals
+  } = useSelector(s => s.deals)
+
+  useEffect(() => {
+    if (params?.deal) setDeal(params.deal); 
+  }, [params]);
+
+  useEffect(() => {
+    if (deal?.order?.order_id) {
+      const updated = deals.find(d => d.order.order_id === deal.order.order_id);
+      if (updated) setDeal(updated);
+    }
+  }, [deals]);
+
+  useEffect(() => {
+    const socket = getSocket();
+    setSocket(socket)
+  }, [])
+
   useEffect(() => {
     if(!deal) return;
     dispatch(set_deal(
@@ -232,35 +252,37 @@ export default function DealForBuyer() {
             <Text style={styles.sectionTitle}>Deal Information</Text>
             
             <View style={styles.infoGrid}>
-              <InfoCard 
-                icon="📅" 
-                title="Start Date" 
-                value={deal.order.date || '15 Feb 2024'} 
+              <InfoCard
+                icon="📅"
+                title="Start Date"
+                value={(Tools.formatDealDate((deal.order.date).toLocaleString())) || 'Loading'}
               />
-              <InfoCard 
-                icon="🏁" 
-                title="End Date" 
-                value={deal.endDate || 'Present'} 
+              <InfoCard
+                icon="🏁"
+                title="End Date"
+                value={(deal.order.end_date) || 'Present'}
               />
-              <InfoCard 
-                icon="⏱️" 
-                title="Duration" 
-                value="5 days & Counting" 
-              />
-              <InfoCard 
-                icon="📦" 
-                title="Type" 
-                value={`${deal?.product?.purpose[0].toUpperCase()}${deal?.product?.purpose.slice(1)}` || 'Accommodation'}
-
+              <InfoCard
+                icon="⏱️"
+                title="Duration"
+                value={Tools.getTimeAgo(deal.order.date)}
+              /> 
+              <InfoCard
+                icon="📦"
+                title="Type"
+                value={`${Tools.capitalize(deal?.product?.purpose)}` || 'Loading...'}
               />
             </View>
-
-            <View style={styles.descriptionCard}>
-              <Text style={styles.descriptionTitle}>Description</Text>
-              <Text style={styles.descriptionText}>
-                {deal?.product?.description || 'This is a detailed description of the product or accommodation. It includes all the features and benefits that the user should know about.'}
-              </Text>
-            </View>
+ 
+            {
+              deal?.product?.description &&
+              <View style={styles.descriptionCard}>
+                <Text style={styles.descriptionTitle}>Description</Text>
+                <Text style={styles.descriptionText}>
+                  {deal?.product?.description || 'This is a detailed description of the product or accommodation. It includes all the features and benefits that the user should know about.'}
+                </Text>
+              </View>
+            }
           </View>
         )}
 
@@ -290,7 +312,7 @@ export default function DealForBuyer() {
                 isCompleted={false}
                 isActive={true}
               />
-              <TrackingStep 
+              <TrackingStep  
                 step={4}
                 title="Completed"
                 description="Deal will be marked complete"
@@ -306,44 +328,74 @@ export default function DealForBuyer() {
             <Text style={styles.sectionTitle}>Quick Actions</Text>
             
             <View style={styles.actionsGrid}>
-              <TouchableOpacity style={styles.actionButton}>
-                <Text style={styles.actionIcon}>📄</Text>
-                <Text style={styles.actionText}>View Contract</Text>
+
+              <TouchableOpacity style={[styles.actionButton, {
+                opacity: (deal.order.status.delivered.completed && !deal.order.status.delivered.buyer) ? 1 : .5
+              }]} 
+                onPress={ e => {
+                  const isDeliveredConfirmedByVendor = (deal.order.status.delivered.completed && !deal.order.status.delivered.buyer);
+
+                  if(!isDeliveredConfirmedByVendor){  
+                    Alert.alert(
+                      "Pending Delivery",
+                      "The vendor has not confirmed delivery yet. Kindly wait while the delivery is completed." 
+                    );
+                  }else{
+                    navigation.navigate('deal_satisfaction', {deal})
+                  }
+                } 
+              }> 
+                <Text style={styles.actionIcon}>📦✅</Text>
+                <Text style={styles.actionText}>Confirm Delivery</Text>
+              </TouchableOpacity> 
+              
+              <TouchableOpacity style={[styles.actionButton, {
+                opacity: deal.order.status.delivered.completed && deal.order.status.delivered.buyer ? 1 : .5
+              }]} onPress={ e => {
+                  const isDeliveredConfirmedByBoth = (deal.order.status.delivered.completed && deal.order.status.delivered.buyer);
+
+                  if(!isDeliveredConfirmedByBoth){
+                    Alert.alert(
+                      "Delivery Confirmation Required",
+                      "Please confirm that you have received the item before releasing funds to the vendor."
+                    );
+                  }else{
+                    navigation.navigate('release_funds', {deal})
+                  }
+                }
+              }> 
+                <Text style={styles.actionIcon}>🔓💰</Text> 
+                <Text style={styles.actionText}>Release Funds</Text>
               </TouchableOpacity>
               
-              <TouchableOpacity style={styles.actionButton}>
-                <Text style={styles.actionIcon}>📞</Text>
-                <Text style={styles.actionText}>Call Partner</Text>
-              </TouchableOpacity>
+              {/* <TouchableOpacity style={styles.actionButton}>
+                <Text style={styles.actionIcon}>🚨⚖️</Text>
+                <Text style={styles.actionText}>Raise Dispute</Text>
+              </TouchableOpacity> */}
               
-              <TouchableOpacity style={styles.actionButton}>
-                <Text style={styles.actionIcon}>📍</Text>
-                <Text style={styles.actionText}>Get Directions</Text>
-              </TouchableOpacity>
-              
-              <TouchableOpacity style={styles.actionButton}>
+              {/* <TouchableOpacity style={styles.actionButton}>
                 <Text style={styles.actionIcon}>🔔</Text>
                 <Text style={styles.actionText}>Set Reminder</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
-          </View>
+          </View> 
         )}
       </Animated.ScrollView>
 
       {/* Fixed Bottom Bar */}
       <View style={styles.bottomBar}>
-        {/* <TouchableOpacity 
+        <TouchableOpacity 
           style={[styles.bottomButton, styles.cancelButton]}
           onPress={handleCancel}
         >
           <Text style={styles.cancelButtonText}>Cancel Deal</Text>
-        </TouchableOpacity> */}
+        </TouchableOpacity>
         
         <TouchableOpacity
           style={[styles.bottomButton, styles.confirmButton]}
           onPress={handleConfirm}
         >
-          <Text style={styles.confirmButtonText}>Cancel Deal</Text>
+          <Text style={styles.confirmButtonText}>Raise Dispute</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

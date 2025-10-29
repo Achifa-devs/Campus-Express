@@ -30,7 +30,7 @@ export default function DealForVendor() {
   } = useRoute()?.params
   const [activeTab, setActiveTab] = useState('details')
   const [loading, setLoading] = useState(false)
-  const [cancelled, setCancelled] = useState(false)
+  const [cancelled, setCancelled] = useState(true)
   const [socket, setSocket] = useState(null)
   const [orderStatus, setOrderStatus] = useState(deal.orderStatus || 'shipping') // pending, shipping, delivered
   const dispatch = useDispatch()
@@ -116,9 +116,6 @@ export default function DealForVendor() {
   const handleStartShipping = () =>
     handleOrderAction("Start Shipping", "Mark this order as 'Shipped'?", "deal_shipping", "delivered");
 
-  const handleConfirmDelivery = () =>
-    handleOrderAction("Confirm Delivery", "Has the customer received the order?", "deal_delivered", "evidence");
-
   const handleUploadEvidence = () =>
     handleOrderAction("Upload Evidence", "Provide tracking or delivery details.", "deal_evidence", "payment");
 
@@ -134,76 +131,62 @@ export default function DealForVendor() {
     </View>
   )
 
-  const VendorActionButton = ({ title, icon, onPress, variant = 'primary', disabled = false }) => (
+  const VendorActionCard = ({ title, icon, description, onPress, variant = 'primary', disabled = false, completed = false }) => (
     <TouchableOpacity 
       style={[
-        styles.vendorActionButton,
-        styles[`${variant}VendorActionButton`],
-        disabled && styles.disabledVendorActionButton
+        styles.vendorActionCard,
+        styles[`${variant}VendorActionCard`],
+        disabled && styles.disabledVendorActionCard,
+        completed && styles.completedVendorActionCard
       ]}
       onPress={onPress}
-      disabled={disabled}
+      disabled={disabled || completed}
     >
-      <Text style={styles.vendorActionIcon}>{icon}</Text>
+      <View style={styles.vendorActionCardHeader}>
+        <View style={styles.vendorActionIconContainer}>
+          <Text style={styles.vendorActionIcon}>{icon}</Text>
+          {completed && (
+            <View style={styles.completedBadge}>
+              <Text style={styles.completedBadgeText}>✓</Text>
+            </View>
+          )}
+        </View>
+        <View style={styles.vendorActionTextContainer}>
+          <Text style={[
+            styles.vendorActionCardTitle,
+            styles[`${variant}VendorActionCardTitle`],
+            (disabled || completed) && styles.disabledVendorActionCardTitle
+          ]}>
+            {title}
+          </Text>
+          {completed && (
+            <Text style={styles.completedText}>Completed</Text>
+          )}
+        </View>
+      </View>
+      
       <Text style={[
-        styles.vendorActionText,
-        styles[`${variant}VendorActionText`],
-        disabled && styles.disabledVendorActionText
+        styles.vendorActionDescription,
+        (disabled || completed) && styles.disabledVendorActionDescription
       ]}>
-        {title}
+        {description}
       </Text>
+      
+      <View style={styles.vendorActionCardFooter}>
+        {!completed && !disabled && (
+          <Text style={styles.actionPromptText}>Tap to proceed →</Text>
+        )}
+        {!completed && disabled && (
+          <Text style={styles.disabledActionText}>Complete previous steps first</Text>
+        )}
+        {completed && (
+          <Text style={styles.completedActionText}>Step completed ✓</Text>
+        )}
+      </View>
     </TouchableOpacity>
   )
 
-  const getTimeAgo = (pastDate) => {
-    if (!pastDate) return '';
 
-    const now = new Date();
-    const past = new Date(pastDate);
-    const diffMs = now - past; // difference in milliseconds
-
-    // Convert to seconds, minutes, hours, days
-    const seconds = Math.floor(diffMs / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-
-    if (days >= 1) {
-      return `${days} day${days > 1 ? 's' : ''} & Counting`;
-    } else if (hours >= 1) {
-      return `${hours} hour${hours > 1 ? 's' : ''} & Counting`;
-    } else if (minutes >= 1) {
-      return `${minutes} minute${minutes > 1 ? 's' : ''} & Counting`;
-    } else {
-      return `${seconds} second${seconds !== 1 ? 's' : ''} & Counting`;
-    }
-  };
-
-
-  const formatDealDate = (dateString) => {
-    if (!dateString) return '';
-
-    const date = new Date(dateString);
-
-    // Get date parts
-    const day = date.getDate();
-    const month = date.toLocaleString('default', { month: 'long' });
-    const year = date.getFullYear();
-
-    // Add ordinal suffix (st, nd, rd, th)
-    const getOrdinal = (n) => {
-      const s = ['th', 'st', 'nd', 'rd'];
-      const v = n % 100;
-      return s[(v - 20) % 10] || s[v] || s[0];
-    };
-
-    const hours = date.getHours();
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-    const hour12 = hours % 12 || 12;
-
-    return `${day}${getOrdinal(day)} ${month} ${year} by ${hour12}:${minutes}${ampm}`;
-  };
 
   const GetTimeline = (status = {}) => {
     const labelMap = {
@@ -342,18 +325,18 @@ export default function DealForVendor() {
         </View>
 
         <View style={{
-          display: cancelled ? 'flex' : 'none',
+          display: !cancelled ? 'flex' : 'none',
         }}>
           {/* Tab Content */}
           {activeTab === 'details' && (
             <View style={styles.tabContent}>
               <Text style={styles.sectionTitle}>Deal Information</Text>
           
-              <View style={styles.infoGrid}>
+              <View style={styles.infoGrid}> 
                 <InfoCard
                   icon="📅"
                   title="Start Date"
-                  value={(formatDealDate((deal.order.date).toLocaleString())) || 'Loading'}
+                  value={(Tools.formatDealDate((deal.order.date).toLocaleString())) || 'Loading'}
                 />
                 <InfoCard
                   icon="🏁"
@@ -363,7 +346,7 @@ export default function DealForVendor() {
                 <InfoCard
                   icon="⏱️"
                   title="Duration"
-                  value={getTimeAgo(deal.order.date)}
+                  value={Tools.getTimeAgo(deal.order.date)}
                 />
                 <InfoCard
                   icon="📦"
@@ -407,73 +390,64 @@ export default function DealForVendor() {
           {activeTab === 'manage' && (
             <View style={styles.tabContent}>
               <Text style={styles.sectionTitle}>Deal Management</Text>
-          
-              {/* Action Buttons Grid */}
+
+              {/* Action Buttons Grid - Updated to full width columns */}
               <View style={styles.vendorActionsGrid}>
-                <VendorActionButton
+                <VendorActionCard
                   title="Start Shipping"
                   icon="🚚"
+                  description="Mark the order as shipped and provide tracking information to the buyer"
                   onPress={handleStartShipping}
                   variant="primary"
                   disabled={orderStatus !== 'shipping'}
+                  completed={deal.order.status.shipping?.completed}
                 />
-          
-                <VendorActionButton
-                  title="Upload Evidence"
-                  icon="🗂️"
+
+                <VendorActionCard
+                  title="Confirm Delivery"
+                  icon="✅"
+                  description="Upload proof of delivery evidence and confirm the order has been received"
                   onPress={() => navigation.navigate('deal_proof', {
                     deal,
                     onReturn: (updatedDeal) => {
-                      // This runs when you come back from deal_proof
                       deal = (updatedDeal);
                     },
                   })}
-                  variant="trust"
-                  disabled={orderStatus !== 'evidence'}
-                />
-          
-                <VendorActionButton
-                  title="Confirm Delivery"
-                  icon="✅"
-                  onPress={handleConfirmDelivery}
                   variant="secondary"
                   disabled={orderStatus !== 'delivered'}
+                  completed={deal.order.status.delivered?.completed}
                 />
-          
-                <VendorActionButton
+
+                <VendorActionCard
                   title="Claim Payment"
                   icon="🧾"
+                  description="Request payment release after successful delivery confirmation"
                   onPress={handleClaimPayment}
                   variant="success"
                   disabled={orderStatus !== 'payment'}
+                  completed={deal.order.status.payment?.completed}
                 />
               </View>
+
               {/* Customer Information */}
               <View style={styles.customerCard}>
                 <Text style={styles.customerCardTitle}>Customer Details</Text>
-          
+
                 <View style={styles.customerInfoRow}>
                   <Text style={styles.customerInfoLabel}>Name:</Text>
                   <Text style={styles.customerInfoValue}>{`${deal.partner.fname} ${deal.partner.lname}` || 'Customer Name'}</Text>
                 </View>
-          
-          
+
                 <View style={styles.customerInfoRow}>
                   <Text style={styles.customerInfoLabel}>Delivery Method:</Text>
                   <Text style={styles.customerInfoValue}>
-                    {
-                      deal.order.pick_up_channels[0].channel
-                    }
+                    {deal.order.pick_up_channels[0].channel}
                   </Text>
                 </View>
                 <View style={styles.customerInfoRow}>
                   <Text style={styles.customerInfoLabel}>Delivery Address:</Text>
                   <Text style={styles.customerInfoValue}>
-          
-                    {
-                      deal.order.pick_up_channels[0].locale
-                    }
-          
+                    {deal.order.pick_up_channels[0].locale}
                   </Text>
                 </View>
               </View>
@@ -481,6 +455,7 @@ export default function DealForVendor() {
           )}
         </View> 
       </Animated.ScrollView>
+
       {/* Fixed Bottom Bar */}
       <View style={styles.bottomBar}>
         { !cancelled &&
@@ -520,18 +495,18 @@ export default function DealForVendor() {
               style={[styles.bottomButton, styles.confirmButton]}
               // onPress={handleConfirm}
             >
-              <Text style={styles.confirmButtonText}>Create dispute</Text>
+              <Text style={styles.confirmButtonText}>Raise Dispute</Text>
             </TouchableOpacity>
           </>
         }
-
+ 
         {
           cancelled &&
           <TouchableOpacity
             style={[styles.bottomButton, styles.confirmButton]}
             // onPress={handleConfirm}
           >
-            <Text style={styles.confirmButtonText}>This Deal Was Cancelled {deal.order.status.cancelled.initiator === user.user_id ? 'By You' : 'By The Customer'}</Text>
+            <Text style={styles.confirmButtonText}>This Deal Was Cancelled {/**deal.order.status.cancelled.initiator === user.user_id ? 'By You' : 'By The Customer'*/}</Text>
           </TouchableOpacity>
         }
       </View>
@@ -890,76 +865,133 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   vendorActionsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
     marginBottom: 16,
   },
-  vendorActionButton: {
-    width: '48%',
+
+  // New Vendor Action Card Styles
+  vendorActionCard: {
     backgroundColor: '#fff',
-    padding: 16,
+    padding: 20,
     borderRadius: 4,
-    alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 16,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 1,
+      height: 2,
     },
-    shadowOpacity: 0.05,
-    shadowRadius: 3,
-    elevation: 1,
-    borderWidth: 2,
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
+    borderWidth: 1,
+    borderColor: '#f1f5f9',
   },
-  primaryVendorActionButton: {
-    color: '#fff',
-    // borderColor: '#3b82f6',
-    backgroundColor: '#3b82f6',
+  primaryVendorActionCard: {
+    borderLeftWidth: 4,
+    borderLeftColor: '#3b82f6',
   },
-  secondaryVendorActionButton: {
-    color: '#fff',
-    // borderColor: '#64748b',
-    backgroundColor: '#26A69A',
+  secondaryVendorActionCard: {
+    borderLeftWidth: 4,
+    borderLeftColor: '#26A69A',
   },
-  trustVendorActionButton: {
-    color: '#fff',
-    // borderColor: '#10b981',
-    backgroundColor: '#00BFA6',
+  successVendorActionCard: {
+    borderLeftWidth: 4,
+    borderLeftColor: '#2ECC71',
   },
-  successVendorActionButton: {
-    color: '#fff',
-    // borderColor: '#10b981',
-    backgroundColor: '#2ECC71',
-  },
-  disabledVendorActionButton: {
-    borderColor: '#e2e8f0',
+  disabledVendorActionCard: {
     backgroundColor: '#f8fafc',
-    opacity: 0.6,
+    borderColor: '#e2e8f0',
+    opacity: 0.7,
+  },
+  completedVendorActionCard: {
+    backgroundColor: '#f0fdf4',
+    borderColor: '#dcfce7',
+  },
+  vendorActionCardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  vendorActionIconContainer: {
+    position: 'relative',
+    marginRight: 12,
   },
   vendorActionIcon: {
     fontSize: 24,
-    marginBottom: 8,
   },
-  vendorActionText: {
+  completedBadge: {
+    position: 'absolute',
+    top: -4,
+    right: -4,
+    backgroundColor: '#10b981',
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#fff',
+  },
+  completedBadgeText: {
+    color: '#fff',
+    fontSize: 10,
+    fontWeight: 'bold',
+  },
+  vendorActionTextContainer: {
+    flex: 1,
+  },
+  vendorActionCardTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    marginBottom: 4,
+  },
+  primaryVendorActionCardTitle: {
+    color: '#3b82f6',
+  },
+  secondaryVendorActionCardTitle: {
+    color: '#26A69A',
+  },
+  successVendorActionCardTitle: {
+    color: '#2ECC71',
+  },
+  disabledVendorActionCardTitle: {
+    color: '#94a3b8',
+  },
+  completedText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#10b981',
+  },
+  vendorActionDescription: {
+    fontSize: 14,
+    lineHeight: 20,
+    color: '#64748b',
+    marginBottom: 12,
+  },
+  disabledVendorActionDescription: {
+    color: '#94a3b8',
+  },
+  vendorActionCardFooter: {
+    borderTopWidth: 1,
+    borderTopColor: '#f1f5f9',
+    paddingTop: 12,
+  },
+  actionPromptText: {
     fontSize: 14,
     fontWeight: '600',
-    textAlign: 'center',
+    color: '#3b82f6',
+    textAlign: 'right',
   },
-  primaryVendorActionText: {
-    color: '#fff',
-  },
-  secondaryVendorActionText: {
-    color: '#fff',
-  },
-  trustVendorActionText: {
-    color: '#fff',
-  },
-  successVendorActionText: {
-    color: '#fff',
-  },
-  disabledVendorActionText: {
+  disabledActionText: {
+    fontSize: 14,
     color: '#94a3b8',
+    textAlign: 'right',
+    fontStyle: 'italic',
+  },
+  completedActionText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#10b981',
+    textAlign: 'right',
   },
   timelineCard: {
     backgroundColor: '#fff',
