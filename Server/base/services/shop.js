@@ -7,7 +7,8 @@ const {
   findProductsById,
   createProductById,
   deleteProductById,
-  findShopMetrics
+  findShopMetrics,
+  updateShopPaymentById
 } = require('../models/shop')
 
 
@@ -63,16 +64,28 @@ exports.createShop = async function (payload) {
   }
 };
 
-exports.updateShop = async function (payload) {
-    const { title, description, user_id, logo } = payload;
+exports.updateShopPayment = async function (payload) {
+  const { validatedAcct, user_id } = payload;
 
-    try {
-      // Business logic
-      const response = await updateShopById({ title, description, user_id, logo });
-      return response;
-    } catch (error) {
-      console.log(error)
-    }
+  try {
+    // Business logic
+    const response = await updateShopPaymentById({ validatedAcct, user_id });
+    return response;
+  } catch (error) {
+    console.log(error)
+  }
+};
+
+exports.updateShop = async function (payload) {
+  const { title, description, user_id, logo } = payload;
+
+  try {
+    // Business logic
+    const response = await updateShopById({ title, description, user_id, logo });
+    return response;
+  } catch (error) {
+    console.log(error)
+  }
 };
 
 exports.getProduct = async function (payload) {

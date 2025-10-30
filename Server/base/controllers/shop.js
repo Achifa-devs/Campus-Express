@@ -9,6 +9,7 @@ const {
     updateProduct,
     deleteProduct,
     getShopAnalytics,
+    updateShopPayment,
 } = require('../services/shop')
 
 exports.getShopHandler =  async function (req, res) {
@@ -58,6 +59,14 @@ exports.updateShopHandler =  async function (req, res) {
     }
 }
 
+exports.updateShopPaymentHandler =  async function (req, res) {
+    try {
+        const response = await updateShopPayment(req.body);
+        res.status(201).json({ success: true, data: response });
+    } catch (error) {
+        res.status(400).json({ success: false, message: error.message });
+    }
+}
 
 exports.getProductHandler =  async function (req, res) {
     

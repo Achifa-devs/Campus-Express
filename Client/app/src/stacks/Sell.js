@@ -25,6 +25,7 @@ import Inventory from "../screen/Inventory";
 import Offers from "../components/Home/Offers";
 import PromotedAdDetails from "../screen/Promotion";
 import Performance from "../screen/Performance";
+import Payment from "../screen/Payment";
 
 const SellStack = createNativeStackNavigator();
 export function SellStackScreen() {
@@ -83,6 +84,7 @@ export function SellStackScreen() {
                 fontWeight: 'bold',
                 color: '#000',
                 marginLeft: 0,
+                padding: 0,
                 flexShrink: 1,
                 marginBottom: 5
               }}>
@@ -302,7 +304,47 @@ export function SellStackScreen() {
       }}   name="metrics" component={Performance} />
 
       
+      <SellStack.Screen
+        options={{
+          header: ({ navigation }) => (
+            <View style={{
+              height: 60,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              backgroundColor: '#FFF',
+              paddingHorizontal: 16,
+              paddingVertical: 8,
+              borderBottomWidth: 1,
+              borderBottomColor: '#F0F0F0',
+              shadowColor: '#000',
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.05,
+              shadowRadius: 3.84,
+              elevation: 2,
+              ...Platform.select({
+                ios: {
+                  paddingTop: 10,
+                },
+              })
+            }}>
+              <Text style={{
+                fontSize: 20,
+                fontWeight: 'bold', 
+                color: '#111',
+              }}>
+                Payment Setup
+              </Text>
 
+            </View>
+          ),
+        }}
+          
+        name="payment_setup" component={Payment}
+      />
        
               
     </SellStack.Navigator>  

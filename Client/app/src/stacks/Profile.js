@@ -417,7 +417,6 @@ export function ProfileStackScreen() {
                 ),
                 
             }}   name="support" component={Support} />
-            
 
             {/*
             

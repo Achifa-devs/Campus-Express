@@ -3,6 +3,49 @@ const initializeCloudinary = require('../config/cloudinary');
 const v2 = initializeCloudinary();
 const shortId = require('short-id');
 const { getVendorPromo, updateFirebaseTokenById, getCurrentVersion } = require('../models/general');
+const https = require('https');
+require('dotenv').config()
+
+
+async function verifyAccountNumber(payload) {
+  const { account_number, bank_code } = payload;
+
+  const options = {
+    hostname: 'api.paystack.co',
+    port: 443,
+    path: `/bank/resolve?account_number=${account_number}&bank_code=${bank_code}`,
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`
+    }
+  };
+
+  return new Promise((resolve, reject) => {
+    const req = https.request(options, res => {
+      let data = '';
+
+      res.on('data', chunk => {
+        data += chunk;
+      });
+
+      res.on('end', () => {
+        try {
+          const parsed = JSON.parse(data);
+          resolve(parsed);
+        } catch (err) {
+          reject(err);
+        }
+      });
+    });
+
+    req.on('error', err => {
+      reject(err);
+    });
+
+    req.end();
+  });
+}
+
 
 // ✅ Function 1: Check app version
 async function checkVersion() {
@@ -41,9 +84,6 @@ async function sendFirebaseNotification(payload) {
 
   }
 
-  
-
-  
 }
 
 // ✅ Function 4: Get media folder from Cloudinary
@@ -157,5 +197,6 @@ module.exports = {
   getMediaFolderFromCloudinary,
   uploadMediaToCloudinary,
   deleteMediaFromCloudinary,
-  checkVendorPromo
+  checkVendorPromo,
+  verifyAccountNumber
 };

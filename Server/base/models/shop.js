@@ -63,35 +63,81 @@ exports.findShopDetailsById = async function ({ user_id }) {
 };
 
 // Create new shop
-exports.registerShop = async function ({ 
-    logo=null,
-    shopName,
-    description,
-    address1,
-    address2,
-    address3,
-    user_id
-    }) {
-    try {
-        const subscription = {
-        "plan": "free",
-        "start_date": new Date(),
-        "end_date": "NUll",
-        "updated_at": new Date()
-        }
-        const {rows} = await pool.query(
-        `INSERT INTO shops (
-            id,shop_id,user_id,title,category,status,description,logo_url,open_hrs,social_links,is_verified,created_at,street,lodge,town,views,subscription
-        ) VALUES (
-            DEFAULT,
-            '${await shortId.generate(10)}', '${user_id}', '${shopName}', '', 'active', '${description}', '${logo ? logo : 'NULL'}', '', '', ${false}, '${new Date()}', '${address1}', '${address2}', '${address3}', ${0}, '${JSON.stringify(subscription)}'
-        ) RETURNING *`
-        );
-        return rows[0];
-    } catch (error) {
-        throw new Error("Internal server error", error);
-    }
+exports.registerShop = async function ({
+  logo = null,
+  shopName,
+  description,
+  address1,
+  address2,
+  address3,
+  user_id
+}) {
+  try {
+    const subscription = {
+      plan: "free",
+      start_date: new Date(),
+      end_date: null,
+      updated_at: new Date()
+    };
+
+    const shop_id = await shortId.generate(10);
+    const created_at = new Date();
+
+    const query = `
+      INSERT INTO shops (
+        shop_id,
+        user_id,
+        title,
+        category,
+        status,
+        description,
+        logo_url,
+        open_hrs,
+        social_links,
+        is_verified,
+        created_at,
+        street,
+        lodge,
+        town,
+        views,
+        subscription,
+        account_data
+      ) VALUES (
+        $1, $2, $3, $4, $5, $6, $7, $8, $9,
+        $10, $11, $12, $13, $14, $15, $16, $17
+      )
+      RETURNING *;
+    `;
+
+    const values = [
+      shop_id,
+      user_id,
+      shopName,
+      '', // category (optional)
+      'active',
+      description,
+      logo,
+      '', // open_hrs (optional)
+      '', // social_links (optional)
+      false,
+      created_at,
+      address1,
+      address2,
+      address3,
+      0, // views
+      subscription,
+      null // account_data
+    ];
+
+    const { rows } = await pool.query(query, values);
+    return rows[0];
+
+  } catch (error) {
+    console.error("Error registering shop:", error);
+    throw new Error("Internal server error");
+  }
 };
+
 
 // Update shop 
 exports.updateShopById = async function ({ user_id, title, description, logo }) {
@@ -102,6 +148,24 @@ exports.updateShopById = async function ({ user_id, title, description, logo }) 
       WHERE user_id = $1 
       RETURNING *`,
       [user_id, title, description, logo]
+    );
+    return rows[0]; // this gives you the updated item
+  } catch (error) {
+    console.log(error)
+  }
+};
+
+
+
+// Update shop 
+exports.updateShopPaymentById = async function ({ validatedAcct, user_id }) {
+  try {
+    const {rows} = await pool.query(
+      `UPDATE shops 
+      SET account_data = $1
+      WHERE user_id = $2
+      RETURNING *`,
+      [JSON.stringify(validatedAcct), user_id]
     );
     return rows[0]; // this gives you the updated item
   } catch (error) {

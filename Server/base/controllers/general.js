@@ -5,34 +5,33 @@ const {
     getMediaFolderFromCloudinary, 
     uploadMediaToCloudinary, 
     deleteMediaFromCloudinary, 
-    checkVendorPromo
+    checkVendorPromo,
+    verifyAccountNumber
 } = require("../services/general");
-const Flutterwave = require('flutterwave-node-v3');
 require("dotenv").config();
 
-exports.bankVerification = async function (req, res) {
+exports.bankVerificationHandler = async function (req, res) {
     let {
         account_number,
         bank_code
     } = req.body;
-    console.log(account_number, bank_code)
-    const flw = new Flutterwave(process.env.FLW_PUBLIC_KEY, process.env.FLW_SECRET_KEY);
-    const data = {account_number: account_number,account_bank: bank_code};
-
-    flw.Misc.verify_Account(data)
-    .then((data) => {
-        console.log(data)
-        if(data.status === 'success'){
-            res.status(201).send({ success: true, data: result.data })
-        }else{
-            res.status(503).send({ success: false, data: null})
+    try {
+        const {
+            status,
+            data,
+            message
+        } = await verifyAccountNumber({
+            account_number, bank_code
+        });
+        if(!status){
+            res.status(503).json({ success: false, data: data, message });
+            return;
         }
-    })
-    .catch(err => {
-        res.status(400).json({ success: false, message: err.message });
-        console.log(err)
-    });
-
+        res.status(201).json({ success: true, data: data, message });
+    } catch (error) {
+        console.error('Error verifying account:', error);
+        res.status(503).json({ success: false, data: data, message: error });
+    }
 }
 
 exports.checkVersionHandler =  async function (req, res) {

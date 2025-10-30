@@ -26,6 +26,17 @@ exports.findDealsByVendorId = async function ({ user_id }) {
   return rows;
 };
 
+exports.findTransactionByOrderId = async function ({ order_id }) {
+  const { rows } = await pool.query(
+    `
+      SELECT *
+      FROM transactions
+      WHERE order_id = $1
+    `,
+    [order_id]
+  );
+  return rows[0];
+};
 
 exports.findPartnerById = async function ({ user_id }) {
   const { rows } = await pool.query(

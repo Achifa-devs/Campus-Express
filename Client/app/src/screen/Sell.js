@@ -33,6 +33,7 @@ import { set_sub_modal } from '../../redux/modal/sub';
 import { set_shop } from '../../redux/info/shop';
 import Tools from '../utils/generalHandler';
 import Promo from '../components/Sell/Promo';
+import Payment from './Payment';
 const { width } = Dimensions.get('window');
 
 const ShopScreen = () => {
@@ -120,7 +121,8 @@ const ShopScreen = () => {
     // setRefreshing(true); 
     navigation.navigate('Sell', { refresh: Date.now() });
   };
-  
+
+
   // Simulate checking if shop exists in DB
   useEffect(() => {
     (async function getUser(params) {
@@ -239,7 +241,7 @@ const ShopScreen = () => {
     if (!validateForm()) return;
 
     setIsLoading(true)
-    fetch(`https://cs-node.vercel.app/vendor/create-shop`, {
+    fetch(`https://base-three-opal.vercel.app/shop/create`, {
       method: 'post',
       headers: {
         "Content-Type": "Application/json"
@@ -570,6 +572,10 @@ const ShopScreen = () => {
         </ScrollView>
       </KeyboardAvoidingView>
     );
+  }
+
+  if(shopExists && shop?.account_data === null || shop?.account_data === 'null'){
+    navigation.navigate('payment_setup')
   }
   
 

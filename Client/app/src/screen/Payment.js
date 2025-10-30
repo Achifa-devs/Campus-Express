@@ -13,10 +13,11 @@ import {
   StatusBar 
 } from "react-native";
 import Icon from 'react-native-vector-icons/Ionicons';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import DropdownComp from '../reusables/Dropdown';
+import { set_shop } from '../../redux/info/shop';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -27,7 +28,7 @@ export default function Payment() {
   const [banks, setBanks] = useState([]);
   const [bankName, setBankName] = useState('');
   const [acctNo, setAcctNo] = useState('');
-  const [beneficiary, setBeneficiary] = useState('');
+  const [validatedAcct, setValidatedAcct] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [isVerified, setIsVerified] = useState(false);
@@ -108,7 +109,7 @@ export default function Payment() {
       setIsLoading(false);
       
       if (response.success) {
-        setBeneficiary(response.name);
+        setValidatedAcct(response.data)
         setIsVerified(true);
         Alert.alert('Success', 'Bank account verified successfully!');
       } else {
@@ -117,27 +118,29 @@ export default function Payment() {
     })
     .catch((err) => {
       setIsLoading(false);
-      console.log(err);
+      
       Alert.alert('Network Error', 'Unable to verify account. Please check your connection.');
     });
   };
 
+  const dispatch = useDispatch()
   const handleAddBank = () => {
     if (!isVerified) {
       Alert.alert('Verification Required', 'Please verify your bank account first.');
       return;
     }
-
     setIsLoading(true);
-    // Simulate API call to add bank
-    setTimeout(() => {
-      setIsLoading(false);
-      Alert.alert(
-        'Success', 
-        'Bank account added successfully!',
-        [{ text: 'OK', onPress: () => navigation.goBack() }]
-      );
-    }, 2000);
+    axios.post('http://10.253.129.3:5432/shop/payment/update', {
+      validatedAcct, user_id: user.user_id
+    }).then(({data}) => {
+      // console.log(data.data)
+      if(data.success){
+        dispatch(set_shop(data.data))
+        navigation.goBack()
+      }else{
+        Alert.alert("Internal server error:", "An error occured, please try again!")
+      }
+    }).catch(err => Alert.alert("Internal server error:", "An error occured, please try again!"))
   };
 
   const getSelectedBankName = () => {
@@ -208,7 +211,7 @@ export default function Payment() {
             dropdownData={banks}
             customField={'code'}
             placeholder="Choose your bank"
-            error={errors.bankName}
+            // error={errors.bankName}
           />
           {errors.bankName && (
             <Text style={styles.errorText}>{errors.bankName}</Text>
@@ -221,12 +224,12 @@ export default function Payment() {
         </View>
 
         {/* Beneficiary Display */}
-        {(beneficiary || isVerified) && (
+        {(validatedAcct.account_name || isVerified) && (
           <View style={styles.inputSection}>
             <Text style={styles.inputLabel}>Account Holder Name</Text>
             <View style={styles.beneficiaryContainer}>
               <Icon name="checkmark-circle" size={20} color="#10B981" />
-              <Text style={styles.beneficiaryText}>{beneficiary}</Text>
+              <Text style={styles.beneficiaryText}>{validatedAcct?.account_name}</Text>
             </View>
             <Text style={styles.successText}>
               ✓ Account verified successfully

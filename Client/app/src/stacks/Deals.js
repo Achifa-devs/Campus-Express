@@ -24,6 +24,7 @@ import ProofOfDeliveryUpload from "../components/Deals/Evidence";
 import Satisfaction from "../screen/Satisfaction";
 import Shipping from "../screen/Shipping";
 import Payment from "../screen/Payment";
+import Receipt from "../screen/Receipt";
 // import ChatList from "../screen/ChatList";
 // import ChatRoom from "../screen/ChatRoom";
 
@@ -309,7 +310,7 @@ export function DealStackScreen() {
                 name="deal_shipping" component={Shipping}
             />
 
-                       <DealStack.Screen
+            <DealStack.Screen
                 options={{
                     header: ({ navigation }) => (
                         <View style={{
@@ -341,15 +342,17 @@ export function DealStackScreen() {
                                 fontWeight: 'bold', 
                                 color: '#111',
                             }}>
-                                Payment
+                                Delivery Receipt
                             </Text>
 
                         </View>
                     ),
                 }}
                 
-                name="deal_payment" component={Payment}
+                name="deal_receipt" component={Receipt}
             />
+
+
 
           
 

@@ -12,6 +12,7 @@ const {
    updateProductHandler,
    deleteProductHandler,
    getShopAnalyticsHandler,
+   updateShopPaymentHandler,
  }  = require('../controllers/shop')
 
 shopRouter.get('/shop', getShopHandler)
@@ -20,6 +21,7 @@ shopRouter.get('/shop/analytics', getShopAnalyticsHandler)
 
 shopRouter.post('/shop/create', parser, createShopHandler)
 shopRouter.post('/shop/update', parser, updateShopHandler)
+shopRouter.post('/shop/payment/update', parser, updateShopPaymentHandler)
 // shopRouter.post('/shop/delete', parser, () => '')
 
 shopRouter.get('/shop/product', getProductHandler)

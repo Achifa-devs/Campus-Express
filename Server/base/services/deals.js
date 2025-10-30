@@ -4,7 +4,8 @@ const {
     updateDealById, 
     findPartnerById,
     findDealsByUserId,
-    findDealsByVendorId
+    findDealsByVendorId,
+    findTransactionByOrderId
 } = require("../models/deals");
 const { findProductById } = require("../models/product");
 
@@ -29,10 +30,12 @@ exports.getDeals = async function (payload) {
     user_as_buyer.map(async (deal) => {
       const partner = await findPartnerById({ user_id: deal.vendor_id });
       const product = await findProductById({ product_id: deal.product_id }); // optional
+      const transaction = await findTransactionByOrderId({ order_id: deal.order_id})
       return {
         order: deal,
         partner,
-        product: product[0]
+        product: product[0],
+        transaction
       };
     })
   );
@@ -42,10 +45,12 @@ exports.getDeals = async function (payload) {
     user_as_vendor.map(async (deal) => {
       const partner = await findPartnerById({ user_id: deal.user_id });
       const product = await findProductById({ product_id: deal.product_id }); // optional
+      const transaction = await findTransactionByOrderId({ order_id: deal.order_id})
       return {
         order: deal,
         partner,
-        product: product[0]
+        product: product[0],
+        transaction
       };
     })
   );

@@ -417,7 +417,7 @@ export default function DealForVendor() {
                   description="Request payment release after successful delivery confirmation"
                   // onPress={handleClaimPayment}
                   onPress={e => {
-                    navigation.navigate('deal_payment', {
+                    navigation.navigate('deal_receipt', {
                       deal
                     })
                   }}   
