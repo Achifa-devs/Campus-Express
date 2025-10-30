@@ -39,10 +39,10 @@ exports.updateUserPhotoById =  async function ({photo, user_id}) {
 exports.createNewToken =  async function  ({ token, date, user_id }) {
   
     const { rows } = await pool.query(`
-        INSERT INTO token (id, token, expires_at, user_id)
-        VALUES (DEFAULT, $1, $2, $3)
-        RETURNING *
-        `, [token, date, user_id]
+      INSERT INTO token (id, token, expires_at, user_id)
+      VALUES (DEFAULT, $1, $2, $3)
+      RETURNING *
+      `, [token, date, user_id]
     );
 
     return rows[0];
@@ -51,12 +51,14 @@ exports.createNewToken =  async function  ({ token, date, user_id }) {
 
 exports.countToken =  async function  ({ token, user_id }) {
   
-  const result = await pool.query(`
+  const {
+    rows
+  } = await pool.query(`
     SELECT COUNT(*) as count
-    FROM users
+    FROM token
     WHERE token = $1 AND user_id = $2
   `, [token, user_id])
-  return parseInt(result.rows[0].count)
+  return parseInt(rows[0].count)
 }
 
 // Check Vendor email
@@ -92,11 +94,13 @@ exports.findUserById =  async function ({user_id}) {
 
 exports.findUserByEmail =  async function ({ email }) {
   
-  const result = await pool.query(
+  const {
+    rows
+  } = await pool.query(
     `SELECT * FROM users WHERE email = $1`,
     [email]
   );
-  return result.rows[0];
+  return rows[0];
 };
 
 exports.findUserByPhone =  async function ({ phone }) {
@@ -135,13 +139,15 @@ exports.updateUserProfileById =  async function ({ user_id, fname, lname, gender
   return result.rows[0];
 };
 
-exports.updateUserPasswordById =  async function ({ user_id, pwd }) {
+exports.updateUserPasswordById =  async function ({ user_id, password }) {
   
-  const result = await pool.query(
+  const {
+    rows
+  } = await pool.query(
     `UPDATE users set password=$1 WHERE user_id = $2`,
-    [pwd, user_id]
+    [password, user_id]
   );
-  return result.rows[0];
+  return rows[0];
 };
 
 exports.updateUserFcm =  async function ({ fcm, user_id }) {

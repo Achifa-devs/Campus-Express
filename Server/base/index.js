@@ -1,16 +1,21 @@
 const express = require('express');
-const mocha = require('mocha');
 const cors = require('cors');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const { v2 } = require('cloudinary');
+
+// Load environment variables FIRST
+require('dotenv').config();
+
 const userRouter = require('./routes/user');
 const shopRouter = require('./routes/shop');
 const generalRouter = require('./routes/general');
 const productRouter = require('./routes/product');
 const dealRouter = require('./routes/deals');
+
 const app = express();
 
+// Middleware
 app.use(morgan('dev'));
 app.use(cors({
   origin: '*',
@@ -19,30 +24,71 @@ app.use(cors({
   optionsSuccessStatus: 200,
   allowedHeaders: ['Content-Type', 'Authorization', 'cs-gender'],
 }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(userRouter)
-app.use(shopRouter)
-app.use(generalRouter)
-app.use(productRouter)
-app.use(dealRouter)
+// Routes
+app.use(userRouter);
+app.use(shopRouter);
+app.use(generalRouter);
+app.use(productRouter);
+app.use(dealRouter);
 
+// Root route
 app.get('/', (req, res) => {
   res.status(200).json({
     success: true,
-    data: null
-  })
-})
+    message: 'Campus Sphere API is running',
+    timestamp: new Date().toISOString()
+  });
+});
 
-require('dotenv').config()
-
-app.listen(process.env.PORT, (port) => {
-    console.log(`Listening to port ${process.env.PORT}`)
-})
-
-process.on('unhandledRejection', (reason, promise) => {
-  console.log('Unhandled Rejection at:', reason.stack || reason)
+// Health check route
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    success: true,
+    status: 'healthy',
+    environment: process.env.NODE_ENV || 'development'
+  });
 });
 
 
+// Start server
+const PORT = process.env.PORT || 5432;
+
+const server = app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`📍 http://localhost:${PORT}`);
+  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+});
+
+// Process handlers
+process.on('unhandledRejection', (reason, promise) => {
+  console.log('❌ Unhandled Rejection at:', reason.stack || reason);
+});
+
+process.on('uncaughtException', (error) => {
+  console.error('❌ Uncaught Exception:', error);
+  process.exit(1);
+});
+
+// Handle graceful shutdown
+process.on('SIGINT', () => {
+  console.log('\n🛑 Received SIGINT. Shutting down gracefully...');
+  server.close(() => {
+    console.log('✅ Server closed.');
+    process.exit(0);
+  });
+});
+
+process.on('SIGTERM', () => {
+  console.log('🛑 Received SIGTERM. Shutting down gracefully...');
+  server.close(() => {
+    console.log('✅ Server closed.');
+    process.exit(0);
+  });
+});
+
+// Remove or comment out the test email code at the bottom
 // let mail = tokenTemplate('Akpulu.F', '4500', 'akpulufabian@gmail.com'); 
 // let res = tools.send_email('Email Update', mail, 'akpulufabian@gmail.com').then(res => console.log(res))

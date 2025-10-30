@@ -22,11 +22,21 @@ const tools = require("../utils/tools");
 
 
 exports.createToken = async function  (payload) {
-  const { token, date, user_id } = payload;
+  const { date, email } = payload;
 
   try {
     // Business logic
-    const response = await createNewToken({ token, date, user_id })
+    const { 
+      user_id 
+    } = await findUserByEmail({ email });
+    console.log(user_id)
+
+    if(!user_id){
+      throw new Error("Email does not exist");
+    }
+    const token = tools.generateNumericToken();
+    const response = await createNewToken({ token, date, user_id });
+    
     return response;
   } catch (error) {
     console.log("error: ", error)
@@ -34,11 +44,14 @@ exports.createToken = async function  (payload) {
 };
 
 exports.verifyToken = async function  (payload) {
-  const { token } = payload;
+  const { token, email } = payload;
 
   try {
     // Business logic
-    const response = await countToken({ token });
+    const {
+      user_id
+    } = await findUserByEmail({ email });
+    const response = await countToken({ token, user_id });
     return response;
   } catch (error) {
     console.log("error: ", error)
@@ -190,15 +203,20 @@ exports.updateUserProfile = async function  (payload) {
 };
 
 exports.updateUserPassword = async function  (payload) {
-  const { user_id, pwd } = payload;
+  const { email, password } = payload;
 
-  // Business logic
-  let Vendor = await findUserById({ user_id });
-  let oldPwd = Vendor.password;
-  let comparison = await bcrypt.compare(pwd, oldPwd);
-  if (comparison) {
-    throw new Error("New password cannot be the same as old password");
-  } 
-  const response = await updateUserPasswordById({ user_id, pwd });
-  return response;
+  try {
+    // Business logic
+    const user = await findUserByEmail({ email });
+    let oldPwd = user.password;
+    let comparison = await bcrypt.compare(password, oldPwd);
+    if (comparison) {
+      throw new Error("New password cannot be the same as old password");
+    } 
+    const response = await updateUserPasswordById({ user_id: user.user_id, password });
+    return response;  
+  } catch (error) {
+    console.log(error)
+    // throw new Error("");  
+  }
 };

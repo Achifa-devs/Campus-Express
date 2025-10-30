@@ -57,10 +57,10 @@ const PasswordScreen = ({ route, navigation }) => {
 
   function ConfirmToken() {
     setLoading(true)
-    axios.post("https://cs-node.vercel.app/verify-token", {
+    axios.post("http://10.253.129.3:5432/user/token/verify", {
       email,
       token,
-    })
+    })  
     .then((result) => {
       setLoading(false)
 
@@ -97,13 +97,14 @@ const PasswordScreen = ({ route, navigation }) => {
     setLoading(true)
 
 
-    axios.post("https://cs-node.vercel.app/reset-password", {
+    axios.post("http://10.253.129.3:5432/user/update/password", {
       email,
       password: password,
     })
     .then((result) => {
       setLoading(false)
 
+      console.log(result.data)
       const response = result.data; // axios parses JSON automatically
 
       if (response.success && response.data) {
@@ -114,9 +115,9 @@ const PasswordScreen = ({ route, navigation }) => {
       }
     })
     .catch((err) => {
-      setLoading(false)
+      setLoading(false)   
 
-      console.log(err);
+      console.log(err.message);
       Alert.alert("Internal server error!", "Please try again")
     });
 

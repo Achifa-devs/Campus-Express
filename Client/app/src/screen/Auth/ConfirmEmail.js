@@ -41,9 +41,10 @@ const EmailScreen = ({ navigation }) => {
 
   function ConfirmEmail() {
     setLoading(true)
-    axios.post("https://cs-node.vercel.app/confirm-email", { email })
+    axios.post("http://10.253.129.3:5432/user/token", { email, date: new Date() })
     .then((result) => {
-        setLoading(false)
+      console.log("result: ", result.data)
+        setLoading(false)   
 
         const response = result.data; // axios already parses JSON
         console.log(response);

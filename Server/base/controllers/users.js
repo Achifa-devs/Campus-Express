@@ -16,7 +16,7 @@ const {
 
 exports.createTokenHandler =  async function (req, res) {
     try {
-        const response = await createToken(req.query);
+        const response = await createToken(req.body);
         res.status(201).json({ success: true, data: response });
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });
@@ -25,7 +25,7 @@ exports.createTokenHandler =  async function (req, res) {
 
 exports.verifyTokenHandler =  async function (req, res) {
     try {
-        const response = await verifyToken(req.query);
+        const response = await verifyToken(req.body);
         res.status(201).json({ success: true, data: response });
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });
@@ -43,7 +43,7 @@ exports.getUserHandler =  async function (req, res) {
 
 exports.deleteUserHandler =  async function (req, res) {
     try {
-        const response = await deleteUser(req.query);
+        const response = await deleteUser(req.body);
         res.status(201).json({ success: true, data: response });
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });
@@ -109,6 +109,7 @@ exports.updateUserPasswordHandler =  async function (req, res) {
         const response = await updateUserPassword(req.body);
         res.status(201).json({ success: true, data: response });
     } catch (error) {
+        console.log(error)
         res.status(400).json({ success: false, message: error.message });
     }
-}
+} 
