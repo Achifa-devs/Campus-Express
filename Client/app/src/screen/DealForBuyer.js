@@ -7,7 +7,7 @@ import {
   StyleSheet, 
   Text, 
   TouchableOpacity, 
-  View,
+  View, 
   SafeAreaView,
   StatusBar,
   Alert,

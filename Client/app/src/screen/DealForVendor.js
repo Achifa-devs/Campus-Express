@@ -22,6 +22,7 @@ import { getSocket } from '../services/socket'
 import { set_deals } from '../../redux/info/deals'
 import ProofOfDeliveryUpload from '../components/Deals/Evidence'
 import BottomModal from '../reusables/BtmModal'
+import AlertModal from '../components/Deals/AlertModal'
 // SMA-Lp3t-ZC3c-v4aKL
 export default function DealForVendor() {
   const navigation = useNavigation();
@@ -32,6 +33,7 @@ export default function DealForVendor() {
   const [loading, setLoading] = useState(false)
   const [cancelled, setCancelled] = useState(true)
   const [socket, setSocket] = useState(null)
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
   const [orderStatus, setOrderStatus] = useState(deal.orderStatus || 'shipping') // pending, shipping, delivered
   const dispatch = useDispatch()
   const {  
@@ -204,6 +206,24 @@ export default function DealForVendor() {
     return stats;
   };
 
+  const handleOpenAlert = () => {
+    setIsAlertVisible(true);
+  };
+
+  const handleCloseAlert = () => {
+    setIsAlertVisible(false);
+  };
+
+  const handleConfirm = () => {
+    console.log('Vendor understood the requirements');
+    setIsAlertVisible(false);
+  };
+
+  const handleDispute = () => {
+    console.log('Navigate to dispute information screen');
+    // You can navigate to a dispute info screen or show another modal
+    setIsAlertVisible(false);
+  };
 
 
   return (
@@ -227,6 +247,12 @@ export default function DealForVendor() {
           <ActivityIndicator size={'large'} color={'#FF4500'}></ActivityIndicator>
         </View>
       }
+      <AlertModal
+        visible={isAlertVisible}
+        onClose={handleCloseAlert}
+        onConfirm={handleConfirm}
+        onDispute={handleDispute}
+      />
       
       <Animated.ScrollView 
         style={[styles.scrollView]}
@@ -412,18 +438,28 @@ export default function DealForVendor() {
                 />
 
                 <VendorActionCard
-                  title="Claim Payment"
+                  title={
+                    !deal?.order?.status?.completed?.buyer ?  
+                    "Awaiting Customer Confirmation" 
+                    : "Claim Payment"}
                   icon="🧾"
-                  description="Request payment release after successful delivery confirmation"
+                  description={ 
+                    !deal?.order?.status?.completed?.buyer ? 
+                    "You can’t claim payment until the customer confirms satisfaction with the delivery." 
+                    : "Request your money once the customer says they’re satisfied with the deal."}
                   // onPress={handleClaimPayment}
                   onPress={e => {
-                    navigation.navigate('deal_receipt', {
-                      deal
-                    })
-                  }}   
+                    if (deal?.order?.status?.completed?.buyer) {
+                      navigation.navigate('deal_receipt', {
+                        deal
+                      });
+                    }else{
+                      setIsAlertVisible(true)
+                    }
+                  }}    
                   variant="success"
                   disabled={orderStatus !== 'payment'}
-                  completed={deal.order.status.payment?.completed}
+                  completed={deal?.order?.status?.completed?.vendor}
                 />
               </View>
 
@@ -492,6 +528,35 @@ export default function DealForVendor() {
             <TouchableOpacity
               style={[styles.bottomButton, styles.confirmButton]}
               // onPress={handleConfirm}
+              onPress={e => {
+                if(!deal.order.status.delivered.completed){
+                  navigation.navigate('')
+                }else{
+                  Alert.alert(
+                    "You cannot raise a dispute at this stage",
+                    "You are only allowed to raise dispute after you have confirmed delivery!",
+                    [
+                      {
+                        text: "Learn more",
+                        onPress: () => {
+                          navigation.navigate('')
+                        }
+                      },
+                      {
+                        text: "Continue",
+                        onPress: () => {
+
+                        },
+                        style: "default"
+                      }
+                     
+                    ],
+                    {
+                      cancelable: true
+                    }
+                  )
+                }
+              }}
             >
               <Text style={styles.confirmButtonText}>Raise Dispute</Text>
             </TouchableOpacity>

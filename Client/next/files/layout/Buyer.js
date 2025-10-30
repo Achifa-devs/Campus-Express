@@ -297,6 +297,10 @@ const BuyerLayout = ({children}) => {
                     ?
                     ''
                     :
+                    pathname.split('/').splice(-1)[0] === 'policy'
+                    ?
+                    ''
+                    :
                     pathname.split('/').splice(-1)[0] === 'terms-of-use'
                     ?
                     ''

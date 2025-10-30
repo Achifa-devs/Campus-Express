@@ -1,5 +1,7 @@
 import React from 'react'
 import './styles/xxl.css'
+import './styles/small.css'
+import './styles/hybrid.css'
 import logo from "../../public/ic_notification.png"
 
 export default function page() {

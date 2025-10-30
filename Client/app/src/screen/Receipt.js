@@ -73,23 +73,6 @@ const Receipt = ({ navigation, route }) => {
     },
   };
 
-  const calculateSubtotal = () => {
-    return receiptData.items.reduce((sum, item) => sum + item.total, 0);
-  };
-
-  const calculateTotal = () => {
-    const subtotal = calculateSubtotal();
-    const shipping = deal.order.shipping_fee;
-    const fees = receiptData.fees.platformFee + receiptData.fees.transactionFee + receiptData.fees.tax;
-    return subtotal + shipping + fees;
-  };
-
-  const calculateVendorAmount = () => {
-    const subtotal = calculateSubtotal();
-    const platformFee = receiptData.fees.platformFee;
-    return subtotal - platformFee;
-  };
-
   const handleClaimPayment = () => {
     Alert.alert(
       'Claim Payment',
@@ -147,23 +130,6 @@ const Receipt = ({ navigation, route }) => {
     });
   };
 
-  const getStatusColor = (status) => {
-    const colors = {
-      pending: '#F59E0B',
-      paid: '#10B981',
-      cancelled: '#DC2626',
-    };
-    return colors[status] || '#6B7280';
-  };
-
-  const getStatusText = (status) => {
-    const texts = {
-      pending: 'Payment Pending',
-      paid: 'Payment Completed',
-      cancelled: 'Cancelled',
-    };
-    return texts[status] || 'Unknown';
-  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -372,11 +338,11 @@ const Receipt = ({ navigation, route }) => {
         <TouchableOpacity 
           style={[styles.actionButton, styles.claimButton]}
           onPress={handleClaimPayment}
-          disabled={receiptData.status !== 'pending'}
+        //   disabled={receiptData.status !== 'pending'}
         >
           <Ionicons name="wallet-outline" size={20} color="#FFFFFF" />
           <Text style={styles.claimButtonText}>
-            {receiptData.status === 'pending' ? 'Claim Payment' : 'Payment Claimed'}
+            {!deal.order.completed.vendor ? 'Claim Payment' : 'Payment Claimed'}
           </Text>
         </TouchableOpacity>
       </View>
