@@ -144,7 +144,7 @@ exports.updateUserPasswordById =  async function ({ user_id, password }) {
   const {
     rows
   } = await pool.query(
-    `UPDATE users set password=$1 WHERE user_id = $2`,
+    `UPDATE users set password=$1 WHERE user_id = $2 RETURNING *`,
     [password, user_id]
   );
   return rows[0];

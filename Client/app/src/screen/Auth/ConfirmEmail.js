@@ -41,7 +41,7 @@ const EmailScreen = ({ navigation }) => {
 
   function ConfirmEmail() {
     setLoading(true)
-    axios.post("http://10.253.129.3:5432/user/token", { email, date: new Date() })
+    axios.post("https://base-three-opal.vercel.app/user/token", { email, date: new Date() })
     .then((result) => {
       console.log("result: ", result.data)
         setLoading(false)   

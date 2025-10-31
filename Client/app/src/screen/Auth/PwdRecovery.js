@@ -57,7 +57,7 @@ const PasswordScreen = ({ route, navigation }) => {
 
   function ConfirmToken() {
     setLoading(true)
-    axios.post("http://10.253.129.3:5432/user/token/verify", {
+    axios.post("https://base-three-opal.vercel.app/user/token/verify", {
       email,
       token,
     })  
@@ -97,7 +97,7 @@ const PasswordScreen = ({ route, navigation }) => {
     setLoading(true)
 
 
-    axios.post("http://10.253.129.3:5432/user/update/password", {
+    axios.post("https://base-three-opal.vercel.app/user/update/password", {
       email,
       password: password,
     })
@@ -111,14 +111,14 @@ const PasswordScreen = ({ route, navigation }) => {
         Alert.alert("Password changed successfully!")
         navigation.navigate('login')
       } else {
-        Alert.alert("Password was not changed successfully!", "Please try again")
+        Alert.alert("Password was not changed successfully!", "Please try again and ensure new password is not the same as old password.")
       }
     })
     .catch((err) => {
       setLoading(false)   
 
       console.log(err.message);
-      Alert.alert("Internal server error!", "Please try again")
+      Alert.alert("Internal server error!", "Please try again and ensure new password is not the same as old password.")
     });
 
   };

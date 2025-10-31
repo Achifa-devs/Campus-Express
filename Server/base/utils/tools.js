@@ -23,13 +23,13 @@ module.exports = class tools {
         secure: true, 
         auth: { 
           user: 'campus-sphere@campussphere.net',
-          pass: 'A!nianuli82003',
+          pass: 'A!nianuli82003',  
         },
       });
   
       // Email content 
       const mailOptions = { 
-        from: '"Campus Sphere" <campus-sphere@campussphere.net>',
+        from: '"Campus Sphere"<campus-sphere@campussphere.net>',
         to: email,
         subject,
         html: template,

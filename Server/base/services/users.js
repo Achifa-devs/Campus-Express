@@ -14,6 +14,7 @@ const {
   updateUserPhoneById,
   updateUserProfileById,
 } = require("../models/users");
+const tokenTemplate = require('../utils/token');
 
 
 const bcrypt = require("bcryptjs");
@@ -36,7 +37,9 @@ exports.createToken = async function  (payload) {
     }
     const token = tools.generateNumericToken();
     const response = await createNewToken({ token, date, user_id });
-    
+    let mail = tokenTemplate(`${fname}.${lname[0]}`, token, email);  
+    const emailSent = await tools.send_email('Token for password recovery', mail, email);
+    if(!emailSent)throw new Error("Email not sent, Try again");
     return response;
   } catch (error) {
     console.log("error: ", error)
@@ -193,7 +196,6 @@ exports.updateUserPhone = async function  (payload) {
 
   return response;
 };
-
 exports.updateUserProfile = async function  (payload) {
   const { user_id, fname, lname, gender } = payload;
   // Business logic
@@ -208,15 +210,17 @@ exports.updateUserPassword = async function  (payload) {
   try {
     // Business logic
     const user = await findUserByEmail({ email });
+
     let oldPwd = user.password;
     let comparison = await bcrypt.compare(password, oldPwd);
     if (comparison) {
       throw new Error("New password cannot be the same as old password");
     } 
-    const response = await updateUserPasswordById({ user_id: user.user_id, password });
+    const hashPwd = await bcrypt.hash(password, 10)
+    const response = await updateUserPasswordById({ user_id: user.user_id, password: hashPwd });
     return response;  
   } catch (error) {
     console.log(error)
-    // throw new Error("");  
+    throw new Error("Internal server error");
   }
 };

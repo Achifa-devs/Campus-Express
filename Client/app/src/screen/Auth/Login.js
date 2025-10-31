@@ -120,7 +120,7 @@ const Login = ({ updateActiveJsx }) => {
       await new Promise(resolve => setTimeout(resolve, 1500));
       
       // Replace with actual API call
-      const response = await fetch('https://cs-node.vercel.app/vendor/login', {
+      const response = await fetch('https://base-three-opal.vercel.app/user/login', {
         method: 'POST',
         headers: { "Content-Type": "Application/json" },
         body: JSON.stringify(formData)
