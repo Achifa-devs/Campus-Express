@@ -99,7 +99,7 @@ process.on('SIGTERM', () => {
 cron.schedule("* * * * *", async () => { 
   try {
     await pool.query("DELETE FROM token WHERE expires_at < NOW() - INTERVAL '1 minute'");
-    console.log("Expired tokens deleted");
+    console.log("Expired tokens deleted"); 
   } catch (err) {  
     console.error("Error deleting tokens:", err);  
   } 
