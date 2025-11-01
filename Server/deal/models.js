@@ -66,7 +66,7 @@ exports.updateDealById = async function ({ order, new_stage, date, userId, nxt_s
       completed: true,
       completedAt: date,
       buyer: order.user_id === userId ? true: false,
-      vendor: order.vendor_id === userId ? true: false
+      vendor: order.user_id === userId ? true : order.vendor_id === userId ? true: false
     };
   }else if(new_stage === 'shipping'){
     newStatus = {
@@ -97,7 +97,8 @@ exports.updateDealById = async function ({ order, new_stage, date, userId, nxt_s
     RETURNING *;
   `;
 
-  const values = [JSON.stringify(newStatus), order.order_id, nxt_stage];
+  const nxt_stage_ = order.user_id === userId && new_stage === 'delivered' ? 'delivered' : nxt_stage 
+  const values = [JSON.stringify(newStatus), order.order_id, nxt_stage_];
 
   const { rows } = await pool.query(query, values);
 
@@ -143,3 +144,15 @@ exports.updateDealById = async function ({ order, new_stage, date, userId, nxt_s
 
     return rows[0]; // returns the inserted record
   };
+
+  // Create new shop review
+exports.createShopReview = async function ({ shop_id, product_id, buyer_id, review, date, comment, rating }) {
+  const {
+    rows
+  } = await pool.query(
+    `INSERT INTO reviews (id, shop_id, product_id, buyer_id, review, date, comment, rating) 
+    VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7)`,
+    [shop_id, product_id, buyer_id, review, date, comment, rating]
+  );
+  return rows[0];
+};

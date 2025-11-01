@@ -1,5 +1,5 @@
 import { useRoute, useNavigation } from '@react-navigation/native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback, useMemo } from 'react'
 import { 
   Dimensions, 
   Image, 
@@ -9,7 +9,7 @@ import {
   TouchableOpacity, 
   View, 
   SafeAreaView,
-  StatusBar,
+  StatusBar, 
   Alert,
   Animated
 } from 'react-native'
@@ -18,6 +18,7 @@ import { set_deal } from '../../redux/info/deal'
 import Tools from '../utils/generalHandler'
 import js_ago from 'js-ago'
 import { getSocket } from '../services/socket'
+
 export default function DealForBuyer() {
   const navigation = useNavigation()
   const { params } = useRoute();
@@ -25,40 +26,52 @@ export default function DealForBuyer() {
   const [deal, setDeal] = useState(params?.deal || null);
   const dispatch = useDispatch();
   const [socket, setSocket] = useState(null);
-  const {
-    user
-  } = useSelector(s => s.user)
-  const {
-    deals
-  } = useSelector(s => s.deals)
+  
+  const { user } = useSelector(s => s.user)
+  const { deals } = useSelector(s => s.deals)
 
+  const fadeAnim = React.useRef(new Animated.Value(0)).current
+
+  // Memoized derived values
+  const partnerInitials = useMemo(() => {
+    return (deal?.partner?.fname?.[0] + '.' + deal?.partner?.lname?.[0]) || 'SS'
+  }, [deal?.partner?.fname, deal?.partner?.lname])
+
+  const isDeliveredConfirmedByVendor = useMemo(() => {
+    return deal?.order?.status?.delivered?.completed && !deal?.order?.status?.delivered?.buyer
+  }, [deal?.order?.status?.delivered])
+
+  const isDeliveredConfirmedByBoth = useMemo(() => {
+    return deal?.order?.status?.delivered?.completed && deal?.order?.status?.delivered?.buyer
+  }, [deal?.order?.status?.delivered])
+
+  // Effects
   useEffect(() => {
-    if (params?.deal) setDeal(params.deal); 
-  }, [params]);
+    if (params?.deal) {
+      setDeal(params.deal)
+    }
+  }, [params?.deal])
 
   useEffect(() => {
     if (deal?.order?.order_id) {
-      const updated = deals.find(d => d.order.order_id === deal.order.order_id);
-      if (updated) setDeal(updated);
+      const updatedDeal = deals.find(d => d.order.order_id === deal.order.order_id)
+      if (updatedDeal) setDeal(updatedDeal)
     }
-  }, [deals]);
+  }, [deals, deal?.order?.order_id])
 
   useEffect(() => {
-    const socket = getSocket();
-    setSocket(socket)
+    const socketInstance = getSocket()
+    setSocket(socketInstance)
   }, [])
 
   useEffect(() => {
-    if(!deal) return;
-    dispatch(set_deal(
-      {
-        room: Tools.generateConversationId(user?.user_id, deal?.partner?.user_id),
-        partner: deal?.partner
-      }
-    ))
-  }, [deal])
-  
-  const fadeAnim = new Animated.Value(0)
+    if (!deal || !user) return
+    
+    dispatch(set_deal({
+      room: Tools.generateConversationId(user.user_id, deal.partner?.user_id),
+      partner: deal.partner
+    }))
+  }, [deal, user, dispatch])
 
   React.useEffect(() => {
     Animated.timing(fadeAnim, {
@@ -66,17 +79,15 @@ export default function DealForBuyer() {
       duration: 500,
       useNativeDriver: true,
     }).start()
-  }, [])
+  }, [fadeAnim])
 
-  const handleConfirm = () => {
+  // Event handlers
+  const handleConfirm = useCallback(() => {
     Alert.alert(
       "Confirm Deal",
       "Are you sure you want to confirm this deal?",
       [
-        {
-          text: "Cancel",
-          style: "cancel"
-        },
+        { text: "Cancel", style: "cancel" },
         { 
           text: "Confirm", 
           onPress: () => {
@@ -86,17 +97,14 @@ export default function DealForBuyer() {
         }
       ]
     )
-  }
+  }, [navigation])
 
-  const handleCancel = () => {
+  const handleCancel = useCallback(() => {
     Alert.alert(
       "Cancel Deal",
       "Are you sure you want to cancel this deal?",
       [
-        {
-          text: "No",
-          style: "cancel"
-        },
+        { text: "No", style: "cancel" },
         { 
           text: "Yes", 
           style: "destructive",
@@ -107,13 +115,32 @@ export default function DealForBuyer() {
         }
       ]
     )
-  }
+  }, [navigation])
 
-  const handleChat = () => {
-    Alert.alert("Start Chat", `Chat with ${deal.partnerName || 'the seller'}`)
-  }
+  const handleConfirmDelivery = useCallback(() => {
+    if (!isDeliveredConfirmedByVendor) {  
+      Alert.alert(
+        "Pending Delivery",
+        "The vendor has not confirmed delivery yet. Kindly wait while the delivery is completed."  
+      )
+    } else {
+      navigation.navigate('deal_satisfaction', { deal })
+    }
+  }, [isDeliveredConfirmedByVendor, navigation, deal])
 
-  const TrackingStep = ({ step, title, description, isActive, isCompleted }) => (
+  const handleReleaseFunds = useCallback(() => {
+    if (!isDeliveredConfirmedByBoth) {
+      Alert.alert(
+        "Delivery Confirmation Required",
+        "Please confirm that you have received the item before releasing funds to the vendor."
+      )
+    } else {
+      navigation.navigate('release_funds', { deal })
+    }
+  }, [isDeliveredConfirmedByBoth, navigation, deal])
+
+  // Component functions
+  const TrackingStep = useCallback(({ step, title, description, isActive, isCompleted }) => (
     <View style={styles.trackingStep}>
       <View style={styles.stepIndicator}>
         <View style={[
@@ -141,15 +168,78 @@ export default function DealForBuyer() {
         </Text>
       </View>
     </View>
-  )
+  ), [])
 
-  const InfoCard = ({ icon, title, value }) => (
+  const InfoCard = useCallback(({ icon, title, value }) => (
     <View style={styles.infoCard}>
       <Text style={styles.infoIcon}>{icon}</Text>
       <Text style={styles.infoTitle}>{title}</Text>
       <Text style={styles.infoValue}>{value}</Text>
     </View>
-  )
+  ), [])
+
+  const ActionCard = useCallback(({ title, icon, description, onPress, disabled = false, completed = false }) => (
+    <TouchableOpacity 
+      activeOpacity={0.8}
+      style={[
+        styles.vendorActionCard,
+        disabled && styles.disabledVendorActionCard,
+        completed && styles.completedVendorActionCard
+      ]}
+      onPress={onPress}
+      disabled={disabled || completed}
+    >
+      <View style={styles.vendorActionCardHeader}>
+        <View style={styles.vendorActionIconContainer}>
+          <Text style={styles.vendorActionIcon}>{icon}</Text>
+          {completed && (
+            <View style={styles.completedBadge}>
+              <Text style={styles.completedBadgeText}>✓</Text>
+            </View>
+          )}
+        </View>
+        <View style={styles.vendorActionTextContainer}>
+          <Text style={[
+            styles.vendorActionCardTitle,
+            (disabled || completed) && styles.disabledVendorActionCardTitle
+          ]}>
+            {title}
+          </Text>
+          {completed && (
+            <Text style={styles.completedText}>Completed</Text>
+          )}
+        </View>
+      </View>
+      
+      <Text style={[
+        styles.vendorActionDescription,
+        (disabled || completed) && styles.disabledVendorActionDescription
+      ]}>
+        {description}
+      </Text>
+      
+      <View style={styles.vendorActionCardFooter}>
+        {!completed && !disabled && (
+          <Text style={styles.actionPromptText}>Tap to proceed →</Text>
+        )}
+        {!completed && disabled && (
+          <Text style={styles.disabledActionText}>Complete previous steps first</Text>
+        )}
+        {completed && (
+          <Text style={styles.completedActionText}>Step completed ✓</Text>
+        )}
+      </View>
+    </TouchableOpacity>
+  ), [])
+
+  // Early return if no deal
+  if (!deal) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <Text>Loading...</Text>
+      </SafeAreaView>
+    )
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -166,10 +256,6 @@ export default function DealForBuyer() {
               source={{ uri: deal.product.thumbnail_id || 'https://via.placeholder.com/300' }}
               style={styles.productImage}
             />
-            {/* <LinearGradient
-              colors={['transparent', 'rgba(0,0,0,0.8)']}
-              style={styles.imageGradient}
-            /> */}
             <View style={styles.statusBadge}>
               <Text style={styles.statusText}>
                 {deal.order.stage?.toUpperCase() || 'PENDING'}
@@ -187,32 +273,25 @@ export default function DealForBuyer() {
             
             {/* Partner Info */}
             <View style={styles.partnerSection}>
-              {
-                !deal?.partner?.photo?
+              {deal?.partner?.photo ? (
+                <Image 
+                  source={{ uri: deal.partner.photo }}
+                  style={styles.partnerPhoto}
+                />
+              ) : (
                 <View style={styles.partnerAvatar}>
                   <Text style={styles.partnerInitials}>
-                    {
-                      (deal?.partner?.fname[0]+'.'+deal?.partner?.lname[0] || 'SS').split(' ').map(n => n[0]).join('')
-                    }
+                    {partnerInitials}
                   </Text>
                 </View>
-                :
-                <Image 
-                  source={{uri: deal.partner.photo}}
-                  style={{
-                    height: 44,
-                    width: 44,
-                    borderRadius: 50,
-                    marginHorizontal: 9
-                }} />
-              }
+              )}
               <View style={styles.partnerInfo}>
                 <Text style={styles.partnerName}>
-                  {deal?.partner?.fname+' '+deal?.partner?.lname || 'Customer Name'}
+                  {`${deal?.partner?.fname || ''} ${deal?.partner?.lname || ''}`.trim() || 'Customer Name'}
                 </Text>
-                <Text style={styles.partnerRating}>{
-                  deal.partner.lastseen === 'now' ? '🟢 Online' : `🔴 Active ${js_ago(new Date(deal.partner.lastseen))}`  
-                }</Text>
+                <Text style={styles.partnerRating}>
+                  {deal.partner.lastseen === 'now' ? '🟢 Online' : `🔴 Active ${js_ago(new Date(deal.partner.lastseen))}`}
+                </Text>
               </View>
             </View>
           </View>
@@ -220,30 +299,17 @@ export default function DealForBuyer() {
 
         {/* Tab Navigation */}
         <View style={styles.tabContainer}>
-          <TouchableOpacity 
-            style={[styles.tab, activeTab === 'details' && styles.activeTab]}
-            onPress={() => setActiveTab('details')}
-          >
-            <Text style={[styles.tabText, activeTab === 'details' && styles.activeTabText]}>
-              Details
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity 
-            style={[styles.tab, activeTab === 'tracking' && styles.activeTab]}
-            onPress={() => setActiveTab('tracking')}
-          >
-            <Text style={[styles.tabText, activeTab === 'tracking' && styles.activeTabText]}>
-              Tracking
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity 
-            style={[styles.tab, activeTab === 'actions' && styles.activeTab]}
-            onPress={() => setActiveTab('actions')}
-          >
-            <Text style={[styles.tabText, activeTab === 'actions' && styles.activeTabText]}>
-              Actions
-            </Text>
-          </TouchableOpacity>
+          {['details', 'tracking', 'actions'].map((tab) => (
+            <TouchableOpacity 
+              key={tab}
+              style={[styles.tab, activeTab === tab && styles.activeTab]}
+              onPress={() => setActiveTab(tab)}
+            >
+              <Text style={[styles.tabText, activeTab === tab && styles.activeTabText]}>
+                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              </Text>
+            </TouchableOpacity>
+          ))}
         </View>
 
         {/* Tab Content */}
@@ -255,12 +321,12 @@ export default function DealForBuyer() {
               <InfoCard
                 icon="📅"
                 title="Start Date"
-                value={(Tools.formatDealDate((deal.order.date).toLocaleString())) || 'Loading'}
+                value={Tools.formatDealDate(deal.order.date?.toLocaleString()) || 'Loading'}
               />
               <InfoCard
                 icon="🏁"
                 title="End Date"
-                value={(deal.order.end_date) || 'Present'}
+                value={deal.order.end_date || 'Present'}
               />
               <InfoCard
                 icon="⏱️"
@@ -274,15 +340,14 @@ export default function DealForBuyer() {
               />
             </View>
  
-            {
-              deal?.product?.description &&
+            {deal?.product?.description && (
               <View style={styles.descriptionCard}>
                 <Text style={styles.descriptionTitle}>Description</Text>
                 <Text style={styles.descriptionText}>
-                  {deal?.product?.description || 'This is a detailed description of the product or accommodation. It includes all the features and benefits that the user should know about.'}
+                  {deal.product.description}
                 </Text>
               </View>
-            }
+            )}
           </View>
         )}
 
@@ -327,58 +392,26 @@ export default function DealForBuyer() {
           <View style={styles.tabContent}>
             <Text style={styles.sectionTitle}>Quick Actions</Text>
             
-            <View style={styles.actionsGrid}>
-
-              <TouchableOpacity style={[styles.actionButton, {
-                opacity: (deal.order.status.delivered.completed && !deal.order.status.delivered.buyer) ? 1 : .5
-              }]} 
-                onPress={ e => {
-                  const isDeliveredConfirmedByVendor = (deal.order.status.delivered.completed && !deal.order.status.delivered.buyer);
-
-                  if(!isDeliveredConfirmedByVendor){  
-                    Alert.alert(
-                      "Pending Delivery",
-                      "The vendor has not confirmed delivery yet. Kindly wait while the delivery is completed."  
-                    );
-                  }else{
-                    navigation.navigate('deal_satisfaction', {deal})
-                  }
-                } 
-              }> 
-                <Text style={styles.actionIcon}>📦✅</Text>
-                <Text style={styles.actionText}>Confirm Delivery</Text>
-              </TouchableOpacity> 
+            <View style={[styles.actionsGrid, { flexDirection: 'column', flexWrap: 'nowrap' }]}>
+              <ActionCard
+                title="Confirm Delivery"
+                icon="📦"
+                description="Confirm that you have received the delivered items"
+                onPress={handleConfirmDelivery}
+                disabled={!isDeliveredConfirmedByVendor}
+                completed={deal?.order?.status?.delivered?.buyer}
+              />
               
-              <TouchableOpacity style={[styles.actionButton, {
-                opacity: deal.order.status.delivered.completed && deal.order.status.delivered.buyer ? 1 : .5
-              }]} onPress={ e => {
-                  const isDeliveredConfirmedByBoth = (deal.order.status.delivered.completed && deal.order.status.delivered.buyer);
-
-                  if(!isDeliveredConfirmedByBoth){
-                    Alert.alert(
-                      "Delivery Confirmation Required",
-                      "Please confirm that you have received the item before releasing funds to the vendor."
-                    );
-                  }else{
-                    navigation.navigate('release_funds', {deal})
-                  }
-                }
-              }> 
-                <Text style={styles.actionIcon}>🔓💰</Text> 
-                <Text style={styles.actionText}>Release Funds</Text>
-              </TouchableOpacity>
-              
-              {/* <TouchableOpacity style={styles.actionButton}>
-                <Text style={styles.actionIcon}>🚨⚖️</Text>
-                <Text style={styles.actionText}>Raise Dispute</Text>
-              </TouchableOpacity> */}
-              
-              {/* <TouchableOpacity style={styles.actionButton}>
-                <Text style={styles.actionIcon}>🔔</Text>
-                <Text style={styles.actionText}>Set Reminder</Text>
-              </TouchableOpacity> */}
+              <ActionCard
+                title="Release Funds"
+                icon="🔓"
+                description="Release payment to the vendor after confirming delivery"
+                onPress={handleReleaseFunds}
+                disabled={!isDeliveredConfirmedByBoth}
+                completed={deal?.order?.status?.released}
+              />
             </View>
-          </View> 
+          </View>
         )}
       </Animated.ScrollView>
 
@@ -408,35 +441,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f8fafc',
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e2e8f0',
-  },
-  backButton: {
-    padding: 8,
-  },
-  backButtonText: {
-    fontSize: 24,
-    color: '#64748b',
-    fontWeight: '300',
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#1e293b',
-  },
-  chatButton: {
-    padding: 8,
-  },
-  chatButtonText: {
-    fontSize: 20,
-  },
   scrollView: {
     flex: 1,
   },
@@ -461,13 +465,6 @@ const styles = StyleSheet.create({
   productImage: {
     width: '100%',
     height: '100%',
-  },
-  imageGradient: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 100,
   },
   statusBadge: {
     position: 'absolute',
@@ -519,6 +516,12 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '700',
+  },
+  partnerPhoto: {
+    height: 44,
+    width: 44,
+    borderRadius: 50,
+    marginHorizontal: 9
   },
   partnerInfo: {
     flex: 1,
@@ -718,31 +721,114 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'space-between',
   },
-  actionButton: {
-    width: '48%',
+  // Vendor Action Card Styles
+  vendorActionCard: {
     backgroundColor: '#fff',
     padding: 20,
     borderRadius: 4,
-    alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 16,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 1,
+      height: 2,
     },
-    shadowOpacity: 0.05,
-    shadowRadius: 3,
-    elevation: 1,
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
+    borderWidth: 1,
+    borderColor: '#f1f5f9',
+    borderLeftWidth: 4,
+    borderLeftColor: '#3b82f6',
   },
-  actionIcon: {
+  disabledVendorActionCard: {
+    backgroundColor: '#f8fafc',
+    borderColor: '#e2e8f0',
+    borderLeftColor: '#94a3b8',
+    opacity: 0.7,
+  },
+  completedVendorActionCard: {
+    backgroundColor: '#f0fdf4',
+    borderColor: '#dcfce7',
+    borderLeftColor: '#10b981',
+  },
+  vendorActionCardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  vendorActionIconContainer: {
+    position: 'relative',
+    marginRight: 12,
+  },
+  vendorActionIcon: {
     fontSize: 24,
-    marginBottom: 8,
   },
-  actionText: {
+  completedBadge: {
+    position: 'absolute',
+    top: -4,
+    right: -4,
+    backgroundColor: '#10b981',
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#fff',
+  },
+  completedBadgeText: {
+    color: '#fff',
+    fontSize: 10,
+    fontWeight: 'bold',
+  },
+  vendorActionTextContainer: {
+    flex: 1,
+  },
+  vendorActionCardTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    marginBottom: 4,
+    color: '#26A69A',
+  },
+  disabledVendorActionCardTitle: {
+    color: '#94a3b8',
+  },
+  completedText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#10b981',
+  },
+  vendorActionDescription: {
+    fontSize: 14,
+    lineHeight: 20,
+    color: '#64748b',
+    marginBottom: 12,
+  },
+  disabledVendorActionDescription: {
+    color: '#94a3b8',
+  },
+  vendorActionCardFooter: {
+    borderTopWidth: 1,
+    borderTopColor: '#f1f5f9',
+    paddingTop: 12,
+  },
+  actionPromptText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1e293b',
-    textAlign: 'center',
+    color: '#3b82f6',
+    textAlign: 'right',
+  },
+  disabledActionText: {
+    fontSize: 14,
+    color: '#94a3b8',
+    textAlign: 'right',
+    fontStyle: 'italic',
+  },
+  completedActionText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#10b981',
+    textAlign: 'right',
   },
   bottomBar: {
     position: 'absolute',

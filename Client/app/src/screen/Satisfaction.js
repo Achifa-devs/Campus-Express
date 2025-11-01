@@ -1,5 +1,5 @@
 import { useRoute } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -16,16 +16,41 @@ import {
 } from 'react-native';
 import StarRating from 'react-native-star-rating-widget';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import Tools from '../utils/generalHandler';
+import { getSocket } from '../services/socket';
+import { set_deals } from '../../redux/info/deals';
 
 const Satisfaction = ({ navigation }) => {
+  const [formData, setFormData] = useState({
+    review: '',
+    commemt: '',
+    rating: ''
+  })
+  
   const [rating, setRating] = useState(0);
   const [reviewType, setReviewType] = useState('');
   const [comment, setComment] = useState('');
+  const [socket, setSocket] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const {product, seller, shop} = useRoute()?.params;
+  const dispatch = useDispatch();
   const { user } = useSelector(s => s?.user);
-  
+  const { deals } = useSelector(s => s?.deals);
+  const { deal } = useRoute()?.params;
+
+  useEffect(() => {
+    setFormData((prev) => ({ 
+      ...prev,
+      rating,
+      comment,
+      review: reviewType,
+    }))
+  }, [rating, comment, reviewType])
+
+  useEffect(() => {
+    const socketInstance = getSocket()
+    setSocket(socketInstance);
+  }, [])
 
   const reviewOptions = [
     { id: 'poor', label: 'Poor', icon: 'sad-outline', color: '#e84118' },
@@ -49,39 +74,48 @@ const Satisfaction = ({ navigation }) => {
       Alert.alert('Comment Too Short', 'Please provide a more detailed comment (at least 10 characters)');
       return;
     }
-
-    setIsSubmitting(true);
-    
-    fetch(`https://cs-node.vercel.app/review`, {
-      method: 'post',
-
-      headers: {
-      "Content-Type": "Application/json" 
+    // setIsSubmitting(true);
+    socket.emit(
+      'deal_update',
+      {
+        room_id: Tools.generateConversationId(user.user_id, deal.partner.user_id),
+        order: deal.order,
+        userId: user.user_id,
+        date: new Date(),
+        new_stage: 'delivered',
+        nxt_stage: 'payment',
+        formData
       },
-      body: JSON.stringify({
-          shop_id: shop?.shop_id, product_id: product?.product_id, buyer_id: user?.user_id, review: reviewType, date: new Date(), comment, rating
-      })
-    })
-    .then(async (result) => {
-      let response = await result.json(); 
-      setIsSubmitting(false);
-
-      Alert.alert(
-        'Review Submitted', 
-        'Thank you for your feedback!',
-        [
-          {
-            text: 'OK',
-            onPress: () => navigation.navigate('product', {data: product, reviewed: true})
-          }
-        ]
-      );
-    })
-    .catch((err) => {
-      Alert.alert('Network error, please try again.');
-      setIsSubmitting(false);
-      console.log(err);
-    });
+      callback => { 
+        const { success, data } = callback;  
+        console.log(success, data)   
+        if (success) {
+          dispatch(set_deals(  
+            deals.map(item =>
+              item.order.order_id === data.order_id
+                ? { ...item, order: data }
+                : item
+            )
+          ));
+          Alert.alert(
+            'Delivery Confirmed', 
+            'Thank you for your feedback!',
+            [
+              {
+                text: 'OK',
+                // onPress: () => navigation.navigate('deal_buyer', {
+                //   deal: deals.filter(item => item.order.order_id === deal.order.order_id)[0]
+                // })
+              }
+            ]
+          );
+          setIsSubmitting(false)  
+        } else {
+          setIsSubmitting(false)              
+          Alert.alert("Error", "Unable to update this deal. Please try again.");
+        }
+      }     
+    );
   };
 
   const selectedReviewOption = reviewOptions.find(option => option.id === reviewType);
@@ -95,101 +129,101 @@ const Satisfaction = ({ navigation }) => {
     >
         {
 
-            isSubmitting&&
-            <View style={{
-                flex: 1,
-                width: Dimensions.get('window').width,
-                height: Dimensions.get('window').height,
-                justifyContent: 'center',
-                alignItems: 'center',
-                position: 'absolute', top: 0, left: 0, zIndex: 100,
-                backgroundColor: 'rgba(255, 251, 246, 0.2)', // Fully transparent
-            }}>
-                <ActivityIndicator size="large" color="#FF4500" />
-            </View>
+          isSubmitting&&
+          <View style={{
+              flex: 1,
+              width: Dimensions.get('window').width,
+              height: Dimensions.get('window').height,
+              justifyContent: 'center',
+              alignItems: 'center',
+              position: 'absolute', top: 0, left: 0, zIndex: 100,
+              backgroundColor: 'rgba(255, 251, 246, 0.2)', // Fully transparent
+          }}>
+              <ActivityIndicator size="large" color="#FF4500" />
+          </View>
         }
         <View style={styles.contentContainer}>
-            <ScrollView 
-            contentContainerStyle={styles.scrollContainer}
-            showsVerticalScrollIndicator={false}
-            >
-            <View style={styles.ratingSection}>
-                <Text style={styles.sectionTitle}>Vendor Performance Rating</Text>
-                <View style={styles.starContainer}>
-                <StarRating
-                    rating={rating}
-                    onChange={setRating}
-                    starSize={40}
-                    color="#FF4500"
-                    starStyle={styles.starStyle}
-                />
-                <Text style={styles.ratingText}>
-                    {rating === 0 ? 'Tap stars to rate' : `${rating.toFixed(1)} / 5.0`}
-                </Text>
-                </View>
-            </View>
+          <ScrollView 
+          contentContainerStyle={styles.scrollContainer}
+          showsVerticalScrollIndicator={false}
+          >
+          <View style={styles.ratingSection}>
+              <Text style={styles.sectionTitle}>Vendor Performance Rating</Text>
+              <View style={styles.starContainer}>
+              <StarRating
+                  rating={rating}
+                  onChange={setRating}
+                  starSize={40}
+                  color="#FF4500"
+                  starStyle={styles.starStyle}
+              />
+              <Text style={styles.ratingText}>
+                  {rating === 0 ? 'Tap stars to rate' : `${rating.toFixed(1)} / 5.0`}
+              </Text>
+              </View>
+          </View>
 
-            <View style={styles.reviewTypeSection}>
-                <Text style={styles.sectionTitle}>How was your experience?</Text>
-                <View style={styles.reviewOptions}>
-                {reviewOptions.map(option => (
-                    <TouchableOpacity
-                    key={option.id}
-                    style={[
-                        styles.reviewOption,
-                        reviewType === option.id && styles.selectedReviewOption,
-                        reviewType === option.id && { backgroundColor: option.color }
-                    ]}
-                    onPress={() => setReviewType(option.id)}
-                    >
-                    <Ionicons 
-                        name={option.icon} 
-                        size={20} 
-                        color={reviewType === option.id ? '#fff' : option.color} 
-                    />
-                    <Text style={[
-                        styles.reviewOptionText,
-                        reviewType === option.id && styles.selectedReviewOptionText
-                    ]}>
-                        {option.label}
-                    </Text>
-                    </TouchableOpacity>
-                ))}
-                </View>
-            </View>
+          <View style={styles.reviewTypeSection}>
+              <Text style={styles.sectionTitle}>How was your experience?</Text>
+              <View style={styles.reviewOptions}>
+              {reviewOptions.map(option => (
+                  <TouchableOpacity
+                  key={option.id}
+                  style={[
+                      styles.reviewOption,
+                      reviewType === option.id && styles.selectedReviewOption,
+                      reviewType === option.id && { backgroundColor: option.color }
+                  ]}
+                  onPress={() => setReviewType(option.id)}
+                  >
+                  <Ionicons 
+                      name={option.icon} 
+                      size={20} 
+                      color={reviewType === option.id ? '#fff' : option.color} 
+                  />
+                  <Text style={[
+                      styles.reviewOptionText,
+                      reviewType === option.id && styles.selectedReviewOptionText
+                  ]}>
+                      {option.label}
+                  </Text>
+                  </TouchableOpacity>
+              ))}
+              </View>
+          </View>
 
-            <View style={styles.commentSection}>
-                <Text style={styles.sectionTitle}>Share your experience</Text>
-                <TextInput
-                style={styles.commentInput}
-                multiline
-                numberOfLines={6}
-                placeholder="What did you like or dislike? How was the product quality, delivery experience, etc.?"
-                value={comment}
-                onChangeText={setComment}
-                textAlignVertical="top"
-                />
-                <Text style={styles.charCount}>{comment.length}/500 characters</Text>
-            </View>
-            </ScrollView>
+          <View style={styles.commentSection}>
+              <Text style={styles.sectionTitle}>Share your experience</Text>
+              <TextInput
+              style={styles.commentInput}
+              multiline
+              numberOfLines={6}
+              placeholder="What did you like or dislike? How was the product quality, delivery experience, etc.?"
+              value={comment}
+              onChangeText={setComment}
+              textAlignVertical="top"
+              />
+              <Text style={styles.charCount}>{comment.length}/500 characters</Text>
+          </View>
+          </ScrollView>
 
-            {/* Fixed Submit Button at Bottom */}
-            <View style={styles.fixedButtonContainer}>
-            <TouchableOpacity
-                style={[
-                styles.submitButton,
-                isSubmitting && styles.submitButtonDisabled
-                ]}
-                onPress={handleSubmit}
-                disabled={isSubmitting}
-            >
-                {isSubmitting ? (
-                <Text style={styles.submitButtonText}>Submitting...</Text>
-                ) : (
-                <Text style={styles.submitButtonText}>Confirm Delivery</Text>
-                )}
-            </TouchableOpacity>
-            </View>
+          {/* Fixed Submit Button at Bottom */}
+          <View style={styles.fixedButtonContainer}>
+          <TouchableOpacity
+            style={[
+            styles.submitButton,
+            isSubmitting && styles.submitButtonDisabled
+            ]}
+            onPress={handleSubmit}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+            <Text style={styles.submitButtonText}>Submitting...</Text>
+            ) : (
+            <Text style={styles.submitButtonText}>Confirm Delivery</Text>
+            )}
+          </TouchableOpacity>
+          </View>
         </View>
       
     </KeyboardAvoidingView>
@@ -205,7 +239,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContainer: {
-    padding: 8,
+    padding: 4,
     paddingBottom: 90, // Extra padding to account for fixed button
   },
   header: {
@@ -225,9 +259,9 @@ const styles = StyleSheet.create({
   productCard: {
     flexDirection: 'row',
     backgroundColor: '#fff',
-    borderRadius: 4,
+    borderRadius: 2,
     padding: 16,
-    marginBottom: 8,
+    marginBottom: 4,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -257,9 +291,9 @@ const styles = StyleSheet.create({
   },
   ratingSection: {
     backgroundColor: '#fff',
-    borderRadius: 4,
+    borderRadius: 2,
     padding: 20,
-    marginBottom: 8,
+    marginBottom: 4,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -286,9 +320,9 @@ const styles = StyleSheet.create({
   },
   reviewTypeSection: {
     backgroundColor: '#fff',
-    borderRadius: 4,
+    borderRadius: 2,
     padding: 20,
-    marginBottom: 8,
+    marginBottom: 4,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -305,7 +339,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 10,
     paddingHorizontal: 16,
-    borderRadius: 4,
+    borderRadius: 2,
     borderWidth: 1,
     borderColor: '#e0e0e0',
     marginBottom: 12,
@@ -326,7 +360,7 @@ const styles = StyleSheet.create({
   },
   commentSection: {
     backgroundColor: '#fff',
-    borderRadius: 4,
+    borderRadius: 2,
     padding: 20,
     marginBottom: 16,
     shadowColor: '#000',
@@ -343,7 +377,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     minHeight: 150,
     textAlignVertical: 'top',
-    marginBottom: 8,
+    marginBottom: 4,
   },
   charCount: {
     fontSize: 12,
@@ -367,7 +401,7 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     backgroundColor: '#FF4500',
-    borderRadius: 12,
+    borderRadius: 2,
     padding: 18,
     alignItems: 'center',
     shadowColor: '#000',

@@ -209,7 +209,7 @@ function generateBody(stage, role) {
     case 'delivered':
       return role === 'vendor'
         ? '📍 The order has been successfully delivered to the specified address. Please confirm delivery now. (Only confirm if the order has been delivered successfully.)'
-        : '';
+        : 'The buyer confirmed he/she received the order. (You can now proceed to payment)';
 
     case 'cancelled':
       return role === 'buyer'

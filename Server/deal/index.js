@@ -5,8 +5,9 @@ const cors = require('cors');
 // const { generateDealId } = require('./utils');
 require('dotenv').config();
 const axios = require('axios');
-const { createNewDeal, findPartnerById, updateDealById, updateUserStatus, getConversationPartner, createNewProof } = require('./models');
+const { createNewDeal, findPartnerById, updateDealById, updateUserStatus, getConversationPartner, createNewProof, createShopReview } = require('./models');
 const { sendNotification, generateConversationId, sendNotificationForDealUpdateFromVendorToBuyer, sendNotificationForDealUpdateFromBuyerToVendor } = require('./utils');
+const pool = require('./db');
 const Deal = express();
 
 Deal.use(cors({
@@ -139,6 +140,21 @@ io.on('connection', async(socket) => {
             const response = await updateDealById({ order, new_stage, date, userId, nxt_stage, formData });
             if (!response) return callback({ success: false, data: '' });
 
+            if (new_stage === 'delivered' && userId === order.user_id) {
+                const {
+                    rows
+                } = await pool.query(`SELECT shop_id from shops WHERE user_id = $1`, [order.vendor_id])
+                await createShopReview({
+                    shop_id: rows[0].shop_id, 
+                    product_id: order.product_id, 
+                    buyer_id: order.user_id, 
+                    review: formData.review, 
+                    date, 
+                    comment: formData.comment, 
+                    rating: formData.rating
+                })
+            }
+
             // 2️⃣ Get both parties
             const partner = await findPartnerById({ user_id: order.vendor_id });
             const customer = await findPartnerById({ user_id: order.user_id });
@@ -158,6 +174,7 @@ io.on('connection', async(socket) => {
 
             // Vendor → Buyer updates
             if (
+                new_stage === 'delivered' && userId === order.vendor_id &&
                 ['shipping', 'delivered', 'evidence', 'payment'].includes(new_stage) ||
                 (new_stage === 'cancelled' && userId === order.vendor_id) ||
                 (userId === order.vendor_id && !['confirmed'].includes(new_stage))
@@ -175,7 +192,7 @@ io.on('connection', async(socket) => {
             else if (
                 new_stage === 'confirmed' ||
                 (new_stage === 'cancelled' && userId !== order.vendor_id) ||
-                (userId !== order.vendor_id && !['shipping', 'delivered'].includes(new_stage))
+                (userId !== order.vendor_id && !['shipping'].includes(new_stage))
             ) {
                 result = await sendNotificationForDealUpdateFromBuyerToVendor({
                     partner,

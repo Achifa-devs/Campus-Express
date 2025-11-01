@@ -55,7 +55,7 @@ export default function App() {
     // Foreground listener
     const unsubscribe = messaging().onMessage(async remoteMessage => {
     
-      console.log("room",JSON.parse(partner))
+      // console.log("room",JSON.parse(partner)) 
       // Show local notification with Notifee
       await notifee.displayNotification({
         title: remoteMessage.data?.title || 'New message',

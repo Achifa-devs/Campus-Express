@@ -424,7 +424,7 @@ export default function DealForVendor() {
 
                 <VendorActionCard
                   title="Confirm Delivery"
-                  icon="✅"
+                  icon="📦"
                   description="Upload proof of delivery evidence and confirm the order has been received"
                   onPress={() => navigation.navigate('deal_proof', {
                     deal,
@@ -452,7 +452,7 @@ export default function DealForVendor() {
                     if (deal?.order?.status?.completed?.buyer) {
                       navigation.navigate('deal_receipt', {
                         deal
-                      });
+                      }); 
                     }else{
                       setIsAlertVisible(true)
                     }
