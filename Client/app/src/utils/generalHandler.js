@@ -253,6 +253,32 @@ class Tools {
         }
     }   
 
+    static cyclicTimeWatch(pastDate, durationHours = 6) {
+        const start = new Date(pastDate);
+        const now = new Date();
+
+        // Milliseconds between now and the past date
+        const elapsedMs = now - start;
+
+        // Milliseconds for the full duration (e.g., 6 hours)
+        const durationMs = durationHours * 60 * 60 * 1000;
+
+        // Remaining time until duration expires
+        const remainingMs = Math.max(durationMs - elapsedMs, 0);
+
+        const hours = Math.floor(remainingMs / (1000 * 60 * 60));
+        const minutes = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((remainingMs % (1000 * 60)) / 1000);
+
+        return {
+            elapsedHours: Math.floor(elapsedMs / (1000 * 60 * 60)),
+            elapsedMinutes: Math.floor((elapsedMs % (1000 * 60 * 60)) / (1000 * 60)),
+            remaining: `${hours}h ${minutes}m ${seconds}s`,
+            expired: remainingMs <= 0
+        };
+    }
+
+
 
 }
 

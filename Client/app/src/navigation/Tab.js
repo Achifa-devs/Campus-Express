@@ -30,6 +30,7 @@ import { ChatStackScreen } from '../stacks/Chat';
 import { getSocket, initSocket } from '../services/socket';
 import { set_chat } from '../../redux/info/chat';
 import { DealStackScreen } from '../stacks/Deals';
+import { RefundStackScreen } from '../stacks/Refunds';
 
 
 const Tab = createBottomTabNavigator();
@@ -123,6 +124,8 @@ export default function StoreTab({navigation}) {
               iconName = focused ? 'person-circle' : 'person-circle-outline';
             }else if (route.name === 'Chat') {
               iconName = focused ? 'chatbubble' : 'chatbubble-outline';
+            }else if(route.name === 'Refunds'){
+              iconName = focused ? 'return-down-back' : 'return-down-back-outline'
             }else if(route.name === 'Deals'){
               iconName = focused ? 'pricetag' : 'pricetag-outline'
             }
@@ -146,6 +149,10 @@ export default function StoreTab({navigation}) {
         <Tab.Screen 
           name="Deals"  
           component={DealStackScreen} />
+
+        <Tab.Screen 
+          name="Refunds"  
+          component={RefundStackScreen} />
 
         <Tab.Screen 
           name="Sell"  

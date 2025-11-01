@@ -2081,6 +2081,11 @@
   dependencies:
     merge-options "^3.0.4"
 
+"@react-native-community/checkbox@^0.5.20":
+  version "0.5.20"
+  resolved "https://registry.npmjs.org/@react-native-community/checkbox/-/checkbox-0.5.20.tgz"
+  integrity sha512-NuTAOFmttPEX7cwDbVr5Rf0HR86zCzX2FllebMayxca//dFH6X5DLySftra/PC2K9kt42yashWK7T2Tucm5JTQ==
+
 "@react-native-community/cli-clean@13.6.9":
   version "13.6.9"
   resolved "https://registry.npmjs.org/@react-native-community/cli-clean/-/cli-clean-13.6.9.tgz"
@@ -7440,7 +7445,7 @@ react-native-webview@*, react-native-webview@^13.13.5:
     escape-string-regexp "^4.0.0"
     invariant "2.2.4"
 
-react-native@*, "react-native@^0.0.0-0 || >=0.60 <1.0", "react-native@>= 0.50.0", react-native@>=0.33, react-native@>=0.50.0, react-native@>=0.58.4, react-native@>=0.59, react-native@>=0.59.0, react-native@>=0.60.0, react-native@>=0.64.0, react-native@>=0.8.0, react-native@0.74.3:
+react-native@*, "react-native@^0.0.0-0 || >=0.60 <1.0", "react-native@>= 0.50.0", "react-native@>= 0.62", react-native@>=0.33, react-native@>=0.50.0, react-native@>=0.58.4, react-native@>=0.59, react-native@>=0.59.0, react-native@>=0.60.0, react-native@>=0.64.0, react-native@>=0.8.0, react-native@0.74.3:
   version "0.74.3"
   resolved "https://registry.npmjs.org/react-native/-/react-native-0.74.3.tgz"
   integrity sha512-UFutCC6WEw6HkxlcpQ2BemKqi0JkwrgDchYB5Svi8Sp4Xwt4HA6LGEjNQgZ+3KM44bjyFRpofQym0uh0jACGng==

@@ -484,7 +484,7 @@ function NavigationHandler() {
               if (name) {
                 console.log('📍 Current screen:', name);
 
-                if (name === 'home' || name === 'sell' || name === 'profile' || name === 'chat' || name === 'deals') {
+                if (name === 'home' || name === 'sell' || name === 'profile' || name === 'chat' || name === 'deals' || name === 'refunds') {
                   dispatch(set_nested_nav({ boolean: true, id: Tools.generateId() }));
                 } else {
                   dispatch(set_nested_nav({ boolean: false, id: Tools.generateId() }));

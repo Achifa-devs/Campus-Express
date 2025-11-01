@@ -103,9 +103,9 @@ const Satisfaction = ({ navigation }) => {
             [
               {
                 text: 'OK',
-                // onPress: () => navigation.navigate('deal_buyer', {
-                //   deal: deals.filter(item => item.order.order_id === deal.order.order_id)[0]
-                // })
+                onPress: () => navigation.navigate('deal_buyer', {
+                  deal: deals.filter(item => item.order.order_id === deal.order.order_id)[0]
+                })
               }
             ]
           );

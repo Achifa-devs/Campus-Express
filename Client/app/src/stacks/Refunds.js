@@ -29,8 +29,8 @@ import ReleaseFunds from "../screen/ReleaseFund";
 // import ChatList from "../screen/ChatList";
 // import ChatRoom from "../screen/ChatRoom";
 
-const DealStack = createNativeStackNavigator();
-export function DealStackScreen() {
+const RefundStack = createNativeStackNavigator();
+export function RefundStackScreen() {
   const dispatch = useDispatch()
 
     const { user } = useSelector(s => s.user);
@@ -39,9 +39,9 @@ export function DealStackScreen() {
     const route = useRoute()
 
     return (
-        <DealStack.Navigator>
+        <RefundStack.Navigator>
 
-            <DealStack.Screen
+            <RefundStack.Screen
                 options={{
                     header: ({ navigation }) => (
                         <View style={{
@@ -73,16 +73,16 @@ export function DealStackScreen() {
                                 fontWeight: 'bold', 
                                 color: '#111',
                             }}>
-                                Deals
+                                Refunds
                             </Text>
                         </View>
                     ),
                 }}
                 
-                name="deals" component={Deals}
+                name="refunds" component={Deals}
             />
 
-            <DealStack.Screen
+            <RefundStack.Screen
                 options={{
                     header: ({ navigation }) => (
                         <View style={{
@@ -114,7 +114,7 @@ export function DealStackScreen() {
                                 fontWeight: 'bold', 
                                 color: '#111',
                             }}>
-                                Deal
+                                Refund
                             </Text>
 
 
@@ -131,10 +131,10 @@ export function DealStackScreen() {
                     ),
                 }}
                 
-                name="deal_buyer" component={DealForBuyer}
+                name="refund_buyer" component={DealForBuyer}
             />
 
-            <DealStack.Screen
+            <RefundStack.Screen
                 options={{
                     header: ({ navigation }) => (
                         <View style={{
@@ -166,7 +166,7 @@ export function DealStackScreen() {
                                 fontWeight: 'bold', 
                                 color: '#111',
                             }}>
-                                Deal
+                                Refund
                             </Text>
 
                             <TouchableOpacity onPress={e => {
@@ -182,10 +182,10 @@ export function DealStackScreen() {
                     ),
                 }}
                 
-                name="deal_vendor" component={DealForVendor}
+                name="refund_vendor" component={DealForVendor}
             />
 
-            <DealStack.Screen
+            <RefundStack.Screen
                 options={{
                     header: ({ navigation }) => (
                         <View style={{
@@ -217,17 +217,17 @@ export function DealStackScreen() {
                                 fontWeight: 'bold', 
                                 color: '#111',
                             }}>
-                                Proof of Delivery
+                                Proof of Refund
                             </Text>
 
                         </View>
                     ),
                 }}
                 
-                name="deal_proof" component={ProofOfDeliveryUpload}
+                name="refund_proof" component={ProofOfDeliveryUpload}
             />
 
-            <DealStack.Screen
+            <RefundStack.Screen
                 options={{
                     header: ({ navigation }) => (
                         <View style={{
@@ -259,17 +259,17 @@ export function DealStackScreen() {
                                 fontWeight: 'bold', 
                                 color: '#111',
                             }}>
-                                Delivery Confirmation
+                                Refund Confirmation
                             </Text>
 
                         </View>
                     ),
                 }}
                 
-                name="deal_satisfaction" component={Satisfaction}
+                name="refund_satisfaction" component={Satisfaction}
             />
 
-            <DealStack.Screen
+            <RefundStack.Screen
                 options={{
                     header: ({ navigation }) => (
                         <View style={{
@@ -301,17 +301,17 @@ export function DealStackScreen() {
                                 fontWeight: 'bold', 
                                 color: '#111',
                             }}>
-                                Delivery Configuration
+                                Refund Configuration
                             </Text>
 
                         </View>
                     ),
                 }}
                 
-                name="deal_shipping" component={Shipping}
+                name="refund_shipping" component={Shipping}
             />
 
-            <DealStack.Screen
+            <RefundStack.Screen
                 options={{
                     header: ({ navigation }) => (
                         <View style={{
@@ -343,17 +343,17 @@ export function DealStackScreen() {
                                 fontWeight: 'bold', 
                                 color: '#111',
                             }}>
-                                Delivery Receipt
+                                Refund Receipt
                             </Text>
 
                         </View>
                     ),
                 }}
                 
-                name="deal_receipt" component={Receipt}
+                name="refund_receipt" component={Receipt}
             />
 
-            <DealStack.Screen
+            <RefundStack.Screen
                 options={{
                     header: ({ navigation }) => (
                         <View style={{
@@ -396,6 +396,6 @@ export function DealStackScreen() {
             />
 
 
-        </DealStack.Navigator>  
+        </RefundStack.Navigator>  
     ); 
 }
