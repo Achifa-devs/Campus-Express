@@ -5,7 +5,9 @@ const {
     findPartnerById,
     findDealsByUserId,
     findDealsByVendorId,
-    findTransactionByOrderId
+    findTransactionByOrderId,
+    findRefundsByVendorId,
+    findRefundsByUserId
 } = require("../models/deals");
 const { findProductById } = require("../models/product");
 
@@ -61,6 +63,50 @@ exports.getDeals = async function (payload) {
   return result;
 };
 
+exports.getRefunds = async function (payload) {
+  const { user_id } = payload;
+
+  // Find deals where user is the buyer
+  const user_as_buyer = await findRefundsByUserId({ user_id });
+
+  // Find deals where user is the vendor
+  const user_as_vendor = await findRefundsByVendorId({ user_id });
+
+  // Deals where user is the buyer (partner = vendor)
+  const deals_from_user_as_buyer = await Promise.all(
+    user_as_buyer.map(async (deal) => {
+      const partner = await findPartnerById({ user_id: deal.vendor_id });
+      const product = await findProductById({ product_id: deal.product_id }); // optional
+      const transaction = await findTransactionByOrderId({ order_id: deal.order_id})
+      return {
+        order: deal,
+        partner,
+        product: product[0],
+        transaction
+      };
+    })
+  );
+
+  // Deals where user is the vendor (partner = buyer)
+  const deals_from_user_as_vendor = await Promise.all(
+    user_as_vendor.map(async (deal) => {
+      const partner = await findPartnerById({ user_id: deal.user_id });
+      const product = await findProductById({ product_id: deal.product_id }); // optional
+      const transaction = await findTransactionByOrderId({ order_id: deal.order_id})
+      return {
+        order: deal,
+        partner,
+        product: product[0],
+        transaction
+      };
+    })
+  );
+
+  // Combine both
+  const result = [...deals_from_user_as_buyer, ...deals_from_user_as_vendor];
+
+  return result;
+};
 
 exports.updateDeal = async function (payload) {
   const { order_id,status,pick_up_channels } = payload;

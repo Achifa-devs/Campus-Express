@@ -20,12 +20,13 @@ import Deals from "../screen/Deals";
 import DealForBuyer from "../screen/DealForBuyer";
 import DealForVendor from "../screen/DealForVendor";
 import Tools from "../utils/generalHandler";
-import ProofOfDeliveryUpload from "../components/Deals/Evidence";
+import ProofOfDeliveryUpload from "../screen/Evidence";
 import Satisfaction from "../screen/Satisfaction";
 import Shipping from "../screen/Shipping";
 import Payment from "../screen/Payment";
 import Receipt from "../screen/Receipt";
 import ReleaseFunds from "../screen/ReleaseFund";
+import DisputeForBuyer from "../screen/DisputeForBuyer";
 // import ChatList from "../screen/ChatList";
 // import ChatRoom from "../screen/ChatRoom";
 
@@ -393,6 +394,48 @@ export function DealStackScreen() {
                 }}
                 
                 name="release_funds" component={ReleaseFunds}
+            />
+
+            <DealStack.Screen
+                options={{
+                    header: ({ navigation }) => (
+                        <View style={{
+                            height: 60,
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            backgroundColor: '#FFF',
+                            paddingHorizontal: 16,
+                            paddingVertical: 8,
+                            borderBottomWidth: 1,
+                            borderBottomColor: '#F0F0F0',
+                            shadowColor: '#000',
+                            shadowOffset: {
+                                width: 0,
+                                height: 2,
+                            },
+                            shadowOpacity: 0.05,
+                            shadowRadius: 3.84,
+                            elevation: 2,
+                            ...Platform.select({
+                                ios: {
+                                    paddingTop: 10,
+                                },
+                            })
+                        }}>
+                            <Text style={{
+                                fontSize: 20,
+                                fontWeight: 'bold', 
+                                color: '#111',
+                            }}>
+                                Dispute Form
+                            </Text>
+
+                        </View>
+                    ),
+                }}
+                
+                name="buyer_dispute" component={DisputeForBuyer}
             />
 
 

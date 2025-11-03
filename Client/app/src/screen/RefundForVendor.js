@@ -419,126 +419,14 @@ export default function DealForBuyer() {
       <View style={styles.bottomBar}>
         <TouchableOpacity 
           style={[styles.bottomButton, styles.cancelButton]}
-          onPress={e => {
-            if (!deal.order.status.delivered.vendor && deal.order.status.delivered.buyer) {
-              Alert.alert(
-                "Cancellation Fee Notice",
-                "Cancelling this transaction will incur a service charge of ₦70 in addition to the deduction of the shipping fee paid. These charges apply because both you and the vendor have confirmed that the item has been delivered. In accordance with our policy, the applicable fees will be deducted from your refund amount to cover administrative and logistics costs.",
-                [
-                  {
-                    text: "Learn More",
-                    onPress: () => {
-                      ''
-                    }
-                  },
-                  {
-                    text: "Continue",
-                    style: "default",
-                    onPress: () => {
-                      ''
-                    }
-                    
-                  },
-                  {
-                    text: "Cancel",
-                    style: "cancel"
-                  },
-                  
-                ]
-              )
-            }else{
-              Alert.alert(
-                "Cancellation Fee Notice",
-                "Cancelling this transaction will attract a processing fee of ₦70. This fee covers administrative and transfer costs associated with reversing the transaction. Please confirm that you wish to proceed with the cancellation before continuing.",
-                [
-                  {
-                    text: "Learn More",
-                    onPress: () => {
-                      ''
-                    }
-                  },
-                  {
-                    text: "Continue",
-                    style: "default",
-                    onPress: () => {
-                      ''
-                    }
-                    
-                  },
-                  {
-                    text: "Cancel",
-                    style: "cancel"
-                  },
-                  
-                ]
-              )
-            }
-          }}
+          onPress={handleCancel}
         >
           <Text style={styles.cancelButtonText}>Cancel Deal</Text>
         </TouchableOpacity>
         
         <TouchableOpacity
           style={[styles.bottomButton, styles.confirmButton]}
-          onPress={e => {
-            if (deal.order.status.delivered.vendor && deal.order.status.delivered.buyer) {
-              Alert.alert(
-                "Are you sure you want to initiate a dispute with this vendor? ",
-                "This action indicates that you’re dissatisfied with the transaction and wish to request a formal review. Starting a dispute will pause any ongoing deal progress until the matter is reviewed and resolved by our support team.",
-                [
-                  {
-                    text: "Learn More",
-                    onPress: () => {
-                      ''
-                    }
-                  },
-                  {
-                    text: "Continue",
-                    style: "default",
-                    onPress: () => {
-                      navigation.navigate('buyer_dispute', {
-                        deal
-                      })
-                    }
-                    
-                  },
-                  {
-                    text: "Cancel",
-                    style: "cancel"
-                  },
-                  
-                ]
-              )
-            }else{
-              Alert.alert(
-                "Dispute Not Allowed Yet",
-                "You cannot raise a dispute before the vendor has delivered the item. Please ensure that delivery has been completed and verified before initiating a dispute request.",
-                [
-                  {
-                    text: "Learn More",
-                    onPress: () => {
-                      ''
-                    }
-                  },
-                  {
-                    text: "Continue",
-                    style: "default",
-                    onPress: () => {
-                      navigation.navigate('buyer_dispute', {
-                        deal
-                      })
-                    }
-                    
-                  },
-                  {
-                    text: "Cancel",
-                    style: "cancel"
-                  },
-                  
-                ]
-              )
-            }
-          }}
+          onPress={handleConfirm}
         >
           <Text style={styles.confirmButtonText}>Raise Dispute</Text>
         </TouchableOpacity>

@@ -39,6 +39,7 @@ import { getMessaging } from "@react-native-firebase/messaging";
 import { navigationRef, notifeeNavigationRef } from "./root_nav";
 import NetworkCard from "../components/NetworkCard";
 import { set_deals } from "../../redux/info/deals";
+import DisputeModal from "../modals/Dispute";
 Sound.setCategory("Playback"); // ensure sound plays even in silent mode (iOS)
 function NavigationHandler() {
 
@@ -562,6 +563,15 @@ function NavigationHandler() {
                 sponsored_modal.visible === 1 ? 
                 
                 <Sponsorship visible={sponsored_modal.visible === 1 ? true: false}  onSelectPackage={''} onClose={e=> dispatch(set_sponsored_modal({data: null, visible: 0}))} />
+                : ''
+              )
+            }
+
+            {
+              (
+                sponsored_modal.visible !== 1 ? 
+                
+                <DisputeModal visible={true}  onSelectPackage={''} onClose={e=> dispatch(set_sponsored_modal({data: null, visible: 0}))} />
                 : ''
               )
             } 

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { 
   Dimensions, 
   Image, 
+  ScrollView, 
   StyleSheet, 
   Text, 
   TouchableOpacity, 
@@ -23,7 +24,7 @@ import ProofOfDeliveryUpload from './Evidence'
 import BottomModal from '../reusables/BtmModal'
 import AlertModal from '../components/Deals/AlertModal'
 // SMA-Lp3t-ZC3c-v4aKL
-export default function DealForVendor() {
+export default function RefundForBuyer() {
   const navigation = useNavigation();
   let { 
     deal
@@ -125,13 +126,13 @@ export default function DealForVendor() {
     </View>
   )
 
-  const VendorActionCard = ({ title, icon, description, onPress, variant = 'primary', disabled = false, completed = false }) => (
+  const BuyerActionCard = ({ title, icon, description, onPress, variant = 'primary', disabled = false, completed = false }) => (
     <TouchableOpacity activeOpacity={.8}
       style={[
         styles.vendorActionCard,
-        styles[`${variant}VendorActionCard`],
-        disabled && styles.disabledVendorActionCard,
-        completed && styles.completedVendorActionCard
+        styles[`${variant}BuyerActionCard`],
+        disabled && styles.disabledBuyerActionCard,
+        completed && styles.completedBuyerActionCard
       ]}
       onPress={onPress}
       disabled={disabled || completed}
@@ -148,8 +149,8 @@ export default function DealForVendor() {
         <View style={styles.vendorActionTextContainer}>
           <Text style={[
             styles.vendorActionCardTitle,
-            styles[`${variant}VendorActionCardTitle`],
-            (disabled || completed) && styles.disabledVendorActionCardTitle
+            styles[`${variant}BuyerActionCardTitle`],
+            (disabled || completed) && styles.disabledBuyerActionCardTitle
           ]}>
             {title}
           </Text>
@@ -161,7 +162,7 @@ export default function DealForVendor() {
       
       <Text style={[
         styles.vendorActionDescription,
-        (disabled || completed) && styles.disabledVendorActionDescription
+        (disabled || completed) && styles.disabledBuyerActionDescription
       ]}>
         {description}
       </Text>
@@ -214,7 +215,7 @@ export default function DealForVendor() {
   };
 
   const handleConfirm = () => {
-    console.log('Vendor understood the requirements');
+    console.log('Buyer understood the requirements');
     setIsAlertVisible(false);
   };
 
@@ -411,7 +412,7 @@ export default function DealForVendor() {
 
               {/* Action Buttons Grid - Updated to full width columns */}
               <View style={styles.vendorActionsGrid}>
-                <VendorActionCard
+                <BuyerActionCard
                   title="Start Shipping"
                   icon="🚚"
                   description="Mark the order as dispatched provide tracking information to the buyer"
@@ -421,7 +422,7 @@ export default function DealForVendor() {
                   completed={deal.order.status.shipping?.completed}
                 />
 
-                <VendorActionCard
+                <BuyerActionCard
                   title="Confirm Delivery"
                   icon="📦"
                   description="Upload proof of delivery evidence and confirm the order has been received"
@@ -436,7 +437,7 @@ export default function DealForVendor() {
                   completed={deal.order.status.delivered?.completed}
                 />
 
-                <VendorActionCard
+                <BuyerActionCard
                   title={
                     !deal?.order?.status?.completed?.buyer ?  
                     "Awaiting Customer Confirmation" 
@@ -883,7 +884,7 @@ const styles = StyleSheet.create({
     color: '#64748b',
     lineHeight: 20,
   },
-  // Vendor Management Styles
+  // Buyer Management Styles
   statusCard: {
     backgroundColor: '#fff',
     padding: 20,
@@ -930,7 +931,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
 
-  // New Vendor Action Card Styles
+  // New Buyer Action Card Styles
   vendorActionCard: {
     backgroundColor: '#fff',
     padding: 20,
@@ -947,24 +948,24 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#f1f5f9',
   },
-  primaryVendorActionCard: {
+  primaryBuyerActionCard: {
     borderLeftWidth: 4,
     borderLeftColor: '#3b82f6',
   },
-  secondaryVendorActionCard: {
+  secondaryBuyerActionCard: {
     borderLeftWidth: 4,
     borderLeftColor: '#26A69A',
   },
-  successVendorActionCard: {
+  successBuyerActionCard: {
     borderLeftWidth: 4,
     borderLeftColor: '#2ECC71',
   },
-  disabledVendorActionCard: {
+  disabledBuyerActionCard: {
     backgroundColor: '#f8fafc',
     borderColor: '#e2e8f0',
     opacity: 0.7,
   },
-  completedVendorActionCard: {
+  completedBuyerActionCard: {
     backgroundColor: '#f0fdf4',
     borderColor: '#dcfce7',
   },
@@ -1006,16 +1007,16 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     marginBottom: 4,
   },
-  primaryVendorActionCardTitle: {
+  primaryBuyerActionCardTitle: {
     color: '#3b82f6',
   },
-  secondaryVendorActionCardTitle: {
+  secondaryBuyerActionCardTitle: {
     color: '#26A69A',
   },
-  successVendorActionCardTitle: {
+  successBuyerActionCardTitle: {
     color: '#2ECC71',
   },
-  disabledVendorActionCardTitle: {
+  disabledBuyerActionCardTitle: {
     color: '#94a3b8',
   },
   completedText: {
@@ -1029,7 +1030,7 @@ const styles = StyleSheet.create({
     color: '#64748b',
     marginBottom: 12,
   },
-  disabledVendorActionDescription: {
+  disabledBuyerActionDescription: {
     color: '#94a3b8',
   },
   vendorActionCardFooter: {

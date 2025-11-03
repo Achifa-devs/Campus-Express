@@ -13,12 +13,12 @@ import {
   KeyboardAvoidingView
 } from 'react-native';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import DropdownComp from '../../reusables/Dropdown';
-import Tools from '../../utils/generalHandler';
+import DropdownComp from '../reusables/Dropdown';
+import Tools from '../utils/generalHandler';
 import axios from 'axios';
-import { getSocket } from '../../services/socket';
+import { getSocket } from '../services/socket';
 import { useDispatch, useSelector } from 'react-redux';
-import { set_deals } from '../../../redux/info/deals';
+import { set_deals } from '../../redux/info/deals';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 const ProofOfDeliveryUpload = () => {

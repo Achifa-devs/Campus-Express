@@ -5,7 +5,7 @@ const cors = require('cors');
 // const { generateDealId } = require('./utils');
 require('dotenv').config();
 const axios = require('axios');
-const { createNewDeal, findPartnerById, updateDealById, updateUserStatus, getConversationPartner, createNewProof, createShopReview } = require('./models');
+const { createNewDeal, findPartnerById, updateDealById, updateUserStatus, getConversationPartner, createNewProof, createShopReview, createNewDispute } = require('./models');
 const { sendNotification, generateConversationId, sendNotificationForDealUpdateFromVendorToBuyer, sendNotificationForDealUpdateFromBuyerToVendor } = require('./utils');
 const pool = require('./db');
 const Deal = express();
@@ -223,8 +223,6 @@ io.on('connection', async(socket) => {
                 date
             } = data;
 
-            console.log('deal: ', deal)
-
             // ✅ Create the proof record
             const proof = await createNewProof({
                 order: deal,
@@ -242,6 +240,86 @@ io.on('connection', async(socket) => {
                 date,
                 userId: deal.vendor_id, // or from deal data if available
                 nxt_stage: 'payment',
+            });
+
+            io.to(room_id).emit('deal_proof', { data: 
+                {
+                    proof,
+                    updatedDeal,
+                } 
+            });
+
+            // ✅ Return success response
+            callback({
+                success: true,
+                data: {
+                    proof,
+                    updatedDeal,
+                }
+            });
+
+        } catch (error) {
+            console.error('Error in deal_proof event:', error);
+            callback({
+                success: false,
+                error: error.message,
+            });
+        }
+    });
+
+    socket.on('deal_dispute', async (data, callback) => {
+        
+        try {
+            const {
+                room_id,
+                date,
+                order,
+                formData
+            } = data;
+
+            const {
+                disputeType,
+                disputeTypeOthers=null,
+                disputeDescription,
+                preferredResolution,
+                disputeProof=[],
+            } = formData
+
+            // console.log(disputeProof)
+
+            // ✅ Create the proof record 
+            const proof = await createNewDispute({
+                order_id: order.order_id,
+                reason: disputeTypeOthers ? disputeTypeOthers : disputeType,
+                description: disputeDescription,
+                resolution: preferredResolution,
+                proof: disputeProof,
+                date: date
+            });
+
+            // ✅ Update the deal stage
+            const updatedDeal = await updateDealById({
+                order,
+                new_stage: 'dispute',
+                date,
+                userId: order.user_id, // or from deal data if available
+                nxt_stage: 'return',
+            });
+            const partner = await findPartnerById({ user_id: order.vendor_id });
+
+            io.to(room_id).emit('deal_dispute', { data: 
+                {
+                    proof,
+                    updatedDeal,
+                } 
+            });
+
+            result = await sendNotificationForDealUpdateFromBuyerToVendor({
+                partner,
+                order,
+                room_id,
+                new_stage: 'dispute',
+                role: 'buyer',
             });
 
             // ✅ Return success response

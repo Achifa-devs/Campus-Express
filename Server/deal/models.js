@@ -60,6 +60,13 @@ exports.updateDealById = async function ({ order, new_stage, date, userId, nxt_s
       completedAt: date,
       initiator: userId
     };
+  }else if(new_stage === 'dispute'){
+    newStatus = {
+      outcome: "success",
+      completed: true,
+      completedAt: date,
+      initiator: userId
+    };
   }else if(new_stage === 'delivered'){
     newStatus = {
       outcome: "success",
@@ -140,6 +147,18 @@ exports.updateDealById = async function ({ order, new_stage, date, userId, nxt_s
       VALUES ($1, $2, $3, $4, $5, $6)
       RETURNING *`,
       [order, method, location, description, files, date]
+    );
+
+    return rows[0]; // returns the inserted record
+  };
+
+  // Create dispute
+  exports.createNewDispute = async ({ order_id, reason, description, resolution, proof, date }) => {
+    const { rows } = await pool.query(
+      `INSERT INTO disputes (order_id, reason, description, resolution, proof, date)
+      VALUES ($1, $2, $3, $4, $5, $6)
+      RETURNING *`,
+      [order_id, reason, description, resolution, proof, date]
     );
 
     return rows[0]; // returns the inserted record

@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet, StatusBar, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet, StatusBar, ActivityIndicator, Alert } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import useCyclicTimeWatch from '../hooks/Timer';
 
 export default function ReleaseFunds() {
@@ -11,9 +11,27 @@ export default function ReleaseFunds() {
   const {
     deal
   } = useRoute().params;
-  const { remaining, expired } = useCyclicTimeWatch(deal.order.status.delivered.completedAt, 6);
+  const navigation = useNavigation()
+  const { remaining, expired } = useCyclicTimeWatch(deal.order.status.delivered.completedAt, 12);
 
   const handleReleaseFunds = async () => {
+    Alert.alert(
+      "Funds Released Automatically",
+      "The funds have been released automatically after the 12-hour review period elapsed. This action complies with our policy, which states that once a customer confirms delivery, the payment will be released to the vendor after a 12-hour confirmation window.",
+      [
+        {
+          text: "Continue",
+          style: "default"
+        },
+        {
+          text: "Learn More",
+          style: "default",
+          onPress: () => {
+            
+          }
+        }
+      ]
+    )
     setIsProcessing(true);
     // Your release logic here
     setTimeout(() => setIsProcessing(false), 2000);
@@ -36,19 +54,19 @@ export default function ReleaseFunds() {
             </View>
             <View style={styles.orderHeaderText}>
               <Text style={styles.orderTitle}>Deal Summary</Text>
-              <Text style={styles.orderId}>Order #2341</Text>
+              <Text numberOfLines={1} style={styles.orderId}>Order #{deal.order.order_id}</Text>
             </View>
           </View>
 
           <View style={styles.divider} />
 
           <View style={styles.orderDetails}>
-            <InfoRow icon="person-outline" label="Vendor" value="James' Auto Parts" />
-            <InfoRow icon="bag-handle-outline" label="Product" value="Car Windshield Replacement" />
+            <InfoRow icon="person-outline" label="Vendor" value={`${deal.partner.fname}${deal.partner.lname}`} />
+            <InfoRow icon="bag-handle-outline" label="Product" value={deal.product.title} />
             <InfoRow 
               icon="card-outline" 
               label="Amount" 
-              value="₦12,500" 
+              value={"₦"+deal.order.price}
               highlight 
             />
           </View>
@@ -113,6 +131,35 @@ export default function ReleaseFunds() {
             <TouchableOpacity
               style={[styles.secondaryButton, styles.dangerButton]}
               activeOpacity={0.7}
+              onPress={e => {
+                Alert.alert(
+                  "Are you sure you want to initiate a dispute with this vendor? ",
+                  "This action indicates that you’re dissatisfied with the transaction and wish to request a formal review. Starting a dispute will pause any ongoing deal progress until the matter is reviewed and resolved by our support team.",
+                  [
+                    {
+                      text: "Learn More",
+                      onPress: () => {
+                        ''
+                      }
+                    },
+                    {
+                      text: "Continue",
+                      style: "default",
+                      onPress: () => {
+                        navigation.navigate('buyer_dispute', {
+                          deal
+                        })
+                      }
+                      
+                    },
+                    {
+                      text: "Cancel",
+                      style: "cancel"
+                    },
+                    
+                  ]
+                )
+              }}
             >
               <Icon name="flag-outline" size={18} color="#dc2626" />
               <Text style={[styles.secondaryButtonText, styles.dangerButtonText]}>
@@ -130,33 +177,33 @@ export default function ReleaseFunds() {
       </ScrollView>
         <View style={styles.bottomBar}>
             <Text style={{
-                color: expired ? '#ef4444' : '#22c55e',
-                fontWeight: '700',
-                fontSize: 14,
-                paddingHorizontal: 12,
-                paddingVertical: 6,
-                backgroundColor: expired ? '#fef2f2' : '#f0fdf4',
-                borderRadius: 6,
-                borderWidth: 1,
-                borderColor: expired ? '#fecaca' : '#bbf7d0',
-                overflow: 'hidden',
-                minWidth: 70,
-                textAlign: 'center'
+              color: expired ? '#ef4444' : '#22c55e',
+              fontWeight: '700',
+              fontSize: 14,
+              paddingHorizontal: 12,
+              paddingVertical: 6,
+              backgroundColor: expired ? '#fef2f2' : '#f0fdf4',
+              borderRadius: 6,
+              borderWidth: 1,
+              borderColor: expired ? '#fecaca' : '#bbf7d0',
+              overflow: 'hidden',
+              minWidth: 70,
+              textAlign: 'center'
             }}>
                 {expired ? "EXPIRED" : remaining}
             </Text>
             <Text style={{
-                color: expired ? '#dc2626' : '#15803d',
-                fontWeight: '600',
-                fontSize: 14,
-                paddingHorizontal: 8,
-                paddingVertical: 4,
-                backgroundColor: 'transparent',
-                borderRadius: 4,
-                overflow: 'hidden',
-                fontStyle: expired ? 'italic' : 'normal'
+              color: expired ? '#dc2626' : '#15803d',
+              fontWeight: '600',
+              fontSize: 14,
+              paddingHorizontal: 8,
+              paddingVertical: 4,
+              backgroundColor: 'transparent',
+              borderRadius: 4,
+              overflow: 'hidden',
+              fontStyle: expired ? 'italic' : 'normal'
             }}>
-                {expired ? "Funds released" : "Pending release"}
+              {expired ? "Funds released" : "Pending release"}
             </Text>
         </View>
     </View>

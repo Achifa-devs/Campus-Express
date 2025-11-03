@@ -20,12 +20,13 @@ import Deals from "../screen/Deals";
 import DealForBuyer from "../screen/DealForBuyer";
 import DealForVendor from "../screen/DealForVendor";
 import Tools from "../utils/generalHandler";
-import ProofOfDeliveryUpload from "../components/Deals/Evidence";
+import ProofOfDeliveryUpload from "../screen/Evidence";
 import Satisfaction from "../screen/Satisfaction";
 import Shipping from "../screen/Shipping";
 import Payment from "../screen/Payment";
 import Receipt from "../screen/Receipt";
 import ReleaseFunds from "../screen/ReleaseFund";
+import Refunds from "../screen/Refunds";
 // import ChatList from "../screen/ChatList";
 // import ChatRoom from "../screen/ChatRoom";
 
@@ -79,7 +80,7 @@ export function RefundStackScreen() {
                     ),
                 }}
                 
-                name="refunds" component={Deals}
+                name="refunds" component={Refunds}
             />
 
             <RefundStack.Screen

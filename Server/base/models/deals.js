@@ -26,6 +26,30 @@ exports.findDealsByVendorId = async function ({ user_id }) {
   return rows;
 };
 
+exports.findRefundsByUserId = async function ({ user_id }) {
+  const { rows } = await pool.query(
+    `
+      SELECT *
+      FROM refunds 
+      WHERE user_id = $1 
+    `,
+    [user_id]
+  );
+  return rows;
+};
+
+exports.findRefundsByVendorId = async function ({ user_id }) {
+  const { rows } = await pool.query(
+    `
+      SELECT *
+      FROM refunds 
+      WHERE vendor_id = $1 
+    `,
+    [user_id]
+  );
+  return rows;
+};
+
 exports.findTransactionByOrderId = async function ({ order_id }) {
   const { rows } = await pool.query(
     `
