@@ -46,8 +46,8 @@ export default function DealForVendor() {
   } = useSelector(s => s.user)
 
   useEffect(() => {
-    let new_deal = deals.filter(item => item.order.order_id === deal.order.order_id)[0];
-    setCancelled(new_deal.order.status.cancelled.completed);
+    let new_deal = deals.filter(item => item?.order?.order_id === deal?.order?.order_id)[0];
+    setCancelled(new_deal?.order?.status?.cancelled?.completed);
   }, [deals, deal])
 
   useEffect(() => {
@@ -418,7 +418,7 @@ export default function DealForVendor() {
                   onPress={() => navigation.navigate('deal_shipping', {deal})} 
                   variant="primary"
                   disabled={orderStatus !== 'shipping'}
-                  completed={deal.order.status.shipping?.completed}
+                  completed={deal.order.status.dispatched?.completed}
                 />
 
                 <VendorActionCard

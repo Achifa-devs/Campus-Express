@@ -278,7 +278,7 @@ const ProofOfDeliveryUpload = () => {
   return (
     <>
       {
-        !isLoading &&
+        isLoading &&
         <View style={{  
             height: '100%', 
             width: '100%',

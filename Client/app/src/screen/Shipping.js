@@ -147,7 +147,7 @@ const Shipping = () => {
               ]
             );
           } else {
-            setLoading(false)              
+            setLoading(false);
             Alert.alert("Error", "Unable to update this deal. Please try again.");
           }
         }     

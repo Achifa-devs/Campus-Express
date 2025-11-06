@@ -9,7 +9,7 @@ export const initSocket = async (userId) => {
 
   const token = await Memory.get("token");
 
-  socket = io("http://192.168.0.3:3456", {  
+  socket = io("http://192.168.0.3:2020", {  
   // socket = io("https://campus-express-1.onrender.com", { 
   // socket = io("https://campus-express-production.up.railway.app", {
     transports: ["websocket"],

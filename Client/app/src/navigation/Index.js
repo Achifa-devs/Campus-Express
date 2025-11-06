@@ -9,7 +9,7 @@ import Sound from 'react-native-sound';
 import WelcomeScreen from "./Welcome";
 import { set_mode } from "../../redux/info/mode";
 import { NavigationContainer } from "@react-navigation/native";
-import { AppState, Dimensions, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, AppState, Dimensions, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { set_campus } from "../../redux/info/campus";
 import { PaystackProvider } from 'react-native-paystack-webview';
 import { CampusSelection } from "../modals/Campus";
@@ -43,7 +43,6 @@ import DisputeModal from "../modals/Dispute";
 import { set_dispute_modal } from "../../redux/modal/dispute";
 Sound.setCategory("Playback"); // ensure sound plays even in silent mode (iOS)
 function NavigationHandler() {
-
   const { locale_modal } = useSelector(s => s.locale_modal);
   const { sub_modal } = useSelector(s => s.sub_modal);
   const { ads_modal } = useSelector(s => s.ads_modal);
@@ -260,6 +259,8 @@ function NavigationHandler() {
 
   useEffect(() => {
     if(!socket)return;
+    const processedDeals = new Set();
+
     socket.on("message", async ({ newMessage, partner }) => {
       const {
         sender_id,
@@ -317,42 +318,49 @@ function NavigationHandler() {
       dispatch(set_is_active({online: true, user_id: partnerId, id: Tools.generateId(10)}))
     })
 
-    socket.on('deal_update', async({
-      success, data
-    }) => {
-      Alert.alert('Deal Update', 'A deal has been updated. Please check your deals section for details.', [{ text: 'OK' }]);
-      if (success) {
-        await playSound()
-        
-        dispatch(set_deals(
-          deals.map(item =>
-            item.order.order_id === data.order_id
-              ? { ...item, order: data }
-              : item
-          )
-        ))
+    socket.on('deal_update', async ({ data }) => {
+      
+      if (data.user_id !== user.user_id) return;
+
+      // prevent duplicate updates by order_id
+      if (processedDeals.has(data.order_id)) {
+        console.log("⚠️ Duplicate deal update skipped:", data.order_id);
+        return;
       }
-    })
+
+      processedDeals.add(data.order_id);
+
+      console.log("✅ Deal update received:", data.order_id);
+
+      await playSound();
+      let new_deals = deals.map(item =>
+        item.order.order_id === data.order_id
+          ? { ...item, order: data }
+          : item
+      )
+      dispatch(
+        set_deals(new_deals)
+      );
+    });
 
     socket.on('deal_proof', async({
-      success, data
+      data
     }) => {
       const {
         proof,
         updatedDeal,
       } = data;
-      Alert.alert('Deal Update', 'A deal has been updated. Please check your deals section for details.', [{ text: 'OK' }]);
-      if (success) {
-        await playSound()
-        
-        dispatch(set_deals(
-          deals.map(item =>
-            item.order.order_id === updatedDeal.order_id
-              ? { ...item, order: updatedDeal }
-              : item
-          )
-        ))
-      }
+      if (updatedDeal.user_id !== user.user_id) return;
+      await playSound()
+      const new_deals = set_deals(
+        deals.map(item =>
+          item.order.order_id === updatedDeal.order_id
+            ? { ...item, order: updatedDeal }   
+            : item
+        )
+      )
+      dispatch(new_deals)
+     
     })
   }, [socket])
 
@@ -494,14 +502,16 @@ function NavigationHandler() {
     dispute_modal
   } = useSelector(s => s.dispute_modal)
   useEffect(() => {
-    if(!deals) return;
+    if (!deals || !Array.isArray(deals)) return;
+
     deals.forEach(deal => {
-      console.log("deal stage: ", deal.order.stage);
-      if(deal.order.stage.toLowerCase() === 'return' ){
-        dispatch(set_dispute_modal({data: deal, visible: 0}))
+      const stage = deal?.order?.stage?.toLowerCase?.();
+      if (stage === 'return') {
+        dispatch(set_dispute_modal({ data: deal, visible: 0 }));
       }
     });
   }, [deals]);
+
 
   const routeNameRef = useRef();
   // const navigationRef = useRef(); 

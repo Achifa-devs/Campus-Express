@@ -53,7 +53,7 @@ export default function DealForBuyer() {
   }, [params?.deal])
 
   useEffect(() => {
-    if (deal?.order?.order_id) {
+    if (deal?.order?.order_id && Array.isArray(deals)) {
       const updatedDeal = deals.find(d => d.order.order_id === deal.order.order_id)
       if (updatedDeal) setDeal(updatedDeal)
     }
@@ -374,15 +374,15 @@ export default function DealForBuyer() {
                 step={3}
                 title="Delivery dispatched"
                 description="Your deal has been dispatched and awaiting customers delivery"
-                isCompleted={deal.order.status.shipping.completed}
-                isActive={!deal.order.status.shipping.completed}
+                isCompleted={deal.order.status.dispatched.completed}
+                isActive={!deal.order.status.dispatched.completed}
               />
               <TrackingStep  
                 step={4}
                 title="Delivery confirmed"
                 description="Deal will be marked complete"
                 isCompleted={deal.order.status.delivered.completed && deal.order.status.delivered.buyer}
-                isActive={deal.order.status.delivered.completed && deal.order.status.delivered.buyer}
+                isActive={!deal.order.status.delivered.completed && !deal.order.status.delivered.buyer}
               />
 
               <TrackingStep

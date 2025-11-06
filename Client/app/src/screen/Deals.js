@@ -27,6 +27,9 @@ export default function Deals() {
 
     const [refreshing, setRefreshing] = useState(false);
     const [loading, setLoading] = useState(true);
+    const {
+        deals
+    } = useSelector(s => s.deals)
     
     const {
         user
@@ -81,12 +84,9 @@ export default function Deals() {
         getDeals();
     }, [user])
 
-    const {
-        deals
-    } = useSelector(s => s.deals)
-    
+
     useEffect(() => {
-        if(!deals && !Array.isArray(deals))return;
+        if(!deals || !Array.isArray(deals))return;
         // console.log("deals: ", deals);
         setDealList((prev) => {
             // const newActive = deals.filter(item => item.order.stage.toLowerCase() !== 'completed' && item.order.stage.toLowerCase() !== 'cancelled');
