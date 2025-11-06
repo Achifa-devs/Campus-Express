@@ -7,11 +7,62 @@ import {
   StyleSheet,
   Image,
   ScrollView,
+  Linking,
+  Dimensions
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const DisputeModal = ({ visible, disputeData, onConfirm, onReject }) => {
   if (!visible) return null;
+
+  // Sample evidence data structure
+  const evidence = disputeData?.evidence || [
+    { type: 'image', uri: disputeData?.proof, name: 'proof_image.jpg' },
+    // { type: 'file', uri: 'https://example.com/document.pdf', name: 'supporting_document.pdf' },
+    { type: 'image', uri: 'https://example.com/photo2.jpg', name: 'additional_photo.jpg' },
+  ];
+
+  const handleOpenFile = async (uri) => {
+    try {
+      const canOpen = await Linking.canOpenURL(uri);
+      if (canOpen) {
+        await Linking.openURL(uri);
+      }
+    } catch (error) {
+      console.log('Error opening file:', error);
+    }
+  };
+
+  const renderEvidenceItem = (item, index) => {
+    if (item.type === 'image') {
+      return (
+        <View key={index} style={styles.evidenceItem}>
+          <Image 
+            source={{ uri: item.uri }} 
+            style={styles.evidenceImage} 
+            resizeMode="cover"
+          />
+          <Text style={styles.evidenceName} numberOfLines={1}>
+            {item.name}
+          </Text>
+        </View>
+      );
+    } else {
+      return (
+        <TouchableOpacity 
+          key={index} 
+          style={[styles.evidenceItem, styles.fileItem]}
+          onPress={() => handleOpenFile(item.uri)}
+        >
+          <Ionicons name="document-text" size={24} color="#FF6A00" />
+          <Text style={styles.evidenceName} numberOfLines={1}>
+            {item.name}
+          </Text>
+          <Ionicons name="open-outline" size={16} color="#666" />
+        </TouchableOpacity>
+      );
+    }
+  };
 
   return (
     <Modal 
@@ -50,16 +101,26 @@ const DisputeModal = ({ visible, disputeData, onConfirm, onReject }) => {
                   {disputeData?.reason || 'No reason provided.'} 
                 </Text>
               </View>
+            </View>
 
-              {/* Proof Image */}
-              {disputeData?.proof && (
-                <View style={styles.proofSection}>
-                  <Text style={styles.proofLabel}>Supporting Evidence:</Text>
-                  <Image 
-                    source={{ uri: disputeData.proof }} 
-                    style={styles.proofImage} 
-                    resizeMode="cover"
-                  />
+            {/* Evidence Section */}
+            <View style={styles.evidenceSection}>
+              <View style={styles.sectionHeader}>
+                <Ionicons name="images" size={20} color="#333" />
+                <Text style={styles.sectionLabel}>Supporting Evidence</Text>
+                <Text style={styles.evidenceCount}>
+                  ({evidence.length} {evidence.length === 1 ? 'item' : 'items'})
+                </Text>
+              </View>
+              
+              {evidence.length > 0 ? (
+                <View style={styles.evidenceGrid}>
+                  {evidence.map(renderEvidenceItem)}
+                </View>
+              ) : (
+                <View style={styles.noEvidence}>
+                  <Ionicons name="folder-open" size={32} color="#CCC" />
+                  <Text style={styles.noEvidenceText}>No evidence provided</Text>
                 </View>
               )}
             </View>
@@ -68,7 +129,7 @@ const DisputeModal = ({ visible, disputeData, onConfirm, onReject }) => {
             <View style={styles.noteBox}>
               <Ionicons name="information-circle" size={16} color="#6C757D" />
               <Text style={styles.noteText}>
-                During review, funds are temporarily held. Please verify the claim based on your records.
+                During review, funds are temporarily held. Please verify the claim based on your records and the evidence provided.
               </Text>
             </View>
           </ScrollView>
@@ -97,23 +158,24 @@ const DisputeModal = ({ visible, disputeData, onConfirm, onReject }) => {
   );
 };
 
+const h = Dimensions.get('window').height;
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.7)',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
+    padding: 0,
   },
-    container: {
+  container: {
     width: '100%',
-    maxWidth: 400,
-    height: '85%', // slightly more breathing room
+    // maxWidth: 400,
+    height: h * 0.9,
     backgroundColor: '#FFF',
-    borderRadius: 12,
+    // borderRadius: 12,
     overflow: 'hidden',
     elevation: 8,
-    },
+  },
   header: {
     alignItems: 'center',
     padding: 24,
@@ -131,31 +193,37 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    flexGrow: 1,
   },
   description: {
     fontSize: 14,
     lineHeight: 20,
     color: '#666',
-    textAlign: 'center',
+    textAlign: 'justify',
     paddingHorizontal: 20,
     paddingVertical: 16,
     backgroundColor: '#FAFAFA',
   },
   detailSection: {
     padding: 20,
+    paddingBottom: 0,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 12,
   },
   sectionLabel: {
     fontSize: 16,
     fontWeight: '600',
     color: '#333',
-    marginBottom: 12,
   },
   detailBox: {
     backgroundColor: '#F8F9FA',
     borderRadius: 8,
     padding: 16,
     borderLeftWidth: 4,
+    marginVertical: 12,
     borderLeftColor: '#FF6A00',
   },
   detailLabel: {
@@ -169,21 +237,57 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     color: '#555',
   },
-  proofSection: {
-    marginTop: 16,
+  evidenceSection: {
+    padding: 20,
   },
-  proofLabel: {
+  evidenceCount: {
     fontSize: 14,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 8,
+    color: '#666',
+    marginLeft: 'auto',
   },
-  proofImage: {
-    width: '100%',
-    height: 200,
+  evidenceGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+  },
+  evidenceItem: {
+    width: '48%',
+    backgroundColor: '#F8F9FA',
     borderRadius: 8,
+    padding: 12,
     borderWidth: 1,
     borderColor: '#E0E0E0',
+  },
+  evidenceImage: {
+    width: '100%',
+    height: 120,
+    borderRadius: 6,
+    marginBottom: 8,
+  },
+  fileItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  evidenceName: {
+    fontSize: 12,
+    color: '#555',
+    flex: 1,
+    marginHorizontal: 8,
+  },
+  noEvidence: {
+    alignItems: 'center',
+    padding: 32,
+    backgroundColor: '#FAFAFA',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#EEE',
+    borderStyle: 'dashed',
+  },
+  noEvidenceText: {
+    fontSize: 14,
+    color: '#999',
+    marginTop: 8,
   },
   noteBox: {
     flexDirection: 'row',
@@ -220,10 +324,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 8,
     elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
   },
   invalidButton: {
     backgroundColor: '#DC3545',

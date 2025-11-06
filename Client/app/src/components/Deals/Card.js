@@ -53,11 +53,11 @@ export default function Card({ item }) {
               style={styles.mainImage}
               source={{ uri: item?.product?.thumbnail_id }}
             />
-            <View style={styles.typeIndicator}>
+            {/* <View style={styles.typeIndicator}>
               <Text style={styles.typeText}>
                 {getTransactionType()}
               </Text>
-            </View>
+            </View> */}
           </View>
           
           {/* Product details */}

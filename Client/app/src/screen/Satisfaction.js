@@ -74,7 +74,7 @@ const Satisfaction = ({ navigation }) => {
       Alert.alert('Comment Too Short', 'Please provide a more detailed comment (at least 10 characters)');
       return;
     }
-    // setIsSubmitting(true);
+    setIsSubmitting(true);
     socket.emit(
       'deal_update',
       {
@@ -122,26 +122,28 @@ const Satisfaction = ({ navigation }) => {
 
 
   return (
-    <KeyboardAvoidingView 
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
-    >
-        {
+    <>
+      {
 
-          isSubmitting&&
-          <View style={{
-              flex: 1,
-              width: Dimensions.get('window').width,
-              height: Dimensions.get('window').height,
-              justifyContent: 'center',
-              alignItems: 'center',
-              position: 'absolute', top: 0, left: 0, zIndex: 100,
-              backgroundColor: 'rgba(255, 251, 246, 0.2)', // Fully transparent
-          }}>
-              <ActivityIndicator size="large" color="#FF4500" />
-          </View>
-        }
+        isSubmitting&&
+        <View style={{
+            flex: 1,
+            width: Dimensions.get('window').width,
+            height: Dimensions.get('window').height,
+            justifyContent: 'center',
+            alignItems: 'center',
+            position: 'absolute', top: 0, left: 0, zIndex: 100,
+            backgroundColor: 'rgba(255, 251, 246, 0.2)', // Fully transparent
+        }}>
+            <ActivityIndicator size="large" color="#FF4500" />
+        </View>
+      }
+      
+      <KeyboardAvoidingView 
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
+      >
         <View style={styles.contentContainer}>
           <ScrollView 
           contentContainerStyle={styles.scrollContainer}
@@ -225,8 +227,9 @@ const Satisfaction = ({ navigation }) => {
           </TouchableOpacity>
           </View>
         </View>
-      
-    </KeyboardAvoidingView>
+        
+      </KeyboardAvoidingView>
+    </>
   );
 }; 
 

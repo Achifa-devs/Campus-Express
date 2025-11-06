@@ -40,6 +40,7 @@ import { navigationRef, notifeeNavigationRef } from "./root_nav";
 import NetworkCard from "../components/NetworkCard";
 import { set_deals } from "../../redux/info/deals";
 import DisputeModal from "../modals/Dispute";
+import { set_dispute_modal } from "../../redux/modal/dispute";
 Sound.setCategory("Playback"); // ensure sound plays even in silent mode (iOS)
 function NavigationHandler() {
 
@@ -60,6 +61,20 @@ function NavigationHandler() {
   const { is_connected } = useSelector(s => s?.is_connected);
   const [newMessage, setNewMessage] = useState({})
 
+  const playSound = async () => {
+    const ding = new Sound("sound.wav", Sound.MAIN_BUNDLE, (error) => {
+      if (error) {
+        console.log("Failed to load the sound", error);
+        return;
+      }
+      ding.play((success) => {
+        if (!success) {
+          console.log("Playback failed due to audio decoding errors");
+        }
+        ding.release(); // free memory after playback
+      });
+    });
+  }
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener(state => {
       dispatch(set_is_connected(!!(state.isConnected && state.isInternetReachable)));
@@ -168,7 +183,7 @@ function NavigationHandler() {
     chat && chat.map(room => {
       room.partner && socket?.emit('join_room', { otherUserId: room.partner.user_id });
     })
-  }, [chat, socket])
+  }, [chat, socket])   
 
   useEffect(() => {
     if (!chat) return;
@@ -186,7 +201,7 @@ function NavigationHandler() {
 
   
 
-  function updateChat ({
+  async function updateChat ({
     sender_id,
     receiver_id,
     content,
@@ -237,18 +252,7 @@ function NavigationHandler() {
       dispatch(set_chat(updatedChatList));
       setChatBool(false);
       // ✅ Play notification sound
-      const ding = new Sound("sound.wav", Sound.MAIN_BUNDLE, (error) => {
-        if (error) {
-          console.log("Failed to load the sound", error);
-          return;
-        }
-        ding.play((success) => {
-          if (!success) {
-            console.log("Playback failed due to audio decoding errors");
-          }
-          ding.release(); // free memory after playback
-        });
-      });
+      await playSound();
       // Dispatch updated chat
     }
   }
@@ -316,11 +320,35 @@ function NavigationHandler() {
     socket.on('deal_update', async({
       success, data
     }) => {
+      Alert.alert('Deal Update', 'A deal has been updated. Please check your deals section for details.', [{ text: 'OK' }]);
       if (success) {
+        await playSound()
+        
         dispatch(set_deals(
           deals.map(item =>
             item.order.order_id === data.order_id
               ? { ...item, order: data }
+              : item
+          )
+        ))
+      }
+    })
+
+    socket.on('deal_proof', async({
+      success, data
+    }) => {
+      const {
+        proof,
+        updatedDeal,
+      } = data;
+      Alert.alert('Deal Update', 'A deal has been updated. Please check your deals section for details.', [{ text: 'OK' }]);
+      if (success) {
+        await playSound()
+        
+        dispatch(set_deals(
+          deals.map(item =>
+            item.order.order_id === updatedDeal.order_id
+              ? { ...item, order: updatedDeal }
               : item
           )
         ))
@@ -462,6 +490,19 @@ function NavigationHandler() {
     fetchSponsors();
   }, [user]); // runs whenever campus changes
 
+  const {
+    dispute_modal
+  } = useSelector(s => s.dispute_modal)
+  useEffect(() => {
+    if(!deals) return;
+    deals.forEach(deal => {
+      console.log("deal stage: ", deal.order.stage);
+      if(deal.order.stage.toLowerCase() === 'return' ){
+        dispatch(set_dispute_modal({data: deal, visible: 0}))
+      }
+    });
+  }, [deals]);
+
   const routeNameRef = useRef();
   // const navigationRef = useRef(); 
 
@@ -569,7 +610,7 @@ function NavigationHandler() {
 
             {
               (
-                sponsored_modal.visible !== 1 ? 
+                dispute_modal.visible === 1 ? 
                 
                 <DisputeModal visible={true}  onSelectPackage={''} onClose={e=> dispatch(set_sponsored_modal({data: null, visible: 0}))} />
                 : ''

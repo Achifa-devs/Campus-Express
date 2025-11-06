@@ -9,18 +9,18 @@ const { width } = Dimensions.get('window');
 const ITEM_WIDTH = (width - 40) / 3; // Account for padding
 
 const statusList = [
-  { name: 'time-outline', activeName: 'active', label: 'Active' },
-  { name: 'checkmark-done-outline', activeName: 'completed', label: 'Completed' },
-  { name: 'close-circle-outline', activeName: 'cancelled', label: 'Cancelled'},
+  { name: 'cart-outline', activeName: 'purchases', label: 'Purchase(s)' },
+  { name: 'pricetag-outline', activeName: 'sales', label: 'Sale(s)' },
+  // { name: 'close-circle-outline', activeName: 'cancelled', label: 'Cancelled'},
 ];
 
 
 
 const Status = React.memo(({sendData}) => {
     const navigation = useNavigation();
-    const [activeStatus, setActiveStatus] = useState('Active');
+    const [activeStatus, setActiveStatus] = useState('Purchase(s)');
     const handleClick = () => {
-        sendData(activeStatus);
+      sendData(activeStatus);
     };
 
     useEffect(() => {

@@ -14,7 +14,7 @@ const {
   updateUserPhoneById,
   updateUserProfileById,
 } = require("../models/users");
-const tokenTemplate = require('../utils/token');
+const tokenTemplate = require('../email_templates/token');
 
 
 const bcrypt = require("bcryptjs");

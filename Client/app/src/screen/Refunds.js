@@ -8,23 +8,20 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { set_deals } from '../../redux/info/deals';
 
-export default function Refunds() {
+export default function Deals() {
 
-    const [activeStatus, setActiveStatus] = useState('Active');
+    const [activeStatus, setActiveStatus] = useState('Purchase(s)');
     const [List, setList] = useState([]);
     const [dealList, setDealList] = useState({
-        active: [],
-        completed: [],
-        cancelled: []
+        purchases: [],
+        sales: []
     });
 
     useEffect(() => {
-        if(activeStatus === 'Active'){
-            setList(dealList.active)
-        }else if(activeStatus === 'Completed'){
-            setList(dealList.completed)
-        }else{
-            setList(dealList.cancelled)
+        if(activeStatus === 'Purchase(s)'){
+            setList(dealList.purchases)
+        }else if(activeStatus === 'Sale(s)'){
+            setList(dealList.sales)
         }
     }, [activeStatus, dealList]);
 
@@ -48,12 +45,12 @@ export default function Refunds() {
 
     const handleRefresh = async() => {
         setRefreshing(true);
-        getRefunds();
+        getDeals();
     };
  
     const dispatch = useDispatch()
-    function getRefunds () {
-        axios.get('http://10.134.85.3:5432/refunds', {params: {user_id: user?.user_id}}).then(({data}) => {
+    function getDeals () {
+        axios.get('http://192.168.0.3:5432/refunds', {params: {user_id: user?.user_id}}).then(({data}) => {
             const res = data.data;
             dispatch(set_deals(res))
             setRefreshing(false);
@@ -70,7 +67,7 @@ export default function Refunds() {
         <TouchableOpacity style={styles.emptyState} onPress={e => navigation.navigate('Home')}>
           <>
             <Text style={styles.emptyStateText}>
-              {`No ${activeStatus} refunds found`}
+              {`No ${activeStatus} deals found`}
             </Text>
           </>
           <Text style={styles.emptyStateSubtext}>
@@ -81,7 +78,7 @@ export default function Refunds() {
 
     useEffect(() => {
         if(!user) return;
-        getRefunds();
+        getDeals();
     }, [user])
 
     const {
@@ -92,14 +89,17 @@ export default function Refunds() {
         if(!deals && !Array.isArray(deals))return;
         // console.log("deals: ", deals);
         setDealList((prev) => {
-            const newActive = deals.filter(item => item.order.stage.toLowerCase() !== 'completed' && item.order.stage.toLowerCase() !== 'cancelled');
-            const newCompleted = deals.filter(item => item.order.stage.toLowerCase() === 'completed');
-            const newCancelled = deals.filter(item => item.order.stage.toLowerCase() === 'cancelled');
+            // const newActive = deals.filter(item => item.order.stage.toLowerCase() !== 'completed' && item.order.stage.toLowerCase() !== 'cancelled');
+            // const newCompleted = deals.filter(item => item.order.stage.toLowerCase() === 'completed');
+            // const newCancelled = deals.filter(item => item.order.stage.toLowerCase() === 'cancelled');
+
+            const purchases = deals.filter(item => item.order.user_id === user.user_id && item.order.vendor_id !== user.user_id);
+            const sales = deals.filter(item => item.order.vendor_id === user.user_id && item.order.user_id !== user.user_id);
+
             return {
                 ...prev,
-                active: newActive,
-                completed: newCompleted,
-                cancelled: newCancelled
+                purchases: purchases,
+                sales: sales,
             };
         });
     }, [deals])

@@ -68,20 +68,26 @@ async function updateFirebaseToken(payload) {
 
 // ✅ Function 3: Send Firebase Notification
 async function sendFirebaseNotification(payload) {
-  const { token, data } = payload;
-  const { type } = data;
-  if(type === 'deal'){
-    const { title, body, media, order_id } = data;
-    const result = await sendPushOnNewDeal(token, title, body, media, order_id);
-    if (result.success) return result;
-    else throw new Error("Error sending firebase notification: " + result.message);
-  }else if(type /** Chat */){
-    const { title, body, room, partner } = data;
-    const result = await sendNoticeForNewMsg(token, title, body, room, partner);
-    if (result.success) return result;
-    else throw new Error("Error sending firebase notification: " + result.error);
-  }else{
-
+  try {
+    const { token, data } = payload;
+    const { type } = data;
+    if(type === 'deal'){
+      const { title, body, media, order_id } = data;
+      const result = await sendPushOnNewDeal(token, title, body, media, order_id);
+      console.log("Firebase notification result: ", result);
+      if (result.success) return result;
+      else throw new Error("Error sending firebase notification: " + result.message);
+    }else if(type /** Chat */){
+      const { title, body, room, partner } = data;
+      const result = await sendNoticeForNewMsg(token, title, body, room, partner);
+      if (result.success) return result;
+      else throw new Error("Error sending firebase notification: " + result.error);
+    }else{
+  
+    }
+  } catch (error) {
+    console.log("error: ", error);
+    throw new Error("Internal server error: " + error.message);
   }
 
 }

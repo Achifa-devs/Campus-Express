@@ -104,9 +104,9 @@ const ProofOfDeliveryUpload = () => {
             ));
             handleSubmit()
             // setOrderStatus(newStatus);
-            // setLoading(false)  
+            setIsLoading(false)  
           } else {
-            // setLoading(false)              
+            setIsLoading(false)              
             Alert.alert("Error", "Unable to update this deal. Please try again.");
           }
         }     
@@ -278,7 +278,7 @@ const ProofOfDeliveryUpload = () => {
   return (
     <>
       {
-        isLoading &&
+        !isLoading &&
         <View style={{  
             height: '100%', 
             width: '100%',

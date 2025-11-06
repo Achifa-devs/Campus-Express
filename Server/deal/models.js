@@ -153,16 +153,49 @@ exports.updateDealById = async function ({ order, new_stage, date, userId, nxt_s
   };
 
   // Create dispute
-  exports.createNewDispute = async ({ order_id, reason, description, resolution, proof, date }) => {
-    const { rows } = await pool.query(
-      `INSERT INTO disputes (order_id, reason, description, resolution, proof, date)
-      VALUES ($1, $2, $3, $4, $5, $6)
-      RETURNING *`,
-      [order_id, reason, description, resolution, proof, date]
-    );
+  exports.createNewDispute = async ({
+    order_id,
+    reason,
+    description,
+    resolution,
+    proof,
+    date,
+    user_id,
+    to
+  }) => {
+    try {
+      // Validation: Ensure required fields are provided
+      if (!order_id || !reason || !user_id || !to) {
+        throw new Error("Missing required dispute fields.");
+      }
 
-    return rows[0]; // returns the inserted record
+      const query = `
+        INSERT INTO disputes (
+          order_id, reason, description, resolution, proof, date, status, "from", "to"
+        )
+        VALUES ($1, $2, $3, $4, $5, $6, 'open', $7, $8)
+        RETURNING *;
+      `;
+
+      const values = [
+        order_id,
+        reason,
+        description || null,
+        resolution || null,
+        proof || null,
+        date || new Date(),
+        user_id,
+        to
+      ];
+
+      const { rows } = await pool.query(query, values);
+      return rows[0];
+    } catch (error) {
+      console.error("Error creating dispute:", error.message);
+      throw new Error("Unable to create dispute. Please try again later.");
+    }
   };
+
 
   // Create new shop review
 exports.createShopReview = async function ({ shop_id, product_id, buyer_id, review, date, comment, rating }) {

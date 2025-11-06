@@ -138,14 +138,14 @@ const DisputeForBuyer = () => {
     };
     const handleSubmit = () => {
       if (validateForm()) {
-      // setLoading(true);
+      setLoading(true);
         socket.emit(
           'deal_dispute',
           {
             room_id: Tools.generateConversationId(user.user_id, deal.partner.user_id),
             order: deal.order,
             userId: user.user_id,
-            date: new Date(),
+            date: new Date(), 
             formData,
             
           },

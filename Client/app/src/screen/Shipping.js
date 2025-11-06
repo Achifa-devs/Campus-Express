@@ -118,8 +118,8 @@ const Shipping = () => {
           order: deal.order,
           userId: user.user_id,
           date: new Date(),
-          new_stage: "shipping",
-          nxt_stage: "delivered",
+          new_stage: "dispatched",
+          nxt_stage: "delivery",
           formData
         },
         callback => { 

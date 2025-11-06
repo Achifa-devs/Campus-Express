@@ -22,16 +22,16 @@ const server = CHAT.listen(process.env.PORT, () => {
 
 CHAT.use(cors({
   origin: '*',
-  // origin: "https://campus-express-production.up.railway.app", // your frontend dev origin
-  // credentials: true,
+  origin: "https://campus-express-production.up.railway.app", // your frontend dev origin
+  credentials: true,
 }));
 
 const io = new Server(server, {
   cors: {
     origin: '*',
-    // origin: "https://campus-express-production.up.railway.app",   // or your client URL
+    origin: "https://campus-express-production.up.railway.app",   // or your client URL
     methods: ["GET", "POST"],
-    // credentials: true
+    credentials: true
   }
 });
 const onlineUsers = new Map(); // userId -> Set of socketIds

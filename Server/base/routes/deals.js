@@ -1,5 +1,5 @@
 const express = require('express');
-const { getDealsHandler, getDealHandler, createDealHandler, updateDealHandler, getRefundsHandler } = require('../controllers/deals');
+const { getDealsHandler, getDealHandler, getRefundsHandler } = require('../controllers/deals');
 const dealRouter = express.Router();
 const parser = require('body-parser').json({ limit: '1024mb' });
 

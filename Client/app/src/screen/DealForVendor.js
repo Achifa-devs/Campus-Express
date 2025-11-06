@@ -432,7 +432,7 @@ export default function DealForVendor() {
                     },
                   })}
                   variant="secondary"
-                  disabled={orderStatus !== 'delivered'}
+                  disabled={orderStatus !== 'delivery'}
                   completed={deal.order.status.delivered?.completed}
                 />
 
@@ -444,7 +444,7 @@ export default function DealForVendor() {
                   icon="🧾"
                   description={ 
                     !deal?.order?.status?.completed?.buyer ? 
-                    "You can’t claim payment until the customer confirms satisfaction with the delivery." 
+                    "You won't receive payment until the customer confirms satisfaction with the delivery." 
                     : "Request your money once the customer says they’re satisfied with the deal."}
                   // onPress={handleClaimPayment}
                   onPress={e => {

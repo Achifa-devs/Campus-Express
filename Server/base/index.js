@@ -105,3 +105,25 @@ cron.schedule("* * * * *", async () => {
   } 
 });    
 // Remove or comment out the test email code at the bottom
+
+// const registrationTemplate = require('./email_templates/welcome');
+// const tools = require('./utils/tools');
+
+// (async () => {
+//   try {
+//     // Generate the email HTML template
+//     const mail = registrationTemplate('Akpulu.F', 'akpulufabian@gmail.com', 'Unizik, Awka');
+    
+//     // Send the email
+//     const emailSent = await tools.send_email(
+//       'Token for Password Recovery',
+//       mail,
+//       'akpulufabian@gmail.com'
+//     );
+
+//     console.log('Email sent:', emailSent);
+//   } catch (error) {
+//     console.error('Error sending email:', error);
+//   }
+// })
+// ();

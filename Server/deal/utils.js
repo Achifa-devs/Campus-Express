@@ -20,7 +20,7 @@ exports.sendNotification = async ({ customer, partner, order, room_id }) => {
 
   try {
     const response = await axios.post(
-      "https://base-three-opal.vercel.app/firebase/notification",
+      "http://192.168.0.3:5432/firebase/notification",
       {
         token: partner.fcm,
         data: {
@@ -74,7 +74,7 @@ exports.sendNotificationForDealUpdateFromVendorToBuyer = async ({ customer, orde
 
   try {
     const response = await axios.post(
-      "https://base-three-opal.vercel.app/firebase/notification",
+      "http://192.168.0.3:5432/firebase/notification",
       {
         token: customer.fcm,
         data: {
@@ -128,7 +128,7 @@ exports.sendNotificationForDealUpdateFromBuyerToVendor = async ({ partner, order
 
   try {
     const response = await axios.post(
-      "https://base-three-opal.vercel.app/firebase/notification",
+      "http://192.168.0.3:5432/firebase/notification",
       {
         token: partner.fcm,
         data: {

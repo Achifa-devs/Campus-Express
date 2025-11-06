@@ -134,8 +134,10 @@ io.on('connection', async(socket) => {
 
     socket.on('deal_update', async (data, callback) => {
         try {
-            const { order, new_stage, date, userId, room_id, nxt_stage, formData=null } = data;
+            const { order, new_stage, date, userId, nxt_stage, formData=null } = data;
 
+
+            const room_id = generateConversationId(order.user_id, order.vendor_id);
             // 1️⃣ Update the deal record
             const response = await updateDealById({ order, new_stage, date, userId, nxt_stage, formData });
             if (!response) return callback({ success: false, data: '' });
@@ -242,6 +244,8 @@ io.on('connection', async(socket) => {
                 nxt_stage: 'payment',
             });
 
+            const room_id = generateConversationId(deal.user_id, deal.vendor_id);
+            // console.log('Emitting to room:', room_id);
             io.to(room_id).emit('deal_proof', { data: 
                 {
                     proof,
@@ -294,7 +298,9 @@ io.on('connection', async(socket) => {
                 description: disputeDescription,
                 resolution: preferredResolution,
                 proof: disputeProof,
-                date: date
+                date: date,
+                user_id: userId === order.user_id ? userId : order.vendor_id,
+                to: userId === order.user_id ? order.vendor_id : order.user_id
             });
 
             // ✅ Update the deal stage

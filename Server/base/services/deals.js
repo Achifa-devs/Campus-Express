@@ -7,7 +7,10 @@ const {
     findDealsByVendorId,
     findTransactionByOrderId,
     findRefundsByVendorId,
-    findRefundsByUserId
+    findRefundsByUserId,
+    findDisputesByIds,
+    findDisputesAsVendor,
+    findDisputesAsBuyer
 } = require("../models/deals");
 const { findProductById } = require("../models/product");
 
@@ -26,6 +29,8 @@ exports.getDeals = async function (payload) {
 
   // Find deals where user is the vendor
   const user_as_vendor = await findDealsByVendorId({ user_id });
+  
+  // Find all disputes related to this user
 
   // Deals where user is the buyer (partner = vendor)
   const deals_from_user_as_buyer = await Promise.all(
@@ -33,11 +38,14 @@ exports.getDeals = async function (payload) {
       const partner = await findPartnerById({ user_id: deal.vendor_id });
       const product = await findProductById({ product_id: deal.product_id }); // optional
       const transaction = await findTransactionByOrderId({ order_id: deal.order_id})
+      const disputes = await findDisputesAsBuyer({ order_id: deal.order_id });
+
       return {
         order: deal,
         partner,
         product: product[0],
-        transaction
+        transaction,
+        disputes
       };
     })
   );
@@ -47,12 +55,14 @@ exports.getDeals = async function (payload) {
     user_as_vendor.map(async (deal) => {
       const partner = await findPartnerById({ user_id: deal.user_id });
       const product = await findProductById({ product_id: deal.product_id }); // optional
-      const transaction = await findTransactionByOrderId({ order_id: deal.order_id})
+      const transaction = await findTransactionByOrderId({ order_id: deal.order_id});
+      const disputes = await findDisputesAsVendor({ order_id: deal.order_id });
       return {
         order: deal,
         partner,
         product: product[0],
-        transaction
+        transaction,
+        disputes
       };
     })
   );
@@ -77,12 +87,14 @@ exports.getRefunds = async function (payload) {
     user_as_buyer.map(async (deal) => {
       const partner = await findPartnerById({ user_id: deal.vendor_id });
       const product = await findProductById({ product_id: deal.product_id }); // optional
-      const transaction = await findTransactionByOrderId({ order_id: deal.order_id})
+      const transaction = await findTransactionByOrderId({ order_id: deal.order_id });
+      const disputes = await findDisputesAsBuyer({ order_id: deal.order_id });
       return {
         order: deal,
         partner,
         product: product[0],
-        transaction
+        transaction,
+        disputes
       };
     })
   );
@@ -92,12 +104,14 @@ exports.getRefunds = async function (payload) {
     user_as_vendor.map(async (deal) => {
       const partner = await findPartnerById({ user_id: deal.user_id });
       const product = await findProductById({ product_id: deal.product_id }); // optional
-      const transaction = await findTransactionByOrderId({ order_id: deal.order_id})
+      const transaction = await findTransactionByOrderId({ order_id: deal.order_id });
+      const disputes = await findDisputesAsVendor({ order_id: deal.order_id });
       return {
         order: deal,
         partner,
         product: product[0],
-        transaction
+        transaction,
+        disputes
       };
     })
   );

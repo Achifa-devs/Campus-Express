@@ -10,21 +10,18 @@ import { set_deals } from '../../redux/info/deals';
 
 export default function Deals() {
 
-    const [activeStatus, setActiveStatus] = useState('Active');
+    const [activeStatus, setActiveStatus] = useState('Purchase(s)');
     const [List, setList] = useState([]);
     const [dealList, setDealList] = useState({
-        active: [],
-        completed: [],
-        cancelled: []
+        purchases: [],
+        sales: []
     });
 
     useEffect(() => {
-        if(activeStatus === 'Active'){
-            setList(dealList.active)
-        }else if(activeStatus === 'Completed'){
-            setList(dealList.completed)
-        }else{
-            setList(dealList.cancelled)
+        if(activeStatus === 'Purchase(s)'){
+            setList(dealList.purchases)
+        }else if(activeStatus === 'Sale(s)'){
+            setList(dealList.sales)
         }
     }, [activeStatus, dealList]);
 
@@ -53,7 +50,7 @@ export default function Deals() {
  
     const dispatch = useDispatch()
     function getDeals () {
-        axios.get('https://base-three-opal.vercel.app/deals', {params: {user_id: user?.user_id}}).then(({data}) => {
+        axios.get('http://192.168.0.3:5432/deals', {params: {user_id: user?.user_id}}).then(({data}) => {
             const res = data.data;
             dispatch(set_deals(res))
             setRefreshing(false);
@@ -92,14 +89,17 @@ export default function Deals() {
         if(!deals && !Array.isArray(deals))return;
         // console.log("deals: ", deals);
         setDealList((prev) => {
-            const newActive = deals.filter(item => item.order.stage.toLowerCase() !== 'completed' && item.order.stage.toLowerCase() !== 'cancelled');
-            const newCompleted = deals.filter(item => item.order.stage.toLowerCase() === 'completed');
-            const newCancelled = deals.filter(item => item.order.stage.toLowerCase() === 'cancelled');
+            // const newActive = deals.filter(item => item.order.stage.toLowerCase() !== 'completed' && item.order.stage.toLowerCase() !== 'cancelled');
+            // const newCompleted = deals.filter(item => item.order.stage.toLowerCase() === 'completed');
+            // const newCancelled = deals.filter(item => item.order.stage.toLowerCase() === 'cancelled');
+
+            const purchases = deals.filter(item => item.order.user_id === user.user_id && item.order.vendor_id !== user.user_id);
+            const sales = deals.filter(item => item.order.vendor_id === user.user_id && item.order.user_id !== user.user_id);
+
             return {
                 ...prev,
-                active: newActive,
-                completed: newCompleted,
-                cancelled: newCancelled
+                purchases: purchases,
+                sales: sales,
             };
         });
     }, [deals])

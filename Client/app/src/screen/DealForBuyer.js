@@ -358,31 +358,39 @@ export default function DealForBuyer() {
             <View style={styles.trackingContainer}>
               <TrackingStep 
                 step={1}
-                title="Deal Requested"
+                title="Deal placed"
                 description="Your deal has been submitted"
                 isCompleted={true}
                 isActive={false}
               />
               <TrackingStep 
                 step={2}
-                title="Payment Processing"
-                description="Payment is being verified"
+                title="Payment processed"
+                description="Payment is processed successfully"
                 isCompleted={true}
                 isActive={false}
               />
               <TrackingStep 
                 step={3}
-                title="Confirmation"
-                description="Waiting for your confirmation"
-                isCompleted={false}
-                isActive={true}
+                title="Delivery dispatched"
+                description="Your deal has been dispatched and awaiting customers delivery"
+                isCompleted={deal.order.status.shipping.completed}
+                isActive={!deal.order.status.shipping.completed}
               />
               <TrackingStep  
                 step={4}
-                title="Completed"
+                title="Delivery confirmed"
                 description="Deal will be marked complete"
-                isCompleted={false}
-                isActive={false}
+                isCompleted={deal.order.status.delivered.completed && deal.order.status.delivered.buyer}
+                isActive={deal.order.status.delivered.completed && deal.order.status.delivered.buyer}
+              />
+
+              <TrackingStep
+                step={5}
+                title="Deal completed"
+                description="Your deal has been successfully completed"
+                isCompleted={deal.order.status.completed.completed && deal.order.status.completed.buyer}
+                isActive={deal.order.status.completed.completed && deal.order.status.completed.buyer}
               />
             </View>
           </View>

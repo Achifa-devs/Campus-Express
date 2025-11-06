@@ -38,6 +38,47 @@ exports.findRefundsByUserId = async function ({ user_id }) {
   return rows;
 };
 
+exports.findDisputesAsBuyer = async function ({ order_id }) {
+  const { 
+    rows 
+  } = await pool.query(
+    `
+      SELECT *
+      FROM disputes 
+      WHERE order_id = $1 
+    `,
+    [order_id]
+  );
+  return rows;
+}
+exports.findDisputesAsVendor = async function ({ order_id }) {
+  const { 
+    rows 
+  } = await pool.query(
+    `
+      SELECT *
+      FROM disputes 
+      WHERE order_id = $1  
+    `,
+    [order_id]
+  );
+  return rows;
+}
+
+exports.findDisputesByIds = async function ({ user_id }) {
+  const { 
+    rows 
+  } = await pool.query(
+    `
+      SELECT *
+      FROM disputes 
+      WHERE to = $1 
+    `,
+    [user_id]
+  );
+  return rows;
+}
+
 exports.findRefundsByVendorId = async function ({ user_id }) {
   const { rows } = await pool.query(
     `
