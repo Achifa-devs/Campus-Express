@@ -12,7 +12,7 @@ export default function page() {
             
               <h1 style={{ color: '#fff', fontSize: '4vh', fontWeight: '500' }}>Campus Sphere Policies</h1>
               
-              <small className='overview'>Welcome to Campus Sphere Nigeria - your trusted campus marketplace. Below you'll find all our policies designed to create a safe, fair, and transparent trading environment for our campus community.</small>
+              <small className='overview'>Welcome to Campus Sphere Nigeria - your trusted campus marketplace. Below you&apos;ll find all our policies designed to create a safe, fair, and transparent trading environment for our campus community.</small>
         </header>
 
         
@@ -62,7 +62,7 @@ export default function page() {
                 </p>
                 <p>
                     3. Platform Usage:
-                    - Campus Sphere provides the platform but isn't involved in individual transactions
+                    - Campus Sphere provides the platform but isn&apos;t involved in individual transactions
                     - Users are responsible for their interactions and transactions
                     - We may suspend accounts violating these terms
                 </p>
@@ -74,7 +74,7 @@ export default function page() {
                 <p>
                     1. Transaction Fees:
                     - Standard platform fee of 2.5% applies to all successful transactions
-                    - Fees are deducted automatically from the seller's payment
+                    - Fees are deducted automatically from the vendor&apos;s payment
                     - No fees for browsing, listing, or messaging
                 </p>
                 <p>
@@ -132,7 +132,7 @@ export default function page() {
                 </p>
                 <p>
                     3. Final Decision:
-                    - Campus Sphere's decision is final in all disputes
+                    - Campus Sphere&apos;s decision is final in all disputes
                     - Repeated disputes may result in account review or suspension
                     - Serious cases may be referred to campus authorities
                 </p>

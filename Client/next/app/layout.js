@@ -125,7 +125,7 @@ export default async function RootLayout({ children }) {
           crossOrigin="anonymous"
         />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
-        <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+        {/* <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script> */}
 
         {/* Structured Data */}
         <StructuredData data={websiteSchema} />
