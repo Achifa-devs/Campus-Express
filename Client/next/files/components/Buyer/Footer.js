@@ -307,7 +307,7 @@ const bottomFooterStyles = {
       </div>
 
       <div style={bottomFooterStyles}>
-        <p style={{ margin: 0, color: '#fff'}}>&copy; 2024 Campus Sphere. All Rights Reserved.</p>
+        <p style={{ margin: 0, color: '#fff'}}>&copy; {new Date().getUTCFullYear()} Campus Sphere. All Rights Reserved.</p>
       </div>
     </footer>
   );

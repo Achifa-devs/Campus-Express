@@ -509,13 +509,13 @@ const Header = () => {
                       window.location.href = '/store' : window.location.href = '/login'
                     }} style={{
                       height: '40px',
-                      width: '100px',
+                      width: 'fit-content',
                       textAlign: 'center',
                       color: '#ffff',
                       borderRadius: '5px',
                       lineHeight: '1.6',
                       margin: '10px auto',
-                      padding: '5px',
+                      padding: '5px 10px',
                       fontWeight: '500',
                     }}>
                       Get Started

@@ -22,6 +22,8 @@ export default function Page() {
     window.location.href = uri;
   };
 
+
+
   return (
     <>
       
@@ -221,31 +223,31 @@ export default function Page() {
 
         <div className="vision-section">
           <div className='vision-header'>
-            <div class="logo">Campus Sphere</div>
-            <div class="tagline">Bridging the gap between students and vendors</div>
+            <div className="logo">Campus Sphere</div>
+            <div className="tagline">Bridging the gap between students and vendors</div>
           </div>
-          <div class="vision-card">
+          <div className="vision-card">
               <h2>Our Vision</h2>
               <p>&quot;To be the leading platform that empowers students and campus vendors by bridging gaps and creating a seamless marketplace experience.&quot;</p>
           </div>
-          <div class="mission-section">
+          <div className="mission-section">
             <h2>Our Mission</h2>
             
-            <div class="mission-grid">
-              <div class="mission-card">
-                  <div class="mission-icon">①</div>
+            <div className="mission-grid">
+              <div className="mission-card">
+                  <div className="mission-icon">①</div>
                   <h3>End Information Asymmetry</h3>
                   <p>To end information asymmetry between campus vendors and customers, ensuring that everyone has access to the right information at the right time.</p>
               </div>
               
-              <div class="mission-card">
-                  <div class="mission-icon">②</div>
+              <div className="mission-card">
+                  <div className="mission-icon">②</div>
                   <h3>Secure Transactions</h3>
                   <p>To improve security through escrow services, providing a safe and trustworthy transaction environment for all users.</p>
               </div>
               
-              <div class="mission-card">
-                  <div class="mission-icon">③</div>
+              <div className="mission-card">
+                  <div className="mission-icon">③</div>
                   <h3>Vendor Visibility</h3>
                   <p>To improve the visibility of vendors&quot; ads to customers across Nigerian campuses, maximizing their reach and opportunities for growth.</p>
               </div>
@@ -298,7 +300,8 @@ export default function Page() {
         </div>
 
         <div className="team-section">
-          <div class="team-header">
+          <br />
+          <div className="team-header">
             <h1>Meet Our Team</h1>
             <p style={{
               textAlign: 'center',
@@ -313,20 +316,37 @@ export default function Page() {
             }}>The passionate individuals building CampusConnect to bridge the gap between students and campus vendors across Nigeria.</p>
           </div>
           
-          <div class="founder-section">
+          <div className="founder-section" >
             
-            <div class="team-grid">
-              <div class="team-card founder-card">
-                <img src="https://res.cloudinary.com/daqbhghwq/image/upload/v1746981002/1742973114382_ldrmy5.jpg" alt="Founder" class="team-img" />
-                <div class="team-info">
-                  <span class="team-role founder-role">Founder & CEO</span>
-                  <h3 class="team-name">Akpulu Fabian</h3>
-                  <p class="team-title">Product Vision & Strategy | Software Design & Engineering</p>
-                  <p class="team-bio">Serial entrepreneur with 5+ years experience in building e-commerce platforms across Africa.</p>
-                  {/* <div class="social-links">
-                    <a href="#" class="social-link">in</a>
-                    <a href="#" class="social-link">tw</a>
-                    <a href="#" class="social-link">ig</a>
+            <div className="team-grid" style={{justifyContent: 'center', alignItems: 'center' , display: 'flex', gap: '40px', flexWrap: 'wrap'}}>
+              <div className="team-card founder-card" style={{height: '650px'}}>
+                <img src="https://res.cloudinary.com/daqbhghwq/image/upload/v1746981002/1742973114382_ldrmy5.jpg" alt="Founder" className="team-img" />
+                <div className="team-info">
+                  <span className="team-role founder-role">Founder & CEO</span>
+                  <h3 className="team-name">Akpulu Fabian</h3>
+                  <p className="team-title">Product Vision & Strategy | Software Design & Engineering</p>
+                  <p className="team-bio" style={{textAlign: 'center'}}>Serial entrepreneur with 5+ years experience in building E-commerce & Fintech platforms across Africa.</p>
+                  {/* <div className="social-links">
+                    <a href="#" className="social-link">in</a>
+                    <a href="#" className="social-link">tw</a>
+                    <a href="#" className="social-link">ig</a>
+                  </div> */}
+                </div>
+              </div>
+
+              <div className="team-card founder-card" style={{height: '650px'}}>
+                <img src="https://res.cloudinary.com/daqbhghwq/image/upload/v1757403785/IMG-20250809-WA0017_ili5nn.jpg" alt="Founder" className="team-img" />
+                <div className="team-info">
+                  <span className="team-role founder-role">Co-Founder & CFO</span>
+                  <h3 className="team-name">Oluwajomiloju Anjorin</h3>
+                  <p className="team-title">Investment Strategist | Business Growth & Advisory</p>
+                  <p className="team-bio" style={{textAlign: 'center'}}>Investor with over 5 years of experience in driving innovation and sustainable business growth across Africa.</p>
+
+
+                  {/* <div className="social-links">
+                    <a href="#" className="social-link">in</a>
+                    <a href="#" className="social-link">tw</a>
+                    <a href="#" className="social-link">ig</a>
                   </div> */}
                 </div>
               </div>

@@ -69,7 +69,23 @@ const BuyerLayout = ({children}) => {
     //     })
     // }
 
+    // useEffect(() => {
+    //     // Any data fetching can be done here
+    //     if ("Notification" in window) {
+    //     // Ask the user for permission to show notifications
+    //     Notification.requestPermission().then(permission => {
+    //         if (permission === "granted") {
+    //         // Show notification
+    //         new Notification("New Code Update!", {
+    //             body: "A new version of the code is now available. Click to refresh.",
+    //             icon: "https://example.com/icon.png"
+    //         });
+    //         }
+    //     });
+    //     }
+    // }, []);
     
+        
 
     useEffect(() => {
         // Add a request interceptor to modify headers

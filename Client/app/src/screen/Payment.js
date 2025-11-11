@@ -97,7 +97,7 @@ export default function Payment() {
       bank_code: bankName
     };
 
-    fetch(`http://10.253.129.3:5432/bank/verification`, {
+    fetch(`https://base-three-opal.vercel.app/bank/verification`, {
       method: 'POST',
       headers: {
         "Content-Type": "application/json"
@@ -130,7 +130,7 @@ export default function Payment() {
       return;
     }
     setIsLoading(true);
-    axios.post('http://10.253.129.3:5432/shop/payment/update', {
+    axios.post('https://base-three-opal.vercel.app/shop/payment/update', {
       validatedAcct, user_id: user.user_id
     }).then(({data}) => {
       // console.log(data.data)

@@ -1296,7 +1296,8 @@ export default function NewListing() {
 
                            
                             {
-                                
+
+                                category_state !== 'Lodge & Apartments' &&
                                 <div className="input-cnt">
                                     <label style={{display: 'flex', width: '250px', fontSize: 'small'}} htmlFor="">Stock {category_state === 'Lodge & Apartments' ? '(How many of this lodge is vacant)' : 'How many of this item is available in your warehouse'}</label>
                                     <input defaultValue={stock.current} onInput={e => productStock(e.target.value)}  type="number" name="stock" id="" />
@@ -1406,6 +1407,7 @@ export default function NewListing() {
                                             }}>edit</button>
                                             
                                         </section>
+                                        {/* // Stock */}
                                         <section className='shadow-md' style={{pointerEvent: 'all',padding: '10px', display: 'flex', alignItems: 'center', margin: '5px 0px', justifyContent: 'space-between', width: '100%'}}>
                                             <span style={{margin: '8px 0px 0px 0px'}}>
                                                 <input checked={!!shipping_range?.out_state?.selected} onClick={e => 
@@ -1468,12 +1470,6 @@ export default function NewListing() {
                                 category_state === 'Lodge & Apartments'
                                 ?
                                     <>
-                                    
-
-                                        <div className="input-cnt">
-                                            <label htmlFor="">Lodge Name</label>
-                                            <input  type="text" onInput={e=> productLodgeName(e.target.value)} name='Lodge Name' defaultValue={lodge_name.current} placeholder="Lodge Name" id="" />
-                                        </div>
 
                                         <div className="input-cnt">
                                             <label htmlFor="">Flat Location (Down/Up Floor)</label>
@@ -1490,47 +1486,6 @@ export default function NewListing() {
                                             <input onInput={e=> productAddress2(e.target.value)} type="text" name="Address2" defaultValue={address2.current} placeholder="Address 2" id="" />
                                         </div>
 
-                                        <div className="input-cnt">
-                                            <label htmlFor="">Address 3 (Optional)</label>
-                                            <input onInput={e=> productAddress3(e.target.value)} type="text" name="Address3" defaultValue={address3.current} placeholder="Address 3" id="address3" />
-                                        </div>
-
-                                        <div className="input-cnt">
-                                            <label htmlFor="">Address 4 (Optional)</label>
-                                            <input onInput={e=> productAddress4(e.target.value)} type="text" name="Address4" defaultValue={address4.current} placeholder="Address 4" id="address4" />
-                                        </div>
-
-                                        <div className="input-cnt">
-                                            <label htmlFor="">Country</label>
-
-                                            <select defaultValue={country.current} onInput={e=> productCountry(e.target.value)} name="Country" placeholder="" id="">
-                                                <option value="">Select Country</option>
-                                                <option selected={true} value="Nigeria">Nigeria</option>
-                                            </select>
-                                        </div>
-
-                                        <div className="input-cnt">
-                                            <label htmlFor="">State</label>
-
-                                            <select defaultValue={state.current} onInput={e=> productState(e.target.value)} name="State" placeholder="" id="" >
-                                                <option value="">Select State</option>
-                                                {
-                                                    country_list.map((item,index) => 
-                                                        true  === item.name
-                                                        ?
-                                                        <option selected key={index} value={item.name}>{item.name}</option>
-                                                        :
-                                                        <option key={index} value={item.name}>{item.name}</option>
-                                                    )
-                                                }
-                                            </select>
-                                        </div>
-
-                                        <div className="input-cnt">
-                                            <label htmlFor="">City/Region <small style={{fontSize: 'x-small'}}>(e.g Ifite-Awka, OKofia-Nnewi)</small></label>
-                                            <input onInput={e=> productCity(e.target.value)} city='City' type="text" name='Region' placeholder='City/Region (e.g Ifite-Awka, OKofia-Nnewi)' />
-
-                                        </div>
                                     </>
                                     :
                                     ''

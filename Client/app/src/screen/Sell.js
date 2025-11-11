@@ -65,7 +65,7 @@ const ShopScreen = () => {
   let [is_promo_active, set_is_promo_active] = useState(false)
 
   useEffect(() => {
-    axios.get('http://10.253.129.3:5432/vendor/promo').then(({
+    axios.get('https://base-three-opal.vercel.app/vendor/promo').then(({
       data
     }) => {
     if(data.success && data.data){
@@ -280,32 +280,35 @@ const ShopScreen = () => {
 
   const [modalVisible, setModalVisible] = useState(false);
   const toggleModal = () => {
-    let p = (shop.subscription.plan)
-    let publishable = p === 'free' ? 2 : p === 'basic' ? 7 : p === 'standard' ? 20 : 10000000000
+    setModalVisible(!modalVisible);
+    // For subscription modal
     
-    if (userAds.length < publishable) {
-      setModalVisible(!modalVisible);
-    } else {
-      Alert.alert(
-        "Upgrade Needed", "Upgrade your plan to keep reaching more customers.",
-        [
-          {
-            text: "Cancel",
-            style: "cancel",
-            onPress: () => console.log("User canceled"),
-          },
-          {
-            text: "Upgrade now",
-            onPress: () => {
-              console.log("Redirecting to login...");
-              dispatch(set_sub_modal(1));
-              // navigation.navigate("Login"); // if using react-navigation
-            },
-          },
-        ],
-        { cancelable: false }
-      );
-    }
+    // let p = (shop.subscription.plan)
+    // let publishable = p === 'free' ? 2 : p === 'basic' ? 7 : p === 'standard' ? 20 : 10000000000
+    
+    // if (userAds.length < publishable) {
+    //   setModalVisible(!modalVisible);
+    // } else {
+    //   Alert.alert(
+    //     "Upgrade Needed", "Upgrade your plan to keep reaching more customers.",
+    //     [
+    //       {
+    //         text: "Cancel",
+    //         style: "cancel",
+    //         onPress: () => console.log("User canceled"),
+    //       },
+    //       {
+    //         text: "Upgrade now",
+    //         onPress: () => {
+    //           console.log("Redirecting to login...");
+    //           dispatch(set_sub_modal(1));
+    //           // navigation.navigate("Login"); // if using react-navigation
+    //         },
+    //       },
+    //     ],
+    //     { cancelable: false }
+    //   );
+    // }
   };
 
 

@@ -53,6 +53,7 @@ const SellerLayout = ({children,setCookie}) => {
         setScreenWidth(window.innerWidth)
     },[])
 
+  
     return (
         <>
            

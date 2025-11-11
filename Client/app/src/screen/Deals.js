@@ -53,7 +53,7 @@ export default function Deals() {
  
     const dispatch = useDispatch()
     function getDeals () {
-        axios.get('http://192.168.0.3:5432/deals', {params: {user_id: user?.user_id}}).then(({data}) => {
+        axios.get('https://base-three-opal.vercel.app/deals', {params: {user_id: user?.user_id}}).then(({data}) => {
             const res = data.data;
             dispatch(set_deals(res))
             setRefreshing(false);

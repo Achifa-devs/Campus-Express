@@ -232,8 +232,6 @@ export default function Create({ route }) {
             shipping_durationErr: ''
           })
         }
-  
-        
       } else if(category === 'Pets'){
         setErrList({
           categoryErr: '',
