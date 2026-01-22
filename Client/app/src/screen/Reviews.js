@@ -65,7 +65,7 @@ export default function Reviews() {
                             <StarRating
                                 rating={parseFloat(averageRating)}
                                 starSize={24}
-                                color="#FF4500"
+                                color="#FFA500"
                                 starStyle={{marginRight: 2}}
                                 onChange={() => {}}
                             />
@@ -77,7 +77,7 @@ export default function Reviews() {
                             {[5, 4, 3, 2, 1].map((rating) => (
                                 <View key={rating} style={styles.ratingBarContainer}>
                                     <Text style={styles.ratingNumber}>{rating}</Text>
-                                    <Ionicons name="star" size={16} color="#FF4500" />
+                                    <Ionicons name="star" size={16} color="#FFA500" />
                                     <View style={styles.ratingBarBackground}>
                                         <View 
                                             style={[
@@ -104,7 +104,7 @@ export default function Reviews() {
                                         <StarRating
                                             rating={parseInt(item.rating)}
                                             starSize={20}
-                                            color="#FF4500"
+                                            color="#FFA500"
                                             starStyle={{marginRight: 1}}
                                             onChange={() => {}}
                                         />
@@ -138,7 +138,7 @@ export default function Reviews() {
                                                 <Ionicons 
                                                     name={expandedReview === index ? "chevron-up" : "chevron-down"} 
                                                     size={16} 
-                                                    color="#FF4500" 
+                                                    color="#FFA500" 
                                                 />
                                             </TouchableOpacity>
                                         )}
@@ -294,7 +294,7 @@ const styles = StyleSheet.create({
     },
     readMoreText: {
         fontSize: 14,
-        color: '#FF4500',
+        color: '#FFA500',
         fontWeight: '500',
         marginRight: 4,
     },

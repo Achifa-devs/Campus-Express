@@ -5,9 +5,9 @@
     :root {
         --primary: #4F46E5;
         --secondary: #10B981;
-        --dark: #FF4500;
+        --dark: #FFA500;
         --light: #F9FAFB;
-        --accent: #FF4500;
+        --accent: #FFA500;
     }
     
     html,body{
@@ -104,7 +104,7 @@
         flex-direction: column;
         align-items: flex-start;
         padding: 10px 100px;
-        background-color: #FF4500;
+        background-color: #FFA500;
     }
 
     .buyer-showcase{
@@ -113,7 +113,7 @@
         padding: 0px;
         position: relative;
         margin: 20px 0 0 0;
-        /* background-color: #FF4500; */
+        /* background-color: #FFA500; */
     }
     .buyer-showcase-cnt {
         height: fit-content;
@@ -185,7 +185,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        background-color: #FF4500;
+        background-color: #FFA500;
         justify-content: center;
         margin-bottom: 5px;
     }
@@ -199,7 +199,7 @@
         font-size: 3vh;
         font-weight: 500;
         margin-bottom: 2.5px;
-        color: #FF4500;
+        color: #FFA500;
     }
 
     h2{

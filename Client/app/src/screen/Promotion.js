@@ -632,12 +632,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
   },
   extendButton: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
   },
   viewAdButton: {
     backgroundColor: '#fff',
     borderWidth: 2,
-    borderColor: '#FF4500',
+    borderColor: '#FFA500',
   },
   extendButtonText: {
     color: '#fff',
@@ -646,7 +646,7 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   viewAdButtonText: {
-    color: '#FF4500',
+    color: '#FFA500',
     fontWeight: 'bold',
     fontSize: 16,
     marginLeft: 8,

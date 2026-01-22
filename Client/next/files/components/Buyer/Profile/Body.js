@@ -103,13 +103,13 @@ function Coin({email,phone,user_id, name}) {
   };
 
   const handleFlutterPayment = useFlutterwave(config);
-  return(<div className="profile-edit" style={{background: '#FF4500'}}>
+  return(<div className="profile-edit" style={{background: '#FFA500'}}>
 
     <h2 style={{width: '100%', textAlign: 'center', color: '#fff', fontSize: '3.5vh', fontWeight: '500'}}>Campus Coin Exchange</h2>
 
     <div className="seller-input-cnt">
         <section style={{width: '100%'}}>
-          <p style={{color: '#fff', padding: '10px', borderRadius: '5px', width: '100%', border: '1px solid #FF4500', padding: '10px 0 10px 0', fontWeight: '400'}}>Exchange Coin For Cash</p>
+          <p style={{color: '#fff', padding: '10px', borderRadius: '5px', width: '100%', border: '1px solid #FFA500', padding: '10px 0 10px 0', fontWeight: '400'}}>Exchange Coin For Cash</p>
 
           <select name="" id="" style={{background: '#efefef'}}>
             {

@@ -22,7 +22,7 @@ export default function Carousel({category,product_id,updateReq}) {
 
    
     useEffect(() => {
-        fetch(`/api/store/products/category?category=${category}&limit=${10}`, {
+        fetch(`/api/products/category?category=${category}&limit=${10}`, {
             headers: {
                 'Gender': window.localStorage.getItem('cs-gender') 
             }

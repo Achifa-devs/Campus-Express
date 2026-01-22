@@ -133,7 +133,7 @@ const ItemCard = React.memo(({ item, onPress }) => {
 
         {loading && (
           <View style={styles.loadingOverlay}>
-            <ActivityIndicator size="small" color="#FF4500" />
+            <ActivityIndicator size="small" color="#FFA500" />
           </View>
         )}
 
@@ -150,7 +150,7 @@ const ItemCard = React.memo(({ item, onPress }) => {
           onPress={handleSave}
         >
           {wishlistLoading ? (
-            <ActivityIndicator size="small" color={wishlisted ? '#FFF' : '#FF4500'} />
+            <ActivityIndicator size="small" color={wishlisted ? '#FFF' : '#FFA500'} />
           ) : (
             <Icon
               name={wishlisted ? 'heart' : 'heart-outline'}
@@ -178,7 +178,7 @@ const ItemCard = React.memo(({ item, onPress }) => {
 
         <View style={styles.metaContainer}>
           <View style={styles.locationContainer}>
-            <Icon name="location-outline" size={12} color="#FF4500" />
+            <Icon name="location-outline" size={12} color="#FFA500" />
             <Text style={styles.locationText} numberOfLines={1}>
               {item?.campus}
             </Text>
@@ -248,7 +248,7 @@ export default function ProductOffer({ data, loading }) {
   if (loading) {
     return (
       <View style={styles.emptyContainer}>
-        <ActivityIndicator size="large" color="#FF4500" />
+        <ActivityIndicator size="large" color="#FFA500" />
         <Text style={styles.emptyTitle}>Loading Offers...</Text>
         <Text style={styles.emptySubtitle}>Please wait while we fetch products</Text>
       </View>
@@ -383,7 +383,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   conditionBadge: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
@@ -418,8 +418,8 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(0, 0, 0, 0.05)',
   },
   wishlistButtonActive: {
-    backgroundColor: '#FF4500',
-    borderColor: '#FF4500',
+    backgroundColor: '#FFA500',
+    borderColor: '#FFA500',
   },
   detailsContainer: {
     padding: 12,

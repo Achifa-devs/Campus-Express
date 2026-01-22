@@ -80,7 +80,7 @@ export default function AccounManagement() {
                 <button 
                   className="w-100 border-0 rounded p-3 d-flex justify-content-between align-items-center text-white shadow-sm"
                   onClick={() => setbtn1(!btn1)}
-                  style={{ background: '#FF4500', transition: 'all 0.3s ease' }}
+                  style={{ background: '#FFA500', transition: 'all 0.3s ease' }}
                 >
                   <div className="d-flex align-items-center">
                     <img 
@@ -109,7 +109,7 @@ export default function AccounManagement() {
                 <button 
                   className="w-100 border-0 rounded p-3 d-flex justify-content-between align-items-center text-white shadow-sm"
                   onClick={() => setbtn2(!btn2)}
-                  style={{ background: '#FF4500', transition: 'all 0.3s ease' }}
+                  style={{ background: '#FFA500', transition: 'all 0.3s ease' }}
                 >
                   <div className="d-flex align-items-center">
                     <img 
@@ -160,7 +160,7 @@ function Input({ data, updateMenu }) {
         <button 
           onClick={() => updateMenu('profile-edit')} 
           className="btn btn-outline-primary border-2 fw-semibold"
-          style={{ color: '#FF4500', borderColor: '#FF4500', background: 'transparent' }}
+          style={{ color: '#FFA500', borderColor: '#FFA500', background: 'transparent' }}
         >
           Edit Profile
         </button>
@@ -272,7 +272,7 @@ function EditProfile({ data }) {
               defaultValue={data?.fname} 
               onInput={e => setfname(e.target.value)} 
               className="form-control border-2"
-              style={{ fontWeight: '400', borderColor: '#FF4500' }}
+              style={{ fontWeight: '400', borderColor: '#FFA500' }}
               type="text" 
             />
           </div>
@@ -284,7 +284,7 @@ function EditProfile({ data }) {
               defaultValue={data?.lname} 
               onInput={e => setlname(e.target.value)} 
               className="form-control border-2"
-              style={{ fontWeight: '400', borderColor: '#FF4500' }}
+              style={{ fontWeight: '400', borderColor: '#FFA500' }}
               type="text" 
             />
           </div>
@@ -295,7 +295,7 @@ function EditProfile({ data }) {
             <select 
               onInput={e => setgender(e.target.value)} 
               className="form-select border-2"
-              style={{ borderColor: '#FF4500', fontWeight: '400' }}
+              style={{ borderColor: '#FFA500', fontWeight: '400' }}
               defaultValue={data?.gender || ''}
             >
               <option value="">Select gender</option>
@@ -308,7 +308,7 @@ function EditProfile({ data }) {
           <button 
             onClick={update_buyer} 
             className="btn fw-semibold text-white px-4 py-2"
-            style={{ background: '#FF4500', borderRadius: '8px' }}
+            style={{ background: '#FFA500', borderRadius: '8px' }}
           >
             Save Changes
           </button>
@@ -362,7 +362,7 @@ function Edit({ edit, data }) {
         <h4 className="fw-semibold mb-3">Update {edit}</h4>
         
         <div className="mb-4">
-          <div className="badge px-3 py-2 fw-semibold" style={{ background: '#fff4e0', color: '#FF4500', borderRadius: '10px' }}>
+          <div className="badge px-3 py-2 fw-semibold" style={{ background: '#fff4e0', color: '#FFA500', borderRadius: '10px' }}>
             Active
           </div>
         </div>
@@ -406,7 +406,7 @@ function Edit({ edit, data }) {
             <button 
               onClick={update_} 
               className="btn w-100 fw-semibold text-white py-2"
-              style={{ background: '#FF4500', borderRadius: '8px' }}
+              style={{ background: '#FFA500', borderRadius: '8px' }}
             >
               Update {edit}
             </button>
@@ -504,7 +504,7 @@ function Password() {
           <button 
             onClick={update_} 
             className="btn fw-semibold text-white w-100 py-2"
-            style={{ background: '#FF4500', borderRadius: '8px' }}
+            style={{ background: '#FFA500', borderRadius: '8px' }}
           >
             Update Password
           </button>

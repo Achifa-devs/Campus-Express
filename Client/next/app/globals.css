@@ -30,7 +30,7 @@ li{
 .loader {
   width: 27px;
   height: 27px;
-  border: 3px solid #FF4500;
+  border: 3px solid #FFA500;
   border-radius: 50%;
   display: inline-block;
   position: relative;
@@ -43,7 +43,7 @@ li{
   position: absolute;
   left: 0;
   top: 0;
-  background: #FF4500;
+  background: #FFA500;
   width: 8px;
   height: 8px;
   transform: translate(-50%, 50%);
@@ -372,7 +372,7 @@ textarea{
 button{
     height: auto;
     width: auto;
-    background-color: #FF4500; 
+    background-color: #FFA500; 
     color: #fff;
     outline: none;
     bmenu: none;

@@ -118,13 +118,13 @@ const BuyerLayout = ({children}) => {
             </div>
 
             <div className='buyer-overlay'>
-                <div class="gender-card">
-                <div class="large-svg-container">
+                <div className="gender-card">
+                <div className="large-svg-container">
                     <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 50 90"
-                    class="largemalesvg"
+                    className="largemalesvg"
                     height="90"
                     width="50"
                     >
@@ -153,7 +153,7 @@ const BuyerLayout = ({children}) => {
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 50 90"
-                    class="largefemalesvg"
+                    className="largefemalesvg"
                     height="90"
                     width="50"
                     >
@@ -173,25 +173,25 @@ const BuyerLayout = ({children}) => {
                     </svg>
                 </div>
                 <form action="#">
-                    <h3 class="heading">What's your gender?</h3>
-                    <div class="radio-wrapper">
+                    <h3 className="heading">What's your gender?</h3>
+                    <div className="radio-wrapper">
                     <input onInput={e=> {
                         window.localStorage.setItem('cs-gender', 'male')
                         window.location.reload()
                         document.querySelector('.buyer-overlay').removeAttribute('id')
                     }}
-                        class="gender-radio-buttons"
+                        className="gender-radio-buttons"
                         id="male"
                         value="male"
                         name="gender"
                         type="radio"
                     />
-                    <label class="genderlabel malebutton" for="male">
+                    <label className="genderlabel malebutton" for="male">
                         <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 50 90"
-                        class="smallsvg malesmallsvg"
+                        className="smallsvg malesmallsvg"
                         >
                         <circle
                             stroke-width="6"
@@ -222,7 +222,7 @@ const BuyerLayout = ({children}) => {
                     </label>
 
                     <input
-                        class="gender-radio-buttons"
+                        className="gender-radio-buttons"
                         id="female"
                         value="female"
                         name="gender"
@@ -234,12 +234,12 @@ const BuyerLayout = ({children}) => {
                             document.querySelector('.buyer-overlay').removeAttribute('id')
                         }}
                     />
-                    <label class="genderlabel femalebutton" for="female">
+                    <label className="genderlabel femalebutton" for="female">
                         <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 50 90"
-                        class="smallsvg"
+                        className="smallsvg"
                         >
                         <circle
                             stroke-width="6"
@@ -264,7 +264,7 @@ const BuyerLayout = ({children}) => {
                     </label>
 
                     <input
-                        class="gender-radio-buttons"
+                        className="gender-radio-buttons"
                         id="other"
                         value="other"
                         name="gender"

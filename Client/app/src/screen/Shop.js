@@ -154,7 +154,7 @@ export default function Shop() {
     if (isLoading) {
         return (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#FF4500" />
+            <ActivityIndicator size="large" color="#FFA500" />
             <Text style={styles.loadingText}>Processing...</Text>
           </View>
         );
@@ -178,7 +178,7 @@ export default function Shop() {
                 </View>
                 
                 <View style={styles.infoCard}>
-                    <Ionicons name="information-circle" size={20} color="#FF4500" />
+                    <Ionicons name="information-circle" size={20} color="#FFA500" />
                     <Text style={styles.infoText}>Update your shop information to improve visibility and customer trust</Text>
                 </View>
             
@@ -267,7 +267,7 @@ export default function Shop() {
                                                 {categoryKey}
                                             </Text>
                                             {!isSelected && (
-                                                <Ionicons name="add" size={16} color="#FF4500" />
+                                                <Ionicons name="add" size={16} color="#FFA500" />
                                             )}
                                         </TouchableOpacity>
                                     );
@@ -287,7 +287,7 @@ export default function Shop() {
                                                 onPress={() => set_list(list.filter(filt => filt !== item))}
                                             >
                                                 <Text style={styles.selectedText}>{item}</Text>
-                                                <Ionicons name="close" size={16} color="#FF4500" />
+                                                <Ionicons name="close" size={16} color="#FFA500" />
                                             </TouchableOpacity>
                                         ))}
                                     </View>
@@ -318,7 +318,7 @@ export default function Shop() {
             <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
                 {/* Header Banner */}
                 <LinearGradient
-                    colors={['#FF4500', '#FF6347']}
+                    colors={['#FFA500', '#FF6347']}
                     style={styles.banner}
                     start={{x: 0, y: 0}}
                     end={{x: 1, y: 0}}
@@ -343,7 +343,7 @@ export default function Shop() {
                                 />
                             ) : (
                                 <View style={styles.avatarPlaceholder}>
-                                    <Ionicons name="storefront" size={28} color="#FF4500" />
+                                    <Ionicons name="storefront" size={28} color="#FFA500" />
                                 </View>
                             )}
                         </View>
@@ -358,7 +358,7 @@ export default function Shop() {
                                     <Ionicons 
                                         name={eval(shop?.is_verified) ? "shield-checkmark" : "alert-circle"} 
                                         size={16} 
-                                        color={eval(shop?.is_verified) ? "#10B981" : "#FF4500"} 
+                                        color={eval(shop?.is_verified) ? "#10B981" : "#FFA500"} 
                                     />
                                     <Text style={styles.verificationText}>
                                         {eval(shop?.is_verified) ? 'Verified Shop' : 'Verification Pending'}
@@ -372,7 +372,7 @@ export default function Shop() {
                         style={styles.editButton}
                         onPress={() => toggleModal(false)}
                     >
-                        <Ionicons name="create-outline" size={22} color="#FF4500" />
+                        <Ionicons name="create-outline" size={22} color="#FFA500" />
                     </TouchableOpacity>
                 </View>
                 
@@ -391,7 +391,7 @@ export default function Shop() {
                     </View>
                     <View style={styles.statDivider} />
                     <View style={styles.statItem}>
-                        <Ionicons name="star-outline" size={20} color="#FF4500" />
+                        <Ionicons name="star-outline" size={20} color="#FFA500" />
                         <Text style={styles.statNumber}>
                             {
                                 review?.length > 0 ? 
@@ -422,7 +422,7 @@ export default function Shop() {
                                 <StarRating
                                     rating={review?.length > 0 ? review?.reduce((sum, item) => sum + parseInt(item.rating), 0) / review?.length : 0}
                                     starSize={18}
-                                    color="#FF4500"
+                                    color="#FFA500"
                                     starStyle={{marginRight: 2}}
                                     onChange={() => {}}
                                 />
@@ -439,7 +439,7 @@ export default function Shop() {
                                         <StarRating
                                             rating={parseInt(item.rating)}
                                             starSize={16}
-                                            color="#FF4500"
+                                            color="#FFA500"
                                             starStyle={{marginRight: 1}}
                                             onChange={() => {}}
                                         />
@@ -472,7 +472,7 @@ export default function Shop() {
                             style={styles.viewAllButton}
                         >
                             <Text style={styles.viewAllText}>View All Reviews</Text>
-                            <Ionicons name="arrow-forward" size={16} color="#FF4500" />
+                            <Ionicons name="arrow-forward" size={16} color="#FFA500" />
                         </TouchableOpacity>
                     )}
                 </View>  
@@ -551,7 +551,7 @@ export default function Shop() {
                            'View Detailed Analytics'
                             // shop.subscription.plan !== 'free'? 'View Detailed Analytics' : 'Subscribe To View Analytics'    
                         }</Text>
-                        <Ionicons name="arrow-forward" size={16} color="#FF4500" />
+                        <Ionicons name="arrow-forward" size={16} color="#FFA500" />
                     </TouchableOpacity>
                 </View> 
             </ScrollView>
@@ -910,7 +910,7 @@ const styles = StyleSheet.create({
     viewAllText: {
         fontSize: 14,
         fontWeight: '600',
-        color: '#FF4500',
+        color: '#FFA500',
         marginRight: 8,
     },
     analyticsButton: {
@@ -926,7 +926,7 @@ const styles = StyleSheet.create({
     analyticsButtonText: {
         fontSize: 14,
         fontWeight: '600',
-        color: '#FF4500',
+        color: '#FFA500',
         marginRight: 8,
     },
     // Modal Styles
@@ -1013,7 +1013,7 @@ const styles = StyleSheet.create({
     changeButton: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#FF4500',
+        backgroundColor: '#FFA500',
         paddingHorizontal: 12,
         paddingVertical: 8,
         borderRadius: 8,
@@ -1128,7 +1128,7 @@ const styles = StyleSheet.create({
     },
     saveButton: {
         flex: 1,
-        backgroundColor: '#FF4500',
+        backgroundColor: '#FFA500',
         padding: 16,
         borderRadius: 8,
         alignItems: 'center',

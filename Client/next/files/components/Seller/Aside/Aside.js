@@ -46,7 +46,7 @@ export default function Aside() {
 
 
                 <li style={{background: active === 'listing' ? '#f9f9f9' : '#fff'}} onClick={e => window.location.href=('/vendor/listing')}>
-                        <svg width="30px" height="30px" viewBox="0 -0.5 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#FF4500">
+                        <svg width="30px" height="30px" viewBox="0 -0.5 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#FFA500">
 strokeLinejoin
                             <g id="SVGRepo_bgCarrier" stroke-width="0"/>strokeLinejoinstrokeLinejoinstrokeLinejoinstrokeLinejoin
 
@@ -125,7 +125,7 @@ strokeLinejoin
                 </li>
 
                 <li style={{background: active === 'profile' ? '#f9f9f9' : '#fff'}} className='seller__extra__menu' onClick={e => window.location.href=('/vendor/profile')}>
-                    <span style={{height: '30px', width: '30px', color: '#fff', fontSize: 'medium', display: 'flex', borderRadius: '50%', background: '#FF4500', padding: '8px', alignItems: 'center', justifyContent: 'center', fontSize: 'x-small', fontWeight: '500'}}>
+                    <span style={{height: '30px', width: '30px', color: '#fff', fontSize: 'medium', display: 'flex', borderRadius: '50%', background: '#FFA500', padding: '8px', alignItems: 'center', justifyContent: 'center', fontSize: 'x-small', fontWeight: '500'}}>
                         A.C
                     </span>
                     &nbsp;

@@ -268,7 +268,7 @@ const ProductPage = () => {
                             <>
                                 {/* <Contact phone={phone} SendMssg={SendMssg}  />
                                 <br /> */}
-                                <button style={{marginBottom: '15px', background: '#FF4500', color: '#fff'}} onClick={handleOrder}>{
+                                <button style={{marginBottom: '15px', background: '#FFA500', color: '#fff'}} onClick={handleOrder}>{
                                     order_list.filter((data) => data.product.product_id === item.product_id && data.order.user_id === buyerData.user_id).length > 0
                                     ?
 
@@ -294,7 +294,7 @@ const ProductPage = () => {
 
                         <section style={{fontWeight: '400', padding: '15px', background: '#fff4e0', }}>
                             
-                            <small style={{fontSize: 'small', color: '#FF4500', lineHeight: '12px', borderRadius: '6px'}}>Payment Must Be Made Via Campus Sphere Platform To Avoid Fraud Else You Can <b>Trade With The Seller Outside The Platform At Your Own Risk.</b></small>
+                            <small style={{fontSize: 'small', color: '#FFA500', lineHeight: '12px', borderRadius: '6px'}}>Payment Must Be Made Via Campus Sphere Platform To Avoid Fraud Else You Can <b>Trade With The Seller Outside The Platform At Your Own Risk.</b></small>
                         </section>
 
                         <br />

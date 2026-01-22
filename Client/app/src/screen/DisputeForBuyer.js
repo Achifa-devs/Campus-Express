@@ -297,7 +297,7 @@ const DisputeForBuyer = () => {
             backgroundColor: '#FFF8F6',
             opacity: .5
           }}>
-            <ActivityIndicator size={'large'} color={'#FF4500'}></ActivityIndicator>
+            <ActivityIndicator size={'large'} color={'#FFA500'}></ActivityIndicator>
           </View>
         }
         <KeyboardAvoidingView 
@@ -313,7 +313,7 @@ const DisputeForBuyer = () => {
             
             {/* Additional Information */}
             <View style={styles.infoCard}>
-              <Ionicons name="information-circle" size={20} color="#FF4500" />
+              <Ionicons name="information-circle" size={20} color="#FFA500" />
               <View style={styles.infoContent}>
                 <Text style={styles.infoTitle}>Dispute Best Practices</Text>
                 <Text style={styles.infoText}>
@@ -325,7 +325,7 @@ const DisputeForBuyer = () => {
             {/* Dispute Reason Section*/}
             <View style={styles.section}>
               <View style={styles.sectionHeader}>
-                <Ionicons name="warning-outline" size={20} color="#FF4500" />
+                <Ionicons name="warning-outline" size={20} color="#FFA500" />
                 <Text style={styles.sectionTitle}>Dispute Reason</Text>
               </View>
               <Text style={styles.sectionDescription}>
@@ -350,7 +350,7 @@ const DisputeForBuyer = () => {
             {formData.disputeType === 'others' && (
               <View style={styles.section}>
                 <View style={styles.sectionHeader}>
-                  <Ionicons name="business-outline" size={20} color="#FF4500" />
+                  <Ionicons name="business-outline" size={20} color="#FFA500" />
                   <Text style={styles.sectionTitle}>State your dispute reason</Text>
                 </View>
                 
@@ -644,7 +644,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 4,
     borderLeftWidth: 4,
-    borderLeftColor: '#FF4500',
+    borderLeftColor: '#FFA500',
   },
   infoContent: {
     flex: 1,
@@ -689,7 +689,7 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   submitButtonActive: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
   },
   submitButtonDisabled: {
     backgroundColor: '#D1D5DB',
@@ -761,7 +761,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderWidth: 2,
-    borderColor: '#FF4500',
+    borderColor: '#FFA500',
     borderStyle: 'dashed',
     borderRadius: 4,
     justifyContent: 'center',
@@ -772,7 +772,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8,
@@ -784,7 +784,7 @@ const styles = StyleSheet.create({
   },
   uploadText: {
     fontSize: 12,
-    color: '#FF4500',
+    color: '#FFA500',
     fontWeight: '500',
     textAlign: 'center',
   },

@@ -371,7 +371,7 @@ const Header = () => {
         pathname.split('/').splice(-1)[0] !== '' || pathname.split('/').length === 1 ? '' : '/store'
       }}>
         <Image
-            src="https://res.cloudinary.com/daqbhghwq/image/upload/v1746402998/Untitled_design-removebg-preview_peqlme.png"
+            src="/logo.png"
             alt="Campus Store Logo"
             width={65}
             height={65}
@@ -392,7 +392,7 @@ const Header = () => {
               <ul style={{
                 width: 'fit-content'
               }}>
-                <li style={{background: '#FF4500'}} onClick={e => openFloatingMenu(e,'categories')}>
+                <li style={{background: '#FFA500'}} onClick={e => openFloatingMenu(e,'categories')}>
                 <span style={{color: '#fff'}}><b>Categories</b></span>
                 
               </li>
@@ -439,7 +439,7 @@ const Header = () => {
             </div> : <h1 style={{
               fontSize: '4vh',
               fontWeight: '800',
-              color: '#FF4500'
+              color: '#FFA500'
             }}>Campus Sphere</h1> 
           :
           ''
@@ -571,7 +571,7 @@ const Header = () => {
               }
               
                 
-                {/* <li style={{padding: '5px 10px 5px 10px', background: '#FF4500', color: '#fff', fontSize: 'medium'}} onClick={e => window.href = (`/seller`) }>
+                {/* <li style={{padding: '5px 10px 5px 10px', background: '#FFA500', color: '#fff', fontSize: 'medium'}} onClick={e => window.href = (`/seller`) }>
                   <span>
                     <img src={sellSvg} style={{height: '25px', width: '25px'}} alt="" />
                   </span>

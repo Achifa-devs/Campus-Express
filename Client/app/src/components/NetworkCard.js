@@ -8,7 +8,7 @@ export default function NetworkCard({checkInternet}) {
     <>
         <View style={{
             width: screenWidth * 0.95,
-            backgroundColor: '#FF4500',
+            backgroundColor: '#FFA500',
             position: 'absolute',
             bottom: 10,
             left: screenWidth * 0.025,
@@ -80,7 +80,7 @@ export default function NetworkCard({checkInternet}) {
                 onPress={e => checkInternet()}
             >
                 <Text style={{
-                    color: '#FF4500',
+                    color: '#FFA500',
                     fontSize: 15,
                     fontWeight: '600',
                 }}>

@@ -124,7 +124,7 @@ export default function Aside() {
                         item?.unread === 0 ? ''
                         :
                         <>
-                          <span style={{width: 'fit-content', padding: '2.5px 8px', height: 'fit-content', fontSize: 'small', background: '#FF4500', borderRadius: '10px', color: '#fff'}}>5</span>
+                          <span style={{width: 'fit-content', padding: '2.5px 8px', height: 'fit-content', fontSize: 'small', background: '#FFA500', borderRadius: '10px', color: '#fff'}}>5</span>
                         </>
                       }
                     </div>

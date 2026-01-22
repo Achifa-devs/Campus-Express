@@ -34,7 +34,7 @@ export default function SearchOutput() {
                             height: 'auto',
                             width: '100%',
                             padding: '20px 10px',
-                            borderLeft: '1px solid #FF4500', 
+                            borderLeft: '1px solid #FFA500', 
                             marginBottom: '6px',
                         }} onClick={e => window.location.href=(`/store/product/${item?.product_id}`)} key={index} className='shadow-sm'>
                             {item.title}
@@ -52,7 +52,7 @@ export default function SearchOutput() {
                         fontSize: 'large',
                         // background: 'red',
                         fontWeight: 'bold', 
-                        color: '#FF4500',
+                        color: '#FFA500',
                     }}>
                         <img src={searchSvg.src} style={{height: '50px', width: '50px'}}  alt="" />
                             <br />

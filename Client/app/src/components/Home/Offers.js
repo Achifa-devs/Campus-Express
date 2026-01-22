@@ -43,7 +43,7 @@ const Offers = React.memo(() => {
             <Icon 
               name={isActive ? item.activeName : item.name} 
               size={20} 
-              color={isActive ? '#FF4500' : '#666'} 
+              color={isActive ? '#FFA500' : '#666'} 
               style={styles.icon}
             />
             <Text style={[styles.label, isActive && styles.activeLabel]}>
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   activeLabel: {
-    color: '#FF4500',
+    color: '#FFA500',
     fontWeight: '600',
   },
   activeIndicator: {
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     height: 3,
     width: '60%',
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     borderRadius: 3,
   },
 });

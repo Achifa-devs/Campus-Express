@@ -70,7 +70,7 @@ const FilterAside = ({
             }}>
                 {/* Header */}
                 <div className="card-header bg-white border-bottom">
-                    <h5 style={{color: '#FF4500'}} className="mb-0 text-center fw-semibold">
+                    <h5 style={{color: '#FFA500'}} className="mb-0 text-center fw-semibold">
                         Filter Section
                     </h5>
                 </div>
@@ -235,7 +235,7 @@ const FilterAside = ({
                         </div>
                         <div className="col-6">
                             <button 
-                                style={{backgroundColor: '#FF4500'}}
+                                style={{backgroundColor: '#FFA500'}}
                                 className="btn text-white w-100 fw-semibold"
                                 onClick={e => applyFilter(category_checked, price_checked, condition_checked, location_checked)}
                             >

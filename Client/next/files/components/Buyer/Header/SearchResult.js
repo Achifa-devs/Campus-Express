@@ -48,7 +48,7 @@ const SearchResult = ({searchTop,searchLeft,searchDisplay,searchWidth}) => {
                                 height: 'auto',
                                 width: '100%',
                                 padding: '10px', 
-                                borderLeft: '1px solid #FF4500',  
+                                borderLeft: '1px solid #FFA500',  
                                 marginBottom: '10px',
                             }} className="shadow-sm" onClick={e => window.location.href=(`/store/product/${item[0]?.product_id}`)} key={index}>
                                 <span style={{fontWeight: '500'}}></span>
@@ -71,7 +71,7 @@ const SearchResult = ({searchTop,searchLeft,searchDisplay,searchWidth}) => {
                         fontSize: 'large',
                         // background: 'red',
                         fontWeight: 'bold', 
-                        color: '#FF4500',
+                        color: '#FFA500',
                     }}>
                         <img src={searchSvg.src} style={{height: '50px', width: '50px'}}  alt="" />
                             <br />

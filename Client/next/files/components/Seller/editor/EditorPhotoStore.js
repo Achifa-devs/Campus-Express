@@ -60,7 +60,7 @@ const EditorPhotoStore = ({edit,deletePhoto,productPhotos,photos,category}) => {
 
                 <div className="seller-shop-samples shadow-sm" style={{width: '100%', borderRadius: '10px'}}>
                                 
-                    <label htmlFor="imgfile" style={{height: '100%', margin: '0 5px 0 5px', background: '#FF4500',cursor: 'pointer', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', padding: '20px', borderRadius: '10px', textAlign: 'center'}}>
+                    <label htmlFor="imgfile" style={{height: '100%', margin: '0 5px 0 5px', background: '#FFA500',cursor: 'pointer', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', padding: '20px', borderRadius: '10px', textAlign: 'center'}}>
 
                         {/* <img src={xSvg} style={{height: '40px', width: '40px'}} alt="" /> */}
                         <small style={{color: '#fff', textAlign: 'center'}}>Upload Image</small>

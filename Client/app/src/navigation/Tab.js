@@ -134,7 +134,7 @@ export default function StoreTab({navigation}) {
 
           
           },
-          tabBarActiveTintColor: '#FF4500',
+          tabBarActiveTintColor: '#FFA500',
           tabBarInactiveTintColor: 'gray',
           headerShown: false,
           tabBarStyle: {

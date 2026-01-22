@@ -331,7 +331,7 @@ const Receipt = ({ navigation, route }) => {
           style={[styles.actionButton, styles.shareButton]}
           onPress={handleShareReceipt}
         >
-          <Ionicons name="share-social-outline" size={20} color="#FF4500" />
+          <Ionicons name="share-social-outline" size={20} color="#FFA500" />
           <Text style={styles.shareButtonText}>Share</Text>
         </TouchableOpacity>
         
@@ -415,7 +415,7 @@ const styles = StyleSheet.create({
   receiptId: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#FF4500',
+    color: '#FFA500',
     marginBottom: 4,
     // width: '40%'
   },
@@ -619,13 +619,13 @@ const styles = StyleSheet.create({
   termsTitle: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#FF4500',
+    color: '#FFA500',
     marginBottom: 8,
     textTransform: 'uppercase',
   },
   termsText: {
     fontSize: 10,
-    color: '#FF4500',
+    color: '#FFA500',
     lineHeight: 16,
   },
   footer: {
@@ -673,13 +673,13 @@ const styles = StyleSheet.create({
   shareButton: {
     backgroundColor: '#FFFFFF',
     borderWidth: 2,
-    borderColor: '#FF4500',
+    borderColor: '#FFA500',
   },
   claimButton: {
     backgroundColor: '#10B981',
   },
   shareButtonText: {
-    color: '#FF4500',
+    color: '#FFA500',
     fontSize: 16,
     fontWeight: '700',
     marginLeft: 8,

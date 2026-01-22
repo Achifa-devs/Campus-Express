@@ -229,7 +229,7 @@ const Card = ({item, index}) => {
                         &nbsp;
                         {/* &nbsp; */}
 
-                        <span  style={{background: '#fff', color: '#FF4500', padding: '0',  fontSize: screenWidth > 480 ? 'x-small' : 'xx-small', fontWeight: '500', overflow: 'hidden', height: '15px'}}> 
+                        <span  style={{background: '#fff', color: '#FFA500', padding: '0',  fontSize: screenWidth > 480 ? 'x-small' : 'xx-small', fontWeight: '500', overflow: 'hidden', height: '15px'}}> 
                             {(item?.uni_state) }, {(item?.campus)}
                         </span>
                     </span>
@@ -274,7 +274,7 @@ const Card = ({item, index}) => {
 
                         &nbsp;
                         &nbsp;
-                        <span style={{fontSize: 'x-small', background: '#FF4500'}}>{
+                        <span style={{fontSize: 'x-small', background: '#FFA500'}}>{
                             order_list.filter((data) => data?.product?.product_id === item?.product_id && data?.order?.user_id === buyer_info?.user_id)?.length > 0
                             ?
 

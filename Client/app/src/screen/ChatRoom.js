@@ -509,7 +509,7 @@ const ChatRoom = ({ route }) => {
           backgroundColor: '#FFF8F6',
           opacity: .5
         }}>
-          <ActivityIndicator size={'large'} color={'#FF4500'}></ActivityIndicator>
+          <ActivityIndicator size={'large'} color={'#FFA500'}></ActivityIndicator>
         </View>
       }
       {/* Custom Header */}
@@ -523,7 +523,7 @@ const ChatRoom = ({ route }) => {
             !room.partner || !room.partner.photo
             ?
             <View style={[styles.avatar, {display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff4e0'}]}>
-              <Ionicons name={"person-circle-outline"} size={45} color={"#FF4500"} />
+              <Ionicons name={"person-circle-outline"} size={45} color={"#FFA500"} />
             </View>
             :
             <Image
@@ -748,7 +748,7 @@ const Card = ({ product_id }) => {
   );
 };
 
-const PRIMARY_COLOR = '#FF4500';
+const PRIMARY_COLOR = '#FFA500';
 const COMPLEMENTARY_COLOR = '#00BFFF';
 const LIGHT_ORANGE = '#FFE4D6';
 const LIGHT_BLUE = '#E6F4FF';
@@ -1108,7 +1108,7 @@ const styles = StyleSheet.create({
   adPrice: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FF4500',
+    color: '#FFA500',
     marginBottom: 12,
   },
   adStats: {

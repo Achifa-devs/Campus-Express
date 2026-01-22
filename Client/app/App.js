@@ -64,7 +64,7 @@ export default function App() {
           channelId: 'default',
           importance: AndroidImportance.HIGH,
           smallIcon: 'ic_notification', // make sure this icon exists in android/app/src/main/res/
-          color: '#FF4500'
+          color: '#FFA500'
         },
       });
     });

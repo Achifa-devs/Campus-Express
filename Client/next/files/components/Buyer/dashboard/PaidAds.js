@@ -39,8 +39,8 @@ export default function PaidAds({condition,cntName,top}) {
     <>
       
       <div className="buyer-flash-ads" style={{display: 'flex', flexDirection: 'column', borderRadius: '2.5px', height: 'auto', marginBottom: top, position: 'relative', width: screenWidth > 760 ?'calc(100% - 320px)' : '100%', float: 'right', padding: '8px', marginRight: screenWidth > 760 ? '20px' : '0px', background: '#f9f9f9'}}>
-        <div style={{height: '50px', padding: '10px', display: 'flex', alignItems: 'center', justifyContent: 'left', borderRadius: '2.5px', width: '100%', color: '#FF4500', background: '#fff', margin: '0 0 10px 0'}}>
-          <div style={{float: 'left', color: '#FF4500', fontFamily: 'roboto',}}><b>{cntName}</b></div>
+        <div style={{height: '50px', padding: '10px', display: 'flex', alignItems: 'center', justifyContent: 'left', borderRadius: '2.5px', width: '100%', color: '#FFA500', background: '#fff', margin: '0 0 10px 0'}}>
+          <div style={{float: 'left', color: '#FFA500', fontFamily: 'roboto',}}><b>{cntName}</b></div>
         </div>
 
         <div style={{display: 'flex', overflow: 'auto'}}>

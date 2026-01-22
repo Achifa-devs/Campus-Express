@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FF4500',
+    color: '#FFA500',
     marginTop: 16,
     marginBottom: 8,
   },
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   linkText: {
-    color: '#FF4500',
+    color: '#FFA500',
     textDecorationLine: 'underline',
   },
 });

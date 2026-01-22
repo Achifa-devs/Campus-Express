@@ -109,7 +109,7 @@ export default function Btm({ updateUser, user_id, navigation, product_id, updat
         <ScrollView style={styles.container}>
             {/* Profile Section */}
             <LinearGradient
-                colors={['#FF4500', '#FF7F50']}
+                colors={['#FFA500', '#FF7F50']}
                 start={{x: 0, y: 0}}
                 end={{x: 1, y: 0}}
                 style={styles.profileHeader}
@@ -165,7 +165,7 @@ export default function Btm({ updateUser, user_id, navigation, product_id, updat
             {/* Reviews Header */}
             <View style={styles.reviewsHeader}>
                 <View style={styles.reviewsTitleContainer}>
-                    <Ionicons name="star" size={20} color="#FF4500" />
+                    <Ionicons name="star" size={20} color="#FFA500" />
                     <Text style={styles.reviewsTitle}>Reviews ({reviews?.length})</Text>
                 </View>
                 
@@ -306,7 +306,7 @@ export default function Btm({ updateUser, user_id, navigation, product_id, updat
                                             rating={review.rating}
                                             onChange={() => {}}
                                             starSize={16}
-                                            color="#FF4500"
+                                            color="#FFA500"
                                             starStyle={styles.starStyle}
                                         />
                                         <Text style={styles.reviewType}>
@@ -558,7 +558,7 @@ const styles = StyleSheet.create({
     reviewType: {
         fontSize: 12,
         fontWeight: '700',
-        color: '#FF4500',
+        color: '#FFA500',
         marginTop: 4,
         textTransform: 'capitalize',
     },

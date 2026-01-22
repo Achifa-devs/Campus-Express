@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
   },
   price: {
     fontSize: 16,
-    color: '#FF4500',
+    color: '#FFA500',
     fontWeight: '600',
   },
   adImage: {
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   browseButton: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 5,

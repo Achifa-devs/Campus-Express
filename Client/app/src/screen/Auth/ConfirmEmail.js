@@ -70,7 +70,7 @@ const EmailScreen = ({ navigation }) => {
     return (
 
         <View style={styles.loadingOverlay}>
-            <ActivityIndicator size="large" color="#FF4500" />
+            <ActivityIndicator size="large" color="#FFA500" />
         </View>
     )
   }
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   button: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     padding: 15,
     borderRadius: 8,
     alignItems: 'center',

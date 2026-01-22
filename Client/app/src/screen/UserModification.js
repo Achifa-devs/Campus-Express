@@ -210,7 +210,7 @@ export default function UserModification() {
     if (isLoading) {
         return (
             <View style={styles.loadingContainer}>
-                <ActivityIndicator size="large" color="#FF4500" />
+                <ActivityIndicator size="large" color="#FFA500" />
             </View>
         );
     }
@@ -223,7 +223,7 @@ export default function UserModification() {
                 </View>
                 
                 <View style={styles.infoCard}>
-                    <Ionicons name="information-circle" size={24} color="#FF4500" />
+                    <Ionicons name="information-circle" size={24} color="#FFA500" />
                     <Text style={styles.infoText}>You are trying to update your coverphoto.</Text>
                     <Text style={styles.learnMoreText}>Learn more in our help articles.</Text>
                 </View>
@@ -271,7 +271,7 @@ export default function UserModification() {
                             style={{
                                 flexDirection: 'row',
                                 alignItems: 'center',
-                                backgroundColor: '#FF4500',
+                                backgroundColor: '#FFA500',
                                 paddingHorizontal: 16,
                                 paddingVertical: 10,
                                 borderRadius: 8,
@@ -334,7 +334,7 @@ export default function UserModification() {
                             <TouchableOpacity style={{height: 60, width: 60}} onPress={e => {
                                 toggleModal()
                             }}>
-                                <Ionicons name={"person-circle"} color='#FF4500' size={60} />
+                                <Ionicons name={"person-circle"} color='#FFA500' size={60} />
                             </TouchableOpacity>  
                     }  
                 </View>
@@ -445,7 +445,7 @@ export default function UserModification() {
                     }else{
                         Alert.alert("Field missing", 'Please ensure no field is empty!')
                     }
-                }} style={{height: 60, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#FF4500', borderRadius: 8}}>
+                }} style={{height: 60, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#FFA500', borderRadius: 8}}>
                     <Text style={{color: '#FFF'}}>Save</Text>
                 </TouchableOpacity>
             </View>
@@ -477,7 +477,7 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         marginBottom: 16,
         borderWidth: 3,
-        borderColor: '#FF4500',
+        borderColor: '#FFA500',
     },
     loadingText: {
         marginTop: 16,
@@ -572,7 +572,7 @@ const styles = StyleSheet.create({
     },
     learnMoreText: {
         fontSize: 16,
-        color: '#FF4500',
+        color: '#FFA500',
         fontWeight: '600',
     },
     inputGroup: {
@@ -663,7 +663,7 @@ const styles = StyleSheet.create({
         fontWeight: '500',
     },
     setupButton: {
-        backgroundColor: '#FF4500',
+        backgroundColor: '#FFA500',
         borderRadius: 12,
         padding: 18,
         alignItems: 'center',

@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#FF4500',
+    color: '#FFA500',
     marginBottom: 12,
   },
   progressContainer: {
@@ -267,8 +267,8 @@ const styles = StyleSheet.create({
     color: '#374151',
   },
   primaryButton: {
-    backgroundColor: '#FF4500',
-    borderColor: '#FF4500',
+    backgroundColor: '#FFA500',
+    borderColor: '#FFA500',
   },
   primaryButtonText: {
     color: '#FFF',

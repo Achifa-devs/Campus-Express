@@ -447,7 +447,7 @@ const Dashboard = () => {
                         
                 </div>
 
-                <button className="shadow" style={{position: 'fixed', bottom: '20px', padding: '10px', display: 'flex', alignItems: 'center', flexDirection: 'row', justifyContent: 'center', right: '20px', width: 'auto', height: 'auto', background: '#FF4500', borderRadius: '10px'}} onClick={e => window.location.href=('/seller')}>  
+                <button className="shadow" style={{position: 'fixed', bottom: '20px', padding: '10px', display: 'flex', alignItems: 'center', flexDirection: 'row', justifyContent: 'center', right: '20px', width: 'auto', height: 'auto', background: '#FFA500', borderRadius: '10px'}} onClick={e => window.location.href=('/seller')}>  
                 
                     {/* <img src={mssg} style={{height: '25px', width: '25px'}} alt="" /> */}
                     <span>

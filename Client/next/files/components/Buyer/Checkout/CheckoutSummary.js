@@ -142,7 +142,7 @@ const CheckoutSummary = ({ Total, Method, order_list, type }) => {
                     justifyContent: "center"
                 }}>
                     <button
-                        style={{ position: "relative", background: "#FF4500", color: "#fff" }}
+                        style={{ position: "relative", background: "#FFA500", color: "#fff" }}
                         className="shadow-sm button"
                         onClick={(e) => {
                             e.preventDefault();

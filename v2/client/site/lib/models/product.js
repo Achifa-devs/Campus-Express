@@ -11,14 +11,14 @@ export async function findProductById({ product_id }) {
 
 // Find all products
 export async function findProducts({ gender, limit }) {
+  console.log("limit:", limit)
+  // ((others ? 'gender' AND others->>'gender' = $1)
+  // OR NOT (others ? 'gender'))
   const { rows } = await pool.query(
     `SELECT *
      FROM products
-     WHERE
-       ((others ? 'gender' AND others->>'gender' = $1)
-       OR NOT (others ? 'gender'))
-     LIMIT $2`,
-    [gender, limit]
+     LIMIT $1`,
+    [limit]
   );
   return rows;
 }

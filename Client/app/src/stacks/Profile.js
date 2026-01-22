@@ -78,7 +78,7 @@ export function ProfileStackScreen() {
                                             borderRadius: 50,
                                             marginBottom: 12,
                                             borderWidth: 3,
-                                            borderColor: '#FF4500',
+                                            borderColor: '#FFA500',
                                         }}
                                         onError={() => console.log('Error loading image')}
                                     />
@@ -101,10 +101,10 @@ export function ProfileStackScreen() {
                                     dispatch(set_mode('auth'))
                                 }}>
                                     <Text style={{
-                                        color: '#FF4500',
+                                        color: '#FFA500',
                                         paddingRight: 8
                                     }}>Login</Text>
-                                    <Ionicons name={"enter-outline"} size={18} color={"#FF4500"} />
+                                    <Ionicons name={"enter-outline"} size={18} color={"#FFA500"} />
 
                                 </TouchableOpacity>
                             }

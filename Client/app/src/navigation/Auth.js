@@ -50,7 +50,7 @@ export default function AuthStackScreen({updateActiveJsx}) {
                             <Text>&nbsp;</Text>
                             <Text>&nbsp;</Text>
                             <Text>&nbsp;</Text>
-                            <Text style={{color: '#FF4500', fontSize: 16, fontWeight: 'bold'}}>Campus Sphere</Text>
+                            <Text style={{color: '#FFA500', fontSize: 16, fontWeight: 'bold'}}>Campus Sphere</Text>
                         </View>
 
                     </View>
@@ -66,7 +66,7 @@ export default function AuthStackScreen({updateActiveJsx}) {
                             <Text>&nbsp;</Text>
                             <Text>&nbsp;</Text>
                             <Text>&nbsp;</Text>
-                            <Text style={{color: '#FF4500', fontSize: 16, fontWeight: 'bold'}}>Campus Sphere</Text>
+                            <Text style={{color: '#FFA500', fontSize: 16, fontWeight: 'bold'}}>Campus Sphere</Text>
                         </View>
 
                     </View>
@@ -84,7 +84,7 @@ export default function AuthStackScreen({updateActiveJsx}) {
                             <Text>&nbsp;</Text>
                             <Text>&nbsp;</Text>
                             <Text>&nbsp;</Text>
-                            <Text style={{color: '#FF4500', fontSize: 16, fontWeight: 'bold'}}>Campus Sphere</Text>
+                            <Text style={{color: '#FFA500', fontSize: 16, fontWeight: 'bold'}}>Campus Sphere</Text>
                         </View>
                     </View>
                 ),
@@ -99,7 +99,7 @@ export default function AuthStackScreen({updateActiveJsx}) {
                             <Text>&nbsp;</Text>
                             <Text>&nbsp;</Text>
                             <Text>&nbsp;</Text>
-                            <Text style={{color: '#FF4500', fontSize: 16, fontWeight: 'bold'}}>Campus Sphere</Text>
+                            <Text style={{color: '#FFA500', fontSize: 16, fontWeight: 'bold'}}>Campus Sphere</Text>
                         </View>
 
                     </View>

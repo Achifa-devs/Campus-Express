@@ -101,7 +101,7 @@ const Performance = () => {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#FF4500" />
+        <ActivityIndicator size="large" color="#FFA500" />
         <Text style={styles.loadingText}>Loading your shop...</Text>
       </View>
     );
@@ -118,7 +118,7 @@ const Performance = () => {
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.summaryContainer}
         >
-          <View style={[styles.summaryCard, { backgroundColor: '#FF4500' }]}>
+          <View style={[styles.summaryCard, { backgroundColor: '#FFA500' }]}>
             <Ionicons name="eye-outline" size={20} color="white" />
             <Text style={styles.summaryNumber}>{metrics.filter(item=> item.source === 'views').length}</Text>
             <Text style={styles.summaryLabel}>Views</Text>
@@ -379,7 +379,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   promoteButton: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     borderRadius: 8,
     padding: 16,
     flexDirection: 'row',

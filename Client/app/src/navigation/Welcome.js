@@ -46,7 +46,7 @@ const WelcomeScreen = () => {
 
   return (
     <SafeAreaView style={styles.safeContainer}>
-      <StatusBar barStyle="dark-content" backgroundColor={"#FF4500"} />
+      <StatusBar barStyle="dark-content" backgroundColor={"#FFA500"} />
      
       <View style={styles.container}>
         <View
@@ -80,11 +80,11 @@ const styles = StyleSheet.create({
 
   safeContainer: {
     flex: 1,
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
   },
   container: {
     flex: 1,
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 40,
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     // borderColor: '#FFF',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     // shadowColor: '#000',
     // shadowOffset: { width: 0, height: 4 },
     // shadowOpacity: 0.2,
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FF4500',
+    color: '#FFA500',
     marginBottom: 10,
   },
   modalText: {
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   updateButton: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     padding: 12,
     borderRadius: 6,
     width: '100%',

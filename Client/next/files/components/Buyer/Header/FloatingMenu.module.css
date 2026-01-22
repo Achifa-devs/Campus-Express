@@ -35,7 +35,7 @@
 }
 
 .lastItem {
-    background-color: #FF4500;
+    background-color: #FFA500;
     color: white;
 }
 
@@ -91,7 +91,7 @@
 }
 
 .floatingMenu::-webkit-scrollbar-thumb {
-    background: #FF4500;
+    background: #FFA500;
     border-radius: 10px;
 }
 

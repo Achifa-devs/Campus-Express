@@ -30,7 +30,7 @@ export default function LodgeAmenities({amenities, deleteAmenities, productAmeni
                             alignItems: 'flex-start',
                             justifyContent: 'space-between',
                             margin: '5px',
-                            background: '#FF4500',
+                            background: '#FFA500',
                             color: '#fff',
                             cursor: 'pointer'
                         }}>

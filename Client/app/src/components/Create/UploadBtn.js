@@ -83,10 +83,10 @@ const styles = StyleSheet.create({
   uploadButton: {
     height: 50,
     borderRadius: 12,
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#FF4500',
+    shadowColor: '#FFA500',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 4,

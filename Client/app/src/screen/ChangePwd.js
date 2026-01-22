@@ -122,7 +122,7 @@ export default function ChangePwd({ route, navigation }) {
         {token_sent && (
           <View style={styles.overlay}>
             <View style={styles.overlayContent}>
-              <ActivityIndicator size="large" color="#FF4500" />
+              <ActivityIndicator size="large" color="#FFA500" />
               <Text style={styles.overlayText}>Sending verification token{'\n'}Please wait...</Text>
             </View>
           </View>
@@ -131,7 +131,7 @@ export default function ChangePwd({ route, navigation }) {
         {pwd_set && (
           <View style={styles.overlay}>
             <View style={styles.overlayContent}>
-              <ActivityIndicator size="large" color="#FF4500" />
+              <ActivityIndicator size="large" color="#FFA500" />
               <Text style={styles.overlayText}>Updating passcode{'\n'}Please wait...</Text>
             </View>
           </View>
@@ -366,7 +366,7 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   recoverLink: {
-    color: '#FF4500',
+    color: '#FFA500',
     fontWeight: '500',
   },
   inputContainer: {
@@ -387,8 +387,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   inputFocused: {
-    borderColor: '#FF4500',
-    shadowColor: '#FF4500',
+    borderColor: '#FFA500',
+    shadowColor: '#FFA500',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
@@ -419,7 +419,7 @@ const styles = StyleSheet.create({
     borderTopColor: '#F0F0F0',
   },
   actionButton: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: 'center',

@@ -120,7 +120,7 @@ const Home = () => {
             </div>
             
             <div className="seller-home" style={{position: 'relative'}}>
-                <div style={{padding: '10px', borderRadius: '5px', display: screenWidth > 760 ? 'none' : 'flex',  background: '#FF4500', color: '#fff', fontSize: 'large', position: 'fixed', right: '15px', bottom: '100px'}} onClick={e => navigate(`/seller.editor`) }>
+                <div style={{padding: '10px', borderRadius: '5px', display: screenWidth > 760 ? 'none' : 'flex',  background: '#FFA500', color: '#fff', fontSize: 'large', position: 'fixed', right: '15px', bottom: '100px'}} onClick={e => navigate(`/seller.editor`) }>
                     <span>Sell</span>
                     &nbsp;
                     <span>

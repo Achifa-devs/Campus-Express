@@ -243,7 +243,7 @@ export default function DealForVendor() {
           backgroundColor: '#FFF8F6',
           opacity: .5
         }}>
-          <ActivityIndicator size={'large'} color={'#FF4500'}></ActivityIndicator>
+          <ActivityIndicator size={'large'} color={'#FFA500'}></ActivityIndicator>
         </View>
       }
       <AlertModal
@@ -724,7 +724,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   activeTab: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
   },
   tabText: {
     fontSize: 14,
@@ -918,7 +918,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   progress: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     color: '#FFF'
   },
   statusIndicatorText: {
@@ -1083,7 +1083,7 @@ const styles = StyleSheet.create({
     width: 12,
     height: 12,
     borderRadius: 6,
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     marginRight: 12,
     marginTop: 4,
   },

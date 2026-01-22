@@ -29,7 +29,7 @@ const LoginReminder = ({ text = "Sign in to continue" }) => {
         activeOpacity={0.8}
       >
         <View style={styles.buttonContent}>
-          <Icon name="log-in" size={30} color="#FF4500" style={styles.icon} />
+          <Icon name="log-in" size={30} color="#FFA500" style={styles.icon} />
           <View style={styles.textContainer}>
             <Text style={styles.buttonText}>Sign In Required</Text>
             <Text style={styles.descriptionText}>{text}</Text>
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   buttonText: {
-    color: '#FF4500',
+    color: '#FFA500',
     fontSize: 16,
     fontWeight: '600',
     marginBottom: 2,
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
 
   },
   descriptionText: {
-    color: '#FF4500',
+    color: '#FFA500',
     fontSize: 14,
     fontWeight: '400',
   },

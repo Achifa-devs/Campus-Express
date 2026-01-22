@@ -99,7 +99,7 @@ const GetStartedScreen = ({  }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={"#FF4500"} />
+      <StatusBar barStyle="dark-content" backgroundColor={"#FFA500"} />
 
       {/* Top Section */}
       <View style={styles.topBar}>

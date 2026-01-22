@@ -555,7 +555,7 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#FF4500',
+    color: '#FFA500',
     marginBottom: 4,
   },
   statLabel: {
@@ -614,7 +614,7 @@ const styles = StyleSheet.create({
   adPrice: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FF4500',
+    color: '#FFA500',
     marginBottom: 8,
   },
   adStats: {
@@ -691,7 +691,7 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   featuredPackage: {
-    borderColor: '#FF4500',
+    borderColor: '#FFA500',
     transform: [{ scale: 1.02 }],
   },
   selectedPackage: {
@@ -702,7 +702,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -10,
     alignSelf: 'center',
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     paddingHorizontal: 12,
     paddingVertical: 4,
     borderRadius: 20,
@@ -779,7 +779,7 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderRadius: 4,
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 8,
@@ -797,13 +797,13 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   subscribeButton: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',
   },
   selectedButton: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
   },
   subscribeButtonText: {
     color: 'white',
@@ -828,7 +828,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
   },
   scrollDotActive: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     width: 12,
   },
   // Info Section
@@ -855,7 +855,7 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 4,
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,

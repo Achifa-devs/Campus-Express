@@ -124,14 +124,14 @@ const CheckoutSummary = ({Total, Method, order_list, type}) => {
                         alignItems: 'center',
                         justifyContent: 'space-between'
                     }}>
-                        <button style={{position: 'relative', width: '45%', background: '#FF4500', color: '#fff'}}  className="shadow-sm button" onClick={ e => {
+                        <button style={{position: 'relative', width: '45%', background: '#FFA500', color: '#fff'}}  className="shadow-sm button" onClick={ e => {
                             e.preventDefault();
                             
                         }}>
                             <span>Accept</span>
                         </button>
 
-                        <button style={{position: 'relative', width: '45%', background: '#FF4500', color: '#fff'}}  className="shadow-sm button" onClick={ e => {
+                        <button style={{position: 'relative', width: '45%', background: '#FFA500', color: '#fff'}}  className="shadow-sm button" onClick={ e => {
                             e.preventDefault();
                             
                         }}>

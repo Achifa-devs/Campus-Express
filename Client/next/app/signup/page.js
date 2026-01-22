@@ -407,9 +407,9 @@ const Signup = () => {
                         </form>
                     
                         <div className='btn-cnt'>
-                            <button style={{background: '#ff4500', color: '#fff'}} onClick={e => {e.preventDefault(); Registration(e)}}>Register</button>
+                            <button style={{background: '#FFA500', color: '#fff'}} onClick={e => {e.preventDefault(); Registration(e)}}>Register</button>
                             <br />
-                            <small onClick={e => window.location.href='/login'} style={{cursor: 'pointer', color: '#ff4500'}}>Already Have An Account, Signin Here</small>
+                            <small onClick={e => window.location.href='/login'} style={{cursor: 'pointer', color: '#FFA500'}}>Already Have An Account, Signin Here</small>
                         </div>
 
                     </div>

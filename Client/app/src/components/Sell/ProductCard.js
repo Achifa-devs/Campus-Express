@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FF4500',
+    color: '#FFA500',
   },
   analytics: {
     flexDirection: 'row',
@@ -306,7 +306,7 @@ const styles = StyleSheet.create({
     height: 36,
   },
   viewButton: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     flexDirection: 'row',
     gap: 4,
     paddingHorizontal: 8,

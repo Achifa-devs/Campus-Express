@@ -132,157 +132,151 @@ const Card = ({item, index}) => {
         <> 
             
             <div className="cols" key={index} id={item.product_id} >
-                <div className="card shadow-md" key={index} style={{height: 'auto', marginBottom: '10px', borderRadius: '4px'}}>
-                    
-                    
-                    
-                    {
-                        
-                        (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(item?.thumbnail_id?.split('.').pop().toLowerCase())) ? 
-                        <Thumbnail thumbnail_id={item?.thumbnail_id}/>
-                        :
-                        <Video thumbnail_id={item?.thumbnail_id} />
-                        
-                        
-                    }
-
-                    <div className="card-body" style={{position: 'relative'}}>
-                        
-                        {
-                            screenWidth > 479
-                            ?
-                            <small style={{
-                                fontSize: 'small',
-                                fontWeight: '500',
-                                fontFamily: 'sans-serif',
-                                maxHeight: '36px',
-                                lineHeight: '18px',
-                                color: '#000',
-                                display: 'webkitBox',
-                                WebkitBoxOrient: 'vertical',
-                                WebkitLineClamp: '2',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis'
-                            }} onClick={e => window.location.href=(`/store/product/${item.product_id}`)} >{item.title}</small>
-                            : 
-                            <small style={{
-                                fontSize: 'small',
-                                fontWeight: '500',
-                                fontFamily: 'sans-serif',
-                                maxHeight: '36px',
-                                lineHeight: '18px',
-                                color: '#000',
-
-                                WebkitBoxOrient: 'vertical',
-                                WebkitLineClamp: '2',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis'
-                            }} onClick={e => window.location.href=(`/store/product/${item.product_id}`)} >{item.title}</small>
-                        }
-
-                      
-                        
-                        {
-                            screenWidth > 479
-                            ?
-                            <h6 onClick={e => window.location.href=(`/store/product/${item.product_id}`)} style={{marginBottom: '10px', marginTop: '10px', fontWeight: '400', fontSize: 'small', color: '#000', fontFamily: 'sans-serif'}}>&#8358;{
-                                new Intl.NumberFormat('en-us').format(item.price)
-                            }</h6>
-                            : 
-                            <h6 onClick={e => window.location.href=(`/store/product/${item.product_id}`)} style={{marginBottom: '10px', fontWeight: '700', color: '#000'}}>&#8358;{new Intl.NumberFormat('en-us').format(item.price)}</h6>
-                        }
-
-                        {
-                            item?.others?.condition &&
-                            <div onClick={e => window.location.href=(`/store/product/${item.product_id}`)} style={{display: 'flex',background: '#fff', color: 'orangered',  alignItems: 'center', justifyContent: 'left', padding: '0'}}>
-                                <span  style={{background: '#fff', color: '#000', borderRadius: '5px', top: '20px', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', left: '20px', padding: '5px 0 5px 0'}}>
-                                    <span  style={{background: '#fff',color: 'orangered', padding: '0'}}>
-
-                                        <img src={conditionSvg.src} style={{height: '20px', width: '20px', marginBottom: '5px'}} alt="" />
-
-                                    </span>
-                                    &nbsp;
-
-                                    <span  style={{background: '#fff',color: 'rgb(98, 98, 98)', padding: '0',  fontSize: 'x-small', fontWeight: '500'}}> 
-                                        {(item.others)?.condition}
-                                    </span>
-                                </span>
-                                
-                            </div>
-                        }
-
-                        {/* <SaveButton data={item} Saver={Saver} isItemSaved={saved} /> */}
-
-                    </div>
-
-                    
-                    {/*<br />*/} 
-
-                    
-
-                    <span  style={{background: '#fff',display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'left', position: 'relative',color: '#000', borderRadius: '5px', padding: '2.5px', zIndex: '1000', padding: '0 5px 0 5px', overflow: 'hidden'}}>
-                        <span  style={{background: '#fff',color: 'orangered', padding: '0'}}>
-                            <img src={locationSvg.src} style={{height: screenWidth  > 480 ? '15px' : '12px', width: screenWidth  > 480 ? '20px' : '12px', marginBottom: '5px'}} alt="" />
-
-                        </span>
-
-                        &nbsp;
-                        {/* &nbsp; */}
-
-                        <span  style={{background: '#fff', color: '#FFA500', padding: '0',  fontSize: screenWidth > 480 ? 'x-small' : 'xx-small', fontWeight: '500', overflow: 'hidden', height: '15px'}}> 
-                            {(item?.uni_state) }, {(item?.campus)}
-                        </span>
-                    </span>
-
-                    
-
-                    <div className="" style={{height: 'fit-content', display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center', padding: '0 5px 0 5px', margin: '10px 0 0 0'}}>
-                       <div style={{
-                         display: 'flex', justifyContent: 'left', width: '50%', alignItems: 'center',
-                       }}>
-                            <img src={img.src} style={{height: '15px', width: '15px', borderRadius: '10px'}} alt="" />
-                            &nbsp;
-                            <div style={{height: 'fit-content', width: 'fit-content', fontWeight: '400', fontSize: 'x-small'}} > {item.views} views</div>
-                       </div>
-
-                        <div style={{color: '#626262', fontSize: 'x-small', fontWeight: '500', height: '30px', display: 'flex', justifyContent: 'left', flexWrap: 'nowrap', width: '50%', alignItems: 'center'}}>
-                            <span>
-                                <img src={timsSvg.src} style={{height: '15px', width: '15px', marginBottom: '3px'}} alt="" />
-                            </span>
-                            &nbsp;
-                            &nbsp;
-                            <span style={{fontSize: 'x-small'}}>
-                                {
-                                    js_ago(new Date(item.date))
-                                }
-                            </span>
-                        </div>
-                    </div>
-
-                    {/* <button style={BtnStyles} onClick={e => {
-                        order_list.filter((data) => data?.product?.product_id === item?.product_id && data?.order?.user_id === buyer_info?.user_id)?.length > 0
-                        ?
-                        window.location.href = `/store/checkout/${item?.product_id}`
-                        :
-                        window.location.href = `/store/new-order/${item?.product_id}`
-
+                <div className="card shadow-md" key={index} style={{height: '320px', marginBottom: '10px', borderRadius: '4px', position: 'relative', display: 'flex', padding: '5px'}}>
+                  
+                    <div style={{
+                        position: 'absolute',
+                        top: '0',
+                        width: '100%',
+                        left: '0',
+                        height: '150px'
                     }}>
+                        {
+                        
+                            (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(item?.thumbnail_id?.split('.').pop().toLowerCase())) ?
+                            <Thumbnail thumbnail_id={item?.thumbnail_id}/>
+                            :
+                            <Video thumbnail_id={item?.thumbnail_id} />
+                        
+                        
+                        }
+                    </div>
 
-                        <span>
-                            <img src={orderSvg.src} style={{height: '20px', width: '20px', position: 'relative', borderRadius: '2.5px',marginRight: '5px'}} alt="" />
+                    <div style={{
+                        position: 'absolute',
+                        bottom: '0',
+                        width: '100%',
+                        left: '0',
+                        // height: '300px',
+                        flexDirection: 'column',
+                        
+                    }}>
+                        <div className="card-body" style={{position: 'relative', margin: '0px', padding: "0px 10px"}}>
+                        
+                            {
+                                screenWidth > 479
+                                ?
+                                <small style={{
+                                    fontSize: '14px',
+                                    fontWeight: '500',
+                                    fontFamily: 'sans-serif',
+                                    maxHeight: '18px',
+                                    lineHeight: '18px',
+                                    color: '#000',
+                                    display: 'webkitBox',
+                                    WebkitBoxOrient: 'vertical',
+                                    WebkitLineClamp: '1',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis'
+                                }} onClick={e => window.location.href=(`/store/product/${item.product_id}`)} >{item.title}</small>
+                                :
+                                <small style={{
+                                    fontSize: 'small',
+                                    fontWeight: '500',
+                                    fontFamily: 'sans-serif',
+                                    maxHeight: '18px',
+                                    lineHeight: '18px',
+                                    color: '#000',
+                                    WebkitBoxOrient: 'vertical',
+                                    WebkitLineClamp: '1',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis'
+                                }} onClick={e => window.location.href=(`/store/product/${item.product_id}`)} >{item.title}</small>
+                            }
+                        
+                        
+                            {
+                                screenWidth > 479
+                                ?
+                                <h6 onClick={e => window.location.href=(`/store/product/${item.product_id}`)} style={{marginBottom: '10px', marginTop: '10px', fontWeight: '400', fontSize: '18px', color: '#000', fontFamily: 'sans-serif'}}>&#8358;{
+                                    new Intl.NumberFormat('en-us').format(item.price)
+                                }</h6>
+                                :
+                                <h6 onClick={e => window.location.href=(`/store/product/${item.product_id}`)} style={{marginBottom: '10px', fontWeight: '700', color: '#000'}}>&#8358;{new Intl.NumberFormat('en-us').format(item.price)}</h6>
+                            }
+                            {
+                                item?.others?.condition &&
+                                <div onClick={e => window.location.href=(`/store/product/${item.product_id}`)} style={{display: 'flex',background: '#fff', color: 'orangered',  alignItems: 'center', justifyContent: 'left', padding: '0'}}>
+                                    <span  style={{background: '#fff', color: '#000', borderRadius: '5px', top: '20px', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', left: '20px', padding: '5px 0 5px 0'}}>
+                                        <span  style={{background: '#fff',color: 'orangered', padding: '0'}}>
+                                            <img src={conditionSvg.src} style={{height: '20px', width: '20px', marginBottom: '5px'}} alt="" />
+                                        </span>
+                                        &nbsp;
+                                        <span  style={{background: '#fff',color: 'rgb(98, 98, 98)', padding: '0',  fontSize: 'x-small', fontWeight: '500'}}>
+                                            {(item.others)?.condition}
+                                        </span>
+                                    </span>
+                        
+                                </div>
+                            }
+                            {/* <SaveButton data={item} Saver={Saver} isItemSaved={saved} /> */}
+                        </div>
+                        
+                        {/*<br />*/}
+                        
+                        <span  style={{background: '#fff',display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'left', position: 'relative',color: '#000', borderRadius: '5px', padding: '2.5px', zIndex: '1000', padding: '0 5px 0 5px', overflow: 'hidden'}}>
+                            <span  style={{background: '#fff',color: 'orangered', padding: '0'}}>
+                                <img src={locationSvg.src} style={{height: screenWidth  > 480 ? '15px' : '12px', width: screenWidth  > 480 ? '20px' : '12px', marginBottom: '5px'}} alt="" />
+                            </span>
+                            &nbsp;
+                            {/* &nbsp; */}
+                            <span  style={{background: '#fff', color: '#FFA500', padding: '0',  fontSize: screenWidth > 480 ? 'x-small' : 'xx-small', fontWeight: '500', overflow: 'hidden', height: '15px'}}>
+                                {(item?.uni_state) }, {(item?.campus)}
+                            </span>
                         </span>
-
-                        &nbsp;
-                        &nbsp;
-                        <span style={{fontSize: 'x-small', background: '#FFA500'}}>{
+                        
+                        <div className="" style={{height: 'fit-content', display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center', padding: '0 5px 0 5px', margin: '0 0 0 0'}}>
+                           <div style={{
+                             display: 'flex', justifyContent: 'left', width: '50%', alignItems: 'center',
+                           }}>
+                                <img src={img.src} style={{height: '15px', width: '15px', borderRadius: '10px'}} alt="" />
+                                &nbsp;
+                                <div style={{height: 'fit-content', width: 'fit-content', fontWeight: '400', fontSize: 'x-small'}} > {item.views} views</div>
+                           </div>
+                            <div style={{color: '#626262', fontSize: 'x-small', fontWeight: '500', height: '30px', display: 'flex', justifyContent: 'left', flexWrap: 'nowrap', width: '50%', alignItems: 'center'}}>
+                                <span>
+                                    <img src={timsSvg.src} style={{height: '15px', width: '15px', marginBottom: '3px'}} alt="" />
+                                </span>
+                                &nbsp;
+                                &nbsp;
+                                <span style={{fontSize: 'x-small'}}>
+                                    {
+                                        js_ago(new Date(item.date))
+                                    }
+                                </span>
+                            </div>
+                        </div>
+                        {/* <button style={BtnStyles} onClick={e => {
                             order_list.filter((data) => data?.product?.product_id === item?.product_id && data?.order?.user_id === buyer_info?.user_id)?.length > 0
                             ?
-
-                            'View Order'
+                            window.location.href = `/store/checkout/${item?.product_id}`
                             :
-                            'Place Order Now'
-                        }</span>
-                    </button> */}
+                            window.location.href = `/store/new-order/${item?.product_id}`
+                        }}>
+                            <span>
+                                <img src={orderSvg.src} style={{height: '20px', width: '20px', position: 'relative', borderRadius: '2.5px',marginRight: '5px'}} alt="" />
+                            </span>
+                            &nbsp;
+                            &nbsp;
+                            <span style={{fontSize: 'x-small', background: '#FFA500'}}>{
+                                order_list.filter((data) => data?.product?.product_id === item?.product_id && data?.order?.user_id === buyer_info?.user_id)?.length > 0
+                                ?
+                                'View Order'
+                                :
+                                'Place Order Now'
+                            }</span>
+                        </button> */}
+                    </div>
 
                 </div>
             </div> 

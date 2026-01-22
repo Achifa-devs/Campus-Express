@@ -82,7 +82,7 @@ const ProductPageClient = ({product, slug}) => {
             let overlay = document.querySelector('.overlay');
             overlay.setAttribute('id', 'overlay');
             if (product.user_id) {
-                fetch(`/api/store/vendor?user_id=${product?.user_id}`, { cache: 'no-store',}).then(async (res) => {
+                fetch(`/api/vendor?user_id=${product?.user_id}`, { cache: 'no-store',}).then(async (res) => {
                     let response = await res.json()
                     set_seller(response.data)
                     overlay.removeAttribute('id')

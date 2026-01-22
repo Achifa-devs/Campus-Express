@@ -328,7 +328,7 @@ const ShopScreen = () => {
   const renderPerformanceMetric = (icon, value, label) => (
     <View style={styles.metricCard}>
       <View style={styles.metricIconContainer}>
-        <Icon name={icon} size={24} color="#FF4500" />
+        <Icon name={icon} size={24} color="#FFA500" />
       </View>
       <Text style={styles.metricValue}>{value}</Text>
       <Text style={styles.metricLabel}>{label}</Text>
@@ -425,7 +425,7 @@ const ShopScreen = () => {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#FF4500" />
+        <ActivityIndicator size="large" color="#FFA500" />
         <Text style={styles.loadingText}>Loading your shop...</Text>
       </View>
     );
@@ -444,7 +444,7 @@ const ShopScreen = () => {
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#FF4500" />
+        <ActivityIndicator size="large" color="#FFA500" />
       </View>
     );
   }
@@ -461,7 +461,7 @@ const ShopScreen = () => {
 
         {uploadingLogo && 
           <View style={{height: screenHeight, width: screenWidth, position: 'absolute', top: 0, zIndex: 100, backgroundColor: 'rgba(0,0,0,.3  )', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-            <ActivityIndicator size="small" color="#FF4500" />
+            <ActivityIndicator size="small" color="#FFA500" />
           </View>
         }
         <ScrollView contentContainerStyle={styles.formContainer}>
@@ -494,7 +494,7 @@ const ShopScreen = () => {
                 </>
               ) : (
                 <View style={styles.logoPlaceholder}>
-                  <Ionicons name="camera" size={32} color="#FF4500" />
+                  <Ionicons name="camera" size={32} color="#FFA500" />
                   <Text style={styles.logoPlaceholderText}>Add Shop Logo</Text>
                 </View>
               )}
@@ -840,7 +840,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     padding: 16,
     borderRadius: 12,
     marginBottom: 24,
@@ -909,7 +909,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   seeAllText: {
-    color: '#FF4500',
+    color: '#FFA500',
     fontSize: 14,
     fontWeight: '500',
   },
@@ -947,7 +947,7 @@ const styles = StyleSheet.create({
   adPrice: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FF4500',
+    color: '#FFA500',
     marginBottom: 8,
   },
   adStats: {
@@ -1025,7 +1025,7 @@ const styles = StyleSheet.create({
   formTitle: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#FF4500',
+    color: '#FFA500',
     marginBottom: 20,
     textAlign: 'center',
   },
@@ -1041,7 +1041,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#FF4500',
+    borderColor: '#FFA500',
     overflow: 'hidden',
   },
   logoPlaceholder: {
@@ -1049,7 +1049,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   logoPlaceholderText: {
-    color: '#FF4500',
+    color: '#FFA500',
     marginTop: 8,
     fontSize: 12,
   },
@@ -1068,7 +1068,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   changeLogoText: {
-    color: '#FF4500',
+    color: '#FFA500',
     textDecorationLine: 'underline',
   },
   inputContainer: {
@@ -1093,7 +1093,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
   },
   submitButton: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     padding: 15,
     borderRadius: 8,
     alignItems: 'center',

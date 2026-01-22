@@ -116,7 +116,7 @@ export default function Deals() {
                 {
                     loading ? (
                         <View style={styles.loadingContainer}>
-                            <ActivityIndicator size="large" color="#FF4500" />
+                            <ActivityIndicator size="large" color="#FFA500" />
                             <Text style={styles.loadingText}>Loading deals...</Text>
                         </View>
                     ) : 
@@ -130,8 +130,8 @@ export default function Deals() {
                             <RefreshControl
                                 refreshing={refreshing}
                                 onRefresh={handleRefresh}
-                                colors={['#FF4500']}
-                                tintColor="#FF4500"
+                                colors={['#FFA500']}
+                                tintColor="#FFA500"
                             />
                         }
                         showsVerticalScrollIndicator={false}

@@ -171,7 +171,7 @@ function Profile() {
                             <img src={photo}  style={{height: '100%', width: '100%', borderRadius: '50%'}} alt="" />
 
 
-                            <label style={{position: 'absolute', height: '30px', width: '30px', border: 'none', right: '5px', borderRadius: '50%', top: '10px', background: '#FF4500'}} htmlFor="coverphoto">
+                            <label style={{position: 'absolute', height: '30px', width: '30px', border: 'none', right: '5px', borderRadius: '50%', top: '10px', background: '#FFA500'}} htmlFor="coverphoto">
                                 <img src={editSvg}  style={{height: '30px', width: '30px'}} alt="" />
                             </label>
                         </div>
@@ -260,7 +260,7 @@ function Profile() {
                 
                     <div className="seller-input-cnt">
                         
-                        <button style={{background: '#FF4500'}} onClick={e => {e.preventDefault(); UpdateProfile();}}>Update</button>
+                        <button style={{background: '#FFA500'}} onClick={e => {e.preventDefault(); UpdateProfile();}}>Update</button>
                         
                     </div>
 
@@ -356,7 +356,7 @@ function Verification() {
 
                         <div className="seller-input-cnt">
                             
-                            <button style={{background: '#FF4500'}} onClick={e => {e.preventDefault();}}>Verify</button>
+                            <button style={{background: '#FFA500'}} onClick={e => {e.preventDefault();}}>Verify</button>
                             
                         </div>
 
@@ -426,7 +426,7 @@ function Payments() {
 
                         <div className="seller-input-cnt">
                             
-                            <button style={{background: '#FF4500'}} onClick={async(e) => {
+                            <button style={{background: '#FFA500'}} onClick={async(e) => {
                                 e.preventDefault()
                                 let acctNum = AcctNum.current
                                 let Bank = BankCode.current
@@ -506,7 +506,7 @@ function Notice() {
 
                         <div className="seller-input-cnt">
                             
-                            <button style={{background: '#FF4500'}} onClick={e => {e.preventDefault();}}>Verify</button>
+                            <button style={{background: '#FFA500'}} onClick={e => {e.preventDefault();}}>Verify</button>
                             
                         </div>
 

@@ -175,7 +175,7 @@ function InvetoryEdit({list}) {
           </div>)
 
           :
-          <div style={{background: '#FF4500'}}>
+          <div style={{background: '#FFA500'}}>
             <span style={{color: '#fff'}}>Please select any item you sell</span>
           </div>
         }
@@ -276,12 +276,12 @@ function Coin({user}) {
   };
 
   const handleFlutterPayment = useFlutterwave(config);
-  return(<div className="profile-edit" style={{background: '#FF4500'}}>
+  return(<div className="profile-edit" style={{background: '#FFA500'}}>
 
       <h2 style={{width: '100%', textAlign: 'center', color: '#fff', fontSize: '3.5vh', fontWeight: '500'}}>Campus Coin Exchange</h2>
       <div className="seller-input-cnt">
 
-        <section style={{width: '100%', borderRadius: '5px', padding: '10px', border: '1px solid #FF4500'}}>
+        <section style={{width: '100%', borderRadius: '5px', padding: '10px', border: '1px solid #FFA500'}}>
           <p style={{color: '#fff', fontWeight: '400', padding: '10px 0 10px 0', borderRadius: '5px', width: '100%'}}>Select The Amount To Buy</p>
 
           <select onInput={e => {
@@ -318,7 +318,7 @@ function Coin({user}) {
 
       <div className="seller-input-cnt">
           <section style={{width: '100%'}}>
-            <p style={{color: '#fff', padding: '10px', borderRadius: '5px', width: '100%', border: '1px solid #FF4500', padding: '10px 0 10px 0', fontWeight: '400'}}>Exchange Coin For Cash</p>
+            <p style={{color: '#fff', padding: '10px', borderRadius: '5px', width: '100%', border: '1px solid #FFA500', padding: '10px 0 10px 0', fontWeight: '400'}}>Exchange Coin For Cash</p>
 
             <select name="" id="" style={{background: '#efefef'}}>
               {
@@ -372,12 +372,12 @@ function Rent({shop,userData,updateActiveJsx}) {
     }
       
   }
-  return(<div className="profile-edit" style={{background: '#FF4500'}}>
+  return(<div className="profile-edit" style={{background: '#FFA500'}}>
       <div className="seller-input-cnt">
 
         
 
-        <section style={{width: '100%', borderRadius: '5px', padding: '10px', border: '1px solid #FF4500'}}>
+        <section style={{width: '100%', borderRadius: '5px', padding: '10px', border: '1px solid #FFA500'}}>
           <h2 style={{width: '100%', textAlign: 'center', color: '#fff', fontSize: '3.5vh', fontWeight: '500'}}>Campus Shop Rent </h2>
 
           <br />
@@ -472,7 +472,7 @@ function Ads({shop}) {
       ]
     },
   ]
-  return(<div className="profile-edit" style={{background: '#FF4500', padding: '10px', height: '95vh', width: '100vw', overflow: 'auto'}}>
+  return(<div className="profile-edit" style={{background: '#FFA500', padding: '10px', height: '95vh', width: '100vw', overflow: 'auto'}}>
 
       <div className="seller-input-cnt" style={{width: '100%', height: 'fit-content', display: 'inline-block', overflow: 'auto'}}>
         <h2 style={{color: '#fff'}}><b>Ads Packages</b></h2>
@@ -482,8 +482,8 @@ function Ads({shop}) {
 
             return(
 
-              <section key={index} style={{width: '100%', background: '#fff', margin: '0 0px 20px 0px', borderRadius: '5px', padding: '10px', border: '1px solid #FF4500'}}>
-                <p style={{background: '#FF4500', color: '#fff', padding: '10px', borderRadius: '5px', width: '100%'}}>{item.title}</p>
+              <section key={index} style={{width: '100%', background: '#fff', margin: '0 0px 20px 0px', borderRadius: '5px', padding: '10px', border: '1px solid #FFA500'}}>
+                <p style={{background: '#FFA500', color: '#fff', padding: '10px', borderRadius: '5px', width: '100%'}}>{item.title}</p>
 
                 <div style={{padding: '10px'}}>
                   <p>{item.cost}</p>

@@ -180,7 +180,7 @@ const Subscription = ({ visible, onClose }) => {
           {/* Current Plan Dashboard */}
           <View style={styles.dashboard}>
             <View style={styles.dashboardHeader}>
-              <Ionicons name="person-circle" size={26} color="#FF4500" />
+              <Ionicons name="person-circle" size={26} color="#FFA500" />
               <Text style={styles.dashboardTitle}>Your Current Plan</Text>
             </View>
             <View style={styles.planInfo}>
@@ -228,7 +228,7 @@ const Subscription = ({ visible, onClose }) => {
                   ]}
                 >
                   {index === 2 && (
-                    <LinearGradient colors={['#FF4500', '#FF6347']} style={styles.popularBadge}>
+                    <LinearGradient colors={['#FFA500', '#FF6347']} style={styles.popularBadge}>
                       <Ionicons name="star" size={12} color="white" />
                       <Text style={styles.popularBadgeText}>MOST POPULAR</Text>
                     </LinearGradient>
@@ -277,7 +277,7 @@ const Subscription = ({ visible, onClose }) => {
                     onPress={() => handleSubscribe(planName)}
                     disabled={isCurrentPlan}
                   >
-                    <LinearGradient colors={isCurrentPlan ? ['#e0e0e0', '#e0e0e0'] : ['#FF6A00', '#FF4500']} style={styles.subscribeButtonInner}>
+                    <LinearGradient colors={isCurrentPlan ? ['#e0e0e0', '#e0e0e0'] : ['#FF6A00', '#FFA500']} style={styles.subscribeButtonInner}>
                       <Text style={[styles.subscribeButtonText, isCurrentPlan && styles.currentButtonText]}>
                         {isCurrentPlan ? 'Current Plan' : planName === 'Free' ? 'Select Free Plan' : 'Subscribe Now'}
                       </Text>
@@ -292,7 +292,7 @@ const Subscription = ({ visible, onClose }) => {
             <Text style={styles.infoTitle}>Why Upgrade Your Plan?</Text>
 
             <View style={styles.infoItem}>
-              <LinearGradient colors={['#FF4500', '#FF6347']} style={styles.infoIcon}>
+              <LinearGradient colors={['#FFA500', '#FF6347']} style={styles.infoIcon}>
                 <Ionicons name="trending-up" size={20} color="white" />
               </LinearGradient>
               <View style={styles.infoContent}>
@@ -302,7 +302,7 @@ const Subscription = ({ visible, onClose }) => {
             </View>
 
             <View style={styles.infoItem}>
-              <LinearGradient colors={['#FF4500', '#FF6347']} style={styles.infoIcon}>
+              <LinearGradient colors={['#FFA500', '#FF6347']} style={styles.infoIcon}>
                 <Ionicons name="analytics" size={20} color="white" />
               </LinearGradient>
               <View style={styles.infoContent}>
@@ -312,7 +312,7 @@ const Subscription = ({ visible, onClose }) => {
             </View>
 
             <View style={styles.infoItem}>
-              <LinearGradient colors={['#FF4500', '#FF6347']} style={styles.infoIcon}>
+              <LinearGradient colors={['#FFA500', '#FF6347']} style={styles.infoIcon}>
                 <Ionicons name="business" size={20} color="white" />
               </LinearGradient>
               <View style={styles.infoContent}>
@@ -396,7 +396,7 @@ const styles = StyleSheet.create({
   currentPlanName: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#FF4500',
+    color: '#FFA500',
     marginBottom: 4,
   },
   currentPlanPrice: {
@@ -415,7 +415,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
   expirySoon: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
   },
   expiryOk: {
     backgroundColor: '#4CAF50',
@@ -454,7 +454,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderWidth: 1,
     borderColor: '#f0f0f0',
-    shadowColor: '#FF4500',
+    shadowColor: '#FFA500',
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.06,
     shadowRadius: 12,
@@ -462,14 +462,14 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   currentPlanCard: {
-    borderColor: '#FF4500',
+    borderColor: '#FFA500',
     backgroundColor: '#fff',
     borderWidth: 2
   },
   featuredPlan: {
-    borderColor: '#FF4500',
+    borderColor: '#FFA500',
     transform: [{ scale: 1.015 }],
-    shadowColor: '#FF4500',
+    shadowColor: '#FFA500',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.06,
     shadowRadius: 12,
@@ -704,8 +704,8 @@ const styles = StyleSheet.create({
     borderColor: '#ddd',
   },
   buttonSubscribe: {
-    backgroundColor: '#FF4500',
-    shadowColor: '#FF4500',
+    backgroundColor: '#FFA500',
+    shadowColor: '#FFA500',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.18,
     shadowRadius: 8,

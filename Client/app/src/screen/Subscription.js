@@ -192,7 +192,7 @@ const Subscription = () => {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#FF4500" />
+        <ActivityIndicator size="large" color="#FFA500" />
         <Text style={styles.loadingText}>Loading subscription plans...</Text>
       </View>
     );
@@ -206,7 +206,7 @@ const Subscription = () => {
         {shop?.subscription && (
           <View style={styles.dashboard}>
             <View style={styles.dashboardHeader}>
-              <Ionicons name="person-circle" size={26} color="#FF4500" />
+              <Ionicons name="person-circle" size={26} color="#FFA500" />
               <Text style={styles.dashboardTitle}>Your Current Plan</Text>
             </View>
             <View style={styles.planInfo}>
@@ -264,7 +264,7 @@ const Subscription = () => {
                 ]}
               >
                 {index === 2 && (
-                  <LinearGradient colors={['#FF4500', '#FF6347']} style={styles.popularBadge}>
+                  <LinearGradient colors={['#FFA500', '#FF6347']} style={styles.popularBadge}>
                     <Ionicons name="star" size={12} color="white" />
                     <Text style={styles.popularBadgeText}>MOST POPULAR</Text>
                   </LinearGradient>
@@ -313,7 +313,7 @@ const Subscription = () => {
                   onPress={() => !disabled && handleSubscribe(planDetails)}
                   disabled={disabled}
                 >
-                  <LinearGradient colors={disabled ? ['#e0e0e0', '#e0e0e0'] : ['#FF6A00', '#FF4500']} style={styles.subscribeButtonInner}>
+                  <LinearGradient colors={disabled ? ['#e0e0e0', '#e0e0e0'] : ['#FF6A00', '#FFA500']} style={styles.subscribeButtonInner}>
                     <Text style={[styles.subscribeButtonText, disabled && styles.currentButtonText]}>
                       {label}
                     </Text>
@@ -329,7 +329,7 @@ const Subscription = () => {
           <Text style={styles.benefitsTitle}>Why Upgrade Your Plan?</Text>
           
           <View style={styles.benefitItem}>
-            <LinearGradient colors={['#FF4500', '#FF6347']} style={styles.benefitIcon}>
+            <LinearGradient colors={['#FFA500', '#FF6347']} style={styles.benefitIcon}>
               <Ionicons name="trending-up" size={20} color="white" />
             </LinearGradient>
             <View style={styles.benefitContent}>
@@ -339,7 +339,7 @@ const Subscription = () => {
           </View>
 
           <View style={styles.benefitItem}>
-            <LinearGradient colors={['#FF4500', '#FF6347']} style={styles.benefitIcon}>
+            <LinearGradient colors={['#FFA500', '#FF6347']} style={styles.benefitIcon}>
               <Ionicons name="analytics" size={20} color="white" />
             </LinearGradient>
             <View style={styles.benefitContent}>
@@ -349,7 +349,7 @@ const Subscription = () => {
           </View>
 
           <View style={styles.benefitItem}>
-            <LinearGradient colors={['#FF4500', '#FF6347']} style={styles.benefitIcon}>
+            <LinearGradient colors={['#FFA500', '#FF6347']} style={styles.benefitIcon}>
               <Ionicons name="business" size={20} color="white" />
             </LinearGradient>
             <View style={styles.benefitContent}>
@@ -381,7 +381,7 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   header: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -440,7 +440,7 @@ const styles = StyleSheet.create({
   currentPlanName: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#FF4500',
+    color: '#FFA500',
     marginBottom: 4,
   },
   currentPlanPrice: {
@@ -449,7 +449,7 @@ const styles = StyleSheet.create({
     color: '#1A1A1A',
   },
   currentPlanCard: {
-    borderColor: '#FF4500',
+    borderColor: '#FFA500',
     backgroundColor: '#fff',
     borderWidth: 2
   },
@@ -464,7 +464,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   expirySoon: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
   },
   expiryOk: {
     backgroundColor: '#4CAF50',
@@ -504,7 +504,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderWidth: 1,
     borderColor: '#f0f0f0',
-    shadowColor: '#FF4500',
+    shadowColor: '#FFA500',
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.06,
     shadowRadius: 12,
@@ -519,9 +519,9 @@ const styles = StyleSheet.create({
     borderWidth: 2
   },
   featuredPlan: {
-    borderColor: '#FF4500',
+    borderColor: '#FFA500',
     transform: [{ scale: 1.015 }],
-    shadowColor: '#FF4500',
+    shadowColor: '#FFA500',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.06,
     shadowRadius: 12,
@@ -591,7 +591,7 @@ const styles = StyleSheet.create({
   discountPrice: {
     fontSize: 28,
     fontWeight: '800',
-    color: '#FF4500',
+    color: '#FFA500',
   },
   discountBadge: {
     backgroundColor: '#4CAF50',

@@ -50,7 +50,7 @@ export default function Nav() {
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
-        borderBottom: active === 'orders' ? '#FF4500' : '#fff'
+        borderBottom: active === 'orders' ? '#FFA500' : '#fff'
       }}>
         <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect x="5" y="4" width="14" height="17" rx="2" stroke="#000" stroke-width="2"/>
@@ -62,8 +62,8 @@ export default function Nav() {
         &nbsp;
         <span>Orders</span>
       </div> */}
-      <div onClick={e => window.location.href=('/vendor/listing')} style={{width: '33.3%', fontSize: 'x-small', color: '#000', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0px', flexDirection: 'column', borderBottom: active === 'listing' ? '#FF4500' : '#fff'}}>
-        <svg width="20px" height="20px" viewBox="0 -0.5 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#FF4500">
+      <div onClick={e => window.location.href=('/vendor/listing')} style={{width: '33.3%', fontSize: 'x-small', color: '#000', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0px', flexDirection: 'column', borderBottom: active === 'listing' ? '#FFA500' : '#fff'}}>
+        <svg width="20px" height="20px" viewBox="0 -0.5 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#FFA500">
   strokeLinejoin
           <g id="SVGRepo_bgCarrier" stroke-width="0"/>strokeLinejoinstrokeLinejoinstrokeLinejoinstrokeLinejoin
 
@@ -76,7 +76,7 @@ export default function Nav() {
         &nbsp;
         <span>Listing</span>
       </div>
-      {/* <div style={{width: '33.3%', borderBottom: active === 'balance' ? '#FF4500' : '#fff', fontSize: 'x-small', color: '#000', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0px', flexDirection: 'column'}} onClick={e => 
+      {/* <div style={{width: '33.3%', borderBottom: active === 'balance' ? '#FFA500' : '#fff', fontSize: 'x-small', color: '#000', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0px', flexDirection: 'column'}} onClick={e => 
       {
         window.location.href=('/vendor/balance')
         // alert('Check back later')
@@ -95,7 +95,7 @@ export default function Nav() {
           <span>Balance</span>
       </div> */}
       
-      <div onClick={e =>window.location.href=('/vendor/shop')} style={{width: '33.3%', borderBottom: active === 'shop' ? '#FF4500' : '#fff', fontSize: 'x-small', color: '#000', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0px', flexDirection: 'column'}}>
+      <div onClick={e =>window.location.href=('/vendor/shop')} style={{width: '33.3%', borderBottom: active === 'shop' ? '#FFA500' : '#fff', fontSize: 'x-small', color: '#000', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0px', flexDirection: 'column'}}>
         <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#000">
 strokeLinejoin
           <g id="SVGRepo_bgCarrier" stroke-width="0"/>strokeLinejoin

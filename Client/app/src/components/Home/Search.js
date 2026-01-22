@@ -72,7 +72,7 @@ const SearchBar = () => {
     <View style={advancedStyles.container}>
       <View style={advancedStyles.searchBar}>
         {/* Search Icon */}
-        <Icon name="search" size={22} color="#FF4500" style={advancedStyles.icon} />
+        <Icon name="search" size={22} color="#FFA500" style={advancedStyles.icon} />
         
         {/* Search Input */}
         {/* <TextInput
@@ -109,11 +109,11 @@ const SearchBar = () => {
           onPress={() => dispatch(set_locale_modal(1))}
           activeOpacity={0.7}
         >
-          <Icon name="location-outline" size={16} color="#FF4500" />
+          <Icon name="location-outline" size={16} color="#FFA500" />
           <Text style={advancedStyles.locationText} numberOfLines={1}>
             {campus || 'Select Campus'}
           </Text>
-          <Icon name="chevron-down" size={14} color="#FF4500" />
+          <Icon name="chevron-down" size={14} color="#FFA500" />
         </TouchableOpacity>
       </View>
       
@@ -129,7 +129,7 @@ const SearchBar = () => {
                 <Icon 
                   name={option === 'Products' ? "cart" : option === 'Lodges' ? "bed" : "construct"} 
                   size={16} 
-                  color="#FF4500" 
+                  color="#FFA500" 
                 />
                 <Text style={styles.suggestionText}>{item?.title}</Text>
               </TouchableOpacity>
@@ -208,7 +208,7 @@ const advancedStyles = StyleSheet.create({
     }),
   },
   locationText: {
-    color: '#FF4500',
+    color: '#FFA500',
     fontWeight: '600',
     fontSize: 12,
     marginHorizontal: 4,

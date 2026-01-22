@@ -24,7 +24,7 @@ export function tokenTemplate(name, token, email) {
                         }
 
                         .header {
-                        background-color: #FF4500;
+                        background-color: #FFA500;
                         color: white;
                         padding: 30px 20px;
                         text-align: center;

@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   introTitle: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#FF4500',
+    color: '#FFA500',
     marginVertical: 12,
   },
   introText: {
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FF4500',
+    color: '#FFA500',
     marginTop: 16,
     marginBottom: 8,
   },
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
     marginLeft: 12,
   },
   linkText: {
-    color: '#FF4500',
+    color: '#FFA500',
     textDecorationLine: 'underline',
   },
 });

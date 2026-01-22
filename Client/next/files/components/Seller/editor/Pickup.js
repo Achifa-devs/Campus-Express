@@ -28,14 +28,14 @@ export default function Pickup() {
         </div>
 
         <div className="pickup-channel-cnt" style={{background: '#fff', padding: '20px'}}>
-            <h5 style={{color: '#FF4500', fontWeight: '500'}}>PickUp Channel</h5>
+            <h5 style={{color: '#FFA500', fontWeight: '500'}}>PickUp Channel</h5>
             <br />
             <div className="input-cnt">
-                <div style={{display: 'flex', alignItems: 'flex-start', fontWeight: '500', fontSize: '20', justifyContent: 'flex-start', flexDirection: 'column', position: 'relative', border: '1px solid #FF4500', padding: '10px'}}>
+                <div style={{display: 'flex', alignItems: 'flex-start', fontWeight: '500', fontSize: '20', justifyContent: 'flex-start', flexDirection: 'column', position: 'relative', border: '1px solid #FFA500', padding: '10px'}}>
                     <section style={{display: 'flex', alignItems: 'center', fontWeight: '500', fontSize: '20', justifyContent: 'flex-start', flexDirection: 'row-reverse'}}>
                         <label style={{height: '20px', padding: '0', width: 'auto', display: 'flex', alignItems: 'flex-end'}} htmlFor="">Shop Pickup</label>
                         &nbsp;&nbsp;<input style={{height: '20px', width: '20px'}} type="checkbox" name="" id="" />
-                        <button onClick={e => addLocation('Shop Pickup')} className='shadow-sm' style={{position: 'absolute', top: '2.5px', right: '5px', height: '40px', width: 'auto', padding: '10px', background: '#fff', color: '#FF4500', fontSize: 'small'}}>Add Location</button>
+                        <button onClick={e => addLocation('Shop Pickup')} className='shadow-sm' style={{position: 'absolute', top: '2.5px', right: '5px', height: '40px', width: 'auto', padding: '10px', background: '#fff', color: '#FFA500', fontSize: 'small'}}>Add Location</button>
                     </section>
                     <section style={{padding: '10px', fontSize: '12', fontWeight: '400'}}>
                         <small>
@@ -47,7 +47,7 @@ export default function Pickup() {
                             locale.map((item) => 
                                 item.channel === 'Shop Pickup'
                                 ?
-                                <div className='shadow-sm' style={{display: 'flex', alignItems: 'center', fontWeight: '500', fontSize: '20', justifyContent: 'space-between', border: '1px solid #FF4500', flexDirection: 'row', padding: '5px 5px 5px 10px', width: '100%', background: '#fff', position: 'relative', borderRadius: '5px', marginBottom: '10px'}}>
+                                <div className='shadow-sm' style={{display: 'flex', alignItems: 'center', fontWeight: '500', fontSize: '20', justifyContent: 'space-between', border: '1px solid #FFA500', flexDirection: 'row', padding: '5px 5px 5px 10px', width: '100%', background: '#fff', position: 'relative', borderRadius: '5px', marginBottom: '10px'}}>
                                     <section style={{width: '80%', fontSize: 'small', fontWeight: '400'}}>{item.locale}</section>
                                     <button  onClick={e=>deleteLocation(item.index)} style={{width: '35px', height: '35px', padding: '5px', textAlign: 'center', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                                         <img src={deleteSvg} style={{height: '100%', margin: '0', left: 'unset', float: 'unset', width: '100%', position: 'relative'}} alt="" />
@@ -60,11 +60,11 @@ export default function Pickup() {
                     </section>
                 </div>
                 <br />
-                <div style={{display: 'flex', alignItems: 'flex-start', fontWeight: '500', fontSize: '20', justifyContent: 'flex-start', flexDirection: 'column', position: 'relative', border: '1px solid #FF4500', padding: '10px'}}>
+                <div style={{display: 'flex', alignItems: 'flex-start', fontWeight: '500', fontSize: '20', justifyContent: 'flex-start', flexDirection: 'column', position: 'relative', border: '1px solid #FFA500', padding: '10px'}}>
                     <section style={{display: 'flex', alignItems: 'center', fontWeight: '500', fontSize: '20', justifyContent: 'flex-start', flexDirection: 'row-reverse'}}>
                         <label style={{height: '20px', padding: '0', width: 'auto', display: 'flex', alignItems: 'flex-end'}} htmlFor="">Cutom Location Pickup</label>
                         &nbsp;&nbsp;<input style={{height: '20px', width: '20px'}} type="checkbox" name="" id="" />
-                        <button onClick={e => addLocation('Cutom Location Pickup')} className='shadow-sm' style={{position: 'absolute', top: '2.5px', right: '5px', height: '40px', width: 'auto', padding: '10px', background: '#fff', color: '#FF4500', fontSize: 'small'}}>Add Location</button>
+                        <button onClick={e => addLocation('Cutom Location Pickup')} className='shadow-sm' style={{position: 'absolute', top: '2.5px', right: '5px', height: '40px', width: 'auto', padding: '10px', background: '#fff', color: '#FFA500', fontSize: 'small'}}>Add Location</button>
                     </section>
                     <section style={{padding: '10px', fontSize: '12', fontWeight: '400'}}>
                         <small>
@@ -76,7 +76,7 @@ export default function Pickup() {
                             locale.map((item) => 
                                 item.channel === 'Cutom Location Pickup'
                                 ?
-                                <div className='shadow-sm' style={{display: 'flex', alignItems: 'center', fontWeight: '500', fontSize: '20', justifyContent: 'space-between', border: '1px solid #FF4500', flexDirection: 'row', padding: '5px 5px 5px 10px', width: '100%', background: '#fff', position: 'relative', borderRadius: '5px', marginBottom: '10px'}}>
+                                <div className='shadow-sm' style={{display: 'flex', alignItems: 'center', fontWeight: '500', fontSize: '20', justifyContent: 'space-between', border: '1px solid #FFA500', flexDirection: 'row', padding: '5px 5px 5px 10px', width: '100%', background: '#fff', position: 'relative', borderRadius: '5px', marginBottom: '10px'}}>
                                     <section style={{width: '80%', fontSize: 'small', fontWeight: '400'}}>{item.locale}</section>
                                     <button  onClick={e=>deleteLocation(item.index)} style={{width: '35px', height: '35px', padding: '5px', textAlign: 'center', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                                         <img src={deleteSvg} style={{height: '100%', margin: '0', left: 'unset', float: 'unset', width: '100%', position: 'relative'}} alt="" />
@@ -90,11 +90,11 @@ export default function Pickup() {
                 </div>
                 <br />
                
-                <div style={{display: 'flex', alignItems: 'flex-start', fontWeight: '500', fontSize: '20', justifyContent: 'flex-start', flexDirection: 'column', position: 'relative', border: '1px solid #FF4500', padding: '10px'}}>
+                <div style={{display: 'flex', alignItems: 'flex-start', fontWeight: '500', fontSize: '20', justifyContent: 'flex-start', flexDirection: 'column', position: 'relative', border: '1px solid #FFA500', padding: '10px'}}>
                     <section style={{display: 'flex', alignItems: 'center', fontWeight: '500', fontSize: '20', justifyContent: 'flex-start', flexDirection: 'row-reverse'}}>
                         <label style={{height: '20px', padding: '0', width: 'auto', display: 'flex', alignItems: 'flex-end'}} htmlFor="">Door Step Pickup</label>
                         &nbsp;&nbsp;<input style={{height: '20px', width: '20px'}} type="checkbox" name="" id="" />
-                        <button onClick={e => addLocation('Door Step Pickup')} className='shadow-sm' style={{position: 'absolute', top: '2.5px', right: '5px', height: '40px', width: 'auto', padding: '10px', background: '#fff', color: '#FF4500', fontSize: 'small'}}>Add Location</button>
+                        <button onClick={e => addLocation('Door Step Pickup')} className='shadow-sm' style={{position: 'absolute', top: '2.5px', right: '5px', height: '40px', width: 'auto', padding: '10px', background: '#fff', color: '#FFA500', fontSize: 'small'}}>Add Location</button>
                     </section>
                     <section style={{padding: '10px', fontSize: '12', fontWeight: '400'}}>
                         <small>
@@ -106,7 +106,7 @@ export default function Pickup() {
                             locale.map((item) => 
                                 item.channel === 'Door Step Pickup'
                                 ?
-                                <div className='shadow-sm' style={{display: 'flex', alignItems: 'center', fontWeight: '500', fontSize: '20', justifyContent: 'space-between', border: '1px solid #FF4500', flexDirection: 'row', padding: '5px 5px 5px 10px', width: '100%', background: '#fff', position: 'relative', borderRadius: '5px', marginBottom: '10px'}}>
+                                <div className='shadow-sm' style={{display: 'flex', alignItems: 'center', fontWeight: '500', fontSize: '20', justifyContent: 'space-between', border: '1px solid #FFA500', flexDirection: 'row', padding: '5px 5px 5px 10px', width: '100%', background: '#fff', position: 'relative', borderRadius: '5px', marginBottom: '10px'}}>
                                     <section style={{width: '80%', fontSize: 'small', fontWeight: '400'}}>{item.locale}</section>
                                     <button  onClick={e=>deleteLocation(item.index)} style={{width: '35px', height: '35px', padding: '5px', textAlign: 'center', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                                         <img src={deleteSvg} style={{height: '100%', margin: '0', left: 'unset', float: 'unset', width: '100%', position: 'relative'}} alt="" />
@@ -119,11 +119,11 @@ export default function Pickup() {
                     </section>
                 </div>
                 <br />
-                <div style={{display: 'flex', alignItems: 'flex-start', fontWeight: '500', fontSize: '20', justifyContent: 'flex-start', flexDirection: 'column', position: 'relative', border: '1px solid #FF4500', padding: '10px'}}>
+                <div style={{display: 'flex', alignItems: 'flex-start', fontWeight: '500', fontSize: '20', justifyContent: 'flex-start', flexDirection: 'column', position: 'relative', border: '1px solid #FFA500', padding: '10px'}}>
                     <section style={{display: 'flex', alignItems: 'center', fontWeight: '500', fontSize: '20', justifyContent: 'flex-start', flexDirection: 'row-reverse'}}>
                         <label style={{height: '20px', padding: '0', width: 'auto', display: 'flex', alignItems: 'flex-end'}} htmlFor="">Seller Delivery to Buyer Door Step</label>
                         &nbsp;&nbsp;<input style={{height: '20px', width: '20px'}} type="checkbox" name="" id="" />
-                        <button onClick={e => addLocation('Seller Delivery to Buyer Door Step')} className='shadow-sm' style={{position: 'absolute', top: '2.5px', right: '5px', height: '40px', width: 'auto', padding: '10px', background: '#fff', color: '#FF4500', fontSize: 'small'}}>Add Location</button>
+                        <button onClick={e => addLocation('Seller Delivery to Buyer Door Step')} className='shadow-sm' style={{position: 'absolute', top: '2.5px', right: '5px', height: '40px', width: 'auto', padding: '10px', background: '#fff', color: '#FFA500', fontSize: 'small'}}>Add Location</button>
                     </section>
                     <section style={{padding: '10px', fontSize: '12', fontWeight: '400'}}>
                         <small>
@@ -135,7 +135,7 @@ export default function Pickup() {
                             locale.map((item) => 
                                 item.channel === 'Seller Delivery to Buyer Door Step'
                                 ?
-                                <div className='shadow-sm' style={{display: 'flex', alignItems: 'center', fontWeight: '500', fontSize: '20', justifyContent: 'space-between', border: '1px solid #FF4500', flexDirection: 'row', padding: '5px 5px 5px 10px', width: '100%', background: '#fff', position: 'relative', borderRadius: '5px', marginBottom: '10px'}}>
+                                <div className='shadow-sm' style={{display: 'flex', alignItems: 'center', fontWeight: '500', fontSize: '20', justifyContent: 'space-between', border: '1px solid #FFA500', flexDirection: 'row', padding: '5px 5px 5px 10px', width: '100%', background: '#fff', position: 'relative', borderRadius: '5px', marginBottom: '10px'}}>
                                     <section style={{width: '80%', fontSize: 'small', fontWeight: '400'}}>{item.locale}</section>
                                     <button  onClick={e=>deleteLocation(item.index)} style={{width: '35px', height: '35px', padding: '5px', textAlign: 'center', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                                         <img src={deleteSvg} style={{height: '100%', margin: '0', left: 'unset', float: 'unset', width: '100%', position: 'relative'}} alt="" />
@@ -149,11 +149,11 @@ export default function Pickup() {
                     </section>
                 </div>
                 <br />
-                <div style={{display: 'flex', alignItems: 'flex-start', fontWeight: '500', fontSize: '20', justifyContent: 'flex-start', flexDirection: 'column', position: 'relative', border: '1px solid #FF4500', padding: '10px'}}>
+                <div style={{display: 'flex', alignItems: 'flex-start', fontWeight: '500', fontSize: '20', justifyContent: 'flex-start', flexDirection: 'column', position: 'relative', border: '1px solid #FFA500', padding: '10px'}}>
                     <section style={{display: 'flex', alignItems: 'center', fontWeight: '500', fontSize: '20', justifyContent: 'flex-start', flexDirection: 'row-reverse'}}>
                         <label style={{height: '20px', padding: '0', width: 'auto', display: 'flex', alignItems: 'flex-end'}} htmlFor="">Custom Location Pickup Selected By Buyer</label>
                         &nbsp;&nbsp;<input style={{height: '20px', width: '20px'}} type="checkbox" name="" id="" />
-                        <button onClick={e => addLocation('Cutom Location Pickup')} className='shadow-sm' style={{position: 'absolute', top: '2.5px', right: '5px', height: '40px', width: 'auto', padding: '10px', background: '#fff', color: '#FF4500', fontSize: 'small'}}>Add Location</button>
+                        <button onClick={e => addLocation('Cutom Location Pickup')} className='shadow-sm' style={{position: 'absolute', top: '2.5px', right: '5px', height: '40px', width: 'auto', padding: '10px', background: '#fff', color: '#FFA500', fontSize: 'small'}}>Add Location</button>
                     </section>
                     <section style={{padding: '10px', fontSize: '12', fontWeight: '400'}}>
                         <small>
@@ -165,7 +165,7 @@ export default function Pickup() {
                             locale.map((item) => 
                                 item.channel === 'Cutom Location Pickup'
                                 ?
-                                <div className='shadow-sm' style={{display: 'flex', alignItems: 'center', fontWeight: '500', fontSize: '20', justifyContent: 'space-between', border: '1px solid #FF4500', flexDirection: 'row', padding: '5px 5px 5px 10px', width: '100%', background: '#fff', position: 'relative', borderRadius: '5px', marginBottom: '10px'}}>
+                                <div className='shadow-sm' style={{display: 'flex', alignItems: 'center', fontWeight: '500', fontSize: '20', justifyContent: 'space-between', border: '1px solid #FFA500', flexDirection: 'row', padding: '5px 5px 5px 10px', width: '100%', background: '#fff', position: 'relative', borderRadius: '5px', marginBottom: '10px'}}>
                                     <section style={{width: '80%', fontSize: 'small', fontWeight: '400'}}>{item.locale}</section>
                                     <button  onClick={e=>deleteLocation(item.index)} style={{width: '35px', height: '35px', padding: '5px', textAlign: 'center', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                                         <img src={deleteSvg} style={{height: '100%', margin: '0', left: 'unset', float: 'unset', width: '100%', position: 'relative'}} alt="" />

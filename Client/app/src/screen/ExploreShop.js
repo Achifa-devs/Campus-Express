@@ -49,7 +49,7 @@ export default function Shop() {
         <ScrollView style={styles.container}>
             {/* Header Banner */}
             <LinearGradient
-                colors={['#FF4500', '#FF7F50']}
+                colors={['#FFA500', '#FF7F50']}
                 style={styles.banner}
                 start={{x: 0, y: 0}}
                 end={{x: 1, y: 0}}
@@ -73,7 +73,7 @@ export default function Shop() {
                         />
                     ) : (
                         <View style={styles.avatarPlaceholder}>
-                            <Ionicons name="storefront" size={32} color="#FF4500" />
+                            <Ionicons name="storefront" size={32} color="#FFA500" />
                         </View>
                     )}
                 </View>
@@ -81,7 +81,7 @@ export default function Shop() {
                 <View style={styles.shopInfo}>
                     <Text style={styles.shopTitle}>{user?.fname} {user?.lname}</Text>
                     <TouchableOpacity style={styles.verificationBadge}>
-                        <Ionicons name={eval(shop.is_verified) ? "shield-checkmark" : "close-circle"} size={16} color="#FF4500" />
+                        <Ionicons name={eval(shop.is_verified) ? "shield-checkmark" : "close-circle"} size={16} color="#FFA500" />
                         <Text style={styles.verificationText}>{eval(shop.is_verified) ? 'Verified': 'Not Verified'}</Text>
                     </TouchableOpacity>
                 </View>  
@@ -423,7 +423,7 @@ const styles = StyleSheet.create({
         borderColor: '#FFE5DE',
     },
     verificationText: {
-        color: '#FF4500',
+        color: '#FFA500',
         fontSize: 12,
         fontWeight: '600',
         marginLeft: 6,
@@ -608,7 +608,7 @@ const styles = StyleSheet.create({
     },
     learnMoreText: {
         fontSize: 16,
-        color: '#FF4500',
+        color: '#FFA500',
         fontWeight: '600',
     },
     inputGroup: {
@@ -699,7 +699,7 @@ const styles = StyleSheet.create({
         fontWeight: '500',
     },
     setupButton: {
-        backgroundColor: '#FF4500',
+        backgroundColor: '#FFA500',
         borderRadius: 12,
         padding: 18,
         alignItems: 'center',

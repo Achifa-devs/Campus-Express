@@ -126,7 +126,7 @@ export function RefundStackScreen() {
                                     id: Tools.generateId(0)
                                 });
                             }}>
-                                <Ionicons name={'chatbubbles-outline'} color={'#FF4500'} size={25} />
+                                <Ionicons name={'chatbubbles-outline'} color={'#FFA500'} size={25} />
                             </TouchableOpacity>
                         </View>
                     ),
@@ -177,7 +177,7 @@ export function RefundStackScreen() {
                                     id: Tools.generateId(0)
                                 });
                             }}>
-                                <Ionicons name={'chatbubbles-outline'} color={'#FF4500'} size={25} />
+                                <Ionicons name={'chatbubbles-outline'} color={'#FFA500'} size={25} />
                             </TouchableOpacity>
                         </View>
                     ),

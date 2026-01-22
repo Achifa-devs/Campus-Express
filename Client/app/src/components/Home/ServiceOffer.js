@@ -76,7 +76,7 @@ const ServicesOffer = ({ data = [], loading }) => {
         <Icon
           name={item.icon}
           size={24}
-          color={activeCategory === item.name ? '#FF4500' : '#666'}
+          color={activeCategory === item.name ? '#FFA500' : '#666'}
         />
         <Text
           style={[
@@ -138,7 +138,7 @@ const ServicesOffer = ({ data = [], loading }) => {
   if (loading) {
     return (
       <View style={styles.emptyContainer}>
-        <ActivityIndicator size="large" color="#FF4500" />
+        <ActivityIndicator size="large" color="#FFA500" />
         <Text style={styles.emptyTitle}>Loading Services...</Text>
       </View>
     );
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
   },
   activeCategory: { backgroundColor: '#FFF0E8' },
   categoryText: { marginTop: 4, fontSize: 12, color: '#666', fontWeight: '500' },
-  activeCategoryText: { color: '#FF4500', fontWeight: '600' },
+  activeCategoryText: { color: '#FFA500', fontWeight: '600' },
 });
 
 export default ServicesOffer;

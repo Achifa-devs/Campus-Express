@@ -179,7 +179,7 @@ const Login = ({ updateActiveJsx }) => {
         >
           {isLoading && (
             <View style={styles.loadingOverlay}>
-              <ActivityIndicator size="large" color="#FF4500" />
+              <ActivityIndicator size="large" color="#FFA500" />
             </View>
           )}
 
@@ -391,9 +391,9 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   inputFocused: {
-    borderColor: '#FF4500',
+    borderColor: '#FFA500',
     backgroundColor: '#FFF',
-    shadowColor: '#FF4500',
+    shadowColor: '#FFA500',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.2,
     shadowRadius: 8,
@@ -434,17 +434,17 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
   forgotPasswordText: {
-    color: '#FF4500',
+    color: '#FFA500',
     fontSize: 14,
     fontWeight: '600',
   },
   loginButton: {
     height: 56,
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#FF4500',
+    shadowColor: '#FFA500',
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.3,
     shadowRadius: 12,
@@ -471,7 +471,7 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   signupLink: {
-    color: '#FF4500',
+    color: '#FFA500',
     fontSize: 14,
     fontWeight: '700',
   },

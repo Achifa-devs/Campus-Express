@@ -1019,7 +1019,7 @@ export default function NewListing() {
                         }
                           
                     }} style={{
-                        background: '#FF4500',
+                        background: '#FFA500',
                         color: '#FFF', 
                         border: 'none', 
                         outline: 'none',
@@ -1512,7 +1512,7 @@ export default function NewListing() {
                                 {
                                     thumbnail !== ''
                                     ?
-                                        <div style={{position: 'relative',height: '100%', width: '100%', border: '3px solid #FF4500'}}>
+                                        <div style={{position: 'relative',height: '100%', width: '100%', border: '3px solid #FFA500'}}>
                                             <div onClick={e => { 
                                                 seller_overlay_setup(true, `Deleting thumbnail...`)
                             

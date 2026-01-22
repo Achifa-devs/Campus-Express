@@ -52,7 +52,7 @@ export default function Condition({ updateCondition, category, error }) {
           <Ionicons 
             name="pricetag-outline" 
             size={20} 
-            color={isFocused ? '#FF4500' : '#666'} 
+            color={isFocused ? '#FFA500' : '#666'} 
             style={styles.icon}
           />
         )}
@@ -60,7 +60,7 @@ export default function Condition({ updateCondition, category, error }) {
           <View style={styles.item}>
             <Text style={styles.textItem}>{item.title}</Text>
             {value === item.title && (
-              <Ionicons name="checkmark" size={20} color="#FF4500" />
+              <Ionicons name="checkmark" size={20} color="#FFA500" />
             )}
           </View>
         )}

@@ -292,7 +292,7 @@ const ProofOfDeliveryUpload = () => {
             backgroundColor: '#FFF8F6',
             opacity: .5
         }}>
-            <ActivityIndicator size={'large'} color={'#FF4500'}></ActivityIndicator>
+            <ActivityIndicator size={'large'} color={'#FFA500'}></ActivityIndicator>
         </View>
       }
       <KeyboardAvoidingView 
@@ -585,7 +585,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderWidth: 2,
-    borderColor: '#FF4500',
+    borderColor: '#FFA500',
     borderStyle: 'dashed',
     borderRadius: 4,
     justifyContent: 'center',
@@ -596,7 +596,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8,
@@ -608,7 +608,7 @@ const styles = StyleSheet.create({
   },
   uploadText: {
     fontSize: 12,
-    color: '#FF4500',
+    color: '#FFA500',
     fontWeight: '500',
     textAlign: 'center',
   },
@@ -620,14 +620,14 @@ const styles = StyleSheet.create({
   },
   submitButton: {
 
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     paddingVertical: 16,
     borderRadius: 4,
     alignItems: 'center',
     marginBottom: 8,
     ...Platform.select({
       ios: {
-        shadowColor: '#FF4500',
+        shadowColor: '#FFA500',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,
         shadowRadius: 4,
@@ -662,12 +662,12 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     marginBottom: 10,
     borderLeftWidth: 4,
-    borderLeftColor: '#FF4500',
+    borderLeftColor: '#FFA500',
   },
   summaryTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FF4500',
+    color: '#FFA500',
     marginBottom: 8,
   },
   summaryText: {

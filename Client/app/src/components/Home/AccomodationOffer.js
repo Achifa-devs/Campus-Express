@@ -179,7 +179,7 @@ const AccomodationOffer = ({ data = [], loading }) => {
               disabled={isLoading}
             >
               {isLoading ? (
-                <ActivityIndicator size="small" color={isWishlisted ? '#FFF' : '#FF4500'} />
+                <ActivityIndicator size="small" color={isWishlisted ? '#FFF' : '#FFA500'} />
               ) : (
                 <Icon
                   name={isWishlisted ? 'heart' : 'heart-outline'}
@@ -211,7 +211,7 @@ const AccomodationOffer = ({ data = [], loading }) => {
             </Text>
 
             <View style={styles.locationRow}>
-              <Icon name="location" size={16} color="#FF4500" />
+              <Icon name="location" size={16} color="#FFA500" />
               <Text style={styles.location} numberOfLines={1}>
                 {item?.campus} - {item?.others?.lodge_data?.address1}, {item?.others?.lodge_data?.address2}
               </Text>
@@ -231,7 +231,7 @@ const AccomodationOffer = ({ data = [], loading }) => {
   if (loading) {
     return (
       <View style={styles.emptyContainer}>
-        <ActivityIndicator size="large" color="#FF4500" />
+        <ActivityIndicator size="large" color="#FFA500" />
         <Text style={styles.emptyTitle}>Loading Offers...</Text>
         <Text style={styles.emptySubtitle}>Please wait while we fetch products</Text>
       </View>
@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 8,
     left: 8,
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 3,
@@ -293,7 +293,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(0,0,0,0.05)',
   },
-  wishlistBtnActive: { backgroundColor: '#FF4500', borderColor: '#FF4500' },
+  wishlistBtnActive: { backgroundColor: '#FFA500', borderColor: '#FFA500' },
   boostBadge: {
     position: 'absolute',
     bottom: 0,

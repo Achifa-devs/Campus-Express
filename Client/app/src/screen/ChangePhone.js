@@ -54,7 +54,7 @@ export default function ChangePhone({ route, navigation }) {
         {token_sent && (
           <View style={styles.overlay}>
             <View style={styles.overlayContent}>
-              <ActivityIndicator size="large" color="#FF4500" />
+              <ActivityIndicator size="large" color="#FFA500" />
               <Text style={styles.overlayText}>Sending verification token{'\n'}Please wait...</Text>
             </View>
           </View>
@@ -63,7 +63,7 @@ export default function ChangePhone({ route, navigation }) {
         {phone_sent && (
           <View style={styles.overlay}>
             <View style={styles.overlayContent}>
-              <ActivityIndicator size="large" color="#FF4500" />
+              <ActivityIndicator size="large" color="#FFA500" />
               <Text style={styles.overlayText}>Updating phone number{'\n'}Please wait...</Text>
             </View>
           </View>
@@ -297,8 +297,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   inputFocused: {
-    borderColor: '#FF4500',
-    shadowColor: '#FF4500',
+    borderColor: '#FFA500',
+    shadowColor: '#FFA500',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
@@ -336,7 +336,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   alternativeOptionText: {
-    color: '#FF4500',
+    color: '#FFA500',
     fontWeight: '500',
   },
   buttonContainer: {
@@ -345,7 +345,7 @@ const styles = StyleSheet.create({
     borderTopColor: '#F0F0F0',
   },
   actionButton: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: 'center',

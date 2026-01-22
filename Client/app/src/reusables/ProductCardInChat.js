@@ -73,7 +73,7 @@ const ProductCardInChat = ({ product, onViewProduct, isSender }) => {
   );
 };
 
-const PRIMARY_COLOR = '#FF4500';
+const PRIMARY_COLOR = '#FFA500';
 const COMPLEMENTARY_COLOR = '#00BFFF';
 const LIGHT_ORANGE = '#FFE4D6';
 const LIGHT_BLUE = '#E6F4FF';

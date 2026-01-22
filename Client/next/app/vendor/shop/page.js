@@ -96,7 +96,7 @@ export default function Shop() {
                     </div>
 
                     <ul className='learner-data-cnt'>
-                        <li style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px', flexDirection: 'row', color: '#FF4500', border: '1px solid #FF4500'}}  className='learner-data' onClick={e => window.location.href=('/vendor/new-listing/')}>Add New Product To Your Listing </li>
+                        <li style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px', flexDirection: 'row', color: '#FFA500', border: '1px solid #FFA500'}}  className='learner-data' onClick={e => window.location.href=('/vendor/new-listing/')}>Add New Product To Your Listing </li>
                     </ul>
                 </div> 
                 <div className="seller-shop-metrics">

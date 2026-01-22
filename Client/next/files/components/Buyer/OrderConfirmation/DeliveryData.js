@@ -42,7 +42,7 @@ export default function DeliveryData({order_list}) {
                     order_list !== ''
                     ?
                     order_list?.order?.pick_up_channels.map(item=> 
-                        <div className='shadow-sm' style={{display: 'flex', alignItems: 'center', fontWeight: '500', fontSize: '20', justifyContent: 'space-between', border: '1px solid #FF4500', flexDirection: 'row', padding: '5px 5px 5px 10px', width: '100%', background: '#fff', position: 'relative', borderRadius: '5px', marginBottom: '10px'}}>
+                        <div className='shadow-sm' style={{display: 'flex', alignItems: 'center', fontWeight: '500', fontSize: '20', justifyContent: 'space-between', border: '1px solid #FFA500', flexDirection: 'row', padding: '5px 5px 5px 10px', width: '100%', background: '#fff', position: 'relative', borderRadius: '5px', marginBottom: '10px'}}>
                             
                             <section style={{width: '80%', fontSize: 'small', fontWeight: '400'}}>
                                 <b>{item.channel}</b>
@@ -64,7 +64,7 @@ export default function DeliveryData({order_list}) {
                                 }
                                 </div>
                             </section>
-                            <button className='shadow-sm' style={{position: 'absolute', top: '5px', right: '5px', height: 'auto', width: 'auto', display: 'flex', alignItems: 'center', justifyContents: 'center', padding: '5px', textAlign: 'center', background: '#fff', color: '#FF4500', fontSize: 'small', float: 'right', color: '#fff', background: '#FF4500'}}>
+                            <button className='shadow-sm' style={{position: 'absolute', top: '5px', right: '5px', height: 'auto', width: 'auto', display: 'flex', alignItems: 'center', justifyContents: 'center', padding: '5px', textAlign: 'center', background: '#fff', color: '#FFA500', fontSize: 'small', float: 'right', color: '#fff', background: '#FFA500'}}>
                                 <Link href={{ pathname: `/new-order/${pathname.split('/').splice(-1)[0]}`, query: { order_id: order_list?.order?.order_id } }}>
                                 {
                                 'Edit'

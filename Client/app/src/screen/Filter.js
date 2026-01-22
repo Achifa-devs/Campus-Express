@@ -107,7 +107,7 @@ const ProductCard = ({ item, navigation, user, Fav }) => {
             onPress={handleSave}
           >
             {favLoading ? (
-              <ActivityIndicator size="small" color={wishlisted ? "#FFF" : "#FF4500"} />
+              <ActivityIndicator size="small" color={wishlisted ? "#FFF" : "#FFA500"} />
             ) : (
               <Icon
                 name={wishlisted ? 'heart' : 'heart-outline'}
@@ -304,10 +304,10 @@ export default function TypeProducts() {
               >
                 <Text style={styles.modalOptionText}>{condition}</Text>
                 {filterWord.condition === condition && (
-                  <Icon name="checkmark" size={18} color="#FF4500" />
+                  <Icon name="checkmark" size={18} color="#FFA500" />
                 )}
                 {!filterWord.condition && condition === 'Any Condition' && (
-                  <Icon name="checkmark" size={18} color="#FF4500" />
+                  <Icon name="checkmark" size={18} color="#FFA500" />
                 )}
               </TouchableOpacity>
             ))}
@@ -326,10 +326,10 @@ export default function TypeProducts() {
               >
                 <Text style={styles.modalOptionText}>{gender}</Text>
                 {filterWord.gender === gender && (
-                  <Icon name="checkmark" size={18} color="#FF4500" />
+                  <Icon name="checkmark" size={18} color="#FFA500" />
                 )}
                 {!filterWord.gender && gender === 'Any Gender' && (
-                  <Icon name="checkmark" size={18} color="#FF4500" />
+                  <Icon name="checkmark" size={18} color="#FFA500" />
                 )}
               </TouchableOpacity>
             ))}
@@ -348,10 +348,10 @@ export default function TypeProducts() {
               >
                 <Text style={styles.modalOptionText}>{sort}</Text>
                 {filterWord.priceSort === sort && (
-                  <Icon name="checkmark" size={18} color="#FF4500" />
+                  <Icon name="checkmark" size={18} color="#FFA500" />
                 )}
                 {!filterWord.priceSort && sort === 'Default' && (
-                  <Icon name="checkmark" size={18} color="#FF4500" />
+                  <Icon name="checkmark" size={18} color="#FFA500" />
                 )}
               </TouchableOpacity>
             ))}
@@ -370,10 +370,10 @@ export default function TypeProducts() {
               >
                 <Text style={styles.modalOptionText}>{sort}</Text>
                 {filterWord.dateSort === sort && (
-                  <Icon name="checkmark" size={18} color="#FF4500" />
+                  <Icon name="checkmark" size={18} color="#FFA500" />
                 )}
                 {!filterWord.dateSort && sort === 'Default' && (
-                  <Icon name="checkmark" size={18} color="#FF4500" />
+                  <Icon name="checkmark" size={18} color="#FFA500" />
                 )}
               </TouchableOpacity>
             ))}
@@ -388,7 +388,7 @@ export default function TypeProducts() {
   if (loading) {
       return (
       <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#FF4500" />
+          <ActivityIndicator size="large" color="#FFA500" />
       </View>
       );
   }
@@ -573,8 +573,8 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(0, 0, 0, 0.05)',
   },
   wishlistButtonActive: {
-    backgroundColor: '#FF4500',
-    borderColor: '#FF4500',
+    backgroundColor: '#FFA500',
+    borderColor: '#FFA500',
   },
   topBadgesContainer: {
     position: 'absolute',
@@ -584,7 +584,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   conditionBadge: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
@@ -647,7 +647,7 @@ const styles = StyleSheet.create({
   },
   sortText: {
     fontSize: 14,
-    color: '#FF4500',
+    color: '#FFA500',
     fontWeight: '500',
     marginLeft: 4,
   },
@@ -671,8 +671,8 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   activeFilterBtn: {
-    backgroundColor: '#FF4500',
-    borderColor: '#FF4500',
+    backgroundColor: '#FFA500',
+    borderColor: '#FFA500',
   },
   filterBtnText: {
     fontSize: 14,
@@ -702,7 +702,7 @@ const styles = StyleSheet.create({
   activeFilterTag: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 12,
@@ -715,7 +715,7 @@ const styles = StyleSheet.create({
   },
   clearAllText: {
     fontSize: 12,
-    color: '#FF4500',
+    color: '#FFA500',
     fontWeight: '500',
     marginLeft: 8,
   },
@@ -760,7 +760,7 @@ const styles = StyleSheet.create({
   price: {
     fontWeight: 'bold',
     fontSize: 16,
-    color: '#FF4500',
+    color: '#FFA500',
     marginBottom: 4,
   },
   titleText: {
@@ -800,7 +800,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 8,
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
   },
   resetFiltersText: {
     color: '#FFF',

@@ -15,8 +15,8 @@ const FloatingMenu = ({list,right,top,visible,getSelectedOption,setDisplay}) => 
                             index === list.length -1 && getSelectedOption !== 'categories'
                             ?
                             <>
-                                <div style={{borderBottom: '.5px solid #FF4500', width: '100%', margin: '7px 0px'}}></div>
-                                    <li style={{  color: '#fff', background: '#FF4500'}} onClick={e => {
+                                <div style={{borderBottom: '.5px solid #FFA500', width: '100%', margin: '7px 0px'}}></div>
+                                    <li style={{  color: '#fff', background: '#FFA500'}} onClick={e => {
                                         getSelectedOption === 'categories' ?
                                         window.location.href = `/store/category/${item?.txt}`
                                         : 

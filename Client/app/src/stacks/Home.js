@@ -321,7 +321,7 @@ const styles = StyleSheet.create({
     }),
   },
   locationText: {
-    color: '#FF4500',
+    color: '#FFA500',
     fontWeight: '600',
     fontSize: 13,
     marginHorizontal: 6,
@@ -339,7 +339,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 4,
     borderWidth: 1.5,
-    borderColor: '#FF4500',
+    borderColor: '#FFA500',
     minWidth: 100,
     alignItems: 'center',
     justifyContent: 'center',
@@ -353,8 +353,8 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   subscribedButton: {
-    backgroundColor: '#FF4500',
-    borderColor: '#FF4500',
+    backgroundColor: '#FFA500',
+    borderColor: '#FFA500',
   },
   buttonContent: {
     flexDirection: 'row',
@@ -365,7 +365,7 @@ const styles = StyleSheet.create({
     marginRight: 6,
   },
   buttonText: {
-    color: '#FF4500',
+    color: '#FFA500',
     fontSize: 14,
     fontWeight: '600',
     textAlign: 'center',
@@ -377,7 +377,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -4,
     right: -4,
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     width: 18,
     height: 18,
     borderRadius: 9,
@@ -394,14 +394,14 @@ const styles = StyleSheet.create({
   loginButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 4,
     gap: 6,
     ...Platform.select({
       ios: {
-        shadowColor: '#FF4500',
+        shadowColor: '#FFA500',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,
         shadowRadius: 4,

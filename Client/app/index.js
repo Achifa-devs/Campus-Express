@@ -77,7 +77,7 @@ messaging().setBackgroundMessageHandler(async remoteMessage => {
       pressAction: {
         id: 'default',
       },
-      color: '#FF4500', // 🔥 optional custom color (orange-red)
+      color: '#FFA500', // 🔥 optional custom color (orange-red)
       importance: AndroidImportance.HIGH,
       visibility: AndroidVisibility.PUBLIC,
       sound: 'default'

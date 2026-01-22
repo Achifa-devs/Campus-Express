@@ -58,7 +58,7 @@ const EditorVideoStore = ({edit,deleteVideo,productVideos,videos,category}) => {
                 <div className="seller-shop-samples shadow-sm">
                                 
                     
-                    <label htmlFor="vidfile" style={{height: '100%', margin: '0 5px 0 5px', background: '#FF4500',cursor: 'pointer', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', padding: '20px', borderRadius: '10px', textAlign: 'center'}}>
+                    <label htmlFor="vidfile" style={{height: '100%', margin: '0 5px 0 5px', background: '#FFA500',cursor: 'pointer', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', padding: '20px', borderRadius: '10px', textAlign: 'center'}}>
 
                         {/* <img src={xSvg} style={{height: '40px', width: '40px'}} alt="" /> */}
                         <small style={{color: '#fff', textAlign: 'center'}}>Upload Video</small>

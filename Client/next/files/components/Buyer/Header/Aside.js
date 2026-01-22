@@ -130,7 +130,7 @@ const Aside = ({
                 {/* Main Content */}
                 <div className="aside-cnt h-100 bg-white" style={{padding: 0}}>
                     {/* User Header Section */}
-                    <div className="p-3 text-white" style={{background: '#FF4500'}}>
+                    <div className="p-3 text-white" style={{background: '#FFA500'}}>
                         <div className="d-flex align-items-center mb-3">
                             <div 
                                 className="rounded-circle d-flex align-items-center justify-content-center me-3"
@@ -138,7 +138,7 @@ const Aside = ({
                                     background: '#fff4e0', 
                                     width: '50px', 
                                     height: '50px', 
-                                    color: '#FF4500'
+                                    color: '#FFA500'
                                 }}
                             >
                                 <h6 className="mb-0 fw-bold">
@@ -179,7 +179,7 @@ const Aside = ({
                         <div className="p-3">
                             {/* Services Section */}
                             <div className="mb-4">
-                                <h6 className="fw-semibold mb-3" style={{color: '#FF4500'}}>
+                                <h6 className="fw-semibold mb-3" style={{color: '#FFA500'}}>
                                     Services
                                 </h6>
                                 <ul className="list-unstyled">
@@ -203,7 +203,7 @@ const Aside = ({
 
                             {/* Categories Section */}
                             <div className="mb-4">
-                                <h6 className="fw-semibold mb-3" style={{color: '#FF4500'}}>
+                                <h6 className="fw-semibold mb-3" style={{color: '#FFA500'}}>
                                     Categories
                                 </h6>
                                 <ul className="list-unstyled">
@@ -230,7 +230,7 @@ const Aside = ({
 
                             {/* Help Center Section */}
                             <div className="mb-4">
-                                <h6 className="fw-semibold mb-3" style={{color: '#FF4500'}}>
+                                <h6 className="fw-semibold mb-3" style={{color: '#FFA500'}}>
                                     Help Center
                                 </h6>
                                 <ul className="list-unstyled">
@@ -254,7 +254,7 @@ const Aside = ({
 
                             {/* Contact Us Section */}
                             <div className="p-3 border-top">
-                                <h6 className="fw-semibold mb-3" style={{color: '#FF4500'}}>
+                                <h6 className="fw-semibold mb-3" style={{color: '#FFA500'}}>
                                     Contact Us
                                 </h6>
                                 <div className="d-flex justify-content-between">

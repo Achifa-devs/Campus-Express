@@ -238,10 +238,10 @@ export default function VideoUpload({ videos, updatePhotos, setUploading, update
                 disabled={uploadProgress[index] !== undefined}
               >
                 {uploadProgress[index] !== undefined ? (
-                  <ActivityIndicator size="small" color="#FF4500" />
+                  <ActivityIndicator size="small" color="#FFA500" />
                 ) : (
                   <>
-                    <MaterialIcons name="video-library" size={28} color="#FF4500" />
+                    <MaterialIcons name="video-library" size={28} color="#FFA500" />
                     {index === 0 && (
                       <Text style={styles.addButtonText}>Add Main Video</Text>
                     )}
@@ -348,7 +348,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 8,
     left: 8,
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 4,
@@ -363,7 +363,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     borderWidth: 1,
-    borderColor: '#FF4500',
+    borderColor: '#FFA500',
     borderRadius: 8,
     borderStyle: 'dashed',
     justifyContent: 'center',
@@ -371,7 +371,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
   },
   addButtonText: {
-    color: '#FF4500',
+    color: '#FFA500',
     fontSize: 12,
     marginTop: 4,
     textAlign: 'center',

@@ -27,7 +27,7 @@ export default function IntegerCard({question, unit, options, updateUnit}) {
                             updateUnit(unit-1)
                             :
                             ''
-                        }} key={index} style={[styles.btn, {backgroundColor: index === 0 ? '#FF4500': index === 1 ? "#FFF" : '#000'}]}>
+                        }} key={index} style={[styles.btn, {backgroundColor: index === 0 ? '#FFA500': index === 1 ? "#FFF" : '#000'}]}>
                             <Text style={{color: index === 1 ? '#000' : '#FFF'}}>
                                 {
                                     index === 1 ? unit : item
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     btn: {
         width: '33.3%',
         height: 35,
-        backgroundColor: '#FF4500',
+        backgroundColor: '#FFA500',
         borderRadius: 4,
         display: 'flex',
         flexDirection: 'row',

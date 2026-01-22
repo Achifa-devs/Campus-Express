@@ -1,7 +1,13 @@
 import { Pool } from 'pg';
 
+const connectionString = process.env.NEXT_PUBLIC_DATABASE_URL || process.env.DATABASE_URL;
+
+if (!connectionString) {
+  console.error('❌ No DATABASE_URL or NEXT_PUBLIC_DATABASE_URL found in environment');
+}
+
 const config = {
-  connectionString: process.env.DATABASE_URL,
+  connectionString,
   ssl: {
     require: true,
     rejectUnauthorized: false,
@@ -16,10 +22,15 @@ let pool;
 
 function getPool() {
   if (!pool) {
+    console.log('🔗 Creating new database pool...');
     pool = new Pool(config);
     
     pool.on('error', (err) => {
-      console.error('Unexpected error on idle client', err);
+      console.error('❌ Unexpected error on idle client', err);
+    });
+    
+    pool.on('connect', () => {
+      console.log('✅ Database connected');
     });
   }
   return pool;

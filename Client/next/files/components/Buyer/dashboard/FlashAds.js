@@ -29,44 +29,44 @@ const FlashAds = () => {
                 <ul style={{padding: '5px'}}>
                     <li style={{position: 'relative', height: '120px'}}>
                         <img src={phn}  style={{height: '100%', border: '2px solid #f9f9f9', width: '100%', borderRadius: '5px'}} alt="" />
-                        <div style={{background: '#FF4500', width: '100%', padding: '5px', fontSize: 'small', color: '#fff', position: 'absolute', bottom: '0', left: '0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>Mobile Phones</div>
+                        <div style={{background: '#FFA500', width: '100%', padding: '5px', fontSize: 'small', color: '#fff', position: 'absolute', bottom: '0', left: '0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>Mobile Phones</div>
                     </li>
                     <li style={{position: 'relative', height: '120px'}}>
                         <img src={laptop}  style={{height: '100%', border: '2px solid #f9f9f9', width: '100%', borderRadius: '5px'}} alt="" />
-                        <div style={{background: '#FF4500', width: '100%', padding: '5px', fontSize: 'small', color: '#fff', position: 'absolute', bottom: '0', left: '0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>Laptops</div>
+                        <div style={{background: '#FFA500', width: '100%', padding: '5px', fontSize: 'small', color: '#fff', position: 'absolute', bottom: '0', left: '0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>Laptops</div>
                     </li>
                     <li style={{position: 'relative', height: '120px'}}>
                         <img src={gen}  style={{height: '100%', border: '2px solid #f9f9f9', width: '100%', borderRadius: '5px'}} alt="" />
-                        <div style={{background: '#FF4500', width: '100%', padding: '5px', fontSize: 'small', color: '#fff', position: 'absolute', bottom: '0', left: '0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>Generators</div>
+                        <div style={{background: '#FFA500', width: '100%', padding: '5px', fontSize: 'small', color: '#fff', position: 'absolute', bottom: '0', left: '0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>Generators</div>
                     </li>
                     <li style={{position: 'relative', height: '120px'}}>
                         <img src={tab}  style={{height: '100%', border: '2px solid #f9f9f9', width: '100%', borderRadius: '5px'}} alt="" />
-                        <div style={{background: '#FF4500', width: '100%', padding: '5px', fontSize: 'small', color: '#fff', position: 'absolute', bottom: '0', left: '0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>Tablets</div>
+                        <div style={{background: '#FFA500', width: '100%', padding: '5px', fontSize: 'small', color: '#fff', position: 'absolute', bottom: '0', left: '0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>Tablets</div>
                     </li>
                     <li style={{position: 'relative', height: '120px'}}>
                         <img src={watch}  style={{height: '100%', border: '2px solid #f9f9f9', width: '100%', borderRadius: '5px'}} alt="" />
-                        <div style={{background: '#FF4500', width: '100%', padding: '5px', fontSize: 'small', color: '#fff', position: 'absolute', bottom: '0', left: '0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>Wrist Watch</div>
+                        <div style={{background: '#FFA500', width: '100%', padding: '5px', fontSize: 'small', color: '#fff', position: 'absolute', bottom: '0', left: '0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>Wrist Watch</div>
                     </li>
 
                     <li style={{position: 'relative', height: '120px'}}>
                         <img src={shoe}  style={{height: '100%', border: '2px solid #f9f9f9', width: '100%', borderRadius: '5px'}} alt="" />
-                        <div style={{background: '#FF4500', width: '100%', padding: '5px', fontSize: 'small', color: '#fff', position: 'absolute', bottom: '0', left: '0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>hoes</div>
+                        <div style={{background: '#FFA500', width: '100%', padding: '5px', fontSize: 'small', color: '#fff', position: 'absolute', bottom: '0', left: '0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>hoes</div>
                     </li>
                     <li style={{position: 'relative', height: '120px'}}>
                         <img src={clothes}  style={{height: '100%', border: '2px solid #f9f9f9', width: '100%', borderRadius: '5px'}} alt="" />
-                        <div style={{background: '#FF4500', width: '100%', padding: '5px', fontSize: 'small', color: '#fff', position: 'absolute', bottom: '0', left: '0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>Clothes</div>
+                        <div style={{background: '#FFA500', width: '100%', padding: '5px', fontSize: 'small', color: '#fff', position: 'absolute', bottom: '0', left: '0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>Clothes</div>
                     </li>
                     <li style={{position: 'relative', height: '120px'}}>
                         <img src={groce}  style={{height: '100%', border: '2px solid #f9f9f9', width: '100%', borderRadius: '5px'}} alt="" />
-                        <div style={{background: '#FF4500', width: '100%', padding: '5px', fontSize: 'small', color: '#fff', position: 'absolute', bottom: '0', left: '0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>Groceries</div>
+                        <div style={{background: '#FFA500', width: '100%', padding: '5px', fontSize: 'small', color: '#fff', position: 'absolute', bottom: '0', left: '0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>Groceries</div>
                     </li>
                     <li style={{position: 'relative', height: '120px'}}>
                         <img src={hb}  style={{height: '100%', border: '2px solid #f9f9f9', width: '100%', borderRadius: '5px'}} alt="" />
-                        <div style={{background: '#FF4500', width: '100%', padding: '5px', fontSize: 'small', color: '#fff', position: 'absolute', bottom: '0', left: '0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>Health/Beauty</div>
+                        <div style={{background: '#FFA500', width: '100%', padding: '5px', fontSize: 'small', color: '#fff', position: 'absolute', bottom: '0', left: '0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>Health/Beauty</div>
                     </li>
                     <li style={{position: 'relative', height: '120px'}}>
                         <img src={lodge}  style={{height: '100%', border: '2px solid #f9f9f9', width: '100%', borderRadius: '5px'}} alt="" />
-                        <div style={{background: '#FF4500', width: '100%', padding: '5px', fontSize: 'small', color: '#fff', position: 'absolute', bottom: '0', left: '0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>Lodges</div>
+                        <div style={{background: '#FFA500', width: '100%', padding: '5px', fontSize: 'small', color: '#fff', position: 'absolute', bottom: '0', left: '0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>Lodges</div>
                     </li>
                 </ul>
             </div>

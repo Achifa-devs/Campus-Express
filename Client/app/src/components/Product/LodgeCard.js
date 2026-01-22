@@ -273,7 +273,7 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 18,
     fontWeight: '800',
-    color: '#FF4500',
+    color: '#FFA500',
   },
   analytics: {
     flexDirection: 'row',
@@ -329,8 +329,8 @@ const styles = StyleSheet.create({
     minWidth: 80,
   },
   viewButton: {
-    backgroundColor: '#FF4500',
-    borderColor: '#FF4500',
+    backgroundColor: '#FFA500',
+    borderColor: '#FFA500',
   },
   deleteButton: {
     backgroundColor: '#FFF6F6',

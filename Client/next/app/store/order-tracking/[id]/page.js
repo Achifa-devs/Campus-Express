@@ -123,8 +123,8 @@ export default function OrderTracker() {
                 ''
                 :
                 <h6 className="" style={{padding:'5px 10px', margin: '0', borderBottom: '1px solid #efefef', height: '50px', width: '100%', background: '#fff', fontWeight: '600', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: '70px', zIndex: '10000'}}>
-                    <button onClick={e => updateJsx(true)} style={{width: 'auto', padding: '10px', height: '100%', border: '1px solid #FF4500', background: activeJsx ? '#FF4500' : '#fff', color: !activeJsx ? '#FF4500' : '#fff'}}>View Order Details</button>
-                    <button onClick={e => updateJsx(false)} style={{width: 'auto', padding: '10px', height: '100%', border: '1px solid #FF4500', background: !activeJsx ? '#FF4500' : '#fff', color: activeJsx ? '#FF4500' : '#fff'}}>Track order</button>
+                    <button onClick={e => updateJsx(true)} style={{width: 'auto', padding: '10px', height: '100%', border: '1px solid #FFA500', background: activeJsx ? '#FFA500' : '#fff', color: !activeJsx ? '#FFA500' : '#fff'}}>View Order Details</button>
+                    <button onClick={e => updateJsx(false)} style={{width: 'auto', padding: '10px', height: '100%', border: '1px solid #FFA500', background: !activeJsx ? '#FFA500' : '#fff', color: activeJsx ? '#FFA500' : '#fff'}}>Track order</button>
                 </h6>
             }
             <div className="order-tracker-cnt" style={{padding: screenWidth > 760 ?  '0 0 0 0' : '5px 5px 5px 5px', background: '#f9f9f9', display: 'flex', flexDirection: 'column', margin: screenWidth > 760 ? '5px 10px 5px 10px' : '0px 5px 60px 5px', justifyContent: 'space-between', width: '100%'}}>

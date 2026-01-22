@@ -23,7 +23,7 @@ const ItemImgs = ({product_id,title,category}) => {
 
     useEffect(() => {
         try {
-            axios.get('/api/store/image-folder', {params: {folder: product_id}})
+            axios.get('/api/image-folder', {params: {folder: product_id}})
             .then(({data})=>{
                 set_uris(data.data)
                 dispatch(setItemImagesTo(data.data))

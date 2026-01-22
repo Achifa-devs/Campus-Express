@@ -818,7 +818,7 @@ function ShopInfo({campusLocaleList}) {
                             loader(true, 'Setting Up Your Shop Name')
                             set_shop_name()                         
                         }} style={{
-                            background: '#FF4500',
+                            background: '#FFA500',
                             color: '#FFF', 
                             border: 'none', 
                             outline: 'none',

@@ -787,7 +787,7 @@ const Editor = () => {
 
                                                 <hr />
                                                 <br />
-                                                <div className='' style={{display: 'flex', alignItems: 'center', fontWeight: '500', fontSize: '20', justifyContent: 'space-between', border: '1px solid #FF4500', flexDirection: 'row', padding: '0', width: '100%', background: '#fff', position: 'relative', borderRadius: '5px', marginBottom: '10px', border: 'none'}}>
+                                                <div className='' style={{display: 'flex', alignItems: 'center', fontWeight: '500', fontSize: '20', justifyContent: 'space-between', border: '1px solid #FFA500', flexDirection: 'row', padding: '0', width: '100%', background: '#fff', position: 'relative', borderRadius: '5px', marginBottom: '10px', border: 'none'}}>
                                                             
                                                 <div style={{padding: '0', width: '100%'}}>
 
@@ -803,12 +803,12 @@ const Editor = () => {
                                                         </small>
                                                     </section>
                                                     
-                                                    <button disabled={lodgeAddress.length > 0 ? true : false} onClick={e => addLocation('Door Step Delivery')} className='shadow-sm' style={{position: 'relative', height: 'auto', width: 'auto', display: 'flex', alignItems: 'center', justifyContents: 'center', padding: '10px', textAlign: 'center', background: '#fff', color: '#FF4500', fontSize: 'small', float: 'right', color: '#fff', background: '#FF4500', opacity: lodgeAddress.length > 0 ? '.5' : '1'}}>Add location</button>
+                                                    <button disabled={lodgeAddress.length > 0 ? true : false} onClick={e => addLocation('Door Step Delivery')} className='shadow-sm' style={{position: 'relative', height: 'auto', width: 'auto', display: 'flex', alignItems: 'center', justifyContents: 'center', padding: '10px', textAlign: 'center', background: '#fff', color: '#FFA500', fontSize: 'small', float: 'right', color: '#fff', background: '#FFA500', opacity: lodgeAddress.length > 0 ? '.5' : '1'}}>Add location</button>
                                                     <section style={{display: 'flex', alignItems: 'flex-start', fontWeight: '500', fontSize: '20', justifyContent: 'flex-start', flexDirection: 'column', padding: '10px', width: '100%', background: '#fff', position: 'relative', borderRadius: '5px'}}>
                                                         {
                                                             lodgeAddress.map((item) => 
                                                                 
-                                                                <div className='shadow-sm' style={{display: 'flex', alignItems: 'center', fontWeight: '500', fontSize: '20', justifyContent: 'space-between', border: '1px solid #FF4500', flexDirection: 'row', padding: '5px 5px 5px 10px', width: '100%', background: '#fff', position: 'relative', borderRadius: '5px', marginBottom: '10px'}}>
+                                                                <div className='shadow-sm' style={{display: 'flex', alignItems: 'center', fontWeight: '500', fontSize: '20', justifyContent: 'space-between', border: '1px solid #FFA500', flexDirection: 'row', padding: '5px 5px 5px 10px', width: '100%', background: '#fff', position: 'relative', borderRadius: '5px', marginBottom: '10px'}}>
                                                                 <div style={{display: 'flex', alignItems: 'flex-start', fontWeight: '500', fontSize: '20', justifyContent: 'space-between', flexDirection: 'column', padding: '0', width: '100%', background: '#fff', position: 'relative', borderRadius: '5px', marginBottom: '10px'}}>
                                                                     <small>{
                                                                     item.locale

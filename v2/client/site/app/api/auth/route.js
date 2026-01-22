@@ -1,0 +1,28 @@
+// app/api/seller-auth/route.js
+
+import jwt from 'jsonwebtoken';
+import { cookies } from 'next/headers';
+import { NextResponse } from 'next/server';
+
+export async function GET(req) {
+  try {
+    const cookieStore = await cookies();
+    const user_secret = cookieStore.get('user_secret')?.value;
+    console.log("user_secret: ", user_secret)
+
+    if (!user_secret) {
+      return NextResponse.json({ success: false, id: '' }, { status: 401 });
+    }
+
+    try {
+      const decoded = jwt.verify(user_secret, 'kdiU$28Fs!9shF&2xZpD3Q#1gLx@R7TkWzPq');
+      return NextResponse.json({ success: true, id: decoded.id }, { status: 200 });
+    } catch (err) {
+      console.error('JWT error:', err.message);
+      return NextResponse.json({ success: false, id: '' }, { status: 401 });
+    }
+  } catch (err) {
+    console.error('Server error:', err.message);
+    return NextResponse.json({ success: false, id: '' }, { status: 500 });
+  }
+}

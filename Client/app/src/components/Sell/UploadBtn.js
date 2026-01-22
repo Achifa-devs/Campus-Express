@@ -19,7 +19,7 @@ export default function UploadBtn({ navigation, toggleModal, is_promo_active }) 
         title={`Upload Offerings${is_promo_active ? ' and Earn Now' : ''}`}
         description="Publish your accommodations, products, or services available for sale or rent."
         icon={<UploadIcon />}
-        color="#FF4500"
+        color="#FFA500"
         onPress={() => {toggleModal()}}
       />
 

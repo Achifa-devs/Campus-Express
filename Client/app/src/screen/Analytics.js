@@ -86,7 +86,7 @@ const AnalyticsScreen = () => {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#FF4500" />
+        <ActivityIndicator size="large" color="#FFA500" />
         <Text style={styles.loadingText}>Loading analytics data...</Text>
       </View>
     );
@@ -124,7 +124,7 @@ const AnalyticsScreen = () => {
           {/* <Text style={[secondStyle.productName, plan !== 'standard' && plan !== 'premium' &&styles.blur ]}>{item.title} ({item.purpose.charAt(0).toUpperCase() + item.purpose.slice(1)})</Text> */}
           <Text style={[secondStyle.productName]}>{item.title} ({item.purpose.charAt(0).toUpperCase() + item.purpose.slice(1)})</Text>
           <View style={secondStyle.valueContainer}>
-            <Ionicons name={getIconForFilter(activeFilter)} size={16} color="#FF4500" />
+            <Ionicons name={getIconForFilter(activeFilter)} size={16} color="#FFA500" />
             {/* <Text style={[secondStyle.valueText, plan !== 'standard' && plan !== 'premium' &&styles.blur ]}>{value}</Text> */}
             <Text style={[secondStyle.valueText]}>{value}</Text>
           </View>
@@ -207,7 +207,7 @@ const AnalyticsScreen = () => {
             <Ionicons 
               name={filter.icon} 
               size={16} 
-              color={activeFilter === filter.key ? "#fff" : "#FF4500"} 
+              color={activeFilter === filter.key ? "#fff" : "#FFA500"} 
             />
             <Text
               style={[
@@ -304,7 +304,7 @@ const AnalyticsScreen = () => {
             propsForDots: {
               r: '4',
               strokeLinecap: '2',
-              stroke: '#FF4500',
+              stroke: '#FFA500',
             },
           }}
           bezier
@@ -549,7 +549,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F1F3F5',
   },
   timeframeButtonActive: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
   },
   timeframeButtonText: {
     fontSize: 14,
@@ -632,7 +632,7 @@ const styles = StyleSheet.create({
   conversionText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FF4500',
+    color: '#FFA500',
   },
   additionalMetrics: {
     flexDirection: 'row',
@@ -704,8 +704,8 @@ const secondStyle = StyleSheet.create({
     elevation: 2,
   },
   activeFilter: {
-    backgroundColor: "#FF4500",
-    borderColor: "#FF4500",
+    backgroundColor: "#FFA500",
+    borderColor: "#FFA500",
   },
   filterText: {
     fontSize: 14,
@@ -754,7 +754,7 @@ const secondStyle = StyleSheet.create({
   statValue: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FF4500',
+    color: '#FFA500',
     marginBottom: 4,
   },
   statLabel: {
@@ -816,7 +816,7 @@ const secondStyle = StyleSheet.create({
   valueText: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: "#FF4500",
+    color: "#FFA500",
     marginLeft: 6,
   },
   progressBar: {
@@ -828,7 +828,7 @@ const secondStyle = StyleSheet.create({
   },
   progressFill: {
     height: '100%',
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     borderRadius: 3,
   },
   metricsRow: {

@@ -55,7 +55,7 @@ export default function UserDataCnt({data,title}) {
                     </li>
                   </li>)
                   : 
-                    <li style={{display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#FF4500', color: '#fff'}}>
+                    <li style={{display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#FFA500', color: '#fff'}}>
                       No {title} Yet
                     </li>
 

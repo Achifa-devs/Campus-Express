@@ -50,7 +50,7 @@ export default function Size({ updateType, category, type_list, error, onFocus }
           <View style={styles.item}>
             <Text style={styles.textItem}>{item.title}</Text>
             {value === item.title && (
-              <Ionicons name="checkmark" size={20} color="#FF4500" />
+              <Ionicons name="checkmark" size={20} color="#FFA500" />
             )}
           </View>
         )}

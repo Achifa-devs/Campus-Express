@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         paddingVertical: 14,
         backgroundColor: '#fff',
-        borderBottomColor: '#FF4500',
+        borderBottomColor: '#FFA500',
         borderBottomWidth: 1.25,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 1 },
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: '#FF4500',
+        color: '#FFA500',
         letterSpacing: 0.5,
     },
 
@@ -183,7 +183,7 @@ const card_styles = StyleSheet.create({
         color: '#333',
     },
     moreCircle: {
-        backgroundColor: '#FF4500',
+        backgroundColor: '#FFA500',
     },
     moreText: {
         fontSize: 24,

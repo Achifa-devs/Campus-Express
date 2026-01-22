@@ -36,7 +36,7 @@ const topFooter = {
   padding: screenWidth > 760 ? '40px' : '10px',
   alignItems: 'flex-start',
   fontFamily: 'Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif',
-  // backgroundColor: '#FF4500',
+  // backgroundColor: '#FFA500',
   borderRadius: '20px',
   color: '#fff'
 
@@ -53,7 +53,7 @@ const containerStyles = {
   justifyContent: 'space-evenly',
   flexDirection: 'row',
   padding: '40px',
-  // backgroundColor: '#FF4500',
+  // backgroundColor: '#FFA500',
 };
 
 const sectionStyles = {

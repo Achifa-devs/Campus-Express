@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     btn: {
         width: '33.3%',
         height: 35,
-        backgroundColor: '#FF4500',
+        backgroundColor: '#FFA500',
         borderRadius: 4,
         display: 'flex',
         flexDirection: 'row',

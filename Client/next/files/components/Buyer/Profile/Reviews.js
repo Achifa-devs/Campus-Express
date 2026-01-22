@@ -17,7 +17,7 @@ export default function Reviews({reviews}) {
                     )
                   })
                   :
-                  <li style={{display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#FF4500', color: '#fff'}}>
+                  <li style={{display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#FFA500', color: '#fff'}}>
                     No Reviews Yet
                   </li>
                 }

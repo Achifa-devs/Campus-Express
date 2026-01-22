@@ -105,7 +105,7 @@ const ReviewSubmissionScreen = ({ navigation }) => {
                 position: 'absolute', top: 0, left: 0, zIndex: 100,
                 backgroundColor: 'rgba(255, 251, 246, 0.2)', // Fully transparent
             }}>
-                <ActivityIndicator size="large" color="#FF4500" />
+                <ActivityIndicator size="large" color="#FFA500" />
             </View>
         }
         <View style={styles.contentContainer}>
@@ -131,7 +131,7 @@ const ReviewSubmissionScreen = ({ navigation }) => {
                     rating={rating}
                     onChange={setRating}
                     starSize={40}
-                    color="#FF4500"
+                    color="#FFA500"
                     starStyle={styles.starStyle}
                 />
                 <Text style={styles.ratingText}>
@@ -264,7 +264,7 @@ const styles = StyleSheet.create({
   productPrice: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FF4500',
+    color: '#FFA500',
   },
   ratingSection: {
     backgroundColor: '#fff',
@@ -377,7 +377,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   submitButton: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     borderRadius: 12,
     padding: 18,
     alignItems: 'center',

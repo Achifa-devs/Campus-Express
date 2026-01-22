@@ -336,69 +336,69 @@ module.exports = function registrationTemplate(name, email, campus) {
                 </head>
                 <body>
 
-                    <div class="container">
-                        <div class="header">
-                            <div class="logo">CS</div>
+                    <div className="container">
+                        <div className="header">
+                            <div className="logo">CS</div>
                             <h1>Welcome to CampusSphere! 🎉</h1>
                             <p>Your Campus Marketplace Awaits</p>
                         </div>
                         
-                        <div class="content">
-                            <p class="greeting">Hello ${' ' + name},</p>
+                        <div className="content">
+                            <p className="greeting">Hello ${' ' + name},</p>
                             
-                            <div class="welcome-section">
+                            <div className="welcome-section">
                                 <p style="font-size: 16px; color: #475569; margin: 0;">
                                     Thank you for choosing CampusSphere - the trusted marketplace for your campus community. 
                                     We're excited to have you onboard and can't wait to see you explore, buy, and sell within your campus ecosystem.
                                 </p>
                             </div>
 
-                            <div class="user-info">
+                            <div className="user-info">
                                 <h3 style="color: #1E293B; margin-bottom: 20px; text-align: center;">Your Account Details</h3>
-                                <div class="info-item">
-                                    <span class="info-label">Full Name: </span>
-                                    <span class="info-value"> ${' ' + name}</span>
+                                <div className="info-item">
+                                    <span className="info-label">Full Name: </span>
+                                    <span className="info-value"> ${' ' + name}</span>
                                 </div>
-                                <div class="info-item">
-                                    <span class="info-label">Email Address: </span>
-                                    <span class="info-value"> ${' ' + email}</span>
+                                <div className="info-item">
+                                    <span className="info-label">Email Address: </span>
+                                    <span className="info-value"> ${' ' + email}</span>
                                 </div>
-                                <div class="info-item">
-                                    <span class="info-label">Campus: </span>
-                                    <span class="info-value"> ${' ' + campus || 'Main Campus'}</span>
+                                <div className="info-item">
+                                    <span className="info-label">Campus: </span>
+                                    <span className="info-value"> ${' ' + campus || 'Main Campus'}</span>
                                 </div>
-                                <div class="info-item">
-                                    <span class="info-label">Account Status: </span>
-                                    <span class="info-value" style="color: #22C55E;"> &nbsp;Active ✅</span>
+                                <div className="info-item">
+                                    <span className="info-label">Account Status: </span>
+                                    <span className="info-value" style="color: #22C55E;"> &nbsp;Active ✅</span>
                                 </div>
                             </div>
 
                             <h3 style="color: #1E293B; margin-bottom: 20px; text-align: center;">Discover Campus Sphere Features</h3>
-                            <div class="features-grid">
-                                <div class="feature-card">
-                                    <div class="feature-icon">🛒</div>
-                                    <div class="feature-title">Buy & Sell</div>
-                                    <div class="feature-desc">Trade Course Materials, Mobile Phones, Laptops, Games, Electronics, and other Lodge Accessories with campus mates</div>
+                            <div className="features-grid">
+                                <div className="feature-card">
+                                    <div className="feature-icon">🛒</div>
+                                    <div className="feature-title">Buy & Sell</div>
+                                    <div className="feature-desc">Trade Course Materials, Mobile Phones, Laptops, Games, Electronics, and other Lodge Accessories with campus mates</div>
                                 </div>
-                                <div class="feature-card">
-                                    <div class="feature-icon">🏠</div>
-                                    <div class="feature-title">Accommodation/Lodges</div>
-                                    <div class="feature-desc">Find Roommate & sublets</div>
+                                <div className="feature-card">
+                                    <div className="feature-icon">🏠</div>
+                                    <div className="feature-title">Accommodation/Lodges</div>
+                                    <div className="feature-desc">Find Roommate & sublets</div>
                                 </div>
-                                <div class="feature-card">
-                                    <div class="feature-icon">🛡️</div>
-                                    <div class="feature-title">Secure Payments</div>
-                                    <div class="feature-desc">Safe transactions with campus-verified users</div>
+                                <div className="feature-card">
+                                    <div className="feature-icon">🛡️</div>
+                                    <div className="feature-title">Secure Payments</div>
+                                    <div className="feature-desc">Safe transactions with campus-verified users</div>
                                 </div>
                             </div>
 
-                            <a href="https://www.campussphere.net" class="cta-button">
+                            <a href="https://www.campussphere.net" className="cta-button">
                                 Explore Your Dashboard →
                             </a>
 
-                            <div class="next-steps">
+                            <div className="next-steps">
                                 <h3>🚀 Get Started Guide</h3>
-                                <ul class="steps-list"> 
+                                <ul className="steps-list"> 
                                     <li>Complete your profile with a photo and bio</li>
                                     <li>Verify your student status for trusted badge</li>
                                     <li>Browse listings in your campus marketplace</li>
@@ -407,7 +407,7 @@ module.exports = function registrationTemplate(name, email, campus) {
                                 </ul>
                             </div>
 
-                            <div class="campus-highlight">
+                            <div className="campus-highlight">
                                 <h3 style="color: #92400E; margin-bottom: 10px;">🏫 Campus Exclusive</h3>
                                 <p style="color: #92400E; margin: 0; font-size: 14px;">
                                     As a Campus Sphere member, you get exclusive access to campus-only deals, 
@@ -415,12 +415,12 @@ module.exports = function registrationTemplate(name, email, campus) {
                                 </p>
                             </div>
 
-                            <div class="security-note">
+                            <div className="security-note">
                                 🔒 <strong>Account Security:</strong> Your account is protected with campus verification. 
                                 Never share your password and always meet in safe campus locations for transactions.
                             </div>
 
-                            <div class="signature">
+                            <div className="signature">
                                 <p>Welcome to your campus community,</p>
                                 <p><strong>The Campus Sphere Team</strong></p>
                                 <p style="color: #718096; font-size: 14px; margin-top: 10px;">
@@ -429,29 +429,29 @@ module.exports = function registrationTemplate(name, email, campus) {
                             </div>
                         </div>
                         
-                        <div class="footer">
-                            <div class="footer-links">
+                        <div className="footer">
+                            <div className="footer-links">
                                 <a href="https://www.campussphere.net/privacy-policy">Privacy Policy</a>
                                 <a href="https://www.campussphere.net/terms-of-use">Terms of Service</a>
                                 <a href="https://www.campussphere.net/help-center">Help Center</a>
                             </div>
                             
-                            <div class="social-icons">
-                                <a href="https://web.facebook.com/profile.php?id=61569276643577" class="social-icon">
+                            <div className="social-icons">
+                                <a href="https://web.facebook.com/profile.php?id=61569276643577" className="social-icon">
                                     <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook">
                                 </a>
-                                <a href="https://x.com/CampusSphere?t=ci_pEhDRWMfsC68XIM-D4g&s=08" class="social-icon">
+                                <a href="https://x.com/CampusSphere?t=ci_pEhDRWMfsC68XIM-D4g&s=08" className="social-icon">
                                     <img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="Twitter">
                                 </a>
-                                <a href="https://whatsapp.com/channel/0029Vb5WQNQ6xCSTfXow583w" class="social-icon">
+                                <a href="https://whatsapp.com/channel/0029Vb5WQNQ6xCSTfXow583w" className="social-icon">
                                     <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
                                 </a>
-                                <a href="https://www.tiktok.com/@campus_sphere?is_from_webapp=1&sender_device=pc" class="social-icon">
+                                <a href="https://www.tiktok.com/@campus_sphere?is_from_webapp=1&sender_device=pc" className="social-icon">
                                     <img src="https://cdn-icons-png.flaticon.com/512/3046/3046120.png" alt="TikTok">
                                 </a>
                             </div>
                             
-                            <p class="copyright">
+                            <p className="copyright">
                                 © 2024 Campus Sphere. All rights reserved.<br>
                                 Connecting campus communities through trusted commerce.
                             </p>

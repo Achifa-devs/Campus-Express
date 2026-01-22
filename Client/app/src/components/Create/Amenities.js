@@ -197,8 +197,8 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   amenityButtonSelected: {
-    backgroundColor: '#FF4500',
-    borderColor: '#FF4500',
+    backgroundColor: '#FFA500',
+    borderColor: '#FFA500',
   },
   amenityText: {
     fontSize: 14,

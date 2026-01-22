@@ -139,7 +139,7 @@ const ChatList = ({ navigation }) => {
           !item.partner || !item.partner.photo
           ?
           <View style={[styles.avatar, {display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff4e0'}]}>
-            <Ionicons name={"person-circle-outline"} size={40} color={"#FF4500"} />
+            <Ionicons name={"person-circle-outline"} size={40} color={"#FFA500"} />
           </View>
           :
           <Image
@@ -231,7 +231,7 @@ const ChatList = ({ navigation }) => {
       <View style={styles.listContainer}>
         {loading ? (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#FF4500" />
+            <ActivityIndicator size="large" color="#FFA500" />
             <Text style={styles.loadingText}>Loading chats...</Text>
           </View>
         ) : (
@@ -245,8 +245,8 @@ const ChatList = ({ navigation }) => {
               <RefreshControl
                 refreshing={refreshing}
                 onRefresh={handleRefresh}
-                colors={['#FF4500']}
-                tintColor="#FF4500"
+                colors={['#FFA500']}
+                tintColor="#FFA500"
               />
             }
             showsVerticalScrollIndicator={false}
@@ -386,7 +386,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   unreadBadge: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     borderRadius: 4,
     minWidth: 24,
     height: 24,

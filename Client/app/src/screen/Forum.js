@@ -122,13 +122,13 @@ const styles = StyleSheet.create({
   replyCount: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#FF4500',
+    color: '#FFA500',
   },
   fab: {
     position: 'absolute',
     bottom: 24,
     right: 24,
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     width: 56,
     height: 56,
     borderRadius: 28,

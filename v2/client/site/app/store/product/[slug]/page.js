@@ -5,15 +5,16 @@ import ProductPageClient from "./product"; // Client component
 import Head from "next/head";
 
 export async function generateMetadata({ params }) {
-  const slug = params?.slug;
+  const { slug } = await params;
 
   if (!slug) {
     return { title: "Default Product" };
   }
 
   try {
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
     const res = await fetch(
-      `https://www.campussphere.net/api/store/products/details?slug=${slug}`,
+      `${baseUrl}/api/products/details?slug=${slug}`,
       { cache: "no-store" }
     );
 
@@ -91,7 +92,7 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function ProductPage({ params }) {
-  const { slug } = params;
+  const { slug } = await params;
   let product = null;
 
   if (!slug) {
@@ -99,8 +100,9 @@ export default async function ProductPage({ params }) {
   }
 
   try {
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
     const res = await fetch(
-      `https://www.campussphere.net/api/store/products/details?slug=${slug}`, 
+      `${baseUrl}/api/products/details?slug=${slug}`, 
       { cache: "no-store" }
     );
 

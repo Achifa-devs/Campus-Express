@@ -194,7 +194,7 @@ const Inventory = () => {
         alignItems: 'center',
         backgroundColor: '#F8F9FA',
       }}>
-        <ActivityIndicator size="large" color="#FF4500" />
+        <ActivityIndicator size="large" color="#FFA500" />
       </View>
     );
   }

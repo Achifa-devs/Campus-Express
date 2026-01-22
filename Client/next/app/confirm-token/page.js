@@ -237,7 +237,7 @@ export default function ConfirmToken() {
                     <div className="seller-input-cnt" style={{justifyContent: 'space-between', flexDirection: 'row'}}>
         
         
-                        <button style={{ background: '#ff4500', color: '#fff', border: 'none', outline: 'none', height: '40px', width: '100%', borderRadius: '5px' }} onClick={e => {
+                        <button style={{ background: '#FFA500', color: '#fff', border: 'none', outline: 'none', height: '40px', width: '100%', borderRadius: '5px' }} onClick={e => {
                             // alert()
                             e.preventDefault();
                             VerifyToken(e, [...document.querySelectorAll('input')], )

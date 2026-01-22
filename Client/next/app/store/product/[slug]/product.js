@@ -233,7 +233,7 @@ const ProductPageClient = ({product, slug}) => {
                         <>
                             <Contact phone={seller?.phone} item={product}  />
                             <br /> 
-                            {/* <button style={{marginBottom: '15px', background: '#FF4500', color: '#fff', border: 'none', outline: 'none',borderRadius: '2.5px'}} className='shadow-sm' onClick={handleOrder}>{
+                            {/* <button style={{marginBottom: '15px', background: '#FFA500', color: '#fff', border: 'none', outline: 'none',borderRadius: '2.5px'}} className='shadow-sm' onClick={handleOrder}>{
                                 order_list.filter((data) => data.product.product_id === product.product_id && data.order.user_id === user_id).length > 0
                                 ?
 

@@ -65,7 +65,7 @@ const Ads = () => {
 
     return (   
         <>
-            <div className="buyer-ads-cnt shadow" style={{ background: '#FF4500', padding: screenWidth > 760 ? '10px' : '0', position: 'relative', marginBottom: screenWidth > 760 ? '0px' : '20px', marginTop: screenWidth > 760 ? '0px' : '10px'}}>
+            <div className="buyer-ads-cnt shadow" style={{ background: '#FFA500', padding: screenWidth > 760 ? '10px' : '0', position: 'relative', marginBottom: screenWidth > 760 ? '0px' : '20px', marginTop: screenWidth > 760 ? '0px' : '10px'}}>
                 <section style={{background: '#fff', padding: '5px', overflow: 'auto', backgroundColor: '#fff', borderRadius: '0', color: '#000'}}>
                     <ul style={{listStyleType: 'none', margin: '0', padding: '10px 0 10px 0', overflow: 'auto'}}>
                         {

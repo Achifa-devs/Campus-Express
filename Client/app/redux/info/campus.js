@@ -144,7 +144,7 @@ export default campus_slice.reducer
 //   },
 //   clearAllText: {
 //     fontSize: 14,
-//     color: '#FF4500',
+//     color: '#FFA500',
 //     fontWeight: '500',
 //   },
 //   suggestionList: {

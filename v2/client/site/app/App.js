@@ -40,7 +40,7 @@ function Auth({children}) {
 
     if (!excludedPaths.includes(currentPath)) {
       // alert('Fetching user authentication...')
-      fetch('/api/store/auth', {
+      fetch('/api/auth', {
         method: 'GET'
       })
       .then(async (res) => {

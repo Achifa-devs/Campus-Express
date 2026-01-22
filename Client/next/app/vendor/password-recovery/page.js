@@ -421,7 +421,7 @@ function EmailConfirmation({ConfirmEmail, updateEmail}) {
 
                     
                     
-                    <button style={{background: '#ff4500',color: '#fff', border: 'none', outline: 'none', height: '40px', width: '100%', borderRadius: '5px'}} onClick={e => {e.preventDefault(); ConfirmEmail(e,[...document.querySelectorAll('input')], document.querySelector('.err-cnt').querySelector('.err-mssg'))}}>
+                    <button style={{background: '#FFA500',color: '#fff', border: 'none', outline: 'none', height: '40px', width: '100%', borderRadius: '5px'}} onClick={e => {e.preventDefault(); ConfirmEmail(e,[...document.querySelectorAll('input')], document.querySelector('.err-cnt').querySelector('.err-mssg'))}}>
                         Confirm Registered Email
                     </button>
                     
@@ -449,7 +449,7 @@ function EnterToken({VerifyToken, updateToken}) {
 
                     
                     
-                    <button style={{background: '#ff4500',color: '#fff', border: 'none', outline: 'none', height: '40px', width: '100%', borderRadius: '5px'}} onClick={e => {e.preventDefault(); VerifyToken(e,[...document.querySelectorAll('input')])}}>
+                    <button style={{background: '#FFA500',color: '#fff', border: 'none', outline: 'none', height: '40px', width: '100%', borderRadius: '5px'}} onClick={e => {e.preventDefault(); VerifyToken(e,[...document.querySelectorAll('input')])}}>
                         Verify Token
                     </button>
                     
@@ -474,7 +474,7 @@ function UpdatePwd({ResetPassword,updateCpwd, updatePwd }) {
                     <input style={{background: '#efefef'}} onInput={e => updateCpwd(e.target.value)}  placeholder='Password...' type="password" />
                 </div>
                 <div className="seller-input-cnt" style={{justifyContent: 'space-between', flexDirection: 'row'}}>
-                    <button style={{background: '#ff4500',color: '#fff', border: 'none', outline: 'none', height: '40px', width: '100%', borderRadius: '5px'}} onClick={e => {e.preventDefault(); ResetPassword(e,[...document.querySelectorAll('input')])}}>
+                    <button style={{background: '#FFA500',color: '#fff', border: 'none', outline: 'none', height: '40px', width: '100%', borderRadius: '5px'}} onClick={e => {e.preventDefault(); ResetPassword(e,[...document.querySelectorAll('input')])}}>
                         Reset Password
                     </button>
                 </div>

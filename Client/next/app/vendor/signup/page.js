@@ -285,7 +285,7 @@ const Signup = () => {
                                     height: '120px',
                                     width: '100px',
                                     borderRadius: '5px',
-                                    border: '1px solid #FF4500',
+                                    border: '1px solid #FFA500',
                                     backgroundColor: '#f9f9f9',
                                     display: 'flex',
                                     alignItems: 'center',
@@ -322,7 +322,7 @@ const Signup = () => {
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
-                                            color: '#FF4500',
+                                            color: '#FFA500',
                                             fontWeight: '500',
                                             fontSize: '14px',
                                             cursor: 'pointer'
@@ -386,7 +386,7 @@ const Signup = () => {
                         </form>
                     
                         <div className='btn-cnt'>
-                            <button style={{background: '#ff4500', color: '#fff'}} onClick={e => {e.preventDefault(); Registration(e)}}>Register New Shop</button>
+                            <button style={{background: '#FFA500', color: '#fff'}} onClick={e => {e.preventDefault(); Registration(e)}}>Register New Shop</button>
                             
                         </div>
 

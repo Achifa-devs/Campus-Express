@@ -167,7 +167,7 @@ const Product = ({ item, seller, order_list }) => {
                             </p>
 
 
-                            <h3 style={{ fontSize: 'small', fontWeight: 'bold', textDecoration: 'underline', padding: '0px', textTransform: 'capitalize', color: '#FF4500', marginBottom: '10px'}}>{item?.stock} units availble</h3>
+                            <h3 style={{ fontSize: 'small', fontWeight: 'bold', textDecoration: 'underline', padding: '0px', textTransform: 'capitalize', color: '#FFA500', marginBottom: '10px'}}>{item?.stock} units availble</h3>
                             <br />
 
                             <div style={{color: '#000', fontSize: 'smalll'}}>+ Shipping fee: from ₦{new Intl.NumberFormat('en-us').format(JSON.parse(item?.shipping_range)?.in_campus?.price)} ({seller?.campus})</div>

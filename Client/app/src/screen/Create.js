@@ -645,7 +645,7 @@ export default function Create({ route }) {
     <>
       {uploading && 
         <View style={{height: screenHeight, width: screenWidth, position: 'absolute', top: 0, zIndex: 100, backgroundColor: 'rgba(0,0,0,.3  )', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-          <ActivityIndicator size="small" color="#FF4500" />
+          <ActivityIndicator size="small" color="#FFA500" />
         </View>
       }
       

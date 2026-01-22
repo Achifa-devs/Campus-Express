@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   alertContainer: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     borderRadius: 4,
     width: screenWidth * 0.9,
     height: '90%',

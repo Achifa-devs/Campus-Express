@@ -334,7 +334,7 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   selectedPackage: {
-    borderColor: '#FF4500',
+    borderColor: '#FFA500',
     backgroundColor: '#fff4e0',
   },
   packageHeader: {
@@ -406,7 +406,7 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -444,7 +444,7 @@ const styles = StyleSheet.create({
     color: '#2d3436',
   },
   purchaseButton: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: 8,

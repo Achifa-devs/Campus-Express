@@ -35,7 +35,7 @@ const User = () => {
   if (loading) {
     return (
       <View style={styles.centerContainer}>
-        <ActivityIndicator size="large" color="#FF4500" />
+        <ActivityIndicator size="large" color="#FFA500" />
         <Text style={styles.loadingText}>Loading user data...</Text>
       </View>
     );
@@ -58,7 +58,7 @@ const User = () => {
             />
             :
             <View style={{height: 60, width: 60}}>
-                <Ionicons name={"person-circle"} color='#FF4500' size={60} />
+                <Ionicons name={"person-circle"} color='#FFA500' size={60} />
             </View>  
         }  
         <Text style={styles.userName}>
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     marginBottom: 16,
     borderWidth: 3,
-    borderColor: '#FF4500',
+    borderColor: '#FFA500',
   },
   userName: {
     fontSize: 24,
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   editButton: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 8,
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   actionButton: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     padding: 16,
     borderRadius: 12,
     alignItems: 'center',
@@ -269,10 +269,10 @@ const styles = StyleSheet.create({
   secondaryAction: {
     backgroundColor: 'transparent',
     borderWidth: 1,
-    borderColor: '#FF4500',
+    borderColor: '#FFA500',
   },
   secondaryActionText: {
-    color: '#FF4500',
+    color: '#FFA500',
   },
 });
 

@@ -101,7 +101,7 @@ export default function Faq() {
         {
             list.current.map(item => 
                 <div className="cols">
-                    <div className="card shadow-sm" style={{height: 'auto', marginBottom: '10px', borderRadius: '10px', background: '#fff4e0', color: '#FF4500'}}>
+                    <div className="card shadow-sm" style={{height: 'auto', marginBottom: '10px', borderRadius: '10px', background: '#fff4e0', color: '#FFA500'}}>
                         <h5 style={{width: '100%', textAlign: 'left'}}><b>{item.title}</b></h5>
                         {/* <br /> */}
                         <div style={{padding: '10px'}}>{item.description}</div>

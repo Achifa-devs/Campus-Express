@@ -8,7 +8,7 @@ export default function Top({ data }) {
       {/* Location and Date Row */}
       <View style={styles.locationRow}>
         <View style={styles.locationIcon}>
-          <Ionicons name="location" size={16} color="#FF4500" />
+          <Ionicons name="location" size={16} color="#FFA500" />
 
         </View>
         <Text style={styles.locationText} numberOfLines={1}>
@@ -43,13 +43,13 @@ export default function Top({ data }) {
         <View style={styles.metaRow}>
           {data.condition && (
             <View style={styles.metaItem}>
-              <Ionicons name="build" size={16} color="#FF4500" />
+              <Ionicons name="build" size={16} color="#FFA500" />
               <Text style={styles.metaText}>{data.condition}</Text>
             </View>
           )}
           {data.category && (
             <View style={styles.metaItem}>
-              <Ionicons name="grid" size={16} color="#FF4500" />
+              <Ionicons name="grid" size={16} color="#FFA500" />
               <Text style={styles.metaText}>{data.category}</Text>
             </View>
           )}
@@ -105,13 +105,13 @@ const styles = StyleSheet.create({
   },
   priceSymbol: {
     fontSize: 18,
-    color: '#FF4500',
+    color: '#FFA500',
     fontWeight: 'bold',
     marginRight: 2,
   },
   priceText: {
     fontSize: 22,
-    color: '#FF4500',
+    color: '#FFA500',
     fontWeight: 'bold',
     marginRight: 12,
   },
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
   },
   negotiableText: {
     fontSize: 12,
-    color: '#FF4500',
+    color: '#FFA500',
     fontWeight: '500',
   },
   metaRow: {

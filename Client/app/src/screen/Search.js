@@ -188,7 +188,7 @@ const Search = ({ route, navigation }) => {
       <View style={styles.resultsContainer}>
         {loading ? (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#FF4500" />
+            <ActivityIndicator size="large" color="#FFA500" />
             <Text style={styles.loadingText}>Searching...</Text>
           </View>
         ) : error ? (
@@ -212,7 +212,7 @@ const Search = ({ route, navigation }) => {
               <RefreshControl
                 refreshing={refreshing}
                 onRefresh={handleRefresh}
-                colors={['#FF4500']}
+                colors={['#FFA500']}
               />
             }
             showsVerticalScrollIndicator={false}
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   searchButton: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderRadius: 8,
@@ -285,7 +285,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   retryButton: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: 8,

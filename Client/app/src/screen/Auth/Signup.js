@@ -330,7 +330,7 @@ formData
     <View style={styles.container}>
       {serverLoading && (
         <View style={styles.loadingOverlay}>
-          <ActivityIndicator size="large" color="#FF4500" />
+          <ActivityIndicator size="large" color="#FFA500" />
           <Text style={styles.loadingText}>Creating your account...</Text>
         </View>
       )}
@@ -431,7 +431,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     marginTop: 16,
-    color: '#FF4500',
+    color: '#FFA500',
     fontSize: 16,
   },
   header: {
@@ -460,7 +460,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#FF4500',
+    color: '#FFA500',
     marginBottom: 8,
   },
   subtitle: {
@@ -507,7 +507,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   inputFocused: {
-    borderColor: '#FF4500',
+    borderColor: '#FFA500',
   },
   inputError: {
     borderColor: '#D32F2F',
@@ -553,10 +553,10 @@ const styles = StyleSheet.create({
   },
   loginTextBold: {
     fontWeight: '600',
-    color: '#FF4500',
+    color: '#FFA500',
   },
   signupButton: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     height: 50,
     borderRadius: 8,
     justifyContent: 'center',

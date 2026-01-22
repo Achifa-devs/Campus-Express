@@ -112,7 +112,7 @@ export default function DeliveryAddress({ item, order_id, order, updateDeliveryO
 
           <h6 className="" style={{padding:'10px', margin: '0', borderBottom: '1px solid #efefef', height: '50px', width: '100%', background: '#fff', fontWeight: '600', display: 'flex', alignItems: 'center'}}>Delivery Address</h6>
           
-          <div className='' style={{display: 'flex', alignItems: 'center', fontWeight: '500', fontSize: '20', justifyContent: 'space-between', border: '1px solid #FF4500', flexDirection: 'row', padding: '0', width: '100%', background: '#fff', position: 'relative', borderRadius: '5px', marginBottom: '10px', border: 'none'}}>
+          <div className='' style={{display: 'flex', alignItems: 'center', fontWeight: '500', fontSize: '20', justifyContent: 'space-between', border: '1px solid #FFA500', flexDirection: 'row', padding: '0', width: '100%', background: '#fff', position: 'relative', borderRadius: '5px', marginBottom: '10px', border: 'none'}}>
                       
             <div style={{padding: '0', width: '100%'}}>
 
@@ -141,7 +141,7 @@ export default function DeliveryAddress({ item, order_id, order, updateDeliveryO
                       locale.map((item) => 
                         item.channel === 'Custom Pickup Location'
                         ?
-                        <div className='shadow-sm' style={{display: 'flex', alignItems: 'center', fontWeight: '500', fontSize: '20', justifyContent: 'space-between', border: '1px solid #FF4500', flexDirection: 'row', padding: '5px 5px 5px 10px', width: '100%', background: '#fff', position: 'relative', borderRadius: '5px', marginBottom: '10px'}}>
+                        <div className='shadow-sm' style={{display: 'flex', alignItems: 'center', fontWeight: '500', fontSize: '20', justifyContent: 'space-between', border: '1px solid #FFA500', flexDirection: 'row', padding: '5px 5px 5px 10px', width: '100%', background: '#fff', position: 'relative', borderRadius: '5px', marginBottom: '10px'}}>
                           <section style={{width: '80%', fontSize: 'small', fontWeight: '400'}}>
                             <div>
                               {item.locale}
@@ -171,7 +171,7 @@ export default function DeliveryAddress({ item, order_id, order, updateDeliveryO
                     }
                   </section>
 
-                  <button disabled={item?.channel === 'Custom Pickup Location' && locale.length > 0 ? true : false} onClick={e => addLocation('Custom Pickup Location')} className='shadow-sm' style={{position: 'relative', height: 'auto', width: 'auto', display: 'flex', alignItems: 'center', justifyContents: 'center', borderRadius: '5px', padding: '10px', textAlign: 'center', background: '#fff', color: '#FF4500', fontSize: 'small', float: 'right', color: '#fff', background: '#FF4500'}}>{
+                  <button disabled={item?.channel === 'Custom Pickup Location' && locale.length > 0 ? true : false} onClick={e => addLocation('Custom Pickup Location')} className='shadow-sm' style={{position: 'relative', height: 'auto', width: 'auto', display: 'flex', alignItems: 'center', justifyContents: 'center', borderRadius: '5px', padding: '10px', textAlign: 'center', background: '#fff', color: '#FFA500', fontSize: 'small', float: 'right', color: '#fff', background: '#FFA500'}}>{
                     pickUpChannel === 'Custom Pickup Location' && locale.length > 0 
                     ?
                     'Edit Location'
@@ -207,7 +207,7 @@ export default function DeliveryAddress({ item, order_id, order, updateDeliveryO
                       locale.map((item) => 
                         item.channel === 'Door Step Delivery'
                         ?
-                        <div className='shadow-sm' style={{display: 'flex', alignItems: 'center', fontWeight: '500', fontSize: '20', justifyContent: 'space-between', border: '1px solid #FF4500', flexDirection: 'row', padding: '5px 5px 5px 10px', width: '100%', background: '#fff', position: 'relative', borderRadius: '5px', marginBottom: '10px'}}>
+                        <div className='shadow-sm' style={{display: 'flex', alignItems: 'center', fontWeight: '500', fontSize: '20', justifyContent: 'space-between', border: '1px solid #FFA500', flexDirection: 'row', padding: '5px 5px 5px 10px', width: '100%', background: '#fff', position: 'relative', borderRadius: '5px', marginBottom: '10px'}}>
                           <section style={{width: '80%', fontSize: 'small', fontWeight: '400'}}>
                             <div>
                               {item.locale}
@@ -236,7 +236,7 @@ export default function DeliveryAddress({ item, order_id, order, updateDeliveryO
                     }
                   </section>
 
-                  <button onClick={e => addLocation('Door Step Delivery')} className='shadow-sm' style={{position: 'relative', height: 'auto', width: 'auto', display: 'flex', alignItems: 'center', justifyContents: 'center', padding: '10px', textAlign: 'center', background: '#fff', color: '#FF4500', fontSize: 'small', float: 'right', borderRadius: '5px', color: '#fff', background: '#FF4500'}}>{
+                  <button onClick={e => addLocation('Door Step Delivery')} className='shadow-sm' style={{position: 'relative', height: 'auto', width: 'auto', display: 'flex', alignItems: 'center', justifyContents: 'center', padding: '10px', textAlign: 'center', background: '#fff', color: '#FFA500', fontSize: 'small', float: 'right', borderRadius: '5px', color: '#fff', background: '#FFA500'}}>{
                     pickUpChannel === 'Door Step Delivery' && locale.length > 0 
                     ?
                     'Edit Location'
@@ -428,7 +428,7 @@ function PickupChannel({updateLocation,title,edit,order_data,item}) {
         <>
            
             <div style={{background: '#fff', width: 'fit-content', padding: '10px', position: 'relative', height: '80%', borderRadius: '0'}}>
-              <h6 style={{padding: '10px', color: '#FF4500', fontWeight: '500'}}><u>Input Your {title} Location </u></h6>
+              <h6 style={{padding: '10px', color: '#FFA500', fontWeight: '500'}}><u>Input Your {title} Location </u></h6>
                 <section style={{padding: '10px', overflow: 'auto', height: 'calc(100% - 100px)'}}>
   
                   <div className="input-cnt" style={{width: '100%'}}>

@@ -14,7 +14,7 @@ export default function OptionCard({question, options}) {
            {
                 options.map((item, index) => {
                     return(
-                        <TouchableOpacity key={index} style={[styles.btn, {backgroundColor: index === 0 ? '#FF4500' : '#2F2F2F'}]}>
+                        <TouchableOpacity key={index} style={[styles.btn, {backgroundColor: index === 0 ? '#FFA500' : '#2F2F2F'}]}>
                             <Text style={{color: '#FFF'}}>
                                 {
                                     item
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     btn: {
         width: '48%',
         height: 35,
-        backgroundColor: '#FF4500',
+        backgroundColor: '#FFA500',
         borderRadius: 4,
         display: 'flex',
         flexDirection: 'row',

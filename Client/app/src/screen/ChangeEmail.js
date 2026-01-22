@@ -94,7 +94,7 @@ export default function ChangeEmail({ route, navigation }) {
       {/* Loading Overlays */}
       {token_sent && (
         <View style={styles.overlay}>
-          <ActivityIndicator size="large" color="#FF4500" />
+          <ActivityIndicator size="large" color="#FFA500" />
           <Text style={styles.overlayText}>
             Sending verification token to your email.{'\n'}Please wait...
           </Text>
@@ -103,7 +103,7 @@ export default function ChangeEmail({ route, navigation }) {
       
       {email_sent && (
         <View style={styles.overlay}>
-          <ActivityIndicator size="large" color="#FF4500" />
+          <ActivityIndicator size="large" color="#FFA500" />
           <Text style={styles.overlayText}>
             Updating your email address.{'\n'}Please wait...
           </Text>
@@ -159,7 +159,7 @@ export default function ChangeEmail({ route, navigation }) {
             style={styles.helpLink}
             // onPress={() => navigation.navigate('recover-pwd')}
           >
-            <Icon name="help-circle-outline" size={16} color="#FF4500" />
+            <Icon name="help-circle-outline" size={16} color="#FFA500" />
             <Text style={styles.helpLinkText}>Need help with email verification?</Text>
           </TouchableOpacity>
         </ScrollView>
@@ -305,7 +305,7 @@ const styles = StyleSheet.create({
   },
   helpLinkText: {
     fontSize: 14,
-    color: '#FF4500',
+    color: '#FFA500',
     marginLeft: 6,
     fontWeight: '500',
   },
@@ -320,7 +320,7 @@ const styles = StyleSheet.create({
     borderTopColor: '#EEEEEE',
   },
   primaryButton: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',

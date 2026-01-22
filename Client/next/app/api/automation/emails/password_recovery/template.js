@@ -17,7 +17,7 @@ export function PWD_RESET_TEMPLATE(name,token) {
         .container {
             max-width: 600px;
             margin: 40px auto;
-            background: #ff4500; /* Red-orange background */
+            background: #FFA500; /* Red-orange background */
             border-radius: 10px;
             padding: 30px;
             text-align: center;
@@ -38,7 +38,7 @@ export function PWD_RESET_TEMPLATE(name,token) {
         }
         h1 {
             margin-bottom: 10px;
-            color: #ff4500;
+            color: #FFA500;
         }
         p {
             font-size: 16px;
@@ -47,7 +47,7 @@ export function PWD_RESET_TEMPLATE(name,token) {
         .token {
             font-size: 20px;
             font-weight: bold;
-            color: #ff4500;
+            color: #FFA500;
             background: #fff3e0;
             padding: 10px 20px;
             display: inline-block;
@@ -55,7 +55,7 @@ export function PWD_RESET_TEMPLATE(name,token) {
             margin: 15px 0;
         }
         .button {
-            background: #ff4500;
+            background: #FFA500;
             color: white;
             padding: 12px 20px;
             border-radius: 5px;

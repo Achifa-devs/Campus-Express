@@ -213,7 +213,7 @@ const BuyerLogin = ({query}) => {
                     
                         <div className="seller-input-cnt">
                             
-                            <button style={{background: '#ff4500',color: '#fff'}} onClick={e => {Login(e)}}>
+                            <button style={{background: '#FFA500',color: '#fff'}} onClick={e => {Login(e)}}>
                                 {
                                     btn
                                 }

@@ -5,9 +5,9 @@
     :root {
         --primary: #4F46E5;
         --secondary: #10B981;
-        --dark: #FF4500;
+        --dark: #FFA500;
         --light: #F9FAFB;
-        --accent: #FF4500;
+        --accent: #FFA500;
     }
     
     html,body{
@@ -104,7 +104,7 @@
         flex-direction: column;
         align-items: flex-start;
         padding: 10px 100px;
-        background-color: #FF4500;
+        background-color: #FFA500;
     }
 
     .buyer-showcase{
@@ -113,7 +113,7 @@
         padding: 0px;
         position: relative;
         margin: 20px 0 0 0;
-        /* background-color: #FF4500; */
+        /* background-color: #FFA500; */
     }
     .buyer-showcase-cnt {
         height: fit-content;
@@ -504,7 +504,7 @@
 
     .video-statement{
         height: 550px;
-        background-color: #FF4500;
+        background-color: #FFA500;
         width: 100%; display: flex;
         align-items: center;
         justify-content: space-between;
@@ -527,7 +527,7 @@
 
     .team-section{
         width: 100%;
-        background-color: #FF4500;
+        background-color: #FFA500;
         margin: 0 auto;
         
     }
@@ -535,7 +535,7 @@
     .team-cnt{
         /* max-width: 800px; */
         margin: 0 auto;
-        /* background-color: #FF4500; */
+        /* background-color: #FFA500; */
         padding: 3rem 2rem;
     }
 

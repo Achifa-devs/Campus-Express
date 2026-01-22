@@ -188,7 +188,7 @@ const Shipping = () => {
             backgroundColor: '#FFF8F6',
             opacity: .5
           }}>
-            <ActivityIndicator size={'large'} color={'#FF4500'}></ActivityIndicator>
+            <ActivityIndicator size={'large'} color={'#FFA500'}></ActivityIndicator>
           </View>
         }
         <KeyboardAvoidingView 
@@ -204,7 +204,7 @@ const Shipping = () => {
             
             {/* Additional Information */}
             <View style={styles.infoCard}>
-              <Ionicons name="information-circle" size={20} color="#FF4500" />
+              <Ionicons name="information-circle" size={20} color="#FFA500" />
               <View style={styles.infoContent}>
                 <Text style={styles.infoTitle}>Shipping Best Practices</Text>
                 <Text style={styles.infoText}>
@@ -218,7 +218,7 @@ const Shipping = () => {
             {/* Delivery Method Section */}
             <View style={styles.section}>
               <View style={styles.sectionHeader}>
-                <Ionicons name="person-outline" size={20} color="#FF4500" />
+                <Ionicons name="person-outline" size={20} color="#FFA500" />
                 <Text style={styles.sectionTitle}>Delivery Responsibility</Text>
               </View>
               <Text style={styles.sectionDescription}>
@@ -242,7 +242,7 @@ const Shipping = () => {
             {formData.deliveryMethod === 'courier' && (
               <View style={styles.section}>
                 <View style={styles.sectionHeader}>
-                  <Ionicons name="business-outline" size={20} color="#FF4500" />
+                  <Ionicons name="business-outline" size={20} color="#FFA500" />
                   <Text style={styles.sectionTitle}>Courier Service Type</Text>
                 </View>
                 <Text style={styles.sectionDescription}>
@@ -299,7 +299,7 @@ const Shipping = () => {
                     console.log("location: ", location)
                   }}
                 >
-                  <Ionicons name="locate" size={20} color="#FF4500" />
+                  <Ionicons name="locate" size={20} color="#FFA500" />
                 </TouchableOpacity> */}
               </View>
               {errors.currentLocation ? (
@@ -480,7 +480,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 4,
     borderLeftWidth: 4,
-    borderLeftColor: '#FF4500',
+    borderLeftColor: '#FFA500',
   },
   infoContent: {
     flex: 1,
@@ -525,7 +525,7 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   submitButtonActive: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
   },
   submitButtonDisabled: {
     backgroundColor: '#D1D5DB',

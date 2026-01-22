@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
   },
   price: {
     fontSize: 16,
-    color: '#FF4500',
+    color: '#FFA500',
     fontWeight: '600',
   },
   emptyContainer: {

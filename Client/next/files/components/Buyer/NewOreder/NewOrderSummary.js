@@ -168,7 +168,7 @@ export default function NewOrderSummary({item,stock,deliveryOpt,order_id}) {
                         alignItems: 'center',
                         justifyContent: 'center'
                     }}>
-                        <button style={{position: 'relative', background: '#FF4500', color: '#fff', borderRadius: '5px'}}  className="shadow-sm button" onClick={order_id !== '' && order_id !== undefined && order_id !== 'null' && order_id !== 'undefined' && order_id !== null ? handleOrderUpdate:handleNewOrder}>
+                        <button style={{position: 'relative', background: '#FFA500', color: '#fff', borderRadius: '5px'}}  className="shadow-sm button" onClick={order_id !== '' && order_id !== undefined && order_id !== 'null' && order_id !== 'undefined' && order_id !== null ? handleOrderUpdate:handleNewOrder}>
                             <span>
                                 {
                                     order_id !== '' && order_id !== undefined && order_id !== 'null' && order_id !== 'undefined' && order_id !== null ? 'Update Order' : 'Create New Order'

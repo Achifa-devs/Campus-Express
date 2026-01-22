@@ -77,7 +77,7 @@ const Invite = () => {
         </View>
         <TouchableOpacity
           style={{
-            backgroundColor: '#FF4500',
+            backgroundColor: '#FFA500',
             paddingVertical: 6,
             paddingHorizontal: 12,
             borderRadius: 5,

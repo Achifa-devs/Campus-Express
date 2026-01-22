@@ -50,7 +50,7 @@ export default function ReleaseFunds() {
         <View style={styles.orderCard}>
           <View style={styles.orderHeader}>
             <View style={styles.iconContainer}>
-              <Icon name="cube-outline" size={24} color="#FF4500" />
+              <Icon name="cube-outline" size={24} color="#FFA500" />
             </View>
             <View style={styles.orderHeaderText}>
               <Text style={styles.orderTitle}>Deal Summary</Text>
@@ -84,7 +84,7 @@ export default function ReleaseFunds() {
             <CheckBox 
               value={confirmed} 
               onValueChange={setConfirmed}
-              tintColors={{ true: '#FF4500', false: '#999' }}
+              tintColors={{ true: '#FFA500', false: '#999' }}
               style={styles.checkbox}
             />
             <Text style={styles.checkboxText}>
@@ -376,7 +376,7 @@ const styles = StyleSheet.create({
   },
   infoValueHighlight: {
     fontSize: 18,
-    color: '#FF4500',
+    color: '#FFA500',
   },
 
   // Confirmation Section
@@ -424,7 +424,7 @@ const styles = StyleSheet.create({
     padding: 16,
     marginVertical: 10,
     borderLeftWidth: 4,
-    borderLeftColor: '#FF4500',
+    borderLeftColor: '#FFA500',
   },
   warningHeader: {
     flexDirection: 'row',
@@ -448,14 +448,14 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   primaryButton: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 16,
     borderRadius: 4,
     marginBottom: 12,
-    shadowColor: '#FF4500',
+    shadowColor: '#FFA500',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 8,

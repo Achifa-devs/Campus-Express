@@ -76,7 +76,7 @@ const AdModal = ({ isVisible, onClose, adContent }) => {
                 <View style={styles.featuresContainer}>
                   {ad.features.map((feature, index) => (
                     <View key={index} style={styles.featureItem}>
-                      <Ionicons name="checkmark-circle" size={20} color="#FF4500" />
+                      <Ionicons name="checkmark-circle" size={20} color="#FFA500" />
                       <Text style={styles.featureText}>{feature}</Text>
                     </View>
                   ))}
@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
   },
   ctaButton: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',

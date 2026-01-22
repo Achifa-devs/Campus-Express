@@ -367,14 +367,14 @@ const Header = () => {
       <div className="buyer-header shadow-sm"  style={{position: 'sticky', top: '0', zIndex: '10000', background: '#fff', padding: pathname.split('/').splice(-1)[0] !== '' || pathname.split('/').length === 1 ? '0px' : '10px', justifyContent: pathname.split('/').splice(-1)[0] !== '' || pathname.split('/').length === 1 ? 'space-between' : 'space-between'}}>
 
 
-      <div style={{cursor: 'pointer', height: '100%', display: 'flex', alignItems: 'center'}} onClick={e => {
+      <div style={{cursor: 'pointer', height: '100%', display: 'flex', alignItems: 'center', padding: "0px 10px"}} onClick={e => {
         pathname.split('/').splice(-1)[0] !== '' || pathname.split('/').length === 1 ? '' : '/store'
       }}>
         <Image
             src="/logo.png"
             alt="Campus Store Logo"
-            width={65}
-            height={65}
+            width={50}
+            height={50}
             className="logo"
             
         />

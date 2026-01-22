@@ -32,10 +32,10 @@
 
     .aside-header p {
         margin: 0;
-        color: #FF4500;
+        color: #FFA500;
         font-size: 1.3rem;
         font-weight: 700;
-        background: linear-gradient(135deg, #FF4500, #FFA500);
+        background: linear-gradient(135deg, #FFA500, #FFA500);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -100,7 +100,7 @@
     .chat-room-header{
         height: 70px;
         width: 100%;
-        background: linear-gradient(135deg, #FF4500, #FFA500);
+        background: linear-gradient(135deg, #FFA500, #FFA500);
         border-bottom: 1px solid #e2e8f0;
         display: flex;
         flex-direction: row;
@@ -155,7 +155,7 @@
     .chat-room-body .sent{
         width: fit-content;
         max-width: 60%;
-        background-color: #FF4500;
+        background-color: #FFA500;
         color: #ffffff;
         padding: 10px 15px;
         border-radius: 15px;
@@ -208,7 +208,7 @@
     }
 
     textarea:focus {
-        border-color: #FF4500;
+        border-color: #FFA500;
         background: #fff;
         box-shadow: 0 0 0 2px rgba(255, 69, 0, 0.1);
     }
@@ -222,7 +222,7 @@
         position: absolute;
         right: 10px;
         bottom: 10px;
-        background: #FF4500;
+        background: #FFA500;
         border: none;
         border-radius: 50%;
         width: 32px;

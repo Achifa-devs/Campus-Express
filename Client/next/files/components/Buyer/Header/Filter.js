@@ -86,7 +86,7 @@ export default function Filter({
             }} className="buyer-filter card border-0 shadow-sm h-100" onClick={e => e.target === e.currentTarget ? closeFilter() : ''}>
                 {/* Header */}
                 <div className="card-header bg-white border-bottom py-3">
-                    <h5 className="mb-0 text-center fw-semibold" style={{color: '#FF4500'}}>
+                    <h5 className="mb-0 text-center fw-semibold" style={{color: '#FFA500'}}>
                         Filter Section
                     </h5>
                 </div>
@@ -257,8 +257,8 @@ export default function Filter({
                                 className="btn w-100 fw-semibold"
                                 onClick={e => applyFilter(category_checked, price_checked, condition_checked, location_checked)}
                                 style={{
-                                    backgroundColor: '#FF4500',
-                                    border: '1px solid #FF4500',
+                                    backgroundColor: '#FFA500',
+                                    border: '1px solid #FFA500',
                                     color: 'white'
                                 }}
                             >

@@ -32,7 +32,7 @@ export default function Category({ updateCategory, category_list, error, onFocus
           <Ionicons 
             name="grid-outline" 
             size={20} 
-            color={isFocused ? '#FF4500' : '#666'} 
+            color={isFocused ? '#FFA500' : '#666'} 
           />
         </View>
         <View style={styles.dropdownContainer}>

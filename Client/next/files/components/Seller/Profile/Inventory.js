@@ -27,11 +27,11 @@ export default function Inventory({shop, InvetoryEdit,updateActiveJsx}) {
                     ? 
                     JSON.parse(shop?.inventory).map((item,index) => <li key={index} style={{listStyleType: 'none', margin: '10px'}}>{item}</li>) 
                     : 
-                    <li style={{display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#FF4500', color: '#fff'}}>
+                    <li style={{display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#FFA500', color: '#fff'}}>
                       Please Add Items You Sell
                     </li> 
                   : 
-                  <li style={{display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#FF4500', color: '#fff'}}>
+                  <li style={{display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#FFA500', color: '#fff'}}>
                       Please Add Items You Sell
                     </li>
                     

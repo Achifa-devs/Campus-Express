@@ -521,7 +521,7 @@ function NavigationHandler() {
     <>
 
       <SafeAreaView style={styles.container}>
-        <StatusBar barStyle="dark-content" backgroundColor={"#FF4500"} translucent={false} /> 
+        <StatusBar barStyle="dark-content" backgroundColor={"#FFA500"} translucent={false} /> 
 
         <PaystackProvider publicKey={'pk_live_13343a7bd4deeebc644070871efcdf8fdcf280f7'} defaultChannels={["card", "bank", "ussd", "bank_transfer"]} debug={true}>
           <NavigationContainer 

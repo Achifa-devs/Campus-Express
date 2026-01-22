@@ -342,7 +342,7 @@ const Accommodation = ({ route, navigation }) => {
     if (loading) {
       return (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#FF4500" />
+          <ActivityIndicator size="large" color="#FFA500" />
           <Text style={styles.loadingText}>Loading service details...</Text>
         </View>
       );
@@ -364,7 +364,7 @@ const Accommodation = ({ route, navigation }) => {
           backgroundColor: '#FFF8F6',
           opacity: .5
         }}>
-          <ActivityIndicator size={'large'} color={'#FF4500'}></ActivityIndicator>
+          <ActivityIndicator size={'large'} color={'#FFA500'}></ActivityIndicator>
         </View>
       }
       <View style={styles.header}>
@@ -439,12 +439,12 @@ const Accommodation = ({ route, navigation }) => {
               onPress={handleSave}
             >
               {favLoading ? (
-                <ActivityIndicator size="small" color="#FF4500" />
+                <ActivityIndicator size="small" color="#FFA500" />
               ) : (
                 <Ionicons 
                   name={saved ? "heart" : "heart-outline"} 
                   size={24} 
-                  color={saved ? "#FF4500" : "#FFF"} 
+                  color={saved ? "#FFA500" : "#FFF"} 
                 />
               )}
             </TouchableOpacity>
@@ -570,7 +570,7 @@ const Accommodation = ({ route, navigation }) => {
           {/* Safety Tips */} 
           <View style={styles.safetyTips}>
             <View style={styles.safetyHeader}>
-              <Ionicons name="shield-checkmark" size={20} color="#FF4500" />
+              <Ionicons name="shield-checkmark" size={20} color="#FFA500" />
               <Text style={styles.safetyTitle}>Accommodation Safety Tips</Text>
             </View>
             <View style={styles.safetyList}>
@@ -617,13 +617,13 @@ const Accommodation = ({ route, navigation }) => {
           disabled={favLoading}
         >
           {favLoading ? (
-            <ActivityIndicator size="small" color="#FF4500" />
+            <ActivityIndicator size="small" color="#FFA500" />
           ) : (
             <>
               <Ionicons 
                 name={saved ? "heart" : "heart-outline"} 
                 size={20} 
-                color={saved ? "#FF4500" : "#666"} 
+                color={saved ? "#FFA500" : "#666"} 
               />
               <Text style={[styles.bottomButtonText, saved && styles.savedText]}>
                 {saved ? 'Saved' : 'Save'}
@@ -747,7 +747,7 @@ const styles = StyleSheet.create({
    
   },
   connection: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     borderRadius: 8,
     paddingVertical: 4,
     paddingHorizontal: 8,
@@ -821,7 +821,7 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 17,
     fontWeight: 'bold',
-    color: '#FF4500',
+    color: '#FFA500',
   },
   priceLabel: {
     fontSize: 16,
@@ -841,7 +841,7 @@ const styles = StyleSheet.create({
   tagText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FF4500',
+    color: '#FFA500',
   },
   actionRow: {
     flexDirection: 'row',
@@ -874,7 +874,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingVertical: 12,
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     borderRadius: 10,
     flex: 1,
     justifyContent: 'center',
@@ -938,7 +938,7 @@ const styles = StyleSheet.create({
   safetyTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#FF4500',
+    color: '#FFA500',
     marginLeft: 8,
   },
   safetyList: {
@@ -1002,7 +1002,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
   },
   saveButtonActive: {
-    borderColor: '#FF4500',
+    borderColor: '#FFA500',
     backgroundColor: '#FFF8F6',
   },
   bottomButtonText: {
@@ -1012,7 +1012,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   savedText: {
-    color: '#FF4500',
+    color: '#FFA500',
   },
   reviewButton: {
     flex: 1,
@@ -1035,7 +1035,7 @@ const styles = StyleSheet.create({
   },
   shareButton: {
     flex: 1,
-    backgroundColor: '#FF4500',
+    backgroundColor: '#FFA500',
     borderRadius: 10,
     flexDirection: 'row',
     justifyContent: 'center',

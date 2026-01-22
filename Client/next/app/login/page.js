@@ -227,7 +227,7 @@ export default function Login() {
 
                         
                         
-                        <button style={{background: '#ff4500',color: '#fff', border: 'none', outline: 'none', height: '40px', width: '100%', borderRadius: '5px'}} onClick={e => {e.preventDefault(); Login(e)}}>
+                        <button style={{background: '#FFA500',color: '#fff', border: 'none', outline: 'none', height: '40px', width: '100%', borderRadius: '5px'}} onClick={e => {e.preventDefault(); Login(e)}}>
                             {
                                 btn
                             }

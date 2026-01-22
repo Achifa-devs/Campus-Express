@@ -38,7 +38,7 @@ module.exports = function tokenTemplate(name, token, email){
                         }
 
                         .header {
-                            background: linear-gradient(135deg, #FF6B35 0%, #FF4500 100%);
+                            background: linear-gradient(135deg, #FF6B35 0%, #FFA500 100%);
                             color: white;
                             padding: 40px 30px;
                             text-align: center;
@@ -159,7 +159,7 @@ module.exports = function tokenTemplate(name, token, email){
                         .cta-button {
                             display: block;
                             width: 100%;
-                            background: linear-gradient(135deg, #FF6B35 0%, #FF4500 100%);
+                            background: linear-gradient(135deg, #FF6B35 0%, #FFA500 100%);
                             color: white;
                             text-decoration: none;
                             padding: 18px 30px;
@@ -290,44 +290,44 @@ module.exports = function tokenTemplate(name, token, email){
                 </head>
                 <body>
 
-                    <div class="container">
-                        <div class="header">
-                            <div class="logo">CS</div>
+                    <div className="container">
+                        <div className="header">
+                            <div className="logo">CS</div>
                             <h1>Verify Your Email</h1>
                             <p>Secure access to your Campus Sphere account</p>
                         </div>
                         
-                        <div class="content">
-                            <p class="greeting">Hello ${name},</p>
+                        <div className="content">
+                            <p className="greeting">Hello ${name},</p>
                             
-                            <p class="instruction">
+                            <p className="instruction">
                                 You're just one step away from securing your Campus Sphere account. 
                                 Use the verification token below to complete your email verification process.
                             </p>
 
-                            <div class="token-container">
-                                <div class="token-label">Your Verification Token</div>
-                                <div class="token-box">${token}</div>
+                            <div className="token-container">
+                                <div className="token-label">Your Verification Token</div>
+                                <div className="token-box">${token}</div>
                             </div>
 
-                            <div class="expiry-notice">
+                            <div className="expiry-notice">
                                 ⏰ This token will expire in <strong>60 seconds</strong> for your security.
                             </div>
 
-                            <a href="https://www.campussphere.net/vendor/reset-password?token=${token}&email=${email}" class="cta-button">
+                            <a href="https://www.campussphere.net/vendor/reset-password?token=${token}&email=${email}" className="cta-button">
                                 Verify Email Address
                             </a>
 
-                            <p class="alternative-text">
+                            <p className="alternative-text">
                                 Or copy and paste this token in the verification page
                             </p>
 
-                            <div class="security-note">
+                            <div className="security-note">
                                 🔒 <strong>Security Tip:</strong> If you didn't request this verification, 
                                 please ignore this email and ensure your account credentials are secure.
                             </div>
 
-                            <div class="signature">
+                            <div className="signature">
                                 <p>Best regards,</p>
                                 <p><strong>The Campus Sphere Team</strong></p>
                                 <p style="color: #718096; font-size: 14px; margin-top: 10px;">
@@ -336,29 +336,29 @@ module.exports = function tokenTemplate(name, token, email){
                             </div>
                         </div>
                         
-                        <div class="footer">
-                            <div class="footer-links">
+                        <div className="footer">
+                            <div className="footer-links">
                                 <a href="https://campussphere.net/privacy">Privacy Policy</a>
                                 <a href="https://campussphere.net/terms">Terms of Service</a>
                                 <a href="https://campussphere.net/support">Help Center</a>
                             </div>
                             
-                            <div class="social-icons">
-                                <a href="https://facebook.com/campussphere" class="social-icon">
+                            <div className="social-icons">
+                                <a href="https://facebook.com/campussphere" className="social-icon">
                                     <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook">
                                 </a>
-                                <a href="https://twitter.com/campussphere" class="social-icon">
+                                <a href="https://twitter.com/campussphere" className="social-icon">
                                     <img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="Twitter">
                                 </a>
-                                <a href="https://instagram.com/campussphere" class="social-icon">
+                                <a href="https://instagram.com/campussphere" className="social-icon">
                                     <img src="https://cdn-icons-png.flaticon.com/512/733/733558.png" alt="Instagram">
                                 </a>
-                                <a href="https://linkedin.com/company/campussphere" class="social-icon">
+                                <a href="https://linkedin.com/company/campussphere" className="social-icon">
                                     <img src="https://cdn-icons-png.flaticon.com/512/733/733561.png" alt="LinkedIn">
                                 </a>
                             </div>
                             
-                            <p class="copyright">
+                            <p className="copyright">
                                 © 2024 Campus Sphere. All rights reserved.<br>
                                 Building trusted campus communities worldwide.
                             </p>

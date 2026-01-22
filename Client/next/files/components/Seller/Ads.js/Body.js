@@ -30,7 +30,7 @@ const Body = ({cards}) => {
                         fontSize: 'medium',
                     }} alt="" />
 
-                    <div style={{color: '#FF4500',fontFamily: 'sans-serif', fontWeight: '800'}}>You Have'nt Uploaded Any Item Yet</div>
+                    <div style={{color: '#FFA500',fontFamily: 'sans-serif', fontWeight: '800'}}>You Have'nt Uploaded Any Item Yet</div>
                     <Link to={'/seller.editor'} style={{color: 'orange',fontFamily: 'sans-serif', fontWeight: '500'}}>Click Here To Start Listing Your Items Now</Link>
                 </section>
             
