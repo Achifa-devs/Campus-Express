@@ -1,0 +1,26 @@
+.notice-cnt{
+    height: fit-content;
+    width: fit-content;
+    background-color: orangered;
+    position: fixed;
+    color: #fff;
+    bottom: -100vh;
+    /* bottom: 100px; */
+    border-radius: 5px;
+    transition: 1s;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 1000;
+    /* top: 50%; */
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#notice-cnt{
+    
+    bottom: 100px;
+    transition: 1s;
+
+}

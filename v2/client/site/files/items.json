@@ -1,0 +1,149 @@
+{"items" : 
+    {
+        "category": 
+        [
+            {
+                "Books": 
+                [
+                    "Create custom item","Self improvements","Fiction","Non Fiction","Romance","Business & Finance","Biography","Educational Books & Textbooks","Historical Fiction","Science Fiction & Fantasy books", "Thriller & Mystery Books", "Religious"
+                ],
+                "img": "/app/src/assets/food-market-purchasing-svgrepo-com.svg"
+            },
+            {
+                "Food": 
+                [
+                    "Create custom item","Meat","Fruits","Vegetables","Oil","Grains","Legumes","Junk Food & Snaks","Sea Food","Processed Food", "Wine","Beverages","Food"
+                ],
+                "img": "/app/src/assets/food-market-purchasing-svgrepo-com.svg"
+            },
+
+            {
+                "Electronics":
+                [
+                    "Create custom item","Audio/Musical Equipment","Photo/Video Camera","Printer","Scanners","Video Game Console","Video Games","T.V","DVD","MIFI/Routers"
+                ],
+                "img": ""
+            },
+
+            {
+                "Fashion": 
+                [
+                    "Create custom item","Bags","Clothing","Jewelry","Foot Wear","Watch", "Sneakers","Accessories"
+                ],
+                "FootWear":  ["Create custom sub category ","Sandals","Shoes","Cotina","Palms","Boots","Slippers"],
+                "ClothingMale": ["Create custom sub category ","Underwear","Tops","Trousees","Nicker/Shorts","Sports-wear","Swim-suit"],
+                "ClothingFemale": ["Create custom sub category ","Underwear","Tops","Trousees","Nicker/Shorts","Sports-wear","Gown","Skirt","Swim-suit"],
+                "Accessories": ["Create custom sub category ","Belt","Solks","Bangos","Chain","Necklace","Cap","Ski-Mask"],
+                "img": ""
+            },
+
+            {
+                "Health & Beauty": 
+                [
+                    "Create custom item","Bath & Body","Hair Care","Skin Care","Wig & Weavon","Fragrance","Make-Up","Tool Accessories","Sexual Wellness"
+                ],
+                "img": ""
+            },
+
+            {
+                "Cleaning Agents": 
+                [
+                    "Create custom item","Detergents","Insecticide","Disinfectants","Acid Cleaners"
+                ],
+                "img": ""
+            },
+
+            {
+                "Mobile Phones": 
+                [
+                    "Create custom item","Android","Samsung","IOS","Windows","BalckBerry","Cell Phone"
+                ],
+                "img": ""
+            },
+
+
+            {
+                "Tablets": 
+                [
+                    "Create custom item","Android","Samsung","IOS","Windows","BalckBerry"
+                ],
+                "img": ""
+            },
+
+            {
+                "Laptops & Desktops": 
+                [
+                    "Create custom item","Windows","Mac","Chrome","Ubuntu","Linux"
+                ],
+                "img": ""
+            },
+
+            {
+                "Laptops & Desktops Accessories": 
+                [
+                    "Create custom item","Monitor","Speakers","C.P.U","Flash Drive","Hard Disk/SSD","Mouse","Keyboard","Charger/Cords"
+                ],
+                "img": ""
+            },
+
+            {
+                "Phone & Tablet Accessories": 
+                [
+                    "Create custom item","Ear Piece","Charger","Memory Card","Battery","Sim Card","Phone Case","OTG","Air Pod","Power Bank"
+                ],
+                "img": ""
+            },
+
+            {
+                "Pets": 
+                [
+                    "Create custom item","Cat","Dog","Bird","Rabbit","Snakes","Mice","Parrot"
+                ],
+                "img": ""
+            },
+
+            {
+                "Vehicle": 
+                [
+                    "Create custom item","SUV","Sedan","Mini Van","Truck","Bus","Tricycle","Bicycle","MotorCycle","Van"
+                ],
+                "img": ""
+            },
+
+            
+
+            {
+                "Lodge & Apartments": [
+                    "Lodge-mate needed", "Lodge needed"
+                ],
+                "img": ""
+            },
+
+            {
+                "Furnitures": 
+                [
+                    "Create custom item","Chair","Table","CupBoard","Shelve","Wardrobe","Stool","Bench","Bed"
+                ],
+                "img": ""
+            },
+
+            {
+                "Appliances": 
+                [
+                    "Create custom item","Gas","Stove","Generator","Electric Cooker","Blender","Washing Machine","Refridgerator","Kettle","Fan","Bulb","Stabilizer","Toaster","Vacuum Cleaner","Dish Washer","Micro Wave","Oven","Mixer"
+                ],
+                "img": ""
+            },
+
+            {
+                "Utensils": 
+                [
+                    "Create custom item","Plate","Pot","Spoon/Fork","Knife","Tray","Basket","Cup"
+                ],
+                "img": ""
+            }
+
+        ]
+    }
+}
+
