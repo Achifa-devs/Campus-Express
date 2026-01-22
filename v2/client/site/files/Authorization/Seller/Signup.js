@@ -98,7 +98,7 @@ const Signup = () => {
 
         if(validation.current){
             setBtn(
-                <div className="Authloader" style={{background: '#fff',border: '1px solid orangered'}}></div>
+                <div className="Authloader" style={{background: '#fff',border: '1px solid #FFA500'}}></div>
             )
             e.target.disabled = true;
             let response = await RegisterSeller(fname.trim(),lname.trim(),email,phone,pwd,state,campus)
@@ -250,7 +250,7 @@ const Signup = () => {
                 </div>
                 <div id="right">
                     <br />
-                    <h6><b style={{background: 'orangered', color: '#fff', padding: '10px', borderRadius: '5px', marginBottom: '20px', height: '150px'}}>Signup Form For Sellers</b></h6>
+                    <h6><b style={{background: '#FFA500', color: '#fff', padding: '10px', borderRadius: '5px', marginBottom: '20px', height: '150px'}}>Signup Form For Sellers</b></h6>
                 
                     <br />
                     <form action="">
@@ -358,9 +358,9 @@ const Signup = () => {
                     </form>
 
                     {/* <div>
-                        <small style={{color: 'orangered'}}>Forgot Password? Recover Password Here</small>
+                        <small style={{color: '#FFA500'}}>Forgot Password? Recover Password Here</small>
                     </div> */}
-                    <div onClick={e => navigate('/seller.login')} style={{width: '100%', textAlign: 'center', color: 'orangered'}}>
+                    <div onClick={e => navigate('/seller.login')} style={{width: '100%', textAlign: 'center', color: '#FFA500'}}>
                         <small style={{cursor: 'pointer'}}>Already Have An Account, Signin Here</small>
                     </div>
                     

@@ -40,7 +40,7 @@ const Product = ({ item, seller, order_list }) => {
         color: '#fff',
         fontSize: 'small',
         fontWeight: '500',
-        backgroundColor: 'orangered',
+        backgroundColor: '#FFA500',
         margin: '0'
     }
 
@@ -160,7 +160,7 @@ const Product = ({ item, seller, order_list }) => {
                     {   
                         item ?
 
-                        <div style={{background: '#fff', padding: '10px',    color: 'orangered', fontWeight: '500', position: 'relative', borderRadius: '5px', height: 'fit-content'}}>
+                        <div style={{background: '#fff', padding: '10px',    color: '#FFA500', fontWeight: '500', position: 'relative', borderRadius: '5px', height: 'fit-content'}}>
                             
                             <p style={{fontWeight: '700', margin: '0', padding: '10px 0', fontSize: '3.5vh', color: '#000'}}>
                                 <small>&#8358;</small>{new Intl.NumberFormat('en-us').format(item?.price)}
@@ -225,7 +225,7 @@ const Product = ({ item, seller, order_list }) => {
                                     :
                                     'Place Order Now'
                                 */}
-                                {/* <Link to={`tel:+234${phone}`} style={{height: '50px', width: '45%', borderRadius: '5px', display: 'flex', alignItems: 'center', cursor: 'pointer', justifyContent: 'space-evenly', fontSize: 'x-small', background: 'orangered', color: '#fff'}}>
+                                {/* <Link to={`tel:+234${phone}`} style={{height: '50px', width: '45%', borderRadius: '5px', display: 'flex', alignItems: 'center', cursor: 'pointer', justifyContent: 'space-evenly', fontSize: 'x-small', background: '#FFA500', color: '#fff'}}>
                                     {
                                         
                                         <>

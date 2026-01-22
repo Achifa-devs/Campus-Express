@@ -74,7 +74,7 @@ const BuyerAside = () => {
         <>
             <div className="buyer-aside">
                 <div className="buyer-aside-cnt">
-                    <h5 style={{fontWeight: '1000', color: 'orangered'}}>Filter Section </h5>
+                    <h5 style={{fontWeight: '1000', color: '#FFA500'}}>Filter Section </h5>
                     <div className="input-cnt" >
                         <div style={{height: 'fit-content', color: '#fff', width: '100%', marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'left'}}>
                             <input style={{height: '20px', cursor: 'pointer', width: '20px'}} type="checkbox" name="" id="" />
@@ -191,7 +191,7 @@ const BuyerAside = () => {
                             position: 'relative',
                             fontSize: 'large',
                             fontWeight: '1000',
-                            backgroundColor: 'orangered',
+                            backgroundColor: '#FFA500',
                             margin: '0'
                         }}>
                             Cancel
@@ -211,7 +211,7 @@ const BuyerAside = () => {
                             position: 'relative',
                             fontSize: 'large',
                             fontWeight: '1000',
-                            backgroundColor: 'orangered',
+                            backgroundColor: '#FFA500',
                             margin: '0'
                         }}>
                             Apply

@@ -106,7 +106,7 @@ const Card = ({item,index,unit,getTotalPrice, product_id}) => {
         <>
             <div key={index} className="buyer-cart-card shadow-sm">
                 <Thumbnail product_id={product_id} />
-                <button  className="buyer-cart-remove-btn" style={{background: 'orangered'}} onClick={e => AddToCart(e,item.item.product_id)}>
+                <button  className="buyer-cart-remove-btn" style={{background: '#FFA500'}} onClick={e => AddToCart(e,item.item.product_id)}>
                     Remove
                 </button>
 

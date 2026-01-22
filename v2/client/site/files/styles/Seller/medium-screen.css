@@ -33,7 +33,7 @@
         align-items: center;
         padding: 20px;
         color: #fff;
-        background-color: orangered;
+        background-color: #FFA500;
     }
 
     .seller-logo{
@@ -42,7 +42,7 @@
         font-size: 5vh;
         display: flex;
         font-weight: 600;
-        color: orangered;
+        color: #FFA500;
         align-items: center;
         padding: 20px;
         justify-content: left;
@@ -59,7 +59,7 @@
         z-index: 1000;
         transition: 1s;
         padding: 10px;
-        background-color: orangered;
+        background-color: #FFA500;
     }
 
     #seller-aside{
@@ -95,14 +95,14 @@
         border-radius: 0;
         font-size: large;
         font-weight: 1000;
-        color: orangered;
+        color: #FFA500;
         position: absolute;
         top: 0;
         padding: 10px;
         left: 0;
         margin-top: 0;
         margin-bottom: 10px;
-        background-color: orangered;
+        background-color: #FFA500;
     }
 
     .seller-aside-logo span h4{
@@ -139,7 +139,7 @@
         border-top: 1px solid #fff;
         /* border-bottom: 1px solid #fff; */
         position: relative;
-        background-color: orangered;
+        background-color: #FFA500;
     }
 
     .seller-aside .seller-aside-nav ul li{
@@ -163,7 +163,7 @@
         opacity: .9;
         border-top: 1px solid #fff;
         border-bottom: 1px solid #fff;
-        background-color: orangered;
+        background-color: #FFA500;
         position: absolute;
         bottom: 0px;
         left: 0;
@@ -218,7 +218,7 @@
         flex-shrink: 0;
         text-align: center;
         cursor: pointer;
-        color: orangered;
+        color: #FFA500;
         padding: 5px;
         border: 1px solid #FFA500;
         display: flex;
@@ -233,7 +233,7 @@
     .seller-home-overview ul li button{
         border: none;
         outline: none;
-        color: orangered;
+        color: #FFA500;
         padding: 10px;
         margin: 0;
         border-radius: 10px;
@@ -245,7 +245,7 @@
     }
 
     .seller-home-overview ul li a{
-        color: orangered;
+        color: #FFA500;
         text-decoration: none;
     }
 
@@ -408,7 +408,7 @@
 
     .input-cnt label{
         font-size: small;
-        color: orangered;
+        color: #FFA500;
     }
 
     .input-cnt input{
@@ -552,7 +552,7 @@
         font-size: small;
         font-weight: 500;
         text-align: center;
-        color: orangered;
+        color: #FFA500;
         margin: 5px 5px 5px 5px;
         padding: 10px;
         border-radius: 5px;
@@ -627,7 +627,7 @@
         border-radius: 5px;
         padding: 5px;
         width: fit-content;
-        background-color: orangered;
+        background-color: #FFA500;
         color: #fff;
         align-items: flex-end;
         font-size: medium;
@@ -1102,7 +1102,7 @@
     .seller-inbox-card .btm{
         display: block;
         height: 100px;
-        border: 1px solid orangered;
+        border: 1px solid #FFA500;
     }
     .btm{
         height: 120px;
@@ -1144,10 +1144,10 @@
    
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: orangered;
+    background: #FFA500;
   }
   
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
-    background: orangered;
+    background: #FFA500;
   }

@@ -21,7 +21,7 @@ const FlashAds = () => {
         <>
             <div className="buyer-flash-sales " style={{padding: '0px',margin: `0 0 0 0`,width: screenWidth < 480 ? '100%' : 'calc(100% - 300px)',float: 'right', position: 'relative'}}>
                 <div className='shadow-sm' style={{height: '40px', padding: '0 10px 0 10px', borderBottom: '1px solid #efefef', marginBottom: '0', flexDirection: 'row',display: 'flex', alignItems: 'center', justifyContent: 'space-between',}}>
-                    <small style={{float: 'left', color: 'orangered'}}><b>Get the best deals</b></small>
+                    <small style={{float: 'left', color: '#FFA500'}}><b>Get the best deals</b></small>
 
                     {/* <small style={{float: 'right', cursor: 'pointer'}}><b>SEE ALL</b></small> */}
                 </div>

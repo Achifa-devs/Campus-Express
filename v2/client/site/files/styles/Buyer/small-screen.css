@@ -39,7 +39,7 @@
         cursor: pointer;
         display: flex;
         align-items: center;
-        color: orangered;
+        color: #FFA500;
         font-weight: 500;
         font-size: small;
         height: 35px;
@@ -59,7 +59,7 @@
     .buyer-main-cnt{
         padding: 1px 10px 10px 10px; 
 
-        background-color: orangered;
+        background-color: #FFA500;
     }
 
     .buyer-flash-ads{
@@ -127,7 +127,7 @@
         align-items: center;
         justify-content: space-between;
 
-        background-color: orangered;
+        background-color: #FFA500;
     }
 
     .buyer-ads-cnt section:nth-child(odd){
@@ -145,7 +145,7 @@
         /* padding: 10px; */
         height: 100%;
         border-radius: 1px;
-        background-color: orangered;
+        background-color: #FFA500;
     }
     .buyer-ads-cnt section:nth-child(even) img{
         height: 150px;
@@ -241,7 +241,7 @@
         cursor: pointer;
         margin: 0 5px 0 5px;
         font-size: large;
-        background-color: orangered;
+        background-color: #FFA500;
         color: #fff;
         font-weight: 500;
     }
@@ -271,7 +271,7 @@
         border-bottom-right-radius: 35px;
         position: relative;
         width: 100px;
-        background-color: orangered;
+        background-color: #FFA500;
         color: #fff;
         outline: none;
         font-weight: 500;
@@ -297,7 +297,7 @@
         width: 100%;
         font-size: large;
         font-weight: 1000;
-        color: orangered;
+        color: #FFA500;
     }
 
     .buyer-aside-cnt{
@@ -347,7 +347,7 @@
         padding: 10px;
         font-size: small;
         justify-content: space-between;
-        background-color: orangered;
+        background-color: #FFA500;
         color: #fff;
         border-radius: 5px;
 
@@ -408,7 +408,7 @@
         font-weight: 500;
         margin: 0 0 5px 0;
         font-size: small;
-        background-color: orangered;
+        background-color: #FFA500;
         color: #fff;
     }
     .buyer-card-cnt .card .card-footer{
@@ -517,7 +517,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        border: 1px solid orangered;
+        border: 1px solid #FFA500;
         border-radius: 50%;
         position: relative;
         margin: 0 5px 0 5px;
@@ -609,7 +609,7 @@
     }
 
     .buyer-product-seller-details .buyer-seller-products h4{
-        color: orangered;
+        color: #FFA500;
         padding: 0 0 0 5px;
     }
 
@@ -665,7 +665,7 @@
         background-color: #f9f9f9;
     }
     .buyer-cart-checkout button{
-        background-color: orangered;
+        background-color: #FFA500;
         color: #fff;
         font-weight: 500;
         outline: none;
@@ -759,7 +759,7 @@
         display: flex;
         background-color: #f9f9f9;
         padding: 5px;
-        color: orangered;
+        color: #FFA500;
         align-items: center;
         justify-content: center;
         flex-direction: row;
@@ -788,7 +788,7 @@
         border-radius: 2.5px;
     }
     .buyer-items-stock div:nth-child(odd){
-        background-color: orangered;
+        background-color: #FFA500;
         color: #fff;
         font-weight: bold;
         font-size: medium;
@@ -808,7 +808,7 @@
         
     }
     .buyer-history-checkout button{
-        background-color: orangered;
+        background-color: #FFA500;
         color: #fff;
         font-weight: 500;
         outline: none;
@@ -912,7 +912,7 @@
         display: flex;
         background-color: #f9f9f9;
         padding: 5px;
-        color: orangered;
+        color: #FFA500;
         align-items: center;
         justify-content: center;
         flex-direction: row;
@@ -943,7 +943,7 @@
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
-        background-color: orangered;
+        background-color: #FFA500;
         color: #fff;
         border-radius: 2.5px;
     }
@@ -962,7 +962,7 @@
         
     }
     .buyer-savedItem-checkout button{
-        background-color: orangered;
+        background-color: #FFA500;
         color: #fff;
         font-weight: 500;
         outline: none;
@@ -1074,7 +1074,7 @@
         display: flex;
         background-color: #f9f9f9;
         padding: 5px;
-        color: orangered;
+        color: #FFA500;
         align-items: center;
         justify-content: center;
         flex-direction: row;
@@ -1105,7 +1105,7 @@
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
-        background-color: orangered;
+        background-color: #FFA500;
         color: #fff;
         border-radius: 2.5px;
     }
@@ -1113,7 +1113,7 @@
         margin-top: 5px;
     }
     .buyer-items-stock div:nth-child(odd){
-        background-color: orangered;
+        background-color: #FFA500;
         color: #fff;
         font-weight: bold;
         font-size: medium;
@@ -1177,7 +1177,7 @@
         float: left;
         flex-shrink: 0;
         font-weight: 500;
-        background-color: orangered;
+        background-color: #FFA500;
         padding: 20px;
         flex-direction: row;
         justify-content: flex-start;
@@ -1205,7 +1205,7 @@
         float: left;
         flex-shrink: 0;
         font-weight: 500;
-        background-color: orangered;
+        background-color: #FFA500;
         padding: 20px;
         flex-direction: row;
         justify-content: flex-start;
@@ -1257,7 +1257,7 @@
         width: 100%;
     }
     .buyer-checkout-cnt button{
-        background-color: orangered;
+        background-color: #FFA500;
         color: #fff;
         font-weight: 500;
         outline: none;
@@ -1484,7 +1484,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        color: orangered;
+        color: #FFA500;
         background-color: #fff4e0;
     }
 
@@ -1530,7 +1530,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        border: 1px solid orangered;
+        border: 1px solid #FFA500;
         margin: 0;
     }
 
@@ -1541,7 +1541,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        color: orangered;
+        color: #FFA500;
         background-color: #fff4e0;
     }
 
@@ -1553,14 +1553,14 @@
         font-size: large;
         font-weight: 500;
         align-items: flex-end;
-        color: orangered;
+        color: #FFA500;
         padding: 15px;
     } 
 
     .mssg-body{
         height: calc(100% - 120px);
         width: 100%;
-        border-bottom: 1px solid orangered;
+        border-bottom: 1px solid #FFA500;
         left: 0;
         background-color: #fff4e0;
     }

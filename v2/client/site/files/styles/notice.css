@@ -1,7 +1,7 @@
 .notice-cnt{
     height: fit-content;
     width: fit-content;
-    background-color: orangered;
+    background-color: #FFA500;
     position: fixed;
     color: #fff;
     bottom: -100vh;

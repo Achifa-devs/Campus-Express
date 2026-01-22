@@ -26,14 +26,14 @@ const Category = () => {
             <div className="buyer-category shadow-sm">
                 <ul>
 
-                    <li style={{borderBottom: category === 'trends' ? '1px solid orangered' : 'none'}} onClick={e => dispatch(setCategoryTo(e.target.innerHTML.toLowerCase()))}>
+                    <li style={{borderBottom: category === 'trends' ? '1px solid #FFA500' : 'none'}} onClick={e => dispatch(setCategoryTo(e.target.innerHTML.toLowerCase()))}>
                         Trends
                     </li>
 
                    
                     {
                         categoriesList.map((item, index) => 
-                            <li style={{borderBottom: category === Object.keys(item)[0].toLocaleLowerCase() ? '1px solid orangered' : 'none'}} onClick={e => dispatch(setCategoryTo(e.target.innerHTML.toLowerCase()))} key={index}>
+                            <li style={{borderBottom: category === Object.keys(item)[0].toLocaleLowerCase() ? '1px solid #FFA500' : 'none'}} onClick={e => dispatch(setCategoryTo(e.target.innerHTML.toLowerCase()))} key={index}>
                                 {Object.keys(item)[0]}
                             </li>
                         )

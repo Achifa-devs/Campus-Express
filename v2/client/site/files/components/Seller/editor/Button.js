@@ -25,7 +25,7 @@ const UploadBtn = ({update,handleForm}) => {
                     {/* <div className="seller-item-preview-cnt">
 
                     </div> */} 
-                <button onClick={e => handleForm(e)} style={{width: '100%', height: '55px', marginTop: '5px', borderRadius: '4px', padding: '0', background: 'orangered', outline: 'none', border: 'none', color: '#fff'}}>
+                <button onClick={e => handleForm(e)} style={{width: '100%', height: '55px', marginTop: '5px', borderRadius: '4px', padding: '0', background: '#FFA500', outline: 'none', border: 'none', color: '#fff'}}>
                     <div>{update ? 'Update' : 'Upload'}</div>
                 </button>
 

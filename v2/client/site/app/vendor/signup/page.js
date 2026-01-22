@@ -260,7 +260,7 @@ const Signup = () => {
             </div>
            
             <div className="seller-signup">
-                <h6 style={{background: 'orangered', color: '#fff', padding: '10px', marginBottom: '-2px', marginTop: '0', height: 'auto', width: screenWidth > 480 ? 'auto' : '100%', textAlign: 'center'}}>Vendor Center</h6>
+                <h6 style={{background: '#FFA500', color: '#fff', padding: '10px', marginBottom: '-2px', marginTop: '0', height: 'auto', width: screenWidth > 480 ? 'auto' : '100%', textAlign: 'center'}}>Vendor Center</h6>
 
                 <section className='seller-signup-cnt'>
                     

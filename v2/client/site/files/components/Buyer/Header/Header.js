@@ -454,7 +454,7 @@ const Header = () => {
             {/* <li onClick={e => navigate('/buyer.message')}>  
               <img src={cartSvg.src} style={{height: '25px', width: '25px'}} alt="" />
               
-              <span style={{height: 'fit-content', marginTop: '-19px', borderRadius: '50%', width: '20px', fontSize: 'small', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'orangered', color: '#fff'}}>
+              <span style={{height: 'fit-content', marginTop: '-19px', borderRadius: '50%', width: '20px', fontSize: 'small', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#FFA500', color: '#fff'}}>
                 { 
                   cartList
                 }

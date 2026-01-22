@@ -73,7 +73,7 @@ export default function Contact({phone,item}) {
                 <span>WhatsApp</span>
             </button>
 
-            <div onClick={e => window.location.href = `tel:+234${phone}`} style={{height: '50px', width: '45%', borderRadius: '5px', display: 'flex', alignItems: 'center', cursor: 'pointer', justifyContent: 'center', fontSize: 'x-small', background: 'orangered', color: '#fff'}}>
+            <div onClick={e => window.location.href = `tel:+234${phone}`} style={{height: '50px', width: '45%', borderRadius: '5px', display: 'flex', alignItems: 'center', cursor: 'pointer', justifyContent: 'center', fontSize: 'x-small', background: '#FFA500', color: '#fff'}}>
                 {
                     
                     <>

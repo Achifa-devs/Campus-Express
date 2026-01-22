@@ -61,7 +61,7 @@ const Verification = () => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 flexDirection: 'column',
-                color: 'orangered'
+                color: '#FFA500'
             }}>
 
                 {
@@ -76,7 +76,7 @@ const Verification = () => {
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            color: 'orangered'
+                            color: '#FFA500'
                         }}>
                             <img src={vSvg} style={{height: '120px', width: '120px', marginBottom: '5px'}} alt="" />
                         </div>
@@ -95,7 +95,7 @@ const Verification = () => {
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                color: 'orangered'
+                                color: '#FFA500'
                             }}>
                                 <img src={sSvg} style={{height: '120px', width: '120px', marginBottom: '5px'}} alt="" />
                             </div>

@@ -44,7 +44,7 @@ export default function MessageHead({index, data, setRoomId}) {
                 </div>
                 <div style={{height: '50%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', width: '90%', textAlign: 'left'}}>
                     <span>{data?.mssg?.mssg}</span>
-                    <span style={{fontSize: 'small', height: '20px', width: '20px', position: 'absolute', right: '15px', fontWeight: '500', borderRadius: '50%', background: 'orangered', color: '#fff', textAlign: 'center'}}>2</span>  
+                    <span style={{fontSize: 'small', height: '20px', width: '20px', position: 'absolute', right: '15px', fontWeight: '500', borderRadius: '50%', background: '#FFA500', color: '#fff', textAlign: 'center'}}>2</span>  
                 </div>
             </div>
         </section>

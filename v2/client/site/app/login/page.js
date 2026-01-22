@@ -236,10 +236,10 @@ export default function Login() {
                     </div>
                 </form>
                 <div style={{textAlign: 'center'}} onClick={e => window.location.href=('/password-recovery')}>
-                    <small style={{cursor: 'pointer', color: 'orangered', fontWeight: '400'}}>Recover Forgotten Password Here</small>
+                    <small style={{cursor: 'pointer', color: '#FFA500', fontWeight: '400'}}>Recover Forgotten Password Here</small>
                 </div>
                 <div style={{textAlign: 'center'}} onClick={e => window.location.href=('/signup')}>
-                    <small style={{cursor: 'pointer', color: 'orangered', fontWeight: '400'}}>Don t Have An Account, Signup Here</small>
+                    <small style={{cursor: 'pointer', color: '#FFA500', fontWeight: '400'}}>Don t Have An Account, Signup Here</small>
                 </div>
             </section>
         </div>

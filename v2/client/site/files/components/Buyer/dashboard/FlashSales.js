@@ -22,7 +22,7 @@ const FlashSales = () => {
         <>
             <div className="buyer-flash-sales shadow-sm" style={{padding: '10px',margin: `0 0 0 0`,width: screenWidth < 480 ? '100%' : 'calc(100% - 280px)',float: 'right', position: 'relative'}}>
                 <div style={{height: '40px', padding: '0 10px 0 10px', borderBottom: '1px solid #efefef', marginBottom: '0', flexDirection: 'row',display: 'flex', alignItems: 'center', justifyContent: 'space-between',}}>
-                    <small style={{float: 'left', color: 'orangered'}}><b>Get The Best Discount</b></small>
+                    <small style={{float: 'left', color: '#FFA500'}}><b>Get The Best Discount</b></small>
 
                     <small style={{float: 'right', cursor: 'pointer'}}><b>SEE ALL</b></small>
                 </div>

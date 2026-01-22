@@ -37,7 +37,7 @@ const ShowcaseCard = ({item, index}) => {
         color: '#fff',
         fontSize: 'small',
         fontWeight: '500',
-        backgroundColor: 'orangered',
+        backgroundColor: '#FFA500',
         margin: '0'
     }
     let dispatch = useDispatch()

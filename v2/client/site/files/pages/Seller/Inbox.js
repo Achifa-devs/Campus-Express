@@ -41,7 +41,7 @@ const Inbox = () => {
                         <br />
                         <br />
                     
-                        <small style={{color: 'orangered'}}>{loaderText}</small>
+                        <small style={{color: '#FFA500'}}>{loaderText}</small>
                     </>
 
                 }

@@ -3,7 +3,7 @@
     .box-cnt{
         height: 150px;
         width: 45%;
-        border-bottom: 2px solid orangered;
+        border-bottom: 2px solid #FFA500;
         /*border: 1px solid orange;*/
         background: #fff;
         padding: 20px;
@@ -24,7 +24,7 @@
     .box-cnt{
         height: 150px;
         width: 45%;
-        border-bottom: 2px solid orangered;
+        border-bottom: 2px solid #FFA500;
         /*border: 1px solid orange;*/
         background: #fff;
         padding: 20px;
@@ -45,7 +45,7 @@
     .box-cnt{
         height: 150px;
         width: 100%;
-        border-bottom: 2px solid orangered;
+        border-bottom: 2px solid #FFA500;
         /*border: 1px solid orange;*/
         background: #fff;
         padding: 20px;
@@ -72,7 +72,7 @@
 
 .counter{
     height: 80px;
-    /*color: orangered;*/
+    /*color: #FFA500;*/
     width: 100%;
     font-weight: bold;
     font-size: x-large;
@@ -83,7 +83,7 @@
     top: 20px;
     right: 20px;
     cursor: pointer;
-    background: orangered;
+    background: #FFA500;
     color: #fff;
     font-size: x-small;
     padding: 5px;

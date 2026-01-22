@@ -3,7 +3,7 @@ const ErrorPage = () => {
     return ( 
         <>
 
-            <section style={{display: 'flex', flexDirection: 'column', position: 'fixed', top: '0', zIndex: '1000', width: '100vw', height: '100vh', alignItems: 'center', justifyContent: 'center', color: '#fff', background: 'orangered'}}>
+            <section style={{display: 'flex', flexDirection: 'column', position: 'fixed', top: '0', zIndex: '1000', width: '100vw', height: '100vh', alignItems: 'center', justifyContent: 'center', color: '#fff', background: '#FFA500'}}>
 
                 
                 <h1>dorm deals</h1>

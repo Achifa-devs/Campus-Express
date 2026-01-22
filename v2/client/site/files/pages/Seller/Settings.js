@@ -328,7 +328,7 @@ function Verification() {
                                         
                                     </div>
 
-                                    <label htmlFor="seller-passport" style={{width: '250px', height: '50px', background: 'orangered', borderRadius: '5px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff'}}>
+                                    <label htmlFor="seller-passport" style={{width: '250px', height: '50px', background: '#FFA500', borderRadius: '5px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff'}}>
                                         {
                                             passport === ''
                                             ?

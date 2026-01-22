@@ -102,7 +102,7 @@
         height: 100%;
         float: left;
         border-radius: 1px;
-        background-color: orangered;
+        background-color: #FFA500;
     }
 
     .buyer-ads-cnt section:nth-child(even){
@@ -112,7 +112,7 @@
         float: right;
         position: relative;
         border-radius: 1px;
-        background-color: orangered;
+        background-color: #FFA500;
     }
 
     .buyer-ads-cnt .img-cnt img{
@@ -187,7 +187,7 @@
         display: flex;
         white-space: nowrap;
         align-items: center;
-        color: orangered;
+        color: #FFA500;
         font-weight: 500;
         font-size: small;
         height: 35px;
@@ -256,7 +256,7 @@
         border-bottom-right-radius: 5px;
         position: relative;
         width: 100px;
-        background-color: orangered;
+        background-color: #FFA500;
         color: #fff;
         outline: none;
         margin-left: 5px;
@@ -267,7 +267,7 @@
 
     .buyer-card-cnt {
         height: fit-content;
-        width: calc(100% - 300px);
+        width: calc(100% - 350px);
         overflow: auto;
         padding: 0px;
         float: right;
@@ -299,7 +299,7 @@
         padding: 10px;
         font-size: small;
         justify-content: space-between;
-        background-color: orangered;
+        background-color: #FFA500;
         color: #fff;
         border-radius: 5px;
 
@@ -360,7 +360,7 @@
         font-weight: 500;
         margin: 0 0 5px 0;
         font-size: small;
-        background-color: orangered;
+        background-color: #FFA500;
         color: #fff;
     }
     .buyer-card-cnt .card .card-footer{
@@ -453,7 +453,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        border: 1px solid orangered;
+        border: 1px solid #FFA500;
         border-radius: 50%;
         position: relative;
         margin: 0 5px 0 5px;
@@ -536,7 +536,7 @@
     }
 
     .buyer-product-seller-details .buyer-seller-products h4{
-        color: orangered;
+        color: #FFA500;
         padding: 0 0 0 5px;
     }
 
@@ -572,7 +572,7 @@
         
     }
     .buyer-savedItem-checkout button{
-        background-color: orangered;
+        background-color: #FFA500;
         color: #fff;
         font-weight: 500;
         outline: none;
@@ -689,7 +689,7 @@
         display: flex;
         background-color: #f9f9f9;
         padding: 5px;
-        color: orangered;
+        color: #FFA500;
         align-items: center;
         justify-content: center;
         flex-direction: row;
@@ -720,7 +720,7 @@
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
-        background-color: orangered;
+        background-color: #FFA500;
         color: #fff;
         border-radius: 5px;
     }
@@ -728,7 +728,7 @@
         margin-top: 5px;
     }
     .buyer-items-stock div:nth-child(odd){
-        background-color: orangered;
+        background-color: #FFA500;
         color: #fff;
         font-weight: bold;
         font-size: medium;
@@ -782,7 +782,7 @@
         width: 100%;
     }
     .buyer-cart-checkout button{
-        background-color: orangered;
+        background-color: #FFA500;
         color: #fff;
         font-weight: 500;
         outline: none;
@@ -881,7 +881,7 @@
         display: flex;
         background-color: #f9f9f9;
         padding: 5px;
-        color: orangered;
+        color: #FFA500;
         align-items: center;
         justify-content: center;
         flex-direction: row;
@@ -910,7 +910,7 @@
         border-radius: 2.5px;
     }
     .buyer-items-stock div:nth-child(odd){
-        background-color: orangered;
+        background-color: #FFA500;
         color: #fff;
         font-weight: bold;
         font-size: x-large;
@@ -930,7 +930,7 @@
         
     }
     .buyer-history-checkout button{
-        background-color: orangered;
+        background-color: #FFA500;
         color: #fff;
         font-weight: 500;
         outline: none;
@@ -1037,7 +1037,7 @@
         display: flex;
         background-color: #f9f9f9;
         padding: 5px;
-        color: orangered;
+        color: #FFA500;
         align-items: center;
         justify-content: center;
         flex-direction: row;
@@ -1068,7 +1068,7 @@
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
-        background-color: orangered;
+        background-color: #FFA500;
         color: #fff;
         border-radius: 5px;
     }
@@ -1114,7 +1114,7 @@
         width: 100%;
     }
     .buyer-checkout-cnt button{
-        background-color: orangered;
+        background-color: #FFA500;
         color: #fff;
         font-weight: 500;
         outline: none;

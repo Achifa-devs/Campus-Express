@@ -194,7 +194,7 @@ export default function PasswordRecovery() {
   return (
     <>
        <div className="seller-login-cnt" >
-            {/* <h6 style={{background: 'orangered', color: '#fff', padding: '10px', borderRadius: '5px', marginBottom: '-2px', height: 'auto'}}>Vendor Center</h6> */}
+            {/* <h6 style={{background: '#FFA500', color: '#fff', padding: '10px', borderRadius: '5px', marginBottom: '-2px', height: 'auto'}}>Vendor Center</h6> */}
 
             
             <section className="shadow">
@@ -232,7 +232,7 @@ export default function PasswordRecovery() {
                     </div>
                 </form>
                 {isApp === true ? '' : <div style={{textAlign: 'center'}} onClick={e => window.location.href=('/login')}>
-                    <small style={{cursor: 'pointer', color: 'orangered', fontWeight: '400'}}>Back To Login</small>
+                    <small style={{cursor: 'pointer', color: '#FFA500', fontWeight: '400'}}>Back To Login</small>
                 </div>}
             </section>
         </div>

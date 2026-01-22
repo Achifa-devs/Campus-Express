@@ -690,7 +690,7 @@ const Editor = () => {
                                                 }} defaultChecked onInput={e => setPhotoActive(!photoActive)} type="checkbox" name="" id="" />
                                                 &nbsp;
                                                 &nbsp;
-                                                <span style={{fontSize: 'small', fontWeight: '500', color: 'orangered'}}>Do you have image samples for this item. (5 Photos Max)</span>
+                                                <span style={{fontSize: 'small', fontWeight: '500', color: '#FFA500'}}>Do you have image samples for this item. (5 Photos Max)</span>
 
                                             </section> */}
                                             {/* <br /> */}
@@ -718,7 +718,7 @@ const Editor = () => {
                                             }} defaultChecked onInput={e => setPhotoActive(!photoActive)} type="checkbox" name="" id="" />
                                             &nbsp;
                                             &nbsp;
-                                            <span style={{fontSize: 'small', fontWeight: '500', color: 'orangered'}}>Do you have image samples for this item. (5 Photos Max)</span>
+                                            <span style={{fontSize: 'small', fontWeight: '500', color: '#FFA500'}}>Do you have image samples for this item. (5 Photos Max)</span>
 
                                         </section> */}
                                         {/* <br /> */}
@@ -740,7 +740,7 @@ const Editor = () => {
                                         }} defaultChecked onInput={e => setDescriptionActive(!descriptionActive)} type="checkbox" name="" id="" />
                                         &nbsp;
                                         &nbsp; */}
-                                        <span style={{fontSize: 'small', fontWeight: '500', color: 'orangered'}}>Description (Optional)</span>
+                                        <span style={{fontSize: 'small', fontWeight: '500', color: '#FFA500'}}>Description (Optional)</span>
 
                                     </section>
                                     {/* <section style={{width: '100%', opacity: descriptionActive ? 1 : .5, pointerEvents: descriptionActive ? 'all' : 'none'}}> */}
@@ -762,7 +762,7 @@ const Editor = () => {
                                         }} defaultChecked onInput={e => setDescriptionActive(!videoActive)} type="checkbox" name="" id="" />
                                         &nbsp;
                                         &nbsp;
-                                        <span style={{fontSize: 'small', fontWeight: '500', color: 'orangered'}}>Do you have a video sample for this item.</span>
+                                        <span style={{fontSize: 'small', fontWeight: '500', color: '#FFA500'}}>Do you have a video sample for this item.</span>
 
                                     </section>
                                     <section style={{width: '100%', opacity: videoActive ? 1 : .5, pointerEvents: videoActive ? 'all' : 'none'}}>

@@ -39,7 +39,7 @@ const Withdrawal = ({balance}) => {
         
             <form id="paymentForm">
 
-                <h5 style={{color: 'orangered'}}>Order Form</h5>
+                <h5 style={{color: '#FFA500'}}>Order Form</h5>
                 
 
                 <div className="seller-input-cnt">

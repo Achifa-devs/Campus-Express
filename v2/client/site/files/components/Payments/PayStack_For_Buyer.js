@@ -64,7 +64,7 @@
         
 //             <form id="paymentForm">
 
-//                 <h5 style={{color: 'orangered'}}>Deposit Form</h5>
+//                 <h5 style={{color: '#FFA500'}}>Deposit Form</h5>
                 
                 
 //                 <div className="seller-input-cnt">

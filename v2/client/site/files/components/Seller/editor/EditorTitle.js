@@ -10,10 +10,10 @@ const EditorTitle = ({edit,productTitle,draft}) => {
 
     return ( 
         <>
-            <div className="input-cnt" style={{width: '100%', padding: '0', color: 'orangered', position: 'relative',flexDirection: 'column', height: 'auto', marginBottom: '0px'}}>
+            <div className="input-cnt" style={{width: '100%', padding: '0', color: '#FFA500', position: 'relative',flexDirection: 'column', height: 'auto', marginBottom: '0px'}}>
                 {/* <label htmlFor="">Description</label> */}
                 
-                <textarea  defaultValue={window.localStorage.getItem('draft_title') !== null && window.localStorage.getItem('draft_title') !== undefined ? window.localStorage.getItem('draft_title') : ''} maxLength={60} placeholder="Title" name='title' className="seller-shop-title shadow-sm" style={{marginBottom: '0',borderBottom: '2px solid orangered'}} onInput={e => {
+                <textarea  defaultValue={window.localStorage.getItem('draft_title') !== null && window.localStorage.getItem('draft_title') !== undefined ? window.localStorage.getItem('draft_title') : ''} maxLength={60} placeholder="Title" name='title' className="seller-shop-title shadow-sm" style={{marginBottom: '0',borderBottom: '2px solid #FFA500'}} onInput={e => {
                     setTitle(e.target.value)
                     return(productTitle(e.target.value))
                 }}>

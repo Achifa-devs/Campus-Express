@@ -111,7 +111,7 @@ const Signup = () => {
             overlay.setAttribute('id', 'overlay');
             
             setBtn(
-                <div className="Authloader" style={{background: '#fff',border: '1px solid orangered'}}></div>
+                <div className="Authloader" style={{background: '#fff',border: '1px solid #FFA500'}}></div>
             )
             // e.target.disabled = true;
             buyer_overlay_setup(true, 'Signing You Up')

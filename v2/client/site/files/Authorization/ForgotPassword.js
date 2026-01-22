@@ -105,12 +105,12 @@ const ForgotPwd = () => {
     return ( 
         <>
             {/* <SellerLayout> */}
-                <div className="password-reset shadow-sm" style={{background: 'orangered', bottom: '0', position: 'absolute', height: 'calc(100vh - 60px)', width: '100%'}}>
+                <div className="password-reset shadow-sm" style={{background: '#FFA500', bottom: '0', position: 'absolute', height: 'calc(100vh - 60px)', width: '100%'}}>
                     
                     
                     <form className='shadow-sm' action="" style={{width: '350px', padding: '20px', height: 'auto'}}>
                         <br />
-                        <h6><b style={{background: 'orangered', color: '#fff', padding: '10px', borderRadius: '5px', marginBottom: '20px', height: '150px'}}>Password Recovery Form</b></h6>
+                        <h6><b style={{background: '#FFA500', color: '#fff', padding: '10px', borderRadius: '5px', marginBottom: '20px', height: '150px'}}>Password Recovery Form</b></h6>
                     
                         <br />
 

@@ -178,7 +178,7 @@ const BuyerLogin = ({query}) => {
                 <div className="loader">
                 </div>
             </div>
-            <div className="seller-login-cnt" style={{background: 'orangered', bottom: '0', position: 'absolute', height: 'calc(100vh - 0px)'}}>
+            <div className="seller-login-cnt" style={{background: '#FFA500', bottom: '0', position: 'absolute', height: 'calc(100vh - 0px)'}}>
 
                 <section className="shadow-sm" style={{background: '#fff', height: 'fit-content'}}>
                     
@@ -186,7 +186,7 @@ const BuyerLogin = ({query}) => {
 
                     </div>
                     <br />
-                    <h6><b style={{background: 'orangered', color: '#fff', padding: '10px', borderRadius: '5px', marginBottom: '20px', height: '150px'}}>Login Form For Buyers</b></h6>
+                    <h6><b style={{background: '#FFA500', color: '#fff', padding: '10px', borderRadius: '5px', marginBottom: '20px', height: '150px'}}>Login Form For Buyers</b></h6>
 
                     <br />
                     <form action="" >
@@ -223,7 +223,7 @@ const BuyerLogin = ({query}) => {
                     </form>
 
                     <div style={{textAlign: 'center'}} onClick={e => navigate('/password-reset')}>
-                        <small style={{cursor: 'pointer', color: 'orangered', fontWeight: '500'}}>Recover Forgotten Password Here</small>
+                        <small style={{cursor: 'pointer', color: '#FFA500', fontWeight: '500'}}>Recover Forgotten Password Here</small>
                     </div>
                     <div style={{textAlign: 'center'}} onClick={e => {
                         location.search !== ''
@@ -232,7 +232,7 @@ const BuyerLogin = ({query}) => {
                         :
                         navigate('/signup')
                     }}>
-                        <small style={{cursor: 'pointer', color: 'orangered', fontWeight: '500'}}>Don't Have An Account, Signup Here</small>
+                        <small style={{cursor: 'pointer', color: '#FFA500', fontWeight: '500'}}>Don't Have An Account, Signup Here</small>
                     </div>
                 </section>
 

@@ -110,7 +110,7 @@ const BuyerSignup = () => {
         if(validation.current){
             overlay.setAttribute('id', 'overlay');
             setBtn( 
-                <div className="Authloader" style={{background: '#fff',border: '1px solid orangered'}}></div>
+                <div className="Authloader" style={{background: '#fff',border: '1px solid #FFA500'}}></div>
             )
             // e.currentTarget.disabled = true;
             try {
@@ -285,7 +285,7 @@ const BuyerSignup = () => {
 
                 </div>
                 <div id="right">
-                    <h6><b style={{color: 'orangered'}}><u>Signup Form For Buyer</u></b></h6>
+                    <h6><b style={{color: '#FFA500'}}><u>Signup Form For Buyer</u></b></h6>
                 
                     <form action="">
                         <div className="seller-input-cnt">
@@ -406,9 +406,9 @@ const BuyerSignup = () => {
                     </form>
 
                     {/* <div>
-                        <small style={{color: 'orangered'}}>Forgot Password? Recover Password Here</small>
+                        <small style={{color: '#FFA500'}}>Forgot Password? Recover Password Here</small>
                     </div> */}
-                    <div style={{width: '100%', textAlign: 'center', color: 'orangered'}} onClick={e => {
+                    <div style={{width: '100%', textAlign: 'center', color: '#FFA500'}} onClick={e => {
                         location.search !== ''
                         ?
                         navigate(`/login?page=${page}&data=${data_}`)

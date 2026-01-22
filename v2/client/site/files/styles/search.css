@@ -62,7 +62,7 @@
         flex-direction: row;
         justify-content: space-between;
         padding: 5px;
-        /* border-bottom: 1px solid orangered; */
+        /* border-bottom: 1px solid #FFA500; */
     }
 
     .input-cnt input{

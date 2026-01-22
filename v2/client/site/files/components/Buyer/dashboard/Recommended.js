@@ -3,7 +3,7 @@ const Recommended = () => {
         <>
             <div className="buyer-flash-sales">
                 <div style={{height: '50px', padding: '10px'}}>
-                    <div style={{float: 'left', color: 'orangered'}}><b>Recommended for you</b></div>
+                    <div style={{float: 'left', color: '#FFA500'}}><b>Recommended for you</b></div>
                     
                     {/* <div style={{float: 'right', cursor: 'pointer'}}><i>SEE ALL</i></div> */}
                 </div>

@@ -35,7 +35,7 @@ export default function MessageHead({data, index}) {
                 </div>
                 <div style={{height: '50%', display: 'flex', alignItems: 'center', width: '100%', textAlign: 'left'}}>
                     <span>My name is Fabian...</span>
-                    <span style={{fontSize: 'small', height: '20px', width: '20px', position: 'absolute', right: '15px', fontWeight: '500', borderRadius: '50%', background: 'orangered', color: '#fff', textAlign: 'center'}}>2</span>  
+                    <span style={{fontSize: 'small', height: '20px', width: '20px', position: 'absolute', right: '15px', fontWeight: '500', borderRadius: '50%', background: '#FFA500', color: '#fff', textAlign: 'center'}}>2</span>  
                 </div>
             </div>
         </section>

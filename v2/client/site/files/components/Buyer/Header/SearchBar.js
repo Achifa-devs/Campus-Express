@@ -43,7 +43,7 @@ const SearchBar = ({updateSearchText}) => {
       color: '#fff',
       fontSize: 'small',
       fontWeight: '500',
-      backgroundColor: 'orangered',
+      backgroundColor: '#FFA500',
       margin: '0'
   }
 

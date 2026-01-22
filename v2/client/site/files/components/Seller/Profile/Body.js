@@ -565,7 +565,7 @@ function CashOut({user}) {
   return(
     <form id="paymentForm" style={{height: '100%', position: 'relative'}}>
 
-      <h5 style={{color: 'orangered', fontSize: '3vh', fontWeight: 'bold', padding: '10px'}}>Withdrawal Form</h5>
+      <h5 style={{color: '#FFA500', fontSize: '3vh', fontWeight: 'bold', padding: '10px'}}>Withdrawal Form</h5>
       
       {/* <br /> */}
       <div style={{height: 'calc(100% - 120px)', overflow: 'auto', position: 'relative'}}>

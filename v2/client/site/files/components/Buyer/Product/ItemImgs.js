@@ -46,7 +46,7 @@ const ItemImgs = ({product_id,title,category}) => {
                 {
                     uris.map((item, index) => {
                         return(
-                            <div key={index} style={{border: ActiveImg === index ? '1px solid orangered': 'none', cursor: 'pointer', height: '50px', width: '50px', backgroundImage: `url(${item.file})`, backgroundRepeat: 'no-repeat', backgroundSize: '50px 50px', backgroundPosition: 'center', borderRadius: '5px'}} onClick={e => handleActiveImg(index)}>
+                            <div key={index} style={{border: ActiveImg === index ? '1px solid #FFA500': 'none', cursor: 'pointer', height: '50px', width: '50px', backgroundImage: `url(${item.file})`, backgroundRepeat: 'no-repeat', backgroundSize: '50px 50px', backgroundPosition: 'center', borderRadius: '5px'}} onClick={e => handleActiveImg(index)}>
                                 {
                                     (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(item.secure_url?.split('.').pop().toLowerCase())) ? 
                                     <img src={item.secure_url} style={{height: '100%', width: '100%', borderRadius: '5px'}} alt="" loading="lazy" />

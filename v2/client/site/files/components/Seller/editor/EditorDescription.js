@@ -12,7 +12,7 @@ const EditorDescription = ({edit,productDescription, descriptionActive}) => {
                 <textarea defaultValue={window.localStorage.getItem('draft_description') !== null && window.localStorage.getItem('draft_description') !== undefined ? window.localStorage.getItem('draft_description') : ''} maxLength={650} name='description' onInput={e =>{
                     productDescription(e.target.value)
                     setDescriptionCount(e.target.value.length)
-                }} placeholder="Description" style={{borderBottom: '2px solid orangered', background: '#fff'}} className="seller-shop-desc shadow-sm"></textarea>
+                }} placeholder="Description" style={{borderBottom: '2px solid #FFA500', background: '#fff'}} className="seller-shop-desc shadow-sm"></textarea>
                 <div style={{height: 'fit-content', position: 'absolute', right: '10px', fontSize: 'small', bottom: '5px'}}>{descriptionCount}/650</div>
             </div>
             {/* <div style={{textAlign: 'left', width: '100% ', margin: '6px 0 0 5px ', display: descriptionActive ? 'flex': 'none'}} className="editor-err-mssg">Description must contain at least 10 words</div> */}

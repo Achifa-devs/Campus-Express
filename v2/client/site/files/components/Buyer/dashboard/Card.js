@@ -39,7 +39,7 @@ const Card = ({item, index}) => {
         color: '#fff',
         fontSize: 'small',
         fontWeight: '500',
-        backgroundColor: 'orangered',
+        backgroundColor: '#FFA500',
         margin: '0'
     }
     let dispatch = useDispatch()
@@ -132,19 +132,19 @@ const Card = ({item, index}) => {
         <> 
             
             <div className="cols" key={index} id={item.product_id} >
-                <div className="card shadow-md" key={index} style={{height: '320px', marginBottom: '10px', borderRadius: '4px', position: 'relative', display: 'flex', padding: '5px'}}>
+                <div className="card shadow-md" key={index} style={{height: '350px', marginBottom: '10px', borderRadius: '4px', position: 'relative', display: 'flex', padding: '5px'}}>
                   
                     <div style={{
                         position: 'absolute',
                         top: '0',
                         width: '100%',
                         left: '0',
-                        height: '150px'
+                        height: '180px'
                     }}>
                         {
                         
                             (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(item?.thumbnail_id?.split('.').pop().toLowerCase())) ?
-                            <Thumbnail thumbnail_id={item?.thumbnail_id}/>
+                            <Thumbnail height={'180px'} thumbnail_id={item?.thumbnail_id}/>
                             :
                             <Video thumbnail_id={item?.thumbnail_id} />
                         
@@ -206,9 +206,9 @@ const Card = ({item, index}) => {
                             }
                             {
                                 item?.others?.condition &&
-                                <div onClick={e => window.location.href=(`/store/product/${item.product_id}`)} style={{display: 'flex',background: '#fff', color: 'orangered',  alignItems: 'center', justifyContent: 'left', padding: '0'}}>
+                                <div onClick={e => window.location.href=(`/store/product/${item.product_id}`)} style={{display: 'flex',background: '#fff', color: '#FFA500',  alignItems: 'center', justifyContent: 'left', padding: '0'}}>
                                     <span  style={{background: '#fff', color: '#000', borderRadius: '5px', top: '20px', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', left: '20px', padding: '5px 0 5px 0'}}>
-                                        <span  style={{background: '#fff',color: 'orangered', padding: '0'}}>
+                                        <span  style={{background: '#fff',color: '#FFA500', padding: '0'}}>
                                             <img src={conditionSvg.src} style={{height: '20px', width: '20px', marginBottom: '5px'}} alt="" />
                                         </span>
                                         &nbsp;
@@ -225,7 +225,7 @@ const Card = ({item, index}) => {
                         {/*<br />*/}
                         
                         <span  style={{background: '#fff',display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'left', position: 'relative',color: '#000', borderRadius: '5px', padding: '2.5px', zIndex: '1000', padding: '0 5px 0 5px', overflow: 'hidden'}}>
-                            <span  style={{background: '#fff',color: 'orangered', padding: '0'}}>
+                            <span  style={{background: '#fff',color: '#FFA500', padding: '0'}}>
                                 <img src={locationSvg.src} style={{height: screenWidth  > 480 ? '15px' : '12px', width: screenWidth  > 480 ? '20px' : '12px', marginBottom: '5px'}} alt="" />
                             </span>
                             &nbsp;

@@ -41,7 +41,7 @@ const Withdrawal = ({balance}) => {
         
             <form id="paymentForm">
 
-                <h5 style={{color: 'orangered'}}>Withdrawal Form</h5>
+                <h5 style={{color: '#FFA500'}}>Withdrawal Form</h5>
                 
 
                 <div className="seller-input-cnt">
@@ -111,7 +111,7 @@ const Withdrawal = ({balance}) => {
                     
                 </div>
 
-                <div style={{height: '50px', marginBottom: '20px', width: '90%', margin: 'auto', border: '1px solid #efefef', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', background: 'orangered', color: '#fff', borderRadius: '5px', display: !data ? 'none' : 'flex'}}>
+                <div style={{height: '50px', marginBottom: '20px', width: '90%', margin: 'auto', border: '1px solid #efefef', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', background: '#FFA500', color: '#fff', borderRadius: '5px', display: !data ? 'none' : 'flex'}}>
                     {
                         acctName
                     }
