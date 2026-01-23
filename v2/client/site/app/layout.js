@@ -8,7 +8,7 @@ export async function generateMetadata() {
   const imageUrl = "https://www.campussphere.net/api/logo";
 
   return {
-    title: "dorm deals Nigeria | Online Marketplace For Campus Students",
+    title: "Dorm Deals Nigeria | Online Marketplace For Campus Students",
     description: "Enjoy Free Commerce From The Comfort Of Your Lodge.",
     alternates: { canonical: "https://www.campussphere.net" },
     robots: { index: true, follow: true },

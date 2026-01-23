@@ -416,3 +416,19 @@ button{
     background-color: #fff4e0; /* Set your background color */
     color: #000000;
 }
+
+/* Skeleton shimmer animation */
+.react-loading-skeleton {
+    background: linear-gradient(90deg, #ebebeb 25%, #f5f5f5 50%, #ebebeb 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}

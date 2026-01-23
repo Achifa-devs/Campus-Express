@@ -9,7 +9,7 @@ if (!connectionString) {
 const config = {
   connectionString,
   ssl: {
-    require: true,
+    require: false,
     rejectUnauthorized: false,
   },
   connectionTimeoutMillis: 100000,
