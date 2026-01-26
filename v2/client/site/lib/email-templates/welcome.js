@@ -36,7 +36,7 @@ export function welcomeTemplate(name, email, campus) {
           }
 
           .header {
-            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+            background: linear-gradient(135deg, #FFA500 0%, #7C3AED 100%);
             color: white;
             padding: 50px 30px;
             text-align: center;
@@ -106,7 +106,7 @@ export function welcomeTemplate(name, email, campus) {
           .cta-button {
             display: block;
             width: 100%;
-            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+            background: linear-gradient(135deg, #FFA500 0%, #7C3AED 100%);
             color: white;
             text-decoration: none;
             padding: 18px 30px;

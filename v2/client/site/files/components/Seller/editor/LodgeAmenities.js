@@ -38,7 +38,7 @@ export default function LodgeAmenities({amenities, deleteAmenities, productAmeni
                             &nbsp;
                             &nbsp;
                             <span>
-                                <button onClick={deleteAmenities(item)} className="notice-cnt-btn" style={{width: '25px', height: '25px', background: '#fff4e0', borderRadius: '2px', color: 'red', fontWeight: '1000', fontSize: 'small'}}>
+                                <button onClick={deleteAmenities(item)} className="notice-cnt-btn" style={{width: '25px', height: '25px', background: '#FFF6E0', borderRadius: '2px', color: 'red', fontWeight: '1000', fontSize: 'small'}}>
                                     x
                                 </button>
                             </span>

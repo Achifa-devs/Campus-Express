@@ -87,7 +87,7 @@ const Card = ({item, index}) => {
             <div className="cols"  key={index}>
                 <div className="card" key={index} style={{height: 'auto', marginBottom: '10px', border: 'none', borderRadius: '5px', padding: '5px', display: 'block', background: '#fff'}}>
                       
-                    <img loading='lazy' onClick={e => window.location.href=(url)} src={item.svg} style={{height: screenWidth > 480 ? '200px' : '120px', background: '#fff4e0', width: '100%', borderRadius: '2px', display: 'table', margin: '0 auto', borderRadius: '5px', position: 'relative'}} alt="" />
+                    <img loading='lazy' onClick={e => window.location.href=(url)} src={item.svg} style={{height: screenWidth > 480 ? '200px' : '120px', background: '#FFF6E0', width: '100%', borderRadius: '2px', display: 'table', margin: '0 auto', borderRadius: '5px', position: 'relative'}} alt="" />
 
                     <div className="card-body" style={{position: 'relative', padding: '5px', height: 'auto'}}>
                         

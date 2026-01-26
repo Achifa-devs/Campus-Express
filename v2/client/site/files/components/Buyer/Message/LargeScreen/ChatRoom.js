@@ -221,7 +221,7 @@ export default function ChatRoom() {
                     <>
                         <div className='chat-room-header'>
                                 <div id='left'>
-                                    <span style={{padding: partner.photo ? '0px' : '10px', borderRadius: '50%', background: '#fff4e0', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                                    <span style={{padding: partner.photo ? '0px' : '10px', borderRadius: '50%', background: '#FFF6E0', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                                         <Image height={25} width={25} src={partner.photo ? partner.photo : userSvg.src} style={{objectFit: 'cover', borderRadius: '50%'}} alt='Placeholder' />
                                     </span>
                                     {

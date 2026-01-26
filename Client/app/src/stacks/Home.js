@@ -109,6 +109,7 @@ export function HomeStackScreen() {
           </>
         ),
       }} name="home" component={Home} />
+      
       <HomeStack.Screen  options={{
         header: ({navigation}) =>
         (

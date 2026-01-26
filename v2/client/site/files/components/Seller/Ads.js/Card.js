@@ -58,7 +58,7 @@ export default function Card({item,index}) {
 
                     <div className="listing-title-cnt">
                         {item.title}
-                        {/* <div style={{width: '100', color: 'orange', position: 'absolute', bottom: '0', fontSize: 'small', textAlign: 'center', marginTop: '20px', background: '#fff4e0', padding: '5px'}}>Please Delete This Item If It's Not Available</div> */}
+                        {/* <div style={{width: '100', color: 'orange', position: 'absolute', bottom: '0', fontSize: 'small', textAlign: 'center', marginTop: '20px', background: '#FFF6E0', padding: '5px'}}>Please Delete This Item If It's Not Available</div> */}
 
 
                     </div>

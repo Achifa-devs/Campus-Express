@@ -9,6 +9,8 @@ import './styles/small.css'
 import { useDispatch } from 'react-redux'
 import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup'
 import { setBuyerTo } from '@/redux/buyer_store/BuyerData'
+import logoSvg from '../../public/logo.svg'
+
 export default function Login() {
 
     let [btn, setBtn] = useState("Login")
@@ -201,14 +203,25 @@ export default function Login() {
     <>
        <div className="seller-login-cnt" >
             
-            <section className="shadow">
+            <section className="shadow" style={{
+                height: 'fit-content',
+                margin: '20px 0px',
+                borderRadius: '8px'
+            }}>
+                <br />
                 
                 <div className="err-cnt">
 
                 </div>
                 <br />
                 <form action="" >
-                
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
+                        <img src={logoSvg.src} style={{height: '75px', width: '75px'}} alt="" />
+                    </div>
 
                     <div className="seller-input-cnt">
                         <label htmlFor="">Email</label>
@@ -241,6 +254,8 @@ export default function Login() {
                 <div style={{textAlign: 'center'}} onClick={e => window.location.href=('/signup')}>
                     <small style={{cursor: 'pointer', color: '#FFA500', fontWeight: '400'}}>Don t Have An Account, Signup Here</small>
                 </div>
+                <br />
+                <br />
             </section>
         </div>
     </>

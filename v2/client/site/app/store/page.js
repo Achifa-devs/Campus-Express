@@ -28,17 +28,10 @@ import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup';
 import CardCnt from '@/files/components/Buyer/dashboard/CardCnt'
 import Card from '@/files/components/Buyer/dashboard/Card'
 import SearchOutput from '@/files/components/Buyer/Header/SearchOutput'
-import Ads from '@/files/components/Buyer/dashboard/Ads'
 import {
   usePathname
 } from 'next/navigation'
-// import {
-//   // GetSavedItem
-// } from '@/app/storeapi/buyer/get'
-// import {
-//   Filter_Cards,
-//   NewVisitor
-// } from '@/app/storeapi/buyer/post'
+
 import Head from 'next/head'
 import {
   v4
@@ -436,6 +429,8 @@ const Dashboard = () => {
     }
   }, [cards, limit])
 
+  let [active, setActive] = useState(0);
+
    
 
   return ( 
@@ -455,33 +450,7 @@ const Dashboard = () => {
         width: '100%',
         padding: '15px'
 
-      }}>  
-        {/* <div className="buyer-main-cnt" style={{
-          height: 'fit-content',
-          background: '#efefef',
-          width: '100%',
-          flexDirection:'column'
-        }}>  
-
-          {
-            pathname.split('/').splice(-1)[0] === 'search'
-            ?
-            ''
-            :
-            ''
-          }
-            
-          {
-            pathname.split('/').splice(-1)[0] !== 'search' && screenWidth <= 480
-            ?
-            <>
-                
-            </>
-            :
-            ''
-          }
-            
-        </div> */}
+      }}> 
         
         <div className="buyer-main-content buyer-main-cnt" style={{
           background: '#fff',
@@ -490,6 +459,49 @@ const Dashboard = () => {
           padding: '0'
 
         }}>
+          {
+            screenWidth <= 760
+            ?
+            <ul style={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: '10px 10px',
+              background: "#FFA500",
+              borderRadius: "8px",
+              textAlign: "center",
+
+            }}>
+              {
+                [
+                  {text: "Items", svg: ""},
+                  {text: "Lodges", svg: ""},
+                  {text: "Services", svg: ""}
+                ].map((item, index) => <li key={index} style={{
+                  width: "33.3%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: '5px 5px',
+                  background: active === index ? "#fff" : "#FFA500",
+                  borderRadius: "8px",
+                  textAlign: "center",
+                  color: active === index ? "#FFA500" : "#fff",
+                  fontWeight: "bold"
+                }} onClick={e => {
+                  setActive(index)
+                }}>
+                  <span>
+                    {item.text}
+                  </span>
+                  <span>{}</span>
+                </li>)
+              }
+            </ul>
+            :
+            ''
+          }
 
           {
             screenWidth <= 760

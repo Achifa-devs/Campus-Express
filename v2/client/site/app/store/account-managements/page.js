@@ -362,7 +362,7 @@ function Edit({ edit, data }) {
         <h4 className="fw-semibold mb-3">Update {edit}</h4>
         
         <div className="mb-4">
-          <div className="badge px-3 py-2 fw-semibold" style={{ background: '#fff4e0', color: '#FFA500', borderRadius: '10px' }}>
+          <div className="badge px-3 py-2 fw-semibold" style={{ background: '#FFF6E0', color: '#FFA500', borderRadius: '10px' }}>
             Active
           </div>
         </div>

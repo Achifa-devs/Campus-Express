@@ -135,7 +135,7 @@ const Aside = ({
                             <div 
                                 className="rounded-circle d-flex align-items-center justify-content-center me-3"
                                 style={{
-                                    background: '#fff4e0', 
+                                    background: '#FFF6E0', 
                                     width: '50px', 
                                     height: '50px', 
                                     color: '#FFA500'

@@ -28,7 +28,6 @@ import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup';
 import CardCnt from '@/files/components/Buyer/dashboard/CardCnt'
 import Card from '@/files/components/Buyer/dashboard/Card'
 import SearchOutput from '@/files/components/Buyer/Header/SearchOutput'
-import Ads from '@/files/components/Buyer/dashboard/Ads'
 import {
   usePathname
 } from 'next/navigation'
@@ -72,8 +71,12 @@ const Dashboard = () => {
   let [category, setcategory] = useState('')
   let [type, settype] = useState('')
   let [state, setstate] = useState('')
-  let [limit, setlimit] = useState(30)
+  let [limit, setlimit] = useState(3)
   let [items, setitems] = useState([])
+
+  function updateLimit(data){
+    setlimit(data)
+  }
 
   let [activeJSX, setActiveJSX] = useState(<CardCnt 
     ChangeCampus={ChangeCampus} 
@@ -86,6 +89,7 @@ const Dashboard = () => {
     state={state} 
     // applyFilter={applyFilter}
     cards={cards} 
+    updateLimit={updateLimit}
   />)
 
   let [screenWidth, setScreenWidth] = useState(0)
@@ -256,20 +260,24 @@ const Dashboard = () => {
     }, [pathname]);
 
     useEffect(() => {
-      if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(
-          position => {
-              setGeoLocation({
-              lat: position.coords.latitude,
-              lng: position.coords.longitude,
-              });
-          },
-          error => {
-              console.error('Error fetching location', error);
-          }
-          );
-      } else {
-          console.error('Geolocation is not supported by this browser');
+      try {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+            position => {
+                setGeoLocation({
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+                });
+            },
+            error => {
+                console.error('Error fetching location', error);
+            }
+            );
+        } else {
+            console.error('Geolocation is not supported by this browser');
+        }
+      } catch (error) {
+        console.log(error)
       }
     }, []);
 
@@ -326,6 +334,7 @@ const Dashboard = () => {
       state={state} 
       // applyFilter={applyFilter}
       cards={cards} 
+      updateLimit={updateLimit}
         
     />)
       
@@ -382,6 +391,7 @@ const Dashboard = () => {
       ChangeSubCategory={ChangeSubCategory} 
       category={category}
       state={state} 
+      updateLimit={updateLimit}
       // applyFilter={applyFilter}
       cards={cards} />)
   }, [cards])

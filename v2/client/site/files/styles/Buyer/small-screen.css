@@ -1452,14 +1452,14 @@
     .mssg-cnt{
         height: 100%;
         width: 100%;
-        background-color: #fff4e0;
+        background-color: #FFF6E0;
     }
 
     .mssg-aside{
         height: 100%;
         width: 100%;
         padding: 5px;
-        background-color: #fff4e0;
+        background-color: #FFF6E0;
     }
 
     .mssg-head{
@@ -1485,7 +1485,7 @@
         align-items: center;
         justify-content: center;
         color: #FFA500;
-        background-color: #fff4e0;
+        background-color: #FFF6E0;
     }
 
     .mssg-head #right{
@@ -1518,7 +1518,7 @@
         z-index: 1000;
         height: calc(100% - 0px);
         width: 100%;
-        background-color: #fff4e0;
+        background-color: #FFF6E0;
     }
 
     .mssg-room-head{
@@ -1542,7 +1542,7 @@
         align-items: center;
         justify-content: center;
         color: #FFA500;
-        background-color: #fff4e0;
+        background-color: #FFF6E0;
     }
 
     .mssg-room-head #right{
@@ -1562,7 +1562,7 @@
         width: 100%;
         border-bottom: 1px solid #FFA500;
         left: 0;
-        background-color: #fff4e0;
+        background-color: #FFF6E0;
     }
 
 

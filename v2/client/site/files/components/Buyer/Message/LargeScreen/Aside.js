@@ -107,7 +107,7 @@ export default function Aside() {
                   dispatch(set_partner_to(item.partner));
                   
                 }}>
-                  <div id='left' style={{padding: item.partner.photo ? '0px' : '10px', borderRadius: '50%', background: '#fff4e0', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                  <div id='left' style={{padding: item.partner.photo ? '0px' : '10px', borderRadius: '50%', background: '#FFF6E0', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                     <Image src={
                       item.partner?.photo ? item.partner?.photo : userSvg.src
                     } width={35} height={35} style={{objectFit: 'cover', borderRadius: '50%'}} alt='Placeholder' />

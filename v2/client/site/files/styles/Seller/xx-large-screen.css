@@ -74,7 +74,7 @@
     }
 
     .seller-aside ul li:hover{
-        background-color: #fff4e0;
+        background-color: #FFF6E0;
         font-weight: 500;
 
     }
@@ -85,7 +85,7 @@
         width: calc(100% - 0px);
         /* margin: auto; */
         padding: 0;
-        background-color: #fff4e0;
+        background-color: #FFF6E0;
     }
 
     .seller-home-overview{
@@ -94,7 +94,7 @@
         display: flex;
         align-items: center;
         padding: 20px;
-        background-color: #fff4e0;
+        background-color: #FFF6E0;
     }
 
     .seller-home-overview ul{
@@ -136,7 +136,7 @@
         padding: 10px;
         margin: 0;
         border-radius: 10px;
-        background-color: #fff4e0;
+        background-color: #FFF6E0;
     }
 
     .seller-home-overview ul li a{
@@ -155,7 +155,7 @@
         align-items: center;
         padding: 0;
         justify-content: center;
-        background-color: #fff4e0;
+        background-color: #FFF6E0;
     }
 
     .seller-home-list ul{
@@ -204,7 +204,7 @@
         margin: auto;
         overflow: auto;
         padding: 20px;
-        background-color: #fff4e0;
+        background-color: #FFF6E0;
         
     }
 
@@ -247,7 +247,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        background-color: #fff4e0;
+        background-color: #FFF6E0;
 
     }
 
@@ -259,7 +259,7 @@
         flex-direction: column;
         align-items: center;
         padding: 10px;
-        background-color: #fff4e0;
+        background-color: #FFF6E0;
     }
 
     .seller-item-preview-cnt{
@@ -561,7 +561,7 @@
         margin: auto;
         overflow: auto;
         padding: 40px;
-        background-color: #fff4e0;
+        background-color: #FFF6E0;
     }
     .seller-order-card{
         height: 200px;
@@ -756,7 +756,7 @@
         overflow: auto;
         padding: 40px;
         position: relative;
-        background-color: #fff4e0;
+        background-color: #FFF6E0;
     }
     .seller-settings section{
         height: 100px;
@@ -794,7 +794,7 @@
         margin: auto;
         overflow: auto;
         padding: 0px;
-        background-color: #fff4e0;
+        background-color: #FFF6E0;
     }
     .seller-wallet-top{
         height: 120px;
@@ -902,7 +902,7 @@
         overflow: auto;
         position: relative;
         display: block;
-        background-color: #fff4e0;
+        background-color: #FFF6E0;
     }
     .seller-profile-left{
         height: fit-content;
@@ -948,7 +948,7 @@
     .seller-profile-basics{
         height: 100%;
         width: 300px;
-        background-color: #fff4e0;
+        background-color: #FFF6E0;
         padding: 20px;
         border-radius: 5px;
         font-size: medium;
@@ -990,7 +990,7 @@
     .seller-profile-others div{
         height: fit-content;
         width: 100%;
-        background-color: #fff4e0;
+        background-color: #FFF6E0;
         margin-bottom: 20px;
         border-radius: 5px;
         font-family: 'Times New Roman', Times, serif;

@@ -28,7 +28,7 @@ export default function Nav() {
         position: 'fixed',
         bottom: '0',
         left: '0',
-        borderTop: '1px solid #fff4e0',
+        borderTop: '1px solid #FFF6E0',
         alignItems: 'center',
         justifyContent: 'center',
         borderBottom: '#fff',

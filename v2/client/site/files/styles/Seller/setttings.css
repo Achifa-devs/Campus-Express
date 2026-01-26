@@ -21,7 +21,7 @@
 }
 
 .settings-aside ul li:hover{
-    background-color: #fff4e0;
+    background-color: #FFF6E0;
 }
 
 .settings-main{
@@ -68,5 +68,5 @@
     padding: 0;
     margin-bottom: 10px;
     border-radius: 10px;
-    background-color: #fff4e0;
+    background-color: #FFF6E0;
 }

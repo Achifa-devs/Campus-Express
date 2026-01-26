@@ -292,7 +292,7 @@ const ProductPage = () => {
                         
                         <br />
 
-                        <section style={{fontWeight: '400', padding: '15px', background: '#fff4e0', }}>
+                        <section style={{fontWeight: '400', padding: '15px', background: '#FFF6E0', }}>
                             
                             <small style={{fontSize: 'small', color: '#FFA500', lineHeight: '12px', borderRadius: '6px'}}>Payment Must Be Made Via dorm deals Platform To Avoid Fraud Else You Can <b>Trade With The Seller Outside The Platform At Your Own Risk.</b></small>
                         </section>

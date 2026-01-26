@@ -1,6 +1,6 @@
 import React from 'react'
 import './styles/xxl.css'
-import logo from "../../public/ic_notification.png"
+import logo from "../../public/logo.png"
 export default function page() {
   const listStyles = {
     listStyle: 'none',

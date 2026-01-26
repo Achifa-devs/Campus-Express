@@ -27,7 +27,7 @@ export default function Settings() {
             <SellerLayout >
 
                 <div className="seller-main" style={{
-                    background: '#fff4e0',
+                    background: '#FFF6E0',
                     padding: '10px', 
                     height: 'calc(100vh - 70px)',
                     display: 'flex',
@@ -166,7 +166,7 @@ function Profile() {
 
                     <div className="seller-input-cnt" style={{position: 'relative'}}>
                         <input id='coverphoto' style={{background: '#f9f9f9', display: 'none'}} onChange={handleImage}  type="file" />
-                        <div style={{height: '120px', width: '120px', position: 'relative', borderRadius: '50%', background: '#fff4e0'}}>
+                        <div style={{height: '120px', width: '120px', position: 'relative', borderRadius: '50%', background: '#FFF6E0'}}>
 
                             <img src={photo}  style={{height: '100%', width: '100%', borderRadius: '50%'}} alt="" />
 

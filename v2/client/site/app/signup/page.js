@@ -7,7 +7,7 @@ import './styles/x-large.css'
 import './styles/large.css'
 import './styles/medium.css'
 import './styles/small.css'
-import logoSvg from '@/files/assets/default.svg'
+import logoSvg from '../../public/Dorm.svg'
 import { useDispatch } from 'react-redux';
 import { setSellerTo } from '@/redux/seller_store/seller';
 import { buyer_overlay_setup } from '@/files/reusable.js/overlay-setup';
@@ -279,10 +279,11 @@ const Signup = () => {
 
                 <section className='seller-signup-cnt'>
                     
-                    <div className="left">
+                    <div className="left" style={{
+                        background: '#FFF6E0'
+                    }}>
 
                         <img src={logoSvg.src} style={{height: '100%', width: '100%'}} alt="" />
-
 
 
                     </div>

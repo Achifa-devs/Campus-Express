@@ -52,7 +52,7 @@ export default function MessageLg() {
                 width: 'calc(100% - 200px)',
                 float: 'right',
                 padding: '10px',
-                background: '#fff4e0',
+                background: '#FFF6E0',
                 height: 'calc(100vh - 70px)'
             }}>
                 <div className="seller-messages">
