@@ -3,6 +3,8 @@ import Category from '../components/Category'
 import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import ProductsList from '../components/Home/Products'
+import LodgeList from '../components/Home/Lodges'
+import ServiceList from '../components/Home/Services'
 import api from '../api/Api'
 export default function Home(){
 
@@ -11,18 +13,24 @@ export default function Home(){
     const [data, setData] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
 
-    const $ = async() => {
-        const res = await api("get", "products", {}, {option});
-        setData(res);
-    }
+    const fetchData = useCallback(async() => {
+        try {
+            const res = await api("get", "products", {}, {option});
+            setData(res);
+        } catch (error) {
+            console.error('Error fetching products:', error);
+        }
+    }, [option]);
 
-    useEffect(() => {$();}, [])
+    useEffect(() => {
+        fetchData();
+    }, [fetchData]);
 
     const onRefresh = useCallback(() => {
-        setData([])
+        setData([]);
         setRefreshing(true);
-        $().finally(() => setRefreshing(false));
-    }, [option]); 
+        fetchData().finally(() => setRefreshing(false));
+    }, [fetchData]); 
     
  
     return(
@@ -32,7 +40,17 @@ export default function Home(){
                 <View style={styles.sectionHeader}>
                     <Text style={styles.sectionTitle}>Trending {option || 'Products'} near you</Text>
                 </View>
-                <ProductsList />
+                {
+                    option === "Products" && <ProductsList data={data} />
+                }
+
+                {
+                    option === "Lodges" && <LodgeList data={data} />
+                }
+
+                {
+                    option === "Services" && <ServiceList data={data} />
+                }
             </ScrollView>
         </>
     )

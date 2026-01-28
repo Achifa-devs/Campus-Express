@@ -8,7 +8,9 @@
           "Makeup Services",
           "Manicure & Pedicure"
         ],
-        "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1756063363/images_1_olg76e.jpg"
+        "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1756063363/images_1_olg76e.jpg",
+        "vector": "cut-outline",
+        "color": "#EC4899"
       },
       {
         "Fashion & Tailoring": [
@@ -16,7 +18,9 @@
           "Uniform Adjustments",
           "Laundry & Ironing"
         ],
-        "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1756063362/download_3_h00vra.jpg"
+        "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1756063362/download_3_h00vra.jpg",
+        "vector": "shirt-outline",
+        "color": "#F97316"
       },
       {
         "Academic Support": [
@@ -25,7 +29,9 @@
           "Project/Thesis Assistance",
           "Proofreading & Editing"
         ],
-        "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1756063490/download_5_z4szec.jpg"
+        "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1756063490/download_5_z4szec.jpg",
+        "vector": "school-outline",
+        "color": "#8B5CF6"
       },
       {
         "Logistics & Errands": [
@@ -34,7 +40,9 @@
           "Shopping Assistance",
           "Campus Errand Services"
         ],
-        "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1756063362/images_2_via0fq.jpg"
+        "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1756063362/images_2_via0fq.jpg",
+        "vector": "bicycle-outline",
+        "color": "#22C55E"
       },
       {
         "Tech & Digital Services": [
@@ -43,7 +51,9 @@
           "Typing & Printing",
           "Photocopy & Scanning"
         ],
-        "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1756063362/download_4_n0hsya.jpg"
+        "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1756063362/download_4_n0hsya.jpg",
+        "vector": "laptop-outline",
+        "color": "#14B8A6"
       },
       {
         "Cleaning Services": [
@@ -52,19 +62,53 @@
           "Laundry & Folding",
           "Waste Disposal Assistance"
         ],
-        "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1756260586/download_7_flrcl2.jpg"
+        "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1756260586/download_7_flrcl2.jpg",
+        "vector": "trash-outline",
+        "color": "#3B82F6"
+      },
+      {
+        "Food & Eatery": [
+          "Cakes & Pastries",
+          "Home-cooked Meals",
+          "Snacks & Small Chops",
+          "Drinks & Beverages"
+        ],
+        "vector": "fast-food-outline",
+        "color": "#F97316"
+      },
+      {
+        "Technician & Electrical": [
+          "Phone Repairs (Screen, Battery, Charging Port)",
+          "Laptop Repairs (Hardware & Software)",
+          "Cable TV Installation",
+          "Electrical Wiring & Repairs",
+          "Appliance Repairs",
+          "Generator Repairs",
+          "Solar Installation & Maintenance"
+        ],
+        "vector": "construct-outline",
+        "color": "#EAB308"
+      },
+      {
+        "Home & Construction Services": [
+          "Carpentry", 
+          "Plumbing", 
+          "Masonry", 
+          "Tiling"
+        ],
+        "vector": "home-outline",
+        "color": "#92400E"
+      },
+      {
+        "Creative & Art Services": [
+          "Painting", 
+          "Drawing", 
+          "Sculpture", 
+          "Murals"
+        ],
+        "vector": "color-palette-outline",
+        "color": "#8B5CF6"
       }
     ]
   }
 }
-
-
-
-
-
-
-
-
-
-
-

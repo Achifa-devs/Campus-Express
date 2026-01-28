@@ -52,12 +52,11 @@ export default function Category(){
                 </TouchableOpacity>
             </>
         )
-    }, [])
-
+    }, [navigation])
 
     useEffect(() => {
-        const categories = option === 'Products' ? [...product.items.category].splice(0, 10) : option === 'Lodges' ? [...lodge.items.category].splice(0, 10) : [...services.items.category].splice(0, 10);
-        if (categories.length === 10) {
+        const categories = option === 'Products' ? [...product.items.category].splice(0, 10) : option === 'Lodges' ? [...lodge.items.category].splice(0, 10) : [...services.items.category].splice(0, 4);
+        if (option !== 'Lodges' && categories.length === 10 || categories.length < 10) {
             categories.push({ name: "More", items: [] }); // Added name field for consistency
             setList(categories);
         } else {
@@ -79,14 +78,7 @@ export default function Category(){
                     columnWrapperStyle={numColumns > 1 ? styles.row : null}
                     contentContainerStyle={styles.showcase}
                     renderItem={({ item, index }) => (
-                        <TouchableOpacity
-                            activeOpacity={0.7}
-                            onPress={() => handlePress(item)}
-                        >
-                            {
-                                renderCategoryCard(item, index)
-                            }
-                        </TouchableOpacity>
+                        renderCategoryCard(item, index)
                     )}
                     ListEmptyComponent={
                         <View style={styles.noItems}>

@@ -110,7 +110,7 @@ const dummyProducts = [
 
 export default function ProductsList({ data }){
     // Use dummy data if no data prop is provided
-    const productsData = data || dummyProducts;
+    const productsData = dummyProducts || data;
     
     // Split array into two columns without mutating original
     const midPoint = Math.ceil(productsData.length / 2);
@@ -120,7 +120,7 @@ export default function ProductsList({ data }){
     return(
         <View style={styles.listContainer}>
             <View style={styles.column}>
-                {col_1.map((item, index) =>
+                {col_1.map((item, index) =>  
                     <ProductCard key={item.key || item.id || index} item={item} index={index} />
                 )}
             </View>

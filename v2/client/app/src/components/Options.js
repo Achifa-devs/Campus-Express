@@ -14,7 +14,7 @@ export default function Options(){
                 {
                     [
                         {text: "Products", svg: "cube", data: []},
-                        {text: "Lodge", svg: "bed", data: []},
+                        {text: "Lodges", svg: "bed", data: []},
                         {text: "Services", svg: "construct", data: []}
                     ].map((option, index) => {
                         return(
