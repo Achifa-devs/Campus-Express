@@ -1,13 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
 import { set_option } from "../../redux/option";
 
 const OPTIONS = [
-  { text: "Products", svg: "cube" },
-  { text: "Lodges", svg: "bed" },
-  { text: "Services", svg: "construct" },
+  { text: "Products", icon: "inventory-2" },
+  { text: "Lodges", icon: "bed" },
+  { text: "Services", icon: "build" },
 ];
 
 const ACCENT = "#FFA500";
@@ -27,8 +27,8 @@ export default function Options() {
             onPress={() => dispatch(set_option(option.text))}
             activeOpacity={0.7}
           >
-            <Ionicons
-              name={option.svg}
+            <MaterialIcons
+              name={option.icon}
               color={isSelected ? ACCENT : "#999"}
               size={20}
             />

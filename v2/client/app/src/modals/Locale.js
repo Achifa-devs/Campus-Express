@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 
 import { useDispatch } from 'react-redux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import { school_choices } from '../json/location.json';
 import { set_campus } from '../../redux/campus';
@@ -124,14 +124,14 @@ const LocaleSelection = ({ onCloseModal }) => {
           style={modalStyles.backButton}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <Ionicons name="arrow-back" size={25} color="#000" />
+          <MaterialIcons name="chevron-left" size={25} color="#000" />
         </TouchableOpacity>
         <Text style={modalStyles.headerTitle}>Select Your Campus</Text>
       </View>
 
       {/* Search Section */}
       <View style={modalStyles.searchWrapper}>
-        <Ionicons 
+        <MaterialIcons 
           name="search" 
           size={20} 
           color="#999" 
@@ -152,7 +152,7 @@ const LocaleSelection = ({ onCloseModal }) => {
             style={modalStyles.clearButton}
             hitSlop={{ top: 5, bottom: 5, left: 5, right: 5 }}
           >
-            <Ionicons name="close-circle" size={20} color="#999" />
+            <MaterialIcons name="cancel" size={20} color="#999" />
           </TouchableOpacity>
         )}
       </View>

@@ -12,7 +12,7 @@ import {
   ActivityIndicator,
   FlatList,
 } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useDispatch, useSelector } from 'react-redux';
 import Accomodation from '../components/Home/Accomodation';
 import categoriesData from '../json/services.json';
@@ -111,7 +111,7 @@ function ItemCard({ item, navigation, user, favouritesList }) {
           />
           {isBoosted && (
             <View style={layoutStyles.boostPill}>
-              <Ionicons name="rocket" size={12} color="#FFF" />
+              <MaterialIcons name="rocket-launch" size={12} color="#FFF" />
               <Text style={layoutStyles.boostLabel}>  Boosted</Text>
             </View>
           )}
@@ -122,8 +122,8 @@ function ItemCard({ item, navigation, user, favouritesList }) {
             {saveInProgress ? (
               <ActivityIndicator size="small" color={isSaved ? '#FFF' : '#FFA500'} />
             ) : (
-              <Ionicons
-                name={isSaved ? 'heart' : 'heart-outline'}
+              <MaterialIcons
+                name={isSaved ? 'favorite' : 'favorite-border'}
                 size={18}
                 color={isSaved ? '#FFF' : '#000'}
               />
@@ -147,7 +147,7 @@ function ItemCard({ item, navigation, user, favouritesList }) {
             {item.title}
           </Text>
           <View style={layoutStyles.locationRow}>
-            <Ionicons name="location-outline" size={12} color="#666" />
+            <MaterialIcons name="location-on" size={12} color="#666" />
             <Text style={layoutStyles.locationText}>{item.campus}</Text>
           </View>
         </View>
@@ -347,7 +347,7 @@ export default function Filter() {
               >
                 <Text style={layoutStyles.modalRowText}>{opt}</Text>
                 {(filterState.condition === opt || (!filterState.condition && opt === 'Any Condition')) && (
-                  <Ionicons name="checkmark" size={18} color="#FFA500" />
+                  <MaterialIcons name="check" size={18} color="#FFA500" />
                 )}
               </TouchableOpacity>
             ))}
@@ -367,7 +367,7 @@ export default function Filter() {
               >
                 <Text style={layoutStyles.modalRowText}>{opt}</Text>
                 {(filterState.gender === opt || (!filterState.gender && opt === 'Any Gender')) && (
-                  <Ionicons name="checkmark" size={18} color="#FFA500" />
+                  <MaterialIcons name="check" size={18} color="#FFA500" />
                 )}
               </TouchableOpacity>
             ))}
@@ -387,7 +387,7 @@ export default function Filter() {
               >
                 <Text style={layoutStyles.modalRowText}>{opt}</Text>
                 {(filterState.priceSort === opt || (!filterState.priceSort && opt === 'Default')) && (
-                  <Ionicons name="checkmark" size={18} color="#FFA500" />
+                  <MaterialIcons name="check" size={18} color="#FFA500" />
                 )}
               </TouchableOpacity>
             ))}
@@ -407,7 +407,7 @@ export default function Filter() {
               >
                 <Text style={layoutStyles.modalRowText}>{opt}</Text>
                 {(filterState.dateSort === opt || (!filterState.dateSort && opt === 'Default')) && (
-                  <Ionicons name="checkmark" size={18} color="#FFA500" />
+                  <MaterialIcons name="check" size={18} color="#FFA500" />
                 )}
               </TouchableOpacity>
             ))}
@@ -436,7 +436,7 @@ export default function Filter() {
           style={layoutStyles.backBtn}
           onPress={() => navigation.goBack()}
         >
-          <Ionicons name="chevron-back" size={25} color="#000" />
+          <MaterialIcons name="chevron-left" size={25} color="#000" />
         </TouchableOpacity>
         <Text style={layoutStyles.headerTitle}>
           {category} - {type}
@@ -462,8 +462,8 @@ export default function Filter() {
                 {getFilterButtonLabel(label)}
               </Text>
               {active && (
-                <Ionicons
-                  name="close-circle"
+                <MaterialIcons
+                  name="cancel"
                   size={14}
                   color="#FFF"
                   style={layoutStyles.filterChipIcon}
@@ -482,7 +482,7 @@ export default function Filter() {
               <View key={key} style={layoutStyles.activeTag}>
                 <Text style={layoutStyles.activeTagText}>{value}</Text>
                 <TouchableOpacity onPress={() => applyFilterOption(key, null)}>
-                  <Ionicons name="close" size={14} color="#FFF" />
+                  <MaterialIcons name="close" size={14} color="#FFF" />
                 </TouchableOpacity>
               </View>
             ))}
@@ -513,7 +513,7 @@ export default function Filter() {
         />
       ) : (
         <View style={layoutStyles.emptyWrap}>
-          <Ionicons name="search-outline" size={50} color="#ccc" />
+          <MaterialIcons name="search" size={50} color="#ccc" />
           <Text style={layoutStyles.emptyLabel}>No products match your filters</Text>
           <TouchableOpacity style={layoutStyles.resetBtn} onPress={resetFilters}>
             <Text style={layoutStyles.resetBtnText}>Reset Filters</Text>

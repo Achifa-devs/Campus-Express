@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import Video from "react-native-video"
 
@@ -144,7 +144,7 @@ export default function LodgeList(){
                                 justifyContent: 'center',
                                 alignItems: 'center'
                             }}>
-                                <Ionicons color={"#FFA500"} name={item.gender} size={20} />
+                                <MaterialIcons color={"#FFA500"} name={item.gender} size={20} />
                                 <Text style={{textTransform: "capitalize", fontWeight: "bold"}}>
                                     {item.gender}
                                 </Text>
@@ -159,7 +159,7 @@ export default function LodgeList(){
                             display: 'flex',
                             flexDirection: 'row'
                         }}>
-                            <Ionicons name={'pricetag'} color={"#FFA500"}  />
+                            <MaterialIcons name="local-offer" color={"#FFA500"}  />
                             
                             <Text style={styles.condition}>{' '}Inspection fee: {item.fee}</Text>
                         </View>
@@ -167,7 +167,7 @@ export default function LodgeList(){
                             display: 'flex',
                             flexDirection: 'row'
                         }}>
-                            <Ionicons name={'location'} color={"#FFA500"}  />
+                            <MaterialIcons name="location-on" color={"#FFA500"}  />
                             
                             <Text style={styles.location}>{' '}{item.location || 'Location'}</Text>
                         </View>

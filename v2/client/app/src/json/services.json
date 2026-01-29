@@ -9,7 +9,7 @@
           "Manicure & Pedicure"
         ],
         "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1756063363/images_1_olg76e.jpg",
-        "vector": "cut-outline",
+        "vector": "content-cut",
         "color": "#EC4899"
       },
       {
@@ -19,7 +19,7 @@
           "Laundry & Ironing"
         ],
         "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1756063362/download_3_h00vra.jpg",
-        "vector": "shirt-outline",
+        "vector": "checkroom",
         "color": "#F97316"
       },
       {
@@ -30,7 +30,7 @@
           "Proofreading & Editing"
         ],
         "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1756063490/download_5_z4szec.jpg",
-        "vector": "school-outline",
+        "vector": "school",
         "color": "#8B5CF6"
       },
       {
@@ -41,7 +41,7 @@
           "Campus Errand Services"
         ],
         "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1756063362/images_2_via0fq.jpg",
-        "vector": "bicycle-outline",
+        "vector": "directions-bike",
         "color": "#22C55E"
       },
       {
@@ -52,7 +52,7 @@
           "Photocopy & Scanning"
         ],
         "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1756063362/download_4_n0hsya.jpg",
-        "vector": "laptop-outline",
+        "vector": "laptop",
         "color": "#14B8A6"
       },
       {
@@ -63,7 +63,7 @@
           "Waste Disposal Assistance"
         ],
         "img": "https://res.cloudinary.com/daqbhghwq/image/upload/v1756260586/download_7_flrcl2.jpg",
-        "vector": "trash-outline",
+        "vector": "cleaning-services",
         "color": "#3B82F6"
       },
       {
@@ -73,7 +73,7 @@
           "Snacks & Small Chops",
           "Drinks & Beverages"
         ],
-        "vector": "fast-food-outline",
+        "vector": "restaurant",
         "color": "#F97316"
       },
       {
@@ -86,7 +86,7 @@
           "Generator Repairs",
           "Solar Installation & Maintenance"
         ],
-        "vector": "construct-outline",
+        "vector": "build",
         "color": "#EAB308"
       },
       {
@@ -96,7 +96,7 @@
           "Masonry", 
           "Tiling"
         ],
-        "vector": "home-outline",
+        "vector": "home",
         "color": "#92400E"
       },
       {
@@ -106,7 +106,7 @@
           "Sculpture", 
           "Murals"
         ],
-        "vector": "color-palette-outline",
+        "vector": "palette",
         "color": "#8B5CF6"
       }
     ]

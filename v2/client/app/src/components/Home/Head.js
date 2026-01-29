@@ -1,6 +1,6 @@
 
 // import LogoSvg from '../../assets/logo.svg'
-import Icon from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import { useDispatch, useSelector } from "react-redux";
 import React, { useEffect, useState } from "react";
@@ -42,8 +42,8 @@ export default function Head(){
                 activeOpacity={0.8}
                 >
                 <View style={styles.buttonContent}>
-                <Icon 
-                    name={"people-outline"} 
+                <MaterialIcons 
+                    name={"people"} 
                     size={16} 
                     color={"#fff"} 
                     style={styles.icon}
@@ -63,7 +63,7 @@ export default function Head(){
                     activeOpacity={0.9}
                     >
                     <Text style={styles.loginText}>Login</Text>
-                    <Icon name="log-in-outline" size={16} color="#FFF" />
+                    <MaterialIcons name="login" size={16} color="#FFF" />
                     </TouchableOpacity>
                 )
             }

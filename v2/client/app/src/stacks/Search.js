@@ -1,9 +1,9 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Chat from "../screens/Chat";
+import Search from "../screens/Search";
 
-const ChatStack = createNativeStackNavigator();
+const SearchStack = createNativeStackNavigator();
 
-function ChatHeader() {
+function SearchHeader() {
     return (
         <>
             
@@ -32,31 +32,15 @@ function AnalyticsHeader() {
     return null;
 }
 
-export default function ChatStackScreen(){
+export default function SearchStackScreen(){
 
 
 
     return(
-        <ChatStack.Navigator 
+        <SearchStack.Navigator 
             
         >
-            <ChatStack.Screen
-                options={{
-                    header: ChatHeader
-                }}
-                name="chat"
-                component={Chat}
-            />
-
-            {/* <ChatStack.Screen
-                options={{
-                    header: TypeHeader
-                }}
-                name="type"
-                component={Type}
-            />
-
-            <ChatStack.Screen
+            <SearchStack.Screen
                 options={{
                     header: SearchHeader
                 }}
@@ -64,7 +48,23 @@ export default function ChatStackScreen(){
                 component={Search}
             />
 
-            <ChatStack.Screen
+            {/* <SearchStack.Screen
+                options={{
+                    header: TypeHeader
+                }}
+                name="type"
+                component={Type}
+            />
+
+            <SearchStack.Screen
+                options={{
+                    header: SearchHeader
+                }}
+                name="search"
+                component={Search}
+            />
+
+            <SearchStack.Screen
                 options={{
                     header: FilterHeader
                 }}
@@ -72,7 +72,7 @@ export default function ChatStackScreen(){
                 component={Filter}
             />
 
-            <ChatStack.Screen
+            <SearchStack.Screen
                 options={{
                     header: null
                 }}
@@ -80,13 +80,13 @@ export default function ChatStackScreen(){
                 component={Category}
             />
 
-            <ChatStack.Screen
+            <SearchStack.Screen
                 options={{ 
                     header: ProductHeader
                 }}
                 name="product"
                 component={Product}
             /> */}
-        </ChatStack.Navigator>
+        </SearchStack.Navigator>
     )
 }

@@ -11,7 +11,7 @@ import {
   Pressable,
 } from "react-native";
 import { useSelector } from "react-redux";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/native";
 
 const ACCENT = "#FFA500";
@@ -73,7 +73,7 @@ function ProfileHeader({ user }) {
         />
       ) : (
         <View style={s.avatarPlaceholder}>
-          <Ionicons name="person-circle" color={ACCENT} size={60} />
+          <MaterialIcons name="account-circle" color={ACCENT} size={60} />
         </View>
       )}
       <Text style={s.name}>{displayName}</Text>
@@ -164,7 +164,7 @@ export default function Profile() {
   if (!user) {
     return (
       <View style={s.loadingWrap}>
-        <Ionicons name="person-circle-outline" size={64} color="#999" />
+        <MaterialIcons name="account-circle" size={64} color="#999" />
         <Text style={s.loadingText}>No profile data</Text>
       </View>
     );

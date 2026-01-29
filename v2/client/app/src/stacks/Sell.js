@@ -1,9 +1,9 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Chat from "../screens/Chat";
+import Sell from "../screens/Sell";
 
-const ChatStack = createNativeStackNavigator();
+const SellStack = createNativeStackNavigator();
 
-function ChatHeader() {
+function SellHeader() {
     return (
         <>
             
@@ -32,23 +32,23 @@ function AnalyticsHeader() {
     return null;
 }
 
-export default function ChatStackScreen(){
+export default function SellStackScreen(){
 
 
 
     return(
-        <ChatStack.Navigator 
+        <SellStack.Navigator 
             
         >
-            <ChatStack.Screen
+            <SellStack.Screen
                 options={{
-                    header: ChatHeader
+                    header: SellHeader
                 }}
-                name="chat"
-                component={Chat}
+                name="sell"
+                component={Sell}
             />
 
-            {/* <ChatStack.Screen
+            {/* <SellStack.Screen
                 options={{
                     header: TypeHeader
                 }}
@@ -56,7 +56,7 @@ export default function ChatStackScreen(){
                 component={Type}
             />
 
-            <ChatStack.Screen
+            <SellStack.Screen
                 options={{
                     header: SearchHeader
                 }}
@@ -64,7 +64,7 @@ export default function ChatStackScreen(){
                 component={Search}
             />
 
-            <ChatStack.Screen
+            <SellStack.Screen
                 options={{
                     header: FilterHeader
                 }}
@@ -72,7 +72,7 @@ export default function ChatStackScreen(){
                 component={Filter}
             />
 
-            <ChatStack.Screen
+            <SellStack.Screen
                 options={{
                     header: null
                 }}
@@ -80,13 +80,13 @@ export default function ChatStackScreen(){
                 component={Category}
             />
 
-            <ChatStack.Screen
+            <SellStack.Screen
                 options={{ 
                     header: ProductHeader
                 }}
                 name="product"
                 component={Product}
             /> */}
-        </ChatStack.Navigator>
+        </SellStack.Navigator>
     )
 }

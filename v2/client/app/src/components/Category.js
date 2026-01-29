@@ -211,7 +211,7 @@ const layoutStyles = StyleSheet.create({
   iconWrap: {
     width: ICON_SIZE * 0.8,
     height: ICON_SIZE * 0.8,
-    borderRadius: ICON_SIZE / 2,
+    borderRadius: 12,
     backgroundColor: '#eee',
     justifyContent: 'center',
     alignItems: 'center',
@@ -223,7 +223,7 @@ const layoutStyles = StyleSheet.create({
   iconImage: {
     width: ICON_SIZE,
     height: ICON_SIZE,
-    borderRadius: ICON_SIZE / 2,
+    borderRadius: 12,
   },
   iconMoreLabel: {
     fontSize: 24,

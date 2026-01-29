@@ -11,7 +11,7 @@ import {
   Platform
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useDispatch, useSelector } from 'react-redux';
 import { set_locale_modal } from '../../../redux/modals/locale';
 import tools from '../../utils/tools';
@@ -23,9 +23,9 @@ const API_BASE_URL = 'https://cs-node.vercel.app/search';
 
 // Icon mappings for different option types
 const OPTION_ICON_MAP = {
-  'Products': 'cart',
-  'Lodges': 'bed',
-  'Services': 'construct'
+  'Products': 'shopping-cart',
+  'Lodges': 'hotel',
+  'Services': 'build'
 };
 
 // Purpose mapping for API
@@ -136,7 +136,7 @@ const SearchBar = () => {
 
   // Get icon name for current option
   const getOptionIcon = useMemo(() => {
-    return OPTION_ICON_MAP[selectedOption] || 'construct';
+    return OPTION_ICON_MAP[selectedOption] || 'build';
   }, [selectedOption]);
 
   // Get display text for campus
@@ -148,7 +148,7 @@ const SearchBar = () => {
     <View style={componentStyles.wrapper}>
       <View style={componentStyles.searchContainer}>
         {/* Search Icon */}
-        <Icon 
+        <MaterialIcons 
           name="search" 
           size={22} 
           color="#FFA500" 
@@ -173,7 +173,7 @@ const SearchBar = () => {
             style={componentStyles.clearIconWrapper}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
-            <Icon name="close-circle" size={20} color="#999" />
+            <MaterialIcons name="cancel" size={20} color="#999" />
           </TouchableOpacity>
         )}
         
@@ -190,7 +190,7 @@ const SearchBar = () => {
           <Text style={componentStyles.campusText} numberOfLines={1}>
             {campusDisplayText}
           </Text>
-          <Icon name="chevron-down" size={14} color="#FFA500" />
+          <MaterialIcons name="keyboard-arrow-down" size={14} color="#FFA500" />
         </TouchableOpacity>
       </View>
       
@@ -205,12 +205,12 @@ const SearchBar = () => {
                 style={resultsStyles.resultRow}
                 activeOpacity={0.6}
               >
-                <Icon 
-                  name={getOptionIcon} 
-                  size={16} 
-                  color="#FFA500" 
-                  style={resultsStyles.resultIcon}
-                />
+<MaterialIcons 
+                name={getOptionIcon} 
+                size={16} 
+                color="#FFA500" 
+                style={resultsStyles.resultIcon}
+              />
                 <Text style={resultsStyles.resultLabel} numberOfLines={1}>
                   {item?.title}
                 </Text>

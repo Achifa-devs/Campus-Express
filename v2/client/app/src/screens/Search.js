@@ -14,7 +14,7 @@ import {
   Alert,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import tools from '../utils/tools';
 import Options from '../components/Options';
 import Video from 'react-native-video';
@@ -284,7 +284,7 @@ const Search = ({ route, navigation }) => {
           activeOpacity={0.7}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <Ionicons name="chevron-back" size={24} color="#333" />
+          <MaterialIcons name="chevron-left" size={24} color="#333" />
         </TouchableOpacity>
         <TextInput
           style={screenStyles.inputField}

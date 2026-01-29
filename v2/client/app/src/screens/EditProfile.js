@@ -13,7 +13,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import { launchImageLibrary } from "react-native-image-picker";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import axios from "axios";
 
 import BottomModal from "../reuseables/BtmModal";
@@ -53,7 +53,7 @@ function AvatarBlock({ uri, onPress }) {
       {uri ? (
         <Image source={{ uri }} style={s.avatar} />
       ) : (
-        <Ionicons name="person-circle" color={ACCENT} size={60} />
+        <MaterialIcons name="account-circle" color={ACCENT} size={60} />
       )}
     </Pressable>
   );
@@ -121,7 +121,7 @@ function PhotoModal({ visible, onClose, user, photo, onPhotoChange, onSave }) {
           <Text style={s.modalTitle}>Profile Settings</Text>
         </View>
         <View style={s.modalInfo}>
-          <Ionicons name="information-circle" size={24} color={ACCENT} />
+          <MaterialIcons name="info" size={24} color={ACCENT} />
           <Text style={s.modalInfoText}>
             You are trying to update your cover photo.
           </Text>
@@ -134,14 +134,14 @@ function PhotoModal({ visible, onClose, user, photo, onPhotoChange, onSave }) {
               {photo ? (
                 <Image source={{ uri: photo }} style={s.photoPreview} />
               ) : (
-                <Ionicons name="camera" size={32} color="#6C757D" />
+                <MaterialIcons name="photo-camera" size={32} color="#6C757D" />
               )}
             </Pressable>
             <Pressable
               style={({ pressed }) => [s.uploadBtn, pressed && s.btnPressed]}
               onPress={user?.photo ? pickImage : pickImage}
             >
-              <Ionicons name="cloud-upload" size={18} color="#FFF" />
+              <MaterialIcons name="cloud-upload" size={18} color="#FFF" />
               <Text style={s.uploadBtnText}>
                 {user?.photo ? "Change Photo" : "Upload Photo"}
               </Text>

@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useDispatch, useSelector } from "react-redux";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import More from "../screens/More";
 import History from "../screens/History";
 import TermsOfUse from "../screens/TermsOfUse";
@@ -46,7 +46,7 @@ function MoreHeader() {
           />
         ) : (
           <View style={styles.avatarPlaceholder}>
-            <Ionicons name="person-circle" size={80} color="#FFA500" />
+            <MaterialIcons name="account-circle" size={80} color="#FFA500" />
           </View>
         )}
         <View>
@@ -64,7 +64,7 @@ function MoreHeader() {
           onPress={() => dispatch(set_mode("auth"))}
         >
           <Text style={styles.loginText}>Login</Text>
-          <Ionicons name="enter-outline" size={18} color="#FFA500" />
+          <MaterialIcons name="login" size={18} color="#FFA500" />
         </TouchableOpacity>
       )}
     </View>
@@ -75,7 +75,7 @@ function ProfileHeader({ navigation }) {
   return (
     <View style={styles.backHeader}>
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Ionicons name="chevron-back" size={25} color="#000" />
+        <MaterialIcons name="chevron-left" size={25} color="#000" />
       </TouchableOpacity>
       <View style={styles.headerTitleBox}>
         <Text style={styles.headerTitle}>My Campus Identity</Text>
@@ -88,7 +88,7 @@ function EditProfileHeader({ navigation }) {
   return (
     <View style={styles.backHeader}>
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Ionicons name="chevron-back" size={25} color="#000" />
+        <MaterialIcons name="chevron-left" size={25} color="#000" />
       </TouchableOpacity>
       <View style={styles.headerTitleBox}>
         <Text style={styles.headerTitle}>Edit Your Campus Identity</Text>
@@ -101,7 +101,7 @@ function InviteHeader({ navigation }) {
   return (
     <View style={styles.backHeader}>
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Ionicons name="chevron-back" size={25} color="#000" />
+        <MaterialIcons name="chevron-left" size={25} color="#000" />
       </TouchableOpacity>
       <View style={styles.headerTitleBox}>
         <Text style={styles.headerTitle}>Invite your friends</Text>
@@ -114,7 +114,7 @@ function HistoryHeader({ navigation }) {
   return (
     <View style={styles.backHeader}>
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Ionicons name="chevron-back" size={25} color="#000" />
+        <MaterialIcons name="chevron-left" size={25} color="#000" />
       </TouchableOpacity>
       <View style={styles.headerTitleBox}>
         <Text style={styles.headerTitle}>History</Text>
@@ -127,7 +127,7 @@ function PrivacyHeader({ navigation }) {
   return (
     <View style={styles.backHeader}>
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Ionicons name="chevron-back" size={25} color="#000" />
+        <MaterialIcons name="chevron-left" size={25} color="#000" />
       </TouchableOpacity>
       <View style={styles.headerTitleBox}>
         <Text style={styles.headerTitle}>Privacy policy</Text>
@@ -140,7 +140,7 @@ function SupportHeader({ navigation }) {
   return (
     <View style={styles.backHeader}>
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Ionicons name="chevron-back" size={25} color="#000" />
+        <MaterialIcons name="chevron-left" size={25} color="#000" />
       </TouchableOpacity>
       <View style={styles.headerTitleBox}>
         <Text style={styles.headerTitle}>Dorm Deals Forum</Text>
@@ -153,7 +153,7 @@ function TermsConditionsHeader({ navigation }) {
   return (
     <View style={styles.backHeader}>
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Ionicons name="chevron-back" size={25} color="#000" />
+        <MaterialIcons name="chevron-left" size={25} color="#000" />
       </TouchableOpacity>
       <View style={styles.headerTitleBox}>
         <Text style={styles.headerTitle}>Terms of service</Text>

@@ -15,7 +15,6 @@ function HomeHeader() {
     return (
         <>
             <Head />
-            <SearchBar />
             <Deals />
         </>
     );

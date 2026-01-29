@@ -8,7 +8,7 @@ import {
   useWindowDimensions,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
 const BG = "#f9f9f9";
 const CARD = "#fff";
@@ -17,10 +17,10 @@ function MenuRow({ icon, label, onPress }) {
   return (
     <TouchableOpacity activeOpacity={0.7} onPress={onPress} style={s.row}>
       <View style={s.rowInner}>
-        <Ionicons name={icon} size={20} color="#333" style={s.rowIcon} />
+        <MaterialIcons name={icon} size={20} color="#333" style={s.rowIcon} />
         <Text style={s.rowLabel}>{label}</Text>
       </View>
-      <Ionicons name="chevron-forward-outline" size={20} color="#000" />
+      <MaterialIcons name="arrow-forward" size={20} color="#000" />
     </TouchableOpacity>
   );
 }
@@ -49,20 +49,20 @@ function MenuBlock({ title, entries, navigator }) {
 function buildMenu(user) {
   const campusSphere = user
     ? [
-        { label: "Profile", icon: "person-outline", nav: "profile" },
-        { label: "History", icon: "time-outline", nav: "history" },
-        // { label: "Favourite", icon: "heart-outline", nav: "favourite" },
-        { label: "Invite Friends", icon: "people-outline", nav: "invite" },
+        { label: "Profile", icon: "person", nav: "profile" },
+        { label: "History", icon: "schedule", nav: "history" },
+        // { label: "Favourite", icon: "favorite-border", nav: "favourite" },
+        { label: "Invite Friends", icon: "people", nav: "invite" },
       ]
     : [
-        { label: "History", icon: "time-outline", nav: "history" },
-        { label: "Invite Friends", icon: "people-outline", nav: "invite" },
+        { label: "History", icon: "schedule", nav: "history" },
+        { label: "Invite Friends", icon: "people", nav: "invite" },
       ];
 
   const communityLegal = [
-    { label: "Terms Of Use", icon: "document-text-outline", nav: "terms_conditions" },
-    { label: "Privacy Policy", icon: "lock-closed-outline", nav: "privacy" },
-    { label: "Campus Community", icon: "school-outline", nav: "support" },
+    { label: "Terms Of Use", icon: "description", nav: "terms_conditions" },
+    { label: "Privacy Policy", icon: "lock", nav: "privacy" },
+    { label: "Campus Community", icon: "school", nav: "support" },
   ];
 
   return [

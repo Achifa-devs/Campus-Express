@@ -1,18 +1,18 @@
 import { useEffect, useState, useCallback } from "react";
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import services from '../../json/services.json';
 // Helper function to map gender to icon name
 const getGenderIcon = (gender) => {
     switch (gender?.toLowerCase()) {
         case 'male':
-            return 'male-outline';
+            return 'male';
         case 'female':
-            return 'female-outline';
+            return 'female';
         case 'unisex':
-            return 'people-outline';
+            return 'people';
         default:
-            return 'person-outline';
+            return 'person';
     }
 };
 
@@ -29,7 +29,7 @@ const getCategoryIcon = (categoryName) => {
     const category = services.items.category.find(
         cat => Object.keys(cat)[0]?.toLowerCase() === categoryName?.toLowerCase()
     );
-    return category?.vector || 'help-outline';
+    return category?.vector || 'help';
 };
 
 // Dummy data for testing
@@ -39,7 +39,7 @@ const dummyProducts = [
         title: 'Haircut & Barbing',
         summary: 'Professional haircut and barbing services for men. Expert stylists offering modern and traditional cuts with quality grooming.',
         category: 'Personal Grooming',
-        categoryIcon: 'cut-outline',
+        categoryIcon: 'content-cut',
         categoryName: 'Personal Grooming',
         fee: '₦3,500',
         location: 'Book foundation, Ifite-Awka',
@@ -52,7 +52,7 @@ const dummyProducts = [
         title: 'Hair Styling & Braiding',
         summary: 'Professional hair styling, braiding and weaving services for women. Includes cornrows, weaves, relaxing and creative braids.',
         category: 'Personal Grooming',
-        categoryIcon: 'cut-outline',
+        categoryIcon: 'content-cut',
         categoryName: 'Personal Grooming',
         fee: '₦8,000',
         location: 'Amansea, Ifite-Awka',
@@ -65,7 +65,7 @@ const dummyProducts = [
         title: 'Clothes Sewing & Mending',
         summary: 'Expert tailoring and mending services for all clothing types. Custom designs, repairs and alterations available.',
         category: 'Fashion & Tailoring',
-        categoryIcon: 'shirt-outline',
+        categoryIcon: 'checkroom',
         categoryName: 'Fashion & Tailoring',
         fee: '₦2,500',
         location: 'Miracle, Ifite-Awka',
@@ -78,7 +78,7 @@ const dummyProducts = [
         title: 'Assignment Writing',
         summary: 'Professional academic writing assistance. Get well-researched, plagiarism-free assignments written by experienced writers.',
         category: 'Academic Support',
-        categoryIcon: 'book-outline',
+        categoryIcon: 'menu-book',
         categoryName: 'Academic Support',
         fee: '₦5,000',
         location: 'Dynamo, Ifite-Awka',
@@ -91,7 +91,7 @@ const dummyProducts = [
         title: 'Food Delivery',
         summary: 'Fast and reliable food delivery service. Get your meals delivered hot and fresh from your favorite restaurants.',
         category: 'Logistics & Errands',
-        categoryIcon: 'bicycle-outline',
+        categoryIcon: 'directions-bike',
         categoryName: 'Logistics & Errands',
         fee: '₦1,200',
         location: 'Wintess, Ifite-Awka',
@@ -104,7 +104,7 @@ const dummyProducts = [
         title: 'Graphic Design',
         summary: 'Creative graphic design services including logos, flyers, posters and digital art. Affordable professional designs for all needs.',
         category: 'Tech & Digital Services',
-        categoryIcon: 'laptop-outline',
+        categoryIcon: 'laptop',
         categoryName: 'Tech & Digital Services',
         fee: '₦15,000',
         location: 'Yahoo junction, Ifite-Awka',
@@ -117,7 +117,7 @@ const dummyProducts = [
         title: 'Room Cleaning',
         summary: 'Professional room cleaning and organization service. We handle deep cleaning, dusting and tidying of your space.',
         category: 'Cleaning Services',
-        categoryIcon: 'trash-outline',
+        categoryIcon: 'cleaning-services',
         categoryName: 'Cleaning Services',
         fee: '₦4,000',
         location: 'Book foundation, Ifite-Awka',
@@ -130,7 +130,7 @@ const dummyProducts = [
         title: 'Tutorials & Private Lessons',
         summary: 'One-on-one private tutoring sessions. Expert instruction in various subjects to boost your academic performance.',
         category: 'Academic Support',
-        categoryIcon: 'book-outline',
+        categoryIcon: 'menu-book',
         categoryName: 'Academic Support',
         fee: '₦6,500',
         location: 'Amansea, Ifite-Awka',
@@ -155,7 +155,7 @@ export default function ServiceList(){
                             flexDirection: 'row'
                         }}>
                             <View style={styles.titleContainer}>
-                                <Ionicons name={getCategoryIcon(item.categoryName)} size={30} color={getCategoryColor(item.categoryName)} />
+                                <MaterialIcons name={getCategoryIcon(item.categoryName)} size={30} color={getCategoryColor(item.categoryName)} />
                                 <Text style={styles.title} numberOfLines={2}>{"  "}{item.title || 'Product Title'}</Text>
 
                                 
@@ -168,7 +168,7 @@ export default function ServiceList(){
                                 justifyContent: 'center',
                                 alignItems: 'center'
                             }}>
-                                <Ionicons color={"#FFA500"} name={getGenderIcon(item.gender)} size={20} />
+                                <MaterialIcons color={"#FFA500"} name={getGenderIcon(item.gender)} size={20} />
                                 <Text style={{textTransform: "capitalize", fontWeight: "bold"}}>
                                     {item.gender || 'N/A'}
                                 </Text>
@@ -194,7 +194,7 @@ export default function ServiceList(){
                             display: 'flex',
                             flexDirection: 'row'
                         }}>
-                            <Ionicons name={'calendar'} color={"#FFA500"}  />
+                            <MaterialIcons name="event" color={"#FFA500"}  />
                             
                             <Text style={styles.condition}>{' '}Availability: {item.availability.map(day => day.slice(0, 3)).join(', ')}</Text>
                         </View>
@@ -202,7 +202,7 @@ export default function ServiceList(){
                             display: 'flex',
                             flexDirection: 'row'
                         }}>
-                            <Ionicons name={'location'} color={"#FFA500"}  />
+                            <MaterialIcons name="location-on" color={"#FFA500"}  />
                             
                             <Text style={styles.location}>{' '}{item.location || 'Location'}</Text>
                         </View>

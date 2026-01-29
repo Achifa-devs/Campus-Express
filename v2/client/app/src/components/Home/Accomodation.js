@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Video from 'react-native-video';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useSelector, useDispatch } from 'react-redux';
 
 // import { set_mode } from '../../../redux/info/mode';
@@ -187,8 +187,8 @@ const AccomodationOffer = ({ data = [], loading }) => {
                   color={isSaved ? '#FFF' : '#FFA500'}
                 />
               ) : (
-                <Ionicons
-                  name={isSaved ? 'heart' : 'heart-outline'}
+                <MaterialIcons
+                  name={isSaved ? 'favorite' : 'favorite-border'}
                   size={18}
                   color={isSaved ? '#FFF' : '#000'}
                 />
@@ -207,7 +207,7 @@ const AccomodationOffer = ({ data = [], loading }) => {
             </Text>
 
             <View style={s.metaLocation}>
-              <Ionicons name="location" size={16} color="#FFA500" />
+              <MaterialIcons name="location-on" size={16} color="#FFA500" />
               <Text style={s.metaLocationText} numberOfLines={1}>
                 {item?.campus} - {address1}, {address2}
               </Text>
@@ -223,7 +223,7 @@ const AccomodationOffer = ({ data = [], loading }) => {
 
   const EmptyBlock = () => (
     <View style={s.emptyBlock}>
-      <Ionicons name="search-outline" size={48} color="#DFE3E8" />
+      <MaterialIcons name="search" size={48} color="#DFE3E8" />
       <Text style={s.emptyTitle}>No Accommodation Found</Text>
       <Text style={s.emptySubtitle}>
         Try refreshing or adjusting your filters

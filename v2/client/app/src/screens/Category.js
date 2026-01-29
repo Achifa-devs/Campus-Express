@@ -9,7 +9,7 @@ import {
   Image,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import productJson from '../json/product.json';
 import serviceJson from '../json/services.json';
 import { useSelector } from 'react-redux';
@@ -135,7 +135,7 @@ export default function CategoryScreen() {
           activeOpacity={0.7}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <Ionicons name="chevron-back" size={24} color="#333" />
+          <MaterialIcons name="chevron-left" size={24} color="#333" />
         </TouchableOpacity>
         <Text style={s.barText}>{pluralize.singular(option)} Categories</Text>
       </View>
@@ -216,7 +216,7 @@ const s = StyleSheet.create({
   iconBox: {
     width: ICON_DIM * ICON_SCALE,
     height: ICON_DIM * ICON_SCALE,
-    borderRadius: ICON_DIM / 2,
+    borderRadius: 12,
     backgroundColor: '#eee',
     justifyContent: 'center',
     alignItems: 'center',
@@ -228,7 +228,7 @@ const s = StyleSheet.create({
   iconImg: {
     width: ICON_DIM,
     height: ICON_DIM,
-    borderRadius: ICON_DIM / 2,
+    borderRadius: 12,
   },
   iconMore: {
     fontSize: 24,

@@ -28,7 +28,7 @@ import Top from '../components/Product/Top.js';
 import Mid from '../components/Product/Mid.js';
 import Btm from '../components/Product/Btm.js';
 import { useDispatch, useSelector } from 'react-redux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import axios from 'axios';
 import { set_user } from '../../redux/info/user.js';
 import Tools from '../utils/generalHandler.js';
@@ -623,8 +623,8 @@ export default function Product() {
           activeOpacity={0.7}
           hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
         >
-          <Ionicons 
-            name="chevron-back" 
+          <MaterialIcons 
+            name="chevron-left" 
             size={28} 
             color={THEME.white} 
           />
@@ -680,8 +680,8 @@ export default function Product() {
               {isFavouriteLoading ? (
                 <ActivityIndicator size="small" color={THEME.primary} />
               ) : (
-                <Ionicons 
-                  name={isFavourite ? "heart" : "heart-outline"} 
+                <MaterialIcons 
+                  name={isFavourite ? "favorite" : "favorite-border"} 
                   size={DIMENSIONS.iconSizes.heart} 
                   color={isFavourite ? THEME.primary : THEME.white} 
                 />
@@ -701,11 +701,11 @@ export default function Product() {
                 style={styles.chatButton} 
                 onPress={navigateToVendorChat}
               >
-                <Ionicons 
-                  name="chatbubble" 
-                  size={DIMENSIONS.iconSizes.chat} 
-                  color={THEME.white} 
-                />
+<MaterialIcons 
+                name="chat" 
+                size={DIMENSIONS.iconSizes.chat} 
+                color={THEME.white} 
+              />
                 <Text style={styles.chatButtonText}>Chat Vendor</Text>
               </TouchableOpacity>
             </View>
@@ -735,8 +735,8 @@ export default function Product() {
           {/* Safety Tips Section */}
           {/* <View style={styles.safetyTipsContainer}>
             <View style={styles.safetyTipsHeader}>
-              <Ionicons 
-                name="shield-checkmark" 
+              <MaterialIcons 
+                name="verified-user" 
                 size={DIMENSIONS.iconSizes.shield} 
                 color={THEME.primary} 
               />
@@ -745,7 +745,7 @@ export default function Product() {
             <View style={styles.safetyTipsList}>
               {SAFETY_TIPS.map((tip, index) => (
                 <View key={`tip-${index}`} style={styles.safetyTipItem}>
-                  <Ionicons 
+                  <MaterialIcons 
                     name={tip.icon} 
                     size={DIMENSIONS.iconSizes[tip.icon] || 16} 
                     color={THEME.gray} 
@@ -761,7 +761,7 @@ export default function Product() {
             style={styles.writeReviewButton}
             onPress={navigateToReview}
           >
-            <Ionicons 
+            <MaterialIcons 
               name="star" 
               size={DIMENSIONS.iconSizes.star} 
               color={THEME.white} 
@@ -791,8 +791,8 @@ export default function Product() {
             <ActivityIndicator size="small" color={THEME.primary} />
           ) : (
             <>
-              <Ionicons 
-                name={isFavourite ? "heart" : "heart-outline"} 
+              <MaterialIcons 
+                name={isFavourite ? "favorite" : "favorite-border"} 
                 size={DIMENSIONS.iconSizes.heartSmall} 
                 color={isFavourite ? THEME.primary : THEME.gray} 
               />
@@ -810,7 +810,7 @@ export default function Product() {
           style={styles.bottomReviewButton}
           onPress={navigateToReview}
         >
-          <Ionicons 
+          <MaterialIcons 
             name="star" 
             size={DIMENSIONS.iconSizes.starSmall} 
             color={THEME.white} 
@@ -822,8 +822,8 @@ export default function Product() {
           style={styles.bottomShareButton}
           onPress={shareProduct}
         >
-          <Ionicons 
-            name="share-outline" 
+          <MaterialIcons 
+            name="share" 
             size={DIMENSIONS.iconSizes.starSmall} 
             color={THEME.white} 
           />

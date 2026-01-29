@@ -1,61 +1,61 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeStackScreen from "./stacks/Home";
+import SellStackScreen from "./stacks/Sell";
+import SearchStackScreen from "./stacks/Search";
+import ChatStackScreen from "./stacks/Chat";
 import MoreStackScreen from "./stacks/More";
-import { use, useState } from "react";
-import Ionicons from 'react-native-vector-icons/Ionicons'; 
+import { useState } from "react";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
-export default function BottomTab(){
+const TAB_ICONS = {
+  Home: { active: "home", inactive: "home-outline" },
+  Search: { active: "text-search", inactive: "text-search" },
+  Sell: { active: "tag", inactive: "tag-outline" },
+  Chat: { active: "message", inactive: "message-outline" },
+  More: { active: "menu", inactive: "menu" },
+};
 
+export default function BottomTab() {
+  const Tab = createBottomTabNavigator();
+  const [tabBarStyle, setTabBarStyle] = useState("flex");
 
-
-    const Tab = createBottomTabNavigator();
-
-    let [tabBarStyle, setTabBarStyle] = useState('flex')
-
-    function updateTabBarStyle(data) {
-      setTabBarStyle(data)
-    }
-
-    return (
-        <>
-
-            <Tab.Navigator screenOptions={({route}) => ({
-                tabBarIcon: ({focused,color,sized}) => {
-                    let iconName;
-                    switch(route.name){
-                        case "Home":
-                        iconName = focused ? 'home' : 'home-outline';
-                        break;
-
-                        case "Chat":
-                        iconName = focused ? 'chat' : 'chat-outline';
-                        break;
-
-                        case "Shop":
-                        iconName = focused ? 'shop' : 'shop-outline';
-                        break;
-
-                        case "More":
-                        iconName = focused ? 'grid' : 'grid-outline';
-                        break;
-
-                        default:
-                        iconName = 'help-circle-outline';
-                    }
-                    return <Ionicons  name={iconName} size={sized} color={color} />;
-                },
-                
-                tabBarActiveTintColor: '#FFA500',
-                tabBarInactiveTintColor: 'gray',
-                headerShown: false,
-                tabBarStyle: {
-                    display: tabBarStyle
-                }
-            })}>
+  return (
+    <>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            const icons = TAB_ICONS[route.name] ?? { active: "help", inactive: "help" };
+            const iconName = focused ? icons.active : icons.inactive;
+            return (
+              <MaterialCommunityIcons
+                name={iconName}
+                size={size ?? 26}
+                color={color}
+              />
+            );
+          },
+          tabBarActiveTintColor: "#FFA500",
+          tabBarInactiveTintColor: "#9CA3AF",
+          headerShown: false,
+          tabBarStyle: { display: tabBarStyle },
+        })}
+      >
                 <Tab.Screen 
                 name="Home" 
                 component={HomeStackScreen} /> 
 
+
+                <Tab.Screen 
+                name="Search"  
+                component={SearchStackScreen} />
+
+                <Tab.Screen 
+                name="Sell"  
+                component={SellStackScreen} />
+
+                <Tab.Screen 
+                name="Chat"  
+                component={ChatStackScreen} />
 
                 <Tab.Screen 
                 name="More"  

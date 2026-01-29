@@ -8,15 +8,15 @@ import {
   Linking,
   Pressable,
 } from "react-native";
-import Icon from "react-native-vector-icons/Ionicons";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Logo from "../assets/logo.png";
 
 
 const CHANNELS = [
-  { id: "facebook", label: "Facebook", icon: "logo-facebook", color: "#1877F2", url: "" },
-  { id: "instagram", label: "Instagram", icon: "logo-instagram", color: "#C13584", url: "" },
-  { id: "twitter", label: "Twitter", icon: "logo-twitter", color: "#1DA1F2", url: "" },
-  { id: "whatsapp", label: "Whatsapp", icon: "logo-whatsapp", color: "#25D366", url: "" },
+  { id: "facebook", label: "Facebook", icon: "share", color: "#1877F2", url: "" },
+  { id: "instagram", label: "Instagram", icon: "photo-camera", color: "#C13584", url: "" },
+  { id: "twitter", label: "Twitter", icon: "tag", color: "#1DA1F2", url: "" },
+  { id: "whatsapp", label: "Whatsapp", icon: "chat", color: "#25D366", url: "" },
 ];
 
 function openLink(url) {
@@ -42,7 +42,7 @@ function SocialTile({ label, icon, color, url }) {
       style={({ pressed }) => [s.tile, pressed && s.tilePressed]}
       onPress={() => openLink(url)}
     >
-      <Icon name={icon} size={40} color={color} />
+      <MaterialIcons name={icon} size={40} color={color} />
       <Text style={s.tileLabel}>{label}</Text>
     </Pressable>
   );

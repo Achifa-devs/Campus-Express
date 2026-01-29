@@ -7,7 +7,7 @@ import {
   View 
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 // Constants for better maintainability
 const COLORS = {
@@ -83,8 +83,8 @@ export default function Type() {
           onPress={handleBackPress}
           accessibilityLabel="Go back"
         >
-          <Ionicons 
-            name="chevron-back" 
+          <MaterialIcons 
+            name="chevron-left" 
             size={ICON_SIZES.BACK_BUTTON} 
             color={COLORS.BLACK} 
           />
@@ -108,8 +108,8 @@ export default function Type() {
             
             {/* Forward arrow indicator (rotated to point right) */}
             <View style={styles.arrowContainer}>
-              <Ionicons 
-                name="arrow-back" 
+              <MaterialIcons 
+                name="arrow-forward" 
                 size={ICON_SIZES.ARROW_INDICATOR} 
                 color={COLORS.BLACK}
               />
