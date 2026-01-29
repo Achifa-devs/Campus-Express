@@ -1,64 +1,94 @@
-import { FlatList, Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import Category from '../components/Category'
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  Animated,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { useSelector } from "react-redux";
-import ProductsList from '../components/Home/Products'
-import LodgeList from '../components/Home/Lodges'
-import ServiceList from '../components/Home/Services'
-import api from '../api/Api'
-export default function Home(){
 
-    const { option } = useSelector(s => s.option || { option: 'Products' });
+import Category from "../components/Category";
+import LodgeList from "../components/Home/Lodges";
+import ProductsList from "../components/Home/Products";
+import ServiceList from "../components/Home/Services";
+import api from "../api/Api";
 
-    const [data, setData] = useState([]);
-    const [refreshing, setRefreshing] = useState(false);
+const FADE_DURATION = 280;
 
-    const fetchData = useCallback(async() => {
-        try {
-            const res = await api("get", "products", {}, {option});
-            setData(res);
-        } catch (error) {
-            console.error('Error fetching products:', error);
-        }
-    }, [option]);
+export default function Home() {
+  const { option } = useSelector((s) => s.option || { option: "Products" });
 
-    useEffect(() => {
-        fetchData();
-    }, [fetchData]);
+  const [data, setData] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+  const fadeAnim = useRef(new Animated.Value(1)).current;
 
-    const onRefresh = useCallback(() => {
-        setData([]);
-        setRefreshing(true);
-        fetchData().finally(() => setRefreshing(false));
-    }, [fetchData]); 
-    
- 
-    return(
-        <>
-            <ScrollView style={{flex: 1}}>
-                <Category />
-                <View style={styles.sectionHeader}>
-                    <Text style={styles.sectionTitle}>Trending {option || 'Products'} near you</Text>
-                </View>
-                {
-                    option === "Products" && <ProductsList data={data} />
-                }
+  const fetchData = useCallback(async () => {
+    try {
+      const res = await api("get", "products", {}, { option });
+      setData(res);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  }, [option]);
 
-                {
-                    option === "Lodges" && <LodgeList data={data} />
-                }
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
-                {
-                    option === "Services" && <ServiceList data={data} />
-                }
-            </ScrollView>
-        </>
-    )
+  useEffect(() => {
+    fadeAnim.setValue(0);
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: FADE_DURATION,
+      useNativeDriver: true,
+    }).start();
+  }, [option]);
+
+  const onRefresh = useCallback(() => {
+    setData([]);
+    setRefreshing(true);
+    fetchData().finally(() => setRefreshing(false));
+  }, [fetchData]);
+
+  const contentOpacity = fadeAnim;
+
+  return (
+    <ScrollView
+      style={styles.scroll}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          colors={["#FFA500"]}
+          tintColor="#FFA500"
+        />
+      }
+    >
+      <Category />
+      <Animated.View style={[styles.content, { opacity: contentOpacity }]}>
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>
+            Trending {option || "Products"} near you
+          </Text>
+        </View>
+        {option === "Products" && <ProductsList data={data} />}
+        {option === "Lodges" && <LodgeList data={data} />}
+        {option === "Services" && <ServiceList data={data} />}
+      </Animated.View>
+    </ScrollView>
+  );
 }
 
 const styles = StyleSheet.create({
-  
-   sectionHeader: {
+  scroll: {
+    flex: 1,
+  },
+  content: {
+    flex: 1,
+  },
+  sectionHeader: {
         paddingHorizontal: 16,
         paddingVertical: 14,
         backgroundColor: '#fff',

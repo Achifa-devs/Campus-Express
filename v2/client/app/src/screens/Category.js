@@ -11,16 +11,21 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import productJson from '../json/product.json';
-
+import serviceJson from '../json/services.json';
+import { useSelector } from 'react-redux';
+import pluralize from "pluralize"
 const ICON_DIM = 60;
 const ICON_SCALE = 0.8;
-const WIDTH_RATIO = 0.15;
 const COLS = 4;
+const LIST_PADDING_H = 10;
+const GAP = 12;
 const MORE_KEY = 'More';
 const NAV_ALL = 'all-category';
 const NAV_TYPE = 'type';
 
 const { width: W } = Dimensions.get('screen');
+const CONTENT_WIDTH = W - 2 * LIST_PADDING_H;
+const TILE_WIDTH = (CONTENT_WIDTH - COLS * GAP) / COLS;
 
 function pickLabel(entry) {
   if (!entry) return '';
@@ -42,7 +47,7 @@ function isMoreEntry(label) {
 /**
  * Single category tile: icon + label, navigates on press
  */
-function Tile({ entry, index }) {
+function Tile({ entry }) {
   const nav = useNavigation();
   const label = pickLabel(entry);
   const img = entry?.img;
@@ -58,12 +63,9 @@ function Tile({ entry, index }) {
     nav.navigate(NAV_TYPE, { types, category: label });
   }, [nav, entry, label, more]);
 
-  const tileWidth = W * WIDTH_RATIO;
-  const marginLeft = index === 0 ? 0 : 15;
-
   return (
     <TouchableOpacity
-      style={[s.tile, { width: tileWidth, marginLeft }]}
+      style={s.tile}
       onPress={onPress}
       activeOpacity={0.7}
       hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
@@ -94,6 +96,7 @@ function Tile({ entry, index }) {
  */
 export default function CategoryScreen() {
   const navigation = useNavigation();
+  const { option } = useSelector(s => s.option);
   const [entries, setEntries] = useState([]);
 
   const goBack = useCallback(() => {
@@ -103,7 +106,7 @@ export default function CategoryScreen() {
   useEffect(() => {
     let list = [];
     try {
-      const raw = productJson?.items?.category;
+      const raw = option === "Products" ? productJson?.items?.category : serviceJson?.items?.category;
       if (Array.isArray(raw)) list = [...raw];
     } catch (e) {
       console.error('Category load error:', e);
@@ -112,7 +115,7 @@ export default function CategoryScreen() {
   }, []);
 
   const renderTile = useCallback(
-    ({ item, index }) => <Tile entry={item} index={index} />,
+    ({ item }) => <Tile entry={item} />,
     []
   );
 
@@ -134,7 +137,7 @@ export default function CategoryScreen() {
         >
           <Ionicons name="chevron-back" size={24} color="#333" />
         </TouchableOpacity>
-        <Text style={s.barText}>Product Categories</Text>
+        <Text style={s.barText}>{pluralize.singular(option)} Categories</Text>
       </View>
       {hasData ? (
         <FlatList
@@ -182,13 +185,17 @@ const s = StyleSheet.create({
     letterSpacing: 0.5,
   },
   list: {
-    paddingHorizontal: 10,
+    paddingHorizontal: LIST_PADDING_H,
+    paddingTop: 16,
     paddingBottom: 20,
     backgroundColor: '#fff',
   },
   row: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
     backgroundColor: '#fff',
-    justifyContent: 'space-between',
+    marginBottom: GAP,
+    paddingHorizontal: 0,
   },
   empty: {
     flex: 1,
@@ -201,7 +208,9 @@ const s = StyleSheet.create({
     color: '#333',
   },
   tile: {
-    margin: 8,
+    width: TILE_WIDTH,
+    marginRight: GAP,
+    marginVertical: 4,
     alignItems: 'center',
   },
   iconBox: {

@@ -155,7 +155,7 @@ export default function ServiceList(){
                             flexDirection: 'row'
                         }}>
                             <View style={styles.titleContainer}>
-                                <Ionicons name={getCategoryIcon(item.categoryName)} size={40} color={getCategoryColor(item.categoryName)} />
+                                <Ionicons name={getCategoryIcon(item.categoryName)} size={30} color={getCategoryColor(item.categoryName)} />
                                 <Text style={styles.title} numberOfLines={2}>{"  "}{item.title || 'Product Title'}</Text>
 
                                 
@@ -261,8 +261,9 @@ const styles = StyleSheet.create({
         marginBottom: 8,
         width: "75%",
         display: 'flex',
+
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'flex-end'
         // justifyContent: 'space-between'
     },
     title: {

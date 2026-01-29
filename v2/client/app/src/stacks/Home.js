@@ -80,7 +80,7 @@ export default function HomeStackScreen(){
 
             <HomeStack.Screen
                 options={{
-                    header: FilterHeader
+                    header: null
                 }}
                 name="category"
                 component={Category}

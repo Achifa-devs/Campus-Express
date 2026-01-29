@@ -1,5 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import HomeStackScreen from "./stacks/Home";
+import MoreStackScreen from "./stacks/More";
 import { use, useState } from "react";
 import Ionicons from 'react-native-vector-icons/Ionicons'; 
 
@@ -35,7 +36,7 @@ export default function BottomTab(){
                         break;
 
                         case "More":
-                        iconName = focused ? 'more' : 'more-outline';
+                        iconName = focused ? 'grid' : 'grid-outline';
                         break;
 
                         default:
@@ -54,6 +55,11 @@ export default function BottomTab(){
                 <Tab.Screen 
                 name="Home" 
                 component={HomeStackScreen} /> 
+
+
+                <Tab.Screen 
+                name="More"  
+                component={MoreStackScreen} />
                 
                 {/* <Tab.Screen 
                 name="Deals"  

@@ -18,10 +18,14 @@ import servicesData from '../json/services.json';
 
 const ICON_SIZE = 60;
 const SCREEN_WIDTH = Dimensions.get('screen').width;
-const CARD_WIDTH = SCREEN_WIDTH * 0.15;
+const COLS = 4;
+const LIST_PADDING_H = 10;
+const GAP = 12;
+const CONTENT_WIDTH = SCREEN_WIDTH - 2 * LIST_PADDING_H;
+const CARD_WIDTH = (CONTENT_WIDTH - COLS * GAP) / COLS;
 const PADDING_H = 20;
-const MAX_PRODUCTS = 10;
-const MAX_SERVICES = 4;
+const MAX_PRODUCTS = 7;
+const MAX_SERVICES = 7;
 const MORE_LABEL = 'More';
 const MORE_ROUTE = 'category';
 const TYPE_ROUTE = 'type';
@@ -42,9 +46,7 @@ export default function Category() {
 
   const [categoryList, setCategoryList] = useState([]);
 
-  const columnCount = useMemo(() => {
-    return Math.floor((SCREEN_WIDTH - PADDING_H) / CARD_WIDTH);
-  }, []);
+  const columnCount = COLS;
 
   const buildCategoryList = useCallback(() => {
     const getSource = SOURCE_MAP[selectedOption] || SOURCE_MAP.Products;
@@ -190,17 +192,20 @@ const layoutStyles = StyleSheet.create({
     letterSpacing: 0.5,
   },
   grid: {
-    paddingHorizontal: 10,
-    paddingVertical: 10,
+    paddingHorizontal: LIST_PADDING_H,
+    paddingTop: 16,
+    paddingBottom: 20,
     backgroundColor: '#FFF',
   },
   row: {
-    // column wrapper for multi-column grid
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    marginBottom: GAP,
   },
   cell: {
     width: CARD_WIDTH,
-    marginHorizontal: 8,
-    marginVertical: 8,
+    marginRight: GAP,
+    marginVertical: 4,
     alignItems: 'center',
   },
   iconWrap: {

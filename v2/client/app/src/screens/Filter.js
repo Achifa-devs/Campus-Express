@@ -115,7 +115,7 @@ function ItemCard({ item, navigation, user, favouritesList }) {
               <Text style={layoutStyles.boostLabel}>  Boosted</Text>
             </View>
           )}
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={[layoutStyles.saveBtn, isSaved && layoutStyles.saveBtnActive]}
             onPress={toggleSave}
           >
@@ -128,7 +128,7 @@ function ItemCard({ item, navigation, user, favouritesList }) {
                 color={isSaved ? '#FFF' : '#000'}
               />
             )}
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
 
         {item?.others?.condition && (
