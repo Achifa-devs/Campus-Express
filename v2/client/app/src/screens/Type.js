@@ -31,7 +31,7 @@ const SPACING = {
 };
 
 const NAVIGATION_ROUTES = {
-  TYPE_PRODUCT: 'type-product',
+  TYPE_PRODUCT: 'filter',
 };
 
 /**

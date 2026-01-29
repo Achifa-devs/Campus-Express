@@ -620,10 +620,12 @@ export default function Product() {
           style={styles.backButton}
           onPress={() => navigation.goBack()}
           accessibilityLabel="Go back"
+          activeOpacity={0.7}
+          hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
         >
           <Ionicons 
-            name="arrow-back" 
-            size={DIMENSIONS.iconSizes.back} 
+            name="chevron-back" 
+            size={28} 
             color={THEME.white} 
           />
         </TouchableOpacity>
@@ -861,8 +863,12 @@ const styles = StyleSheet.create({
   },
   backButton: {
     backgroundColor: THEME.overlay,
-    borderRadius: 20,
-    padding: 4,
+    borderRadius: 22,
+    padding: 8,
+    minWidth: 44,
+    minHeight: 44,
+    justifyContent: 'center',
+    alignItems: 'center',
     shadowColor: THEME.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
