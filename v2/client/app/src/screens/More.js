@@ -10,12 +10,19 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
-const BG = "#f9f9f9";
+const BG = "#efefef";
 const CARD = "#fff";
 
-function MenuRow({ icon, label, onPress }) {
+const ROW_RADIUS = 12;
+
+function MenuRow({ icon, label, onPress, isFirst, isLast, total }) {
+  const rowStyle = [
+    s.row,
+    isFirst && (total === 1 ? s.rowSingle : s.rowFirst),
+    isLast && total > 1 && s.rowLast,
+  ];
   return (
-    <TouchableOpacity activeOpacity={0.7} onPress={onPress} style={s.row}>
+    <TouchableOpacity activeOpacity={0.7} onPress={onPress} style={rowStyle}>
       <View style={s.rowInner}>
         <MaterialIcons name={icon} size={20} color="#333" style={s.rowIcon} />
         <Text style={s.rowLabel}>{label}</Text>
@@ -27,6 +34,7 @@ function MenuRow({ icon, label, onPress }) {
 
 function MenuBlock({ title, entries, navigator }) {
   if (!entries?.length) return null;
+  const total = entries.length;
   return (
     <View style={s.block}>
       <View style={s.blockTitleWrap}>
@@ -39,6 +47,9 @@ function MenuBlock({ title, entries, navigator }) {
             icon={entry.icon}
             label={entry.label}
             onPress={() => entry.nav && navigator?.navigate(entry.nav)}
+            isFirst={i === 0}
+            isLast={i === total - 1}
+            total={total}
           />
         ))}
       </View>
@@ -103,19 +114,20 @@ export default function More({ navigation }) {
 
 const s = StyleSheet.create({
   scroll: {
-    backgroundColor: BG,
+    backgroundColor: "#fff",
   },
   scrollContent: {
     paddingBottom: 24,
   },
   block: {
     marginBottom: 8,
+    padding: 15
   },
   blockTitleWrap: {
     height: 50,
     justifyContent: "center",
     paddingLeft: 20,
-    backgroundColor: BG,
+    backgroundColor: "#fff",
   },
   blockTitle: {
     fontSize: 15,
@@ -124,6 +136,8 @@ const s = StyleSheet.create({
   },
   blockList: {
     backgroundColor: CARD,
+    borderRadius: ROW_RADIUS,
+    overflow: "hidden",
   },
   row: {
     flexDirection: "row",
@@ -131,8 +145,21 @@ const s = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 20,
     paddingHorizontal: 20,
-    marginBottom: 3,
-    backgroundColor: CARD,
+    backgroundColor: "#f9f9f9",
+    borderBottomWidth: 2,
+    borderBottomColor: "#efefef",
+  },
+  rowFirst: {
+    borderTopLeftRadius: ROW_RADIUS,
+    borderTopRightRadius: ROW_RADIUS,
+  },
+  rowLast: {
+    borderBottomLeftRadius: ROW_RADIUS,
+    borderBottomRightRadius: ROW_RADIUS,
+    borderBottomWidth: 0,
+  },
+  rowSingle: {
+    borderRadius: ROW_RADIUS,
   },
   rowInner: {
     flexDirection: "row",
@@ -150,7 +177,7 @@ const s = StyleSheet.create({
     height: 50,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: BG,
+    backgroundColor: "#fff",
   },
   version: {
     fontSize: 15,
