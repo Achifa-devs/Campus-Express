@@ -1,226 +1,204 @@
-const {
-  countEmail,
-  countPhone,
-  findUserByEmail,
-  findUserById,
-  updateUserFcm,
-  truncateUser,
-  updateUserPhotoById,
-  countToken,
-  createNewToken,
-  createUser,
-  updateUserEmailById,
-  updateUserPasswordById,
-  updateUserPhoneById,
-  updateUserProfileById,
-} = require("../models/users");
-const tokenTemplate = require('../email_templates/token');
-
+// auth-service.js
 
 const bcrypt = require("bcryptjs");
-const shortId = require("short-id");
-const tools = require("../utils/tools");
+const crypto = require("crypto");
+const pool = require("./db"); // pg pool
+const jwt = require("jsonwebtoken");
 
+/* ===============================
+   Custom Domain Errors
+================================ */
 
-exports.createToken = async function  (payload) {
-  const { date, email } = payload;
+class AppError extends Error {
+  constructor(message, status = 400) {
+    super(message);
+    this.status = status;
+  }
+}
+
+class ConflictError extends AppError {
+  constructor(message) {
+    super(message, 409);
+  }
+}
+
+class AuthError extends AppError {
+  constructor(message) {
+    super(message, 401);
+  }
+}
+
+/* ===============================
+   Utility Functions
+================================ */
+
+function generateResetToken() {
+  return crypto.randomBytes(32).toString("hex");
+}
+
+function hashToken(token) {
+  return crypto.createHash("sha256").update(token).digest("hex");
+}
+
+function generateJWT(userId) {
+  return jwt.sign({ sub: userId }, process.env.JWT_SECRET, {
+    expiresIn: "7d",
+  });
+}
+
+/* ===============================
+   Register User
+================================ */
+
+async function registerUser(payload) {
+  const { fname, lname, email, phone, password } = payload;
+
+  const hashedPwd = await bcrypt.hash(password, 12);
 
   try {
-    // Business logic
-    const { 
-      user_id 
-    } = await findUserByEmail({ email });
-    console.log(user_id)
+    const result = await pool.query(
+      `
+      INSERT INTO users (fname, lname, email, phone, password)
+      VALUES ($1, $2, $3, $4, $5)
+      RETURNING id, fname, lname, email
+      `,
+      [fname, lname, email, phone, hashedPwd]
+    );
 
-    if(!user_id){
-      throw new Error("Email does not exist");
+    const user = result.rows[0];
+
+    return {
+      user,
+      token: generateJWT(user.id),
+    };
+
+  } catch (err) {
+    // Rely on DB unique constraints
+    if (err.code === "23505") {
+      throw new ConflictError("Email or phone already exists");
     }
-    const token = tools.generateNumericToken();
-    const response = await createNewToken({ token, date, user_id });
-    let mail = tokenTemplate(`${fname}.${lname[0]}`, token, email);  
-    const emailSent = await tools.send_email('Token for password recovery', mail, email);
-    if(!emailSent)throw new Error("Email not sent, Try again");
-    return response;
-  } catch (error) {
-    console.log("error: ", error)
+    throw err;
   }
-};
+}
 
-exports.verifyToken = async function  (payload) {
-  const { token, email } = payload;
+/* ===============================
+   Login User
+================================ */
+
+async function loginUser({ email, password }) {
+  const result = await pool.query(
+    "SELECT id, password FROM users WHERE email = $1",
+    [email]
+  );
+
+  if (result.rows.length === 0) {
+    throw new AuthError("Invalid credentials");
+  }
+
+  const user = result.rows[0];
+
+  const valid = await bcrypt.compare(password, user.password);
+
+  if (!valid) {
+    throw new AuthError("Invalid credentials");
+  }
+
+  return {
+    token: generateJWT(user.id),
+  };
+}
+
+/* ===============================
+   Request Password Reset
+================================ */
+
+async function requestPasswordReset(email) {
+  const result = await pool.query(
+    "SELECT id FROM users WHERE email = $1",
+    [email]
+  );
+
+  if (result.rows.length === 0) {
+    // Avoid leaking whether email exists
+    return;
+  }
+
+  const userId = result.rows[0].id;
+
+  const rawToken = generateResetToken();
+  const hashed = hashToken(rawToken);
+
+  const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 min
+
+  await pool.query(
+    `
+    INSERT INTO password_resets (user_id, token_hash, expires_at)
+    VALUES ($1, $2, $3)
+    `,
+    [userId, hashed, expiresAt]
+  );
+
+  // In production: send rawToken via email
+  return rawToken;
+}
+
+/* ===============================
+   Reset Password (Transactional)
+================================ */
+
+async function resetPassword({ token, newPassword }) {
+  const client = await pool.connect();
 
   try {
-    // Business logic
-    const {
-      user_id
-    } = await findUserByEmail({ email });
-    const response = await countToken({ token, user_id });
-    return response;
-  } catch (error) {
-    console.log("error: ", error)
+    await client.query("BEGIN");
+
+    const hashed = hashToken(token);
+
+    const result = await client.query(
+      `
+      SELECT user_id, expires_at
+      FROM password_resets
+      WHERE token_hash = $1
+      FOR UPDATE
+      `,
+      [hashed]
+    );
+
+    if (result.rows.length === 0) {
+      throw new AuthError("Invalid or expired token");
+    }
+
+    const reset = result.rows[0];
+
+    if (new Date(reset.expires_at) < new Date()) {
+      throw new AuthError("Token expired");
+    }
+
+    const hashedPwd = await bcrypt.hash(newPassword, 12);
+
+    await client.query(
+      "UPDATE users SET password = $1 WHERE id = $2",
+      [hashedPwd, reset.user_id]
+    );
+
+    await client.query(
+      "DELETE FROM password_resets WHERE token_hash = $1",
+      [hashed]
+    );
+
+    await client.query("COMMIT");
+
+  } catch (err) {
+    await client.query("ROLLBACK");
+    throw err;
+  } finally {
+    client.release();
   }
-};
-exports.getUser = async function  (payload) {
-  const { user_id } = payload;
+}
 
-  try {
-    // Business logic
-    const response = await findUserById({ user_id });
-    return response;
-  } catch (error) {
-    console.log("error: ", error)
-  }
-};
-
-exports.registerUser = async function  (payload) {
-    const { 
-        fname, 
-        lname, 
-        email, 
-        phone, 
-        pwd, 
-        state, 
-        campus, 
-        deviceId, 
-        fcm 
-    } = payload;
-
-    // Hash password
-    let hashedPwd = await bcrypt.hash(pwd, 10);
-    let user_id = `CE-${shortId.generate(10)}`;
-
-    // Check email and phone
-    let existingEmail = await countEmail({ email });
-    let existingPhone = await countPhone({ phone });
-
-    if (existingEmail > 0) {
-        throw new Error("Email exists");
-    } else if (existingPhone > 0) {
-        throw new Error("Phone number exists");
-    }
-
-    // Create vendor
-    const response = await createUser({
-        fname,
-        lname,
-        user_id,
-        email,
-        phone,
-        hashedPwd,
-        state,
-        campus,
-        gender: null,
-        deviceId: deviceId._j,
-        fcm
-    });
-
-    if (response) {
-        const token = tools.generateUserJwtToken(user_id);
-        return {
-            ...response,
-            user: { fname, lname, user_id, email, phone, state, campus },
-            cookie: token
-        };
-    }else{
-        throw new Error("Error creating new user");
-    }
-
-};
-
-exports.loginUser = async function  (payload) {
-    const { 
-        email,
-        pwd,
-        fcm
-    } = payload;
-
-    // Business logic
-    const user = await findUserByEmail({ email });
-
-    if (user) {
-        const auth = await bcrypt.compare(pwd, user.password);
-        if (auth) {
-            await updateUserFcm({fcm, user_id: user.user_id});
-    
-            const token = tools.generateUserJwtToken(user.user_id);
-            return({user: user, cookie: token});
-        }
-        throw new Error("Invalid password");
-        
-    }
-    throw new Error("Email is not registered");
-  
-
-};
-
-exports.deleteUser = async function  (payload) {
-    const { 
-        user_id
-    } = payload;
-
-    // Business logic
-    const user = await findUserById({ user_id });
-
-    if (user) {
-        truncateUser({ user_id })
-        
-    }
-    throw new Error("User does not exist");
-  
-
-};
-
-exports.updateUserEmail = async function  (payload) {
-  const { email, user_id } = payload;
-
-  // Business logic
-  const response = await updateUserEmailById({ email, user_id });
-
-  return response;
-};
-
-exports.updateUserPhoto = async function  (payload) {
-  const { photo, user_id } = payload;
-
-  // Business logic
-  const response = await updateUserPhotoById({ photo, user_id });
-
-  return response;
-};
-
-exports.updateUserPhone = async function  (payload) {
-  const { phone, user_id } = payload;
-
-  // Business logic
-  const response = await updateUserPhoneById({ phone, user_id });
-
-  return response;
-};
-exports.updateUserProfile = async function  (payload) {
-  const { user_id, fname, lname, gender } = payload;
-  // Business logic
-  const response = await updateUserProfileById ({ user_id, fname, lname, gender:  gender.toLowerCase() === 'male' ? 1 : 0 });
-
-  return response;
-};
-
-exports.updateUserPassword = async function  (payload) {
-  const { email, password } = payload;
-
-  try {
-    // Business logic
-    const user = await findUserByEmail({ email });
-
-    let oldPwd = user.password;
-    let comparison = await bcrypt.compare(password, oldPwd);
-    if (comparison) {
-      throw new Error("New password cannot be the same as old password");
-    } 
-    const hashPwd = await bcrypt.hash(password, 10)
-    const response = await updateUserPasswordById({ user_id: user.user_id, password: hashPwd });
-    return response;  
-  } catch (error) {
-    console.log(error)
-    throw new Error("Internal server error");
-  }
+module.exports = {
+  registerUser,
+  loginUser,
+  requestPasswordReset,
+  resetPassword,
 };
